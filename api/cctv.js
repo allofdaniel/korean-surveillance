@@ -5,8 +5,7 @@
 import { setCorsHeaders } from './_utils/cors.js';
 
 export default async function handler(req, res) {
-  setCorsHeaders(res);
-  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (setCorsHeaders(req, res)) return;
 
   const { source, minX, maxX, minY, maxY } = req.query;
   const vworldKey = process.env.VITE_VWORLD_API_KEY;
