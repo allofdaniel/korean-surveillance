@@ -49,6 +49,9 @@ interface ViewControlsBarProps {
   // CCTV
   showCctv: boolean;
   setShowCctv: (show: boolean) => void;
+  // Ships
+  showShips: boolean;
+  setShowShips: (show: boolean) => void;
   // Weather (pass-through to NotamPanel)
   showLightning: boolean;
   setShowLightning: (show: boolean) => void;
@@ -97,6 +100,9 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
   // CCTV
   showCctv,
   setShowCctv,
+  // Ships
+  showShips,
+  setShowShips,
   // Weather (pass-through to NotamPanel)
   showLightning,
   setShowLightning,
@@ -168,6 +174,16 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
         style={showCctv ? { background: 'rgba(255, 215, 0, 0.3)', borderColor: '#FFD700', color: '#FFD700' } : {}}
       >
         CCTV
+      </button>
+      <button
+        className={`view-btn ${showShips ? 'active' : ''}`}
+        onClick={() => setShowShips(!showShips)}
+        title="선박 AIS 추적"
+        aria-label="선박 위치 표시"
+        aria-pressed={showShips}
+        style={showShips ? { background: 'rgba(3, 169, 244, 0.3)', borderColor: '#03A9F4', color: '#03A9F4' } : {}}
+      >
+        AIS
       </button>
 
       <NotamPanel

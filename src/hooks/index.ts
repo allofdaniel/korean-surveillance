@@ -48,5 +48,8 @@ export { default as useSatelliteTracking } from './useSatelliteTracking';
 // CCTV 훅
 export { default as useCctvLayer } from './useCctvLayer';
 
+// 선박 AIS 훅
+export { default as useShipTracking } from './useShipTracking';
+
 // 유틸리티 훅
 export { default as useWindowHeight } from './useWindowHeight';

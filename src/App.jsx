@@ -74,6 +74,7 @@ import {
   useGlobalLayers,
   useSatelliteTracking,
   useCctvLayer,
+  useShipTracking,
 } from './hooks';
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -98,6 +99,7 @@ function App() {
     viewFilter, cycleViewFilter,
     showSatellites, setShowSatellites,
     showCctv, setShowCctv,
+    showShips, setShowShips,
   } = useMapStore();
 
   // UI store
@@ -207,6 +209,9 @@ function App() {
 
   // CCTV layer hook (ITS + 고정 CCTV)
   useCctvLayer(map, mapLoaded, showCctv);
+
+  // Ship AIS tracking hook
+  useShipTracking(map, mapLoaded, showShips);
 
   // Map style hook
   useMapStyle({
@@ -453,6 +458,8 @@ function App() {
         setShowSatellites={setShowSatellites}
         showCctv={showCctv}
         setShowCctv={setShowCctv}
+        showShips={showShips}
+        setShowShips={setShowShips}
         showLightning={showLightning}
         setShowLightning={setShowLightning}
         showSigmet={showSigmet}

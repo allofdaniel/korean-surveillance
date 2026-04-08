@@ -28,6 +28,9 @@ interface MapState {
 
   // CCTV
   showCctv: boolean;
+
+  // Ships
+  showShips: boolean;
 }
 
 interface MapActions {
@@ -42,6 +45,7 @@ interface MapActions {
   cycleViewFilter: () => void;
   setShowSatellites: (value: boolean) => void;
   setShowCctv: (value: boolean) => void;
+  setShowShips: (value: boolean) => void;
 
   // Toggles
   toggle3DView: () => void;
@@ -74,6 +78,9 @@ const useMapStore = create<MapStore>((set) => ({
   // CCTV
   showCctv: false,
 
+  // Ships
+  showShips: false,
+
   // Actions
   setIs3DView: (value) => set({ is3DView: value }),
   setIsDarkMode: (value) => set({ isDarkMode: value }),
@@ -89,6 +96,7 @@ const useMapStore = create<MapStore>((set) => ({
   }),
   setShowSatellites: (value) => set({ showSatellites: value }),
   setShowCctv: (value) => set({ showCctv: value }),
+  setShowShips: (value) => set({ showShips: value }),
 
   // Toggle helpers
   toggle3DView: () => set((state) => ({ is3DView: !state.is3DView })),
@@ -106,6 +114,7 @@ const useMapStore = create<MapStore>((set) => ({
     viewFilter: 'none' as ViewFilter,
     showSatellites: false,
     showCctv: false,
+    showShips: false,
   }),
 }));
 
