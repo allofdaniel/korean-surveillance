@@ -4,7 +4,7 @@
  * - 고정 CCTV (독도, 국립공원, 제주 관광 등)
  */
 import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
-import type { Map as MapboxMap } from 'mapbox-gl';
+import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
 import { logger } from '../utils/logger';
 
 // 고정 CCTV 소스 (API 없이 직접 URL)
@@ -30,9 +30,13 @@ interface CctvCamera {
   category: 'traffic' | 'park' | 'landmark' | 'coastal';
 }
 
-const ITS_API_KEY = '7975323471'; // ITS 공공 CCTV 테스트키
+const ITS_API_KEY = import.meta.env.VITE_ITS_API_KEY || ''; // ITS 공공 CCTV API 키 (data.go.kr 등록 필요)
 
 async function fetchItsCctv(bounds: { minX: number; maxX: number; minY: number; maxY: number }): Promise<CctvCamera[]> {
+  if (!ITS_API_KEY) {
+    logger.info('CCTV', 'ITS API key not configured, using fixed cameras only');
+    return [];
+  }
   try {
     const url = `https://openapi.its.go.kr:9443/cctvInfo?apiKey=${ITS_API_KEY}&type=its&cctvType=1&minX=${bounds.minX}&maxX=${bounds.maxX}&minY=${bounds.minY}&maxY=${bounds.maxY}&getType=json`;
     const resp = await fetch(url);
@@ -184,36 +188,32 @@ export default function useCctvLayer(
           `;
         }
 
-        const popup = new (mapInstance as any).constructor.Popup
-          ? null
-          : null;
+        const p = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '350px', className: 'cctv-popup' })
+          .setLngLat(coords as [number, number])
+          .setHTML(content)
+          .addTo(mapInstance);
 
-        // mapboxgl Popup 직접 사용
-        import('mapbox-gl').then(({ Popup }) => {
-          const p = new Popup({ closeOnClick: true, maxWidth: '350px', className: 'cctv-popup' })
-            .setLngLat(coords as [number, number])
-            .setHTML(content)
-            .addTo(mapInstance);
+        popupRef.current = p;
 
-          popupRef.current = p;
-
-          // HLS 플레이어 초기화
-          if (props.type === 'hls') {
-            setTimeout(() => {
-              const video = document.getElementById('cctv-player') as HTMLVideoElement;
-              if (!video) return;
-              import('hls.js').then(({ default: Hls }) => {
-                if (Hls.isSupported()) {
-                  const hls = new Hls();
-                  hls.loadSource(props.url);
-                  hls.attachMedia(video);
-                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                  video.src = props.url;
-                }
-              });
-            }, 100);
-          }
-        });
+        // HLS 플레이어 초기화
+        if (props.type === 'hls') {
+          setTimeout(async () => {
+            const video = document.getElementById('cctv-player') as HTMLVideoElement;
+            if (!video) return;
+            try {
+              const { default: Hls } = await import('hls.js');
+              if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(props.url);
+                hls.attachMedia(video);
+              } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = props.url;
+              }
+            } catch (err) {
+              logger.error('CCTV', `HLS init error: ${err}`);
+            }
+          }, 200);
+        }
       });
 
       // 커서 변경

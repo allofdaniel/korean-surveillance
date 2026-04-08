@@ -61,14 +61,18 @@ export default function useSatelliteTracking(
   const fetchTLE = useCallback(async () => {
     if (loadedRef.current) return;
     try {
-      // 첫 번째 그룹(stations)만 로드하여 가볍게 시작
-      const resp = await fetch(TLE_GROUPS[0].url);
-      if (!resp.ok) return;
+      logger.info('SatTracking', `Fetching TLE from ${TLE_GROUPS[0].url}`);
+      const resp = await fetch(TLE_GROUPS[0].url, { mode: 'cors' });
+      if (!resp.ok) {
+        logger.error('SatTracking', `TLE fetch failed: ${resp.status} ${resp.statusText}`);
+        return;
+      }
       const text = await resp.text();
+      logger.info('SatTracking', `TLE response: ${text.length} bytes`);
       const records = parseTLE(text);
       satRecords.current = records.slice(0, MAX_SATELLITES);
       loadedRef.current = true;
-      logger.info('SatTracking', `Loaded ${satRecords.current.length} satellites`);
+      logger.info('SatTracking', `Parsed ${satRecords.current.length} satellites`);
     } catch (err) {
       logger.error('SatTracking', `Failed to fetch TLE: ${err}`);
     }

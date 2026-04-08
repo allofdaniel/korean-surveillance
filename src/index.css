@@ -5971,21 +5971,51 @@ body {
    NVG / FLIR / CRT Visual Filters
    ============================================ */
 
-/* NVG (Night Vision Goggle) */
-.filter-nvg {
-  filter: sepia(1) hue-rotate(70deg) saturate(6) contrast(1.5) brightness(0.8);
+/* NVG (Night Vision Goggle) - overlay */
+#nvg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9996;
+  background: rgba(0, 40, 0, 0.35);
+  mix-blend-mode: multiply;
+}
+#nvg-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 20, 0, 0.8) 100%);
 }
 
-/* FLIR (Thermal Imaging) */
-.filter-flir {
-  filter: invert(1) grayscale(1) contrast(2.5) brightness(1.2);
+/* FLIR (Thermal Imaging) - overlay */
+#flir-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9996;
+  background: rgba(255, 140, 0, 0.12);
+  mix-blend-mode: color;
+}
+#flir-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
 }
 
 /* CRT Scanline Overlay */
-.filter-crt {
-  /* no CSS filter on the map itself, overlay handles it */
-}
-
 #crt-overlay {
   position: fixed;
   top: 0;

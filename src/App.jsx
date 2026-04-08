@@ -408,9 +408,11 @@ function App() {
         overflow: 'hidden'
       }}
     >
-      <div ref={mapContainer} id="map" className={viewFilter !== 'none' && viewFilter !== 'crt' ? `filter-${viewFilter}` : ''} style={{ height: `${windowHeight}px` }} />
+      <div ref={mapContainer} id="map" style={{ height: `${windowHeight}px` }} />
 
-      {/* CRT Scanline Overlay */}
+      {/* Visual Filter Overlays (NVG/FLIR/CRT) */}
+      {viewFilter === 'nvg' && <div id="nvg-overlay" />}
+      {viewFilter === 'flir' && <div id="flir-overlay" />}
       {viewFilter === 'crt' && (
         <>
           <div id="crt-vignette" />
