@@ -48,7 +48,8 @@ async function fetchVworldCctv(): Promise<CctvCamera[]> {
       'BOX(129,36,132,39)', // 북동
     ];
     for (const box of boxes) {
-      const url = `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_P_UTISCCTV&key=${VWORLD_KEY}&geomFilter=${box}&size=1000&format=json&crs=EPSG:4326&domain=koreasurveillance.com`;
+      const domain = window.location.hostname === 'localhost' ? 'localhost' : 'koreasurveillance.com';
+      const url = `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_P_UTISCCTV&key=${VWORLD_KEY}&geomFilter=${box}&size=1000&format=json&crs=EPSG:4326&domain=${domain}`;
       const resp = await fetch(url);
       if (!resp.ok) continue;
       const data = await resp.json();
@@ -85,13 +86,13 @@ async function fetchYeosuCctv(): Promise<CctvCamera[]> {
     if (!resp.ok) return [];
     const data = await resp.json();
     const items = data?.response?.body?.items || data?.items || [];
-    return items.map((item: Record<string, string>, i: number) => ({
+    return (Array.isArray(items) ? items : []).map((item: Record<string, string>, i: number) => ({
       id: `yeosu-${i}`,
-      name: item.cctvName || item.cctvNm || `여수 CCTV ${i + 1}`,
-      lat: parseFloat(item.latitude || item.lat || '0'),
-      lng: parseFloat(item.longitude || item.lng || '0'),
-      type: (item.cctvUrl || item.url || '').includes('m3u8') ? 'hls' as const : 'info' as const,
-      url: item.cctvUrl || item.url || '',
+      name: item.istl_lctn_nm || item.cctvName || `여수 CCTV ${i + 1}`,
+      lat: parseFloat(item.y_crdn || item.latitude || '0'),
+      lng: parseFloat(item.x_crdn || item.longitude || '0'),
+      type: (item.strm_http_addr || item.cctvUrl || '').includes('m3u8') ? 'hls' as const : 'info' as const,
+      url: item.strm_http_addr || item.cctvUrl || '',
       category: 'traffic' as const,
     })).filter((c: CctvCamera) => !isNaN(c.lat) && !isNaN(c.lng) && c.lat !== 0);
   } catch (err) {
@@ -151,7 +152,7 @@ export default function useCctvLayer(
 
   const updateMapSource = useCallback(() => {
     const mapInstance = map.current;
-    if (!mapInstance || !mapInstance.isStyleLoaded()) return;
+    if (!mapInstance) return;
 
     const features = cctvDataRef.current.map(cam => ({
       type: 'Feature' as const,
@@ -159,157 +160,109 @@ export default function useCctvLayer(
       properties: { id: cam.id, name: cam.name, type: cam.type, url: cam.url, category: cam.category },
     }));
 
-    const source = mapInstance.getSource('cctv-cameras');
-    if (source && 'setData' in source) {
-      (source as mapboxgl.GeoJSONSource).setData({
-        type: 'FeatureCollection',
-        features: features as GeoJSON.Feature[],
-      });
+    try {
+      const source = mapInstance.getSource('cctv-cameras');
+      if (source && 'setData' in source) {
+        (source as mapboxgl.GeoJSONSource).setData({
+          type: 'FeatureCollection',
+          features: features as GeoJSON.Feature[],
+        });
+        logger.info('CCTV', `Updated map source with ${features.length} features`);
+      } else {
+        logger.error('CCTV', 'Source cctv-cameras not found on map');
+      }
+    } catch (err) {
+      logger.error('CCTV', `updateMapSource error: ${err}`);
     }
   }, [map]);
 
-  // 소스/레이어 생성
+  const layersAddedRef = useRef(false);
+
+  // 통합 effect: 레이어 생성 + 데이터 로드 + 표시
   useEffect(() => {
-    const mapInstance = map.current;
-    if (!mapInstance || !mapLoaded) return;
+    const m = map.current;
+    if (!m || !mapLoaded) return;
 
-    const addLayers = () => {
-      if (!mapInstance.isStyleLoaded()) return;
-
-      if (!mapInstance.getSource('cctv-cameras')) {
-        mapInstance.addSource('cctv-cameras', {
-          type: 'geojson',
-          data: { type: 'FeatureCollection', features: [] },
-        });
-      }
-
-      if (!mapInstance.getLayer('cctv-dots')) {
-        mapInstance.addLayer({
-          id: 'cctv-dots',
-          type: 'circle',
-          source: 'cctv-cameras',
-          paint: {
-            'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 2, 10, 5, 15, 8],
-            'circle-color': [
-              'match', ['get', 'category'],
-              'traffic', '#FFD700',
-              'park', '#4CAF50',
-              'landmark', '#FF5722',
-              'coastal', '#03A9F4',
-              '#FFD700'
-            ],
-            'circle-stroke-color': '#ffffff',
-            'circle-stroke-width': 1,
-            'circle-opacity': 0,
-          },
-        });
-      }
-
-      if (!mapInstance.getLayer('cctv-labels')) {
-        mapInstance.addLayer({
-          id: 'cctv-labels',
-          type: 'symbol',
-          source: 'cctv-cameras',
-          minzoom: 10,
-          layout: {
-            'text-field': ['get', 'name'],
-            'text-size': 10,
-            'text-offset': [0, 1.5],
-            'text-anchor': 'top',
-          },
-          paint: {
-            'text-color': '#FFD700',
-            'text-halo-color': '#000000',
-            'text-halo-width': 1,
-            'text-opacity': 0,
-          },
-        });
-      }
-
-      // 클릭 이벤트 - CCTV 팝업
-      mapInstance.on('click', 'cctv-dots', (e) => {
-        if (!e.features || e.features.length === 0) return;
-        const props = e.features[0].properties;
-        if (!props) return;
-        const coords = (e.features[0].geometry as GeoJSON.Point).coordinates;
-
-        if (popupRef.current) popupRef.current.remove();
-
-        let content = '';
-        if (props.type === 'hls' && props.url) {
-          content = `
-            <div style="width:320px;background:#000;border-radius:8px;overflow:hidden;">
-              <div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div>
-              <video id="cctv-player" style="width:100%;height:180px;background:#000;" autoplay muted playsinline></video>
-              <div style="padding:4px 12px;color:#888;font-size:10px;">${props.category === 'traffic' ? '교통 CCTV' : props.category}</div>
-            </div>`;
-        } else if (props.type === 'iframe' && props.url) {
-          content = `
-            <div style="width:320px;background:#000;border-radius:8px;overflow:hidden;">
-              <div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div>
-              <iframe src="${props.url}" style="width:100%;height:200px;border:none;" allowfullscreen></iframe>
-            </div>`;
-        } else {
-          // info 타입 (위치만 있고 영상 URL 없음)
-          content = `
-            <div style="width:260px;background:#1a1a2e;border-radius:8px;overflow:hidden;padding:12px;">
-              <div style="color:#FFD700;font-weight:bold;font-size:13px;">📍 ${props.name}</div>
-              <div style="color:#aaa;font-size:11px;margin-top:4px;">${props.category === 'traffic' ? '교통 CCTV (위치 정보)' : props.category}</div>
-              <div style="color:#666;font-size:10px;margin-top:4px;">좌표: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}</div>
-            </div>`;
+    const ensureLayers = () => {
+      if (layersAddedRef.current) return;
+      try {
+        if (!m.getSource('cctv-cameras')) {
+          m.addSource('cctv-cameras', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
         }
-
-        const p = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '350px', className: 'cctv-popup' })
-          .setLngLat(coords as [number, number])
-          .setHTML(content)
-          .addTo(mapInstance);
-        popupRef.current = p;
-
-        if (props.type === 'hls' && props.url) {
-          setTimeout(async () => {
-            const video = document.getElementById('cctv-player') as HTMLVideoElement;
-            if (!video) return;
-            try {
-              const { default: Hls } = await import('hls.js');
-              if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(props.url);
-                hls.attachMedia(video);
-              } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = props.url;
-              }
-            } catch (err) {
-              logger.error('CCTV', `HLS init error: ${err}`);
-            }
-          }, 200);
+        if (!m.getLayer('cctv-dots')) {
+          m.addLayer({
+            id: 'cctv-dots', type: 'circle', source: 'cctv-cameras',
+            layout: { visibility: 'none' },
+            paint: {
+              'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 2, 10, 5, 15, 8],
+              'circle-color': ['match', ['get', 'category'], 'traffic', '#FFD700', 'park', '#4CAF50', 'landmark', '#FF5722', 'coastal', '#03A9F4', '#FFD700'],
+              'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1,
+            },
+          });
         }
-      });
+        if (!m.getLayer('cctv-labels')) {
+          m.addLayer({
+            id: 'cctv-labels', type: 'symbol', source: 'cctv-cameras', minzoom: 10,
+            layout: { 'text-field': ['get', 'name'], 'text-size': 10, 'text-offset': [0, 1.5], 'text-anchor': 'top', visibility: 'none' },
+            paint: { 'text-color': '#FFD700', 'text-halo-color': '#000000', 'text-halo-width': 1 },
+          });
+        }
+        // 클릭 이벤트
+        m.on('click', 'cctv-dots', (e) => {
+          if (!e.features?.length) return;
+          const props = e.features[0].properties;
+          if (!props) return;
+          const coords = (e.features[0].geometry as GeoJSON.Point).coordinates;
+          if (popupRef.current) popupRef.current.remove();
 
-      mapInstance.on('mouseenter', 'cctv-dots', () => { mapInstance.getCanvas().style.cursor = 'pointer'; });
-      mapInstance.on('mouseleave', 'cctv-dots', () => { mapInstance.getCanvas().style.cursor = ''; });
+          let content = '';
+          if (props.type === 'hls' && props.url) {
+            content = `<div style="width:320px;background:#000;border-radius:8px;overflow:hidden;"><div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div><video id="cctv-player" style="width:100%;height:180px;background:#000;" autoplay muted playsinline></video><div style="padding:4px 12px;color:#888;font-size:10px;">${props.category === 'traffic' ? '교통 CCTV' : props.category}</div></div>`;
+          } else if (props.type === 'iframe' && props.url) {
+            content = `<div style="width:320px;background:#000;border-radius:8px;overflow:hidden;"><div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div><iframe src="${props.url}" style="width:100%;height:200px;border:none;" allowfullscreen></iframe></div>`;
+          } else {
+            content = `<div style="width:260px;background:#1a1a2e;border-radius:8px;overflow:hidden;padding:12px;"><div style="color:#FFD700;font-weight:bold;font-size:13px;">📍 ${props.name}</div><div style="color:#aaa;font-size:11px;margin-top:4px;">${props.category === 'traffic' ? '교통 CCTV (위치 정보)' : props.category}</div><div style="color:#666;font-size:10px;margin-top:4px;">좌표: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}</div></div>`;
+          }
+
+          const p = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '350px', className: 'cctv-popup' })
+            .setLngLat(coords as [number, number]).setHTML(content).addTo(m);
+          popupRef.current = p;
+
+          if (props.type === 'hls' && props.url) {
+            setTimeout(async () => {
+              const video = document.getElementById('cctv-player') as HTMLVideoElement;
+              if (!video) return;
+              try {
+                const { default: Hls } = await import('hls.js');
+                if (Hls.isSupported()) { const hls = new Hls(); hls.loadSource(props.url); hls.attachMedia(video); }
+                else if (video.canPlayType('application/vnd.apple.mpegurl')) { video.src = props.url; }
+              } catch (err) { logger.error('CCTV', `HLS error: ${err}`); }
+            }, 200);
+          }
+        });
+        m.on('mouseenter', 'cctv-dots', () => { m.getCanvas().style.cursor = 'pointer'; });
+        m.on('mouseleave', 'cctv-dots', () => { m.getCanvas().style.cursor = ''; });
+        layersAddedRef.current = true;
+        logger.info('CCTV', 'Layers added to map');
+      } catch (err) { logger.error('CCTV', `Layer error: ${err}`); }
     };
 
-    if (mapInstance.isStyleLoaded()) addLayers();
-    else mapInstance.once('style.load', addLayers);
-  }, [map, mapLoaded]);
+    const setVis = (v: boolean) => {
+      try {
+        const vis = v ? 'visible' : 'none';
+        if (m.getLayer('cctv-dots')) m.setLayoutProperty('cctv-dots', 'visibility', vis);
+        if (m.getLayer('cctv-labels')) m.setLayoutProperty('cctv-labels', 'visibility', vis);
+      } catch { /* ignore */ }
+    };
 
-  // 표시/숨김 토글
-  useEffect(() => {
-    const mapInstance = map.current;
-    if (!mapInstance || !mapLoaded) return;
-    if (!mapInstance.isStyleLoaded()) return;
+    const run = async () => {
+      if (m.isStyleLoaded()) { ensureLayers(); } else { await new Promise<void>(r => m.once('style.load', () => { ensureLayers(); r(); })); }
+      if (!showCctv) { setVis(false); return; }
+      if (!loadedRef.current) await loadCctvData();
+      updateMapSource();
+      setVis(true);
+    };
 
-    const opacity = showCctv ? 1 : 0;
-    if (mapInstance.getLayer('cctv-dots')) {
-      mapInstance.setPaintProperty('cctv-dots', 'circle-opacity', opacity);
-      mapInstance.setPaintProperty('cctv-dots', 'circle-stroke-opacity', opacity);
-    }
-    if (mapInstance.getLayer('cctv-labels')) {
-      mapInstance.setPaintProperty('cctv-labels', 'text-opacity', opacity);
-    }
-
-    if (showCctv && !loadedRef.current) {
-      loadCctvData().then(updateMapSource);
-    }
+    run();
   }, [map, mapLoaded, showCctv, loadCctvData, updateMapSource]);
 }
