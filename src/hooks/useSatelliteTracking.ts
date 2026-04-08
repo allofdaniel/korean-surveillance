@@ -1,5 +1,6 @@
 /**
  * useSatelliteTracking - CelesTrak TLE 기반 위성 궤도 추적
+ * 위성 아이콘 + 궤도 라인 표시
  */
 import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
 import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
@@ -14,12 +15,11 @@ const TLE_URLS = [
   'https://celestrak.org/NORAD/elements/gp.php?GROUP=geo&FORMAT=tle',
 ];
 const MAX_SATELLITES = 300;
-const UPDATE_INTERVAL = 2000;
+const UPDATE_INTERVAL = 1000; // 1초마다 업데이트 (부드러운 이동)
+const ORBIT_MINUTES = 90; // 궤도 예측 시간
+const ORBIT_STEP = 1; // 1분 간격
 
-interface SatRecord {
-  name: string;
-  satrec: satellite.SatRec;
-}
+interface SatRecord { name: string; satrec: satellite.SatRec; }
 
 function parseTLE(tleText: string): SatRecord[] {
   const lines = tleText.trim().split('\n').map(l => l.trim()).filter(l => l.length > 0);
@@ -29,28 +29,69 @@ function parseTLE(tleText: string): SatRecord[] {
     const line1 = lines[i + 1];
     const line2 = lines[i + 2];
     if (!line1.startsWith('1') || !line2.startsWith('2')) continue;
-    try {
-      const satrec = satellite.twoline2satrec(line1, line2);
-      records.push({ name, satrec });
-    } catch { /* skip */ }
+    try { records.push({ name, satrec: satellite.twoline2satrec(line1, line2) }); } catch { /* skip */ }
   }
   return records;
 }
 
-function getSatPosition(satrec: satellite.SatRec, now: Date) {
+function getSatPosition(satrec: satellite.SatRec, time: Date) {
   try {
-    const posVel = satellite.propagate(satrec, now);
+    const posVel = satellite.propagate(satrec, time);
     if (!posVel.position || typeof posVel.position === 'boolean') return null;
-    const gmst = satellite.gstime(now);
+    const gmst = satellite.gstime(time);
     const geo = satellite.eciToGeodetic(posVel.position, gmst);
-    return {
-      lng: satellite.degreesLong(geo.longitude),
-      lat: satellite.degreesLat(geo.latitude),
-      alt: geo.height,
-    };
-  } catch {
-    return null;
+    const lng = satellite.degreesLong(geo.longitude);
+    const lat = satellite.degreesLat(geo.latitude);
+    if (isNaN(lng) || isNaN(lat)) return null;
+    return { lng, lat, alt: geo.height };
+  } catch { return null; }
+}
+
+function getOrbitPath(satrec: satellite.SatRec, now: Date): [number, number][] {
+  const path: [number, number][] = [];
+  for (let m = -ORBIT_MINUTES / 2; m <= ORBIT_MINUTES / 2; m += ORBIT_STEP) {
+    const t = new Date(now.getTime() + m * 60000);
+    const pos = getSatPosition(satrec, t);
+    if (pos) path.push([pos.lng, pos.lat]);
   }
+  return path;
+}
+
+// 위성 아이콘 생성 (삼각형 + 날개)
+function createSatelliteIcon(map: MapboxMap) {
+  if (map.hasImage('satellite-icon')) return;
+  const size = 20;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  // 위성 몸체 (사각형)
+  ctx.fillStyle = '#ff6b6b';
+  ctx.fillRect(7, 5, 6, 10);
+
+  // 태양전지판 (양쪽 날개)
+  ctx.fillStyle = '#4fc3f7';
+  ctx.fillRect(0, 7, 6, 6);
+  ctx.fillRect(14, 7, 6, 6);
+
+  // 태양전지판 줄무늬
+  ctx.strokeStyle = '#0288d1';
+  ctx.lineWidth = 1;
+  for (let x = 1; x < 6; x += 2) {
+    ctx.beginPath(); ctx.moveTo(x, 7); ctx.lineTo(x, 13); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x + 14, 7); ctx.lineTo(x + 14, 13); ctx.stroke();
+  }
+
+  // 안테나
+  ctx.strokeStyle = '#ff6b6b';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(10, 5); ctx.lineTo(10, 1); ctx.stroke();
+  ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(10, 1, 1.5, 0, Math.PI * 2); ctx.fill();
+
+  map.addImage('satellite-icon', ctx.getImageData(0, 0, size, size), { pixelRatio: 1 });
 }
 
 export default function useSatelliteTracking(
@@ -66,33 +107,45 @@ export default function useSatelliteTracking(
   const updatePositions = useCallback(() => {
     const m = map.current;
     if (!m || satRecords.current.length === 0) return;
-    try {
-      if (!m.getSource('satellite-positions')) return;
-    } catch { return; }
+    try { if (!m.getSource('satellite-positions')) return; } catch { return; }
 
     const now = new Date();
-    const features: GeoJSON.Feature[] = [];
+    const pointFeatures: GeoJSON.Feature[] = [];
+    const lineFeatures: GeoJSON.Feature[] = [];
+
     for (const rec of satRecords.current) {
       const pos = getSatPosition(rec.satrec, now);
-      if (!pos || isNaN(pos.lat) || isNaN(pos.lng)) continue;
-      features.push({
+      if (!pos) continue;
+
+      // 위성 위치 점
+      pointFeatures.push({
         type: 'Feature',
         geometry: { type: 'Point', coordinates: [pos.lng, pos.lat] },
         properties: { name: rec.name, alt: Math.round(pos.alt) },
       });
+
+      // 궤도 라인 (5개마다 하나만 - 성능)
+      if (pointFeatures.length % 5 === 0) {
+        const orbit = getOrbitPath(rec.satrec, now);
+        if (orbit.length > 2) {
+          lineFeatures.push({
+            type: 'Feature',
+            geometry: { type: 'LineString', coordinates: orbit },
+            properties: { name: rec.name },
+          });
+        }
+      }
     }
 
     try {
-      const source = m.getSource('satellite-positions') as mapboxgl.GeoJSONSource;
-      if (source) {
-        source.setData({ type: 'FeatureCollection', features });
-      }
-    } catch (err) {
-      logger.error('SatTracking', `Update error: ${err}`);
-    }
+      const posSrc = m.getSource('satellite-positions') as mapboxgl.GeoJSONSource;
+      if (posSrc) posSrc.setData({ type: 'FeatureCollection', features: pointFeatures });
+
+      const orbitSrc = m.getSource('satellite-orbits') as mapboxgl.GeoJSONSource;
+      if (orbitSrc) orbitSrc.setData({ type: 'FeatureCollection', features: lineFeatures });
+    } catch (err) { logger.error('SatTracking', `Update error: ${err}`); }
   }, [map]);
 
-  // 단일 effect: 맵 로드 + showSatellites 변경 시 모두 처리
   useEffect(() => {
     const m = map.current;
     if (!m || !mapLoaded) return;
@@ -100,35 +153,35 @@ export default function useSatelliteTracking(
     const ensureLayers = () => {
       if (layersAddedRef.current) return;
       try {
+        createSatelliteIcon(m);
+
+        // 궤도 라인 소스/레이어
+        if (!m.getSource('satellite-orbits')) {
+          m.addSource('satellite-orbits', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+        }
+        if (!m.getLayer('satellite-orbit-lines')) {
+          m.addLayer({
+            id: 'satellite-orbit-lines', type: 'line', source: 'satellite-orbits',
+            paint: { 'line-color': '#ff6b6b', 'line-width': 1, 'line-opacity': 0.4, 'line-dasharray': [4, 4] },
+          });
+        }
+
+        // 위성 위치 소스/레이어
         if (!m.getSource('satellite-positions')) {
-          m.addSource('satellite-positions', {
-            type: 'geojson',
-            data: { type: 'FeatureCollection', features: [] },
-          });
+          m.addSource('satellite-positions', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
         }
-        if (!m.getLayer('satellite-dots')) {
+        if (!m.getLayer('satellite-icons')) {
           m.addLayer({
-            id: 'satellite-dots',
-            type: 'circle',
-            source: 'satellite-positions',
-            paint: {
-              'circle-radius': 4,
-              'circle-color': '#ff6b6b',
-              'circle-stroke-color': '#ffffff',
-              'circle-stroke-width': 1,
-            },
-          });
-        }
-        if (!m.getLayer('satellite-labels')) {
-          m.addLayer({
-            id: 'satellite-labels',
-            type: 'symbol',
-            source: 'satellite-positions',
+            id: 'satellite-icons', type: 'symbol', source: 'satellite-positions',
             layout: {
+              'icon-image': 'satellite-icon',
+              'icon-size': 1.5,
+              'icon-allow-overlap': true,
               'text-field': ['get', 'name'],
               'text-size': 9,
-              'text-offset': [0, 1.2],
+              'text-offset': [0, 1.8],
               'text-anchor': 'top',
+              'text-optional': true,
             },
             paint: {
               'text-color': '#ff6b6b',
@@ -137,43 +190,35 @@ export default function useSatelliteTracking(
             },
           });
         }
+
         layersAddedRef.current = true;
-        logger.info('SatTracking', 'Layers added to map');
-      } catch (err) {
-        logger.error('SatTracking', `Layer creation error: ${err}`);
-      }
+        logger.info('SatTracking', 'Layers + icon added');
+      } catch (err) { logger.error('SatTracking', `Layer error: ${err}`); }
     };
 
-    const setVisibility = (visible: boolean) => {
+    const setVis = (v: boolean) => {
       try {
-        const vis = visible ? 'visible' : 'none';
-        if (m.getLayer('satellite-dots')) m.setLayoutProperty('satellite-dots', 'visibility', vis);
-        if (m.getLayer('satellite-labels')) m.setLayoutProperty('satellite-labels', 'visibility', vis);
+        const vis = v ? 'visible' : 'none';
+        if (m.getLayer('satellite-icons')) m.setLayoutProperty('satellite-icons', 'visibility', vis);
+        if (m.getLayer('satellite-orbit-lines')) m.setLayoutProperty('satellite-orbit-lines', 'visibility', vis);
       } catch { /* ignore */ }
     };
 
     const start = async () => {
-      // 레이어 생성
-      if (m.isStyleLoaded()) {
-        ensureLayers();
-      } else {
-        await new Promise<void>(resolve => {
-          m.once('style.load', () => { ensureLayers(); resolve(); });
-        });
-      }
+      if (m.isStyleLoaded()) ensureLayers();
+      else await new Promise<void>(r => m.once('style.load', () => { ensureLayers(); r(); }));
 
       if (!showSatellites) {
-        setVisibility(false);
+        setVis(false);
         if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
         return;
       }
 
-      setVisibility(true);
+      setVis(true);
 
-      // TLE 데이터 로드
       if (!loadedRef.current) {
         try {
-          logger.info('SatTracking', `Fetching TLE data from ${TLE_URLS.length} groups...`);
+          logger.info('SatTracking', 'Fetching TLE data...');
           const allRecords: SatRecord[] = [];
           const results = await Promise.allSettled(TLE_URLS.map(url => fetch(url)));
           for (const result of results) {
@@ -184,14 +229,10 @@ export default function useSatelliteTracking(
           }
           satRecords.current = allRecords.slice(0, MAX_SATELLITES);
           loadedRef.current = true;
-          logger.info('SatTracking', `Loaded ${satRecords.current.length} satellites from ${TLE_URLS.length} groups`);
-        } catch (err) {
-          logger.error('SatTracking', `Fetch error: ${err}`);
-          return;
-        }
+          logger.info('SatTracking', `Loaded ${satRecords.current.length} satellites`);
+        } catch (err) { logger.error('SatTracking', `Fetch error: ${err}`); return; }
       }
 
-      // 즉시 업데이트 + 주기 업데이트
       updatePositions();
       if (!intervalRef.current) {
         intervalRef.current = setInterval(updatePositions, UPDATE_INTERVAL);
@@ -199,9 +240,6 @@ export default function useSatelliteTracking(
     };
 
     start();
-
-    return () => {
-      if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
-    };
+    return () => { if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; } };
   }, [map, mapLoaded, showSatellites, updatePositions]);
 }
