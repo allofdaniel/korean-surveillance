@@ -51,5 +51,8 @@ export { default as useCctvLayer } from './useCctvLayer';
 // 선박 AIS 훅
 export { default as useShipTracking } from './useShipTracking';
 
+// V-World 공간데이터 훅
+export { default as useVworldLayers } from './useVworldLayers';
+
 // 유틸리티 훅
 export { default as useWindowHeight } from './useWindowHeight';

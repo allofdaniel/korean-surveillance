@@ -31,6 +31,11 @@ interface MapState {
 
   // Ships
   showShips: boolean;
+
+  // V-World layers
+  showVwBuildings: boolean;
+  showVwSpecial: boolean;
+  showVwRoads: boolean;
 }
 
 interface MapActions {
@@ -46,6 +51,9 @@ interface MapActions {
   setShowSatellites: (value: boolean) => void;
   setShowCctv: (value: boolean) => void;
   setShowShips: (value: boolean) => void;
+  setShowVwBuildings: (value: boolean) => void;
+  setShowVwSpecial: (value: boolean) => void;
+  setShowVwRoads: (value: boolean) => void;
 
   // Toggles
   toggle3DView: () => void;
@@ -81,6 +89,11 @@ const useMapStore = create<MapStore>((set) => ({
   // Ships
   showShips: false,
 
+  // V-World layers
+  showVwBuildings: false,
+  showVwSpecial: false,
+  showVwRoads: false,
+
   // Actions
   setIs3DView: (value) => set({ is3DView: value }),
   setIsDarkMode: (value) => set({ isDarkMode: value }),
@@ -97,6 +110,9 @@ const useMapStore = create<MapStore>((set) => ({
   setShowSatellites: (value) => set({ showSatellites: value }),
   setShowCctv: (value) => set({ showCctv: value }),
   setShowShips: (value) => set({ showShips: value }),
+  setShowVwBuildings: (value) => set({ showVwBuildings: value }),
+  setShowVwSpecial: (value) => set({ showVwSpecial: value }),
+  setShowVwRoads: (value) => set({ showVwRoads: value }),
 
   // Toggle helpers
   toggle3DView: () => set((state) => ({ is3DView: !state.is3DView })),
@@ -115,6 +131,9 @@ const useMapStore = create<MapStore>((set) => ({
     showSatellites: false,
     showCctv: false,
     showShips: false,
+    showVwBuildings: false,
+    showVwSpecial: false,
+    showVwRoads: false,
   }),
 }));
 

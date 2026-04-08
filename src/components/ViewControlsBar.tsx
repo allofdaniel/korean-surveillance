@@ -52,6 +52,13 @@ interface ViewControlsBarProps {
   // Ships
   showShips: boolean;
   setShowShips: (show: boolean) => void;
+  // V-World layers
+  showVwBuildings: boolean;
+  setShowVwBuildings: (show: boolean) => void;
+  showVwSpecial: boolean;
+  setShowVwSpecial: (show: boolean) => void;
+  showVwRoads: boolean;
+  setShowVwRoads: (show: boolean) => void;
   // Weather (pass-through to NotamPanel)
   showLightning: boolean;
   setShowLightning: (show: boolean) => void;
@@ -103,6 +110,13 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
   // Ships
   showShips,
   setShowShips,
+  // V-World layers
+  showVwBuildings,
+  setShowVwBuildings,
+  showVwSpecial,
+  setShowVwSpecial,
+  showVwRoads,
+  setShowVwRoads,
   // Weather (pass-through to NotamPanel)
   showLightning,
   setShowLightning,
@@ -184,6 +198,20 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
         style={showShips ? { background: 'rgba(3, 169, 244, 0.3)', borderColor: '#03A9F4', color: '#03A9F4' } : {}}
       >
         AIS
+      </button>
+      <button
+        className={`view-btn ${showVwBuildings || showVwSpecial || showVwRoads ? 'active' : ''}`}
+        onClick={() => {
+          const allOn = showVwBuildings && showVwSpecial && showVwRoads;
+          setShowVwBuildings(!allOn);
+          setShowVwSpecial(!allOn);
+          setShowVwRoads(!allOn);
+        }}
+        title="V-World 건물/도로 (줌 11+)"
+        aria-label="V-World 공간데이터 표시"
+        style={(showVwBuildings || showVwSpecial || showVwRoads) ? { background: 'rgba(229, 62, 62, 0.3)', borderColor: '#e53e3e', color: '#fc8181' } : {}}
+      >
+        MAP
       </button>
 
       <NotamPanel

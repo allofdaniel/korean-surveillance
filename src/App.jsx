@@ -75,6 +75,7 @@ import {
   useSatelliteTracking,
   useCctvLayer,
   useShipTracking,
+  useVworldLayers,
 } from './hooks';
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -100,6 +101,9 @@ function App() {
     showSatellites, setShowSatellites,
     showCctv, setShowCctv,
     showShips, setShowShips,
+    showVwBuildings, setShowVwBuildings,
+    showVwSpecial, setShowVwSpecial,
+    showVwRoads, setShowVwRoads,
   } = useMapStore();
 
   // UI store
@@ -212,6 +216,9 @@ function App() {
 
   // Ship AIS tracking hook
   useShipTracking(map, mapLoaded, showShips);
+
+  // V-World spatial data layers (buildings, special buildings, roads)
+  useVworldLayers(map, mapLoaded, showVwBuildings, showVwSpecial, showVwRoads);
 
   // Map style hook
   useMapStyle({
@@ -460,6 +467,12 @@ function App() {
         setShowCctv={setShowCctv}
         showShips={showShips}
         setShowShips={setShowShips}
+        showVwBuildings={showVwBuildings}
+        setShowVwBuildings={setShowVwBuildings}
+        showVwSpecial={showVwSpecial}
+        setShowVwSpecial={setShowVwSpecial}
+        showVwRoads={showVwRoads}
+        setShowVwRoads={setShowVwRoads}
         showLightning={showLightning}
         setShowLightning={setShowLightning}
         showSigmet={showSigmet}
