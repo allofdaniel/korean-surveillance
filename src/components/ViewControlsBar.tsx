@@ -28,6 +28,8 @@ interface NotamDataResponse {
   returned?: number;
 }
 
+type ViewFilter = 'none' | 'nvg' | 'flir' | 'crt';
+
 interface ViewControlsBarProps {
   // 2D/3D Toggle
   is3DView: boolean;
@@ -38,6 +40,15 @@ interface ViewControlsBarProps {
   // Satellite
   showSatellite: boolean;
   setShowSatellite: (show: boolean) => void;
+  // View Filter (NVG/FLIR/CRT)
+  viewFilter: ViewFilter;
+  cycleViewFilter: () => void;
+  // Satellite tracking
+  showSatellites: boolean;
+  setShowSatellites: (show: boolean) => void;
+  // CCTV
+  showCctv: boolean;
+  setShowCctv: (show: boolean) => void;
   // Weather (pass-through to NotamPanel)
   showLightning: boolean;
   setShowLightning: (show: boolean) => void;
@@ -77,6 +88,15 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
   // Satellite
   showSatellite,
   setShowSatellite,
+  // View Filter
+  viewFilter,
+  cycleViewFilter,
+  // Satellite tracking
+  showSatellites,
+  setShowSatellites,
+  // CCTV
+  showCctv,
+  setShowCctv,
   // Weather (pass-through to NotamPanel)
   showLightning,
   setShowLightning,
@@ -120,6 +140,34 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
         aria-pressed={showSatellite}
       >
         🛰️
+      </button>
+      <button
+        className={`view-btn ${viewFilter !== 'none' ? `filter-active-${viewFilter}` : ''}`}
+        onClick={cycleViewFilter}
+        title={`시각 필터: ${viewFilter === 'none' ? 'OFF' : viewFilter.toUpperCase()}`}
+        aria-label="시각 필터 전환 (NVG/FLIR/CRT)"
+      >
+        {viewFilter === 'none' ? 'FX' : viewFilter === 'nvg' ? 'NVG' : viewFilter === 'flir' ? 'FLIR' : 'CRT'}
+      </button>
+      <button
+        className={`view-btn ${showSatellites ? 'active' : ''}`}
+        onClick={() => setShowSatellites(!showSatellites)}
+        title="위성 궤도 추적"
+        aria-label="위성 궤도 표시"
+        aria-pressed={showSatellites}
+        style={showSatellites ? { background: 'rgba(255, 107, 107, 0.3)', borderColor: '#ff6b6b', color: '#ff6b6b' } : {}}
+      >
+        SAT
+      </button>
+      <button
+        className={`view-btn ${showCctv ? 'active' : ''}`}
+        onClick={() => setShowCctv(!showCctv)}
+        title="실시간 CCTV"
+        aria-label="CCTV 카메라 표시"
+        aria-pressed={showCctv}
+        style={showCctv ? { background: 'rgba(255, 215, 0, 0.3)', borderColor: '#FFD700', color: '#FFD700' } : {}}
+      >
+        CCTV
       </button>
 
       <NotamPanel

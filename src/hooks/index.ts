@@ -42,5 +42,11 @@ export { default as useProcedureRendering } from './useProcedureRendering';
 export { default as useGlobalData } from './useGlobalData';
 export { default as useGlobalLayers } from './useGlobalLayers';
 
+// 위성 추적 훅
+export { default as useSatelliteTracking } from './useSatelliteTracking';
+
+// CCTV 훅
+export { default as useCctvLayer } from './useCctvLayer';
+
 // 유틸리티 훅
 export { default as useWindowHeight } from './useWindowHeight';

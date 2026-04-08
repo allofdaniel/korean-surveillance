@@ -72,6 +72,8 @@ import {
   useWindowHeight,
   useGlobalData,
   useGlobalLayers,
+  useSatelliteTracking,
+  useCctvLayer,
 } from './hooks';
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -93,6 +95,9 @@ function App() {
     showBuildings,
     showTerrain, setShowTerrain,
     show3DAltitude, setShow3DAltitude,
+    viewFilter, cycleViewFilter,
+    showSatellites, setShowSatellites,
+    showCctv, setShowCctv,
   } = useMapStore();
 
   // UI store
@@ -196,6 +201,12 @@ function App() {
 
   // Window height hook (Android WebView fix)
   const windowHeight = useWindowHeight(map);
+
+  // Satellite tracking hook (CelesTrak TLE)
+  useSatelliteTracking(map, mapLoaded, showSatellites);
+
+  // CCTV layer hook (ITS + 고정 CCTV)
+  useCctvLayer(map, mapLoaded, showCctv);
 
   // Map style hook
   useMapStyle({
@@ -397,7 +408,15 @@ function App() {
         overflow: 'hidden'
       }}
     >
-      <div ref={mapContainer} id="map" style={{ height: `${windowHeight}px` }} />
+      <div ref={mapContainer} id="map" className={viewFilter !== 'none' && viewFilter !== 'crt' ? `filter-${viewFilter}` : ''} style={{ height: `${windowHeight}px` }} />
+
+      {/* CRT Scanline Overlay */}
+      {viewFilter === 'crt' && (
+        <>
+          <div id="crt-vignette" />
+          <div id="crt-overlay" />
+        </>
+      )}
 
       {/* Time & Weather Display */}
       <TimeWeatherBar
@@ -426,6 +445,12 @@ function App() {
         setIsDarkMode={setIsDarkMode}
         showSatellite={showSatellite}
         setShowSatellite={setShowSatellite}
+        viewFilter={viewFilter}
+        cycleViewFilter={cycleViewFilter}
+        showSatellites={showSatellites}
+        setShowSatellites={setShowSatellites}
+        showCctv={showCctv}
+        setShowCctv={setShowCctv}
         showLightning={showLightning}
         setShowLightning={setShowLightning}
         showSigmet={showSigmet}

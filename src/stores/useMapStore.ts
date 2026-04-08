@@ -7,6 +7,8 @@ import { create } from 'zustand';
  * - 지형/건물 표시
  */
 
+type ViewFilter = 'none' | 'nvg' | 'flir' | 'crt';
+
 interface MapState {
   // View mode
   is3DView: boolean;
@@ -17,6 +19,15 @@ interface MapState {
   showBuildings: boolean;
   showTerrain: boolean;
   show3DAltitude: boolean;
+
+  // Visual filters (NVG/FLIR/CRT)
+  viewFilter: ViewFilter;
+
+  // Satellite tracking
+  showSatellites: boolean;
+
+  // CCTV
+  showCctv: boolean;
 }
 
 interface MapActions {
@@ -27,6 +38,10 @@ interface MapActions {
   setShowBuildings: (value: boolean) => void;
   setShowTerrain: (value: boolean) => void;
   setShow3DAltitude: (value: boolean) => void;
+  setViewFilter: (value: ViewFilter) => void;
+  cycleViewFilter: () => void;
+  setShowSatellites: (value: boolean) => void;
+  setShowCctv: (value: boolean) => void;
 
   // Toggles
   toggle3DView: () => void;
@@ -50,6 +65,15 @@ const useMapStore = create<MapStore>((set) => ({
   showTerrain: true,
   show3DAltitude: true,
 
+  // Visual filters
+  viewFilter: 'none' as ViewFilter,
+
+  // Satellite tracking
+  showSatellites: false,
+
+  // CCTV
+  showCctv: false,
+
   // Actions
   setIs3DView: (value) => set({ is3DView: value }),
   setIsDarkMode: (value) => set({ isDarkMode: value }),
@@ -57,6 +81,14 @@ const useMapStore = create<MapStore>((set) => ({
   setShowBuildings: (value) => set({ showBuildings: value }),
   setShowTerrain: (value) => set({ showTerrain: value }),
   setShow3DAltitude: (value) => set({ show3DAltitude: value }),
+  setViewFilter: (value) => set({ viewFilter: value }),
+  cycleViewFilter: () => set((state) => {
+    const order: ViewFilter[] = ['none', 'nvg', 'flir', 'crt'];
+    const idx = order.indexOf(state.viewFilter);
+    return { viewFilter: order[(idx + 1) % order.length] };
+  }),
+  setShowSatellites: (value) => set({ showSatellites: value }),
+  setShowCctv: (value) => set({ showCctv: value }),
 
   // Toggle helpers
   toggle3DView: () => set((state) => ({ is3DView: !state.is3DView })),
@@ -71,6 +103,9 @@ const useMapStore = create<MapStore>((set) => ({
     showBuildings: true,
     showTerrain: true,
     show3DAltitude: true,
+    viewFilter: 'none' as ViewFilter,
+    showSatellites: false,
+    showCctv: false,
   }),
 }));
 

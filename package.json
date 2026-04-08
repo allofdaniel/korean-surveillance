@@ -25,10 +25,12 @@
     "@capacitor/core": "^8.0.0",
     "@upstash/redis": "^1.36.2",
     "docx": "^9.5.1",
+    "hls.js": "^1.6.15",
     "mapbox-gl": "^3.17.0",
     "pg": "^8.18.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "satellite.js": "^5.0.0",
     "three": "^0.182.0",
     "zod": "^3.22.4",
     "zustand": "^5.0.10"
