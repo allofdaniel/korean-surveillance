@@ -1,0 +1,410 @@
+{
+  "name": "UBIKAIS Full Data Crawler (Daily)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "triggerAtHour": 6,
+              "triggerAtMinute": 0
+            },
+            {
+              "field": "hours",
+              "triggerAtHour": 18,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "매일 06시/18시 실행",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://ubikais.fois.go.kr:8030/common/login?systemId=sysUbikais",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "login-page",
+      "name": "1. 로그인 페이지 접속",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ubikais.fois.go.kr:8030/common/loginProc",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            },
+            {
+              "name": "Referer",
+              "value": "https://ubikais.fois.go.kr:8030/common/login?systemId=sysUbikais"
+            },
+            {
+              "name": "Cookie",
+              "value": "={{ $json.headers['set-cookie'] ? $json.headers['set-cookie'].map(c => c.split(';')[0]).join('; ') : '' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "userId",
+              "value": "allofdanie"
+            },
+            {
+              "name": "userPw",
+              "value": "pr12pr34!!"
+            },
+            {
+              "name": "systemId",
+              "value": "sysUbikais"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "redirect": {
+            "redirect": {
+              "followRedirects": true
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "login-post",
+      "name": "2. 로그인 POST",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        710,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// ===== UBIKAIS 전체 데이터 크롤링 =====\n// 로그인 후 받은 쿠키로 NOTAM + Weather + FPL + AeroData + ATFM 수집\n// 주의: n8n 환경변수에 NODE_TLS_REJECT_UNAUTHORIZED=0 설정 필요 (SSL)\n\nconst BASE_URL = 'https://ubikais.fois.go.kr:8030';\nconst helpers = this.helpers;\n\n// 이전 노드에서 쿠키 추출\nconst loginResponse = $input.first().json;\nlet cookies = '';\nif (loginResponse.headers && loginResponse.headers['set-cookie']) {\n  const setCookies = loginResponse.headers['set-cookie'];\n  cookies = (Array.isArray(setCookies) ? setCookies : [setCookies])\n    .map(c => c.split(';')[0])\n    .join('; ');\n}\n\n// 날짜 헬퍼\nconst now = new Date();\nconst y = now.getFullYear();\nconst m = String(now.getMonth() + 1).padStart(2, '0');\nconst d = String(now.getDate()).padStart(2, '0');\nconst hh = String(now.getHours()).padStart(2, '0');\nconst mm = String(now.getMinutes()).padStart(2, '0');\nconst ss = String(now.getSeconds()).padStart(2, '0');\nconst today = `${y}-${m}-${d}`;\nconst todayCompact = `${y}${m}${d}`;\nconst yy = String(y).slice(2);\nconst todayShort = `${yy}${m}${d}`;\nconst timestamp = `${y}${m}${d}_${hh}${mm}${ss}`;\n\n// 날짜 범위 (N일 전 ~ 오늘)\nfunction dateRange(daysBack) {\n  const from = new Date(now);\n  from.setDate(from.getDate() - daysBack);\n  const fy = from.getFullYear();\n  const fm = String(from.getMonth() + 1).padStart(2, '0');\n  const fd = String(from.getDate()).padStart(2, '0');\n  return { from: `${fy}-${fm}-${fd}`, to: today };\n}\n\n// UBIKAIS API 호출 함수\nasync function crawl(endpoint, params) {\n  const qs = Object.entries(params).map(([k, v]) => encodeURIComponent(k) + \"=\" + encodeURIComponent(String(v))).join(\"&\");\n  const fullUrl = BASE_URL + endpoint + \"?\" + qs;\n  try {\n    const response = await helpers.httpRequest({\n      url: fullUrl,\n      method: 'GET',\n      headers: {\n        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',\n        'Accept': 'application/json, text/javascript, */*; q=0.01',\n        'X-Requested-With': 'XMLHttpRequest',\n        'Referer': BASE_URL + '/sysUbikais/biz/main.ubikais',\n        'Cookie': cookies\n      },\n      skipSslCertificateValidation: true,\n      json: true\n    });\n    return response;\n  } catch (e) {\n    return { error: e.message };\n  }\n}\n\nfunction sleep(ms) {\n  return new Promise(r => setTimeout(r, ms));\n}\n\n// ===== 크롤링 결과 객체 =====\nconst allData = {\n  crawled_at: now.toISOString(),\n  data: {\n    main: { departures: {}, arrivals: {}, weather: {} },\n    notam: { fir: {}, ad: {}, snow: null, prohibited: null, sequence: {} },\n    flight_plans: {},\n    weather: { metar: {}, taf: {}, sigmet: null },\n    aero_data: { airports: {}, runways: {}, aprons: {}, navaids: null, obstacles: null },\n    atfm: {}\n  }\n};\n\n// 공항 목록\nconst mainAirports = ['RKSI', 'RKSS', 'RKPK', 'RKPC', 'RKPU'];\nconst allAirports = [\n  'RKSI', 'RKSS', 'RKTU', 'RKNY', 'RKJK', 'RKNW',\n  'RKPC', 'RKPK', 'RKTN', 'RKJJ', 'RKJY', 'RKPU',\n  'RKTH', 'RKPS', 'RKJB', 'RKTL'\n];\n\n// ========== 1. 메인 페이지 데이터 (주요 공항) ==========\nfor (const apt of mainAirports) {\n  allData.data.main.departures[apt] = await crawl('/main/selectIfr.fois', { depArr: 'dep', apIcao: apt });\n  allData.data.main.arrivals[apt] = await crawl('/main/selectIfr.fois', { depArr: 'arr', apIcao: apt });\n  allData.data.main.weather[apt] = await crawl('/main/selectMetSpec.fois', { apIcao: apt });\n  await sleep(500);\n}\n\n// ========== 2. NOTAM ==========\n// 2a. FIR NOTAM (시리즈: C, A, D)\nfor (const series of ['C', 'A', 'D']) {\n  const result = await crawl('/sysUbikais/biz/nps/selectNotamRecFir.fois', {\n    downloadYn: '1', srchFir: 'RKRR', srchAd: 'RKRR', srchSeries: series,\n    srchValid: today, srchValidsh: todayShort + '2359',\n    srchValidsh2: todayShort + '0000', srchValid2: '1',\n    cmd: 'get-records', limit: '1000', offset: '0'\n  });\n  if (result && result.records) allData.data.notam.fir[series] = result;\n  await sleep(300);\n}\n\n// 2b. AD NOTAM (주요 공항)\nfor (const airport of mainAirports) {\n  const result = await crawl('/sysUbikais/biz/nps/selectNotamRecAd.fois', {\n    downloadYn: '1', srchFir: 'RKRR', srchSeries: 'C', srchAd: airport,\n    srchValid: today, srchValidsh: todayShort + '2359',\n    srchValidsh2: todayShort + '0000', srchValid2: '1',\n    cmd: 'get-records', limit: '1000', offset: '0'\n  });\n  if (result) allData.data.notam.ad[airport] = result;\n  await sleep(300);\n}\n\n// 2c. SNOWTAM\nallData.data.notam.snow = await crawl('/sysUbikais/biz/nps/selectNotamRecSnow.fois', {\n  downloadYn: '1', printYn: '', srchOriginator: '', srchSeq: '',\n  srchAd: '', srchValidFrom: String(y),\n  cmd: 'get-records', limit: '1000', offset: '0'\n});\n\n// 2d. 금지구역 NOTAM\nallData.data.notam.prohibited = await crawl('/sysUbikais/biz/nps/selectRecOffZone.fois', {\n  downloadYn: '1', srchFir: 'RKRR', srchSeries: 'D', srchQcode: 'QRP',\n  srchValid: today, srchValidsh: todayShort + '2359',\n  srchValidsh2: todayShort + '0000', srchValid2: '1',\n  cmd: 'get-records', limit: '1000', offset: '0'\n});\n\n// 2e. Sequence List (시리즈: C, A, D)\nfor (const series of ['C', 'A', 'D']) {\n  const result = await crawl('/sysUbikais/biz/nps/selectNotamRecSeq.fois', {\n    downloadYn: '1', printYn: '', srchFir: 'RKRR', srchSeries: series,\n    srchSeq: '', srchYear: yy,\n    cmd: 'get-records', limit: '1000', offset: '0'\n  });\n  if (result && result.records) allData.data.notam.sequence[series] = result;\n  await sleep(300);\n}\n\n// ========== 3. 비행 계획 (i-ARO) ==========\nallData.data.flight_plans = {\n  ifr_departures: await crawl('/sysUbikais/biz/fpl/selectDep.fois', {\n    today: todayCompact, cmd: 'get-records', limit: 1000, offset: 0\n  }),\n  ifr_arrivals: await crawl('/sysUbikais/biz/fpl/selectArr.fois', {\n    today: todayCompact, cmd: 'get-records', limit: 1000, offset: 0\n  }),\n  vfr: await crawl('/sysUbikais/biz/fpl/selectVfrFpl.fois', {\n    today: todayCompact, cmd: 'get-records', limit: 1000, offset: 0\n  }),\n  ulp_lsa: await crawl('/sysUbikais/biz/fpl/selectUlpFpl.fois', {\n    today: todayCompact, cmd: 'get-records', limit: 1000, offset: 0\n  })\n};\nawait sleep(500);\n\n// ========== 4. 기상 데이터 (주요 공항) ==========\nconst wx2 = dateRange(2);\nconst wx7 = dateRange(7);\n\nfor (const apt of mainAirports) {\n  allData.data.weather.metar[apt] = await crawl('/sysUbikais/biz/wis/selectMetar.fois', {\n    today: todayCompact, srchApIcao: apt,\n    srchDateFr: wx2.from, srchDateTo: wx2.to,\n    cmd: 'get-records', limit: 500, offset: 0\n  });\n  allData.data.weather.taf[apt] = await crawl('/sysUbikais/biz/wis/selectTaf.fois', {\n    today: todayCompact, srchApIcao: apt,\n    srchDateFr: wx2.from, srchDateTo: wx2.to,\n    cmd: 'get-records', limit: 500, offset: 0\n  });\n  await sleep(300);\n}\n\nallData.data.weather.sigmet = await crawl('/sysUbikais/biz/wis/selectSigmet.fois', {\n  srchDateFr: wx7.from, srchDateTo: wx7.to,\n  cmd: 'get-records', limit: 100, offset: 0\n});\n\n// ========== 5. AERO-DATA (전체 공항) ==========\nfor (const apt of allAirports) {\n  allData.data.aero_data.airports[apt] = await crawl('/sysUbikais/biz/ais/airport/select.fois', {\n    today: todayCompact, srchAd: apt\n  });\n  allData.data.aero_data.runways[apt] = await crawl('/sysUbikais/biz/ais/runway/select.fois', {\n    today: todayCompact, srchAd: apt\n  });\n  allData.data.aero_data.aprons[apt] = await crawl('/sysUbikais/biz/ais/apron/select.fois', {\n    today: todayCompact, srchAd: apt\n  });\n  await sleep(300);\n}\n\nallData.data.aero_data.navaids = await crawl('/sysUbikais/biz/ais/navaid/select.fois', {\n  today: todayCompact, cmd: 'get-records', limit: 500, offset: 0\n});\n\nallData.data.aero_data.obstacles = await crawl('/sysUbikais/biz/ais/obst/select.fois', {\n  today: todayCompact, cmd: 'get-records', limit: 500, offset: 0\n});\n\n// ========== 6. ATFM ==========\nallData.data.atfm = {\n  daily_plan: await crawl('/sysUbikais/biz/atfms/selectAdp.fois', {\n    today: todayCompact, cmd: 'get-records', limit: 100, offset: 0\n  }),\n  messages: await crawl('/sysUbikais/biz/atfms/selectDfl.fois', {\n    today: todayCompact, cmd: 'get-records', limit: 100, offset: 0\n  })\n};\n\n// ========== 결과 반환 ==========\n// 통계 계산\nconst stats = {\n  main: mainAirports.length,\n  notam_fir: Object.keys(allData.data.notam.fir).length,\n  notam_ad: Object.keys(allData.data.notam.ad).length,\n  snowtam: allData.data.notam.snow ? 1 : 0,\n  prohibited: allData.data.notam.prohibited ? 1 : 0,\n  flight_plans: 4,\n  weather_metar: Object.keys(allData.data.weather.metar).length,\n  weather_taf: Object.keys(allData.data.weather.taf).length,\n  sigmet: allData.data.weather.sigmet ? 1 : 0,\n  aero_airports: Object.keys(allData.data.aero_data.airports).length,\n  aero_navaids: allData.data.aero_data.navaids ? 1 : 0,\n  aero_obstacles: allData.data.aero_data.obstacles ? 1 : 0,\n  atfm: 2\n};\n\nreturn [{\n  json: {\n    fullData: allData,\n    s3Key: `notam_complete/${timestamp}/ubikais_full_${timestamp}.json`,\n    s3KeyLatest: `notam_complete/latest/ubikais_full_latest.json`,\n    // 개별 파일 S3 키\n    s3Keys: {\n      notam: `notam_complete/${timestamp}/notam_${timestamp}.json`,\n      notamLatest: `notam_complete/latest/notam_current.json`,\n      weather: `notam_complete/${timestamp}/weather_${timestamp}.json`,\n      weatherLatest: `notam_complete/latest/weather_current.json`,\n      flightPlans: `notam_complete/${timestamp}/flight_plans_${timestamp}.json`,\n      flightPlansLatest: `notam_complete/latest/flight_schedule.json`,\n      aeroData: `notam_complete/${timestamp}/aero_data_${timestamp}.json`,\n      aeroDataLatest: `notam_complete/latest/aero_data_current.json`\n    },\n    timestamp: timestamp,\n    date: today,\n    stats: stats\n  }\n}];"
+      },
+      "id": "crawl-full",
+      "name": "3. 전체 데이터 크롤링",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// 전체 데이터를 Supabase 업로드용 바이너리로 변환\n// 전체 + 개별 파일 모두 생성\nconst item = $input.first().json;\nconst fullData = item.fullData;\n\n// 전체 데이터 JSON\nconst fullJson = JSON.stringify(fullData, null, 2);\nconst fullBase64 = Buffer.from(fullJson, 'utf-8').toString('base64');\n\n// 개별 파일: NOTAM\nconst notamJson = JSON.stringify(fullData.data.notam, null, 2);\nconst notamBase64 = Buffer.from(notamJson, 'utf-8').toString('base64');\n\n// 개별 파일: Weather\nconst weatherJson = JSON.stringify(fullData.data.weather, null, 2);\nconst weatherBase64 = Buffer.from(weatherJson, 'utf-8').toString('base64');\n\n// 개별 파일: Flight Plans\nconst fplJson = JSON.stringify(fullData.data.flight_plans, null, 2);\nconst fplBase64 = Buffer.from(fplJson, 'utf-8').toString('base64');\n\n// 개별 파일: Aero Data\nconst aeroJson = JSON.stringify(fullData.data.aero_data, null, 2);\nconst aeroBase64 = Buffer.from(aeroJson, 'utf-8').toString('base64');\n\n// 여러 아이템으로 반환 (각각 Supabase 업로드 대상)\nreturn [\n  // 1. 전체 데이터 (타임스탬프)\n  {\n    json: { s3Key: item.s3Key, fileType: 'full_timestamped', stats: item.stats },\n    binary: { data: { data: fullBase64, mimeType: 'application/json', fileName: `ubikais_full_${item.timestamp}.json` } }\n  },\n  // 2. 전체 데이터 (최신)\n  {\n    json: { s3Key: item.s3KeyLatest, fileType: 'full_latest', stats: item.stats },\n    binary: { data: { data: fullBase64, mimeType: 'application/json', fileName: 'ubikais_full_latest.json' } }\n  },\n  // 3. NOTAM (타임스탬프)\n  {\n    json: { s3Key: item.s3Keys.notam, fileType: 'notam_timestamped' },\n    binary: { data: { data: notamBase64, mimeType: 'application/json', fileName: `notam_${item.timestamp}.json` } }\n  },\n  // 4. NOTAM (최신)\n  {\n    json: { s3Key: item.s3Keys.notamLatest, fileType: 'notam_latest' },\n    binary: { data: { data: notamBase64, mimeType: 'application/json', fileName: 'notam_current.json' } }\n  },\n  // 5. Weather (타임스탬프)\n  {\n    json: { s3Key: item.s3Keys.weather, fileType: 'weather_timestamped' },\n    binary: { data: { data: weatherBase64, mimeType: 'application/json', fileName: `weather_${item.timestamp}.json` } }\n  },\n  // 6. Weather (최신)\n  {\n    json: { s3Key: item.s3Keys.weatherLatest, fileType: 'weather_latest' },\n    binary: { data: { data: weatherBase64, mimeType: 'application/json', fileName: 'weather_current.json' } }\n  },\n  // 7. Flight Plans (타임스탬프)\n  {\n    json: { s3Key: item.s3Keys.flightPlans, fileType: 'fpl_timestamped' },\n    binary: { data: { data: fplBase64, mimeType: 'application/json', fileName: `flight_plans_${item.timestamp}.json` } }\n  },\n  // 8. Flight Plans (최신)\n  {\n    json: { s3Key: item.s3Keys.flightPlansLatest, fileType: 'fpl_latest' },\n    binary: { data: { data: fplBase64, mimeType: 'application/json', fileName: 'flight_schedule.json' } }\n  },\n  // 9. Aero Data (타임스탬프)\n  {\n    json: { s3Key: item.s3Keys.aeroData, fileType: 'aero_timestamped' },\n    binary: { data: { data: aeroBase64, mimeType: 'application/json', fileName: `aero_data_${item.timestamp}.json` } }\n  },\n  // 10. Aero Data (최신)\n  {\n    json: { s3Key: item.s3Keys.aeroDataLatest, fileType: 'aero_latest' },\n    binary: { data: { data: aeroBase64, mimeType: 'application/json', fileName: 'aero_data_current.json' } }\n  }\n];"
+      },
+      "id": "prepare-binary",
+      "name": "4. Supabase 업로드 준비 (10개 파일)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1170,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://mysfgjaggqknuhobwtrc.supabase.co/storage/v1/object/notam-data/{{ $json.s3Key }}",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15c2ZnamFnZ3FrbnVob2J3dHJjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTg5NjAxNSwiZXhwIjoyMDg1NDcyMDE1fQ.ke-cuuQlx6kphA7gyA3crren2ARVZHWdji-5OlKiKCM"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15c2ZnamFnZ3FrbnVob2J3dHJjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTg5NjAxNSwiZXhwIjoyMDg1NDcyMDE1fQ.ke-cuuQlx6kphA7gyA3crren2ARVZHWdji-5OlKiKCM"
+            },
+            {
+              "name": "x-upsert",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "s3-upload-all",
+      "name": "5. Supabase 업로드 (전체 파일)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// 업로드 결과 요약\nconst items = $input.all();\nconst successCount = items.filter(i => !i.json.error).length;\nconst errorCount = items.filter(i => i.json.error).length;\n\nreturn [{\n  json: {\n    summary: `Supabase 업로드 완료: ${successCount}개 성공, ${errorCount}개 실패`,\n    timestamp: new Date().toISOString(),\n    totalFiles: items.length,\n    success: successCount,\n    errors: errorCount\n  }\n}];"
+      },
+      "id": "upload-summary",
+      "name": "6. 업로드 결과 요약",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1630,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// ===== 전체 크롤링 리포트 생성 =====\nconst item = $input.first().json;\nconst stats = item.stats;\nconst fullData = item.fullData;\nconst now = new Date();\nconst dateStr = now.toLocaleDateString('ko-KR');\nconst timeStr = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });\n\n// NOTAM 상세\nconst notamData = fullData?.data?.notam || {};\nlet firTotal = 0;\nObject.values(notamData.fir || {}).forEach(v => { firTotal += v?.records?.length || 0; });\nlet adTotal = 0;\nObject.values(notamData.ad || {}).forEach(v => { adTotal += v?.records?.length || 0; });\nconst snowCount = notamData.snow?.records?.length || 0;\nconst prohibCount = notamData.prohibited?.records?.length || 0;\nlet seqTotal = 0;\nObject.values(notamData.sequence || {}).forEach(v => { seqTotal += v?.records?.length || 0; });\nconst notamTotal = firTotal + adTotal + snowCount + prohibCount + seqTotal;\n\n// Weather 상세\nconst weatherData = fullData?.data?.weather || {};\nlet metarTotal = 0;\nObject.values(weatherData.metar || {}).forEach(v => { metarTotal += v?.records?.length || 0; });\nlet tafTotal = 0;\nObject.values(weatherData.taf || {}).forEach(v => { tafTotal += v?.records?.length || 0; });\nconst sigmetCount = weatherData.sigmet?.records?.length || 0;\nconst weatherTotal = metarTotal + tafTotal + sigmetCount;\n\n// FPL 상세\nconst fplData = fullData?.data?.flight_plans || {};\nconst ifrDep = fplData.ifr_departures?.records?.length || 0;\nconst ifrArr = fplData.ifr_arrivals?.records?.length || 0;\nconst vfr = fplData.vfr?.records?.length || 0;\nconst ulp = fplData.ulp_lsa?.records?.length || 0;\nconst fplTotal = ifrDep + ifrArr + vfr + ulp;\n\n// AeroData 상세\nconst aeroData = fullData?.data?.aero_data || {};\nconst aptCount = Object.keys(aeroData.airports || {}).length;\nconst rwyCount = Object.keys(aeroData.runways || {}).length;\nconst apronCount = Object.keys(aeroData.aprons || {}).length;\nconst navaidCount = aeroData.navaids?.records?.length || 0;\nconst obstCount = aeroData.obstacles?.records?.length || 0;\n\n// ATFM 상세\nconst atfmData = fullData?.data?.atfm || {};\nconst adpCount = atfmData.daily_plan?.records?.length || 0;\nconst dflCount = atfmData.messages?.records?.length || 0;\n\nconst grandTotal = notamTotal + weatherTotal + fplTotal + navaidCount + obstCount + adpCount + dflCount;\n\n// 이메일 HTML\nconst emailHtml = `\n<div style=\"font-family:'Segoe UI',Arial,sans-serif;max-width:700px;margin:0 auto\">\n  <div style=\"background:linear-gradient(135deg,#1a237e,#0d47a1);color:white;padding:20px;border-radius:8px 8px 0 0\">\n    <h2 style=\"margin:0\">UBIKAIS 전체 크롤링 리포트</h2>\n    <p style=\"margin:5px 0 0;opacity:.9\">${dateStr} ${timeStr} | 총 ${grandTotal}건</p>\n  </div>\n  <div style=\"background:#f5f5f5;padding:20px;border:1px solid #ddd\">\n    <h3 style=\"color:#1a237e;border-bottom:2px solid #1a237e;padding-bottom:5px\">NOTAM (${notamTotal}건)</h3>\n    <table style=\"width:100%;border-collapse:collapse;margin-bottom:15px\">\n      <tr style=\"background:#e8eaf6\"><th style=\"text-align:left;padding:6px\">유형</th><th style=\"text-align:right;padding:6px\">건수</th></tr>\n      <tr><td style=\"padding:6px\">FIR NOTAM (C/A/D)</td><td style=\"text-align:right;padding:6px\">${firTotal}</td></tr>\n      <tr style=\"background:#fafafa\"><td style=\"padding:6px\">AD NOTAM</td><td style=\"text-align:right;padding:6px\">${adTotal}</td></tr>\n      <tr><td style=\"padding:6px\">SNOWTAM</td><td style=\"text-align:right;padding:6px\">${snowCount}</td></tr>\n      <tr style=\"background:#fafafa\"><td style=\"padding:6px\">금지구역</td><td style=\"text-align:right;padding:6px\">${prohibCount}</td></tr>\n      <tr><td style=\"padding:6px\">Sequence</td><td style=\"text-align:right;padding:6px\">${seqTotal}</td></tr>\n    </table>\n\n    <h3 style=\"color:#0d47a1;border-bottom:2px solid #0d47a1;padding-bottom:5px\">기상 (${weatherTotal}건)</h3>\n    <table style=\"width:100%;border-collapse:collapse;margin-bottom:15px\">\n      <tr style=\"background:#e3f2fd\"><th style=\"text-align:left;padding:6px\">유형</th><th style=\"text-align:right;padding:6px\">건수</th></tr>\n      <tr><td style=\"padding:6px\">METAR</td><td style=\"text-align:right;padding:6px\">${metarTotal}</td></tr>\n      <tr style=\"background:#fafafa\"><td style=\"padding:6px\">TAF</td><td style=\"text-align:right;padding:6px\">${tafTotal}</td></tr>\n      <tr><td style=\"padding:6px\">SIGMET</td><td style=\"text-align:right;padding:6px\">${sigmetCount}</td></tr>\n    </table>\n\n    <h3 style=\"color:#1b5e20;border-bottom:2px solid #1b5e20;padding-bottom:5px\">비행계획 (${fplTotal}건)</h3>\n    <table style=\"width:100%;border-collapse:collapse;margin-bottom:15px\">\n      <tr style=\"background:#e8f5e9\"><th style=\"text-align:left;padding:6px\">유형</th><th style=\"text-align:right;padding:6px\">건수</th></tr>\n      <tr><td style=\"padding:6px\">IFR 출발</td><td style=\"text-align:right;padding:6px\">${ifrDep}</td></tr>\n      <tr style=\"background:#fafafa\"><td style=\"padding:6px\">IFR 도착</td><td style=\"text-align:right;padding:6px\">${ifrArr}</td></tr>\n      <tr><td style=\"padding:6px\">VFR</td><td style=\"text-align:right;padding:6px\">${vfr}</td></tr>\n      <tr style=\"background:#fafafa\"><td style=\"padding:6px\">ULP/LSA</td><td style=\"text-align:right;padding:6px\">${ulp}</td></tr>\n    </table>\n\n    <h3 style=\"color:#e65100;border-bottom:2px solid #e65100;padding-bottom:5px\">항공정보 (AeroData)</h3>\n    <table style=\"width:100%;border-collapse:collapse;margin-bottom:15px\">\n      <tr style=\"background:#fff3e0\"><th style=\"text-align:left;padding:6px\">유형</th><th style=\"text-align:right;padding:6px\">건수</th></tr>\n      <tr><td style=\"padding:6px\">공항</td><td style=\"text-align:right;padding:6px\">${aptCount}개</td></tr>\n      <tr style=\"background:#fafafa\"><td style=\"padding:6px\">활주로</td><td style=\"text-align:right;padding:6px\">${rwyCount}개</td></tr>\n      <tr><td style=\"padding:6px\">에이프런</td><td style=\"text-align:right;padding:6px\">${apronCount}개</td></tr>\n      <tr style=\"background:#fafafa\"><td style=\"padding:6px\">NAVAID</td><td style=\"text-align:right;padding:6px\">${navaidCount}</td></tr>\n      <tr><td style=\"padding:6px\">장애물</td><td style=\"text-align:right;padding:6px\">${obstCount}</td></tr>\n    </table>\n\n    <h3 style=\"color:#4a148c;border-bottom:2px solid #4a148c;padding-bottom:5px\">ATFM</h3>\n    <table style=\"width:100%;border-collapse:collapse;margin-bottom:15px\">\n      <tr style=\"background:#f3e5f5\"><th style=\"text-align:left;padding:6px\">유형</th><th style=\"text-align:right;padding:6px\">건수</th></tr>\n      <tr><td style=\"padding:6px\">일일 계획 (ADP)</td><td style=\"text-align:right;padding:6px\">${adpCount}</td></tr>\n      <tr style=\"background:#fafafa\"><td style=\"padding:6px\">메시지 (DFL)</td><td style=\"text-align:right;padding:6px\">${dflCount}</td></tr>\n    </table>\n  </div>\n  <div style=\"background:#263238;color:#b0bec5;padding:12px 20px;border-radius:0 0 8px 8px;font-size:12px\">\n    <p style=\"margin:0\">Supabase Storage: notam_complete/${item.timestamp}/ (10개 파일)</p>\n    <p style=\"margin:4px 0 0\">UBIKAIS Full Crawl | n8n Workflow</p>\n  </div>\n</div>`;\n\n// Google Sheets 행 데이터\nconst sheetsRow = {\n  '시간': dateStr + ' ' + timeStr,\n  '워크플로우': '전체 크롤링 (Daily)',\n  'FIR NOTAM': firTotal,\n  'AD NOTAM': adTotal,\n  'SNOWTAM': snowCount,\n  '금지구역': prohibCount,\n  'Sequence': seqTotal,\n  'METAR': metarTotal,\n  'TAF': tafTotal,\n  'SIGMET': sigmetCount,\n  'IFR 출발': ifrDep,\n  'IFR 도착': ifrArr,\n  'VFR': vfr,\n  'ULP/LSA': ulp,\n  'AeroData 공항': aptCount,\n  'NAVAID': navaidCount,\n  '장애물': obstCount,\n  'ATFM ADP': adpCount,\n  'ATFM DFL': dflCount,\n  '총레코드': grandTotal,\n  'Storage경로': 'notam_complete/' + item.timestamp + '/',\n  '상태': '성공'\n};\n\nreturn [{ json: { emailHtml, emailSubject: '[UBIKAIS Full] ' + dateStr + ' ' + timeStr + ' - ' + grandTotal + '건 수집', sheetsRow, grandTotal } }];"
+      },
+      "id": "report-gen",
+      "name": "7. 리포트 생성",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1170,
+        550
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "allofdaniel@gmail.com",
+        "subject": "={{ $json.emailSubject }}",
+        "emailType": "html",
+        "message": "={{ $json.emailHtml }}",
+        "options": {}
+      },
+      "id": "gmail-notify",
+      "name": "8a. Gmail 알림",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1430,
+        480
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CONFIGURE_ME",
+          "name": "Gmail - allofdaniel"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://docs.google.com/spreadsheets/d/1zXsSUt6X6EZSRGT_PYjpSg2glOOMFSNxd1nXF1Gx3TI/edit"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "byName",
+          "value": "NOTAM Log"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "시간": "={{ $json.sheetsRow['시간'] }}",
+            "워크플로우": "={{ $json.sheetsRow['워크플로우'] }}",
+            "FIR NOTAM": "={{ $json.sheetsRow['FIR NOTAM'] }}",
+            "AD NOTAM": "={{ $json.sheetsRow['AD NOTAM'] }}",
+            "SNOWTAM": "={{ $json.sheetsRow['SNOWTAM'] }}",
+            "금지구역": "={{ $json.sheetsRow['금지구역'] }}",
+            "Sequence": "={{ $json.sheetsRow['Sequence'] }}",
+            "METAR": "={{ $json.sheetsRow['METAR'] }}",
+            "TAF": "={{ $json.sheetsRow['TAF'] }}",
+            "SIGMET": "={{ $json.sheetsRow['SIGMET'] }}",
+            "IFR 출발": "={{ $json.sheetsRow['IFR 출발'] }}",
+            "IFR 도착": "={{ $json.sheetsRow['IFR 도착'] }}",
+            "VFR": "={{ $json.sheetsRow['VFR'] }}",
+            "ULP/LSA": "={{ $json.sheetsRow['ULP/LSA'] }}",
+            "AeroData 공항": "={{ $json.sheetsRow['AeroData 공항'] }}",
+            "NAVAID": "={{ $json.sheetsRow['NAVAID'] }}",
+            "장애물": "={{ $json.sheetsRow['장애물'] }}",
+            "ATFM ADP": "={{ $json.sheetsRow['ATFM ADP'] }}",
+            "ATFM DFL": "={{ $json.sheetsRow['ATFM DFL'] }}",
+            "총레코드": "={{ $json.sheetsRow['총레코드'] }}",
+            "S3경로": "={{ $json.sheetsRow['S3경로'] }}",
+            "상태": "={{ $json.sheetsRow['상태'] }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "sheets-log",
+      "name": "8b. Google Sheets 기록",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1430,
+        630
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "CONFIGURE_ME",
+          "name": "Google Sheets - allofdaniel"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "매일 06시/18시 실행": {
+      "main": [
+        [
+          {
+            "node": "1. 로그인 페이지 접속",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. 로그인 페이지 접속": {
+      "main": [
+        [
+          {
+            "node": "2. 로그인 POST",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. 로그인 POST": {
+      "main": [
+        [
+          {
+            "node": "3. 전체 데이터 크롤링",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. 전체 데이터 크롤링": {
+      "main": [
+        [
+          {
+            "node": "4. Supabase 업로드 준비 (10개 파일)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "7. 리포트 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Supabase 업로드 준비 (10개 파일)": {
+      "main": [
+        [
+          {
+            "node": "5. Supabase 업로드 (전체 파일)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Supabase 업로드 (전체 파일)": {
+      "main": [
+        [
+          {
+            "node": "6. 업로드 결과 요약",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7. 리포트 생성": {
+      "main": [
+        [
+          {
+            "node": "8a. Gmail 알림",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "8b. Google Sheets 기록",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "executionTimeout": 600
+  },
+  "versionId": "1",
+  "tags": [
+    {
+      "name": "UBIKAIS",
+      "createdAt": "2026-01-29T00:00:00.000Z",
+      "updatedAt": "2026-01-29T00:00:00.000Z"
+    },
+    {
+      "name": "Full Crawl",
+      "createdAt": "2026-01-29T00:00:00.000Z",
+      "updatedAt": "2026-01-29T00:00:00.000Z"
+    }
+  ]
+}

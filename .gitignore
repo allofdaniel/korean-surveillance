@@ -1,0 +1,35 @@
+.vercel
+node_modules
+dist
+.env
+.env.local
+.env.*.local
+*.db
+*.log
+__pycache__
+*.pyc
+.DS_Store
+Thumbs.db
+*.backup
+.env*.local
+
+# Large data files (crawler outputs)
+ubikais-crawler/data/
+eaip-crawler/data/
+
+# Large static assets (use CDN in production)
+public/A380.glb
+public/b777.glb
+
+# Large navigation data files
+public/data/global_iaps.json
+public/data/global_sids.json
+
+# Coverage reports
+coverage/
+
+# Test screenshots
+*.png
+!public/icons/*.png
+!public/store-assets/*.png
+!public/charts/**/*.png

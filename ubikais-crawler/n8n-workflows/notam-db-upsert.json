@@ -1,0 +1,202 @@
+{
+  "name": "NOTAM DB Upsert (Supabase PostgREST)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "5분마다 실행",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://ubikais.fois.go.kr:8030/common/login?systemId=sysUbikais",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "login-page",
+      "name": "1. 로그인 페이지",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ubikais.fois.go.kr:8030/common/loginProc",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "User-Agent", "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" },
+            { "name": "Content-Type", "value": "application/x-www-form-urlencoded" },
+            { "name": "Referer", "value": "https://ubikais.fois.go.kr:8030/common/login?systemId=sysUbikais" },
+            { "name": "Cookie", "value": "={{ $json.headers['set-cookie'] ? $json.headers['set-cookie'].map(c => c.split(';')[0]).join('; ') : '' }}" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "userId", "value": "allofdanie" },
+            { "name": "userPw", "value": "pr12pr34!!" },
+            { "name": "systemId", "value": "sysUbikais" }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "redirect": { "redirect": { "followRedirects": true } },
+          "response": { "response": { "fullResponse": true, "responseFormat": "text" } }
+        }
+      },
+      "id": "login-post",
+      "name": "2. 로그인 POST",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [710, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// ===== UBIKAIS NOTAM 크롤링 (기존 로직 유지) =====\nconst BASE_URL = 'https://ubikais.fois.go.kr:8030';\nconst helpers = this.helpers;\n\nconst loginResponse = $input.first().json;\nlet cookies = '';\nif (loginResponse.headers && loginResponse.headers['set-cookie']) {\n  const setCookies = loginResponse.headers['set-cookie'];\n  cookies = (Array.isArray(setCookies) ? setCookies : [setCookies])\n    .map(c => c.split(';')[0]).join('; ');\n}\n\nconst now = new Date();\nconst y = now.getFullYear();\nconst m = String(now.getMonth() + 1).padStart(2, '0');\nconst d = String(now.getDate()).padStart(2, '0');\nconst today = `${y}-${m}-${d}`;\nconst yy = String(y).slice(2);\nconst todayShort = `${yy}${m}${d}`;\n\nasync function crawl(endpoint, params) {\n  const qs = Object.entries(params).map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(String(v))).join('&');\n  try {\n    return await helpers.httpRequest({\n      url: BASE_URL + endpoint + '?' + qs,\n      method: 'GET',\n      headers: {\n        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',\n        'Accept': 'application/json, text/javascript, */*; q=0.01',\n        'X-Requested-With': 'XMLHttpRequest',\n        'Referer': BASE_URL + '/sysUbikais/biz/main.ubikais',\n        'Cookie': cookies\n      },\n      skipSslCertificateValidation: true,\n      json: true\n    });\n  } catch (e) { return { error: e.message }; }\n}\nfunction sleep(ms) { return new Promise(r => setTimeout(r, ms)); }\n\nconst allRecords = [];\nconst counts = { fir: {}, ad: {}, snowtam: 0, prohibited: 0 };\n\n// === FIR NOTAM ===\nfor (const series of ['C', 'A', 'D']) {\n  const result = await crawl('/sysUbikais/biz/nps/selectNotamRecFir.fois', {\n    downloadYn: '1', srchFir: 'RKRR', srchAd: 'RKRR', srchSeries: series,\n    srchValid: today, srchValidsh: todayShort + '2359',\n    srchValidsh2: todayShort + '0000', srchValid2: '1',\n    cmd: 'get-records', limit: '1000', offset: '0'\n  });\n  const recs = result?.records || [];\n  counts.fir[series] = recs.length;\n  for (const r of recs) {\n    allRecords.push({ ...r, _sourceType: 'domestic', _sourceGroup: series });\n  }\n  await sleep(500);\n}\n\n// === AD NOTAM ===\nconst airports = ['RKSI', 'RKSS', 'RKPC', 'RKPK', 'RKPU', 'RKJJ', 'RKTN'];\nfor (const airport of airports) {\n  const result = await crawl('/sysUbikais/biz/nps/selectNotamRecAd.fois', {\n    downloadYn: '1', srchFir: 'RKRR', srchSeries: 'C', srchAd: airport,\n    srchValid: today, srchValidsh: todayShort + '2359',\n    srchValidsh2: todayShort + '0000', srchValid2: '1',\n    cmd: 'get-records', limit: '1000', offset: '0'\n  });\n  const recs = result?.records || [];\n  counts.ad[airport] = recs.length;\n  for (const r of recs) {\n    allRecords.push({ ...r, _sourceType: 'international', _sourceGroup: airport });\n  }\n  await sleep(300);\n}\n\n// === SNOWTAM ===\nconst snowResult = await crawl('/sysUbikais/biz/nps/selectNotamRecSnow.fois', {\n  downloadYn: '1', printYn: '', srchOriginator: '', srchSeq: '',\n  srchAd: '', srchValidFrom: String(y),\n  cmd: 'get-records', limit: '1000', offset: '0'\n});\nconst snowRecs = snowResult?.records || [];\ncounts.snowtam = snowRecs.length;\nfor (const r of snowRecs) {\n  allRecords.push({ ...r, _sourceType: 'snowtam', _sourceGroup: 'SNOW' });\n}\n\n// === 금지구역 ===\nconst prohibResult = await crawl('/sysUbikais/biz/nps/selectRecOffZone.fois', {\n  downloadYn: '1', srchFir: 'RKRR', srchSeries: 'D', srchQcode: 'QRP',\n  srchValid: today, srchValidsh: todayShort + '2359',\n  srchValidsh2: todayShort + '0000', srchValid2: '1',\n  cmd: 'get-records', limit: '1000', offset: '0'\n});\nconst prohibRecs = prohibResult?.records || [];\ncounts.prohibited = prohibRecs.length;\nfor (const r of prohibRecs) {\n  allRecords.push({ ...r, _sourceType: 'domestic', _sourceGroup: 'D' });\n}\n\nreturn [{\n  json: {\n    allRecords,\n    counts,\n    crawledAt: now.toISOString(),\n    totalRaw: allRecords.length\n  }\n}];"
+      },
+      "id": "crawl-notam",
+      "name": "3. NOTAM 크롤링",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [940, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// ===== UBIKAIS 레코드 → Supabase notams 테이블 포맷 변환 + Upsert =====\nconst SUPABASE_URL = 'https://mysfgjaggqknuhobwtrc.supabase.co';\nconst SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15c2ZnamFnZ3FrbnVob2J3dHJjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTg5NjAxNSwiZXhwIjoyMDg1NDcyMDE1fQ.ke-cuuQlx6kphA7gyA3crren2ARVZHWdji-5OlKiKCM';\nconst helpers = this.helpers;\nconst startMs = Date.now();\n\nconst { allRecords, counts, crawledAt, totalRaw } = $input.first().json;\n\n// Q-line 좌표 파싱 (DDMMN/DDDMME format from ntCoord or amsOriginal)\nfunction parseQLine(fullText) {\n  if (!fullText) return {};\n  const m = fullText.match(/Q\\)\\s*(\\w+)\\/(\\w+)\\/\\w+\\/\\w+\\/\\w+\\/(\\d{3})\\/(\\d{3})\\/(\\d{4})([NS])(\\d{5})([EW])(\\d{3})/);\n  if (!m) return {};\n  const latDeg = parseInt(m[4].substring(0, 2), 10);\n  const latMin = parseInt(m[4].substring(2, 4), 10);\n  let lat = latDeg + latMin / 60;\n  if (m[5] === 'S') lat = -lat;\n  const lonDeg = parseInt(m[6].substring(0, 3), 10);\n  const lonMin = parseInt(m[6].substring(3, 5), 10);\n  let lon = lonDeg + lonMin / 60;\n  if (m[7] === 'W') lon = -lon;\n  return {\n    fir: m[1], qcode: m[2],\n    q_lower_alt: parseInt(m[3], 10) * 100,\n    q_upper_alt: parseInt(m[4] ? m[3] : '0', 10) * 100,\n    q_lat: lat, q_lon: lon,\n    q_radius_nm: parseInt(m[8], 10)\n  };\n}\n\n// UBIKAIS 레코드 → DB 레코드 변환\nfunction transformRecord(rec) {\n  const series = rec.ntSeries || '';\n  const seq = rec.ntSndSeq || '';\n  const year = rec.ntYear || '';\n  const notamNumber = (series && seq && year) ? `${series}${seq}/${year}` : `UNK_${rec.ntmPk || rec.id}`;\n  \n  const fullText = rec.amsOriginal || '';\n  const parsed = parseQLine(fullText);\n  \n  let effectiveEnd = rec.ntEndDate || '';\n  if (rec.ntPerm === 'PERM') effectiveEnd = 'PERM';\n  else if (rec.ntPerm === 'EST' && effectiveEnd) effectiveEnd = effectiveEnd + 'EST';\n  \n  return {\n    notam_number: notamNumber,\n    location: rec.ntAd || '',\n    full_text: fullText,\n    e_text: rec.ntText || '',\n    qcode: rec.ntCode || parsed.qcode || '',\n    qcode_mean: rec.ntCodeDesc || '',\n    effective_start: rec.ntStartDate || '',\n    effective_end: effectiveEnd,\n    series: series,\n    fir: rec.ntFir || parsed.fir || '',\n    issue_time: rec.ntSendDate || '',\n    ais_type: rec.ntStatus || '',\n    seq: seq,\n    q_lat: parsed.q_lat || null,\n    q_lon: parsed.q_lon || null,\n    q_radius_nm: parsed.q_radius_nm || null,\n    q_lower_alt: parsed.q_lower_alt || (rec.ntLower ? parseInt(rec.ntLower, 10) * 100 : null),\n    q_upper_alt: parsed.q_upper_alt || (rec.ntUpper ? parseInt(rec.ntUpper, 10) * 100 : null),\n    source_type: rec._sourceType || 'domestic',\n    source_group: rec._sourceGroup || series,\n    crawled_at: crawledAt\n  };\n}\n\n// 변환\nconst dbRecords = allRecords\n  .filter(r => r.ntmPk || r.id)\n  .map(transformRecord)\n  .filter(r => r.notam_number && !r.notam_number.startsWith('UNK_'));\n\n// 50개씩 배치 upsert (PostgREST 제한 고려)\nconst BATCH_SIZE = 50;\nlet upsertedTotal = 0;\nlet errors = [];\n\nfor (let i = 0; i < dbRecords.length; i += BATCH_SIZE) {\n  const batch = dbRecords.slice(i, i + BATCH_SIZE);\n  try {\n    const response = await helpers.httpRequest({\n      url: `${SUPABASE_URL}/rest/v1/notams`,\n      method: 'POST',\n      headers: {\n        'apikey': SERVICE_KEY,\n        'Authorization': `Bearer ${SERVICE_KEY}`,\n        'Content-Type': 'application/json',\n        'Prefer': 'resolution=merge-duplicates,return=minimal'\n      },\n      body: JSON.stringify(batch),\n      json: false\n    });\n    upsertedTotal += batch.length;\n  } catch (e) {\n    errors.push(`Batch ${i}: ${e.message}`);\n  }\n}\n\n// 크롤 로그 기록\nconst executionMs = Date.now() - startMs;\nconst logEntry = {\n  crawled_at: crawledAt,\n  source: 'ubikais',\n  domestic_a: counts.fir?.A || 0,\n  domestic_c: counts.fir?.C || 0,\n  domestic_d: counts.fir?.D || 0,\n  domestic_e: 0,\n  international: Object.values(counts.ad || {}).reduce((s, v) => s + v, 0),\n  snowtam: counts.snowtam || 0,\n  total_upserted: upsertedTotal,\n  total_records: totalRaw,\n  status: errors.length === 0 ? 'success' : 'partial',\n  error_message: errors.length > 0 ? errors.join('; ') : null,\n  execution_ms: executionMs\n};\n\ntry {\n  await helpers.httpRequest({\n    url: `${SUPABASE_URL}/rest/v1/notam_crawl_logs`,\n    method: 'POST',\n    headers: {\n      'apikey': SERVICE_KEY,\n      'Authorization': `Bearer ${SERVICE_KEY}`,\n      'Content-Type': 'application/json',\n      'Prefer': 'return=minimal'\n    },\n    body: JSON.stringify(logEntry),\n    json: false\n  });\n} catch (e) { /* log failure is non-fatal */ }\n\nreturn [{\n  json: {\n    upsertedTotal,\n    totalRaw,\n    dbRecordsCount: dbRecords.length,\n    errors,\n    executionMs,\n    counts,\n    crawledAt,\n    status: errors.length === 0 ? 'SUCCESS' : 'PARTIAL'\n  }\n}];"
+      },
+      "id": "db-upsert",
+      "name": "4. Supabase DB Upsert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1170, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const item = $input.first().json;\nconst kstDate = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });\n\nconst emailHtml = `\n<div style=\"font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n  <div style=\"background: #1a237e; color: white; padding: 16px 24px; border-radius: 8px 8px 0 0;\">\n    <h2 style=\"margin: 0;\">NOTAM DB Upsert 완료</h2>\n    <p style=\"margin: 4px 0 0; opacity: 0.8;\">${kstDate} (KST)</p>\n  </div>\n  <div style=\"background: #f5f5f5; padding: 20px 24px; border-radius: 0 0 8px 8px;\">\n    <table style=\"width: 100%; border-collapse: collapse;\">\n      <tr style=\"background: white;\">\n        <td style=\"padding: 10px 14px; border: 1px solid #e0e0e0; font-weight: bold;\">수집 레코드</td>\n        <td style=\"padding: 10px 14px; border: 1px solid #e0e0e0; text-align: right;\">${item.totalRaw}건</td>\n      </tr>\n      <tr style=\"background: #fafafa;\">\n        <td style=\"padding: 10px 14px; border: 1px solid #e0e0e0; font-weight: bold;\">DB Upsert</td>\n        <td style=\"padding: 10px 14px; border: 1px solid #e0e0e0; text-align: right; color: #1a237e; font-weight: bold;\">${item.upsertedTotal}건</td>\n      </tr>\n      <tr style=\"background: white;\">\n        <td style=\"padding: 10px 14px; border: 1px solid #e0e0e0; font-weight: bold;\">실행 시간</td>\n        <td style=\"padding: 10px 14px; border: 1px solid #e0e0e0; text-align: right;\">${item.executionMs}ms</td>\n      </tr>\n      <tr style=\"background: #e3f2fd;\">\n        <td style=\"padding: 10px 14px; border: 1px solid #e0e0e0; font-weight: bold;\">상태</td>\n        <td style=\"padding: 10px 14px; border: 1px solid #e0e0e0; text-align: right; font-weight: bold; color: ${item.status === 'SUCCESS' ? '#2e7d32' : '#f57c00'};\">${item.status}</td>\n      </tr>\n    </table>\n    ${item.errors.length > 0 ? '<p style=\"color: #d32f2f; margin-top: 12px;\">Errors: ' + item.errors.join(', ') + '</p>' : ''}\n    <p style=\"margin-top: 16px; color: #666; font-size: 13px;\">Swagger: <a href=\"https://mysfgjaggqknuhobwtrc.supabase.co/rest/v1/notams\">Supabase API</a></p>\n  </div>\n</div>`;\n\nreturn [{\n  json: {\n    emailSubject: `[NOTAM DB] ${item.crawledAt.split('T')[0]} - ${item.upsertedTotal}건 upsert (${item.status})`,\n    emailHtml,\n    sheetRow: {\n      timestamp: kstDate,\n      workflow: 'NOTAM DB Upsert',\n      total_raw: item.totalRaw,\n      upserted: item.upsertedTotal,\n      execution_ms: item.executionMs,\n      status: item.status,\n      errors: item.errors.join('; ') || 'none'\n    }\n  }\n}];"
+      },
+      "id": "report-summary",
+      "name": "5. 리포트 생성",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1400, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "allofdaniel@gmail.com",
+        "subject": "={{ $json.emailSubject }}",
+        "message": "={{ $json.emailHtml }}",
+        "options": { "appendAttribution": false }
+      },
+      "id": "gmail-send",
+      "name": "6a. Gmail 알림",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1630, 240],
+      "credentials": {
+        "gmailOAuth2": { "id": "CONFIGURE_ME", "name": "Gmail" }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://docs.google.com/spreadsheets/d/1zXsSUt6X6EZSRGT_PYjpSg2glOOMFSNxd1nXF1Gx3TI/edit"
+        },
+        "sheetName": { "__rl": true, "mode": "byName", "value": "NOTAM Log" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "시간": "={{ $json.sheetRow.timestamp }}",
+            "워크플로우": "={{ $json.sheetRow.workflow }}",
+            "수집 레코드": "={{ $json.sheetRow.total_raw }}",
+            "DB Upsert": "={{ $json.sheetRow.upserted }}",
+            "실행시간(ms)": "={{ $json.sheetRow.execution_ms }}",
+            "상태": "={{ $json.sheetRow.status }}",
+            "오류": "={{ $json.sheetRow.errors }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "sheets-append",
+      "name": "6b. Google Sheets 기록",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1630, 420],
+      "credentials": {
+        "googleSheetsOAuth2Api": { "id": "CONFIGURE_ME", "name": "Google Sheets" }
+      }
+    }
+  ],
+  "connections": {
+    "5분마다 실행": {
+      "main": [[{ "node": "1. 로그인 페이지", "type": "main", "index": 0 }]]
+    },
+    "1. 로그인 페이지": {
+      "main": [[{ "node": "2. 로그인 POST", "type": "main", "index": 0 }]]
+    },
+    "2. 로그인 POST": {
+      "main": [[{ "node": "3. NOTAM 크롤링", "type": "main", "index": 0 }]]
+    },
+    "3. NOTAM 크롤링": {
+      "main": [[{ "node": "4. Supabase DB Upsert", "type": "main", "index": 0 }]]
+    },
+    "4. Supabase DB Upsert": {
+      "main": [[
+        { "node": "5. 리포트 생성", "type": "main", "index": 0 }
+      ]]
+    },
+    "5. 리포트 생성": {
+      "main": [[
+        { "node": "6a. Gmail 알림", "type": "main", "index": 0 },
+        { "node": "6b. Google Sheets 기록", "type": "main", "index": 0 }
+      ]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [
+    { "name": "NOTAM" },
+    { "name": "Supabase" },
+    { "name": "DB" }
+  ]
+}

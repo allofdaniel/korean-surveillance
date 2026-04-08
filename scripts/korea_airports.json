@@ -1,0 +1,20 @@
+{
+  "airports": {
+    "RKSI": {"name": "Incheon International", "lat": 37.4691, "lon": 126.4505},
+    "RKSS": {"name": "Gimpo International", "lat": 37.5586, "lon": 126.7906},
+    "RKPK": {"name": "Gimhae International", "lat": 35.1795, "lon": 128.9382},
+    "RKPC": {"name": "Jeju International", "lat": 33.5114, "lon": 126.4929},
+    "RKPU": {"name": "Ulsan", "lat": 35.5934, "lon": 129.3518},
+    "RKTH": {"name": "Pohang", "lat": 35.9879, "lon": 129.4202},
+    "RKTN": {"name": "Daegu International", "lat": 35.8941, "lon": 128.6589},
+    "RKJJ": {"name": "Gwangju", "lat": 35.1264, "lon": 126.8089},
+    "RKJB": {"name": "Muan International", "lat": 34.9914, "lon": 126.3828},
+    "RKJK": {"name": "Gunsan", "lat": 35.9038, "lon": 126.6156},
+    "RKJY": {"name": "Yeosu", "lat": 34.8423, "lon": 127.6169},
+    "RKNW": {"name": "Wonju", "lat": 37.4382, "lon": 127.9604},
+    "RKNY": {"name": "Yangyang International", "lat": 38.0613, "lon": 128.6692},
+    "RKPS": {"name": "Sacheon", "lat": 35.0886, "lon": 128.0715},
+    "RKSM": {"name": "Seoul (Seongnam)", "lat": 37.4449, "lon": 127.1140},
+    "RKTL": {"name": "Cheongju International", "lat": 36.7166, "lon": 127.4991}
+  }
+}

@@ -1,0 +1,207 @@
+/**
+ * useWeather Hook
+ * DO-278A 요구사항 추적: SRS-HOOK-002
+ *
+ * 기상 데이터 관리를 위한 React Hook
+ */
+
+import { useState, useEffect, useCallback, useRef } from 'react';
+import type { MetarData, TafData, SigmetData, LightningStrike } from '@/types';
+import type { UpperWindData, LlwsData, RadarData, SatelliteData } from '@/domain/repositories/IWeatherRepository';
+import { getWeatherRepository } from '@/infrastructure/repositories/WeatherRepository';
+import { assessWeatherRisk } from '@/domain/entities/Weather';
+import { WEATHER_UPDATE_INTERVAL } from '@/config/constants';
+
+interface UseWeatherOptions {
+  icao?: string;
+  autoUpdate?: boolean;
+  updateInterval?: number;
+}
+
+interface WeatherRisk {
+  level: 'low' | 'moderate' | 'high' | 'severe';
+  factors: string[];
+}
+
+interface UseWeatherReturn {
+  metar: MetarData | null;
+  taf: TafData | null;
+  sigmets: SigmetData[];
+  airmets: SigmetData[];
+  upperWind: UpperWindData | null;
+  llws: LlwsData[];
+  radar: RadarData | null;
+  satellite: SatelliteData | null;
+  lightning: LightningStrike[];
+  weatherRisk: WeatherRisk | null;
+  isLoading: boolean;
+  error: Error | null;
+  lastUpdate: Date | null;
+  refreshWeather: () => Promise<void>;
+  refreshRadar: () => Promise<void>;
+  refreshSatellite: () => Promise<void>;
+  refreshLightning: () => Promise<void>;
+}
+
+/**
+ * 기상 데이터 관리 Hook
+ */
+export function useWeather(options: UseWeatherOptions = {}): UseWeatherReturn {
+  const {
+    icao = 'RKPU',
+    autoUpdate = true,
+    updateInterval = WEATHER_UPDATE_INTERVAL,
+  } = options;
+
+  const [metar, setMetar] = useState<MetarData | null>(null);
+  const [taf, setTaf] = useState<TafData | null>(null);
+  const [sigmets, setSigmets] = useState<SigmetData[]>([]);
+  const [airmets, setAirmets] = useState<SigmetData[]>([]);
+  const [upperWind, setUpperWind] = useState<UpperWindData | null>(null);
+  const [llws, setLlws] = useState<LlwsData[]>([]);
+  const [radar, setRadar] = useState<RadarData | null>(null);
+  const [satellite, setSatellite] = useState<SatelliteData | null>(null);
+  const [lightning, setLightning] = useState<LightningStrike[]>([]);
+  const [weatherRisk, setWeatherRisk] = useState<WeatherRisk | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
+
+  const repositoryRef = useRef(getWeatherRepository());
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  /**
+   * 기본 기상 데이터 갱신 (METAR, TAF, SIGMET, AIRMET, 상층풍)
+   */
+  const refreshWeather = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      // Promise.allSettled로 부분 실패 허용 - 일부 데이터 실패해도 나머지 표시
+      const results = await Promise.allSettled([
+        repositoryRef.current.fetchMetar(icao),
+        repositoryRef.current.fetchTaf(icao),
+        repositoryRef.current.fetchSigmet(),
+        repositoryRef.current.fetchAirmet(),
+        repositoryRef.current.fetchUpperWind(),
+        repositoryRef.current.fetchLlws(),
+      ]);
+
+      const metarData = results[0].status === 'fulfilled' ? results[0].value : null;
+      const tafData = results[1].status === 'fulfilled' ? results[1].value : null;
+      const sigmetData = results[2].status === 'fulfilled' ? results[2].value : [];
+      const airmetData = results[3].status === 'fulfilled' ? results[3].value : [];
+      const upperWindData = results[4].status === 'fulfilled' ? results[4].value : null;
+      const llwsData = results[5].status === 'fulfilled' ? results[5].value : [];
+
+      // 실패한 요청 로깅
+      results.forEach((result, idx) => {
+        if (result.status === 'rejected') {
+          const names = ['METAR', 'TAF', 'SIGMET', 'AIRMET', 'Upper Wind', 'LLWS'];
+          console.warn(`${names[idx]} fetch failed:`, result.reason);
+        }
+      });
+
+      setMetar(metarData);
+      setTaf(tafData);
+      setSigmets(sigmetData);
+      setAirmets(airmetData);
+      setUpperWind(upperWindData);
+      setLlws(llwsData);
+      setLastUpdate(new Date());
+
+      // 기상 위험도 평가
+      if (metarData) {
+        const risk = assessWeatherRisk({
+          metar: metarData,
+          sigmets: sigmetData,
+          lightning: [],
+          lastUpdated: Date.now(),
+        });
+        setWeatherRisk(risk);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Unknown error'));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [icao]);
+
+  /**
+   * 레이더 데이터 갱신
+   */
+  const refreshRadar = useCallback(async () => {
+    try {
+      const radarData = await repositoryRef.current.fetchRadar();
+      setRadar(radarData);
+    } catch (err) {
+      console.error('Radar fetch error:', err);
+    }
+  }, []);
+
+  /**
+   * 위성 데이터 갱신
+   */
+  const refreshSatellite = useCallback(async () => {
+    try {
+      const satelliteData = await repositoryRef.current.fetchSatellite();
+      setSatellite(satelliteData);
+    } catch (err) {
+      console.error('Satellite fetch error:', err);
+    }
+  }, []);
+
+  /**
+   * 낙뢰 데이터 갱신
+   */
+  const refreshLightning = useCallback(async () => {
+    try {
+      const lightningData = await repositoryRef.current.fetchLightning();
+      setLightning(lightningData);
+    } catch (err) {
+      console.error('Lightning fetch error:', err);
+    }
+  }, []);
+
+  /**
+   * 자동 갱신 설정
+   */
+  useEffect(() => {
+    if (!autoUpdate) return;
+
+    // 초기 로드
+    refreshWeather();
+
+    // 주기적 갱신
+    intervalRef.current = setInterval(refreshWeather, updateInterval);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [autoUpdate, updateInterval, refreshWeather]);
+
+  return {
+    metar,
+    taf,
+    sigmets,
+    airmets,
+    upperWind,
+    llws,
+    radar,
+    satellite,
+    lightning,
+    weatherRisk,
+    isLoading,
+    error,
+    lastUpdate,
+    refreshWeather,
+    refreshRadar,
+    refreshSatellite,
+    refreshLightning,
+  };
+}
+
+export default useWeather;

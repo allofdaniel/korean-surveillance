@@ -1,0 +1,23 @@
+{
+  "appId": "com.allofdaniel.tbas",
+  "appName": "TBAS",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#000000",
+    "useLegacyBridge": false,
+    "webContentsDebuggingEnabled": true
+  },
+  "plugins": {
+    "Keyboard": {
+      "resize": "none"
+    },
+    "StatusBar": {
+      "style": "dark",
+      "backgroundColor": "#000000"
+    }
+  }
+}
