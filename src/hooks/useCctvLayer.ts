@@ -23,19 +23,12 @@ const IS_PROD = import.meta.env.PROD;
 const VWORLD_KEY = import.meta.env.VITE_VWORLD_API_KEY || '';
 const DATA_GO_KR_KEY = import.meta.env.VITE_DATA_GO_KR_API_KEY || '';
 
-// 고정 CCTV 소스 (검증된 작동 URL만)
+// 고정 CCTV 소스 (2026-04-08 실제 작동 확인된 URL만)
 const FIXED_CCTV: CctvCamera[] = [
-  // 독도 - 울릉군 라이브 (iframe)
-  { id: 'dokdo-1', name: '독도 실시간', lat: 37.2426, lng: 131.8697, type: 'iframe', url: 'https://www.ulleung.go.kr/live/index.do', category: 'landmark' },
-  // 제주 관광 (iframe)
-  { id: 'jeju-seongsan', name: '성산일출봉', lat: 33.4584, lng: 126.9424, type: 'iframe', url: 'https://www.nowjejuplus.com/cctv/2', category: 'landmark' },
-  { id: 'jeju-yongduam', name: '용두암', lat: 33.5158, lng: 126.5118, type: 'iframe', url: 'https://www.nowjejuplus.com/cctv/1', category: 'landmark' },
-  // 국립공원 위치 (영상 없음, 위치 마커만)
-  { id: 'np-seorak', name: '설악산 권금성', lat: 38.1191, lng: 128.4654, type: 'info', url: '', category: 'park' },
-  { id: 'np-jiri', name: '지리산 천왕봉', lat: 35.3371, lng: 127.7306, type: 'info', url: '', category: 'park' },
-  { id: 'np-halla', name: '한라산', lat: 33.3617, lng: 126.4967, type: 'info', url: '', category: 'park' },
-  { id: 'np-bukhan', name: '북한산 백운대', lat: 37.6593, lng: 126.9757, type: 'info', url: '', category: 'park' },
-  { id: 'np-deogyu', name: '덕유산 향적봉', lat: 35.8514, lng: 127.7464, type: 'info', url: '', category: 'park' },
+  // 경주시 교통정보센터 (iframe, HTTPS, 200 OK 확인)
+  { id: 'gj-traffic', name: '경주 교통 CCTV', lat: 35.8562, lng: 129.2247, type: 'iframe', url: 'https://its.gyeongju.go.kr/cctvinfo.do', category: 'traffic' },
+  // 제주 교통정보센터 (iframe)
+  { id: 'jeju-traffic', name: '제주 교통 CCTV', lat: 33.4996, lng: 126.5312, type: 'iframe', url: 'http://jejuits.go.kr/jido/mainView.do?DEVICE_KIND=CCTV', category: 'traffic' },
 ];
 
 /** V-World 2D데이터 API로 전국 교통 CCTV 위치 조회 (프록시 경유) */
