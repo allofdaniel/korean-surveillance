@@ -19,6 +19,7 @@ interface CctvCamera {
   category: 'traffic' | 'park' | 'landmark' | 'coastal';
 }
 
+const IS_PROD = import.meta.env.PROD;
 const VWORLD_KEY = import.meta.env.VITE_VWORLD_API_KEY || '';
 const DATA_GO_KR_KEY = import.meta.env.VITE_DATA_GO_KR_API_KEY || '';
 
@@ -35,40 +36,46 @@ const FIXED_CCTV: CctvCamera[] = [
   { id: 'jeju-yongduam', name: '용두암', lat: 33.5158, lng: 126.5118, type: 'iframe', url: 'http://www.nowjejuplus.com/cctv/1', category: 'landmark' },
 ];
 
-/** V-World 2D데이터 API로 전국 교통 CCTV 위치 조회 */
+/** V-World 2D데이터 API로 전국 교통 CCTV 위치 조회 (프록시 경유) */
 async function fetchVworldCctv(): Promise<CctvCamera[]> {
-  if (!VWORLD_KEY) return [];
   const results: CctvCamera[] = [];
   try {
-    // 한반도를 4개 영역으로 분할하여 요청 (size=1000 제한 대응)
-    const boxes = [
-      'BOX(125,33,129,36)', // 남서
-      'BOX(129,33,132,36)', // 남동
-      'BOX(125,36,129,39)', // 북서
-      'BOX(129,36,132,39)', // 북동
+    const regions = [
+      { minX: 125, maxX: 129, minY: 33, maxY: 36 },
+      { minX: 129, maxX: 132, minY: 33, maxY: 36 },
+      { minX: 125, maxX: 129, minY: 36, maxY: 39 },
+      { minX: 129, maxX: 132, minY: 36, maxY: 39 },
     ];
-    for (const box of boxes) {
-      const domain = window.location.hostname === 'localhost' ? 'localhost' : 'koreasurveillance.com';
-      const url = `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_P_UTISCCTV&key=${VWORLD_KEY}&geomFilter=${box}&size=1000&format=json&crs=EPSG:4326&domain=${domain}`;
-      const resp = await fetch(url);
-      if (!resp.ok) continue;
-      const data = await resp.json();
-      if (data.response?.status !== 'OK') continue;
-      const features = data.response?.result?.featureCollection?.features || [];
-      for (const feat of features) {
-        const coords = feat.geometry?.coordinates;
-        const props = feat.properties || {};
-        if (!coords || coords.length < 2) continue;
-        results.push({
-          id: `vw-${results.length}`,
-          name: props.cctvname || props.locate || '교통 CCTV',
-          lat: coords[1],
-          lng: coords[0],
-          type: 'info',
-          url: '',
-          category: 'traffic',
-        });
+    for (const r of regions) {
+      let url: string;
+      if (IS_PROD) {
+        // Production: Vercel serverless proxy (CORS 우회)
+        url = `/api/cctv?source=vworld&minX=${r.minX}&maxX=${r.maxX}&minY=${r.minY}&maxY=${r.maxY}`;
+      } else {
+        // Dev: 직접 호출 (CORS 무시 가능한 프록시 설정)
+        if (!VWORLD_KEY) continue;
+        url = `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_P_UTISCCTV&key=${VWORLD_KEY}&geomFilter=BOX(${r.minX},${r.minY},${r.maxX},${r.maxY})&size=1000&format=json&crs=EPSG:4326&domain=localhost`;
       }
+      try {
+        const resp = await fetch(url);
+        if (!resp.ok) continue;
+        const data = await resp.json();
+        const features = data.response?.result?.featureCollection?.features || [];
+        for (const feat of features) {
+          const coords = feat.geometry?.coordinates;
+          const props = feat.properties || {};
+          if (!coords || coords.length < 2) continue;
+          results.push({
+            id: `vw-${results.length}`,
+            name: props.cctvname || props.locate || '교통 CCTV',
+            lat: coords[1],
+            lng: coords[0],
+            type: 'info',
+            url: '',
+            category: 'traffic',
+          });
+        }
+      } catch { /* skip region */ }
     }
     logger.info('CCTV', `V-World: ${results.length} cameras loaded`);
   } catch (err) {
@@ -79,9 +86,10 @@ async function fetchVworldCctv(): Promise<CctvCamera[]> {
 
 /** data.go.kr - 여수시 실시간 CCTV */
 async function fetchYeosuCctv(): Promise<CctvCamera[]> {
-  if (!DATA_GO_KR_KEY) return [];
   try {
-    const url = `https://apis.data.go.kr/4810000/YsRoadCctv/CCTVInfo?serviceKey=${encodeURIComponent(DATA_GO_KR_KEY)}&pageNo=1&numOfRows=100&type=json`;
+    const url = IS_PROD
+      ? '/api/cctv?source=yeosu'
+      : `https://apis.data.go.kr/4810000/YsRoadCctv/CCTVInfo?serviceKey=${encodeURIComponent(DATA_GO_KR_KEY)}&pageNo=1&numOfRows=100&type=json`;
     const resp = await fetch(url);
     if (!resp.ok) return [];
     const data = await resp.json();
@@ -103,9 +111,10 @@ async function fetchYeosuCctv(): Promise<CctvCamera[]> {
 
 /** data.go.kr - 남해군 CCTV */
 async function fetchNamhaeCctv(): Promise<CctvCamera[]> {
-  if (!DATA_GO_KR_KEY) return [];
   try {
-    const url = `https://apis.data.go.kr/5430000/nh_cctv/get_cctv_list?serviceKey=${encodeURIComponent(DATA_GO_KR_KEY)}&pageNo=1&numOfRows=100&type=json`;
+    const url = IS_PROD
+      ? '/api/cctv?source=namhae'
+      : `https://apis.data.go.kr/5430000/nh_cctv/get_cctv_list?serviceKey=${encodeURIComponent(DATA_GO_KR_KEY)}&pageNo=1&numOfRows=100&type=json`;
     const resp = await fetch(url);
     if (!resp.ok) return [];
     const data = await resp.json();
