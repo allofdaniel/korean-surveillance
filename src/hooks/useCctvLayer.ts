@@ -1,9 +1,7 @@
 /**
- * useCctvLayer - CCTV 카메라를 맵에 표시하고 클릭 시 영상 팝업
- * 데이터 소스:
- * 1. V-World 2D데이터 API (LT_P_UTISCCTV) - 전국 교통 CCTV 위치
- * 2. data.go.kr - 여수시/남해군 CCTV (영상 URL 포함)
- * 3. 고정 CCTV (독도, 국립공원, 제주 관광)
+ * useCctvLayer - CCTV 카메라를 맵에 표시하고 클릭 시 HLS 영상 팝업
+ * 현재 소스: 여수시 실시간 CCTV (data.go.kr API, 95개 HLS)
+ * 추후: 경찰청/도로교통 API 확보 시 전국 확대
  */
 import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
 import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
@@ -14,67 +12,12 @@ interface CctvCamera {
   name: string;
   lat: number;
   lng: number;
-  type: 'hls' | 'iframe' | 'image' | 'info';
   url: string;
-  category: 'traffic' | 'park' | 'landmark' | 'coastal';
 }
 
 const IS_PROD = import.meta.env.PROD;
-const VWORLD_KEY = import.meta.env.VITE_VWORLD_API_KEY || '';
 const DATA_GO_KR_KEY = import.meta.env.VITE_DATA_GO_KR_API_KEY || '';
 
-// 고정 CCTV: 여수 HLS만 (나머지는 경찰청/도로교통 API 확보 후 추가)
-const FIXED_CCTV: CctvCamera[] = [];
-
-/** V-World 2D데이터 API로 전국 교통 CCTV 위치 조회 (프록시 경유) */
-async function fetchVworldCctv(): Promise<CctvCamera[]> {
-  const results: CctvCamera[] = [];
-  try {
-    const regions = [
-      { minX: 125, maxX: 129, minY: 33, maxY: 36 },
-      { minX: 129, maxX: 132, minY: 33, maxY: 36 },
-      { minX: 125, maxX: 129, minY: 36, maxY: 39 },
-      { minX: 129, maxX: 132, minY: 36, maxY: 39 },
-    ];
-    for (const r of regions) {
-      let url: string;
-      if (IS_PROD) {
-        // Production: Vercel serverless proxy (CORS 우회)
-        url = `/api/cctv?source=vworld&minX=${r.minX}&maxX=${r.maxX}&minY=${r.minY}&maxY=${r.maxY}`;
-      } else {
-        // Dev: 직접 호출 (CORS 무시 가능한 프록시 설정)
-        if (!VWORLD_KEY) continue;
-        url = `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_P_UTISCCTV&key=${VWORLD_KEY}&geomFilter=BOX(${r.minX},${r.minY},${r.maxX},${r.maxY})&size=1000&format=json&crs=EPSG:4326&domain=localhost`;
-      }
-      try {
-        const resp = await fetch(url);
-        if (!resp.ok) continue;
-        const data = await resp.json();
-        const features = data.response?.result?.featureCollection?.features || [];
-        for (const feat of features) {
-          const coords = feat.geometry?.coordinates;
-          const props = feat.properties || {};
-          if (!coords || coords.length < 2) continue;
-          results.push({
-            id: `vw-${results.length}`,
-            name: props.cctvname || props.locate || '교통 CCTV',
-            lat: coords[1],
-            lng: coords[0],
-            type: 'info',
-            url: '',
-            category: 'traffic',
-          });
-        }
-      } catch { /* skip region */ }
-    }
-    logger.info('CCTV', `V-World: ${results.length} cameras loaded`);
-  } catch (err) {
-    logger.error('CCTV', `V-World CCTV error: ${err}`);
-  }
-  return results;
-}
-
-/** data.go.kr - 여수시 실시간 CCTV */
 async function fetchYeosuCctv(): Promise<CctvCamera[]> {
   try {
     const url = IS_PROD
@@ -83,43 +26,16 @@ async function fetchYeosuCctv(): Promise<CctvCamera[]> {
     const resp = await fetch(url);
     if (!resp.ok) return [];
     const data = await resp.json();
-    const items = data?.response?.body?.items || data?.items || [];
+    const items = data?.response?.body?.items || [];
     return (Array.isArray(items) ? items : []).map((item: Record<string, string>, i: number) => ({
       id: `yeosu-${i}`,
-      name: item.istl_lctn_nm || item.cctvName || `여수 CCTV ${i + 1}`,
-      lat: parseFloat(item.y_crdn || item.latitude || '0'),
-      lng: parseFloat(item.x_crdn || item.longitude || '0'),
-      type: (item.strm_http_addr || item.cctvUrl || '').includes('m3u8') ? 'hls' as const : 'info' as const,
-      url: item.strm_http_addr || item.cctvUrl || '',
-      category: 'traffic' as const,
-    })).filter((c: CctvCamera) => !isNaN(c.lat) && !isNaN(c.lng) && c.lat !== 0);
+      name: item.istl_lctn_nm || `여수 CCTV ${i + 1}`,
+      lat: parseFloat(item.y_crdn || '0'),
+      lng: parseFloat(item.x_crdn || '0'),
+      url: item.strm_http_addr || '',
+    })).filter((c: CctvCamera) => c.url && !isNaN(c.lat) && c.lat !== 0);
   } catch (err) {
     logger.error('CCTV', `Yeosu API error: ${err}`);
-    return [];
-  }
-}
-
-/** data.go.kr - 남해군 CCTV */
-async function fetchNamhaeCctv(): Promise<CctvCamera[]> {
-  try {
-    const url = IS_PROD
-      ? '/api/cctv?source=namhae'
-      : `https://apis.data.go.kr/5430000/nh_cctv/get_cctv_list?serviceKey=${encodeURIComponent(DATA_GO_KR_KEY)}&pageNo=1&numOfRows=100&type=json`;
-    const resp = await fetch(url);
-    if (!resp.ok) return [];
-    const data = await resp.json();
-    const items = data?.response?.body?.items?.item || data?.items || [];
-    return (Array.isArray(items) ? items : [items]).map((item: Record<string, string>, i: number) => ({
-      id: `namhae-${i}`,
-      name: item.cctvNm || item.instlLcDesc || `남해 CCTV ${i + 1}`,
-      lat: parseFloat(item.lat || item.latitude || '0'),
-      lng: parseFloat(item.lot || item.longitude || '0'),
-      type: (item.strmUrl || item.cctvUrl || '').includes('m3u8') ? 'hls' as const : 'info' as const,
-      url: item.strmUrl || item.cctvUrl || '',
-      category: 'traffic' as const,
-    })).filter((c: CctvCamera) => !isNaN(c.lat) && !isNaN(c.lng) && c.lat !== 0);
-  } catch (err) {
-    logger.error('CCTV', `Namhae API error: ${err}`);
     return [];
   }
 }
@@ -132,52 +48,25 @@ export default function useCctvLayer(
   const cctvDataRef = useRef<CctvCamera[]>([]);
   const popupRef = useRef<mapboxgl.Popup | null>(null);
   const loadedRef = useRef(false);
-
-  const loadCctvData = useCallback(async () => {
-    if (loadedRef.current) return;
-    logger.info('CCTV', 'Loading CCTV data from all sources...');
-
-    // 모든 소스를 병렬로 fetch
-    const [vworldCams, yeosuCams, namhaeCams] = await Promise.all([
-      fetchVworldCctv(),
-      fetchYeosuCctv(),
-      fetchNamhaeCctv(),
-    ]);
-
-    cctvDataRef.current = [...FIXED_CCTV, ...vworldCams, ...yeosuCams, ...namhaeCams];
-    loadedRef.current = true;
-    logger.info('CCTV', `Total: ${cctvDataRef.current.length} cameras (V-World: ${vworldCams.length}, Yeosu: ${yeosuCams.length}, Namhae: ${namhaeCams.length}, Fixed: ${FIXED_CCTV.length})`);
-  }, []);
+  const layersAddedRef = useRef(false);
 
   const updateMapSource = useCallback(() => {
-    const mapInstance = map.current;
-    if (!mapInstance) return;
-
+    const m = map.current;
+    if (!m) return;
     const features = cctvDataRef.current.map(cam => ({
       type: 'Feature' as const,
       geometry: { type: 'Point' as const, coordinates: [cam.lng, cam.lat] },
-      properties: { id: cam.id, name: cam.name, type: cam.type, url: cam.url, category: cam.category },
+      properties: { name: cam.name, url: cam.url },
     }));
-
     try {
-      const source = mapInstance.getSource('cctv-cameras');
-      if (source && 'setData' in source) {
-        (source as mapboxgl.GeoJSONSource).setData({
-          type: 'FeatureCollection',
-          features: features as GeoJSON.Feature[],
-        });
-        logger.info('CCTV', `Updated map source with ${features.length} features`);
-      } else {
-        logger.error('CCTV', 'Source cctv-cameras not found on map');
+      const source = m.getSource('cctv-cameras') as mapboxgl.GeoJSONSource;
+      if (source) {
+        source.setData({ type: 'FeatureCollection', features: features as GeoJSON.Feature[] });
+        logger.info('CCTV', `Updated ${features.length} cameras on map`);
       }
-    } catch (err) {
-      logger.error('CCTV', `updateMapSource error: ${err}`);
-    }
+    } catch { /* ignore */ }
   }, [map]);
 
-  const layersAddedRef = useRef(false);
-
-  // 통합 effect: 레이어 생성 + 데이터 로드 + 표시
   useEffect(() => {
     const m = map.current;
     if (!m || !mapLoaded) return;
@@ -194,8 +83,9 @@ export default function useCctvLayer(
             layout: { visibility: 'none' },
             paint: {
               'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 2, 10, 5, 15, 8],
-              'circle-color': ['match', ['get', 'category'], 'traffic', '#FFD700', 'park', '#4CAF50', 'landmark', '#FF5722', 'coastal', '#03A9F4', '#FFD700'],
-              'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1,
+              'circle-color': '#FFD700',
+              'circle-stroke-color': '#ffffff',
+              'circle-stroke-width': 1,
             },
           });
         }
@@ -203,46 +93,47 @@ export default function useCctvLayer(
           m.addLayer({
             id: 'cctv-labels', type: 'symbol', source: 'cctv-cameras', minzoom: 10,
             layout: { 'text-field': ['get', 'name'], 'text-size': 10, 'text-offset': [0, 1.5], 'text-anchor': 'top', visibility: 'none' },
-            paint: { 'text-color': '#FFD700', 'text-halo-color': '#000000', 'text-halo-width': 1 },
+            paint: { 'text-color': '#FFD700', 'text-halo-color': '#000', 'text-halo-width': 1 },
           });
         }
-        // 클릭 이벤트
+
+        // 클릭 → HLS 팝업
         m.on('click', 'cctv-dots', (e) => {
           if (!e.features?.length) return;
           const props = e.features[0].properties;
-          if (!props) return;
+          if (!props?.url) return;
           const coords = (e.features[0].geometry as GeoJSON.Point).coordinates;
           if (popupRef.current) popupRef.current.remove();
 
-          let content = '';
-          if (props.type === 'hls' && props.url) {
-            content = `<div style="width:320px;background:#000;border-radius:8px;overflow:hidden;"><div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div><video id="cctv-player" style="width:100%;height:180px;background:#000;" autoplay muted playsinline></video><div style="padding:4px 12px;color:#888;font-size:10px;">${props.category === 'traffic' ? '교통 CCTV' : props.category}</div></div>`;
-          } else if (props.type === 'iframe' && props.url) {
-            content = `<div style="width:480px;background:#000;border-radius:8px;overflow:hidden;"><div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div><iframe src="${props.url}" style="width:100%;height:360px;border:none;" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups"></iframe></div>`;
-          } else {
-            content = `<div style="width:260px;background:#1a1a2e;border-radius:8px;overflow:hidden;padding:12px;"><div style="color:#FFD700;font-weight:bold;font-size:13px;">📍 ${props.name}</div><div style="color:#aaa;font-size:11px;margin-top:4px;">${props.category === 'traffic' ? '교통 CCTV (위치 정보)' : props.category}</div><div style="color:#666;font-size:10px;margin-top:4px;">좌표: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}</div></div>`;
-          }
+          const content = `<div style="width:360px;background:#000;border-radius:8px;overflow:hidden;">
+            <div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div>
+            <video id="cctv-player" style="width:100%;height:200px;background:#000;" autoplay muted playsinline></video>
+            <div style="padding:4px 12px;color:#666;font-size:10px;">여수시 교통 CCTV</div>
+          </div>`;
 
-          const p = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '520px', className: 'cctv-popup' })
+          const p = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '400px' })
             .setLngLat(coords as [number, number]).setHTML(content).addTo(m);
           popupRef.current = p;
 
-          if (props.type === 'hls' && props.url) {
-            setTimeout(async () => {
-              const video = document.getElementById('cctv-player') as HTMLVideoElement;
-              if (!video) return;
-              try {
-                const { default: Hls } = await import('hls.js');
-                if (Hls.isSupported()) { const hls = new Hls(); hls.loadSource(props.url); hls.attachMedia(video); }
-                else if (video.canPlayType('application/vnd.apple.mpegurl')) { video.src = props.url; }
-              } catch (err) { logger.error('CCTV', `HLS error: ${err}`); }
-            }, 200);
-          }
+          setTimeout(async () => {
+            const video = document.getElementById('cctv-player') as HTMLVideoElement;
+            if (!video) return;
+            try {
+              const { default: Hls } = await import('hls.js');
+              if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(props.url);
+                hls.attachMedia(video);
+              } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = props.url;
+              }
+            } catch (err) { logger.error('CCTV', `HLS error: ${err}`); }
+          }, 200);
         });
+
         m.on('mouseenter', 'cctv-dots', () => { m.getCanvas().style.cursor = 'pointer'; });
         m.on('mouseleave', 'cctv-dots', () => { m.getCanvas().style.cursor = ''; });
         layersAddedRef.current = true;
-        logger.info('CCTV', 'Layers added to map');
       } catch (err) { logger.error('CCTV', `Layer error: ${err}`); }
     };
 
@@ -255,13 +146,20 @@ export default function useCctvLayer(
     };
 
     const run = async () => {
-      if (m.isStyleLoaded()) { ensureLayers(); } else { await new Promise<void>(r => m.once('style.load', () => { ensureLayers(); r(); })); }
+      if (m.isStyleLoaded()) ensureLayers();
+      else await new Promise<void>(r => m.once('style.load', () => { ensureLayers(); r(); }));
+
       if (!showCctv) { setVis(false); return; }
-      if (!loadedRef.current) await loadCctvData();
+      if (!loadedRef.current) {
+        const cams = await fetchYeosuCctv();
+        cctvDataRef.current = cams;
+        loadedRef.current = true;
+        logger.info('CCTV', `Loaded ${cams.length} Yeosu cameras`);
+      }
       updateMapSource();
       setVis(true);
     };
 
     run();
-  }, [map, mapLoaded, showCctv, loadCctvData, updateMapSource]);
+  }, [map, mapLoaded, showCctv, updateMapSource]);
 }
