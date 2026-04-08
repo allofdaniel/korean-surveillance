@@ -23,17 +23,19 @@ const IS_PROD = import.meta.env.PROD;
 const VWORLD_KEY = import.meta.env.VITE_VWORLD_API_KEY || '';
 const DATA_GO_KR_KEY = import.meta.env.VITE_DATA_GO_KR_API_KEY || '';
 
-// 고정 CCTV 소스 (API 없이 직접 URL)
+// 고정 CCTV 소스 (검증된 작동 URL만)
 const FIXED_CCTV: CctvCamera[] = [
-  { id: 'dokdo-1', name: '독도 라이브', lat: 37.2426, lng: 131.8697, type: 'hls', url: 'http://www.ulleung.go.kr/wowza/live/nsj.stream/playlist.m3u8', category: 'landmark' },
-  { id: 'np-seorak', name: '설악산 권금성', lat: 38.1191, lng: 128.4654, type: 'hls', url: 'http://119.65.216.155:1935/live/cctv3.stream_360p/playlist.m3u8', category: 'park' },
-  { id: 'np-deogyu', name: '덕유산 향적봉', lat: 35.8514, lng: 127.7464, type: 'hls', url: 'http://119.65.216.155:1935/live/cctv10.stream_360p/playlist.m3u8', category: 'park' },
-  { id: 'np-jiri', name: '지리산 천왕봉', lat: 35.3371, lng: 127.7306, type: 'hls', url: 'http://119.65.216.155:1935/live/cctv1.stream_360p/playlist.m3u8', category: 'park' },
-  { id: 'np-halla', name: '한라산 어리목', lat: 33.3617, lng: 126.4967, type: 'hls', url: 'http://119.65.216.155:1935/live/cctv15.stream_360p/playlist.m3u8', category: 'park' },
-  { id: 'np-bukhan', name: '북한산 백운대', lat: 37.6593, lng: 126.9757, type: 'hls', url: 'http://119.65.216.155:1935/live/cctv5.stream_360p/playlist.m3u8', category: 'park' },
-  { id: 'np-gyeryong', name: '계룡산', lat: 36.3444, lng: 127.2101, type: 'hls', url: 'http://119.65.216.155:1935/live/cctv7.stream_360p/playlist.m3u8', category: 'park' },
-  { id: 'jeju-seongsan', name: '성산일출봉', lat: 33.4584, lng: 126.9424, type: 'iframe', url: 'http://www.nowjejuplus.com/cctv/2', category: 'landmark' },
-  { id: 'jeju-yongduam', name: '용두암', lat: 33.5158, lng: 126.5118, type: 'iframe', url: 'http://www.nowjejuplus.com/cctv/1', category: 'landmark' },
+  // 독도 - 울릉군 라이브 (iframe)
+  { id: 'dokdo-1', name: '독도 실시간', lat: 37.2426, lng: 131.8697, type: 'iframe', url: 'https://www.ulleung.go.kr/live/index.do', category: 'landmark' },
+  // 제주 관광 (iframe)
+  { id: 'jeju-seongsan', name: '성산일출봉', lat: 33.4584, lng: 126.9424, type: 'iframe', url: 'https://www.nowjejuplus.com/cctv/2', category: 'landmark' },
+  { id: 'jeju-yongduam', name: '용두암', lat: 33.5158, lng: 126.5118, type: 'iframe', url: 'https://www.nowjejuplus.com/cctv/1', category: 'landmark' },
+  // 국립공원 위치 (영상 없음, 위치 마커만)
+  { id: 'np-seorak', name: '설악산 권금성', lat: 38.1191, lng: 128.4654, type: 'info', url: '', category: 'park' },
+  { id: 'np-jiri', name: '지리산 천왕봉', lat: 35.3371, lng: 127.7306, type: 'info', url: '', category: 'park' },
+  { id: 'np-halla', name: '한라산', lat: 33.3617, lng: 126.4967, type: 'info', url: '', category: 'park' },
+  { id: 'np-bukhan', name: '북한산 백운대', lat: 37.6593, lng: 126.9757, type: 'info', url: '', category: 'park' },
+  { id: 'np-deogyu', name: '덕유산 향적봉', lat: 35.8514, lng: 127.7464, type: 'info', url: '', category: 'park' },
 ];
 
 /** V-World 2D데이터 API로 전국 교통 CCTV 위치 조회 (프록시 경유) */
