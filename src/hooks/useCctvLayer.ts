@@ -23,24 +23,8 @@ const IS_PROD = import.meta.env.PROD;
 const VWORLD_KEY = import.meta.env.VITE_VWORLD_API_KEY || '';
 const DATA_GO_KR_KEY = import.meta.env.VITE_DATA_GO_KR_API_KEY || '';
 
-// 고정 CCTV 소스 (2026-04-08 HTTPS + iframe 확인)
-const FIXED_CCTV: CctvCamera[] = [
-  // === 종합/교통 ===
-  { id: 'utic', name: '전국 교통 CCTV (UTIC)', lat: 37.5665, lng: 126.9780, type: 'iframe', url: 'https://www.utic.go.kr/map/map.do?menu=cctv', category: 'traffic' },
-  { id: 'seoul-topis', name: '서울 교통 CCTV (TOPIS)', lat: 37.5519, lng: 126.9918, type: 'iframe', url: 'https://www.spatic.go.kr/mobile/map/cctv.do?menuId=57', category: 'traffic' },
-  { id: 'gj-traffic', name: '경주 교통 CCTV', lat: 35.8562, lng: 129.2247, type: 'iframe', url: 'https://its.gyeongju.go.kr/cctvinfo.do', category: 'traffic' },
-  { id: 'jeju-traffic', name: '제주 교통 CCTV', lat: 33.4996, lng: 126.5312, type: 'iframe', url: 'https://jejuits.go.kr/jido/mainView.do?DEVICE_KIND=CCTV', category: 'traffic' },
-  // === 해변/연안 ===
-  { id: 'coast-portal', name: '연안 실시간 (해수부)', lat: 35.1028, lng: 129.0403, type: 'iframe', url: 'https://coast.mof.go.kr/coastScene/coastMediaService.do', category: 'coastal' },
-  { id: 'wsb-surf', name: '전국 서핑 웹캠 (WSB)', lat: 35.1590, lng: 129.1601, type: 'iframe', url: 'https://www.wsbfarm.com/wavecam/WaveCamList', category: 'coastal' },
-  // === 산/국립공원 ===
-  { id: 'np-seorak', name: '설악산 실시간', lat: 38.1191, lng: 128.4654, type: 'iframe', url: 'https://www.knps.or.kr/common/cctv/cctv3.html', category: 'park' },
-  { id: 'np-deogyu', name: '덕유산 실시간', lat: 35.8514, lng: 127.7464, type: 'iframe', url: 'https://www.knps.or.kr/common/cctv/cctv10.html', category: 'park' },
-  // === 제주도 ===
-  { id: 'jeju-tour', name: '제주 관광 CCTV', lat: 33.4584, lng: 126.9424, type: 'iframe', url: 'https://www.trendworld.kr/b/jeju_online_cctv', category: 'landmark' },
-  // === 특수 ===
-  { id: 'dokdo', name: '독도 실시간 (울릉군)', lat: 37.2426, lng: 131.8697, type: 'iframe', url: 'https://www.ulleung.go.kr/live/index.do', category: 'landmark' },
-];
+// 고정 CCTV: 여수 HLS만 (나머지는 경찰청/도로교통 API 확보 후 추가)
+const FIXED_CCTV: CctvCamera[] = [];
 
 /** V-World 2D데이터 API로 전국 교통 CCTV 위치 조회 (프록시 경유) */
 async function fetchVworldCctv(): Promise<CctvCamera[]> {
