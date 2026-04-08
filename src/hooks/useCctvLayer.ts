@@ -23,12 +23,26 @@ const IS_PROD = import.meta.env.PROD;
 const VWORLD_KEY = import.meta.env.VITE_VWORLD_API_KEY || '';
 const DATA_GO_KR_KEY = import.meta.env.VITE_DATA_GO_KR_API_KEY || '';
 
-// 고정 CCTV 소스 (2026-04-08 실제 작동 확인된 URL만)
+// 고정 CCTV 소스 (2026-04-08 iframe 가능 확인된 사이트)
 const FIXED_CCTV: CctvCamera[] = [
-  // 경주시 교통정보센터 (iframe, HTTPS, 200 OK 확인)
+  // === 종합/교통 ===
+  { id: 'utic', name: '전국 교통 CCTV (UTIC)', lat: 37.5665, lng: 126.9780, type: 'iframe', url: 'http://www.utic.go.kr/map/map.do?menu=cctv', category: 'traffic' },
+  { id: 'seoul-topis', name: '서울 교통 CCTV (TOPIS)', lat: 37.5519, lng: 126.9918, type: 'iframe', url: 'http://www.spatic.go.kr/mobile/map/cctv.do?menuId=57', category: 'traffic' },
   { id: 'gj-traffic', name: '경주 교통 CCTV', lat: 35.8562, lng: 129.2247, type: 'iframe', url: 'https://its.gyeongju.go.kr/cctvinfo.do', category: 'traffic' },
-  // 제주 교통정보센터 (iframe)
   { id: 'jeju-traffic', name: '제주 교통 CCTV', lat: 33.4996, lng: 126.5312, type: 'iframe', url: 'http://jejuits.go.kr/jido/mainView.do?DEVICE_KIND=CCTV', category: 'traffic' },
+  // === 해변/연안 ===
+  { id: 'coast-portal', name: '연안 실시간 (해수부)', lat: 35.1028, lng: 129.0403, type: 'iframe', url: 'https://coast.mof.go.kr/coastScene/coastMediaService.do', category: 'coastal' },
+  { id: 'wsb-surf', name: '전국 서핑 웹캠 (WSB)', lat: 35.1590, lng: 129.1601, type: 'iframe', url: 'https://www.wsbfarm.com/wavecam/WaveCamList', category: 'coastal' },
+  // === 산/국립공원 ===
+  { id: 'np-seorak', name: '설악산 실시간', lat: 38.1191, lng: 128.4654, type: 'iframe', url: 'http://www.knps.or.kr/common/cctv/cctv3.html', category: 'park' },
+  { id: 'np-deogyu', name: '덕유산 실시간', lat: 35.8514, lng: 127.7464, type: 'iframe', url: 'http://www.knps.or.kr/common/cctv/cctv10.html', category: 'park' },
+  // === 제주도 ===
+  { id: 'jeju-tour', name: '제주 관광 CCTV', lat: 33.4584, lng: 126.9424, type: 'iframe', url: 'http://www.trendworld.kr/b/jeju_online_cctv', category: 'landmark' },
+  { id: 'jeju-nowplus-1', name: '용두암 실시간', lat: 33.5158, lng: 126.5118, type: 'iframe', url: 'http://www.nowjejuplus.com/cctv/1', category: 'landmark' },
+  { id: 'jeju-nowplus-2', name: '성산일출봉 실시간', lat: 33.4612, lng: 126.9312, type: 'iframe', url: 'http://www.nowjejuplus.com/cctv/2', category: 'landmark' },
+  { id: 'jeju-nowplus-3', name: '중문해수욕장 실시간', lat: 33.2447, lng: 126.4108, type: 'iframe', url: 'http://www.nowjejuplus.com/cctv/3', category: 'coastal' },
+  // === 특수 ===
+  { id: 'dokdo', name: '독도 실시간 (울릉군)', lat: 37.2426, lng: 131.8697, type: 'iframe', url: 'http://www.ulleung.go.kr/live/index.do', category: 'landmark' },
 ];
 
 /** V-World 2D데이터 API로 전국 교통 CCTV 위치 조회 (프록시 경유) */
@@ -223,12 +237,12 @@ export default function useCctvLayer(
           if (props.type === 'hls' && props.url) {
             content = `<div style="width:320px;background:#000;border-radius:8px;overflow:hidden;"><div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div><video id="cctv-player" style="width:100%;height:180px;background:#000;" autoplay muted playsinline></video><div style="padding:4px 12px;color:#888;font-size:10px;">${props.category === 'traffic' ? '교통 CCTV' : props.category}</div></div>`;
           } else if (props.type === 'iframe' && props.url) {
-            content = `<div style="width:320px;background:#000;border-radius:8px;overflow:hidden;"><div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div><iframe src="${props.url}" style="width:100%;height:200px;border:none;" allowfullscreen></iframe></div>`;
+            content = `<div style="width:480px;background:#000;border-radius:8px;overflow:hidden;"><div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div><iframe src="${props.url}" style="width:100%;height:360px;border:none;" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups"></iframe></div>`;
           } else {
             content = `<div style="width:260px;background:#1a1a2e;border-radius:8px;overflow:hidden;padding:12px;"><div style="color:#FFD700;font-weight:bold;font-size:13px;">📍 ${props.name}</div><div style="color:#aaa;font-size:11px;margin-top:4px;">${props.category === 'traffic' ? '교통 CCTV (위치 정보)' : props.category}</div><div style="color:#666;font-size:10px;margin-top:4px;">좌표: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}</div></div>`;
           }
 
-          const p = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '350px', className: 'cctv-popup' })
+          const p = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '520px', className: 'cctv-popup' })
             .setLngLat(coords as [number, number]).setHTML(content).addTo(m);
           popupRef.current = p;
 
