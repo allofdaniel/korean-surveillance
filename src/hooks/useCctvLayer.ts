@@ -1,7 +1,8 @@
 /**
- * useCctvLayer - CCTV 카메라를 맵에 표시하고 클릭 시 HLS 영상 팝업
- * 현재 소스: 여수시 실시간 CCTV (data.go.kr API, 95개 HLS)
- * 추후: 경찰청/도로교통 API 확보 시 전국 확대
+ * useCctvLayer - 전국 CCTV 실시간 영상 표시
+ * 데이터 소스:
+ * 1. ITS 국가교통정보센터 (고속도로/국도 HTTPS HLS) - 전국
+ * 2. data.go.kr 여수시 CCTV (HTTPS HLS) - 여수 지역
  */
 import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
 import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
@@ -13,11 +14,43 @@ interface CctvCamera {
   lat: number;
   lng: number;
   url: string;
+  source: string;
 }
 
 const IS_PROD = import.meta.env.PROD;
+const ITS_KEY = import.meta.env.VITE_ITS_API_KEY || '';
 const DATA_GO_KR_KEY = import.meta.env.VITE_DATA_GO_KR_API_KEY || '';
 
+/** ITS 전국 CCTV (고속도로 + 국도) */
+async function fetchItsCctv(): Promise<CctvCamera[]> {
+  const all: CctvCamera[] = [];
+  for (const roadType of ['its', 'ex']) {
+    try {
+      const url = IS_PROD
+        ? `/api/cctv?source=its&type=${roadType}&minX=125&maxX=132&minY=33&maxY=39`
+        : `https://openapi.its.go.kr:9443/cctvInfo?apiKey=${ITS_KEY}&type=${roadType}&cctvType=4&minX=125&maxX=132&minY=33&maxY=39&getType=json`;
+      const resp = await fetch(url);
+      if (!resp.ok) continue;
+      const data = await resp.json();
+      const items = data?.response?.data || [];
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (!item.cctvurl || !item.coordy) continue;
+        all.push({
+          id: `its-${roadType}-${i}`,
+          name: item.cctvname || '교통 CCTV',
+          lat: parseFloat(item.coordy),
+          lng: parseFloat(item.coordx),
+          url: item.cctvurl,
+          source: roadType === 'ex' ? '고속도로' : '국도',
+        });
+      }
+    } catch { /* skip */ }
+  }
+  return all;
+}
+
+/** 여수시 CCTV */
 async function fetchYeosuCctv(): Promise<CctvCamera[]> {
   try {
     const url = IS_PROD
@@ -33,9 +66,10 @@ async function fetchYeosuCctv(): Promise<CctvCamera[]> {
       lat: parseFloat(item.y_crdn || '0'),
       lng: parseFloat(item.x_crdn || '0'),
       url: item.strm_http_addr || '',
+      source: '여수시',
     })).filter((c: CctvCamera) => c.url && !isNaN(c.lat) && c.lat !== 0);
   } catch (err) {
-    logger.error('CCTV', `Yeosu API error: ${err}`);
+    logger.error('CCTV', `Yeosu error: ${err}`);
     return [];
   }
 }
@@ -56,13 +90,13 @@ export default function useCctvLayer(
     const features = cctvDataRef.current.map(cam => ({
       type: 'Feature' as const,
       geometry: { type: 'Point' as const, coordinates: [cam.lng, cam.lat] },
-      properties: { name: cam.name, url: cam.url },
+      properties: { name: cam.name, url: cam.url, source: cam.source },
     }));
     try {
-      const source = m.getSource('cctv-cameras') as mapboxgl.GeoJSONSource;
-      if (source) {
-        source.setData({ type: 'FeatureCollection', features: features as GeoJSON.Feature[] });
-        logger.info('CCTV', `Updated ${features.length} cameras on map`);
+      const src = m.getSource('cctv-cameras') as mapboxgl.GeoJSONSource;
+      if (src) {
+        src.setData({ type: 'FeatureCollection', features: features as GeoJSON.Feature[] });
+        logger.info('CCTV', `Updated ${features.length} cameras`);
       }
     } catch { /* ignore */ }
   }, [map]);
@@ -82,17 +116,17 @@ export default function useCctvLayer(
             id: 'cctv-dots', type: 'circle', source: 'cctv-cameras',
             layout: { visibility: 'none' },
             paint: {
-              'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 2, 10, 5, 15, 8],
+              'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 1.5, 10, 4, 15, 7],
               'circle-color': '#FFD700',
-              'circle-stroke-color': '#ffffff',
-              'circle-stroke-width': 1,
+              'circle-stroke-color': '#fff',
+              'circle-stroke-width': 0.5,
             },
           });
         }
         if (!m.getLayer('cctv-labels')) {
           m.addLayer({
-            id: 'cctv-labels', type: 'symbol', source: 'cctv-cameras', minzoom: 10,
-            layout: { 'text-field': ['get', 'name'], 'text-size': 10, 'text-offset': [0, 1.5], 'text-anchor': 'top', visibility: 'none' },
+            id: 'cctv-labels', type: 'symbol', source: 'cctv-cameras', minzoom: 12,
+            layout: { 'text-field': ['get', 'name'], 'text-size': 9, 'text-offset': [0, 1.5], 'text-anchor': 'top', visibility: 'none' },
             paint: { 'text-color': '#FFD700', 'text-halo-color': '#000', 'text-halo-width': 1 },
           });
         }
@@ -108,7 +142,7 @@ export default function useCctvLayer(
           const content = `<div style="width:360px;background:#000;border-radius:8px;overflow:hidden;">
             <div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div>
             <video id="cctv-player" style="width:100%;height:200px;background:#000;" autoplay muted playsinline></video>
-            <div style="padding:4px 12px;color:#666;font-size:10px;">여수시 교통 CCTV</div>
+            <div style="padding:4px 12px;color:#666;font-size:10px;">${props.source} CCTV · ITS 국가교통정보센터</div>
           </div>`;
 
           const p = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '400px' })
@@ -151,10 +185,11 @@ export default function useCctvLayer(
 
       if (!showCctv) { setVis(false); return; }
       if (!loadedRef.current) {
-        const cams = await fetchYeosuCctv();
-        cctvDataRef.current = cams;
+        logger.info('CCTV', 'Loading ITS + Yeosu CCTV...');
+        const [itsCams, yeosuCams] = await Promise.all([fetchItsCctv(), fetchYeosuCctv()]);
+        cctvDataRef.current = [...itsCams, ...yeosuCams];
         loadedRef.current = true;
-        logger.info('CCTV', `Loaded ${cams.length} Yeosu cameras`);
+        logger.info('CCTV', `Total: ${cctvDataRef.current.length} (ITS: ${itsCams.length}, Yeosu: ${yeosuCams.length})`);
       }
       updateMapSource();
       setVis(true);
