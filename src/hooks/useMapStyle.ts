@@ -310,23 +310,25 @@ const useMapStyle = ({
     const is3DChanged = prev3DViewRef.current !== is3DView;
     prev3DViewRef.current = is3DView;
 
+    // Terrain: 3D 모드 또는 위성 모드에서 항상 활성화
+    if (!mapInstance.getSource('mapbox-dem')) {
+      mapInstance.addSource('mapbox-dem', {
+        type: 'raster-dem',
+        url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        tileSize: 512,
+        maxzoom: 14
+      });
+    }
+    if ((is3DView || showSatellite) && showTerrain) {
+      mapInstance.setTerrain({ source: 'mapbox-dem', exaggeration: 2.5 });
+    } else if (!is3DView && !showSatellite) {
+      mapInstance.setTerrain(null);
+    }
+
     if (is3DView) {
       // 3D 진입 시 카메라 애니메이션 (최초 전환 시만)
       if (is3DChanged && mapInstance.getPitch() < 10) {
         mapInstance.easeTo({ pitch: 60, bearing: -30, duration: 1000 });
-      }
-      // Terrain 활성화
-      if (!mapInstance.getSource('mapbox-dem')) {
-        mapInstance.addSource('mapbox-dem', {
-          type: 'raster-dem',
-          url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
-          tileSize: 512,
-          maxzoom: 14
-        });
-      }
-      if (showTerrain && (!show3DAltitude || showSatellite)) {
-        mapInstance.setTerrain({ source: 'mapbox-dem', exaggeration: 2.5 });
-        logger.info('MapStyle', `Terrain enabled: exaggeration=2.5`);
       }
       // 3D 건물
       try {
@@ -361,7 +363,6 @@ const useMapStyle = ({
       if (mapInstance.getPitch() > 5) {
         mapInstance.easeTo({ pitch: 0, bearing: 0, duration: 1000 });
       }
-      mapInstance.setTerrain(null);
     }
   }, [map, is3DView, mapLoaded, showTerrain, show3DAltitude, showSatellite]);
 
