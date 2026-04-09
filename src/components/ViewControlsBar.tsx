@@ -222,8 +222,8 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
       <button
         className={`view-btn ${showCesium ? 'active' : ''}`}
         onClick={() => setShowCesium(!showCesium)}
-        title="Cesium 3D 건물 뷰어 (V-World + OSM Buildings)"
-        aria-label="Cesium 3D 건물 뷰어"
+        title="Google 3D 텍스처 건물 ON/OFF"
+        aria-label="Google 3D 텍스처 건물"
         style={showCesium ? { background: 'rgba(156, 39, 176, 0.3)', borderColor: '#9c27b0', color: '#ce93d8' } : {}}
       >
         3D

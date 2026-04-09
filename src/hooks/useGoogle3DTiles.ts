@@ -7,6 +7,7 @@ import type { Map as MapboxMap } from 'mapbox-gl';
 import { MapboxOverlay } from '@deck.gl/mapbox';
 import { Tile3DLayer } from '@deck.gl/geo-layers';
 import { Tiles3DLoader } from '@loaders.gl/3d-tiles';
+import useMapStore from '../stores/useMapStore';
 
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 const TILESET_URL = 'https://tile.googleapis.com/v1/3dtiles/root.json';
@@ -24,10 +25,21 @@ export default function useGoogle3DTiles(
     if (!m || !mapLoaded || !GOOGLE_KEY) return;
 
     if (enabled && !addedRef.current) {
-      // 3D 모드로 자동 전환 (피치가 없으면 건물이 안 보임)
+      // 3D 모드로 자동 전환
       if (m.getPitch() < 30) {
         m.easeTo({ pitch: 60, bearing: -30, duration: 1000 });
       }
+      // V-World 위성 끄기 (Google 3D가 자체 위성 포함)
+      const { showSatellite, setShowSatellite } = useMapStore.getState();
+      if (showSatellite) {
+        setShowSatellite(false);
+      }
+      // Mapbox 3D 건물 숨기기 (Google 3D가 건물 제공)
+      try {
+        if (m.getLayer('3d-buildings')) {
+          m.setLayoutProperty('3d-buildings', 'visibility', 'none');
+        }
+      } catch { /* ignore */ }
 
       try {
         const overlay = new MapboxOverlay({
@@ -68,6 +80,12 @@ export default function useGoogle3DTiles(
         } catch { /* ignore */ }
         overlayRef.current = null;
         addedRef.current = false;
+        // Mapbox 3D 건물 복원
+        try {
+          if (m.getLayer('3d-buildings')) {
+            m.setLayoutProperty('3d-buildings', 'visibility', 'visible');
+          }
+        } catch { /* ignore */ }
         console.log('[Google3D] Overlay removed');
       }
     }
