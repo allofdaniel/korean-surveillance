@@ -307,7 +307,7 @@ const useMapStyle = ({
       if (showTerrain && !show3DAltitude) {
         mapInstance.setTerrain({ source: 'mapbox-dem', exaggeration: 2.5 });
       }
-      // 3D 鍮뚮뵫 異붽?
+      // 3D 건물 추가
       try {
         if (!mapInstance.getLayer('3d-buildings') && mapInstance.getSource('composite')) {
           mapInstance.addLayer({
@@ -317,12 +317,16 @@ const useMapStyle = ({
             type: 'fill-extrusion',
             minzoom: 10,
             paint: {
-              'fill-extrusion-color': '#aaa',
+              'fill-extrusion-color': showSatellite ? '#d0d0d0' : '#aaa',
               'fill-extrusion-height': ['get', 'height'],
               'fill-extrusion-base': ['get', 'min_height'],
-              'fill-extrusion-opacity': 0.6
+              'fill-extrusion-opacity': showSatellite ? 0.85 : 0.6
             }
           });
+        } else if (mapInstance.getLayer('3d-buildings')) {
+          // 위성 모드 변경 시 건물 스타일 업데이트
+          mapInstance.setPaintProperty('3d-buildings', 'fill-extrusion-color', showSatellite ? '#d0d0d0' : '#aaa');
+          mapInstance.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', showSatellite ? 0.85 : 0.6);
         }
       } catch {
         // composite source not available
@@ -334,7 +338,7 @@ const useMapStyle = ({
       }
       mapInstance.setTerrain(null);
     }
-  }, [map, is3DView, mapLoaded, showTerrain, show3DAltitude]);
+  }, [map, is3DView, mapLoaded, showTerrain, show3DAltitude, showSatellite]);
 
   // ?쇱튂 蹂?붿뿉 ?곕Ⅸ 2D/3D ?먮룞 ?꾪솚
   useEffect(() => {
