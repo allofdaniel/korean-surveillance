@@ -124,7 +124,7 @@ const useMapStyle = ({
       }
 
       if (is3DView && showTerrain && (!show3DAltitude || showSatellite)) {
-        map.current.setTerrain({ source: 'mapbox-dem', exaggeration: showSatellite ? 1.5 : 2.5 });
+        map.current.setTerrain({ source: 'mapbox-dem', exaggeration: 2.5 });
       }
 
       // Sky layer
@@ -150,10 +150,10 @@ const useMapStyle = ({
             type: 'fill-extrusion',
             minzoom: 10,
             paint: {
-              'fill-extrusion-color': showSatellite ? '#d0d0d0' : '#aaa',
+              'fill-extrusion-color': showSatellite ? '#e8e8e8' : '#aaa',
               'fill-extrusion-height': ['get', 'height'],
               'fill-extrusion-base': ['get', 'min_height'],
-              'fill-extrusion-opacity': showSatellite ? 0.85 : 0.6
+              'fill-extrusion-opacity': showSatellite ? 0.9 : 0.6
             }
           });
         }
@@ -325,10 +325,13 @@ const useMapStyle = ({
         });
       }
       if (showTerrain && (!show3DAltitude || showSatellite)) {
-        mapInstance.setTerrain({ source: 'mapbox-dem', exaggeration: showSatellite ? 1.5 : 2.5 });
+        mapInstance.setTerrain({ source: 'mapbox-dem', exaggeration: 2.5 });
+        logger.info('MapStyle', `Terrain enabled: exaggeration=2.5`);
       }
       // 3D 건물
       try {
+        const buildingColor = showSatellite ? '#e8e8e8' : '#aaa';
+        const buildingOpacity = showSatellite ? 0.9 : 0.6;
         if (!mapInstance.getLayer('3d-buildings') && mapInstance.getSource('composite')) {
           mapInstance.addLayer({
             id: '3d-buildings',
@@ -337,18 +340,21 @@ const useMapStyle = ({
             type: 'fill-extrusion',
             minzoom: 10,
             paint: {
-              'fill-extrusion-color': showSatellite ? '#d0d0d0' : '#aaa',
+              'fill-extrusion-color': buildingColor,
               'fill-extrusion-height': ['get', 'height'],
               'fill-extrusion-base': ['get', 'min_height'],
-              'fill-extrusion-opacity': showSatellite ? 0.85 : 0.6
+              'fill-extrusion-opacity': buildingOpacity
             }
           });
+          logger.info('MapStyle', '3D buildings layer added');
         } else if (mapInstance.getLayer('3d-buildings')) {
-          mapInstance.setPaintProperty('3d-buildings', 'fill-extrusion-color', showSatellite ? '#d0d0d0' : '#aaa');
-          mapInstance.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', showSatellite ? 0.85 : 0.6);
+          mapInstance.setPaintProperty('3d-buildings', 'fill-extrusion-color', buildingColor);
+          mapInstance.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', buildingOpacity);
+          // 건물 visibility 보장
+          mapInstance.setLayoutProperty('3d-buildings', 'visibility', 'visible');
         }
-      } catch {
-        // composite source not available
+      } catch (err) {
+        logger.error('MapStyle', `3D buildings error: ${err}`);
       }
     } else if (is3DChanged) {
       // 2D로 전환 시 카메라 리셋
