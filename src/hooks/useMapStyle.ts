@@ -104,7 +104,7 @@ const useMapStyle = ({
         });
       }
 
-      // 3D 鍮뚮뵫 異붽?
+      // 3D 건물 추가 (스타일 로드 시)
       try {
         if (!map.current.getLayer('3d-buildings') && map.current.getSource('composite')) {
           map.current.addLayer({
@@ -114,10 +114,10 @@ const useMapStyle = ({
             type: 'fill-extrusion',
             minzoom: 10,
             paint: {
-              'fill-extrusion-color': '#aaa',
+              'fill-extrusion-color': showSatellite ? '#d0d0d0' : '#aaa',
               'fill-extrusion-height': ['get', 'height'],
               'fill-extrusion-base': ['get', 'min_height'],
-              'fill-extrusion-opacity': 0.6
+              'fill-extrusion-opacity': showSatellite ? 0.85 : 0.6
             }
           });
         }
@@ -304,8 +304,8 @@ const useMapStyle = ({
           maxzoom: 14
         });
       }
-      if (showTerrain && !show3DAltitude) {
-        mapInstance.setTerrain({ source: 'mapbox-dem', exaggeration: 2.5 });
+      if (showTerrain && (!show3DAltitude || showSatellite)) {
+        mapInstance.setTerrain({ source: 'mapbox-dem', exaggeration: showSatellite ? 1.5 : 2.5 });
       }
       // 3D 건물 추가
       try {
