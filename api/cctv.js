@@ -17,7 +17,11 @@ export default async function handler(req, res) {
       if (!itsKey) return res.status(400).json({ error: 'ITS API key not configured' });
       const roadType = type || 'its'; // its: 국도, ex: 고속도로
       const url = `https://openapi.its.go.kr:9443/cctvInfo?apiKey=${itsKey}&type=${roadType}&cctvType=4&minX=${minX || 125}&maxX=${maxX || 132}&minY=${minY || 33}&maxY=${maxY || 39}&getType=json`;
-      const resp = await fetch(url);
+      const resp = await fetch(url, {
+        signal: AbortSignal.timeout(15000),
+        headers: { 'Accept': 'application/json' },
+      });
+      if (!resp.ok) return res.status(resp.status).json({ error: `ITS API returned ${resp.status}` });
       const data = await resp.json();
       return res.status(200).json(data);
 
@@ -33,6 +37,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid source. Use: its, yeosu' });
     }
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message, cause: err.cause?.message || null });
   }
 }
