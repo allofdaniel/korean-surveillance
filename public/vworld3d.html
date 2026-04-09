@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대한감시 - 3D 건물 뷰어</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a1a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    #vmap { width: 100%; height: 100%; }
+
+    .overlay { position: absolute; z-index: 1000; pointer-events: none; }
+    .overlay > * { pointer-events: auto; }
+
+    .info-panel {
+      position: absolute; top: 16px; left: 16px; z-index: 1000;
+      background: rgba(26, 26, 46, 0.92); color: #4fc3f7;
+      border-radius: 10px; padding: 14px 20px; font-size: 13px;
+      backdrop-filter: blur(12px); border: 1px solid rgba(79, 195, 247, 0.2);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .info-panel h2 { color: #fff; font-size: 16px; margin-bottom: 6px; }
+    .info-panel .sub { font-size: 11px; color: #888; margin-top: 6px; }
+
+    .back-btn {
+      position: absolute; top: 16px; right: 16px; z-index: 1000;
+      background: rgba(26, 26, 46, 0.92); color: #fff;
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
+      padding: 10px 20px; font-size: 14px; font-weight: bold;
+      cursor: pointer; backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transition: all 0.2s;
+    }
+    .back-btn:hover { background: rgba(79, 195, 247, 0.2); border-color: #4fc3f7; }
+
+    .city-bar {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;
+      display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    }
+    .city-btn {
+      background: rgba(26, 26, 46, 0.88); color: #4fc3f7;
+      border: 1px solid rgba(79, 195, 247, 0.3); border-radius: 6px;
+      padding: 8px 14px; font-size: 12px; font-weight: bold;
+      cursor: pointer; backdrop-filter: blur(8px);
+      transition: all 0.2s;
+    }
+    .city-btn:hover { background: rgba(79, 195, 247, 0.2); border-color: #4fc3f7; }
+    .city-btn.active { background: rgba(79, 195, 247, 0.3); border-color: #4fc3f7; color: #fff; }
+
+    .loading {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000;
+      color: #4fc3f7; font-size: 18px; text-align: center;
+    }
+    .loading .spinner {
+      width: 40px; height: 40px; border: 3px solid rgba(79,195,247,0.2);
+      border-top-color: #4fc3f7; border-radius: 50%;
+      animation: spin 1s linear infinite; margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="vmap"></div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    V-World 3D 지도 로딩 중...
+  </div>
+
+  <div class="info-panel" id="info">
+    <h2>V-World 3D 건물 뷰어</h2>
+    <div>텍스처 3D 건물 + 위성 + 지형</div>
+    <div class="sub">마우스 드래그: 이동 | 우클릭+드래그: 회전 | 스크롤: 줌 | Ctrl+드래그: 기울기</div>
+  </div>
+
+  <button class="back-btn" onclick="window.close(); if(!window.closed) location.href='/';">
+    대한감시로 돌아가기
+  </button>
+
+  <div class="city-bar" id="cityBar"></div>
+
+  <script>
+    var VWORLD_KEY = '7BAEDF39-BC00-3804-BA17-2A987B170350';
+
+    var cities = [
+      { name: '서울', lon: 126.978, lat: 37.566, alt: 1000 },
+      { name: '강남', lon: 127.028, lat: 37.498, alt: 500 },
+      { name: '여의도', lon: 126.924, lat: 37.525, alt: 500 },
+      { name: '잠실', lon: 127.100, lat: 37.513, alt: 500 },
+      { name: '명동', lon: 126.986, lat: 37.561, alt: 300 },
+      { name: '광화문', lon: 126.977, lat: 37.576, alt: 400 },
+      { name: '부산', lon: 129.075, lat: 35.179, alt: 800 },
+      { name: '해운대', lon: 129.160, lat: 35.163, alt: 500 },
+      { name: '인천', lon: 126.705, lat: 37.456, alt: 600 },
+      { name: '대구', lon: 128.601, lat: 35.871, alt: 600 },
+      { name: '대전', lon: 127.385, lat: 36.351, alt: 600 },
+      { name: '울산', lon: 129.311, lat: 35.539, alt: 600 },
+    ];
+
+    // 도시 버튼 생성
+    var cityBar = document.getElementById('cityBar');
+    cities.forEach(function(city) {
+      var btn = document.createElement('button');
+      btn.className = 'city-btn';
+      btn.textContent = city.name;
+      btn.onclick = function() { moveToCity(city); };
+      cityBar.appendChild(btn);
+    });
+
+    var map3d = null;
+
+    function moveToCity(city) {
+      if (!map3d) return;
+      try {
+        map3d.moveTo(
+          new vw.CoordZ(city.lon, city.lat, city.alt),
+          new vw.Direction(0, -50, 0),
+          true
+        );
+      } catch(e) {
+        console.warn('moveTo failed, trying alternative:', e);
+        try {
+          map3d.getView().setLookAt(city.lon, city.lat, city.alt, 0, -50, 0);
+        } catch(e2) { console.error('Camera move failed:', e2); }
+      }
+    }
+
+    function initMap() {
+      try {
+        var options = {
+          mapMode: "3d",
+          basemapType: vw.BasemapType.PHOTO,
+          controlDensity: vw.DensityType.BASIC,
+          interactionDensity: vw.InteractionDensityType.FULL,
+          controlAutoDisappear: true,
+          homePosition: vw.CoordZ(126.978, 37.566, 1000),
+          homeDirection: vw.Direction(0, -50, 0)
+        };
+
+        map3d = vw.ol3DMap("vmap", options);
+        document.getElementById('loading').style.display = 'none';
+        console.log('[VWorld3D] Map initialized successfully');
+      } catch(e) {
+        console.error('[VWorld3D] Init error:', e);
+        // 재시도
+        setTimeout(function() {
+          try {
+            map3d = vw.ol3DMap("vmap", {
+              mapMode: "3d",
+              basemapType: vw.BasemapType.PHOTO,
+              controlDensity: vw.DensityType.BASIC
+            });
+            document.getElementById('loading').style.display = 'none';
+          } catch(e2) {
+            document.getElementById('loading').innerHTML =
+              '<div style="color:#ff6b6b;">3D 지도 로드 실패</div>' +
+              '<div style="font-size:12px;color:#888;margin-top:8px;">V-World API를 확인해주세요</div>';
+          }
+        }, 2000);
+      }
+    }
+
+    // V-World 3D API 스크립트 로드
+    var script = document.createElement('script');
+    script.src = 'https://map.vworld.kr/js/webglMapInit.js.do?version=3.0&apiKey=' + VWORLD_KEY;
+    script.onload = function() {
+      // API 로드 후 vw 객체 준비 대기
+      var check = setInterval(function() {
+        if (typeof vw !== 'undefined' && vw.ol3DMap) {
+          clearInterval(check);
+          setTimeout(initMap, 500);
+        }
+      }, 200);
+      setTimeout(function() { clearInterval(check); }, 15000);
+    };
+    script.onerror = function() {
+      document.getElementById('loading').innerHTML =
+        '<div style="color:#ff6b6b;">V-World 3D API 로드 실패</div>';
+    };
+    document.head.appendChild(script);
+  </script>
+</body>
+</html>
