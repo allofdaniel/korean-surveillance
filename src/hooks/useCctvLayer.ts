@@ -53,9 +53,8 @@ async function fetchItsCctv(): Promise<CctvCamera[]> {
   const all: CctvCamera[] = [];
   for (const roadType of ['its', 'ex']) {
     try {
-      const url = IS_PROD
-        ? `/api/cctv?source=its&type=${roadType}&minX=125&maxX=132&minY=33&maxY=39`
-        : `https://openapi.its.go.kr:9443/cctvInfo?apiKey=${ITS_KEY}&type=${roadType}&cctvType=4&minX=125&maxX=132&minY=33&maxY=39&getType=json`;
+      // ITS API는 koreasurveillance.com CORS 허용 → 직접 호출 (Vercel 서버리스에서 포트 9443 타임아웃 문제)
+      const url = `https://openapi.its.go.kr:9443/cctvInfo?apiKey=${ITS_KEY}&type=${roadType}&cctvType=4&minX=125&maxX=132&minY=33&maxY=39&getType=json`;
       const resp = await fetch(url);
       if (!resp.ok) continue;
       const data = await resp.json();
