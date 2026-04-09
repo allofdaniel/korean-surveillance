@@ -59,6 +59,9 @@ interface ViewControlsBarProps {
   setShowVwSpecial: (show: boolean) => void;
   showVwRoads: boolean;
   setShowVwRoads: (show: boolean) => void;
+  // Cesium 3D
+  showCesium: boolean;
+  setShowCesium: (show: boolean) => void;
   // Weather (pass-through to NotamPanel)
   showLightning: boolean;
   setShowLightning: (show: boolean) => void;
@@ -117,6 +120,9 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
   setShowVwSpecial,
   showVwRoads,
   setShowVwRoads,
+  // Cesium
+  showCesium,
+  setShowCesium,
   // Weather (pass-through to NotamPanel)
   showLightning,
   setShowLightning,
@@ -212,6 +218,15 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
         style={(showVwBuildings || showVwSpecial || showVwRoads) ? { background: 'rgba(229, 62, 62, 0.3)', borderColor: '#e53e3e', color: '#fc8181' } : {}}
       >
         MAP
+      </button>
+      <button
+        className={`view-btn ${showCesium ? 'active' : ''}`}
+        onClick={() => setShowCesium(!showCesium)}
+        title="Cesium 3D 건물 뷰어 (V-World + OSM Buildings)"
+        aria-label="Cesium 3D 건물 뷰어"
+        style={showCesium ? { background: 'rgba(156, 39, 176, 0.3)', borderColor: '#9c27b0', color: '#ce93d8' } : {}}
+      >
+        3D
       </button>
 
       <NotamPanel

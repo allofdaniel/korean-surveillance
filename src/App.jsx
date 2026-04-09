@@ -49,6 +49,7 @@ import {
   KoreaAirspacePanel,
   MapContextMenu,
 } from './components';
+import CesiumViewer from './components/CesiumViewer';
 
 // Import hooks
 import {
@@ -104,6 +105,7 @@ function App() {
     showVwBuildings, setShowVwBuildings,
     showVwSpecial, setShowVwSpecial,
     showVwRoads, setShowVwRoads,
+    showCesium, setShowCesium,
   } = useMapStore();
 
   // UI store
@@ -476,6 +478,8 @@ function App() {
         setShowVwSpecial={setShowVwSpecial}
         showVwRoads={showVwRoads}
         setShowVwRoads={setShowVwRoads}
+        showCesium={showCesium}
+        setShowCesium={setShowCesium}
         showLightning={showLightning}
         setShowLightning={setShowLightning}
         showSigmet={showSigmet}
@@ -836,6 +840,11 @@ function App() {
         }}
       />
 
+      {/* Cesium 3D 건물 뷰어 */}
+      <CesiumViewer
+        visible={showCesium}
+        onClose={() => setShowCesium(false)}
+      />
     </div>
   );
 }
