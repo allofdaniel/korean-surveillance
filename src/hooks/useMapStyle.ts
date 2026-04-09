@@ -286,13 +286,12 @@ const useMapStyle = ({
   useEffect(() => {
     const mapInstance = map.current;
     if (!mapInstance || !mapLoaded) return;
-    // Skip if is3DView hasn't changed (e.g. mapLoaded toggled due to style switch)
-    if (prev3DViewRef.current === is3DView) return;
+    const is3DChanged = prev3DViewRef.current !== is3DView;
     prev3DViewRef.current = is3DView;
 
     if (is3DView) {
       // ?대? ?명듃???곹깭(?쇱튂 由ъ뒪?덉뿉 ?섑븳 ?꾪솚)硫??좊땲硫붿씠???ㅽ궢
-      if (mapInstance.getPitch() < 10) {
+      if (is3DChanged && mapInstance.getPitch() < 10) {
         mapInstance.easeTo({ pitch: 60, bearing: -30, duration: 1000 });
       }
       // Terrain ?쒖꽦??(?ㅽ???由щ줈???놁씠 3D ?꾪솚 ?쒖뿉???숈옉?섎룄濡?
@@ -331,8 +330,8 @@ const useMapStyle = ({
       } catch {
         // composite source not available
       }
-    } else {
-      // ?대? ?됰㈃ ?곹깭(?쇱튂 由ъ뒪?덉뿉 ?섑븳 ?꾪솚)硫??좊땲硫붿씠???ㅽ궢
+    } else if (is3DChanged) {
+      // 2D로 전환 시 카메라 리셋
       if (mapInstance.getPitch() > 5) {
         mapInstance.easeTo({ pitch: 0, bearing: 0, duration: 1000 });
       }
