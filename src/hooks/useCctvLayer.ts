@@ -15,11 +15,38 @@ interface CctvCamera {
   lng: number;
   url: string;
   source: string;
+  type: 'hls' | 'link'; // hls: HLS 팝업 재생, link: 새 창 열기
 }
 
 const IS_PROD = import.meta.env.PROD;
 const ITS_KEY = import.meta.env.VITE_ITS_API_KEY || '';
 const DATA_GO_KR_KEY = import.meta.env.VITE_DATA_GO_KR_API_KEY || '';
+
+// 외부 CCTV/웹캠 사이트 (클릭 시 새 창 열기)
+const EXTERNAL_SITES: CctvCamera[] = [
+  // 교통
+  { id: 'ext-utic', name: '전국 교통 CCTV (UTIC)', lat: 37.5665, lng: 126.9780, url: 'http://www.utic.go.kr/map/map.do?menu=cctv', source: '경찰청', type: 'link' },
+  { id: 'ext-its', name: 'ITS 국도/고속도로 CCTV', lat: 37.4800, lng: 127.0400, url: 'https://www.its.go.kr/map/cctv', source: 'ITS', type: 'link' },
+  { id: 'ext-topis', name: '서울 교통 CCTV (TOPIS)', lat: 37.5519, lng: 126.9918, url: 'http://www.spatic.go.kr/mobile/map/cctv.do?menuId=57', source: '서울시', type: 'link' },
+  // 해변/연안
+  { id: 'ext-wsb', name: '전국 서핑 웹캠 (WSB)', lat: 35.1590, lng: 129.1601, url: 'https://www.wsbfarm.com/wavecam/WaveCamList', source: '서핑', type: 'link' },
+  { id: 'ext-coast', name: '연안 실시간 (해수부)', lat: 35.1028, lng: 129.0403, url: 'https://coast.mof.go.kr/coastScene/coastMediaService.do', source: '해수부', type: 'link' },
+  // 국립공원
+  { id: 'ext-np', name: '국립공원 실시간', lat: 37.6593, lng: 126.9757, url: 'http://www.knps.or.kr/portal/main/contents.do?menuNo=8000168', source: '국립공원', type: 'link' },
+  { id: 'ext-seorak', name: '설악산 권금성', lat: 38.1191, lng: 128.4654, url: 'http://www.knps.or.kr/common/cctv/cctv3.html', source: '국립공원', type: 'link' },
+  { id: 'ext-deogyu', name: '덕유산 향적봉', lat: 35.8514, lng: 127.7464, url: 'http://www.knps.or.kr/common/cctv/cctv10.html', source: '국립공원', type: 'link' },
+  // 제주
+  { id: 'ext-jeju-tour', name: '제주 관광 CCTV', lat: 33.4584, lng: 126.9424, url: 'http://www.trendworld.kr/b/jeju_online_cctv', source: '제주', type: 'link' },
+  { id: 'ext-jeju-its', name: '제주 교통정보', lat: 33.4996, lng: 126.5312, url: 'http://jejuits.go.kr/jido/mainView.do?DEVICE_KIND=CCTV', source: '제주', type: 'link' },
+  { id: 'ext-jeju-now', name: 'Now 제주 (용두암 등)', lat: 33.5158, lng: 126.5118, url: 'http://www.nowjejuplus.com/cctv/1', source: '제주', type: 'link' },
+  // 특수
+  { id: 'ext-dokdo', name: '독도 실시간', lat: 37.2426, lng: 131.8697, url: 'http://www.ulleung.go.kr/live/index.do', source: '울릉군', type: 'link' },
+  { id: 'ext-smg', name: '새만금 HD 웹캠', lat: 35.7900, lng: 126.6800, url: 'http://smgcctv.kr/cctv/', source: '새만금', type: 'link' },
+  { id: 'ext-yongpyong', name: '용평리조트 웹캠', lat: 37.6443, lng: 128.6805, url: 'https://www.yongpyong.co.kr/kor/guide/realTimeNews/ypResortWebcam.do', source: '리조트', type: 'link' },
+  // 시즌
+  { id: 'ext-hadong', name: '하동 십리벚꽃길', lat: 35.0674, lng: 127.7514, url: 'http://flower.hadong.go.kr/', source: '하동군', type: 'link' },
+  { id: 'ext-gyeongju', name: '경주 교통 CCTV', lat: 35.8562, lng: 129.2247, url: 'https://its.gyeongju.go.kr/cctvinfo.do', source: '경주시', type: 'link' },
+];
 
 /** ITS 전국 CCTV (고속도로 + 국도) */
 async function fetchItsCctv(): Promise<CctvCamera[]> {
@@ -43,6 +70,7 @@ async function fetchItsCctv(): Promise<CctvCamera[]> {
           lng: parseFloat(item.coordx),
           url: item.cctvurl,
           source: roadType === 'ex' ? '고속도로' : '국도',
+          type: 'hls',
         });
       }
     } catch { /* skip */ }
@@ -67,6 +95,7 @@ async function fetchYeosuCctv(): Promise<CctvCamera[]> {
       lng: parseFloat(item.x_crdn || '0'),
       url: item.strm_http_addr || '',
       source: '여수시',
+      type: 'hls' as const,
     })).filter((c: CctvCamera) => c.url && !isNaN(c.lat) && c.lat !== 0);
   } catch (err) {
     logger.error('CCTV', `Yeosu error: ${err}`);
@@ -90,7 +119,7 @@ export default function useCctvLayer(
     const features = cctvDataRef.current.map(cam => ({
       type: 'Feature' as const,
       geometry: { type: 'Point' as const, coordinates: [cam.lng, cam.lat] },
-      properties: { name: cam.name, url: cam.url, source: cam.source },
+      properties: { name: cam.name, url: cam.url, source: cam.source, type: cam.type },
     }));
     try {
       const src = m.getSource('cctv-cameras') as mapboxgl.GeoJSONSource;
@@ -117,7 +146,7 @@ export default function useCctvLayer(
             layout: { visibility: 'none' },
             paint: {
               'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 1.5, 10, 4, 15, 7],
-              'circle-color': '#FFD700',
+              'circle-color': ['match', ['get', 'type'], 'link', '#03A9F4', '#FFD700'],
               'circle-stroke-color': '#fff',
               'circle-stroke-width': 0.5,
             },
@@ -131,12 +160,20 @@ export default function useCctvLayer(
           });
         }
 
-        // 클릭 → HLS 팝업
+        // 클릭 → HLS 팝업 또는 새 창 열기
         m.on('click', 'cctv-dots', (e) => {
           if (!e.features?.length) return;
           const props = e.features[0].properties;
           if (!props?.url) return;
           const coords = (e.features[0].geometry as GeoJSON.Point).coordinates;
+
+          // 외부 링크 → 새 창으로 열기
+          if (props.type === 'link') {
+            window.open(props.url, '_blank', 'noopener,noreferrer');
+            return;
+          }
+
+          // HLS → 팝업 영상 재생
           if (popupRef.current) popupRef.current.remove();
 
           const content = `<div style="width:360px;background:#000;border-radius:8px;overflow:hidden;">
@@ -187,9 +224,9 @@ export default function useCctvLayer(
       if (!loadedRef.current) {
         logger.info('CCTV', 'Loading ITS + Yeosu CCTV...');
         const [itsCams, yeosuCams] = await Promise.all([fetchItsCctv(), fetchYeosuCctv()]);
-        cctvDataRef.current = [...itsCams, ...yeosuCams];
+        cctvDataRef.current = [...EXTERNAL_SITES, ...itsCams, ...yeosuCams];
         loadedRef.current = true;
-        logger.info('CCTV', `Total: ${cctvDataRef.current.length} (ITS: ${itsCams.length}, Yeosu: ${yeosuCams.length})`);
+        logger.info('CCTV', `Total: ${cctvDataRef.current.length} (External: ${EXTERNAL_SITES.length}, ITS: ${itsCams.length}, Yeosu: ${yeosuCams.length})`);
       }
       updateMapSource();
       setVis(true);
