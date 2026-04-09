@@ -322,15 +322,18 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  // Handle terrain toggle
+  // Handle terrain toggle (showTerrain 체크박스로만 제어)
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
-    if (is3DView && showTerrain && !show3DAltitude) {
-      map.current.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
-    } else {
-      map.current.setTerrain(null);
-    }
-  }, [map, mapLoaded, showTerrain, is3DView, show3DAltitude]);
+    try {
+      if (!map.current.getSource('mapbox-dem')) return;
+      if (showTerrain) {
+        map.current.setTerrain({ source: 'mapbox-dem', exaggeration: 2.5 });
+      } else {
+        map.current.setTerrain(null);
+      }
+    } catch { /* ignore */ }
+  }, [map, mapLoaded, showTerrain]);
 
   // Handle 3D buildings visibility
   useEffect(() => {
