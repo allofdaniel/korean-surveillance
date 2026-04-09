@@ -7,7 +7,7 @@ import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
 import { logger } from '../utils/logger';
 
 const IS_PROD = import.meta.env.PROD;
-const MIN_ZOOM = 11; // 줌 11 이상에서만 로드
+const MIN_ZOOM = 5; // 줌 5 이상에서 로드
 const DEBOUNCE_MS = 800;
 
 type LayerType = 'buildings' | 'special' | 'roads';
@@ -42,7 +42,8 @@ export default function useVworldLayers(
   const loadData = useCallback(async () => {
     const m = map.current;
     if (!m) return;
-    if (m.getZoom() < MIN_ZOOM) return;
+    const zoom = m.getZoom();
+    if (zoom < MIN_ZOOM) return;
 
     const bounds = m.getBounds();
     const b = {
@@ -69,7 +70,8 @@ export default function useVworldLayers(
       })());
     }
 
-    if (showSpecial) {
+    if (showSpecial && zoom >= 13) {
+      // SPBD: bbox 10km² 제한이라 줌 13+ 에서만
       loads.push((async () => {
         const fc = await fetchVworldData('special', b);
         if (fc) {
@@ -117,13 +119,13 @@ export default function useVworldLayers(
             layout: { visibility: 'none' },
             paint: {
               'line-color': '#4a5568',
-              'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.5, 15, 2, 18, 4],
+              'line-width': ['interpolate', ['linear'], ['zoom'], 5, 0.2, 10, 0.8, 15, 2, 18, 4],
               'line-opacity': 0.6,
             },
           });
         }
 
-        // 건물 소스/레이어
+        // 건물 소스/레이어 (줌 5+)
         if (!m.getSource('vw-buildings')) {
           m.addSource('vw-buildings', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
         }
@@ -134,20 +136,20 @@ export default function useVworldLayers(
             layout: { visibility: 'none' },
             paint: {
               'fill-color': '#2d3748',
-              'fill-opacity': 0.5,
+              'fill-opacity': ['interpolate', ['linear'], ['zoom'], 5, 0.2, 10, 0.4, 15, 0.6],
               'fill-outline-color': '#4a5568',
             },
           });
         }
 
-        // 특수건물 소스/레이어 (라벨 포함)
+        // 특수건물 소스/레이어 (줌 13+, bbox 10km² 제한)
         if (!m.getSource('vw-special')) {
           m.addSource('vw-special', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
         }
         if (!m.getLayer('vw-special-fill')) {
           m.addLayer({
             id: 'vw-special-fill', type: 'fill', source: 'vw-special',
-            minzoom: MIN_ZOOM,
+            minzoom: 13,
             layout: { visibility: 'none' },
             paint: {
               'fill-color': '#e53e3e',
@@ -161,8 +163,14 @@ export default function useVworldLayers(
             id: 'vw-special-labels', type: 'symbol', source: 'vw-special',
             minzoom: 13,
             layout: {
-              'text-field': ['coalesce', ['get', 'buld_nm'], ['get', 'buld_nm_dc'], ['get', 'uname'], ''],
+              'text-field': ['concat',
+                ['get', 'rd_nm'], ' ',
+                ['get', 'buld_no'],
+                ['case', ['!=', ['get', 'buld_nm'], ''], ['concat', '\n', ['get', 'buld_nm']], ''],
+              ],
               'text-size': 10,
+              'text-anchor': 'center',
+              'text-allow-overlap': false,
               visibility: 'none',
             },
             paint: {
