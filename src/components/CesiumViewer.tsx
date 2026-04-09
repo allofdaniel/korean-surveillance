@@ -1,139 +1,97 @@
 /**
- * CesiumViewer - Google Photorealistic 3D Tiles + V-World 위성
- * 실제 건물 텍스처가 적용된 포토리얼리스틱 3D 뷰어
+ * VWorld3DViewer - V-World 웹지엘 3D지도 API
+ * 텍스처가 적용된 실제 3D 건물 + 위성 + 지형
+ * V-World API 키만으로 동작 (Google 불필요)
  */
-import { useEffect, useRef, useCallback } from 'react';
-import * as Cesium from 'cesium';
-import 'cesium/Build/Cesium/Widgets/widgets.css';
+import { useEffect, useRef } from 'react';
 
 const VWORLD_KEY = import.meta.env.VITE_VWORLD_API_KEY || '';
-const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
+const VWORLD_3D_SCRIPT = `https://map.vworld.kr/js/webglMapInit.js.do?version=3.0&apiKey=${VWORLD_KEY}`;
 
-interface CesiumViewerProps {
+interface VWorld3DViewerProps {
   visible: boolean;
   onClose: () => void;
 }
 
-export default function CesiumViewerComponent({ visible, onClose }: CesiumViewerProps) {
+// V-World 3D API 타입 (글로벌)
+declare global {
+  interface Window {
+    vw: {
+      Map3D: new (container: string, options: unknown) => VWMap3D;
+      CameraPosition: new (lon: number, lat: number, alt: number) => unknown;
+      Direction: new (heading: number, pitch: number, roll: number) => unknown;
+      BasemapType: { PHOTO: string; HYBRID: string; DEFAULT: string };
+      DensityType: { BASIC: string; FULL: string; NONE: string };
+    };
+  }
+}
+
+interface VWMap3D {
+  moveTo: (position: unknown, direction: unknown, duration?: number) => void;
+  destroy?: () => void;
+}
+
+export default function CesiumViewerComponent({ visible, onClose }: VWorld3DViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const viewerRef = useRef<Cesium.Viewer | null>(null);
+  const mapRef = useRef<VWMap3D | null>(null);
+  const scriptLoadedRef = useRef(false);
   const initializedRef = useRef(false);
 
-  const initViewer = useCallback(async () => {
-    if (!containerRef.current || initializedRef.current) return;
-    initializedRef.current = true;
+  useEffect(() => {
+    if (!visible || initializedRef.current || !VWORLD_KEY) return;
 
-    // Cesium Ion 토큰 (OSM Buildings fallback용)
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWZiLTQzYjYtYTQ0OS1kMWFjYmFkNjc5YzciLCJpZCI6OTYyMCwic2NvcGVzIjpbImFzbCIsImFzciIsImdjIl0sImlhdCI6MTU2Mjg2NjI3M30.93b2HY8UiCwlbGFfMoNTTbHONMz6vKQiM_RfY0sZ3U0';
-
-    // Google 3D Tiles가 있으면 별도 imagery 불필요 (Google이 위성+건물+지형 모두 제공)
-    const useGoogle3D = !!GOOGLE_API_KEY;
-
-    const viewerOptions: Cesium.Viewer.ConstructorOptions = {
-      animation: false,
-      timeline: false,
-      homeButton: false,
-      sceneModePicker: false,
-      baseLayerPicker: false,
-      navigationHelpButton: false,
-      geocoder: false,
-      fullscreenButton: false,
-      infoBox: false,
-      selectionIndicator: false,
-      creditContainer: document.createElement('div'),
+    const loadScript = (): Promise<void> => {
+      if (scriptLoadedRef.current && window.vw) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        // 이미 로드된 스크립트 있는지 확인
+        if (document.querySelector(`script[src*="webglMapInit"]`)) {
+          const check = setInterval(() => {
+            if (window.vw) { clearInterval(check); scriptLoadedRef.current = true; resolve(); }
+          }, 100);
+          setTimeout(() => { clearInterval(check); reject(new Error('V-World 3D script timeout')); }, 10000);
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = VWORLD_3D_SCRIPT;
+        script.async = true;
+        script.onload = () => {
+          // vw 객체가 준비될 때까지 대기
+          const check = setInterval(() => {
+            if (window.vw) { clearInterval(check); scriptLoadedRef.current = true; resolve(); }
+          }, 100);
+          setTimeout(() => { clearInterval(check); reject(new Error('vw object not ready')); }, 10000);
+        };
+        script.onerror = () => reject(new Error('V-World 3D script load failed'));
+        document.head.appendChild(script);
+      });
     };
 
-    if (useGoogle3D) {
-      // Google 3D Tiles 모드: 지형/이미지 불필요 (Google이 모두 제공)
-      viewerOptions.baseLayer = false as unknown as Cesium.ImageryLayer;
-      viewerOptions.terrain = undefined;
-    } else {
-      // Fallback: V-World 위성 + Cesium World Terrain
-      if (VWORLD_KEY) {
-        viewerOptions.baseLayer = new Cesium.ImageryLayer(
-          new Cesium.UrlTemplateImageryProvider({
-            url: `https://api.vworld.kr/req/wmts/1.0.0/${VWORLD_KEY}/Satellite/{z}/{y}/{x}.jpeg`,
-            minimumLevel: 5,
-            maximumLevel: 19,
-            credit: new Cesium.Credit('V-World (국토교통부)'),
-          })
-        );
-      }
-      viewerOptions.terrain = Cesium.Terrain.fromWorldTerrain();
-    }
-
-    const viewer = new Cesium.Viewer(containerRef.current, viewerOptions);
-    viewerRef.current = viewer;
-
-    // 렌더링 품질 설정
-    viewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#0a0a1a');
-    viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#1a1a2e');
-    viewer.scene.fog.enabled = true;
-    viewer.scene.fog.density = 0.0002;
-    viewer.scene.globe.showGroundAtmosphere = true;
-    viewer.scene.globe.enableLighting = true;
-    viewer.shadows = true;
-
-    // MSAA 안티앨리어싱
-    if (viewer.scene.msaaSamples !== undefined) {
-      viewer.scene.msaaSamples = 4;
-    }
-
-    if (useGoogle3D) {
-      // Google Photorealistic 3D Tiles (실제 건물 텍스처!)
+    const init = async () => {
       try {
-        console.log('[Cesium] Loading Google Photorealistic 3D Tiles...');
-        const tileset = await Cesium.Cesium3DTileset.fromUrl(
-          `https://tile.googleapis.com/v1/3dtiles/root.json?key=${GOOGLE_API_KEY}`
-        );
-        viewer.scene.primitives.add(tileset);
-        // Google 3D에서는 globe 숨기기 (Google이 지형 제공)
-        viewer.scene.globe.show = false;
-        console.log('[Cesium] Google 3D Tiles loaded successfully');
+        await loadScript();
+        if (!containerRef.current || !window.vw) return;
+
+        const { vw } = window;
+        initializedRef.current = true;
+
+        const map3d = new vw.Map3D('vworld-3d-container', {
+          basemapType: vw.BasemapType.PHOTO,
+          controlDensity: vw.DensityType.BASIC,
+          camera: {
+            center: new vw.CameraPosition(126.978, 37.566, 800),
+            direction: new vw.Direction(0, -45, 0),
+          },
+        });
+
+        mapRef.current = map3d;
+        console.log('[VWorld3D] 3D Map initialized with textured buildings');
       } catch (err) {
-        console.error('[Cesium] Google 3D Tiles 로드 실패, OSM fallback:', err);
-        // Fallback to OSM Buildings
-        viewer.scene.globe.show = true;
-        try {
-          const osmBuildings = await Cesium.createOsmBuildingsAsync();
-          viewer.scene.primitives.add(osmBuildings);
-        } catch { /* skip */ }
+        console.error('[VWorld3D] Init failed:', err);
       }
-    } else {
-      // OSM Buildings (무료, 텍스처 없음)
-      try {
-        const osmBuildings = await Cesium.createOsmBuildingsAsync();
-        viewer.scene.primitives.add(osmBuildings);
-        console.log('[Cesium] OSM Buildings loaded (no texture)');
-      } catch (err) {
-        console.error('[Cesium] OSM Buildings 로드 실패:', err);
-      }
-    }
+    };
 
-    // 서울로 카메라 이동
-    viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(126.978, 37.566, 800),
-      orientation: {
-        heading: Cesium.Math.toRadians(0),
-        pitch: Cesium.Math.toRadians(-35),
-        roll: 0,
-      },
-      duration: 0,
-    });
-  }, []);
-
-  useEffect(() => {
-    if (visible && !initializedRef.current) {
-      initViewer();
-    }
-  }, [visible, initViewer]);
-
-  useEffect(() => {
-    if (!visible || !viewerRef.current) return;
-    const handleResize = () => viewerRef.current?.resize();
-    window.addEventListener('resize', handleResize);
-    setTimeout(handleResize, 100);
-    return () => window.removeEventListener('resize', handleResize);
+    // DOM이 준비된 후 초기화
+    setTimeout(init, 200);
   }, [visible]);
 
   if (!visible) return null;
@@ -142,11 +100,11 @@ export default function CesiumViewerComponent({ visible, onClose }: CesiumViewer
     { name: '서울', lon: 126.978, lat: 37.566, h: 800 },
     { name: '강남', lon: 127.028, lat: 37.498, h: 400 },
     { name: '여의도', lon: 126.924, lat: 37.525, h: 400 },
+    { name: '잠실', lon: 127.100, lat: 37.513, h: 400 },
     { name: '부산', lon: 129.075, lat: 35.179, h: 600 },
     { name: '해운대', lon: 129.160, lat: 35.163, h: 400 },
     { name: '인천', lon: 126.705, lat: 37.456, h: 500 },
     { name: '대구', lon: 128.601, lat: 35.871, h: 500 },
-    { name: '잠실', lon: 127.100, lat: 37.513, h: 400 },
   ];
 
   return (
@@ -155,9 +113,14 @@ export default function CesiumViewerComponent({ visible, onClose }: CesiumViewer
       width: '100vw', height: '100vh',
       zIndex: 9999, background: '#0a0a1a',
     }}>
-      <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
+      {/* V-World 3D 컨테이너 */}
+      <div
+        ref={containerRef}
+        id="vworld-3d-container"
+        style={{ width: '100%', height: '100%' }}
+      />
 
-      {/* 상단 UI */}
+      {/* 상단 정보 */}
       <div style={{
         position: 'absolute', top: 16, left: 16, zIndex: 10000,
         background: 'rgba(26, 26, 46, 0.9)', color: '#4fc3f7',
@@ -166,11 +129,11 @@ export default function CesiumViewerComponent({ visible, onClose }: CesiumViewer
         border: '1px solid rgba(79, 195, 247, 0.2)',
       }}>
         <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#fff' }}>
-          {GOOGLE_API_KEY ? '포토리얼리스틱 3D 뷰어' : 'Cesium 3D 건물 뷰어'}
+          V-World 3D 건물 뷰어
         </div>
-        <div>{GOOGLE_API_KEY ? 'Google 3D Tiles + 실제 건물 텍스처' : 'V-World 위성 + OSM 3D 건물'}</div>
+        <div>텍스처 3D 건물 + 위성 + 지형</div>
         <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>
-          마우스 드래그: 회전 | 스크롤: 줌 | 우클릭: 기울기
+          마우스 드래그: 회전 | 스크롤: 줌 | 우클릭+드래그: 기울기
         </div>
       </div>
 
@@ -195,15 +158,14 @@ export default function CesiumViewerComponent({ visible, onClose }: CesiumViewer
           <button
             key={city.name}
             onClick={() => {
-              viewerRef.current?.camera.flyTo({
-                destination: Cesium.Cartesian3.fromDegrees(city.lon, city.lat, city.h),
-                orientation: {
-                  heading: Cesium.Math.toRadians(0),
-                  pitch: Cesium.Math.toRadians(-35),
-                  roll: 0,
-                },
-                duration: 1.5,
-              });
+              if (mapRef.current && window.vw) {
+                const { vw } = window;
+                mapRef.current.moveTo(
+                  new vw.CameraPosition(city.lon, city.lat, city.h),
+                  new vw.Direction(0, -45, 0),
+                  1.5
+                );
+              }
             }}
             style={{
               background: 'rgba(26, 26, 46, 0.85)', color: '#4fc3f7',
@@ -216,22 +178,6 @@ export default function CesiumViewerComponent({ visible, onClose }: CesiumViewer
           </button>
         ))}
       </div>
-
-      {/* Google API 키 없을 때 안내 */}
-      {!GOOGLE_API_KEY && (
-        <div style={{
-          position: 'absolute', bottom: 60, left: '50%',
-          transform: 'translateX(-50%)', zIndex: 10000,
-          background: 'rgba(255, 152, 0, 0.15)', color: '#ffb74d',
-          borderRadius: 8, padding: '8px 16px', fontSize: 12,
-          border: '1px solid rgba(255, 152, 0, 0.3)',
-          textAlign: 'center', maxWidth: 400,
-        }}>
-          Google Maps API 키를 .env에 추가하면 실제 건물 텍스처가 표시됩니다
-          <br />
-          <code style={{ fontSize: 11 }}>VITE_GOOGLE_MAPS_API_KEY=your_key</code>
-        </div>
-      )}
     </div>
   );
 }
