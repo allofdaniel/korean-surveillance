@@ -150,10 +150,15 @@ const useMapStyle = ({
             type: 'fill-extrusion',
             minzoom: 10,
             paint: {
-              'fill-extrusion-color': showSatellite ? '#e8e8e8' : '#aaa',
+              'fill-extrusion-color': showSatellite
+                ? ['interpolate', ['linear'], ['get', 'height'],
+                    0, '#b8b4a8', 15, '#c0bbb0', 40, '#a8b8c8', 100, '#8aa8c4', 200, '#7090b0']
+                : ['interpolate', ['linear'], ['get', 'height'],
+                    0, '#555555', 15, '#666666', 40, '#777777', 100, '#888888', 200, '#999999'],
               'fill-extrusion-height': ['get', 'height'],
               'fill-extrusion-base': ['get', 'min_height'],
-              'fill-extrusion-opacity': showSatellite ? 0.9 : 0.6
+              'fill-extrusion-opacity': showSatellite ? 0.9 : 0.6,
+              'fill-extrusion-vertical-gradient': true
             }
           });
         }
@@ -330,9 +335,25 @@ const useMapStyle = ({
       if (is3DChanged && mapInstance.getPitch() < 10) {
         mapInstance.easeTo({ pitch: 60, bearing: -30, duration: 1000 });
       }
-      // 3D 건물
+      // 3D 건물 (높이별 색상 그라데이션)
       try {
-        const buildingColor = showSatellite ? '#e8e8e8' : '#aaa';
+        // 위성 모드: 현실적 건물 색상 (콘크리트/유리)
+        // 다크 모드: 사이버 스타일
+        const buildingColor: mapboxgl.Expression = showSatellite
+          ? ['interpolate', ['linear'], ['get', 'height'],
+              0, '#b8b4a8',   // 낮은 건물: 베이지/콘크리트
+              15, '#c0bbb0',  // 중간: 밝은 콘크리트
+              40, '#a8b8c8',  // 고층: 유리/철골 블루그레이
+              100, '#8aa8c4', // 초고층: 유리 블루
+              200, '#7090b0', // 마천루: 진한 블루
+            ]
+          : ['interpolate', ['linear'], ['get', 'height'],
+              0, '#555555',
+              15, '#666666',
+              40, '#777777',
+              100, '#888888',
+              200, '#999999',
+            ];
         const buildingOpacity = showSatellite ? 0.9 : 0.6;
         if (!mapInstance.getLayer('3d-buildings') && mapInstance.getSource('composite')) {
           mapInstance.addLayer({
@@ -345,14 +366,14 @@ const useMapStyle = ({
               'fill-extrusion-color': buildingColor,
               'fill-extrusion-height': ['get', 'height'],
               'fill-extrusion-base': ['get', 'min_height'],
-              'fill-extrusion-opacity': buildingOpacity
+              'fill-extrusion-opacity': buildingOpacity,
+              'fill-extrusion-vertical-gradient': true,
             }
           });
-          logger.info('MapStyle', '3D buildings layer added');
         } else if (mapInstance.getLayer('3d-buildings')) {
           mapInstance.setPaintProperty('3d-buildings', 'fill-extrusion-color', buildingColor);
           mapInstance.setPaintProperty('3d-buildings', 'fill-extrusion-opacity', buildingOpacity);
-          // 건물 visibility 보장
+          mapInstance.setPaintProperty('3d-buildings', 'fill-extrusion-vertical-gradient', true);
           mapInstance.setLayoutProperty('3d-buildings', 'visibility', 'visible');
         }
       } catch (err) {
