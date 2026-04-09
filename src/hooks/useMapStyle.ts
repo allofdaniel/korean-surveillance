@@ -123,7 +123,7 @@ const useMapStyle = ({
         });
       }
 
-      if (is3DView && showTerrain && (!show3DAltitude || showSatellite)) {
+      if (showTerrain) {
         map.current.setTerrain({ source: 'mapbox-dem', exaggeration: 2.5 });
       }
 
@@ -319,9 +319,9 @@ const useMapStyle = ({
         maxzoom: 14
       });
     }
-    if ((is3DView || showSatellite) && showTerrain) {
+    if (showTerrain) {
       mapInstance.setTerrain({ source: 'mapbox-dem', exaggeration: 2.5 });
-    } else if (!is3DView && !showSatellite) {
+    } else {
       mapInstance.setTerrain(null);
     }
 
