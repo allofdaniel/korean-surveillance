@@ -47,14 +47,27 @@ function getSatPosition(satrec: satellite.SatRec, time: Date) {
   } catch { return null; }
 }
 
-function getOrbitPath(satrec: satellite.SatRec, now: Date): [number, number][] {
-  const path: [number, number][] = [];
+function getOrbitPath(satrec: satellite.SatRec, now: Date): [number, number][][] {
+  // 경도가 급변(날짜변경선)하면 라인을 분리하여 MultiLineString으로 반환
+  const segments: [number, number][][] = [];
+  let current: [number, number][] = [];
+  let prevLng: number | null = null;
+
   for (let m = -ORBIT_MINUTES / 2; m <= ORBIT_MINUTES / 2; m += ORBIT_STEP) {
     const t = new Date(now.getTime() + m * 60000);
     const pos = getSatPosition(satrec, t);
-    if (pos) path.push([pos.lng, pos.lat]);
+    if (!pos) continue;
+
+    // 경도 급변 감지 (>100° 차이 = 날짜변경선 통과)
+    if (prevLng !== null && Math.abs(pos.lng - prevLng) > 100) {
+      if (current.length > 1) segments.push(current);
+      current = [];
+    }
+    current.push([pos.lng, pos.lat]);
+    prevLng = pos.lng;
   }
-  return path;
+  if (current.length > 1) segments.push(current);
+  return segments;
 }
 
 // 위성 아이콘 생성 (삼각형 + 날개)
@@ -124,13 +137,13 @@ export default function useSatelliteTracking(
         properties: { name: rec.name, alt: Math.round(pos.alt) },
       });
 
-      // 궤도 라인 (5개마다 하나만 - 성능)
-      if (pointFeatures.length % 5 === 0) {
-        const orbit = getOrbitPath(rec.satrec, now);
-        if (orbit.length > 2) {
+      // 궤도 라인 (10개마다 하나만 - 성능)
+      if (pointFeatures.length % 10 === 0) {
+        const segments = getOrbitPath(rec.satrec, now);
+        if (segments.length > 0) {
           lineFeatures.push({
             type: 'Feature',
-            geometry: { type: 'LineString', coordinates: orbit },
+            geometry: { type: 'MultiLineString', coordinates: segments },
             properties: { name: rec.name },
           });
         }
