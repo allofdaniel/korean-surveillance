@@ -50,7 +50,7 @@ import {
   MapContextMenu,
 } from './components';
 import CesiumViewer from './components/CesiumViewer';
-import useGoogle3DTiles from './hooks/useGoogle3DTiles';
+// Google 3D는 CesiumViewer (Google Maps 3D) 컴포넌트로 처리
 
 // Import hooks
 import {
@@ -223,8 +223,7 @@ function App() {
   // V-World spatial data layers (buildings, special buildings, roads)
   useVworldLayers(map, mapLoaded, showVwBuildings, showVwSpecial, showVwRoads);
 
-  // Google Photorealistic 3D Tiles (3D 버튼으로 토글)
-  useGoogle3DTiles(map, mapLoaded, showCesium);
+  // Google 3D는 CesiumViewer 컴포넌트에서 풀스크린 오버레이로 처리
 
   // Map style hook
   useMapStyle({
@@ -844,7 +843,11 @@ function App() {
         }}
       />
 
-      {/* Google 3D Tiles는 useGoogle3DTiles 훅으로 직접 렌더링 */}
+      {/* Google Maps 3D 텍스처 건물 뷰어 */}
+      <CesiumViewer
+        visible={showCesium}
+        onClose={() => setShowCesium(false)}
+      />
     </div>
   );
 }
