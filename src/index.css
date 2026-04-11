@@ -126,28 +126,33 @@ body {
   left: 10px;
   width: 300px;
   max-height: calc(100vh - 20px);
-  background: rgba(30, 35, 42, 0.95);
+  background: rgba(20, 25, 35, 0.96);
   border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: white;
   z-index: 1000;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
 }
 
 .panel-header {
-  padding: 16px;
+  padding: 14px 16px;
   background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .panel-title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .airport-code {
@@ -190,6 +195,22 @@ body {
   flex-direction: column;
   padding: 12px;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+.panel-content::-webkit-scrollbar {
+  width: 6px;
+}
+.panel-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.panel-content::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+}
+.panel-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.3);
 }
 
 .section {
