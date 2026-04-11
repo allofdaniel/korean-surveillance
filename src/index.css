@@ -3665,9 +3665,11 @@ body {
    MOBILE RESPONSIVE STYLES
    ========================================== */
 
-/* Mobile Menu Toggle Button */
+/* Hamburger Menu Toggle Button - 데스크톱+모바일 공통 */
 .mobile-menu-toggle {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   top: 10px;
   left: 10px;
@@ -3694,22 +3696,54 @@ body {
   transform: scale(0.95);
 }
 
-/* Panel Close Button (in header) */
+/* Panel Close Button (in header) - 데스크톱+모바일 공통 */
 .panel-close-btn {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: rgba(255, 255, 255, 0.2);
   border: none;
   color: white;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 18px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .panel-close-btn:hover {
   background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Panel closed 상태 - 데스크톱에서도 작동 */
+.control-panel.closed {
+  transform: translateX(-110%);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.control-panel {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Backdrop (모바일에서만) */
+.panel-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Light mode adjustments */
@@ -3724,32 +3758,23 @@ body {
   color: white;
 }
 
-/* Mobile Responsive Breakpoints */
+/* 패널 열려있을 때 햄버거 버튼 숨김 (데스크톱+모바일 공통) */
+.control-panel.open ~ .mobile-menu-toggle,
+.mobile-menu-toggle.hidden {
+  display: none;
+}
+
+/* 모바일 백드롭 표시 */
 @media (max-width: 768px) {
-  /* Show mobile menu toggle */
-  .mobile-menu-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* 좌측 상단에 햄버거 버튼 배치 */
-    left: 10px;
-    right: auto;
+  .panel-backdrop {
+    display: block;
   }
 
-  /* 패널이 열려있을 때 햄버거 버튼 숨김 - 중복 닫기 버튼 방지 */
-  .control-panel.open ~ .mobile-menu-toggle,
-  .mobile-menu-toggle.hidden {
-    display: none;
-  }
-
-  /* Show panel close button */
+  /* Show panel close button - 모바일에서 더 크게 */
   .panel-close-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
   }
 
   /* Control panel mobile styles */
@@ -3762,8 +3787,6 @@ body {
     height: 100vh;
     max-height: 100vh;
     border-radius: 0;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
     z-index: 1050;
     overflow-y: auto;
   }

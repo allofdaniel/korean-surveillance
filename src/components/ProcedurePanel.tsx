@@ -224,6 +224,118 @@ export const ApproachPanel: React.FC<ProcedurePanelProps> = ({
   );
 };
 
+/**
+ * 통합 절차 패널 (SID + STAR + APCH 탭으로 통합)
+ */
+interface UnifiedProceduresPanelProps {
+  sidProcedures: ProcedureRecord | null;
+  starProcedures: ProcedureRecord | null;
+  apchProcedures: ProcedureRecord | null;
+  expanded: boolean;
+  onToggle: () => void;
+  sidVisible: VisibleState;
+  setSidVisible: React.Dispatch<React.SetStateAction<VisibleState>>;
+  starVisible: VisibleState;
+  setStarVisible: React.Dispatch<React.SetStateAction<VisibleState>>;
+  apchVisible: VisibleState;
+  setApchVisible: React.Dispatch<React.SetStateAction<VisibleState>>;
+  sidColors: ColorRecord;
+  starColors: ColorRecord;
+  apchColors: ColorRecord;
+}
+
+export const ProceduresPanel: React.FC<UnifiedProceduresPanelProps> = ({
+  sidProcedures, starProcedures, apchProcedures,
+  expanded, onToggle,
+  sidVisible, setSidVisible,
+  starVisible, setStarVisible,
+  apchVisible, setApchVisible,
+  sidColors, starColors, apchColors,
+}) => {
+  const [activeTab, setActiveTab] = React.useState<'SID' | 'STAR' | 'APCH'>('SID');
+
+  const hasAny = (sidProcedures && Object.keys(sidProcedures).length > 0)
+    || (starProcedures && Object.keys(starProcedures).length > 0)
+    || (apchProcedures && Object.keys(apchProcedures).length > 0);
+  if (!hasAny) return null;
+
+  // 활성 카운트
+  const sidCount = Object.values(sidVisible).filter(Boolean).length;
+  const starCount = Object.values(starVisible).filter(Boolean).length;
+  const apchCount = Object.values(apchVisible).filter(Boolean).length;
+  const totalActive = sidCount + starCount + apchCount;
+
+  const renderProcedureList = () => {
+    if (activeTab === 'SID' && sidProcedures) {
+      const rwy18 = Object.entries(sidProcedures).filter(([k]) => k.startsWith('2-6') || k.startsWith('2-7'));
+      const rwy36 = Object.entries(sidProcedures).filter(([k]) => k.startsWith('2-8') || k.startsWith('2-9'));
+      return (
+        <>
+          <RunwayGroup label="RWY 18" procedures={rwy18} visible={sidVisible} onToggle={setSidVisible} colors={sidColors} />
+          <RunwayGroup label="RWY 36" procedures={rwy36} visible={sidVisible} onToggle={setSidVisible} colors={sidColors} />
+        </>
+      );
+    }
+    if (activeTab === 'STAR' && starProcedures) {
+      const rwy18 = Object.entries(starProcedures).filter(([k]) => k.startsWith('2-10'));
+      const rwy36 = Object.entries(starProcedures).filter(([k]) => k.startsWith('2-11'));
+      return (
+        <>
+          <RunwayGroup label="RWY 18" procedures={rwy18} visible={starVisible} onToggle={setStarVisible} colors={starColors} />
+          <RunwayGroup label="RWY 36" procedures={rwy36} visible={starVisible} onToggle={setStarVisible} colors={starColors} />
+        </>
+      );
+    }
+    if (activeTab === 'APCH' && apchProcedures) {
+      const rwy18 = Object.entries(apchProcedures).filter(([k]) => k.includes('RWY 18'));
+      const rwy36 = Object.entries(apchProcedures).filter(([k]) => k.includes('RWY 36'));
+      return (
+        <>
+          <RunwayGroup label="RWY 18" procedures={rwy18} visible={apchVisible} onToggle={setApchVisible} colors={apchColors} />
+          <RunwayGroup label="RWY 36" procedures={rwy36} visible={apchVisible} onToggle={setApchVisible} colors={apchColors} />
+        </>
+      );
+    }
+    return null;
+  };
+
+  const tabStyle = (active: boolean): React.CSSProperties => ({
+    flex: 1,
+    padding: '8px 4px',
+    background: active ? 'rgba(26, 115, 232, 0.3)' : 'rgba(255,255,255,0.05)',
+    border: active ? '1px solid #1a73e8' : '1px solid rgba(255,255,255,0.1)',
+    color: active ? '#64b5f6' : '#ccc',
+    fontSize: '11px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    borderRadius: '6px',
+    transition: 'all 0.2s',
+  });
+
+  return (
+    <div className="section accordion">
+      <div className="accordion-header" onClick={onToggle}>
+        <span>비행 절차{totalActive > 0 ? ` (${totalActive})` : ''}</span>
+        <span className={`accordion-icon ${expanded ? 'expanded' : ''}`}>▼</span>
+      </div>
+      <div className={`toggle-group accordion-content ${!expanded ? 'collapsed' : ''}`}>
+        <div style={{ display: 'flex', gap: '4px', padding: '8px 8px 4px' }}>
+          <button style={tabStyle(activeTab === 'SID')} onClick={() => setActiveTab('SID')}>
+            SID 출발{sidCount > 0 ? ` ${sidCount}` : ''}
+          </button>
+          <button style={tabStyle(activeTab === 'STAR')} onClick={() => setActiveTab('STAR')}>
+            STAR 도착{starCount > 0 ? ` ${starCount}` : ''}
+          </button>
+          <button style={tabStyle(activeTab === 'APCH')} onClick={() => setActiveTab('APCH')}>
+            APCH 접근{apchCount > 0 ? ` ${apchCount}` : ''}
+          </button>
+        </div>
+        <div style={{ padding: '0 8px 8px' }}>{renderProcedureList()}</div>
+      </div>
+    </div>
+  );
+};
+
 // 공항 정보 (korea_airports.json과 동기화)
 const AIRPORT_INFO: Record<string, string> = {
   RKSI: 'ICN 인천',

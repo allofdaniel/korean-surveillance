@@ -12,7 +12,7 @@ export { default as ErrorBoundary } from './ErrorBoundary';
 
 // Panels
 export { default as NotamPanel } from './NotamPanel';
-export { SidPanel, StarPanel, ApproachPanel, ChartOverlayPanel } from './ProcedurePanel';
+export { SidPanel, StarPanel, ApproachPanel, ChartOverlayPanel, ProceduresPanel } from './ProcedurePanel';
 export { default as AircraftDetailPanel } from './AircraftDetailPanel';
 export { default as AtcPanel } from './AtcPanel';
 export { default as AircraftControlPanel } from './AircraftControlPanel';

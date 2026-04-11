@@ -38,9 +38,7 @@ import {
   AltitudeLegend,
   Accordion,
   ToggleItem,
-  SidPanel,
-  StarPanel,
-  ApproachPanel,
+  ProceduresPanel,
   ChartOverlayPanel,
   AircraftDetailPanel,
   TimeWeatherBar,
@@ -499,7 +497,7 @@ function App() {
         fetchNotamData={fetchNotamData}
       />
 
-      {/* Mobile Menu Toggle Button */}
+      {/* Hamburger Menu Toggle Button */}
       {!isPanelOpen && (
         <button
           className="mobile-menu-toggle"
@@ -508,6 +506,11 @@ function App() {
         >
           ☰
         </button>
+      )}
+
+      {/* 모바일 백드롭 (패널 열려있을 때) */}
+      {isPanelOpen && (
+        <div className="panel-backdrop" onClick={() => setIsPanelOpen(false)} />
       )}
 
       {/* Control Panel */}
@@ -698,34 +701,22 @@ function App() {
             setIsDraggingLabel={setIsDraggingLabel}
           />
 
-          {/* SID 출발절차 */}
-          <SidPanel
-            procedures={data?.procedures?.SID}
+          {/* 비행 절차 (SID + STAR + APCH 통합) */}
+          <ProceduresPanel
+            sidProcedures={data?.procedures?.SID}
+            starProcedures={data?.procedures?.STAR}
+            apchProcedures={data?.procedures?.APPROACH}
             expanded={sidExpanded}
             onToggle={() => setSidExpanded(!sidExpanded)}
-            visible={sidVisible}
-            setVisible={setSidVisible}
-            colors={procColors.SID}
-          />
-
-          {/* STAR 도착절차 */}
-          <StarPanel
-            procedures={data?.procedures?.STAR}
-            expanded={starExpanded}
-            onToggle={() => setStarExpanded(!starExpanded)}
-            visible={starVisible}
-            setVisible={setStarVisible}
-            colors={procColors.STAR}
-          />
-
-          {/* APCH 접근절차 */}
-          <ApproachPanel
-            procedures={data?.procedures?.APPROACH}
-            expanded={apchExpanded}
-            onToggle={() => setApchExpanded(!apchExpanded)}
-            visible={apchVisible}
-            setVisible={setApchVisible}
-            colors={procColors.APPROACH}
+            sidVisible={sidVisible}
+            setSidVisible={setSidVisible}
+            starVisible={starVisible}
+            setStarVisible={setStarVisible}
+            apchVisible={apchVisible}
+            setApchVisible={setApchVisible}
+            sidColors={procColors.SID}
+            starColors={procColors.STAR}
+            apchColors={procColors.APPROACH}
           />
 
           {/* 차트 오버레이 */}
