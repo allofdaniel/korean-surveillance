@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- 배경 -->
+  <rect width="64" height="64" rx="12" fill="#0a0a1a"/>
+
+  <!-- 외곽 레이더 원 -->
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#e53e3e" stroke-width="1.5" opacity="0.4"/>
+  <circle cx="32" cy="32" r="20" fill="none" stroke="#e53e3e" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="32" cy="32" r="14" fill="none" stroke="#e53e3e" stroke-width="1.5" opacity="0.8"/>
+
+  <!-- 십자선 -->
+  <line x1="32" y1="6" x2="32" y2="58" stroke="#e53e3e" stroke-width="0.8" opacity="0.5"/>
+  <line x1="6" y1="32" x2="58" y2="32" stroke="#e53e3e" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- 레이더 스윕 -->
+  <path d="M 32 32 L 56 16 A 26 26 0 0 1 58 32 Z" fill="#e53e3e" opacity="0.25"/>
+
+  <!-- 중심 점 -->
+  <circle cx="32" cy="32" r="3" fill="#e53e3e"/>
+  <circle cx="32" cy="32" r="1.5" fill="#fff"/>
+
+  <!-- 한국 위치 표시 (작은 점들) -->
+  <circle cx="42" cy="22" r="1.2" fill="#FFD700"/>
+  <circle cx="22" cy="42" r="1.2" fill="#FFD700"/>
+  <circle cx="44" cy="40" r="1.2" fill="#FFD700"/>
+</svg>

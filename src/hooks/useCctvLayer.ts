@@ -175,10 +175,15 @@ export default function useCctvLayer(
           // HLS → 팝업 영상 재생
           if (popupRef.current) popupRef.current.remove();
 
+          const playerId = `cctv-player-${Date.now()}`;
+          const statusId = `cctv-status-${Date.now()}`;
           const content = `<div style="width:360px;background:#000;border-radius:8px;overflow:hidden;">
             <div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div>
-            <video id="cctv-player" style="width:100%;height:200px;background:#000;" autoplay muted playsinline></video>
-            <div style="padding:4px 12px;color:#666;font-size:10px;">${props.source} CCTV · ITS 국가교통정보센터</div>
+            <div style="position:relative;">
+              <video id="${playerId}" style="width:100%;height:200px;background:#000;display:block;" autoplay muted playsinline controls></video>
+              <div id="${statusId}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#FFD700;font-size:12px;text-align:center;pointer-events:none;">로딩 중...</div>
+            </div>
+            <div style="padding:4px 12px;color:#666;font-size:10px;">${props.source} · ${props.url.substring(0, 60)}...</div>
           </div>`;
 
           const p = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '400px' })
@@ -186,18 +191,63 @@ export default function useCctvLayer(
           popupRef.current = p;
 
           setTimeout(async () => {
-            const video = document.getElementById('cctv-player') as HTMLVideoElement;
+            const video = document.getElementById(playerId) as HTMLVideoElement;
+            const status = document.getElementById(statusId);
             if (!video) return;
+
+            const setStatus = (msg: string, color = '#FFD700') => {
+              if (status) { status.textContent = msg; status.style.color = color; }
+            };
+
             try {
               const { default: Hls } = await import('hls.js');
               if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(props.url);
+                const hls = new Hls({
+                  enableWorker: true,
+                  lowLatencyMode: true,
+                  debug: false,
+                  xhrSetup: (xhr) => {
+                    xhr.withCredentials = false;
+                  },
+                });
+                hls.loadSource(props.url as string);
                 hls.attachMedia(video);
+
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                  setStatus('재생 시작...');
+                  video.play().then(() => {
+                    setStatus('');
+                  }).catch((err) => {
+                    setStatus('▶ 클릭하여 재생', '#4fc3f7');
+                    logger.error('CCTV', `Autoplay blocked: ${err}`);
+                  });
+                });
+
+                hls.on(Hls.Events.ERROR, (_event, data) => {
+                  logger.error('CCTV', `HLS error: ${data.type} - ${data.details} - ${data.fatal ? 'fatal' : 'non-fatal'}`);
+                  if (data.fatal) {
+                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+                      setStatus('네트워크 오류 - 재시도 중...', '#ff6b6b');
+                      hls.startLoad();
+                    } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+                      setStatus('미디어 오류 - 복구 중...', '#ff6b6b');
+                      hls.recoverMediaError();
+                    } else {
+                      setStatus(`재생 불가: ${data.details}`, '#ff6b6b');
+                      hls.destroy();
+                    }
+                  }
+                });
               } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = props.url;
+                video.src = props.url as string;
+                video.addEventListener('loadedmetadata', () => video.play());
+              } else {
+                setStatus('HLS 지원 안 됨', '#ff6b6b');
               }
-            } catch (err) { logger.error('CCTV', `HLS error: ${err}`); }
+            } catch (err) {
+              logger.error('CCTV', `HLS init error: ${err}`);
+              setStatus('초기화 실패', '#ff6b6b');
+            }
           }, 200);
         });
 
