@@ -49,8 +49,6 @@ import {
   KoreaAirspacePanel,
   MapContextMenu,
 } from './components';
-import CesiumViewer from './components/CesiumViewer';
-// Google 3D는 CesiumViewer (Google Maps 3D) 컴포넌트로 처리
 
 // Import hooks
 import {
@@ -106,7 +104,6 @@ function App() {
     showVwBuildings, setShowVwBuildings,
     showVwSpecial, setShowVwSpecial,
     showVwRoads, setShowVwRoads,
-    showCesium, setShowCesium,
   } = useMapStore();
 
   // UI store
@@ -223,7 +220,6 @@ function App() {
   // V-World spatial data layers (buildings, special buildings, roads)
   useVworldLayers(map, mapLoaded, showVwBuildings, showVwSpecial, showVwRoads);
 
-  // Google 3D는 CesiumViewer 컴포넌트에서 풀스크린 오버레이로 처리
 
   // Map style hook
   useMapStyle({
@@ -481,8 +477,6 @@ function App() {
         setShowVwSpecial={setShowVwSpecial}
         showVwRoads={showVwRoads}
         setShowVwRoads={setShowVwRoads}
-        showCesium={showCesium}
-        setShowCesium={setShowCesium}
         showLightning={showLightning}
         setShowLightning={setShowLightning}
         showSigmet={showSigmet}
@@ -843,11 +837,6 @@ function App() {
         }}
       />
 
-      {/* Google Maps 3D 텍스처 건물 뷰어 */}
-      <CesiumViewer
-        visible={showCesium}
-        onClose={() => setShowCesium(false)}
-      />
     </div>
   );
 }

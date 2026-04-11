@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import cesium from 'vite-plugin-cesium';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -8,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  plugins: [react(), cesium()],
+  plugins: [react()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -83,10 +82,6 @@ export default defineConfig({
           // Mapbox GL 분리 (가장 큰 청크, ~465KB gzip)
           if (id.includes('node_modules/mapbox-gl')) {
             return 'vendor-mapbox';
-          }
-          // Cesium 3D 글로브 분리
-          if (id.includes('node_modules/cesium')) {
-            return 'vendor-cesium';
           }
           // Three.js 3D 렌더링 분리
           if (id.includes('node_modules/three')) {

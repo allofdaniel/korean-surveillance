@@ -9,10 +9,6 @@
       "destination": "/privacy.html"
     },
     {
-      "source": "/vworld3d",
-      "destination": "/vworld3d.html"
-    },
-    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     }

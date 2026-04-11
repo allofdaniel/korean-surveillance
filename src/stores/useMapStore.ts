@@ -37,8 +37,6 @@ interface MapState {
   showVwSpecial: boolean;
   showVwRoads: boolean;
 
-  // Cesium 3D viewer
-  showCesium: boolean;
 }
 
 interface MapActions {
@@ -57,7 +55,6 @@ interface MapActions {
   setShowVwBuildings: (value: boolean) => void;
   setShowVwSpecial: (value: boolean) => void;
   setShowVwRoads: (value: boolean) => void;
-  setShowCesium: (value: boolean) => void;
 
   // Toggles
   toggle3DView: () => void;
@@ -98,9 +95,6 @@ const useMapStore = create<MapStore>((set) => ({
   showVwSpecial: false,
   showVwRoads: false,
 
-  // Cesium
-  showCesium: false,
-
   // Actions
   setIs3DView: (value) => set({ is3DView: value }),
   setIsDarkMode: (value) => set({ isDarkMode: value }),
@@ -120,7 +114,6 @@ const useMapStore = create<MapStore>((set) => ({
   setShowVwBuildings: (value) => set({ showVwBuildings: value }),
   setShowVwSpecial: (value) => set({ showVwSpecial: value }),
   setShowVwRoads: (value) => set({ showVwRoads: value }),
-  setShowCesium: (value) => set({ showCesium: value }),
 
   // Toggle helpers
   toggle3DView: () => set((state) => ({ is3DView: !state.is3DView })),
@@ -142,7 +135,6 @@ const useMapStore = create<MapStore>((set) => ({
     showVwBuildings: false,
     showVwSpecial: false,
     showVwRoads: false,
-    showCesium: false,
   }),
 }));
 
