@@ -33,3 +33,7 @@ coverage/
 !public/icons/*.png
 !public/store-assets/*.png
 !public/charts/**/*.png
+
+# 외부 레포 (로컬에만 존재)
+OSINTMappingSite/
+SpaceTracking/
