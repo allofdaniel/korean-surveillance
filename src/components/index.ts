@@ -25,3 +25,7 @@ export { default as ViewControlsBar } from './ViewControlsBar';
 
 // Map
 export { default as MapContextMenu } from './MapContextMenu';
+
+// Control Panel
+export { default as ControlPanel } from './ControlPanel';
+export type { ControlPanelProps } from './ControlPanel';

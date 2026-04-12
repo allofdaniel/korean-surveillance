@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -41,17 +42,11 @@ import {
 
 // Import components
 import {
-  AltitudeLegend,
-  Accordion,
-  ToggleItem,
-  ProceduresPanel,
-  ChartOverlayPanel,
   AircraftDetailPanel,
   TimeWeatherBar,
   ViewControlsBar,
-  AircraftControlPanel,
-  KoreaAirspacePanel,
   MapContextMenu,
+  ControlPanel,
 } from './components';
 
 // Import hooks
@@ -107,7 +102,21 @@ function App() {
     showVwBuildings, setShowVwBuildings,
     showVwSpecial, setShowVwSpecial,
     showVwRoads, setShowVwRoads,
-  } = useMapStore();
+  } = useMapStore(useShallow(s => ({
+    is3DView: s.is3DView, setIs3DView: s.setIs3DView,
+    isDarkMode: s.isDarkMode, setIsDarkMode: s.setIsDarkMode,
+    showSatellite: s.showSatellite, setShowSatellite: s.setShowSatellite,
+    showBuildings: s.showBuildings,
+    showTerrain: s.showTerrain, setShowTerrain: s.setShowTerrain,
+    show3DAltitude: s.show3DAltitude, setShow3DAltitude: s.setShow3DAltitude,
+    viewFilter: s.viewFilter, cycleViewFilter: s.cycleViewFilter,
+    showSatellites: s.showSatellites, setShowSatellites: s.setShowSatellites,
+    showCctv: s.showCctv, setShowCctv: s.setShowCctv,
+    showShips: s.showShips, setShowShips: s.setShowShips,
+    showVwBuildings: s.showVwBuildings, setShowVwBuildings: s.setShowVwBuildings,
+    showVwSpecial: s.showVwSpecial, setShowVwSpecial: s.setShowVwSpecial,
+    showVwRoads: s.showVwRoads, setShowVwRoads: s.setShowVwRoads,
+  })));
 
   // UI store
   const {
@@ -128,7 +137,25 @@ function App() {
     metarPinned, setMetarPinned,
     tafPinned, setTafPinned,
     sectionExpanded, toggleSection,
-  } = useUIStore();
+  } = useUIStore(useShallow(s => ({
+    isPanelOpen: s.isPanelOpen, setIsPanelOpen: s.setIsPanelOpen,
+    layersExpanded: s.layersExpanded, setLayersExpanded: s.setLayersExpanded,
+    aircraftExpanded: s.aircraftExpanded, setAircraftExpanded: s.setAircraftExpanded,
+    sidExpanded: s.sidExpanded, setSidExpanded: s.setSidExpanded,
+    starExpanded: s.starExpanded, setStarExpanded: s.setStarExpanded,
+    apchExpanded: s.apchExpanded, setApchExpanded: s.setApchExpanded,
+    chartExpanded: s.chartExpanded, setChartExpanded: s.setChartExpanded,
+    koreaRoutesExpanded: s.koreaRoutesExpanded, setKoreaRoutesExpanded: s.setKoreaRoutesExpanded,
+    showAtcPanel: s.showAtcPanel, setShowAtcPanel: s.setShowAtcPanel,
+    atcExpanded: s.atcExpanded, toggleAtcSection: s.toggleAtcSection,
+    showWxPanel: s.showWxPanel,
+    showNotamPanel: s.showNotamPanel, setShowNotamPanel: s.setShowNotamPanel,
+    showMetarPopup: s.showMetarPopup, setShowMetarPopup: s.setShowMetarPopup,
+    showTafPopup: s.showTafPopup, setShowTafPopup: s.setShowTafPopup,
+    metarPinned: s.metarPinned, setMetarPinned: s.setMetarPinned,
+    tafPinned: s.tafPinned, setTafPinned: s.setTafPinned,
+    sectionExpanded: s.sectionExpanded, toggleSection: s.toggleSection,
+  })));
 
   // Aircraft store
   const {
@@ -141,7 +168,17 @@ function App() {
     isDraggingLabel, setIsDraggingLabel,
     selectedAircraft, setSelectedAircraft,
     graphHoverData, setGraphHoverData,
-  } = useAircraftStore();
+  } = useAircraftStore(useShallow(s => ({
+    showAircraft: s.showAircraft, setShowAircraft: s.setShowAircraft,
+    showAircraftTrails: s.showAircraftTrails, setShowAircraftTrails: s.setShowAircraftTrails,
+    show3DAircraft: s.show3DAircraft, setShow3DAircraft: s.setShow3DAircraft,
+    trailDuration: s.trailDuration, setTrailDuration: s.setTrailDuration,
+    headingPrediction: s.headingPrediction, setHeadingPrediction: s.setHeadingPrediction,
+    labelOffset: s.labelOffset, setLabelOffset: s.setLabelOffset,
+    isDraggingLabel: s.isDraggingLabel, setIsDraggingLabel: s.setIsDraggingLabel,
+    selectedAircraft: s.selectedAircraft, setSelectedAircraft: s.setSelectedAircraft,
+    graphHoverData: s.graphHoverData, setGraphHoverData: s.setGraphHoverData,
+  })));
 
   // ATC store
   const {
@@ -150,7 +187,13 @@ function App() {
     radarBlackBackground, setRadarBlackBackground,
     selectedAtcSectors, setSelectedAtcSectors,
     toggleSectorGroup,
-  } = useAtcStore();
+  } = useAtcStore(useShallow(s => ({
+    atcOnlyMode: s.atcOnlyMode, setAtcOnlyMode: s.setAtcOnlyMode,
+    radarRange: s.radarRange, setRadarRange: s.setRadarRange,
+    radarBlackBackground: s.radarBlackBackground, setRadarBlackBackground: s.setRadarBlackBackground,
+    selectedAtcSectors: s.selectedAtcSectors, setSelectedAtcSectors: s.setSelectedAtcSectors,
+    toggleSectorGroup: s.toggleSectorGroup,
+  })));
 
   // Layer store
   const {
@@ -179,7 +222,33 @@ function App() {
     showGlobalCtrlAirspace,
     showGlobalRestrAirspace,
     showGlobalFirUir,
-  } = useLayerStore();
+  } = useLayerStore(useShallow(s => ({
+    showWaypoints: s.showWaypoints, setShowWaypoints: s.setShowWaypoints,
+    showObstacles: s.showObstacles, setShowObstacles: s.setShowObstacles,
+    showAirspace: s.showAirspace, setShowAirspace: s.setShowAirspace,
+    showLightning: s.showLightning, setShowLightning: s.setShowLightning,
+    showSigmet: s.showSigmet, setShowSigmet: s.setShowSigmet,
+    showKoreaRoutes: s.showKoreaRoutes, setShowKoreaRoutes: s.setShowKoreaRoutes,
+    showKoreaWaypoints: s.showKoreaWaypoints, setShowKoreaWaypoints: s.setShowKoreaWaypoints,
+    showKoreaNavaids: s.showKoreaNavaids, setShowKoreaNavaids: s.setShowKoreaNavaids,
+    showKoreaAirspaces: s.showKoreaAirspaces, setShowKoreaAirspaces: s.setShowKoreaAirspaces,
+    showKoreaAirports: s.showKoreaAirports, setShowKoreaAirports: s.setShowKoreaAirports,
+    showKoreaHoldings: s.showKoreaHoldings, setShowKoreaHoldings: s.setShowKoreaHoldings,
+    showKoreaTerminalWaypoints: s.showKoreaTerminalWaypoints, setShowKoreaTerminalWaypoints: s.setShowKoreaTerminalWaypoints,
+    showKoreaSids: s.showKoreaSids, setShowKoreaSids: s.setShowKoreaSids,
+    showKoreaStars: s.showKoreaStars, setShowKoreaStars: s.setShowKoreaStars,
+    showKoreaIaps: s.showKoreaIaps, setShowKoreaIaps: s.setShowKoreaIaps,
+    selectedKoreaAirport: s.selectedKoreaAirport, setSelectedKoreaAirport: s.setSelectedKoreaAirport,
+    showGlobalAirports: s.showGlobalAirports,
+    showGlobalNavaids: s.showGlobalNavaids,
+    showGlobalHeliports: s.showGlobalHeliports,
+    showGlobalWaypoints: s.showGlobalWaypoints,
+    showGlobalAirways: s.showGlobalAirways,
+    showGlobalHoldings: s.showGlobalHoldings,
+    showGlobalCtrlAirspace: s.showGlobalCtrlAirspace,
+    showGlobalRestrAirspace: s.showGlobalRestrAirspace,
+    showGlobalFirUir: s.showGlobalFirUir,
+  })));
 
   // ============================================
   // Local State (남은 것들 - 데이터 관련)
@@ -541,237 +610,106 @@ function App() {
       )}
 
       {/* Control Panel */}
-      <div
-        id="main-control-panel"
-        className={`control-panel ${isPanelOpen ? 'open' : 'closed'}`}
-        role="region"
-        aria-label="제어 패널"
-        aria-hidden={!isPanelOpen}
-      >
-        <div className="panel-header">
-          <span className="panel-title">대한감시</span>
-          <button className="panel-close-btn" onClick={() => setIsPanelOpen(false)} aria-label="패널 닫기">✕</button>
-        </div>
-
-        <div className="panel-content">
-          <AltitudeLegend />
-
-          {/* 울산공항 레이어 */}
-          <Accordion title="울산공항 (RKPU)" expanded={layersExpanded} onToggle={() => setLayersExpanded(!layersExpanded)}>
-            <ToggleItem label="웨이포인트" checked={showWaypoints} onChange={setShowWaypoints} disabled={hasActiveProcedure} hint={hasActiveProcedure ? "(절차별)" : null} />
-            <ToggleItem label="장애물" checked={showObstacles} onChange={setShowObstacles} />
-            <ToggleItem label="공역" checked={showAirspace} onChange={setShowAirspace} />
-            {is3DView && <ToggleItem label="3D 고도 표시" checked={show3DAltitude} onChange={setShow3DAltitude} />}
-            {is3DView && <ToggleItem label="지형" checked={showTerrain} onChange={setShowTerrain} />}
-            {is3DView && <ToggleItem label="3D 건물" checked={showBuildings} onChange={(v) => useMapStore.getState().setShowBuildings(v)} />}
-          </Accordion>
-
-          {/* 관제구역 - ATC Sectors */}
-          <Accordion
-            title={`관제구역${selectedAtcSectors.size > 0 ? ` (${selectedAtcSectors.size})` : ''}`}
-            expanded={showAtcPanel}
-            onToggle={() => setShowAtcPanel(!showAtcPanel)}
-          >
-            {atcData && (
-              <>
-                {/* 레이더 뷰 토글 */}
-                <div className="toggle-item" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px', marginBottom: '8px' }}>
-                  <label className="toggle-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                    <input type="checkbox" checked={atcOnlyMode} onChange={(e) => handleAtcModeToggle(e.target.checked)} />
-                    <span>레이더 뷰 ({radarRange}nm)</span>
-                  </label>
-                </div>
-
-                {atcOnlyMode && (
-                  <div style={{ marginBottom: '12px', padding: '8px', background: 'rgba(0,255,0,0.1)', borderRadius: '4px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px' }}>
-                      <span>범위</span>
-                      <span>{radarRange}nm</span>
-                    </div>
-                    <input type="range" min="50" max="500" step="50" value={radarRange} onChange={(e) => setRadarRange(parseInt(e.target.value))} style={{ width: '100%' }} />
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px', fontSize: '11px', cursor: 'pointer' }}>
-                      <input type="checkbox" checked={radarBlackBackground} onChange={(e) => setRadarBlackBackground(e.target.checked)} />
-                      검은 배경
-                    </label>
-                  </div>
-                )}
-
-                {/* ACC/TMA/CTR 일괄 선택 */}
-                <div style={{ display: 'flex', gap: '4px', marginBottom: '8px' }}>
-                  {['ACC', 'TMA', 'CTR'].map(type => (
-                    <button
-                      key={type}
-                      className={`mini-btn ${atcData[type].every(s => selectedAtcSectors.has(s.id)) ? 'active' : ''}`}
-                      onClick={() => toggleSectorGroup(atcData[type].map(s => s.id))}
-                    >
-                      {type} ({atcData[type].length})
-                    </button>
-                  ))}
-                </div>
-
-                {/* 섹터 목록 */}
-                {['ACC', 'TMA', 'CTR'].map(type => (
-                  <div key={type} style={{ marginBottom: '8px' }}>
-                    <div
-                      style={{ fontSize: '11px', fontWeight: 'bold', marginBottom: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-                      onClick={() => toggleAtcSection(type)}
-                    >
-                      <span>{type}</span>
-                      <span style={{ fontSize: '10px' }}>{atcExpanded[type] ? '▼' : '▶'}</span>
-                    </div>
-                    {atcExpanded[type] && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                        {atcData[type].map(s => (
-                          <label
-                            key={s.id}
-                            style={{
-                              display: 'flex', alignItems: 'center', gap: '4px', padding: '2px 6px', fontSize: '10px',
-                              background: selectedAtcSectors.has(s.id) ? 'rgba(0,255,0,0.3)' : 'rgba(255,255,255,0.1)',
-                              borderRadius: '4px', cursor: 'pointer'
-                            }}
-                            title={s.name}
-                          >
-                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: s.color }}></span>
-                            <input
-                              type="checkbox"
-                              checked={selectedAtcSectors.has(s.id)}
-                              onChange={e => {
-                                const newSet = new Set(selectedAtcSectors);
-                                if (e.target.checked) {
-                                  newSet.add(s.id);
-                                } else {
-                                  newSet.delete(s.id);
-                                }
-                                setSelectedAtcSectors(newSet);
-                              }}
-                              style={{ display: 'none' }}
-                            />
-                            <span>{s.name.split(' - ').pop().replace(/ (ACC|TMA|CTR)$/, '').substring(0, 8)}</span>
-                          </label>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </>
-            )}
-          </Accordion>
-
-          {/* Korea Airspace Panel */}
-          <KoreaAirspacePanel
-            koreaAirspaceData={koreaAirspaceData}
-            koreaRoutesExpanded={koreaRoutesExpanded}
-            setKoreaRoutesExpanded={setKoreaRoutesExpanded}
-            showKoreaRoutes={showKoreaRoutes}
-            setShowKoreaRoutes={setShowKoreaRoutes}
-            showKoreaWaypoints={showKoreaWaypoints}
-            setShowKoreaWaypoints={setShowKoreaWaypoints}
-            showKoreaNavaids={showKoreaNavaids}
-            setShowKoreaNavaids={setShowKoreaNavaids}
-            showKoreaAirspaces={showKoreaAirspaces}
-            setShowKoreaAirspaces={setShowKoreaAirspaces}
-            showKoreaAirports={showKoreaAirports}
-            setShowKoreaAirports={setShowKoreaAirports}
-            showKoreaHoldings={showKoreaHoldings}
-            setShowKoreaHoldings={setShowKoreaHoldings}
-            showKoreaTerminalWaypoints={showKoreaTerminalWaypoints}
-            setShowKoreaTerminalWaypoints={setShowKoreaTerminalWaypoints}
-            showKoreaSids={showKoreaSids}
-            setShowKoreaSids={setShowKoreaSids}
-            showKoreaStars={showKoreaStars}
-            setShowKoreaStars={setShowKoreaStars}
-            showKoreaIaps={showKoreaIaps}
-            setShowKoreaIaps={setShowKoreaIaps}
-            selectedKoreaAirport={selectedKoreaAirport}
-            setSelectedKoreaAirport={setSelectedKoreaAirport}
-          />
-
-          {/* Global Data Panel - Disabled for Korea-only view
-          <GlobalDataPanel
-            globalExpanded={globalExpanded}
-            setGlobalExpanded={setGlobalExpanded}
-            counts={globalCounts}
-            loading={globalLoading}
-            showGlobalAirports={showGlobalAirports}
-            setShowGlobalAirports={setShowGlobalAirports}
-            showGlobalNavaids={showGlobalNavaids}
-            setShowGlobalNavaids={setShowGlobalNavaids}
-            showGlobalHeliports={showGlobalHeliports}
-            setShowGlobalHeliports={setShowGlobalHeliports}
-            showGlobalWaypoints={showGlobalWaypoints}
-            setShowGlobalWaypoints={setShowGlobalWaypoints}
-            showGlobalAirways={showGlobalAirways}
-            setShowGlobalAirways={setShowGlobalAirways}
-            showGlobalHoldings={showGlobalHoldings}
-            setShowGlobalHoldings={setShowGlobalHoldings}
-            showGlobalCtrlAirspace={showGlobalCtrlAirspace}
-            setShowGlobalCtrlAirspace={setShowGlobalCtrlAirspace}
-            showGlobalRestrAirspace={showGlobalRestrAirspace}
-            setShowGlobalRestrAirspace={setShowGlobalRestrAirspace}
-            showGlobalFirUir={showGlobalFirUir}
-            setShowGlobalFirUir={setShowGlobalFirUir}
-          />
-          */}
-
-          {/* Aircraft Control Panel */}
-          <AircraftControlPanel
-            aircraftExpanded={aircraftExpanded}
-            setAircraftExpanded={setAircraftExpanded}
-            showAircraft={showAircraft}
-            setShowAircraft={setShowAircraft}
-            showAircraftTrails={showAircraftTrails}
-            setShowAircraftTrails={setShowAircraftTrails}
-            show3DAircraft={show3DAircraft}
-            setShow3DAircraft={setShow3DAircraft}
-            is3DView={is3DView}
-            trailDuration={trailDuration}
-            setTrailDuration={setTrailDuration}
-            headingPrediction={headingPrediction}
-            setHeadingPrediction={setHeadingPrediction}
-            labelOffset={labelOffset}
-            setLabelOffset={setLabelOffset}
-            isDraggingLabel={isDraggingLabel}
-            setIsDraggingLabel={setIsDraggingLabel}
-          />
-
-          {/* 비행 절차 (SID + STAR + APCH 통합) */}
-          <ProceduresPanel
-            sidProcedures={data?.procedures?.SID}
-            starProcedures={data?.procedures?.STAR}
-            apchProcedures={data?.procedures?.APPROACH}
-            expanded={sidExpanded}
-            onToggle={() => setSidExpanded(!sidExpanded)}
-            sidVisible={sidVisible}
-            setSidVisible={setSidVisible}
-            starVisible={starVisible}
-            setStarVisible={setStarVisible}
-            apchVisible={apchVisible}
-            setApchVisible={setApchVisible}
-            sidColors={procColors.SID}
-            starColors={procColors.STAR}
-            apchColors={procColors.APPROACH}
-          />
-
-          {/* 차트 오버레이 */}
-          <ChartOverlayPanel
-            chartsByRunway={CHARTS_BY_RUNWAY}
-            expanded={chartExpanded}
-            onToggle={() => setChartExpanded(!chartExpanded)}
-            activeCharts={activeCharts}
-            toggleChart={toggleChart}
-            chartOpacities={chartOpacities}
-            updateChartOpacity={updateChartOpacity}
-            allChartBounds={allChartBounds}
-            selectedAirport={selectedChartAirport}
-            setSelectedAirport={setSelectedChartAirport}
-            map={map}
-          />
-
-          <div className="section">
-            <button className="fly-btn" onClick={flyToAirport}>공항으로 이동</button>
-          </div>
-        </div>
-      </div>
+      <ControlPanel
+        isPanelOpen={isPanelOpen}
+        setIsPanelOpen={setIsPanelOpen}
+        layersExpanded={layersExpanded}
+        setLayersExpanded={setLayersExpanded}
+        aircraftExpanded={aircraftExpanded}
+        setAircraftExpanded={setAircraftExpanded}
+        sidExpanded={sidExpanded}
+        setSidExpanded={setSidExpanded}
+        chartExpanded={chartExpanded}
+        setChartExpanded={setChartExpanded}
+        koreaRoutesExpanded={koreaRoutesExpanded}
+        setKoreaRoutesExpanded={setKoreaRoutesExpanded}
+        showAtcPanel={showAtcPanel}
+        setShowAtcPanel={setShowAtcPanel}
+        atcExpanded={atcExpanded}
+        toggleAtcSection={toggleAtcSection}
+        is3DView={is3DView}
+        show3DAltitude={show3DAltitude}
+        setShow3DAltitude={setShow3DAltitude}
+        showTerrain={showTerrain}
+        setShowTerrain={setShowTerrain}
+        showBuildings={showBuildings}
+        showWaypoints={showWaypoints}
+        setShowWaypoints={setShowWaypoints}
+        showObstacles={showObstacles}
+        setShowObstacles={setShowObstacles}
+        showAirspace={showAirspace}
+        setShowAirspace={setShowAirspace}
+        showKoreaRoutes={showKoreaRoutes}
+        setShowKoreaRoutes={setShowKoreaRoutes}
+        showKoreaWaypoints={showKoreaWaypoints}
+        setShowKoreaWaypoints={setShowKoreaWaypoints}
+        showKoreaNavaids={showKoreaNavaids}
+        setShowKoreaNavaids={setShowKoreaNavaids}
+        showKoreaAirspaces={showKoreaAirspaces}
+        setShowKoreaAirspaces={setShowKoreaAirspaces}
+        showKoreaAirports={showKoreaAirports}
+        setShowKoreaAirports={setShowKoreaAirports}
+        showKoreaHoldings={showKoreaHoldings}
+        setShowKoreaHoldings={setShowKoreaHoldings}
+        showKoreaTerminalWaypoints={showKoreaTerminalWaypoints}
+        setShowKoreaTerminalWaypoints={setShowKoreaTerminalWaypoints}
+        showKoreaSids={showKoreaSids}
+        setShowKoreaSids={setShowKoreaSids}
+        showKoreaStars={showKoreaStars}
+        setShowKoreaStars={setShowKoreaStars}
+        showKoreaIaps={showKoreaIaps}
+        setShowKoreaIaps={setShowKoreaIaps}
+        selectedKoreaAirport={selectedKoreaAirport}
+        setSelectedKoreaAirport={setSelectedKoreaAirport}
+        atcOnlyMode={atcOnlyMode}
+        handleAtcModeToggle={handleAtcModeToggle}
+        radarRange={radarRange}
+        setRadarRange={setRadarRange}
+        radarBlackBackground={radarBlackBackground}
+        setRadarBlackBackground={setRadarBlackBackground}
+        selectedAtcSectors={selectedAtcSectors}
+        setSelectedAtcSectors={setSelectedAtcSectors}
+        toggleSectorGroup={toggleSectorGroup}
+        atcData={atcData}
+        showAircraft={showAircraft}
+        setShowAircraft={setShowAircraft}
+        showAircraftTrails={showAircraftTrails}
+        setShowAircraftTrails={setShowAircraftTrails}
+        show3DAircraft={show3DAircraft}
+        setShow3DAircraft={setShow3DAircraft}
+        trailDuration={trailDuration}
+        setTrailDuration={setTrailDuration}
+        headingPrediction={headingPrediction}
+        setHeadingPrediction={setHeadingPrediction}
+        labelOffset={labelOffset}
+        setLabelOffset={setLabelOffset}
+        isDraggingLabel={isDraggingLabel}
+        setIsDraggingLabel={setIsDraggingLabel}
+        sidProcedures={data?.procedures?.SID}
+        starProcedures={data?.procedures?.STAR}
+        apchProcedures={data?.procedures?.APPROACH}
+        sidVisible={sidVisible}
+        setSidVisible={setSidVisible}
+        starVisible={starVisible}
+        setStarVisible={setStarVisible}
+        apchVisible={apchVisible}
+        setApchVisible={setApchVisible}
+        sidColors={procColors.SID}
+        starColors={procColors.STAR}
+        apchColors={procColors.APPROACH}
+        hasActiveProcedure={hasActiveProcedure}
+        chartsByRunway={CHARTS_BY_RUNWAY}
+        activeCharts={activeCharts}
+        toggleChart={toggleChart}
+        chartOpacities={chartOpacities}
+        updateChartOpacity={updateChartOpacity}
+        allChartBounds={allChartBounds}
+        selectedChartAirport={selectedChartAirport}
+        setSelectedChartAirport={setSelectedChartAirport}
+        map={map}
+        koreaAirspaceData={koreaAirspaceData}
+        flyToAirport={flyToAirport}
+      />
 
       {/* Aircraft Detail Panel */}
       <AircraftDetailPanel

@@ -17,9 +17,7 @@ Thumbs.db
 ubikais-crawler/data/
 eaip-crawler/data/
 
-# Large static assets (use CDN in production)
-public/A380.glb
-public/b777.glb
+# Large static assets (Draco 압축 후 ~4MB이므로 git 포함 가능)
 
 # Large navigation data files
 public/data/global_iaps.json
