@@ -6,7 +6,10 @@
  */
 import { useEffect, useCallback, type MutableRefObject } from 'react';
 import mapboxgl, { type Map as MapboxMap, type CustomLayerInterface } from 'mapbox-gl';
-import * as THREE from 'three';
+import {
+  Camera, Scene, WebGLRenderer, Matrix4, Color,
+  BufferGeometry, BufferAttribute, MeshBasicMaterial, Mesh, DoubleSide,
+} from 'three';
 
 interface Waypoint {
   lat: number;
@@ -76,15 +79,15 @@ interface UseProcedureRenderingReturn {
   getActiveWaypoints: () => ActiveWaypoint[];
 }
 
-// Extend THREE.WebGLRenderer to include resetState
-interface ExtendedWebGLRenderer extends THREE.WebGLRenderer {
+// Extend WebGLRenderer to include resetState
+interface ExtendedWebGLRenderer extends WebGLRenderer {
   resetState: () => void;
 }
 
 // Custom layer with Three.js properties
 interface ThreeCustomLayer extends CustomLayerInterface {
-  camera?: THREE.Camera;
-  scene?: THREE.Scene;
+  camera?: Camera;
+  scene?: Scene;
   renderer?: ExtendedWebGLRenderer;
 }
 
@@ -135,14 +138,14 @@ const useProcedureRendering = (
       type: 'custom',
       renderingMode: '3d',
       onAdd: function(this: ThreeCustomLayer, mapInstance: MapboxMap, gl: WebGLRenderingContext) {
-        this.camera = new THREE.Camera();
-        this.scene = new THREE.Scene();
+        this.camera = new Camera();
+        this.scene = new Scene();
 
         const ribbonWidth = 0.000004; // Width in mercator units (halved)
 
         // Create continuous ribbon for each procedure
         procedureLines.forEach(({ coords, color }) => {
-          const threeColor = new THREE.Color(color);
+          const threeColor = new Color(color);
 
           // Build continuous ribbon geometry
           const vertices: number[] = [];
@@ -202,24 +205,24 @@ const useProcedureRendering = (
           }
 
           if (vertices.length >= 6 && indices.length >= 3) {
-            const geometry = new THREE.BufferGeometry();
-            geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices), 3));
-            geometry.setIndex(new THREE.BufferAttribute(new Uint32Array(indices), 1));
+            const geometry = new BufferGeometry();
+            geometry.setAttribute('position', new BufferAttribute(new Float32Array(vertices), 3));
+            geometry.setIndex(new BufferAttribute(new Uint32Array(indices), 1));
 
-            const material = new THREE.MeshBasicMaterial({
+            const material = new MeshBasicMaterial({
               color: threeColor,
               transparent: true,
               opacity: 0.85,
-              side: THREE.DoubleSide,
+              side: DoubleSide,
               depthWrite: false
             });
 
-            const mesh = new THREE.Mesh(geometry, material);
+            const mesh = new Mesh(geometry, material);
             this.scene?.add(mesh);
           }
         });
 
-        this.renderer = new THREE.WebGLRenderer({
+        this.renderer = new WebGLRenderer({
           canvas: mapInstance.getCanvas(),
           context: gl,
           antialias: true
@@ -227,7 +230,7 @@ const useProcedureRendering = (
         this.renderer.autoClear = false;
       },
       render: function(this: ThreeCustomLayer, _gl: WebGLRenderingContext, matrix: number[]) {
-        const m = new THREE.Matrix4().fromArray(matrix);
+        const m = new Matrix4().fromArray(matrix);
         if (this.camera) this.camera.projectionMatrix = m;
         this.renderer?.resetState();
         if (this.renderer && this.scene && this.camera) {

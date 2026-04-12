@@ -3,7 +3,7 @@
  * 위성 아이콘 + 궤도 라인 표시
  */
 import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
-import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
+import type { Map as MapboxMap, GeoJSONSource } from 'mapbox-gl';
 import * as satellite from 'satellite.js';
 import { logger } from '../utils/logger';
 
@@ -15,7 +15,8 @@ const TLE_URLS = [
   'https://celestrak.org/NORAD/elements/gp.php?GROUP=geo&FORMAT=tle',
 ];
 const MAX_SATELLITES = 300;
-const UPDATE_INTERVAL = 1000; // 1초마다 업데이트 (부드러운 이동)
+const UPDATE_INTERVAL = 2000; // 2초마다 위치 업데이트 (부드러운 이동)
+const ORBIT_UPDATE_INTERVAL = 30000; // 30초마다 궤도선 재계산 (성능)
 const ORBIT_MINUTES = 90; // 궤도 예측 시간
 const ORBIT_STEP = 1; // 1분 간격
 
@@ -28,6 +29,7 @@ function parseTLE(tleText: string): SatRecord[] {
     const name = lines[i];
     const line1 = lines[i + 1];
     const line2 = lines[i + 2];
+    if (!name || !line1 || !line2) continue;
     if (!line1.startsWith('1') || !line2.startsWith('2')) continue;
     try { records.push({ name, satrec: satellite.twoline2satrec(line1, line2) }); } catch { /* skip */ }
   }
@@ -116,6 +118,7 @@ export default function useSatelliteTracking(
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const loadedRef = useRef(false);
   const layersAddedRef = useRef(false);
+  const lastOrbitUpdate = useRef<number>(0);
 
   const updatePositions = useCallback(() => {
     const m = map.current;
@@ -124,6 +127,7 @@ export default function useSatelliteTracking(
 
     const now = new Date();
     const pointFeatures: GeoJSON.Feature[] = [];
+    const shouldUpdateOrbits = Date.now() - lastOrbitUpdate.current > ORBIT_UPDATE_INTERVAL;
     const lineFeatures: GeoJSON.Feature[] = [];
 
     for (const rec of satRecords.current) {
@@ -137,8 +141,8 @@ export default function useSatelliteTracking(
         properties: { name: rec.name, alt: Math.round(pos.alt) },
       });
 
-      // 궤도 라인 (10개마다 하나만 - 성능)
-      if (pointFeatures.length % 10 === 0) {
+      // 궤도 라인 (30초마다, 10개당 1개만)
+      if (shouldUpdateOrbits && pointFeatures.length % 10 === 0) {
         const segments = getOrbitPath(rec.satrec, now);
         if (segments.length > 0) {
           lineFeatures.push({
@@ -151,11 +155,14 @@ export default function useSatelliteTracking(
     }
 
     try {
-      const posSrc = m.getSource('satellite-positions') as mapboxgl.GeoJSONSource;
+      const posSrc = m.getSource('satellite-positions') as GeoJSONSource;
       if (posSrc) posSrc.setData({ type: 'FeatureCollection', features: pointFeatures });
 
-      const orbitSrc = m.getSource('satellite-orbits') as mapboxgl.GeoJSONSource;
-      if (orbitSrc) orbitSrc.setData({ type: 'FeatureCollection', features: lineFeatures });
+      if (shouldUpdateOrbits) {
+        lastOrbitUpdate.current = Date.now();
+        const orbitSrc = m.getSource('satellite-orbits') as GeoJSONSource;
+        if (orbitSrc) orbitSrc.setData({ type: 'FeatureCollection', features: lineFeatures });
+      }
     } catch (err) { logger.error('SatTracking', `Update error: ${err}`); }
   }, [map]);
 

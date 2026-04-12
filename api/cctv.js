@@ -37,6 +37,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid source. Use: its, yeosu' });
     }
   } catch (err) {
-    return res.status(500).json({ error: err.message, cause: err.cause?.message || null });
+    const isDev = process.env.NODE_ENV === 'development';
+    return res.status(500).json({
+      error: 'Internal server error',
+      ...(isDev && { details: err.message, cause: err.cause?.message || null }),
+    });
   }
 }

@@ -5,6 +5,7 @@
 import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
 import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
 import { logger } from '../utils/logger';
+import { escapeHtml } from '../utils/sanitize';
 
 const UPDATE_INTERVAL = 30000; // 30초마다 업데이트
 
@@ -140,20 +141,25 @@ export default function useShipTracking(
 
         // 클릭 팝업
         m.on('click', 'ship-icons', (e) => {
-          if (!e.features?.length) return;
-          const props = e.features[0].properties;
-          if (!props) return;
-          const coords = (e.features[0].geometry as GeoJSON.Point).coordinates;
+          const feature = e.features?.[0];
+          if (!feature?.properties) return;
+          const props = feature.properties;
+          const coords = (feature.geometry as GeoJSON.Point).coordinates;
+          const name = escapeHtml(props.name as string);
+          const mmsi = escapeHtml(props.mmsi as string);
+          const speed = escapeHtml(String(props.speed ?? ''));
+          const heading = escapeHtml(String(props.heading ?? ''));
+          const type = escapeHtml(props.type as string);
           new mapboxgl.Popup({ closeOnClick: true, maxWidth: '280px' })
             .setLngLat(coords as [number, number])
             .setHTML(`
-              <div style="background:#0a1628;padding:12px;border-radius:8px;color:#fff;">
-                <div style="color:#03A9F4;font-weight:bold;font-size:14px;">🚢 ${props.name}</div>
+              <div style="background:#0a1628;padding:12px;border-radius:8px;color:#fff;" role="dialog" aria-label="선박 ${name}">
+                <div style="color:#03A9F4;font-weight:bold;font-size:14px;">🚢 ${name}</div>
                 <div style="color:#aaa;font-size:11px;margin-top:6px;">
-                  MMSI: ${props.mmsi}<br/>
-                  속도: ${props.speed} kt<br/>
-                  방향: ${props.heading}°<br/>
-                  유형: ${props.type}
+                  MMSI: ${mmsi}<br/>
+                  속도: ${speed} kt<br/>
+                  방향: ${heading}°<br/>
+                  유형: ${type}
                 </div>
               </div>
             `)

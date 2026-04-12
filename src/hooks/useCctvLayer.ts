@@ -7,6 +7,7 @@
 import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
 import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
 import { logger } from '../utils/logger';
+import { escapeHtml, sanitizeUrl } from '../utils/sanitize';
 
 interface CctvCamera {
   id: string;
@@ -161,14 +162,18 @@ export default function useCctvLayer(
 
         // 클릭 → HLS 팝업 또는 새 창 열기
         m.on('click', 'cctv-dots', (e) => {
-          if (!e.features?.length) return;
-          const props = e.features[0].properties;
-          if (!props?.url) return;
-          const coords = (e.features[0].geometry as GeoJSON.Point).coordinates;
+          const feature = e.features?.[0];
+          if (!feature?.properties?.url) return;
+          const props = feature.properties;
+          const coords = (feature.geometry as GeoJSON.Point).coordinates;
+
+          // URL 안전성 검증
+          const safeUrl = sanitizeUrl(props.url as string);
+          if (!safeUrl) return;
 
           // 외부 링크 → 새 창으로 열기
           if (props.type === 'link') {
-            window.open(props.url, '_blank', 'noopener,noreferrer');
+            window.open(safeUrl, '_blank', 'noopener,noreferrer');
             return;
           }
 
@@ -177,13 +182,15 @@ export default function useCctvLayer(
 
           const playerId = `cctv-player-${Date.now()}`;
           const statusId = `cctv-status-${Date.now()}`;
-          const content = `<div style="width:360px;background:#000;border-radius:8px;overflow:hidden;">
-            <div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${props.name}</div>
+          const safeName = escapeHtml(props.name as string);
+          const safeSource = escapeHtml(props.source as string);
+          const content = `<div style="width:360px;background:#000;border-radius:8px;overflow:hidden;" role="dialog" aria-label="CCTV ${safeName}">
+            <div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${safeName}</div>
             <div style="position:relative;">
               <video id="${playerId}" style="width:100%;height:200px;background:#000;display:block;" autoplay muted playsinline controls></video>
               <div id="${statusId}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#FFD700;font-size:12px;text-align:center;pointer-events:none;">로딩 중...</div>
             </div>
-            <div style="padding:4px 12px;color:#666;font-size:10px;">${props.source} · ${props.url.substring(0, 60)}...</div>
+            <div style="padding:4px 12px;color:#666;font-size:10px;">${safeSource}</div>
           </div>`;
 
           const p = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '400px' })
@@ -210,7 +217,7 @@ export default function useCctvLayer(
                     xhr.withCredentials = false;
                   },
                 });
-                hls.loadSource(props.url as string);
+                hls.loadSource(safeUrl);
                 hls.attachMedia(video);
 
                 hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -239,7 +246,7 @@ export default function useCctvLayer(
                   }
                 });
               } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = props.url as string;
+                video.src = safeUrl;
                 video.addEventListener('loadedmetadata', () => video.play());
               } else {
                 setStatus('HLS 지원 안 됨', '#ff6b6b');

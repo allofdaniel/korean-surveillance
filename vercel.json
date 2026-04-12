@@ -24,7 +24,31 @@
     {
       "source": "/data/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=2419200" }
+      ]
+    },
+    {
+      "source": "/aviation_data.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=2419200" }
+      ]
+    },
+    {
+      "source": "/atc_sectors.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=2419200" }
+      ]
+    },
+    {
+      "source": "/navdata.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=2419200" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
     },
     {
@@ -43,7 +67,9 @@
         { "key": "X-Frame-Options", "value": "DENY" },
         { "key": "X-XSS-Protection", "value": "1; mode=block" },
         { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
-        { "key": "Permissions-Policy", "value": "geolocation=(self), microphone=()" },
+        { "key": "Permissions-Policy", "value": "geolocation=(self), microphone=(), camera=(), payment=(), usb=()" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
         { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://api.mapbox.com https://map.vworld.kr https://xdworld.vworld.kr https://maps.googleapis.com https://*.gstatic.com blob:; style-src 'self' 'unsafe-inline' https://api.mapbox.com; img-src 'self' data: blob: https://*.mapbox.com https://*.tiles.mapbox.com https://map.vworld.kr https://xdworld.vworld.kr https://*.vworld.kr https://*.googleapis.com https://*.gstatic.com https://cdn.jetphotos.com https://t.plnspttrs.net https://*.planespotters.net https://www.airport-data.com https://cdn.airport-data.com https://api.vworld.kr https://xdworld.vworld.kr; connect-src 'self' https://api.mapbox.com https://events.mapbox.com https://map.vworld.kr https://xdworld.vworld.kr https://*.vworld.kr https://tile.googleapis.com https://*.googleapis.com https://*.gstatic.com https://*.supabase.co https://api.airplanes.live https://aviationweather.gov wss://*.supabase.co https://api.vworld.kr https://xdworld.vworld.kr https://openapi.its.go.kr:9443 https://celestrak.org http://119.65.216.155:* http://www.ulleung.go.kr https://apis.data.go.kr https://api.odcloud.kr https://itsstream.yeosu.go.kr https://cctvsec.ktict.co.kr:* https://*.ktict.co.kr:*; media-src 'self' blob: https://itsstream.yeosu.go.kr https://cctvsec.ktict.co.kr:* https://*.ktict.co.kr:*; frame-src 'self' https://*.google.com https://*.googleapis.com https://www.utic.go.kr https://www.spatic.go.kr https://its.gyeongju.go.kr https://jejuits.go.kr https://coast.mof.go.kr https://www.wsbfarm.com https://www.knps.or.kr https://www.trendworld.kr https://www.ulleung.go.kr; worker-src 'self' blob: https://*.googleapis.com; child-src blob: http://www.nowjejuplus.com; font-src 'self' data:; frame-ancestors 'none';" }
       ]
     }

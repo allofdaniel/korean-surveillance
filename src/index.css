@@ -4,6 +4,35 @@
   box-sizing: border-box;
 }
 
+/* 접근성: 모션 감소 선호 지원 (vestibular disorders) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  #crt-overlay,
+  #crt-vignette {
+    animation: none !important;
+  }
+}
+
+/* 접근성: 포커스 링 개선 */
+:focus-visible {
+  outline: 2px solid #64b5f6;
+  outline-offset: 2px;
+}
+button:focus-visible,
+.panel-close-btn:focus-visible,
+.mobile-menu-toggle:focus-visible,
+.view-btn:focus-visible {
+  outline: 2px solid #64b5f6;
+  outline-offset: 2px;
+}
+
 /* Critical: Use 100dvh for mobile viewport height (dynamic viewport height) */
 :root {
   --vh: 1vh;

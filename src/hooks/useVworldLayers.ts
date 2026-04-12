@@ -3,7 +3,7 @@
  * 뷰포트 이동 시 자동 로드 (줌 10+ 에서만)
  */
 import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
-import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
+import type { Map as MapboxMap, GeoJSONSource } from 'mapbox-gl';
 import { logger } from '../utils/logger';
 
 const IS_PROD = import.meta.env.PROD;
@@ -46,6 +46,7 @@ export default function useVworldLayers(
     if (zoom < MIN_ZOOM) return;
 
     const bounds = m.getBounds();
+    if (!bounds) return;
     const b = {
       minX: Math.round(bounds.getWest() * 1000) / 1000,
       maxX: Math.round(bounds.getEast() * 1000) / 1000,
@@ -64,7 +65,7 @@ export default function useVworldLayers(
       loads.push((async () => {
         const fc = await fetchVworldData('buildings', b);
         if (fc) {
-          const src = m.getSource('vw-buildings') as mapboxgl.GeoJSONSource;
+          const src = m.getSource('vw-buildings') as GeoJSONSource;
           if (src) src.setData(fc);
         }
       })());
@@ -75,7 +76,7 @@ export default function useVworldLayers(
       loads.push((async () => {
         const fc = await fetchVworldData('special', b);
         if (fc) {
-          const src = m.getSource('vw-special') as mapboxgl.GeoJSONSource;
+          const src = m.getSource('vw-special') as GeoJSONSource;
           if (src) src.setData(fc);
         }
       })());
@@ -85,7 +86,7 @@ export default function useVworldLayers(
       loads.push((async () => {
         const fc = await fetchVworldData('roads', b);
         if (fc) {
-          const src = m.getSource('vw-roads') as mapboxgl.GeoJSONSource;
+          const src = m.getSource('vw-roads') as GeoJSONSource;
           if (src) src.setData(fc);
         }
       })());

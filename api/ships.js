@@ -41,6 +41,10 @@ export default async function handler(req, res) {
       ships,
     });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    const isDev = process.env.NODE_ENV === 'development';
+    return res.status(500).json({
+      error: 'Internal server error',
+      ...(isDev && { details: err.message }),
+    });
   }
 }

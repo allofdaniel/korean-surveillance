@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { generateColor, PROCEDURE_COLORS } from '../utils/colors';
+import { PROCEDURE_COLORS } from '../utils/colors';
 import { logger } from '../utils/logger';
 
 // ============================================
@@ -322,13 +322,16 @@ export default function useDataLoading(): UseDataLoadingReturn {
         const starKeys = Object.keys(json.procedures?.STAR || {});
         const apchKeys = Object.keys(json.procedures?.APPROACH || {});
 
-        console.log('[DataLoading] Loaded aviation data:', {
-          sidCount: sidKeys.length,
-          starCount: starKeys.length,
-          apchCount: apchKeys.length,
-          sidKeys: sidKeys.slice(0, 3),
-          firstSidSegments: json.procedures?.SID?.[sidKeys[0]]?.segments?.length
-        });
+        if (import.meta.env.DEV) {
+          const firstSidKey = sidKeys[0];
+          console.log('[DataLoading] Loaded aviation data:', {
+            sidCount: sidKeys.length,
+            starCount: starKeys.length,
+            apchCount: apchKeys.length,
+            sidKeys: sidKeys.slice(0, 3),
+            firstSidKey: firstSidKey || null
+          });
+        }
 
         setSidVisible(Object.fromEntries(sidKeys.map((k) => [k, false])));
         setStarVisible(Object.fromEntries(starKeys.map((k) => [k, false])));

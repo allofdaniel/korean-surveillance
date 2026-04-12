@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -18,6 +18,12 @@ import {
 } from './constants/config';
 
 import { AIRPORT_DATABASE } from './constants/airports';
+
+// 모듈 상수: runway별 차트 (한 번만 계산)
+const CHARTS_BY_RUNWAY = {
+  '18': Object.entries(PROCEDURE_CHARTS).filter(([, c]) => c.runway === '18'),
+  '36': Object.entries(PROCEDURE_CHARTS).filter(([, c]) => c.runway === '36'),
+};
 
 // Import weather utilities
 import { parseMetar, parseMetarTime } from './utils/weather';
@@ -79,7 +85,6 @@ import {
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 function App() {
-  console.log('[App] Rendering App component');
   const mapContainer = useRef(null);
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -246,19 +251,17 @@ function App() {
     showAircraftPanel, setShowAircraftPanel,
   } = useSelectedAircraft(selectedAircraft);
 
-  // Debug logging for procedure rendering
+  // Debug logging for procedure rendering (DEV only)
   useEffect(() => {
-    console.log('[App] State check:', {
+    if (!import.meta.env.DEV) return;
+    console.debug('[App] State check:', {
       mapLoaded,
       hasData: !!data,
       sidCount: Object.keys(data?.procedures?.SID || {}).length,
       starCount: Object.keys(data?.procedures?.STAR || {}).length,
       apchCount: Object.keys(data?.procedures?.APPROACH || {}).length,
-      activeSids: Object.entries(sidVisible).filter(([, v]) => v).map(([k]) => k),
-      activeStars: Object.entries(starVisible).filter(([, v]) => v).map(([k]) => k),
-      activeApch: Object.entries(apchVisible).filter(([, v]) => v).map(([k]) => k),
     });
-  }, [mapLoaded, data, sidVisible, starVisible, apchVisible]);
+  }, [mapLoaded, data]);
 
   // Procedure rendering hook
   const { hasActiveProcedure } = useProcedureRendering(
@@ -321,6 +324,26 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
+  // ESC 키: 팝업 → 모바일 패널 닫기
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key !== 'Escape') return;
+      // 1. Mapbox popup 닫기 (가장 최근 팝업)
+      const popups = document.querySelectorAll('.mapboxgl-popup-close-button');
+      if (popups.length > 0) {
+        popups[popups.length - 1].click();
+        return;
+      }
+      // 2. NOTAM/Aircraft 패널이 열려 있으면 닫기
+      if (showNotamPanel) { setShowNotamPanel(false); return; }
+      if (showAircraftPanel) { setShowAircraftPanel(false); return; }
+      // 3. 모바일에서 제어 패널 열림 → 닫기
+      if (window.innerWidth <= 768 && isPanelOpen) { setIsPanelOpen(false); return; }
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [isPanelOpen, setIsPanelOpen, showNotamPanel, setShowNotamPanel, showAircraftPanel, setShowAircraftPanel]);
+
   // Handle terrain toggle (showTerrain 체크박스로만 제어)
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
@@ -350,10 +373,12 @@ function App() {
   // Handlers
   // ============================================
 
-  const toggleChart = (chartId) => setActiveCharts(prev => ({ ...prev, [chartId]: !prev[chartId] }));
-  const updateChartOpacity = (chartId, opacity) => setChartOpacities(prev => ({ ...prev, [chartId]: opacity }));
+  const toggleChart = useCallback((chartId) =>
+    setActiveCharts(prev => ({ ...prev, [chartId]: !prev[chartId] })), [setActiveCharts]);
+  const updateChartOpacity = useCallback((chartId, opacity) =>
+    setChartOpacities(prev => ({ ...prev, [chartId]: opacity })), [setChartOpacities]);
 
-  const flyToAirport = () => {
+  const flyToAirport = useCallback(() => {
     map.current?.flyTo({
       center: [129.3518, 35.5934],
       zoom: 12,
@@ -361,17 +386,11 @@ function App() {
       bearing: is3DView ? -30 : 0,
       duration: 2000
     });
-  };
+  }, [is3DView]);
 
-  const handleAtcModeToggle = (enabled) => {
+  const handleAtcModeToggle = useCallback((enabled) => {
     setAtcOnlyMode(enabled);
-    // 카메라 이동 없이 레이더 모드만 토글
-  };
-
-  const chartsByRunway = {
-    '18': Object.entries(PROCEDURE_CHARTS).filter(([_, c]) => c.runway === '18'),
-    '36': Object.entries(PROCEDURE_CHARTS).filter(([_, c]) => c.runway === '36'),
-  };
+  }, [setAtcOnlyMode]);
 
   // ============================================
   // Render
@@ -422,7 +441,13 @@ function App() {
         overflow: 'hidden'
       }}
     >
-      <div ref={mapContainer} id="map" style={{ height: `${windowHeight}px` }} />
+      <div
+        ref={mapContainer}
+        id="map"
+        role="application"
+        aria-label="대한민국 저고도 항공 감시 지도"
+        style={{ height: `${windowHeight}px` }}
+      />
 
       {/* Visual Filter Overlays (NVG/FLIR/CRT) */}
       {viewFilter === 'nvg' && <div id="nvg-overlay" />}
@@ -503,6 +528,8 @@ function App() {
           className="mobile-menu-toggle"
           onClick={() => setIsPanelOpen(true)}
           aria-label="메뉴 열기"
+          aria-expanded={isPanelOpen}
+          aria-controls="main-control-panel"
         >
           ☰
         </button>
@@ -514,7 +541,13 @@ function App() {
       )}
 
       {/* Control Panel */}
-      <div className={`control-panel ${isPanelOpen ? 'open' : 'closed'}`}>
+      <div
+        id="main-control-panel"
+        className={`control-panel ${isPanelOpen ? 'open' : 'closed'}`}
+        role="region"
+        aria-label="제어 패널"
+        aria-hidden={!isPanelOpen}
+      >
         <div className="panel-header">
           <span className="panel-title">대한감시</span>
           <button className="panel-close-btn" onClick={() => setIsPanelOpen(false)} aria-label="패널 닫기">✕</button>
@@ -721,7 +754,7 @@ function App() {
 
           {/* 차트 오버레이 */}
           <ChartOverlayPanel
-            chartsByRunway={chartsByRunway}
+            chartsByRunway={CHARTS_BY_RUNWAY}
             expanded={chartExpanded}
             onToggle={() => setChartExpanded(!chartExpanded)}
             activeCharts={activeCharts}
