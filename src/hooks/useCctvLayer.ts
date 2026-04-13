@@ -240,6 +240,10 @@ export default function useCctvLayer(
                   enableWorker: true,
                   lowLatencyMode: true,
                   debug: false,
+                  maxBufferLength: 5,        // 5초만 버퍼 (빠른 시작)
+                  maxMaxBufferLength: 10,     // 최대 10초
+                  startLevel: 0,             // 최저 품질로 빠르게 시작
+                  capLevelToPlayerSize: true, // 영상 크기에 맞게 품질 제한
                   xhrSetup: (xhr) => { xhr.withCredentials = false; },
                 });
 
