@@ -230,33 +230,34 @@ export default function useCctvLayer(
                   });
                 });
 
-                let networkRetries = 0;
+                const showOpenButton = () => {
+                  hls.destroy();
+                  if (status) {
+                    status.style.pointerEvents = 'auto';
+                    status.innerHTML = `
+                      <div style="color:#aaa;margin-bottom:8px;font-size:11px;">인라인 재생 불가</div>
+                      <button onclick="window.open('${safeUrl}','_blank','noopener')" style="
+                        background:#1a73e8;color:#fff;border:none;border-radius:6px;
+                        padding:8px 16px;font-size:12px;cursor:pointer;font-weight:bold;
+                      ">새 창에서 보기</button>
+                    `;
+                  }
+                };
+
                 hls.on(Hls.Events.ERROR, (_event, data) => {
-                  logger.error('CCTV', `HLS error: ${data.type} - ${data.details} - ${data.fatal ? 'fatal' : 'non-fatal'}`);
-                  if (data.fatal) {
-                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRetries < 2) {
-                      networkRetries++;
-                      setStatus(`재시도 중... (${networkRetries}/2)`, '#ff6b6b');
-                      hls.startLoad();
-                    } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
-                      setStatus('미디어 오류 - 복구 중...', '#ff6b6b');
-                      hls.recoverMediaError();
-                    } else {
-                      hls.destroy();
-                      // CORS 차단 등으로 재생 불가 → 새 창에서 보기 버튼 표시
-                      if (status) {
-                        status.style.pointerEvents = 'auto';
-                        status.innerHTML = `
-                          <div style="color:#ff6b6b;margin-bottom:8px;">스트림 연결 실패</div>
-                          <button onclick="window.open('${safeUrl}','_blank','noopener')" style="
-                            background:#1a73e8;color:#fff;border:none;border-radius:6px;
-                            padding:8px 16px;font-size:12px;cursor:pointer;font-weight:bold;
-                          ">새 창에서 열기</button>
-                        `;
-                      }
-                    }
+                  if (!data.fatal) return;
+                  logger.error('CCTV', `HLS fatal: ${data.type} - ${data.details}`);
+                  if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+                    hls.recoverMediaError();
+                  } else {
+                    showOpenButton();
                   }
                 });
+
+                // 5초 내 재생 시작 안 되면 버튼 표시
+                setTimeout(() => {
+                  if (video.paused && video.readyState < 3) showOpenButton();
+                }, 5000);
               } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = safeUrl;
                 video.addEventListener('loadedmetadata', () => video.play());
