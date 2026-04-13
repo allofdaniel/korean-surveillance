@@ -23,6 +23,12 @@ const IS_PROD = import.meta.env.PROD;
 const ITS_KEY = import.meta.env.VITE_ITS_API_KEY || '';
 const DATA_GO_KR_KEY = import.meta.env.VITE_DATA_GO_KR_API_KEY || '';
 
+/** HLS URL을 프록시 경로로 변환 (CORS/포트 차단 우회) */
+function toProxyUrl(hlsUrl: string): string {
+  if (!IS_PROD) return hlsUrl; // 로컬에서는 직접 접속
+  return `/api/hls-proxy?url=${encodeURIComponent(hlsUrl)}`;
+}
+
 // 외부 CCTV/웹캠 사이트 (클릭 시 새 창 열기)
 const EXTERNAL_SITES: CctvCamera[] = [
   // 교통
@@ -217,7 +223,9 @@ export default function useCctvLayer(
                     xhr.withCredentials = false;
                   },
                 });
-                hls.loadSource(safeUrl);
+                // 프록시 URL로 HLS 로드 (CORS/포트 차단 우회)
+                const proxiedUrl = toProxyUrl(safeUrl);
+                hls.loadSource(proxiedUrl);
                 hls.attachMedia(video);
 
                 hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -259,7 +267,7 @@ export default function useCctvLayer(
                   if (video.paused && video.readyState < 3) showOpenButton();
                 }, 5000);
               } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = safeUrl;
+                video.src = toProxyUrl(safeUrl);
                 video.addEventListener('loadedmetadata', () => video.play());
               } else {
                 if (status) {
