@@ -230,18 +230,30 @@ export default function useCctvLayer(
                   });
                 });
 
+                let networkRetries = 0;
                 hls.on(Hls.Events.ERROR, (_event, data) => {
                   logger.error('CCTV', `HLS error: ${data.type} - ${data.details} - ${data.fatal ? 'fatal' : 'non-fatal'}`);
                   if (data.fatal) {
-                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                      setStatus('네트워크 오류 - 재시도 중...', '#ff6b6b');
+                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRetries < 2) {
+                      networkRetries++;
+                      setStatus(`재시도 중... (${networkRetries}/2)`, '#ff6b6b');
                       hls.startLoad();
                     } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
                       setStatus('미디어 오류 - 복구 중...', '#ff6b6b');
                       hls.recoverMediaError();
                     } else {
-                      setStatus(`재생 불가: ${data.details}`, '#ff6b6b');
                       hls.destroy();
+                      // CORS 차단 등으로 재생 불가 → 새 창에서 보기 버튼 표시
+                      if (status) {
+                        status.style.pointerEvents = 'auto';
+                        status.innerHTML = `
+                          <div style="color:#ff6b6b;margin-bottom:8px;">스트림 연결 실패</div>
+                          <button onclick="window.open('${safeUrl}','_blank','noopener')" style="
+                            background:#1a73e8;color:#fff;border:none;border-radius:6px;
+                            padding:8px 16px;font-size:12px;cursor:pointer;font-weight:bold;
+                          ">새 창에서 열기</button>
+                        `;
+                      }
                     }
                   }
                 });
@@ -249,11 +261,28 @@ export default function useCctvLayer(
                 video.src = safeUrl;
                 video.addEventListener('loadedmetadata', () => video.play());
               } else {
-                setStatus('HLS 지원 안 됨', '#ff6b6b');
+                if (status) {
+                  status.style.pointerEvents = 'auto';
+                  status.innerHTML = `
+                    <button onclick="window.open('${safeUrl}','_blank','noopener')" style="
+                      background:#1a73e8;color:#fff;border:none;border-radius:6px;
+                      padding:8px 16px;font-size:12px;cursor:pointer;font-weight:bold;
+                    ">새 창에서 열기</button>
+                  `;
+                }
               }
             } catch (err) {
               logger.error('CCTV', `HLS init error: ${err}`);
-              setStatus('초기화 실패', '#ff6b6b');
+              if (status) {
+                status.style.pointerEvents = 'auto';
+                status.innerHTML = `
+                  <div style="color:#ff6b6b;margin-bottom:8px;">초기화 실패</div>
+                  <button onclick="window.open('${safeUrl}','_blank','noopener')" style="
+                    background:#1a73e8;color:#fff;border:none;border-radius:6px;
+                    padding:8px 16px;font-size:12px;cursor:pointer;font-weight:bold;
+                  ">새 창에서 열기</button>
+                `;
+              }
             }
           }, 200);
         });
