@@ -192,9 +192,9 @@ export default function useCctvLayer(
           const safeSource = escapeHtml(props.source as string);
           const content = `<div style="width:360px;background:#000;border-radius:8px;overflow:hidden;" role="dialog" aria-label="CCTV ${safeName}">
             <div style="padding:8px 12px;background:#1a1a2e;color:#FFD700;font-weight:bold;font-size:13px;">📹 ${safeName}</div>
-            <div style="position:relative;">
-              <video id="${playerId}" style="width:100%;height:200px;background:#000;display:block;" autoplay muted playsinline controls></video>
-              <div id="${statusId}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#FFD700;font-size:12px;text-align:center;pointer-events:none;">로딩 중...</div>
+            <div id="${playerId}-wrap" style="position:relative;cursor:pointer;">
+              <video id="${playerId}" style="width:100%;height:200px;background:#000;display:block;" muted playsinline controls></video>
+              <div id="${statusId}" style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;color:#FFD700;font-size:13px;text-align:center;background:rgba(0,0,0,0.6);cursor:pointer;">로딩 중...</div>
             </div>
             <div style="padding:4px 12px;color:#666;font-size:10px;">${safeSource}</div>
           </div>`;
@@ -206,11 +206,32 @@ export default function useCctvLayer(
           setTimeout(async () => {
             const video = document.getElementById(playerId) as HTMLVideoElement;
             const status = document.getElementById(statusId);
+            const wrap = document.getElementById(`${playerId}-wrap`);
             if (!video) return;
 
-            const setStatus = (msg: string, color = '#FFD700') => {
-              if (status) { status.textContent = msg; status.style.color = color; }
+            const hideStatus = () => {
+              if (status) status.style.display = 'none';
             };
+            const setStatus = (msg: string, color = '#FFD700') => {
+              if (status) {
+                status.style.display = 'flex';
+                status.textContent = msg;
+                status.style.color = color;
+              }
+            };
+
+            // 오버레이 클릭 → 재생 시도
+            const tryPlay = () => {
+              video.muted = true;
+              video.play().then(() => {
+                hideStatus();
+              }).catch(() => {
+                setStatus('▶ 다시 클릭', '#4fc3f7');
+              });
+            };
+
+            if (wrap) wrap.addEventListener('click', tryPlay);
+            if (status) status.addEventListener('click', tryPlay);
 
             try {
               const { default: Hls } = await import('hls.js');
@@ -219,56 +240,38 @@ export default function useCctvLayer(
                   enableWorker: true,
                   lowLatencyMode: true,
                   debug: false,
-                  xhrSetup: (xhr) => {
-                    xhr.withCredentials = false;
-                  },
+                  xhrSetup: (xhr) => { xhr.withCredentials = false; },
                 });
-                // 프록시 URL로 HLS 로드 (CORS/포트 차단 우회)
+
                 const proxiedUrl = toProxyUrl(safeUrl);
                 hls.loadSource(proxiedUrl);
                 hls.attachMedia(video);
 
                 hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                  setStatus('재생 시작...');
-                  video.play().then(() => {
-                    setStatus('');
-                  }).catch((err) => {
-                    setStatus('▶ 클릭하여 재생', '#4fc3f7');
-                    logger.error('CCTV', `Autoplay blocked: ${err}`);
-                  });
+                  setStatus('▶ 클릭하여 재생', '#4fc3f7');
+                  tryPlay();
                 });
-
-                const showOpenButton = () => {
-                  hls.destroy();
-                  if (status) {
-                    status.style.pointerEvents = 'auto';
-                    status.innerHTML = `
-                      <div style="color:#aaa;margin-bottom:8px;font-size:11px;">인라인 재생 불가</div>
-                      <button onclick="window.open('${safeUrl}','_blank','noopener')" style="
-                        background:#1a73e8;color:#fff;border:none;border-radius:6px;
-                        padding:8px 16px;font-size:12px;cursor:pointer;font-weight:bold;
-                      ">새 창에서 보기</button>
-                    `;
-                  }
-                };
 
                 hls.on(Hls.Events.ERROR, (_event, data) => {
                   if (!data.fatal) return;
-                  logger.error('CCTV', `HLS fatal: ${data.type} - ${data.details}`);
                   if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
                     hls.recoverMediaError();
                   } else {
-                    showOpenButton();
+                    hls.destroy();
+                    setStatus(`오류: ${data.details}`, '#ff6b6b');
                   }
                 });
 
-                // 5초 내 재생 시작 안 되면 버튼 표시
+                // 8초 타임아웃
                 setTimeout(() => {
-                  if (video.paused && video.readyState < 3) showOpenButton();
-                }, 5000);
+                  if (video.readyState < 2) {
+                    setStatus('▶ 클릭하여 재생', '#4fc3f7');
+                  }
+                }, 8000);
+
               } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = toProxyUrl(safeUrl);
-                video.addEventListener('loadedmetadata', () => video.play());
+                video.addEventListener('loadedmetadata', tryPlay);
               } else {
                 if (status) {
                   status.style.pointerEvents = 'auto';
