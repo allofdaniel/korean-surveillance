@@ -3,11 +3,6 @@
  * 커스텀 훅 모음 인덱스
  */
 
-// 기본 훅
-export { useWeather } from './useWeather';
-export { useNotam } from './useNotam';
-export { useAircraft } from './useAircraft';
-
 // 맵 관련 훅
 export { default as useMapInit } from './useMapInit';
 export { default as useMapStyle } from './useMapStyle';
@@ -17,7 +12,6 @@ export { default as useDataLoading } from './useDataLoading';
 export { default as useWeatherData } from './useWeatherData';
 
 // 레이어 관련 훅
-export { default as useRadarLayer } from './useRadarLayer';
 export { default as useChartOverlay } from './useChartOverlay';
 export { default as useAtcRadarRings } from './useAtcRadarRings';
 export { default as useAtcSectors } from './useAtcSectors';
@@ -28,6 +22,7 @@ export { default as useAirspaceLayers } from './useAirspaceLayers';
 // 항공기 관련 훅
 export { default as useAircraftVisualization } from './useAircraftVisualization';
 export { default as useAircraftData } from './useAircraftData';
+export { default as useSmoothedAircraft } from './useSmoothedAircraft';
 export { default as useSelectedAircraft } from './useSelectedAircraft';
 export { default as useAircraftClickHandler } from './useAircraftClickHandler';
 

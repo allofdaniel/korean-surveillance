@@ -4,6 +4,7 @@
 import type { Map as MapboxMap } from 'mapbox-gl';
 import type { KoreaAirport } from '../useDataLoading';
 import { Airspace, AIRSPACE_COLORS, AIRSPACE_TYPE_NAMES, ftToM } from './types';
+import { logger } from '../../utils/logger';
 
 // ---------------------------------------------------------------------------
 // Airspaces
@@ -142,7 +143,7 @@ export function renderAirports(map: MapboxMap, airports: KoreaAirport[]): void {
     );
 
     if (aptData.length === 0) {
-      console.warn('[KoreaAirspace] No valid airports found');
+      logger.warn('KoreaAirspace', 'No valid airports found');
       return;
     }
 
@@ -228,6 +229,6 @@ export function renderAirports(map: MapboxMap, airports: KoreaAirport[]): void {
     // Runway and ILS rendering disabled - alignment issues with Mapbox basemap
     // TODO: Consider using actual runway polygon data from OSM or other sources
   } catch (err) {
-    console.error('[KoreaAirspace] Airport layer error:', err);
+    logger.error('KoreaAirspace', 'Airport layer error', { error: (err as Error).message });
   }
 }

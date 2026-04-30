@@ -145,13 +145,25 @@ export const parseMetarTime = (metar: string | null | undefined): string | null 
 };
 
 /**
- * NOTAM 날짜 파싱 (YYMMDDHHMM 형식)
+ * NOTAM 날짜 파싱
+ * 두 가지 포맷 지원:
+ *   - YYMMDDHHMM (ICAO Q-line 표준, 10자리 숫자) — 예: "2601081600"
+ *   - ISO 8601 (백엔드 API 응답) — 예: "2026-01-15T04:00:00Z"
  * 날짜 유효성 검증 포함
  */
 export const parseNotamDateString = (dateStr: string | null | undefined): Date | null => {
   if (!dateStr || dateStr.length < 10) return null;
 
   try {
+    // ISO 8601 형식 감지: "YYYY-MM-DD..." 패턴
+    if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) {
+      const d = new Date(dateStr);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    // YYMMDDHHMM 10자리 숫자 형식
+    if (!/^\d{10}$/.test(dateStr.substring(0, 10))) return null;
+
     const yy = parseInt(dateStr.substring(0, 2), 10);
     const month = parseInt(dateStr.substring(2, 4), 10);
     const day = parseInt(dateStr.substring(4, 6), 10);
@@ -167,8 +179,10 @@ export const parseNotamDateString = (dateStr: string | null | undefined): Date |
     if (hour < 0 || hour > 23) return null;
     if (min < 0 || min > 59) return null;
 
-    // 연도 처리: 50 이상이면 1900년대, 아니면 2000년대
-    const year = yy >= 50 ? 1900 + yy : 2000 + yy;
+    // 연도 처리: 슬라이딩 윈도우 피벗 — 현재 연도 기준 +30년 초과하면 1900년대로 간주.
+    // 예: 2026 기준 refYY=26, pivot=56. yy>56이면 1900년대. 2080년경 재검토 필요.
+    const refYY = new Date().getUTCFullYear() % 100;
+    const year = yy > refYY + 30 ? 1900 + yy : 2000 + yy;
 
     const date = new Date(Date.UTC(year, month - 1, day, hour, min));
 
@@ -179,6 +193,32 @@ export const parseNotamDateString = (dateStr: string | null | undefined): Date |
   } catch {
     return null;
   }
+};
+
+/**
+ * ISO 8601 또는 YYMMDDHHMM 문자열 → ICAO 표준 YYMMDDHHMM (10자리)
+ * 빈 입력 / 'PERM' / 잘못된 입력은 fallback ('') 반환.
+ *
+ * 예: "2026-04-15T04:30:00Z" → "2604150430"
+ *     "2604150430" → "2604150430" (이미 YYMMDDHHMM)
+ *     "PERM" → "PERM"
+ */
+export const isoToYymmddhhmm = (input: string | null | undefined): string => {
+  if (!input) return '';
+  const s = String(input).trim();
+  if (!s) return '';
+  if (s.toUpperCase() === 'PERM') return 'PERM';
+  // 이미 10자리 YYMMDDHHMM 형식이면 그대로
+  if (/^\d{10}$/.test(s)) return s;
+  // ISO 8601 파싱 시도
+  const d = new Date(s);
+  if (isNaN(d.getTime())) return '';
+  const yy = String(d.getUTCFullYear() % 100).padStart(2, '0');
+  const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(d.getUTCDate()).padStart(2, '0');
+  const hh = String(d.getUTCHours()).padStart(2, '0');
+  const mn = String(d.getUTCMinutes()).padStart(2, '0');
+  return `${yy}${mm}${dd}${hh}${mn}`;
 };
 
 /**

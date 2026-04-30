@@ -1,4 +1,24 @@
+import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
+
 export default async function handler(req, res) {
+  if (setCorsHeaders(req, res)) return;
+  if (await checkRateLimit(req, res)) return;
+
+  // Fail-closed in production: if no DOCS_ACCESS_KEY is configured, deny access (Security C-1)
+  const isProduction = process.env.VERCEL_ENV === 'production' || process.env.NODE_ENV === 'production';
+  if (isProduction && !process.env.DOCS_ACCESS_KEY) {
+    return res.status(503).json({ error: 'Docs disabled in production without DOCS_ACCESS_KEY' });
+  }
+
+  // Optional access key gate — set DOCS_ACCESS_KEY env var to enable
+  const docsKey = process.env.DOCS_ACCESS_KEY;
+  if (docsKey) {
+    const provided = req.headers['x-docs-key'];
+    if (provided !== docsKey) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+  }
+
   res.setHeader('Content-Type', 'text/html');
 
   const html = `<!DOCTYPE html>
@@ -6,6 +26,7 @@ export default async function handler(req, res) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
   <title>TBAS NOTAM API Documentation</title>
   <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui.css" />
   <style>

@@ -5,6 +5,7 @@
  * - Caches data in memory to avoid re-fetching
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { logger } from '../utils/logger';
 
 export interface GlobalDataState {
   airports: unknown[] | null;
@@ -78,7 +79,7 @@ const useGlobalData = (
       const json = await resp.json();
       setData(prev => ({ ...prev, [key]: json }));
     } catch (err) {
-      console.error(`[GlobalData] Failed to load ${key}:`, err);
+      logger.warn('GlobalData', `Failed to load ${key}`, { error: (err as Error).message });
       fetchedRef.current.delete(key);
     } finally {
       setLoading(prev => ({ ...prev, [key]: false }));

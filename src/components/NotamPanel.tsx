@@ -2,7 +2,7 @@
  * NotamPanel Component
  * NOTAM 드롭다운 패널 컴포넌트
  */
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   AIRPORT_DATABASE,
   COUNTRY_INFO,
@@ -13,6 +13,7 @@ import {
   getCancelledNotamRef,
   getNotamValidity,
   buildCancelledNotamSet,
+  interpretNotam,
 } from '../utils/notam';
 
 interface NotamDataItem {
@@ -493,8 +494,11 @@ const MapToggleSection: React.FC<MapToggleSectionProps> = ({ notamData, notamLoc
   };
   const notamCounts = getNotamCounts();
 
-  // Get unique locations (including FIR fallbacks)
-  const locations = [...new Set(notamData?.data?.map(n => getEffectiveLocation(n)).filter(Boolean) as string[])];
+  // Get unique locations (including FIR fallbacks) — memoized to avoid O(n) recompute per render
+  const locations = useMemo(
+    () => [...new Set(notamData?.data?.map(n => getEffectiveLocation(n)).filter(Boolean) as string[])],
+    [notamData?.data]
+  );
   // Only show locations with coordinates AND with NOTAMs in the current period
   const locationsWithCoords = locations.filter(loc => AIRPORT_COORDINATES[loc] && (notamCounts[loc] || 0) > 0);
 
@@ -567,7 +571,7 @@ const MapToggleSection: React.FC<MapToggleSectionProps> = ({ notamData, notamLoc
       {sortedCountries.map(country => {
         const countryInfo = COUNTRY_INFO[country];
         const countryName = countryInfo?.name || '기타';
-        const countryFlag = countryInfo?.flag || '🌐';
+        const countryFlag = countryInfo?.flag || '';
         const countryAirports = byCountry[country];
         if (!countryAirports) return null;
         const airportsInCountry = countryAirports.sort();
@@ -733,7 +737,9 @@ const NotamItem: React.FC<NotamItemProps> = ({ notam, idx, cancelledSet, notamEx
         <span className={`notam-expand-icon ${notamExpanded[itemKey] ? 'expanded' : ''}`}>▼</span>
       </div>
 
-      {notamExpanded[itemKey] && (
+      {notamExpanded[itemKey] && (() => {
+        const interp = interpretNotam(n, (loc) => AIRPORT_DATABASE[loc]?.name);
+        return (
         <div className="notam-item-detail">
           {notamType === 'R' && cancelledRef && (
             <div className="notam-detail-row notam-replaced-ref">
@@ -741,6 +747,26 @@ const NotamItem: React.FC<NotamItemProps> = ({ notam, idx, cancelledSet, notamEx
               <span>{cancelledRef}</span>
             </div>
           )}
+          {/* 한국어 해석 카드 (어디 / 언제 / 무엇) */}
+          <div className="notam-interp-card" style={{
+            background: 'linear-gradient(135deg, rgba(33,150,243,0.10), rgba(33,150,243,0.04))',
+            border: '1px solid rgba(33,150,243,0.35)',
+            borderRadius: 6,
+            padding: '10px 12px',
+            margin: '8px 0',
+            fontSize: 12,
+            lineHeight: 1.6,
+          }}>
+            <div style={{ fontWeight: 600, color: '#64B5F6', marginBottom: 6, fontSize: 11, letterSpacing: 0.5 }}>해석</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '64px 1fr', gap: '4px 10px' }}>
+              <span style={{ color: '#888' }}>어디:</span><span>{interp.where}</span>
+              <span style={{ color: '#888' }}>언제:</span><span>{interp.when}</span>
+              <span style={{ color: '#888' }}>무엇:</span><span style={{ whiteSpace: 'pre-wrap' }}>{interp.what}</span>
+              <span style={{ color: '#888' }}>분류:</span><span>{interp.meta.qcode_ko} · {interp.meta.type}</span>
+              {interp.meta.altitude !== '-' && (<><span style={{ color: '#888' }}>고도:</span><span>{interp.meta.altitude}</span></>)}
+              {interp.meta.radius !== '-' && (<><span style={{ color: '#888' }}>범위:</span><span>{interp.meta.radius}</span></>)}
+            </div>
+          </div>
           <div className="notam-detail-row">
             <span className="notam-label">Q-Code:</span>
             <span>{n.qcode} - {n.qcode_mean}</span>
@@ -750,7 +776,7 @@ const NotamItem: React.FC<NotamItemProps> = ({ notam, idx, cancelledSet, notamEx
             <span>{n.effective_start || '-'} ~ {n.effective_end || 'PERM'}</span>
           </div>
           <div className="notam-detail-row">
-            <span className="notam-label">내용:</span>
+            <span className="notam-label">내용 (E):</span>
           </div>
           <div className="notam-e-text">{n.e_text}</div>
           {n.full_text && (
@@ -762,7 +788,8 @@ const NotamItem: React.FC<NotamItemProps> = ({ notam, idx, cancelledSet, notamEx
             </>
           )}
         </div>
-      )}
+        );
+      })()}
     </div>
   );
 };

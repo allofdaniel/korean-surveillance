@@ -167,51 +167,99 @@ export default function useWeatherData(
     }
   }, []);
 
+  // AbortController ref for METAR/TAF fetch cancellation
+  const weatherAbortControllerRef = useRef<AbortController | null>(null);
+
   // Fetch METAR/TAF when airport is available
   useEffect(() => {
     if (!airport) return;
+
+    // Cancel any in-flight request
+    if (weatherAbortControllerRef.current) {
+      weatherAbortControllerRef.current.abort();
+    }
+    weatherAbortControllerRef.current = new AbortController();
+
     fetchWeatherData();
     weatherIntervalRef.current = setInterval(fetchWeatherData, 5 * 60 * 1000);
     return () => {
       if (weatherIntervalRef.current) clearInterval(weatherIntervalRef.current);
+      if (weatherAbortControllerRef.current) {
+        weatherAbortControllerRef.current.abort();
+        weatherAbortControllerRef.current = null;
+      }
     };
   }, [airport, fetchWeatherData]);
 
+  // 공통: AbortController + cancelled flag 로 unmount 후 setState 차단.
+  // logger.warn 으로 console.error 대체.
+  const safeFetchJson = <T,>(
+    url: string,
+    setter: (v: T) => void,
+    signal: AbortSignal,
+    cancelledRef: { current: boolean },
+    label: string,
+  ): Promise<void> =>
+    fetch(url, { signal })
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json() as Promise<T>;
+      })
+      .then(d => { if (!cancelledRef.current) setter(d); })
+      .catch(e => {
+        if ((e as Error).name === 'AbortError') return;
+        logger.warn('Weather', `${label} fetch failed`, { error: (e as Error).message });
+      });
+
   // Fetch radar data - always use proxy
   useEffect(() => {
-    if (showRadar) {
-      fetch('/api/weather?type=radar').then(r => r.json()).then(setRadarData).catch(console.error);
-      const interval = setInterval(() => {
-        fetch('/api/weather?type=radar').then(r => r.json()).then(setRadarData).catch(console.error);
-      }, 60000);
-      return () => clearInterval(interval);
-    }
+    if (!showRadar) return;
+    const controller = new AbortController();
+    const cancelled = { current: false };
+    void safeFetchJson('/api/weather?type=radar', setRadarData, controller.signal, cancelled, 'Radar');
+    const interval = setInterval(() => {
+      void safeFetchJson('/api/weather?type=radar', setRadarData, controller.signal, cancelled, 'Radar');
+    }, 60000);
+    return () => {
+      cancelled.current = true;
+      controller.abort();
+      clearInterval(interval);
+    };
   }, [showRadar]);
 
   // Fetch satellite weather data
   useEffect(() => {
-    if (showSatelliteWx) {
-      fetch('/api/weather?type=satellite').then(r => r.json()).then(setSatelliteWxData).catch(console.error);
-    }
+    if (!showSatelliteWx) return;
+    const controller = new AbortController();
+    const cancelled = { current: false };
+    void safeFetchJson('/api/weather?type=satellite', setSatelliteWxData, controller.signal, cancelled, 'Satellite');
+    return () => { cancelled.current = true; controller.abort(); };
   }, [showSatelliteWx]);
 
   // Fetch lightning data
   useEffect(() => {
-    if (showLightning) {
-      fetch('/api/weather?type=lightning').then(r => r.json()).then(setLightningData).catch(console.error);
-      const interval = setInterval(() => {
-        fetch('/api/weather?type=lightning').then(r => r.json()).then(setLightningData).catch(console.error);
-      }, 30000);
-      return () => clearInterval(interval);
-    }
+    if (!showLightning) return;
+    const controller = new AbortController();
+    const cancelled = { current: false };
+    void safeFetchJson('/api/weather?type=lightning', setLightningData, controller.signal, cancelled, 'Lightning');
+    const interval = setInterval(() => {
+      void safeFetchJson('/api/weather?type=lightning', setLightningData, controller.signal, cancelled, 'Lightning');
+    }, 30000);
+    return () => {
+      cancelled.current = true;
+      controller.abort();
+      clearInterval(interval);
+    };
   }, [showLightning]);
 
   // Fetch SIGMET/LLWS data
   useEffect(() => {
-    if (showSigmet || showWxPanel) {
-      fetch('/api/weather?type=sigmet').then(r => r.json()).then(setSigmetData).catch(console.error);
-      fetch('/api/weather?type=llws').then(r => r.json()).then(setLlwsData).catch(console.error);
-    }
+    if (!showSigmet && !showWxPanel) return;
+    const controller = new AbortController();
+    const cancelled = { current: false };
+    void safeFetchJson('/api/weather?type=sigmet', setSigmetData, controller.signal, cancelled, 'SIGMET');
+    void safeFetchJson('/api/weather?type=llws', setLlwsData, controller.signal, cancelled, 'LLWS');
+    return () => { cancelled.current = true; controller.abort(); };
   }, [showSigmet, showWxPanel]);
 
   return {

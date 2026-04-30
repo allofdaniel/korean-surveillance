@@ -76,7 +76,7 @@ const LabelPositionPad: React.FC<LabelPositionPadProps> = ({
       onClick={(e) => e.stopPropagation()}
     >
       {/* 중심 + 표시 */}
-      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'rgba(0,255,136,0.3)', fontSize: '20px' }}>✈</div>
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '8px', height: '8px', border: '1px solid rgba(0,255,136,0.3)', borderRadius: '50%' }}></div>
       {/* 현재 라벨 위치 표시 */}
       <div style={{
         position: 'absolute',

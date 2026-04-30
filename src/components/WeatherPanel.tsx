@@ -176,7 +176,6 @@ const LightningList: React.FC<LightningListProps> = ({ lightningData }) => (
     </div>
     {lightningData?.strikes?.slice(0, 50).map((strike, i) => (
       <div key={i} className="wx-lightning-item">
-        <span className="lightning-icon">⚡</span>
         <span className="lightning-pos">{strike.lat?.toFixed(3)}°N {strike.lon?.toFixed(3)}°E</span>
         {strike.amplitude && <span className="lightning-amp">{strike.amplitude}kA</span>}
       </div>

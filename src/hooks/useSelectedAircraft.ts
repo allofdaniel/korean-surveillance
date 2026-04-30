@@ -104,8 +104,7 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
   const [flightTrackLoading, setFlightTrackLoading] = useState(false);
   const [showAircraftPanel, setShowAircraftPanel] = useState(false);
 
-  // aviationstack API key (환경변수 또는 직접 설정)
-  const AVIATIONSTACK_API_KEY = import.meta.env.VITE_AVIATIONSTACK_API_KEY || '';
+  // aviationstack: 키는 서버사이드(/api/flight-schedule)에서 관리 — 브라우저에 노출하지 않음
 
   // Fetch aircraft photo when selectedAircraft changes
   useEffect(() => {
@@ -122,6 +121,9 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
     const hex = selectedAircraft.hex?.toUpperCase();
     const reg = selectedAircraft.registration;
 
+    let cancelled = false;
+    const controller = new AbortController();
+
     // Vercel API Route를 통한 사진 조회 (CORS 해결)
     const fetchPhoto = async () => {
       try {
@@ -129,20 +131,26 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
         if (hex) params.append('hex', hex);
         if (reg) params.append('reg', reg);
 
-        const res = await fetch(`/api/aircraft-photo?${params}`);
+        const res = await fetch(`/api/aircraft-photo?${params}`, { signal: controller.signal });
+        if (cancelled) return;
         const data = await res.json();
 
-        if (data.image) {
+        if (!cancelled && data.image) {
           setAircraftPhoto(data);
         }
-        setAircraftPhotoLoading(false);
+        if (!cancelled) setAircraftPhotoLoading(false);
       } catch (err) {
+        if ((err as Error).name === 'AbortError') return;
         logger.warn('Aircraft', 'Failed to fetch aircraft photo', { error: (err as Error).message });
-        setAircraftPhotoLoading(false);
+        if (!cancelled) setAircraftPhotoLoading(false);
       }
     };
 
     fetchPhoto();
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentional: only re-fetch when hex changes
   }, [selectedAircraft?.hex]);
 
@@ -159,21 +167,31 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
     setAircraftDetailsLoading(true);
     setAircraftDetails(null);
 
+    let cancelled = false;
+    const controller = new AbortController();
+
     const fetchDetails = async () => {
       try {
-        const res = await fetch(`https://hexdb.io/api/v1/aircraft/${hex}`);
+        // FIXME: SECURITY P0 — direct hexdb.io fetch leaks user IP. Move to /api/aircraft-details proxy in next phase.
+        const res = await fetch(`https://hexdb.io/api/v1/aircraft/${hex}`, { signal: controller.signal });
+        if (cancelled) return;
         if (res.ok) {
           const data = await res.json();
-          setAircraftDetails(data);
+          if (!cancelled) setAircraftDetails(data);
         }
       } catch (err) {
+        if ((err as Error).name === 'AbortError') return;
         logger.warn('Aircraft', 'Failed to fetch aircraft details from hexdb.io', { error: (err as Error).message });
       } finally {
-        setAircraftDetailsLoading(false);
+        if (!cancelled) setAircraftDetailsLoading(false);
       }
     };
 
     fetchDetails();
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentional: only re-fetch when hex changes
   }, [selectedAircraft?.hex]);
 
@@ -191,6 +209,10 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
     setFlightScheduleLoading(true);
     setFlightSchedule(null);
 
+    let cancelled = false;
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     const fetchSchedule = async () => {
       // ICAO to IATA 변환 맵 (공통 매핑 사용 + 추가 공항)
       const icaoToIata: Record<string, string> = {
@@ -207,7 +229,7 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
         // 1차: 로컬 UBIKAIS 정적 JSON 파일 직접 검색 (API 없이 작동)
         const reg = selectedAircraft?.registration;
         try {
-          const ubikaisRes = await fetch('/flight_schedule.json');
+          const ubikaisRes = await fetch('/flight_schedule.json', { signal });
           if (ubikaisRes.ok) {
             const ubikaisData = await ubikaisRes.json();
             const departures = ubikaisData.departures || [];
@@ -307,7 +329,7 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
         if (hex) params.append('hex', hex);
         if (reg) params.append('reg', reg);
 
-        const fr24Res = await fetch(`/api/flight-route?${params}`);
+        const fr24Res = await fetch(`/api/flight-route?${params}`, { signal });
         if (fr24Res.ok) {
           const routeData = await fr24Res.json();
           if (routeData?.origin?.iata || routeData?.destination?.iata) {
@@ -363,8 +385,8 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
           }
         }
 
-        // 3차: aviationstack API 백업 (FR24에서 못 찾으면)
-        if (AVIATIONSTACK_API_KEY && callsign) {
+        // 3차: aviationstack 백업 — /api/flight-schedule 프록시 경유 (키는 서버에서 주입)
+        if (callsign) {
           const icaoMatch = callsign.match(/^([A-Z]{3})(\d+)/);
           let flightNumber = callsign;
 
@@ -377,7 +399,7 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
             }
           }
 
-          const avRes = await fetch(`/api/flight-schedule?flight=${flightNumber}`);
+          const avRes = await fetch(`/api/flight-schedule?flight=${flightNumber}`, { signal });
           if (avRes.ok) {
             const avData = await avRes.json();
             if (avData?.data?.length > 0) {
@@ -386,15 +408,20 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
           }
         }
       } catch (err) {
+        if ((err as Error).name === 'AbortError') return;
         logger.warn('FlightSchedule', 'Failed to fetch flight schedule', { error: (err as Error).message });
       } finally {
-        setFlightScheduleLoading(false);
+        if (!cancelled) setFlightScheduleLoading(false);
       }
     };
 
     fetchSchedule();
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentional: only re-fetch when specific props change
-  }, [selectedAircraft?.hex, selectedAircraft?.callsign, AVIATIONSTACK_API_KEY]);
+  }, [selectedAircraft?.hex, selectedAircraft?.callsign]);
 
   // Fetch flight track from OpenSky Trino (full history) or REST API (fallback)
   useEffect(() => {
@@ -408,6 +435,9 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
 
     setFlightTrackLoading(true);
     setFlightTrack(null);
+
+    let trackCancelled = false;
+    const trackController = new AbortController();
 
     const fetchTrack = async () => {
       try {
@@ -457,9 +487,11 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
         }
 
         // 2차: OpenSky REST tracks API (제한된 데이터)
+        if (trackCancelled) return;
         logger.debug('FlightTrack', `Falling back to OpenSky REST API for ${hex}`);
         const res = await fetch(
-          `https://opensky-network.org/api/tracks/all?icao24=${hex}&time=0`
+          `https://opensky-network.org/api/tracks/all?icao24=${hex}&time=0`,
+          { signal: trackController.signal }
         );
         if (res.ok) {
           const data = await res.json();
@@ -492,13 +524,18 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
           logger.warn('FlightTrack', 'OpenSky REST API error', { status: res.status });
         }
       } catch (err) {
+        if ((err as Error).name === 'AbortError') return;
         logger.warn('FlightTrack', 'Failed to fetch flight track from OpenSky', { error: (err as Error).message });
       } finally {
-        setFlightTrackLoading(false);
+        if (!trackCancelled) setFlightTrackLoading(false);
       }
     };
 
     fetchTrack();
+    return () => {
+      trackCancelled = true;
+      trackController.abort();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentional: only re-fetch when hex changes
   }, [selectedAircraft?.hex]);
 

@@ -5,7 +5,7 @@
  * 지도 우클릭 시 나타나는 컨텍스트 메뉴
  */
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, type ReactNode } from 'react';
 
 interface ContextMenuState {
   isOpen: boolean;
@@ -138,17 +138,17 @@ export function MapContextMenu({
       {/* 메뉴 항목들 */}
       <div style={{ padding: '4px 0' }}>
         <MenuItem
-          icon="📋"
+          icon={<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="1" width="7" height="9" rx="1"/><path d="M4 1V0.5M8 1V0.5"/><path d="M4 4h4M4 6.5h2.5"/></svg>}
           label="좌표 복사"
           onClick={handleCopyCoordinates}
         />
         <MenuItem
-          icon="📍"
+          icon={<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 1C4.343 1 3 2.343 3 4c0 2.5 3 7 3 7s3-4.5 3-7c0-1.657-1.343-3-3-3z"/><circle cx="6" cy="4" r="1"/></svg>}
           label="마커 추가"
           onClick={handleAddMarker}
         />
         <MenuItem
-          icon="🎯"
+          icon={<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="6" cy="6" r="4"/><circle cx="6" cy="6" r="1.5"/><line x1="6" y1="1" x2="6" y2="2.5"/><line x1="6" y1="9.5" x2="6" y2="11"/><line x1="1" y1="6" x2="2.5" y2="6"/><line x1="9.5" y1="6" x2="11" y2="6"/></svg>}
           label="이 위치로 이동"
           onClick={handleCenterMap}
         />
@@ -163,7 +163,7 @@ function MenuItem({
   label,
   onClick,
 }: {
-  icon: string;
+  icon: ReactNode;
   label: string;
   onClick: () => void;
 }) {

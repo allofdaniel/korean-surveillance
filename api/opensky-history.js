@@ -1,8 +1,5 @@
-﻿/* global AbortController */
-
-/**
+﻿/**
  * Vercel Serverless Function - OpenSky Flight Track API
- * DO-278A: SRS-API-003
  */
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 

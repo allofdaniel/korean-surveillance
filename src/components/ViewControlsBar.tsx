@@ -150,7 +150,7 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
         aria-label={isDarkMode ? '라이트 모드로 전환' : '다크 모드로 전환'}
         aria-pressed={isDarkMode}
       >
-        {isDarkMode ? '🌙' : '☀️'}
+        {isDarkMode ? 'DARK' : 'LIGHT'}
       </button>
       <button
         className={`view-btn icon-btn ${showSatellite ? 'active' : ''}`}
@@ -159,8 +159,8 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
         aria-label="위성 사진 표시"
         aria-pressed={showSatellite}
       >
-        🛰️
-      </button>
+        IMG
+</button>
       <button
         className={`view-btn ${viewFilter !== 'none' ? `filter-active-${viewFilter}` : ''}`}
         onClick={cycleViewFilter}

@@ -20,8 +20,6 @@ interface CctvCamera {
 }
 
 const IS_PROD = import.meta.env.PROD;
-const ITS_KEY = import.meta.env.VITE_ITS_API_KEY || '';
-const DATA_GO_KR_KEY = import.meta.env.VITE_DATA_GO_KR_API_KEY || '';
 
 /** HLS URL을 프록시 경로로 변환 (CORS/포트 차단 우회) */
 function toProxyUrl(hlsUrl: string): string {
@@ -55,13 +53,13 @@ const EXTERNAL_SITES: CctvCamera[] = [
   { id: 'ext-gyeongju', name: '경주 교통 CCTV', lat: 35.8562, lng: 129.2247, url: 'https://its.gyeongju.go.kr/cctvinfo.do', source: '경주시', type: 'link' },
 ];
 
-/** ITS 전국 CCTV (고속도로 + 국도) */
+/** ITS 전국 CCTV (고속도로 + 국도) — /api/cctv 프록시 경유 */
 async function fetchItsCctv(): Promise<CctvCamera[]> {
   const all: CctvCamera[] = [];
   for (const roadType of ['its', 'ex']) {
     try {
-      // ITS API는 koreasurveillance.com CORS 허용 → 직접 호출 (Vercel 서버리스에서 포트 9443 타임아웃 문제)
-      const url = `https://openapi.its.go.kr:9443/cctvInfo?apiKey=${ITS_KEY}&type=${roadType}&cctvType=4&minX=125&maxX=132&minY=33&maxY=39&getType=json`;
+      // 보안: API 키를 브라우저에 노출하지 않기 위해 서버사이드 프록시 사용
+      const url = `/api/cctv?source=its&type=${roadType}&minX=125&maxX=132&minY=33&maxY=39`;
       const resp = await fetch(url);
       if (!resp.ok) continue;
       const data = await resp.json();
@@ -79,17 +77,16 @@ async function fetchItsCctv(): Promise<CctvCamera[]> {
           type: 'hls',
         });
       }
-    } catch { /* skip */ }
+    } catch (e) { logger.warn('CCTV', `ITS fetch failed for ${roadType}`, { error: (e as Error).message }); }
   }
   return all;
 }
 
-/** 여수시 CCTV */
+/** 여수시 CCTV — /api/cctv 프록시 경유 (로컬/프로덕션 모두) */
 async function fetchYeosuCctv(): Promise<CctvCamera[]> {
   try {
-    const url = IS_PROD
-      ? '/api/cctv?source=yeosu'
-      : `https://apis.data.go.kr/4810000/YsRoadCctv/CCTVInfo?serviceKey=${encodeURIComponent(DATA_GO_KR_KEY)}&pageNo=1&numOfRows=100&type=json`;
+    // 보안: API 키를 브라우저에 노출하지 않기 위해 항상 서버사이드 프록시 사용
+    const url = '/api/cctv?source=yeosu';
     const resp = await fetch(url);
     if (!resp.ok) return [];
     const data = await resp.json();
@@ -140,6 +137,21 @@ export default function useCctvLayer(
     const m = map.current;
     if (!m || !mapLoaded) return;
 
+    // 이 effect 가 추가한 listener 들을 cleanup 시 제거하기 위한 추적 배열
+    const attachedListeners: Array<{
+      type: 'click' | 'mouseenter' | 'mouseleave';
+      layer: string;
+      handler: (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => void;
+    }> = [];
+    const trackOn = (
+      type: 'click' | 'mouseenter' | 'mouseleave',
+      layer: string,
+      handler: (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => void,
+    ): void => {
+      m.on(type, layer, handler);
+      attachedListeners.push({ type, layer, handler });
+    };
+
     const ensureLayers = () => {
       if (layersAddedRef.current) return;
       try {
@@ -167,7 +179,7 @@ export default function useCctvLayer(
         }
 
         // 클릭 → HLS 팝업 또는 새 창 열기
-        m.on('click', 'cctv-dots', (e) => {
+        trackOn('click', 'cctv-dots', (e) => {
           const feature = e.features?.[0];
           if (!feature?.properties?.url) return;
           const props = feature.properties;
@@ -277,34 +289,38 @@ export default function useCctvLayer(
                 video.src = toProxyUrl(safeUrl);
                 video.addEventListener('loadedmetadata', tryPlay);
               } else {
+                // 인라인 onclick 대신 button + addEventListener — URL 의 인용부호로 attr escape 방지
                 if (status) {
                   status.style.pointerEvents = 'auto';
-                  status.innerHTML = `
-                    <button onclick="window.open('${safeUrl}','_blank','noopener')" style="
-                      background:#1a73e8;color:#fff;border:none;border-radius:6px;
-                      padding:8px 16px;font-size:12px;cursor:pointer;font-weight:bold;
-                    ">새 창에서 열기</button>
-                  `;
+                  status.innerHTML = '';
+                  const btn = document.createElement('button');
+                  btn.textContent = '새 창에서 열기';
+                  btn.style.cssText = 'background:#1a73e8;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:12px;cursor:pointer;font-weight:bold;';
+                  btn.addEventListener('click', () => window.open(safeUrl, '_blank', 'noopener'));
+                  status.appendChild(btn);
                 }
               }
             } catch (err) {
               logger.error('CCTV', `HLS init error: ${err}`);
               if (status) {
                 status.style.pointerEvents = 'auto';
-                status.innerHTML = `
-                  <div style="color:#ff6b6b;margin-bottom:8px;">초기화 실패</div>
-                  <button onclick="window.open('${safeUrl}','_blank','noopener')" style="
-                    background:#1a73e8;color:#fff;border:none;border-radius:6px;
-                    padding:8px 16px;font-size:12px;cursor:pointer;font-weight:bold;
-                  ">새 창에서 열기</button>
-                `;
+                status.innerHTML = '';
+                const errMsg = document.createElement('div');
+                errMsg.style.cssText = 'color:#ff6b6b;margin-bottom:8px;';
+                errMsg.textContent = '초기화 실패';
+                status.appendChild(errMsg);
+                const btn = document.createElement('button');
+                btn.textContent = '새 창에서 열기';
+                btn.style.cssText = 'background:#1a73e8;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:12px;cursor:pointer;font-weight:bold;';
+                btn.addEventListener('click', () => window.open(safeUrl, '_blank', 'noopener'));
+                status.appendChild(btn);
               }
             }
           }, 200);
         });
 
-        m.on('mouseenter', 'cctv-dots', () => { m.getCanvas().style.cursor = 'pointer'; });
-        m.on('mouseleave', 'cctv-dots', () => { m.getCanvas().style.cursor = ''; });
+        trackOn('mouseenter', 'cctv-dots', () => { m.getCanvas().style.cursor = 'pointer'; });
+        trackOn('mouseleave', 'cctv-dots', () => { m.getCanvas().style.cursor = ''; });
         layersAddedRef.current = true;
       } catch (err) { logger.error('CCTV', `Layer error: ${err}`); }
     };
@@ -334,5 +350,15 @@ export default function useCctvLayer(
     };
 
     run();
+
+    return () => {
+      // unmount / 의존성 변경 시 추적된 listener 모두 제거
+      for (const { type, layer, handler } of attachedListeners) {
+        try {
+          m.off(type, layer, handler);
+        } catch { /* ignore */ }
+      }
+      attachedListeners.length = 0;
+    };
   }, [map, mapLoaded, showCctv, updateMapSource]);
 }

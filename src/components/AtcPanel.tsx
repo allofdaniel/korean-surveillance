@@ -93,7 +93,7 @@ const RadarViewControls: React.FC<RadarViewControlsProps> = ({
         }
       }}
     >
-      📡 레이더 뷰 ({radarRange}nm)
+      레이더 뷰 ({radarRange}nm)
     </button>
     {atcOnlyMode && (
       <div style={{ marginTop: '8px', padding: '4px 0' }}>

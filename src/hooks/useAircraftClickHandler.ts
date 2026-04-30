@@ -47,26 +47,28 @@ export default function useAircraftClickHandler(
       }
     };
 
+    // 커서 핸들러를 named const 로 hoist — cleanup 시 정확히 같은 reference 로 off 해야 함
+    const setCursorPointer = (): void => {
+      if (map.current) map.current.getCanvas().style.cursor = 'pointer';
+    };
+    const resetCursor = (): void => {
+      if (map.current) map.current.getCanvas().style.cursor = '';
+    };
+
     // 라벨 클릭으로 항공기 선택
-    if (map.current.getLayer('aircraft-labels')) {
+    const hasLabels = map.current.getLayer('aircraft-labels');
+    if (hasLabels) {
       map.current.on('click', 'aircraft-labels', handleAircraftClick as (e: MapMouseEvent) => void);
-      map.current.on('mouseenter', 'aircraft-labels', () => {
-        if (map.current) map.current.getCanvas().style.cursor = 'pointer';
-      });
-      map.current.on('mouseleave', 'aircraft-labels', () => {
-        if (map.current) map.current.getCanvas().style.cursor = '';
-      });
+      map.current.on('mouseenter', 'aircraft-labels', setCursorPointer);
+      map.current.on('mouseleave', 'aircraft-labels', resetCursor);
     }
 
     // 항적 클릭으로도 항공기 선택 가능
-    if (map.current.getLayer('aircraft-trails-3d')) {
+    const hasTrails = map.current.getLayer('aircraft-trails-3d');
+    if (hasTrails) {
       map.current.on('click', 'aircraft-trails-3d', handleAircraftClick as (e: MapMouseEvent) => void);
-      map.current.on('mouseenter', 'aircraft-trails-3d', () => {
-        if (map.current) map.current.getCanvas().style.cursor = 'pointer';
-      });
-      map.current.on('mouseleave', 'aircraft-trails-3d', () => {
-        if (map.current) map.current.getCanvas().style.cursor = '';
-      });
+      map.current.on('mouseenter', 'aircraft-trails-3d', setCursorPointer);
+      map.current.on('mouseleave', 'aircraft-trails-3d', resetCursor);
     }
 
     map.current.on('click', handleMapClick);
@@ -74,8 +76,16 @@ export default function useAircraftClickHandler(
     return () => {
       if (mapInstance) {
         try {
-          mapInstance.off('click', 'aircraft-labels', handleAircraftClick as (e: MapMouseEvent) => void);
-          mapInstance.off('click', 'aircraft-trails-3d', handleAircraftClick as (e: MapMouseEvent) => void);
+          if (hasLabels) {
+            mapInstance.off('click', 'aircraft-labels', handleAircraftClick as (e: MapMouseEvent) => void);
+            mapInstance.off('mouseenter', 'aircraft-labels', setCursorPointer);
+            mapInstance.off('mouseleave', 'aircraft-labels', resetCursor);
+          }
+          if (hasTrails) {
+            mapInstance.off('click', 'aircraft-trails-3d', handleAircraftClick as (e: MapMouseEvent) => void);
+            mapInstance.off('mouseenter', 'aircraft-trails-3d', setCursorPointer);
+            mapInstance.off('mouseleave', 'aircraft-trails-3d', resetCursor);
+          }
           mapInstance.off('click', handleMapClick);
         } catch {
           // Ignore cleanup errors

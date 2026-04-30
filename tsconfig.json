@@ -25,13 +25,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@domain/*": ["src/domain/*"],
-      "@infrastructure/*": ["src/infrastructure/*"],
-      "@presentation/*": ["src/presentation/*"],
       "@config/*": ["src/config/*"],
-      "@utils/*": ["src/utils/*"],
-      "@hooks/*": ["src/presentation/hooks/*"],
-      "@components/*": ["src/presentation/components/*"]
+      "@utils/*": ["src/utils/*"]
     }
   },
   "include": ["src"],

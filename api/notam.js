@@ -1,7 +1,16 @@
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
+import { parseQLineCoords, parseQLine, extractQCode } from './_utils/notamCoords.js';
 
-// Static fallback URL (deployed app's public data)
+// Static fallback URL (deployed app's public data) — last-resort if AIM Korea live fetch fails
 const STATIC_FALLBACK_URL = 'https://tbas.vercel.app/data/notams.json';
+
+// AIM Korea live endpoint (무인증, 한반도 NOTAM 실시간)
+const AIM_KOREA_BASE = 'https://aim.koca.go.kr';
+const AIM_KOREA_INIT = `${AIM_KOREA_BASE}/pib/pibMain.do?type=2&language=ko_KR`;
+const AIM_KOREA_SEARCH = `${AIM_KOREA_BASE}/pib/aisSearch.do`;
+
+// AIM Korea live cache (모듈 레벨, hot 인스턴스 재사용)
+let aimLiveCache = { data: null, fetchedAt: 0, ttlMs: 5 * 60 * 1000 };
 
 // ============================================================
 // Supabase 설정
@@ -15,24 +24,8 @@ const HAS_SUPABASE_BACKEND = Boolean(SUPABASE_URL && SUPABASE_SERVICE_KEY);
 // 유틸리티 함수
 // ============================================================
 
-function parseNotamCoordinates(fullText) {
-  if (!fullText) return null;
-  const qLineMatch = fullText.match(/Q\)\s*\S+\/\S+\/\S+\/\S+\/\S+\/\d{3}\/\d{3}\/(\d{4})([NS])(\d{5})([EW])\d{3}/);
-  if (!qLineMatch) return null;
-
-  const [, latDeg, latDir, lonDeg, lonDir] = qLineMatch;
-  const latDegrees = parseInt(latDeg.substring(0, 2), 10);
-  const latMinutes = parseInt(latDeg.substring(2, 4), 10);
-  let lat = latDegrees + latMinutes / 60;
-  if (latDir === 'S') lat = -lat;
-
-  const lonDegrees = parseInt(lonDeg.substring(0, 3), 10);
-  const lonMinutes = parseInt(lonDeg.substring(3, 5), 10);
-  let lon = lonDegrees + lonMinutes / 60;
-  if (lonDir === 'W') lon = -lon;
-
-  return { lat, lon };
-}
+// 좌표 파서는 _utils/notamCoords.js 에 통합 — alias 로 호환성 유지
+const parseNotamCoordinates = parseQLineCoords;
 
 function isInBounds(lat, lon, bounds, margin = 1) {
   if (bounds == null) return true;
@@ -48,11 +41,16 @@ function isInBounds(lat, lon, bounds, margin = 1) {
 function parseNotamDate(dateStr) {
   if (!dateStr || dateStr.length < 6) return null;
   const year = 2000 + parseInt(dateStr.substring(0, 2), 10);
-  const month = parseInt(dateStr.substring(2, 4), 10) - 1;
+  const month = parseInt(dateStr.substring(2, 4), 10);
   const day = parseInt(dateStr.substring(4, 6), 10);
   const hour = dateStr.length >= 8 ? parseInt(dateStr.substring(6, 8), 10) : 0;
   const minute = dateStr.length >= 10 ? parseInt(dateStr.substring(8, 10), 10) : 0;
-  return new Date(year, month, day, hour, minute);
+  // NOTAM 시간은 UTC (Z 표기). Date.UTC 로 파싱해야 period 필터가 timezone-correct.
+  if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day) ||
+      Number.isNaN(hour) || Number.isNaN(minute)) return null;
+  // Validate ranges before constructing Date — prevents month=0 wrapping to Dec of prior year.
+  if (month < 1 || month > 12 || day < 1 || day > 31 || hour > 23 || minute > 59) return null;
+  return new Date(Date.UTC(year, month - 1, day, hour, minute));
 }
 
 function extractNotamDates(fullText) {
@@ -205,6 +203,140 @@ function flattenAimData(aimData) {
   return items;
 }
 
+/**
+ * AIM Korea (aim.koca.go.kr) 무인증 라이브 NOTAM 패치
+ * 1. /pib/pibMain.do 로 세션 쿠키 획득
+ * 2. /pib/aisSearch.do POST 로 NOTAM 검색
+ * 3. 응답을 프로젝트 표준 포맷으로 변환
+ */
+async function fetchAimKoreaLive() {
+  // Cache hit
+  const now = Date.now();
+  if (aimLiveCache.data && (now - aimLiveCache.fetchedAt) < aimLiveCache.ttlMs) {
+    return { data: aimLiveCache.data, cached: true };
+  }
+
+  try {
+    // Step 1: init session, capture cookie
+    const initRes = await fetch(AIM_KOREA_INIT, {
+      method: 'GET',
+      headers: { 'User-Agent': 'KoreanSurveillance/1.0 NOTAM-bot' }
+    });
+    const setCookie = initRes.headers.get('set-cookie') || '';
+    const jsessionMatch = setCookie.match(/JSESSIONID=([^;]+)/);
+    if (!jsessionMatch) {
+      console.warn('[NOTAM/AIM] no JSESSIONID in init response');
+      return { data: null, error: 'no_session_cookie' };
+    }
+    const jsessionId = jsessionMatch[1];
+
+    // Step 2: search (today + 7 days range to capture current + upcoming)
+    const today = new Date();
+    const future = new Date(today.getTime() + 7 * 86400_000);
+    const fmt = (d) => d.toISOString().substring(0, 10);
+
+    const params = new URLSearchParams({
+      validity_from: fmt(today),
+      validity_to: fmt(future),
+      ais_type: 'NOTAM',
+      traffic: 'I',
+      fir: 'RKRR',
+    });
+
+    const searchRes = await fetch(AIM_KOREA_SEARCH, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Cookie': `JSESSIONID=${jsessionId}`,
+        'Referer': AIM_KOREA_INIT,
+        'User-Agent': 'KoreanSurveillance/1.0 NOTAM-bot',
+      },
+      body: params.toString(),
+    });
+
+    if (!searchRes.ok) {
+      console.warn('[NOTAM/AIM] search HTTP', searchRes.status);
+      return { data: null, error: `http_${searchRes.status}` };
+    }
+
+    const json = await searchRes.json();
+    const records = Array.isArray(json?.DATA) ? json.DATA : [];
+
+    // Step 3: transform to project format
+    const transformed = records.map((r) => transformAimRecord(r)).filter(Boolean);
+
+    // Update cache
+    aimLiveCache = { data: transformed, fetchedAt: now, ttlMs: aimLiveCache.ttlMs };
+    return { data: transformed, cached: false, raw_count: records.length };
+  } catch (e) {
+    console.warn('[NOTAM/AIM] fetch failed:', e.message);
+    return { data: null, error: e.message };
+  }
+}
+
+/**
+ * AIM Korea 레코드 → 프로젝트 표준 포맷
+ */
+function transformAimRecord(r) {
+  if (!r || !r.LOCATION || !r.NOTAM_NO) return null;
+
+  // ECODE / FULL_TEXT 안의 \r\n 정리는 그대로 둠 (parser 가 처리)
+  const fullText = (r.FULL_TEXT || '').trim();
+  const eText = (r.ECODE || '').trim();
+
+  // 좌표 / 반경 추출 (Q-line) — 공유 유틸 사용
+  const q = parseQLine(fullText);
+  const q_lat = q ? q.lat : null;
+  const q_lon = q ? q.lon : null;
+  const q_radius = q ? q.radius : null;
+
+  // 시작/종료 일시 ISO 변환
+  const cleanStart = (r.EFFECTIVE_START || '').replace(/\r?\n/g, '').trim();
+  const cleanEnd = (r.EFFECTIVE_END || '').replace(/\r?\n/g, '').trim();
+  const startISO = yymmddhhmmToISO(cleanStart);
+  const endISO = cleanEnd === 'PERM' ? 'PERM' : yymmddhhmmToISO(cleanEnd);
+
+  // qcode 추출
+  const qcode = extractQCode(fullText);
+  // series (NOTAM 번호의 접두 문자)
+  const seriesMatch = (r.NOTAM_NO || '').match(/^([A-Z])/);
+  const series = seriesMatch ? seriesMatch[1] : 'A';
+
+  return {
+    notam_number: r.NOTAM_NO,
+    notam_id: r.NOTAM_NO,
+    location: r.LOCATION,
+    full_text: fullText,
+    e_text: eText,
+    qcode,
+    qcode_mean: r.QCODE_DESC || '',
+    effective_start: startISO || cleanStart,
+    effective_end: endISO || cleanEnd,
+    series,
+    fir: r.FIR || 'RKRR',
+    q_lat,
+    q_lon,
+    q_radius,
+    crawled_at: new Date().toISOString(),
+  };
+}
+
+function yymmddhhmmToISO(s) {
+  if (!s || s.length < 10) return null;
+  if (!/^\d{10}/.test(s)) return null;
+  const yy = parseInt(s.substring(0, 2), 10);
+  const mm = parseInt(s.substring(2, 4), 10);
+  const dd = parseInt(s.substring(4, 6), 10);
+  const hh = parseInt(s.substring(6, 8), 10);
+  const mn = parseInt(s.substring(8, 10), 10);
+  const yyyy = yy >= 50 ? 1900 + yy : 2000 + yy;
+  if (mm < 1 || mm > 12 || dd < 1 || dd > 31) return null;
+  const d = new Date(Date.UTC(yyyy, mm - 1, dd, hh, mn));
+  if (isNaN(d.getTime())) return null;
+  return d.toISOString();
+}
+
 async function fetchStaticFallback() {
   try {
     const fallbackResponse = await fetch(STATIC_FALLBACK_URL);
@@ -246,13 +378,44 @@ async function fetchFromStorage(params) {
   const { period, bounds } = params;
 
   if (!SUPABASE_PUBLIC) {
-    console.warn('Supabase storage URL is not configured, using static fallback');
+    // 우선순위 1: AIM Korea 라이브 (무인증, 5분 캐시)
+    const aimLive = await fetchAimKoreaLive();
+    if (aimLive.data && aimLive.data.length > 0) {
+      let filtered = aimLive.data;
+      // 영역 필터
+      if (bounds) {
+        filtered = filtered.filter(notam => {
+          const coords = parseNotamCoordinates(notam.full_text);
+          if (!coords) return false;
+          return isInBounds(coords.lat, coords.lon, bounds);
+        });
+      }
+      return {
+        data: filtered,
+        count: filtered.length,
+        afterPeriodFilter: filtered.length,
+        source: aimLive.cached ? 'aim-korea-cached' : 'aim-korea-live',
+        file: 'aim.koca.go.kr',
+        crawled_at: new Date(aimLive.cached ? aimLiveCache.fetchedAt : Date.now()).toISOString(),
+      };
+    }
+
+    // 우선순위 2: tbas.vercel.app 정적 fallback (AIM 실패 시)
+    console.warn('AIM Korea live failed, falling back to static:', aimLive.error);
     const staticFallback = await fetchStaticFallback();
     if (staticFallback) {
+      let filtered = staticFallback;
+      if (bounds) {
+        filtered = filtered.filter(notam => {
+          const coords = parseNotamCoordinates(notam.full_text);
+          if (!coords) return false;
+          return isInBounds(coords.lat, coords.lon, bounds);
+        });
+      }
       return {
-        data: staticFallback,
-        count: staticFallback.length,
-        afterPeriodFilter: staticFallback.length,
+        data: filtered,
+        count: filtered.length,
+        afterPeriodFilter: filtered.length,
         source: 'static-fallback',
         file: 'http-fallback',
         crawled_at: null,
@@ -372,16 +535,47 @@ export default async function handler(req, res) {
 
   try {
     const url = new URL(req.url, `http://${req.headers.host}`);
-    const limit = parseInt(url.searchParams.get('limit')) || 0;
-    const period = url.searchParams.get('period') || 'all';
+
+    // limit 검증 — DoS 방지를 위해 상한 10000
+    const MAX_LIMIT = 10000;
+    const rawLimit = parseInt(url.searchParams.get('limit'), 10);
+    const limit = Number.isFinite(rawLimit) && rawLimit > 0
+      ? Math.min(rawLimit, MAX_LIMIT)
+      : 0;
+
+    // period whitelist 검증
+    const VALID_PERIODS = new Set(['current', '1month', '1year', 'all']);
+    const rawPeriod = url.searchParams.get('period') || 'all';
+    if (!VALID_PERIODS.has(rawPeriod)) {
+      return res.status(400).json({
+        error: 'Invalid period parameter',
+        valid: Array.from(VALID_PERIODS),
+        data: [],
+      });
+    }
+    const period = rawPeriod;
 
     const boundsParam = url.searchParams.get('bounds');
     let bounds = null;
     if (boundsParam) {
       const [south, west, north, east] = boundsParam.split(',').map(Number);
-      if (!isNaN(south) && !isNaN(west) && !isNaN(north) && !isNaN(east)) {
-        bounds = { south, west, north, east };
+      if ([south, west, north, east].some(v => !Number.isFinite(v))) {
+        return res.status(400).json({ error: 'Invalid bounds parameter', data: [] });
       }
+      // bounds 일관성 검증 — south < north, west < east
+      if (south >= north || west >= east) {
+        return res.status(400).json({
+          error: 'Invalid bounds: south must be < north, west < east',
+          data: [],
+        });
+      }
+      const clamped = {
+        south: Math.max(-90, Math.min(90, south)),
+        north: Math.max(-90, Math.min(90, north)),
+        west: Math.max(-180, Math.min(180, west)),
+        east: Math.max(-180, Math.min(180, east)),
+      };
+      bounds = clamped;
     }
 
     const params = { limit, period, bounds };
@@ -422,10 +616,13 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('NOTAM fetch error:', error.message);
+    // 에러 details 는 로컬 dev 에서만 노출.
+    // Vercel preview 도 NODE_ENV !== 'production' 이라 leak 가능했음 — VERCEL_ENV 까지 체크.
+    const isLocalDev = process.env.NODE_ENV === 'development' && !process.env.VERCEL_ENV;
     res.status(500).json({
       error: 'NOTAM service temporarily unavailable',
       code: 'NOTAM_ERROR',
-      ...(process.env.NODE_ENV === 'development' && { details: error.message }),
+      ...(isLocalDev && { details: error.message }),
     });
   }
 }

@@ -188,3 +188,13 @@ export const getProcedureColor = (type: string, index: number): string => {
   const hue = (baseHue[type] || 0) + (index * 30) % 60;
   return `hsl(${hue}, 70%, 50%)`;
 };
+
+/**
+ * 항공기 라벨 색상 (접근성: 흰색으로 변경)
+ */
+export const AIRCRAFT_LABEL_COLOR = '#FFFFFF';
+
+/**
+ * 선택된 항공기 라벨 색상
+ */
+export const AIRCRAFT_LABEL_SELECTED_COLOR = '#FFEB3B';

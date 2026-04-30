@@ -3,7 +3,7 @@
  * OpenSky-style proxy for vessel position data
  * Uses barentswatch.no (free, no key) or Marine Traffic AIS
  */
-import { setCorsHeaders } from './_utils/cors.js';
+import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 
 // 한반도 주변 선박 위치를 제공하는 무료 소스들
 const AIS_SOURCES = {
@@ -31,6 +31,7 @@ const AIS_SOURCES = {
 
 export default async function handler(req, res) {
   if (setCorsHeaders(req, res)) return;
+  if (await checkRateLimit(req, res)) return;
 
   const dataGoKrKey = process.env.VITE_DATA_GO_KR_API_KEY;
 
@@ -41,10 +42,10 @@ export default async function handler(req, res) {
       ships,
     });
   } catch (err) {
-    const isDev = process.env.NODE_ENV === 'development';
+    const isLocalDev = process.env.NODE_ENV === 'development' && !process.env.VERCEL_ENV;
     return res.status(500).json({
       error: 'Internal server error',
-      ...(isDev && { details: err.message }),
+      ...(isLocalDev && { details: err.message }),
     });
   }
 }

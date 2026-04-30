@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type RefObject, type MutableRefObject } from 'react';
 import mapboxgl, { Map as MapboxMap } from 'mapbox-gl';
 import { MAP_STYLES, TRAIL_COLOR, MAPBOX_ACCESS_TOKEN } from '../constants/config';
+import { logger } from '../utils/logger';
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
@@ -138,7 +139,7 @@ export default function useMapInit(
           }
         });
         window.dispatchEvent(customEvent);
-        console.info('[MAP] Context menu event dispatched:', { lat: lngLat.lat, lon: lngLat.lng });
+        logger.debug('Map', 'Context menu event dispatched', { lat: lngLat.lat, lon: lngLat.lng });
       });
 
       setMapLoaded(true);

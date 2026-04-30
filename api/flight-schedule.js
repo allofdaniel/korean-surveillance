@@ -1,6 +1,4 @@
-﻿/* global AbortController */
-
-// Vercel Serverless Function - aviationstack API (Mixed Content fix applied)
+﻿// Vercel Serverless Function - aviationstack API (Mixed Content fix applied)
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 
 const API_TIMEOUT_MS = 8000;

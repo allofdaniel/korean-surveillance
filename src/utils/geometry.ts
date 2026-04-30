@@ -81,7 +81,8 @@ export const createCirclePolygon = (
     const angle = (i / numPoints) * 2 * Math.PI;
     const dx = radiusMeters * Math.cos(angle);
     const dy = radiusMeters * Math.sin(angle);
-    const newLon = lon + (dx / 111320) / Math.cos(lat * Math.PI / 180);
+    const cosLat = Math.max(0.01, Math.cos(lat * Math.PI / 180));
+    const newLon = lon + (dx / 111320) / cosLat;
     const newLat = lat + (dy / 110540);
     coords.push([newLon, newLat]);
   }

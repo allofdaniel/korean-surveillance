@@ -8,7 +8,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/__tests__/setup.ts'],
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    include: [
+      'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      'api/**/*.{test,spec}.{js,ts,mjs,cjs}',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -30,13 +33,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@domain': path.resolve(__dirname, './src/domain'),
-      '@infrastructure': path.resolve(__dirname, './src/infrastructure'),
-      '@presentation': path.resolve(__dirname, './src/presentation'),
       '@config': path.resolve(__dirname, './src/config'),
       '@utils': path.resolve(__dirname, './src/utils'),
-      '@hooks': path.resolve(__dirname, './src/presentation/hooks'),
-      '@components': path.resolve(__dirname, './src/presentation/components'),
     },
   },
 });

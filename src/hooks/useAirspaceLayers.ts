@@ -8,6 +8,7 @@ import { useEffect, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
 import { createObstacleShape } from '../utils/geometry';
 import { OBSTACLE_COLORS } from '../utils/colors';
+import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
 
 interface Waypoint {
   lat: number;
@@ -100,16 +101,11 @@ const useAirspaceLayers = (
     if (!map.current || !data || !mapLoaded) return;
     if (!map.current.isStyleLoaded()) return;
 
-    const safeRemoveLayer = (id: string): void => {
-      try { if (map.current?.getLayer(id)) map.current.removeLayer(id); } catch { /* ignore */ }
-    };
-    const safeRemoveSource = (id: string): void => {
-      try { if (map.current?.getSource(id)) map.current.removeSource(id); } catch { /* ignore */ }
-    };
-
     // Clean up previous layers
-    ['waypoints-2d', 'waypoints-labels', 'obstacles-3d', 'obstacles-2d', 'airspace', 'airspace-outline'].forEach(safeRemoveLayer);
-    ['waypoints-2d', 'obstacles-3d', 'obstacles-2d', 'airspace'].forEach(safeRemoveSource);
+    ['waypoints-2d', 'waypoints-labels', 'obstacles-3d', 'obstacles-2d', 'airspace', 'airspace-outline']
+      .forEach(id => safeRemoveLayer(map.current, id));
+    ['waypoints-2d', 'obstacles-3d', 'obstacles-2d', 'airspace']
+      .forEach(id => safeRemoveSource(map.current, id));
 
     // Airspace
     if (showAirspace && data.airspace) {

@@ -17,6 +17,7 @@ import {
   extractAirlineCode,
   parseMetarTime,
   parseNotamDateString,
+  isoToYymmddhhmm,
   formatRelativeTime,
   formatCacheAge
 } from '@utils/format';
@@ -203,6 +204,41 @@ describe('Format Utilities', () => {
 
     it('should return null for invalid hour', () => {
       expect(parseNotamDateString('2402082530')).toBeNull();
+    });
+  });
+
+  describe('isoToYymmddhhmm — ISO/YYMMDDHHMM 정규화', () => {
+    it('ISO 8601 → YYMMDDHHMM', () => {
+      expect(isoToYymmddhhmm('2026-04-15T04:30:00Z')).toBe('2604150430');
+    });
+
+    it('ISO 8601 with timezone offset → UTC YYMMDDHHMM', () => {
+      // 2026-04-15T13:30:00+09:00 == 2026-04-15T04:30:00Z
+      expect(isoToYymmddhhmm('2026-04-15T13:30:00+09:00')).toBe('2604150430');
+    });
+
+    it('이미 YYMMDDHHMM 형식이면 그대로 반환', () => {
+      expect(isoToYymmddhhmm('2604150430')).toBe('2604150430');
+    });
+
+    it('PERM 보존 (대소문자 무관)', () => {
+      expect(isoToYymmddhhmm('PERM')).toBe('PERM');
+      expect(isoToYymmddhhmm('perm')).toBe('PERM');
+    });
+
+    it('빈 문자열/null/undefined → 빈 문자열', () => {
+      expect(isoToYymmddhhmm('')).toBe('');
+      expect(isoToYymmddhhmm(null)).toBe('');
+      expect(isoToYymmddhhmm(undefined)).toBe('');
+    });
+
+    it('잘못된 입력 → 빈 문자열', () => {
+      expect(isoToYymmddhhmm('not-a-date')).toBe('');
+      expect(isoToYymmddhhmm('2026-13-45')).toBe(''); // invalid date
+    });
+
+    it('millisecond + timezone 조합', () => {
+      expect(isoToYymmddhhmm('2026-04-15T04:30:00.500Z')).toBe('2604150430');
     });
   });
 

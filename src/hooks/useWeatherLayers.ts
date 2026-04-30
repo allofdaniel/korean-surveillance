@@ -3,6 +3,7 @@
 
 import { useEffect, useState, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
+import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
 import type { MetarData } from '../utils/weather';
 import type { AviationData } from './useDataLoading';
 
@@ -121,12 +122,8 @@ export default function useWeatherLayers(
     const layerId = 'wind-threads-layer';
     const glowLayerId = 'wind-threads-glow-layer';
 
-    [layerId, glowLayerId].forEach(id => {
-      try { if (map.current?.getLayer(id)) map.current.removeLayer(id); } catch { /* ignore */ }
-    });
-    [sourceId, glowSourceId].forEach(id => {
-      try { if (map.current?.getSource(id)) map.current.removeSource(id); } catch { /* ignore */ }
-    });
+    [layerId, glowLayerId].forEach(id => safeRemoveLayer(map.current, id));
+    [sourceId, glowSourceId].forEach(id => safeRemoveSource(map.current, id));
 
     map.current.addSource(sourceId, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
     map.current.addSource(glowSourceId, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
@@ -250,12 +247,8 @@ export default function useWeatherLayers(
 
     return () => {
       cancelAnimationFrame(animFrame);
-      [layerId, glowLayerId].forEach(id => {
-        try { if (map.current?.getLayer(id)) map.current.removeLayer(id); } catch { /* ignore */ }
-      });
-      [sourceId, glowSourceId].forEach(id => {
-        try { if (map.current?.getSource(id)) map.current.removeSource(id); } catch { /* ignore */ }
-      });
+      [layerId, glowLayerId].forEach(id => safeRemoveLayer(map.current, id));
+      [sourceId, glowSourceId].forEach(id => safeRemoveSource(map.current, id));
     };
   }, [weatherData?.metar?.wdir, weatherData?.metar?.wspd, mapLoaded, data?.airport, map]);
 
@@ -269,10 +262,8 @@ export default function useWeatherLayers(
     const glowLayerId = 'lightning-glow-layer';
 
     // Remove existing
-    [layerId, glowLayerId].forEach(id => {
-      try { if (map.current?.getLayer(id)) map.current.removeLayer(id); } catch { /* ignore */ }
-    });
-    try { if (map.current?.getSource(sourceId)) map.current.removeSource(sourceId); } catch { /* ignore */ }
+    [layerId, glowLayerId].forEach(id => safeRemoveLayer(map.current, id));
+    safeRemoveSource(map.current, sourceId);
 
     if (!showLightning || !lightningData?.strikes?.length) return;
 
@@ -315,10 +306,8 @@ export default function useWeatherLayers(
     });
 
     return () => {
-      [layerId, glowLayerId].forEach(id => {
-        try { if (map.current?.getLayer(id)) map.current.removeLayer(id); } catch { /* ignore */ }
-      });
-      try { if (map.current?.getSource(sourceId)) map.current.removeSource(sourceId); } catch { /* ignore */ }
+      [layerId, glowLayerId].forEach(id => safeRemoveLayer(map.current, id));
+      safeRemoveSource(map.current, sourceId);
     };
   }, [showLightning, lightningData, mapLoaded, map]);
 
@@ -332,10 +321,8 @@ export default function useWeatherLayers(
     const outlineLayerId = 'sigmet-outline-layer';
     const labelLayerId = 'sigmet-label-layer';
 
-    [layerId, outlineLayerId, labelLayerId].forEach(id => {
-      try { if (map.current?.getLayer(id)) map.current.removeLayer(id); } catch { /* ignore */ }
-    });
-    try { if (map.current?.getSource(sourceId)) map.current.removeSource(sourceId); } catch { /* ignore */ }
+    [layerId, outlineLayerId, labelLayerId].forEach(id => safeRemoveLayer(map.current, id));
+    safeRemoveSource(map.current, sourceId);
 
     if (!showSigmet || !sigmetData) return;
 
@@ -396,10 +383,8 @@ export default function useWeatherLayers(
     });
 
     return () => {
-      [layerId, outlineLayerId, labelLayerId].forEach(id => {
-        try { if (map.current?.getLayer(id)) map.current.removeLayer(id); } catch { /* ignore */ }
-      });
-      try { if (map.current?.getSource(sourceId)) map.current.removeSource(sourceId); } catch { /* ignore */ }
+      [layerId, outlineLayerId, labelLayerId].forEach(id => safeRemoveLayer(map.current, id));
+      safeRemoveSource(map.current, sourceId);
     };
   }, [showSigmet, sigmetData, mapLoaded, map]);
 
@@ -448,8 +433,8 @@ export default function useWeatherLayers(
     const sourceId = 'radar-overlay';
     const layerId = 'radar-layer';
 
-    try { if (map.current?.getLayer(layerId)) map.current.removeLayer(layerId); } catch { /* ignore */ }
-    try { if (map.current?.getSource(sourceId)) map.current.removeSource(sourceId); } catch { /* ignore */ }
+    safeRemoveLayer(map.current, layerId);
+    safeRemoveSource(map.current, sourceId);
 
     if (!showRadar || !radarTimestamp) return;
 
@@ -476,8 +461,8 @@ export default function useWeatherLayers(
     }, beforeLayer);
 
     return () => {
-      try { if (map.current?.getLayer(layerId)) map.current.removeLayer(layerId); } catch { /* ignore */ }
-      try { if (map.current?.getSource(sourceId)) map.current.removeSource(sourceId); } catch { /* ignore */ }
+      safeRemoveLayer(map.current, layerId);
+      safeRemoveSource(map.current, sourceId);
     };
   }, [showRadar, radarTimestamp, mapLoaded, map]);
 }

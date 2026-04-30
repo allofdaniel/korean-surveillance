@@ -237,24 +237,26 @@ export const AIRPORT_DATABASE: Record<string, AirportInfo> = {
 };
 
 // 국가 코드별 정보
+// flag 필드는 빈 문자열로 통일 — 국가 flag 이모지는 OS/플랫폼별 렌더링 불일치가 심함.
+// countryName + country code (KR/JP 등) 조합으로 시각 식별 충분.
 export const COUNTRY_INFO: Record<string, CountryInfo> = {
-  KR: { name: '대한민국', flag: '🇰🇷', prefix: 'RK' },
-  KP: { name: '북한', flag: '🇰🇵', prefix: 'ZK' },
-  JP: { name: '일본', flag: '🇯🇵', prefix: 'RJ/RO' },
-  CN: { name: '중국', flag: '🇨🇳', prefix: 'Z' },
-  TW: { name: '대만', flag: '🇹🇼', prefix: 'RC' },
-  HK: { name: '홍콩', flag: '🇭🇰', prefix: 'VH' },
-  MO: { name: '마카오', flag: '🇲🇴', prefix: 'VM' },
-  VN: { name: '베트남', flag: '🇻🇳', prefix: 'VV' },
-  TH: { name: '태국', flag: '🇹🇭', prefix: 'VT' },
-  SG: { name: '싱가포르', flag: '🇸🇬', prefix: 'WS' },
-  MY: { name: '말레이시아', flag: '🇲🇾', prefix: 'WM' },
-  PH: { name: '필리핀', flag: '🇵🇭', prefix: 'RP' },
-  ID: { name: '인도네시아', flag: '🇮🇩', prefix: 'WI/WA' },
-  US: { name: '미국', flag: '🇺🇸', prefix: 'K/P' },
-  GB: { name: '영국', flag: '🇬🇧', prefix: 'EG' },
-  FR: { name: '프랑스', flag: '🇫🇷', prefix: 'LF' },
-  DE: { name: '독일', flag: '🇩🇪', prefix: 'ED' },
+  KR: { name: '대한민국', flag: '', prefix: 'RK' },
+  KP: { name: '북한', flag: '', prefix: 'ZK' },
+  JP: { name: '일본', flag: '', prefix: 'RJ/RO' },
+  CN: { name: '중국', flag: '', prefix: 'Z' },
+  TW: { name: '대만', flag: '', prefix: 'RC' },
+  HK: { name: '홍콩', flag: '', prefix: 'VH' },
+  MO: { name: '마카오', flag: '', prefix: 'VM' },
+  VN: { name: '베트남', flag: '', prefix: 'VV' },
+  TH: { name: '태국', flag: '', prefix: 'VT' },
+  SG: { name: '싱가포르', flag: '', prefix: 'WS' },
+  MY: { name: '말레이시아', flag: '', prefix: 'WM' },
+  PH: { name: '필리핀', flag: '', prefix: 'RP' },
+  ID: { name: '인도네시아', flag: '', prefix: 'WI/WA' },
+  US: { name: '미국', flag: '', prefix: 'K/P' },
+  GB: { name: '영국', flag: '', prefix: 'EG' },
+  FR: { name: '프랑스', flag: '', prefix: 'LF' },
+  DE: { name: '독일', flag: '', prefix: 'ED' },
 };
 
 // 공항 타입별 한글명

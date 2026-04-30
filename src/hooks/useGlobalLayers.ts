@@ -9,6 +9,8 @@ import { useEffect, useRef } from 'react';
 import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
 import type { MutableRefObject } from 'react';
 import type { GlobalDataState } from './useGlobalData';
+import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
+import { escapeHtml } from '../utils/sanitize';
 
 // All layer/source IDs managed by this hook
 const ALL_LAYERS = [
@@ -75,12 +77,9 @@ const useGlobalLayers = (
     if (!map.current.isStyleLoaded()) return;
     const m = map.current;
 
-    const safeRemoveLayer = (id: string) => { try { if (m.getLayer(id)) m.removeLayer(id); } catch { /* */ } };
-    const safeRemoveSource = (id: string) => { try { if (m.getSource(id)) m.removeSource(id); } catch { /* */ } };
-
     // Clean all
-    ALL_LAYERS.forEach(safeRemoveLayer);
-    ALL_SOURCES.forEach(safeRemoveSource);
+    ALL_LAYERS.forEach(id => safeRemoveLayer(m, id));
+    ALL_SOURCES.forEach(id => safeRemoveSource(m, id));
 
     // ---- Airports ----
     if (showAirports && globalData.airports) {
@@ -435,6 +434,8 @@ const useGlobalLayers = (
         paint: { 'text-color': '#00CED1', 'text-halo-color': 'rgba(0,0,0,0.8)', 'text-halo-width': 1.5 }
       });
     }
+    // isDayMode 는 의도적으로 deps 에서 제외 — toggle 시 별도 effect 가 paint 만 갱신
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     map, mapLoaded, globalData,
     showAirports, showNavaids, showHeliports, showWaypoints,
@@ -467,16 +468,22 @@ const useGlobalLayers = (
       }
     };
 
+    // 모든 popup HTML 에서 외부 JSON 데이터는 escapeHtml() 처리 — XSS 방어
+    // p.color 등 controlled CSS 색상 값은 hex 패턴 검증 후 사용 (그렇지 않으면 fallback)
+    const safeColor = (c: unknown, fallback: string): string =>
+      typeof c === 'string' && /^#[0-9A-Fa-f]{3,8}$/.test(c) ? c : fallback;
+    const e = escapeHtml;
+
     // Airport click
-    const onApt: LayerMouseEvent = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
-      const p = e.features?.[0]?.properties; if (!p) return;
-      showPopup(e.lngLat, `<div style="${PS}"><div style="${PH('#4FC3F7')}">${p.icao}${p.iata ? ' / ' + p.iata : ''}</div>
-        <div style="${PR}"><span style="${PL}">Name</span><span style="${PV}">${p.name}</span></div>
-        ${p.city ? `<div style="${PR}"><span style="${PL}">City</span><span style="${PV}">${p.city}</span></div>` : ''}
-        ${p.country ? `<div style="${PR}"><span style="${PL}">Country</span><span style="${PV}">${p.country}</span></div>` : ''}
-        <div style="${PR}"><span style="${PL}">Elev</span><span style="${PV}">${p.elev} ft</span></div>
+    const onApt: LayerMouseEvent = (ev: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
+      const p = ev.features?.[0]?.properties; if (!p) return;
+      showPopup(ev.lngLat, `<div style="${PS}"><div style="${PH('#4FC3F7')}">${e(p.icao as string)}${p.iata ? ' / ' + e(p.iata as string) : ''}</div>
+        <div style="${PR}"><span style="${PL}">Name</span><span style="${PV}">${e(p.name as string)}</span></div>
+        ${p.city ? `<div style="${PR}"><span style="${PL}">City</span><span style="${PV}">${e(p.city as string)}</span></div>` : ''}
+        ${p.country ? `<div style="${PR}"><span style="${PL}">Country</span><span style="${PV}">${e(p.country as string)}</span></div>` : ''}
+        <div style="${PR}"><span style="${PL}">Elev</span><span style="${PV}">${e(String(p.elev ?? '-'))} ft</span></div>
         <div style="${PR}"><span style="${PL}">IFR</span><span style="${PV}">${p.ifr === true || p.ifr === 'true' ? 'Yes' : 'No'}</span></div>
-        <div style="${PR}"><span style="${PL}">Coord</span><span style="${PV}">${formatCoord(Number(p.lat), Number(p.lon))}</span></div>
+        <div style="${PR}"><span style="${PL}">Coord</span><span style="${PV}">${e(formatCoord(Number(p.lat), Number(p.lon)))}</span></div>
       </div>`);
     };
     on('global-airports', 'click', onApt); on('global-airport-labels', 'click', onApt);
@@ -484,13 +491,13 @@ const useGlobalLayers = (
     on('global-airports', 'mouseleave', () => resetCursor());
 
     // Navaid click
-    const onNav: LayerMouseEvent = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
-      const p = e.features?.[0]?.properties; if (!p) return;
+    const onNav: LayerMouseEvent = (ev: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
+      const p = ev.features?.[0]?.properties; if (!p) return;
       const tc = p.cat === 'ndb' || p.cat === 'terminal_ndb' ? '#FFA500' : '#FF69B4';
-      showPopup(e.lngLat, `<div style="${PS}"><div style="${PH(tc)}">${p.type} ${p.ident}</div>
-        <div style="${PR}"><span style="${PL}">Name</span><span style="${PV}">${p.name}</span></div>
-        ${p.freq ? `<div style="${PR}"><span style="${PL}">Freq</span><span style="${PV}">${p.freq} MHz</span></div>` : ''}
-        <div style="${PR}"><span style="${PL}">Coord</span><span style="${PV}">${formatCoord(Number(p.lat), Number(p.lon))}</span></div>
+      showPopup(ev.lngLat, `<div style="${PS}"><div style="${PH(tc)}">${e(p.type as string)} ${e(p.ident as string)}</div>
+        <div style="${PR}"><span style="${PL}">Name</span><span style="${PV}">${e(p.name as string)}</span></div>
+        ${p.freq ? `<div style="${PR}"><span style="${PL}">Freq</span><span style="${PV}">${e(String(p.freq))} MHz</span></div>` : ''}
+        <div style="${PR}"><span style="${PL}">Coord</span><span style="${PV}">${e(formatCoord(Number(p.lat), Number(p.lon)))}</span></div>
       </div>`);
     };
     on('global-navaids', 'click', onNav); on('global-navaid-labels', 'click', onNav);
@@ -498,13 +505,13 @@ const useGlobalLayers = (
     on('global-navaids', 'mouseleave', () => resetCursor());
 
     // Heliport click
-    const onHeli: LayerMouseEvent = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
-      const p = e.features?.[0]?.properties; if (!p) return;
-      showPopup(e.lngLat, `<div style="${PS}"><div style="${PH('#7B68EE')}">${p.icao}</div>
-        <div style="${PR}"><span style="${PL}">Name</span><span style="${PV}">${p.name}</span></div>
-        ${p.city ? `<div style="${PR}"><span style="${PL}">City</span><span style="${PV}">${p.city}</span></div>` : ''}
-        <div style="${PR}"><span style="${PL}">Elev</span><span style="${PV}">${p.elev} ft</span></div>
-        <div style="${PR}"><span style="${PL}">Coord</span><span style="${PV}">${formatCoord(Number(p.lat), Number(p.lon))}</span></div>
+    const onHeli: LayerMouseEvent = (ev: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
+      const p = ev.features?.[0]?.properties; if (!p) return;
+      showPopup(ev.lngLat, `<div style="${PS}"><div style="${PH('#7B68EE')}">${e(p.icao as string)}</div>
+        <div style="${PR}"><span style="${PL}">Name</span><span style="${PV}">${e(p.name as string)}</span></div>
+        ${p.city ? `<div style="${PR}"><span style="${PL}">City</span><span style="${PV}">${e(p.city as string)}</span></div>` : ''}
+        <div style="${PR}"><span style="${PL}">Elev</span><span style="${PV}">${e(String(p.elev ?? '-'))} ft</span></div>
+        <div style="${PR}"><span style="${PL}">Coord</span><span style="${PV}">${e(formatCoord(Number(p.lat), Number(p.lon)))}</span></div>
       </div>`);
     };
     on('global-heliports', 'click', onHeli); on('global-heliport-labels', 'click', onHeli);
@@ -512,11 +519,11 @@ const useGlobalLayers = (
     on('global-heliports', 'mouseleave', () => resetCursor());
 
     // Airway click
-    const onAwy: LayerMouseEvent = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
-      const p = e.features?.[0]?.properties; if (!p) return;
-      showPopup(e.lngLat, `<div style="${PS}"><div style="${PH(p.color || '#FFD700')}">AWY ${p.name}</div>
-        <div style="${PR}"><span style="${PL}">Type</span><span style="${PV}">${p.type}</span></div>
-        <div style="${PR}"><span style="${PL}">Fixes</span><span style="${PV}">${p.pointCount}</span></div>
+    const onAwy: LayerMouseEvent = (ev: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
+      const p = ev.features?.[0]?.properties; if (!p) return;
+      showPopup(ev.lngLat, `<div style="${PS}"><div style="${PH(safeColor(p.color, '#FFD700'))}">AWY ${e(p.name as string)}</div>
+        <div style="${PR}"><span style="${PL}">Type</span><span style="${PV}">${e(p.type as string)}</span></div>
+        <div style="${PR}"><span style="${PL}">Fixes</span><span style="${PV}">${e(String(p.pointCount ?? '-'))}</span></div>
       </div>`);
     };
     on('global-airways', 'click', onAwy); on('global-airway-labels', 'click', onAwy);
@@ -524,11 +531,11 @@ const useGlobalLayers = (
     on('global-airways', 'mouseleave', () => resetCursor());
 
     // Controlled airspace click
-    const onCtrl: LayerMouseEvent = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
-      const p = e.features?.[0]?.properties; if (!p) return;
-      showPopup(e.lngLat, `<div style="${PS}"><div style="${PH('#4169E1')}">${p.name || 'Controlled'}</div>
-        ${p.class ? `<div style="${PR}"><span style="${PL}">Class</span><span style="${PV}">${p.class}</span></div>` : ''}
-        <div style="${PR}"><span style="${PL}">Alt</span><span style="${PV}">${p.lower || 'GND'} ~ ${p.upper || 'UNL'}</span></div>
+    const onCtrl: LayerMouseEvent = (ev: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
+      const p = ev.features?.[0]?.properties; if (!p) return;
+      showPopup(ev.lngLat, `<div style="${PS}"><div style="${PH('#4169E1')}">${e((p.name as string) || 'Controlled')}</div>
+        ${p.class ? `<div style="${PR}"><span style="${PL}">Class</span><span style="${PV}">${e(p.class as string)}</span></div>` : ''}
+        <div style="${PR}"><span style="${PL}">Alt</span><span style="${PV}">${e(String(p.lower || 'GND'))} ~ ${e(String(p.upper || 'UNL'))}</span></div>
       </div>`);
     };
     on('global-ctrl-fill', 'click', onCtrl); on('global-ctrl-outline', 'click', onCtrl);
@@ -536,11 +543,11 @@ const useGlobalLayers = (
     on('global-ctrl-fill', 'mouseleave', () => resetCursor());
 
     // Restrictive airspace click
-    const onRestr: LayerMouseEvent = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
-      const p = e.features?.[0]?.properties; if (!p) return;
-      showPopup(e.lngLat, `<div style="${PS}"><div style="${PH(p.color || '#FFA500')}">${p.name || 'Restricted'}</div>
-        <div style="${PR}"><span style="${PL}">Type</span><span style="${PV}">${p.type}</span></div>
-        <div style="${PR}"><span style="${PL}">Alt</span><span style="${PV}">${p.lower || 'GND'} ~ ${p.upper || 'UNL'}</span></div>
+    const onRestr: LayerMouseEvent = (ev: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
+      const p = ev.features?.[0]?.properties; if (!p) return;
+      showPopup(ev.lngLat, `<div style="${PS}"><div style="${PH(safeColor(p.color, '#FFA500'))}">${e((p.name as string) || 'Restricted')}</div>
+        <div style="${PR}"><span style="${PL}">Type</span><span style="${PV}">${e(p.type as string)}</span></div>
+        <div style="${PR}"><span style="${PL}">Alt</span><span style="${PV}">${e(String(p.lower || 'GND'))} ~ ${e(String(p.upper || 'UNL'))}</span></div>
       </div>`);
     };
     on('global-restr-fill', 'click', onRestr); on('global-restr-outline', 'click', onRestr);
@@ -548,12 +555,12 @@ const useGlobalLayers = (
     on('global-restr-fill', 'mouseleave', () => resetCursor());
 
     // FIR click
-    const onFir: LayerMouseEvent = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
-      const p = e.features?.[0]?.properties; if (!p) return;
-      showPopup(e.lngLat, `<div style="${PS}"><div style="${PH('#00CED1')}">FIR ${p.id}</div>
-        <div style="${PR}"><span style="${PL}">Name</span><span style="${PV}">${p.name}</span></div>
-        ${p.address ? `<div style="${PR}"><span style="${PL}">Address</span><span style="${PV}">${p.address}</span></div>` : ''}
-        <div style="${PR}"><span style="${PL}">Area</span><span style="${PV}">${p.area}</span></div>
+    const onFir: LayerMouseEvent = (ev: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => {
+      const p = ev.features?.[0]?.properties; if (!p) return;
+      showPopup(ev.lngLat, `<div style="${PS}"><div style="${PH('#00CED1')}">FIR ${e(p.id as string)}</div>
+        <div style="${PR}"><span style="${PL}">Name</span><span style="${PV}">${e(p.name as string)}</span></div>
+        ${p.address ? `<div style="${PR}"><span style="${PL}">Address</span><span style="${PV}">${e(p.address as string)}</span></div>` : ''}
+        <div style="${PR}"><span style="${PL}">Area</span><span style="${PV}">${e(String(p.area ?? '-'))}</span></div>
       </div>`);
     };
     on('global-fir-fill', 'click', onFir); on('global-fir-outline', 'click', onFir);

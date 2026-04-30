@@ -108,6 +108,21 @@ export default function useShipTracking(
     const m = map.current;
     if (!m || !mapLoaded) return;
 
+    // map listener 추적 (cleanup 시 모두 제거)
+    const attachedListeners: Array<{
+      type: 'click' | 'mouseenter' | 'mouseleave';
+      layer: string;
+      handler: (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => void;
+    }> = [];
+    const trackOn = (
+      type: 'click' | 'mouseenter' | 'mouseleave',
+      layer: string,
+      handler: (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] }) => void,
+    ): void => {
+      m.on(type, layer, handler);
+      attachedListeners.push({ type, layer, handler });
+    };
+
     const ensureLayers = () => {
       if (layersAddedRef.current) return;
       try {
@@ -140,7 +155,7 @@ export default function useShipTracking(
         }
 
         // 클릭 팝업
-        m.on('click', 'ship-icons', (e) => {
+        trackOn('click', 'ship-icons', (e) => {
           const feature = e.features?.[0];
           if (!feature?.properties) return;
           const props = feature.properties;
@@ -165,8 +180,8 @@ export default function useShipTracking(
             `)
             .addTo(m);
         });
-        m.on('mouseenter', 'ship-icons', () => { m.getCanvas().style.cursor = 'pointer'; });
-        m.on('mouseleave', 'ship-icons', () => { m.getCanvas().style.cursor = ''; });
+        trackOn('mouseenter', 'ship-icons', () => { m.getCanvas().style.cursor = 'pointer'; });
+        trackOn('mouseleave', 'ship-icons', () => { m.getCanvas().style.cursor = ''; });
 
         layersAddedRef.current = true;
         logger.info('Ships', 'Layers added');
@@ -197,6 +212,13 @@ export default function useShipTracking(
     };
 
     start();
-    return () => { if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; } };
+    return () => {
+      if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
+      // map listener 모두 제거 (HMR / 의존성 변경 / unmount 모두 대응)
+      for (const { type, layer, handler } of attachedListeners) {
+        try { m.off(type, layer, handler); } catch { /* ignore */ }
+      }
+      attachedListeners.length = 0;
+    };
   }, [map, mapLoaded, showShips, updatePositions]);
 }

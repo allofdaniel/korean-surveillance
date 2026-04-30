@@ -4,6 +4,8 @@
  */
 import { useEffect, useRef, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
+import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
+import { logger } from '../utils/logger';
 
 type ChartBounds = [[number, number], [number, number], [number, number], [number, number]];
 
@@ -28,21 +30,16 @@ const useChartOverlay = (
   const prevLayersRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    console.log('[ChartOverlay] Effect triggered:', {
-      hasMap: !!map?.current,
-      mapLoaded,
-      selectedAirport,
-      chartCount: Object.keys(allChartBounds?.[selectedAirport] || {}).length,
-      activeCharts: Object.entries(activeCharts).filter(([, v]) => v).map(([k]) => k)
-    });
+    if (import.meta.env.DEV) {
+      logger.debug('ChartOverlay', 'Effect triggered', {
+        hasMap: !!map?.current,
+        mapLoaded,
+        selectedAirport,
+        chartCount: Object.keys(allChartBounds?.[selectedAirport] || {}).length,
+        activeCharts: Object.entries(activeCharts).filter(([, v]) => v).map(([k]) => k)
+      });
+    }
     if (!map?.current || !mapLoaded) return;
-
-    const safeRemoveLayer = (id: string): void => {
-      try { if (map.current?.getLayer(id)) map.current.removeLayer(id); } catch { /* ignore */ }
-    };
-    const safeRemoveSource = (id: string): void => {
-      try { if (map.current?.getSource(id)) map.current.removeSource(id); } catch { /* ignore */ }
-    };
 
     // Get charts for selected airport
     const airportCharts = allChartBounds?.[selectedAirport] || {};
@@ -57,11 +54,13 @@ const useChartOverlay = (
 
       if (isActive && bounds) {
         currentLayers.add(layerId);
-        console.log(`[ChartOverlay] Adding chart: ${chartId}, file: ${chartData.file}, bounds:`, bounds);
+        if (import.meta.env.DEV) {
+          logger.debug('ChartOverlay', `Adding chart: ${chartId}`, { file: chartData.file, bounds });
+        }
         try {
           // Remove existing layer/source first if they exist (for style changes)
-          if (map.current?.getLayer(layerId)) map.current.removeLayer(layerId);
-          if (map.current?.getSource(sourceId)) map.current.removeSource(sourceId);
+          safeRemoveLayer(map.current, layerId);
+          safeRemoveSource(map.current, sourceId);
 
           // Add source and layer
           map.current?.addSource(sourceId, {
@@ -78,13 +77,15 @@ const useChartOverlay = (
             source: sourceId,
             paint: { 'raster-opacity': chartOpacities[chartId] || 0.7 }
           }, beforeLayer);
-          console.log(`[ChartOverlay] Successfully added chart layer: ${layerId}`);
+          if (import.meta.env.DEV) {
+            logger.debug('ChartOverlay', `Successfully added chart layer: ${layerId}`);
+          }
         } catch (e) {
-          console.error(`[ChartOverlay] Failed to add chart overlay ${chartId}:`, e);
+          logger.error('ChartOverlay', `Failed to add chart overlay ${chartId}`, e instanceof Error ? e : new Error(String(e)));
         }
       } else {
-        safeRemoveLayer(layerId);
-        safeRemoveSource(sourceId);
+        safeRemoveLayer(map.current, layerId);
+        safeRemoveSource(map.current, sourceId);
       }
     });
 
@@ -92,8 +93,8 @@ const useChartOverlay = (
     prevLayersRef.current.forEach(layerId => {
       if (!currentLayers.has(layerId)) {
         const sourceId = layerId.replace('chart-', 'chart-source-');
-        safeRemoveLayer(layerId);
-        safeRemoveSource(sourceId);
+        safeRemoveLayer(map.current, layerId);
+        safeRemoveSource(map.current, sourceId);
       }
     });
 

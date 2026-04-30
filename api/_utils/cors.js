@@ -7,11 +7,25 @@
  */
 
 // Rate Limiting ?�정
-const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1�?
-const RATE_LIMIT_MAX_REQUESTS = parseInt(process.env.RATE_LIMIT_MAX || '100', 10); // 분당 최�? ?�청 ??
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1분
+const RATE_LIMIT_MAX_REQUESTS = parseInt(process.env.RATE_LIMIT_MAX || '100', 10); // 분당 최대 요청 수
+
+// Warn once at module load if production and Upstash env vars are missing
+if (process.env.NODE_ENV === 'production') {
+  const hasUpstash = (process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL) &&
+                     (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN);
+  if (!hasUpstash) {
+    console.warn('[Rate Limit] Upstash env vars not set in production — falling back to in-memory rate limiting (not distributed).');
+  }
+}
 
 // In-memory rate limit store (fallback when Redis not available)
+// LRU 상한 — 다양한 client ID 가 무제한 누적되어 메모리 leak 되는 것 방지.
+// hot Vercel instance 가 분산 환경 없이 운영될 때 안전장치.
 const rateLimitStore = new Map();
+const RATE_LIMIT_STORE_MAX_ENTRIES = 10000;
+// Time-based cleanup guard — run cleanup at most once per 60s to avoid burst misses (#13)
+let lastCleanupAt = 0;
 
 // Upstash Redis ?�스?�스 (지??로딩)
 let redisInstance = null;
@@ -67,9 +81,13 @@ function cleanupRateLimitStore() {
  * @returns {Promise<boolean>} - ?�청??차단?�면 true
  */
 export async function checkRateLimit(req, res) {
-  // ?�라?�언???�별??(IP ?�는 X-Forwarded-For)
-  const clientId = req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
-                   req.headers['x-real-ip'] ||
+  // Hoist routePath before any branch so catch fallback can reference it (Security F-1)
+  const routePath = (req.url || '').split('?')[0];
+
+  // Client identification: prefer x-real-ip (Vercel-controlled), then rightmost x-forwarded-for
+  // hop (also Vercel-appended, not client-spoofable), then socket address (Security F-2)
+  const clientId = req.headers['x-real-ip'] ||
+                   req.headers['x-forwarded-for']?.split(',').pop()?.trim() ||
                    req.socket?.remoteAddress ||
                    'unknown';
 
@@ -80,26 +98,20 @@ export async function checkRateLimit(req, res) {
   let windowStart = now;
 
   if (redis) {
-    // Upstash Redis ?�용 (분산)
-    const key = `ratelimit:${clientId}`;
+    // Upstash Redis — atomic INCR+EXPIRE replaces non-atomic GET+SET (Security F-1 TOCTOU fix)
+    const key = `rl:${clientId}:${routePath}`;
     try {
-      const data = await redis.get(key);
-      if (data && (now - data.windowStart < RATE_LIMIT_WINDOW_MS)) {
-        count = data.count + 1;
-        windowStart = data.windowStart;
-      } else {
-        count = 1;
-        windowStart = now;
-      }
-      await redis.set(key, { count, windowStart }, { ex: 120 }); // 2�?TTL
+      count = await redis.incr(key);
+      if (count === 1) await redis.expire(key, Math.ceil(RATE_LIMIT_WINDOW_MS / 1000));
+      windowStart = now; // window anchored at first request; reset tracks TTL
     } catch (e) {
       console.error('[Rate Limit] Redis error, falling back to in-memory:', e.message);
       // Redis ?�류 ??in-memory fallback
-      return checkRateLimitInMemory(clientId, now, res);
+      return checkRateLimitInMemory(`${clientId}:${routePath}`, now, res);
     }
   } else {
     // In-memory fallback
-    return checkRateLimitInMemory(clientId, now, res);
+    return checkRateLimitInMemory(`${clientId}:${routePath}`, now, res);
   }
 
   // Rate limit ?�더 ?�정
@@ -127,20 +139,34 @@ export async function checkRateLimit(req, res) {
 
 /**
  * In-memory Rate Limiting (fallback)
+ * LRU + size-cap 으로 무제한 성장 방지
  */
 function checkRateLimitInMemory(clientId, now, res) {
-  // ?�기???�리 (10% ?�률�?
-  if (Math.random() < 0.1) {
+  // Time-based cleanup (every 60s) + size-cap triggered cleanup — replaces non-deterministic
+  // Math.random() approach that could miss burst windows (Code MINOR fix #13)
+  if (now - lastCleanupAt > 60_000 || rateLimitStore.size >= RATE_LIMIT_STORE_MAX_ENTRIES) {
     cleanupRateLimitStore();
+    lastCleanupAt = now;
+  }
+  // cleanup 후에도 여전히 cap 초과면 가장 오래된 entry 부터 제거 (Map 은 insertion order)
+  while (rateLimitStore.size >= RATE_LIMIT_STORE_MAX_ENTRIES) {
+    const oldestKey = rateLimitStore.keys().next().value;
+    if (oldestKey === undefined) break;
+    rateLimitStore.delete(oldestKey);
   }
 
   let clientData = rateLimitStore.get(clientId);
 
   if (!clientData || (now - clientData.windowStart > RATE_LIMIT_WINDOW_MS)) {
+    // LRU 행동: 새/만료된 entry 는 항상 끝으로 (Map 의 set 동작)
+    rateLimitStore.delete(clientId);
     clientData = { windowStart: now, count: 1 };
     rateLimitStore.set(clientId, clientData);
   } else {
     clientData.count++;
+    // touch — 활성 client 를 LRU 의 최근으로 (delete + set)
+    rateLimitStore.delete(clientId);
+    rateLimitStore.set(clientId, clientData);
   }
 
   const remaining = Math.max(0, RATE_LIMIT_MAX_REQUESTS - clientData.count);
@@ -219,7 +245,7 @@ export function isOriginAllowed(origin) {
     return true;
   }
 
-  if (/^([a-z0-9-]+\.)?(rkpu-viewer|tbas)\.vercel\.app$/i.test(hostname)) {
+  if (/^([a-z0-9-]+\.)?(rkpu-viewer|tbas|korean-surveillance)\.vercel\.app$/i.test(hostname)) {
     return true;
   }
 

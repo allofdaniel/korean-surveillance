@@ -6,7 +6,6 @@ import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
 import type { Map as MapboxMap, GeoJSONSource } from 'mapbox-gl';
 import { logger } from '../utils/logger';
 
-const IS_PROD = import.meta.env.PROD;
 const MIN_ZOOM = 5; // 줌 5 이상에서 로드
 const DEBOUNCE_MS = 800;
 
@@ -15,9 +14,8 @@ type LayerType = 'buildings' | 'special' | 'roads';
 async function fetchVworldData(type: LayerType, bounds: { minX: number; maxX: number; minY: number; maxY: number }) {
   try {
     const size = type === 'roads' ? 500 : 1000;
-    const url = IS_PROD
-      ? `/api/vworld-data?type=${type}&minX=${bounds.minX}&maxX=${bounds.maxX}&minY=${bounds.minY}&maxY=${bounds.maxY}&size=${size}`
-      : `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=${type === 'buildings' ? 'LT_C_UQ111' : type === 'special' ? 'LT_C_SPBD' : 'LT_L_MOCTLINK'}&key=${import.meta.env.VITE_VWORLD_API_KEY}&geomFilter=BOX(${bounds.minX},${bounds.minY},${bounds.maxX},${bounds.maxY})&size=${size}&format=json&crs=EPSG:4326&domain=localhost`;
+    // 보안: API 키를 브라우저에 노출하지 않기 위해 항상 서버사이드 프록시 사용
+    const url = `/api/vworld-data?type=${type}&minX=${bounds.minX}&maxX=${bounds.maxX}&minY=${bounds.minY}&maxY=${bounds.maxY}&size=${size}`;
     const resp = await fetch(url);
     if (!resp.ok) return null;
     const data = await resp.json();

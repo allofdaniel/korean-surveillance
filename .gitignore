@@ -1,9 +1,10 @@
 .vercel
 node_modules
 dist
+# All env files (보안: .env.production 등 누락 방지)
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 *.db
 *.log
 __pycache__
@@ -11,17 +12,22 @@ __pycache__
 .DS_Store
 Thumbs.db
 *.backup
-.env*.local
+
+# Internal dev tooling (잘못된 staging 방지)
+ubikais-crawler/_secrets.py
+ubikais-crawler/_secrets_*.py
 
 # Large data files (crawler outputs)
 ubikais-crawler/data/
 eaip-crawler/data/
 
-# Large static assets (Draco 압축 후 ~4MB이므로 git 포함 가능)
-
-# Large navigation data files
-public/data/global_iaps.json
-public/data/global_sids.json
+# Local PowerShell / CSV / merge scripts that don't belong in production
+public/*.ps1
+public/*.zip
+public/tma_*.json
+public/atc_sectors_backup.json
+public/atc_sectors_fixed.json
+public/aviation_data.json.backup
 
 # Coverage reports
 coverage/

@@ -6,6 +6,8 @@
  */
 import { useEffect, useCallback, type MutableRefObject } from 'react';
 import mapboxgl, { type Map as MapboxMap, type CustomLayerInterface } from 'mapbox-gl';
+import { logger } from '../utils/logger';
+import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
 import {
   Camera, Scene, WebGLRenderer, Matrix4, Color,
   BufferGeometry, BufferAttribute, MeshBasicMaterial, Mesh, DoubleSide,
@@ -311,50 +313,47 @@ const useProcedureRendering = (
     const activeStars = Object.entries(starVisible).filter(([, v]) => v).map(([k]) => k);
     const activeApch = Object.entries(apchVisible).filter(([, v]) => v).map(([k]) => k);
 
-    console.log('[ProcedureRendering] Effect triggered:', {
-      hasMap: !!map.current,
-      hasData: !!data,
-      mapLoaded,
-      sidDataCount: Object.keys(data?.procedures?.SID || {}).length,
-      starDataCount: Object.keys(data?.procedures?.STAR || {}).length,
-      apchDataCount: Object.keys(data?.procedures?.APPROACH || {}).length,
-      sidVisibleCount: Object.keys(sidVisible).length,
-      starVisibleCount: Object.keys(starVisible).length,
-      apchVisibleCount: Object.keys(apchVisible).length,
-      activeSids,
-      activeStars,
-      activeApch,
-      is3DView,
-      show3DAltitude,
-      will2DRender: !(is3DView && show3DAltitude)
-    });
+    if (import.meta.env.DEV) {
+      logger.debug('Procedures', 'Effect triggered', {
+        hasMap: !!map.current,
+        hasData: !!data,
+        mapLoaded,
+        sidDataCount: Object.keys(data?.procedures?.SID || {}).length,
+        starDataCount: Object.keys(data?.procedures?.STAR || {}).length,
+        apchDataCount: Object.keys(data?.procedures?.APPROACH || {}).length,
+        sidVisibleCount: Object.keys(sidVisible).length,
+        starVisibleCount: Object.keys(starVisible).length,
+        apchVisibleCount: Object.keys(apchVisible).length,
+        activeSids,
+        activeStars,
+        activeApch,
+        is3DView,
+        show3DAltitude,
+        will2DRender: !(is3DView && show3DAltitude)
+      });
 
-    // Debug: Log first few keys from data vs visibility state
-    if (data?.procedures?.SID) {
-      const dataKeys = Object.keys(data.procedures.SID).slice(0, 3);
-      const visibleKeys = Object.keys(sidVisible).slice(0, 3);
-      console.log('[ProcedureRendering] SID keys comparison:', { dataKeys, visibleKeys });
+      // Debug: Log first few keys from data vs visibility state
+      if (data?.procedures?.SID) {
+        const dataKeys = Object.keys(data.procedures.SID).slice(0, 3);
+        const visibleKeys = Object.keys(sidVisible).slice(0, 3);
+        logger.debug('Procedures', 'SID keys comparison', { dataKeys, visibleKeys });
+      }
     }
     if (!map.current || !data || !mapLoaded) {
-      console.warn('[ProcedureRendering] Early return - missing:', {
+      logger.warn('Procedures', 'Early return - missing', {
         map: !map.current,
         data: !data,
         mapLoaded: !mapLoaded
       });
       return;
     }
-    console.log('[ProcedureRendering] Proceeding with render, is3DView:', is3DView);
-
-    const safeRemoveLayer = (id: string): void => {
-      try { if (map.current?.getLayer(id)) map.current.removeLayer(id); } catch { /* ignore */ }
-    };
-    const safeRemoveSource = (id: string): void => {
-      try { if (map.current?.getSource(id)) map.current.removeSource(id); } catch { /* ignore */ }
-    };
+    if (import.meta.env.DEV) {
+      logger.debug('Procedures', 'Proceeding with render', { is3DView });
+    }
 
     // Clean up waypoint labels
-    safeRemoveLayer('proc-waypoints-labels');
-    safeRemoveSource('proc-waypoints-labels');
+    safeRemoveLayer(map.current, 'proc-waypoints-labels');
+    safeRemoveSource(map.current, 'proc-waypoints-labels');
 
     // Sanitize ID to remove spaces and special characters for valid Mapbox layer/source IDs
     const sanitizeId = (id: string): string => id.replace(/[^a-zA-Z0-9-_]/g, '_');
@@ -363,14 +362,14 @@ const useProcedureRendering = (
     const cleanupProcedureLayers = (type: string, key: string, proc: Procedure | undefined): void => {
       const sanitizedKey = sanitizeId(key);
       ['3d', '2d', 'line'].forEach(suffix => {
-        safeRemoveLayer(`${type}-${sanitizedKey}-${suffix}`);
-        safeRemoveSource(`${type}-${sanitizedKey}-${suffix}`);
+        safeRemoveLayer(map.current, `${type}-${sanitizedKey}-${suffix}`);
+        safeRemoveSource(map.current, `${type}-${sanitizedKey}-${suffix}`);
       });
       // Also remove segment-based layers (seg0, seg1, etc.)
       const segCount = proc?.segments?.length || 10;
       for (let i = 0; i < segCount; i++) {
-        safeRemoveLayer(`${type}-${sanitizedKey}-seg${i}-line`);
-        safeRemoveSource(`${type}-${sanitizedKey}-seg${i}-line`);
+        safeRemoveLayer(map.current, `${type}-${sanitizedKey}-seg${i}-line`);
+        safeRemoveSource(map.current, `${type}-${sanitizedKey}-seg${i}-line`);
       }
     };
     Object.entries(data.procedures?.SID || {}).forEach(([k, p]) => cleanupProcedureLayers('sid', k, p));
@@ -378,7 +377,7 @@ const useProcedureRendering = (
     Object.entries(data.procedures?.APPROACH || {}).forEach(([k, p]) => cleanupProcedureLayers('apch', k, p));
 
     // Remove Three.js custom layers
-    ['sid-three-layer', 'star-three-layer', 'apch-three-layer'].forEach(safeRemoveLayer);
+    ['sid-three-layer', 'star-three-layer', 'apch-three-layer'].forEach(id => safeRemoveLayer(map.current, id));
 
     // Render procedures using Three.js custom layer (terrain-independent)
     if (is3DView && show3DAltitude) {
@@ -399,7 +398,9 @@ const useProcedureRendering = (
       // 2D fallback - use simple line layers (each segment as separate line)
       const render2DProcedure = (type: string, key: string, proc: Procedure, color: string): void => {
         const sanitizedKey = sanitizeId(key);
-        console.log(`[ProcedureRendering] render2DProcedure: ${type}/${key} (sanitized: ${sanitizedKey}), segments: ${proc.segments?.length || 0}`);
+        if (import.meta.env.DEV) {
+          logger.debug('Procedures', `render2DProcedure: ${type}/${key}`, { sanitizedKey, segments: proc.segments?.length || 0 });
+        }
         proc.segments?.forEach((seg, segIdx) => {
           if (seg.coordinates && seg.coordinates.length >= 2) {
             const sourceId = `${type}-${sanitizedKey}-seg${segIdx}-line`;
@@ -407,9 +408,11 @@ const useProcedureRendering = (
             try {
               map.current?.addSource(sourceId, { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: coords } } });
               map.current?.addLayer({ id: sourceId, type: 'line', source: sourceId, paint: { 'line-color': color, 'line-width': 3, 'line-opacity': 0.8 } });
-              console.log(`[ProcedureRendering] Added layer: ${sourceId}`);
+              if (import.meta.env.DEV) {
+                logger.debug('Procedures', `Added layer: ${sourceId}`);
+              }
             } catch (err) {
-              console.error(`[ProcedureRendering] Error adding layer ${sourceId}:`, err);
+              logger.error('Procedures', `Error adding layer ${sourceId}`, err instanceof Error ? err : new Error(String(err)));
             }
           }
         });
@@ -420,7 +423,7 @@ const useProcedureRendering = (
       if (data.procedures?.SID) {
         Object.entries(data.procedures.SID).forEach(([k, p]) => {
           if (sidVisible[k]) {
-            console.log(`[ProcedureRendering] Rendering SID: ${k}`);
+            if (import.meta.env.DEV) logger.debug('Procedures', `Rendering SID: ${k}`);
             render2DProcedure('sid', k, p, procColors.SID[k] ?? '#ffffff');
             proceduresRendered++;
           }
@@ -429,7 +432,7 @@ const useProcedureRendering = (
       if (data.procedures?.STAR) {
         Object.entries(data.procedures.STAR).forEach(([k, p]) => {
           if (starVisible[k]) {
-            console.log(`[ProcedureRendering] Rendering STAR: ${k}`);
+            if (import.meta.env.DEV) logger.debug('Procedures', `Rendering STAR: ${k}`);
             render2DProcedure('star', k, p, procColors.STAR[k] ?? '#ffffff');
             proceduresRendered++;
           }
@@ -438,14 +441,16 @@ const useProcedureRendering = (
       if (data.procedures?.APPROACH) {
         Object.entries(data.procedures.APPROACH).forEach(([k, p]) => {
           if (apchVisible[k]) {
-            console.log(`[ProcedureRendering] Rendering APPROACH: ${k}`);
+            if (import.meta.env.DEV) logger.debug('Procedures', `Rendering APPROACH: ${k}`);
             render2DProcedure('apch', k, p, procColors.APPROACH[k] ?? '#ffffff');
             proceduresRendered++;
           }
         });
       }
 
-      console.log(`[ProcedureRendering] Total procedures rendered: ${proceduresRendered}`);
+      if (import.meta.env.DEV) {
+        logger.debug('Procedures', `Total procedures rendered: ${proceduresRendered}`);
+      }
     }
 
     // Waypoint labels - use symbol layer with proper elevation

@@ -34,6 +34,12 @@ interface UIState {
   koreaRoutesExpanded: boolean;
   globalExpanded: boolean;
 
+  // Major-category states (좌측 패널 4분류)
+  catMapExpanded: boolean;       // 지도 표시
+  catAircraftExpanded: boolean;  // 항공기 설정
+  catAirportExpanded: boolean;   // 공항별
+  catDisplayExpanded: boolean;   // 표시 설정
+
   // ATC panel
   showAtcPanel: boolean;
   atcExpanded: Record<AtcSection, boolean>;
@@ -74,6 +80,12 @@ interface UIActions {
   setKoreaRoutesExpanded: (value: boolean) => void;
   setGlobalExpanded: (value: boolean) => void;
   toggleAccordion: (name: AccordionName) => void;
+
+  // Major-category setters
+  setCatMapExpanded: (value: boolean) => void;
+  setCatAircraftExpanded: (value: boolean) => void;
+  setCatAirportExpanded: (value: boolean) => void;
+  setCatDisplayExpanded: (value: boolean) => void;
 
   // ATC
   setShowAtcPanel: (value: boolean) => void;
@@ -121,6 +133,12 @@ const useUIStore = create<UIStore>((set) => ({
   chartExpanded: false,
   koreaRoutesExpanded: false,
   globalExpanded: false,
+
+  // Major-category states — 기본값: 지도 표시 / 항공기 펼침
+  catMapExpanded: true,
+  catAircraftExpanded: true,
+  catAirportExpanded: false,
+  catDisplayExpanded: false,
 
   // ATC panel
   showAtcPanel: false,
@@ -172,6 +190,12 @@ const useUIStore = create<UIStore>((set) => ({
   setKoreaRoutesExpanded: (value) => set({ koreaRoutesExpanded: value }),
   setGlobalExpanded: (value) => set({ globalExpanded: value }),
   toggleAccordion: (name) => set((state) => ({ [name]: !state[name] })),
+
+  // Major-category setters
+  setCatMapExpanded: (value) => set({ catMapExpanded: value }),
+  setCatAircraftExpanded: (value) => set({ catAircraftExpanded: value }),
+  setCatAirportExpanded: (value) => set({ catAirportExpanded: value }),
+  setCatDisplayExpanded: (value) => set({ catDisplayExpanded: value }),
 
   // Actions - ATC
   setShowAtcPanel: (value) => set({ showAtcPanel: value }),

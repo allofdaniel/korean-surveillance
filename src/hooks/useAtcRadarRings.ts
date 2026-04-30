@@ -4,6 +4,8 @@
  */
 import { useEffect, useRef, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
+import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
+import { logger } from '../utils/logger';
 
 // 울산공항 좌표 (RKPU)
 const CENTER_LON = 129.3517;
@@ -46,26 +48,20 @@ const useAtcRadarRings = (
 
     if (!map?.current || !mapLoaded) return;
 
-    const safeRemoveLayer = (id: string): void => {
-      try { if (map.current?.getLayer(id)) map.current.removeLayer(id); } catch { /* ignore */ }
-    };
-    const safeRemoveSource = (id: string): void => {
-      try { if (map.current?.getSource(id)) map.current.removeSource(id); } catch { /* ignore */ }
-    };
-
     const cleanupLayers = (): void => {
+      const m = map.current;
       for (let i = 1; i <= 15; i++) {
-        safeRemoveLayer(`radar-ring-${i}`);
-        safeRemoveLayer(`radar-ring-label-${i}`);
-        safeRemoveSource(`radar-ring-${i}`);
-        safeRemoveSource(`radar-ring-label-${i}`);
+        safeRemoveLayer(m, `radar-ring-${i}`);
+        safeRemoveLayer(m, `radar-ring-label-${i}`);
+        safeRemoveSource(m, `radar-ring-${i}`);
+        safeRemoveSource(m, `radar-ring-label-${i}`);
       }
       for (let i = 0; i < 36; i++) {
-        safeRemoveLayer(`radar-bearing-${i}`);
-        safeRemoveSource(`radar-bearing-${i}`);
+        safeRemoveLayer(m, `radar-bearing-${i}`);
+        safeRemoveSource(m, `radar-bearing-${i}`);
       }
-      safeRemoveLayer('radar-bearing-labels');
-      safeRemoveSource('radar-bearing-labels');
+      safeRemoveLayer(m, 'radar-bearing-labels');
+      safeRemoveSource(m, 'radar-bearing-labels');
     };
 
     const createLayers = (): void => {
@@ -207,7 +203,7 @@ const useAtcRadarRings = (
           }
         });
       } catch (e) {
-        console.warn('Radar rings creation error:', e);
+        logger.warn('AtcRadarRings', 'Rings creation error', { error: (e as Error).message });
       }
     };
 

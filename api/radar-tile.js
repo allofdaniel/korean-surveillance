@@ -3,7 +3,7 @@
  * DO-278A 요구사항 추적: SRS-API-004
  * CORS 문제 해결을 위한 레이더 타일 프록시
  */
-import { setCorsHeaders } from './_utils/cors.js';
+import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 
 /**
  * 경로 유효성 검증 - Path Traversal 방지
@@ -26,6 +26,7 @@ function validatePath(path) {
 export default async function handler(req, res) {
   // CORS 처리 (강화된 버전)
   if (setCorsHeaders(req, res)) return;
+  if (await checkRateLimit(req, res)) return;
 
   const { path } = req.query;
 

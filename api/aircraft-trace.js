@@ -17,8 +17,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'hex parameter is required' });
   }
 
+  if (!/^[0-9a-f]{6}$/i.test(hex)) {
+    return res.status(400).json({ error: 'Invalid hex parameter. Must be a 6-character hexadecimal ICAO address.' });
+  }
+
   // airplanes.live trace API - returns last 25 positions for an aircraft
-  const apiUrl = `https://api.airplanes.live/v2/hex/${hex}`;
+  const apiUrl = `https://api.airplanes.live/v2/hex/${hex.toLowerCase()}`;
 
   // Retry logic with exponential backoff
   const maxRetries = 3;
@@ -57,9 +61,11 @@ export default async function handler(req, res) {
   }
 
   console.error('Error fetching aircraft trace after retries:', lastError);
+  // 에러 details 는 로컬 dev 에서만 노출 (Vercel preview 도 차단)
+  const isLocalDev = process.env.NODE_ENV === 'development' && !process.env.VERCEL_ENV;
   return res.status(500).json({
     error: 'Failed to fetch aircraft trace',
-    details: lastError?.message,
+    ...(isLocalDev && { details: lastError?.message }),
     ac: []
   });
 }

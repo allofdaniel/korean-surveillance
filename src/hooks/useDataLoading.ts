@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { PROCEDURE_COLORS } from '../utils/colors';
 import { logger } from '../utils/logger';
+import type { AllChartBounds } from './useChartOverlay';
 
 // ============================================
 // 항공 데이터 타입 정의
@@ -288,7 +289,8 @@ export interface UseDataLoadingReturn {
   setApchVisible: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
   procColors: ProcColors;
   chartBounds: Record<string, unknown>;
-  allChartBounds: Record<string, Record<string, unknown>>;
+  /** 공항별 chart 매핑 — useChartOverlay 가 직접 소비할 수 있는 강타입 */
+  allChartBounds: AllChartBounds;
   chartOpacities: Record<string, number>;
   setChartOpacities: React.Dispatch<React.SetStateAction<Record<string, number>>>;
   atcData: unknown;
@@ -306,7 +308,7 @@ export default function useDataLoading(): UseDataLoadingReturn {
   const [procColors, setProcColors] = useState<ProcColors>({ SID: {}, STAR: {}, APPROACH: {} });
 
   const [chartBounds, setChartBounds] = useState<Record<string, unknown>>({});
-  const [allChartBounds, setAllChartBounds] = useState<Record<string, Record<string, unknown>>>({});
+  const [allChartBounds, setAllChartBounds] = useState<AllChartBounds>({});
   const [chartOpacities, setChartOpacities] = useState<Record<string, number>>({});
 
   const [atcData, setAtcData] = useState<unknown>(null);
@@ -324,7 +326,7 @@ export default function useDataLoading(): UseDataLoadingReturn {
 
         if (import.meta.env.DEV) {
           const firstSidKey = sidKeys[0];
-          console.log('[DataLoading] Loaded aviation data:', {
+          logger.debug('DataLoading', 'Loaded aviation data', {
             sidCount: sidKeys.length,
             starCount: starKeys.length,
             apchCount: apchKeys.length,
@@ -344,7 +346,7 @@ export default function useDataLoading(): UseDataLoadingReturn {
         });
       })
       .catch((err) => {
-        console.error('[DataLoading] Failed to load aviation data:', err);
+        logger.error('DataLoading', 'Failed to load aviation data', { error: (err as Error).message });
       });
   }, []);
 
@@ -376,7 +378,9 @@ export default function useDataLoading(): UseDataLoadingReturn {
         logger.debug('DataLoading', `Merged ${Object.keys(rkpuCharts).length} manual RKPU charts`);
       }
 
-      setAllChartBounds(allBounds);
+      // 외부 JSON 컨트랙트 단언: all_chart_bounds.json 의 각 entry 는
+      // { file?, bounds? } 형태 (AllChartBounds = Record<string, Record<string, ChartData>>)
+      setAllChartBounds(allBounds as unknown as AllChartBounds);
       setChartBounds(rkpuManualBounds);
 
       const opacities: Record<string, number> = {};

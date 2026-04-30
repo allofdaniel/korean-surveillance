@@ -4,6 +4,10 @@ import { getAircraftApiUrl, getAircraftTraceUrl, AIRCRAFT_UPDATE_INTERVAL } from
 import type { AviationData } from './useDataLoading';
 import { logger } from '../utils/logger';
 
+// 한반도 중심 + 500nm (airplanes.live `point` 엔드포인트 최대 반경)
+// 한반도 박스 내 항공기는 어차피 ~80대로 수렴하므로 이 한 번 호출로 모두 수집됨
+const KOREA_FALLBACK = { lat: 36.5, lon: 127.8, radius: 500 };
+
 export interface AircraftData {
   hex: string;
   callsign: string;
@@ -69,13 +73,13 @@ export interface UseAircraftDataReturn {
 
 /**
  * useAircraftData - 항공기 데이터 로딩 및 관리 훅
- * - ADS-B 데이터 폴링
+ * - ADS-B 데이터 폴링 (한반도 중심 36.5°N/127.8°E + 500nm 고정)
  * - 항적 히스토리 로딩
  * - 항공기 상태 관리
  * - 429 에러 시 백오프 처리
  */
 export default function useAircraftData(
-  data: DataWithAirport | null,
+  _data: DataWithAirport | null,
   mapLoaded: boolean,
   showAircraft: boolean,
   trailDuration: number
@@ -134,16 +138,20 @@ export default function useAircraftData(
       const now = Date.now();
       ac.trace.forEach((point: number[]) => {
         if (point && point.length >= 4) {
-          const ts = point[0];
-          const lat = point[1];
-          const lon = point[2];
-          const alt = point[3];
-          if (ts === undefined || lat === undefined || lon === undefined) return;
-          const timestamp = ts * 1000; // 초 -> 밀리초
+          const ts = point[0] as number | undefined;
+          const lat = point[1] as number | undefined;
+          const lon = point[2] as number | undefined;
+          const alt = point[3] as number | undefined;
+          if (!Number.isFinite(ts) || !Number.isFinite(lat) || !Number.isFinite(lon)) return;
+          // ts, lat, lon are finite numbers after guard above
+          const tsNum = ts as number;
+          const latNum = lat as number;
+          const lonNum = lon as number;
+          const timestamp = tsNum * 1000; // 초 -> 밀리초
           if (now - timestamp <= trailDuration) {
             tracePoints.push({
-              lat,
-              lon,
+              lat: latNum,
+              lon: lonNum,
               altitude_m: ftToM(alt ?? 0),
               timestamp
             });
@@ -161,8 +169,6 @@ export default function useAircraftData(
   }, [trailDuration]);
 
   const fetchAircraftData = useCallback(async () => {
-    if (!data?.airport) return;
-
     // 백오프 중이면 스킵
     if (backoffRef.current > 0 && Date.now() - lastErrorTimeRef.current < backoffRef.current) {
       logger.debug('Aircraft', `API: backing off for ${Math.round(backoffRef.current / 1000)}s`);
@@ -177,8 +183,9 @@ export default function useAircraftData(
     const signal = abortControllerRef.current.signal;
 
     try {
-      const { lat, lon } = data.airport;
-      const response = await fetch(getAircraftApiUrl(lat, lon, 100), { signal });
+      // 한반도 중심 고정 + 500nm 반경으로 일괄 수집
+      const { lat, lon, radius } = KOREA_FALLBACK;
+      const response = await fetch(getAircraftApiUrl(lat, lon, radius), { signal });
 
       // 429 Too Many Requests 처리
       if (response.status === 429) {
@@ -188,6 +195,14 @@ export default function useAircraftData(
         setDataHealth(prev => ({ ...prev, isConnected: false, errorCount: prev.errorCount + 1 }));
         return;
       }
+
+      if (!response.ok) {
+        logger.warn('Aircraft', `API non-OK: ${response.status}`);
+        setDataHealth(prev => ({ ...prev, isConnected: false, errorCount: prev.errorCount + 1 }));
+        return;
+      }
+
+      if (signal.aborted) return;
 
       // 성공 시 백오프 리셋
       backoffRef.current = 0;
@@ -205,6 +220,7 @@ export default function useAircraftData(
           category: (ac.category as string) || 'A0',
           lat: ac.lat as number,
           lon: ac.lon as number,
+          // FIXME: altitude_ft || 0 conflates unknown with ground — see audit P0
           altitude_ft: (ac.alt_baro as number) ?? (ac.alt_geom as number) ?? 0,
           altitude_m: ftToM((ac.alt_baro as number) ?? (ac.alt_geom as number) ?? 0),
           ground_speed: (ac.gs as number) ?? 0,
@@ -238,7 +254,11 @@ export default function useAircraftData(
 
         // 병렬로 trace 로드 (처음에는 모두, 이후에는 일부) - signal 전달하여 취소 가능
         const tracePromises = toLoad.map(ac => loadAircraftTrace(ac.hex, signal).then(trace => ({ hex: ac.hex, trace })));
-        const traces = await Promise.all(tracePromises);
+        const settled = await Promise.allSettled(tracePromises);
+        if (signal.aborted) return;
+        const traces = settled
+          .filter(r => r.status === 'fulfilled')
+          .map(r => (r as PromiseFulfilledResult<{hex: string; trace: TrailPoint[] | null}>).value);
 
         // ref와 state 모두 업데이트 (ref는 fetchAircraftData 내부용, state는 외부 노출용)
         toLoad.forEach(ac => tracesLoadedRef.current.add(ac.hex));
@@ -301,6 +321,7 @@ export default function useAircraftData(
         if (activeHexes.has(hex)) newTracesLoaded.add(hex);
       });
       tracesLoadedRef.current = newTracesLoaded;
+      if (signal.aborted) return;
       setAircraft(processed);
 
       // 데이터 헬스 업데이트
@@ -316,10 +337,10 @@ export default function useAircraftData(
       logger.error('Aircraft', 'Fetch failed', e as Error);
       setDataHealth(prev => ({ ...prev, isConnected: false, errorCount: prev.errorCount + 1 }));
     }
-  }, [data?.airport, trailDuration, loadAircraftTrace]);
+  }, [trailDuration, loadAircraftTrace]);
 
   useEffect(() => {
-    if (!showAircraft || !data?.airport || !mapLoaded) return;
+    if (!showAircraft || !mapLoaded) return;
 
     fetchAircraftData();
     aircraftIntervalRef.current = setInterval(fetchAircraftData, AIRCRAFT_UPDATE_INTERVAL);
@@ -332,7 +353,7 @@ export default function useAircraftData(
         abortControllerRef.current = null;
       }
     };
-  }, [showAircraft, data?.airport, mapLoaded, fetchAircraftData]);
+  }, [showAircraft, mapLoaded, fetchAircraftData]);
 
   return {
     aircraft,

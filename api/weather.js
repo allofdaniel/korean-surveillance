@@ -1,6 +1,4 @@
-﻿/* global AbortController */
-
-// Vercel Serverless Function - Aviation Weather Data for Korea
+﻿// Vercel Serverless Function - Aviation Weather Data for Korea
 // KMA API Hub (apihub.kma.go.kr) + International Sources
 // DO-278A ?붽뎄?ы빆 異붿쟻: SRS-SEC-001
 
@@ -40,12 +38,7 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = REQUEST_TIMEOUT_M
   }
 }
 
-async function fetchJson(url, options = {}, timeoutMs = REQUEST_TIMEOUT_MS) {
-  return fetchWithTimeout(url, options, timeoutMs);
-}
-
-// Apply timeout to every fetch in this module
-globalThis.fetch = fetchJson;
+// fetchWithTimeout is used explicitly at every call site — no global mutation.
 
 const ALLOWED_WEATHER_TYPES = new Set([
   'metar',
@@ -139,11 +132,13 @@ export default async function handler(req, res) {
     }
   } catch (error) {
     console.error('Weather API error:', error.message);
-    // DO-278A SRS-SEC-006: ?꾨줈?뺤뀡?먯꽌 ?먮윭 ?곸꽭 ?④?
+    // DO-278A SRS-SEC-006: 프로덕션에서 에러 상세 숨김
+    // Vercel preview 도 NODE_ENV !== production 이라 leak 가능 — VERCEL_ENV 까지 체크
+    const isLocalDev = process.env.NODE_ENV === 'development' && !process.env.VERCEL_ENV;
     return res.status(500).json({
       error: 'Weather service temporarily unavailable',
       code: 'WEATHER_ERROR',
-      ...(process.env.NODE_ENV === 'development' && { details: error.message })
+      ...(isLocalDev && { details: error.message })
     });
   }
 }
@@ -156,7 +151,7 @@ async function handleAmos(req, res) {
   // RKPU(?몄궛)???곗씠?곌? ?놁쑝誘濡?RKPK(源?????④퍡 ?붿껌
   try {
     const metarUrl = `https://aviationweather.gov/api/data/metar?ids=RKPU,RKPK&format=json`;
-    const response = await fetch(metarUrl);
+    const response = await fetchWithTimeout(metarUrl);
     if (response.ok) {
       const metarJson = await response.json();
       if (metarJson && metarJson.length > 0) {
@@ -195,14 +190,14 @@ async function handleAmos(req, res) {
       const tm = kstNow.toISOString().slice(0, 16).replace(/[-T:]/g, '').slice(0, 12);
 
       const amosUrl = `https://apihub.kma.go.kr/api/typ01/url/amos.php?tm=${tm}&stn=${ULSAN_STN}&authKey=${KMA_API_KEY}`;
-      const amosRes = await fetch(amosUrl);
+      const amosRes = await fetchWithTimeout(amosUrl);
       const amosText = await amosRes.text();
       metar = parseKmaAmos(amosText);
 
       if (!metar) {
         const utcTm = now.toISOString().slice(0, 16).replace(/[-T:]/g, '').slice(0, 12);
         const metarDecUrl = `https://apihub.kma.go.kr/api/typ01/url/air_metar_dec.php?tm=${utcTm}&org=K&authKey=${KMA_API_KEY}`;
-        const metarRes = await fetch(metarDecUrl);
+        const metarRes = await fetchWithTimeout(metarDecUrl);
         const metarText = await metarRes.text();
         metar = parseKmaMetarDec(metarText, ULSAN_STN);
       }
@@ -218,7 +213,7 @@ async function handleAmos(req, res) {
 // TAF - 怨듯빆?덈낫 (aviationweather.gov fallback)
 async function handleTaf(req, res) {
   const tafUrl = `https://aviationweather.gov/api/data/taf?ids=RKPK,RKPU&format=json`;
-  const response = await fetch(tafUrl);
+  const response = await fetchWithTimeout(tafUrl);
   const tafJson = response.ok ? await response.json() : [];
 
   res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate');
@@ -227,11 +222,15 @@ async function handleTaf(req, res) {
 
 // KMA METAR - ??났湲곗긽?꾨Ц 議고쉶 (怨듭떇 KMA API)
 async function handleKmaMetar(req, res) {
-  const icao = req.query.icao || 'RKPU';
+  const rawIcao = typeof req.query.icao === 'string' ? req.query.icao : 'RKPU';
+  const icao = rawIcao || 'RKPU';
+  if (!/^[A-Z]{4}$/.test(icao)) {
+    return res.status(400).json({ error: 'Invalid ICAO. Must be 4 uppercase letters.' });
+  }
   const metarUrl = `https://apihub.kma.go.kr/api/typ02/openApi/AmmIwxxmService/getMetar?pageNo=1&numOfRows=10&dataType=JSON&icao=${icao}&authKey=${KMA_API_KEY}`;
 
   console.info('[Weather API] Fetching KMA METAR for:', icao);
-  const response = await fetch(metarUrl);
+  const response = await fetchWithTimeout(metarUrl);
   const data = response.ok ? await response.json() : null;
 
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
@@ -240,11 +239,15 @@ async function handleKmaMetar(req, res) {
 
 // KMA TAF - 怨듯빆?덈낫 議고쉶 (怨듭떇 KMA API)
 async function handleKmaTaf(req, res) {
-  const icao = req.query.icao || 'RKPU';
+  const rawIcao = typeof req.query.icao === 'string' ? req.query.icao : 'RKPU';
+  const icao = rawIcao || 'RKPU';
+  if (!/^[A-Z]{4}$/.test(icao)) {
+    return res.status(400).json({ error: 'Invalid ICAO. Must be 4 uppercase letters.' });
+  }
   const tafUrl = `https://apihub.kma.go.kr/api/typ02/openApi/AmmIwxxmService/getTaf?pageNo=1&numOfRows=10&dataType=JSON&icao=${icao}&authKey=${KMA_API_KEY}`;
 
   console.info('[Weather API] Fetching KMA TAF for:', icao);
-  const response = await fetch(tafUrl);
+  const response = await fetchWithTimeout(tafUrl);
   const data = response.ok ? await response.json() : null;
 
   res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate');
@@ -256,7 +259,7 @@ async function handleKmaSigmet(req, res) {
   const sigmetUrl = `https://apihub.kma.go.kr/api/typ02/openApi/AmmService/getSigmet?pageNo=1&numOfRows=50&dataType=JSON&authKey=${KMA_API_KEY}`;
 
   console.info('[Weather API] Fetching KMA SIGMET');
-  const response = await fetch(sigmetUrl);
+  const response = await fetchWithTimeout(sigmetUrl);
   const data = response.ok ? await response.json() : null;
 
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
@@ -268,7 +271,7 @@ async function handleKmaAirmet(req, res) {
   const airmetUrl = `https://apihub.kma.go.kr/api/typ02/openApi/AmmService/getAirmet?pageNo=1&numOfRows=50&dataType=JSON&authKey=${KMA_API_KEY}`;
 
   console.info('[Weather API] Fetching KMA AIRMET');
-  const response = await fetch(airmetUrl);
+  const response = await fetchWithTimeout(airmetUrl);
   const data = response.ok ? await response.json() : null;
 
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
@@ -280,7 +283,7 @@ async function handleWarning(req, res) {
   const warningUrl = `https://apihub.kma.go.kr/api/typ02/openApi/AmmService/getWarning?pageNo=1&numOfRows=50&dataType=JSON&authKey=${KMA_API_KEY}`;
 
   console.info('[Weather API] Fetching Airport Warning');
-  const response = await fetch(warningUrl);
+  const response = await fetchWithTimeout(warningUrl);
   const data = response.ok ? await response.json() : null;
 
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
@@ -297,13 +300,13 @@ async function handleSigmet(req, res) {
   const sigmetUrl = `https://apihub.kma.go.kr/api/typ01/url/fct_air_sigmet.php?tm=${tm}&authKey=${KMA_API_KEY}`;
   console.info('[Weather API] Fetching SIGMET for date:', tm);
 
-  const kmaRes = await fetch(sigmetUrl);
+  const kmaRes = await fetchWithTimeout(sigmetUrl);
   const kmaText = await kmaRes.text();
   const kmaSigmets = parseSigmet(kmaText);
 
   // Also get international SIGMET from aviationweather.gov
   const intlUrl = `https://aviationweather.gov/api/data/isigmet?format=json&loc=rkrr`;
-  const intlRes = await fetch(intlUrl);
+  const intlRes = await fetchWithTimeout(intlUrl);
   const intlSigmets = intlRes.ok ? await intlRes.json() : [];
 
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
@@ -313,7 +316,7 @@ async function handleSigmet(req, res) {
 // AIRMET - ?怨좊룄 湲곗긽?뺣낫
 async function handleAirmet(req, res) {
   const airmetUrl = `https://aviationweather.gov/api/data/airmet?format=json`;
-  const response = await fetch(airmetUrl);
+  const response = await fetchWithTimeout(airmetUrl);
   const data = response.ok ? await response.json() : [];
 
   // Filter for Korea region (approximate bounds)
@@ -333,7 +336,7 @@ async function handleNotam(req, res) {
   const notamUrl = `https://api.aviationapi.com/v1/notams?apt=RKPU,RKPK`;
 
   try {
-    const response = await fetch(notamUrl);
+    const response = await fetchWithTimeout(notamUrl);
     const data = response.ok ? await response.json() : {};
 
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate');
@@ -354,7 +357,7 @@ async function handleLlws(req, res) {
   const llwsUrl = `https://apihub.kma.go.kr/api/typ01/url/llws_sfc.php?tm=${tm}&stn=151&authKey=${KMA_API_KEY}`;
   console.info('[Weather API] Fetching LLWS for:', tm);
 
-  const response = await fetch(llwsUrl);
+  const response = await fetchWithTimeout(llwsUrl);
   const text = await response.text();
   const llwsData = parseLlws(text);
 
@@ -406,7 +409,7 @@ async function handleUpperWind(req, res) {
   const openMeteoUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&hourly=windspeed_850hPa,windspeed_700hPa,windspeed_500hPa,windspeed_300hPa,winddirection_850hPa,winddirection_700hPa,winddirection_500hPa,winddirection_300hPa,geopotential_height_850hPa,geopotential_height_700hPa,geopotential_height_500hPa,geopotential_height_300hPa&timezone=Asia/Seoul&forecast_days=1`;
 
   console.info('Fetching Open-Meteo Upper Wind Grid');
-  const response = await fetch(openMeteoUrl);
+  const response = await fetchWithTimeout(openMeteoUrl);
 
   if (!response.ok) {
     return res.status(500).json({ error: 'Failed to fetch upper wind data' });
@@ -540,7 +543,7 @@ async function handleLightning(req, res) {
   const lightningUrl = `https://apihub.kma.go.kr/api/typ01/url/lgt_data.php?tm1=${tmStart}&tm2=${tmEnd}&authKey=${KMA_API_KEY}`;
   console.info('[Weather API] Fetching Lightning data:', tmStart, '-', tmEnd);
 
-  const response = await fetch(lightningUrl);
+  const response = await fetchWithTimeout(lightningUrl);
   const text = await response.text();
   const strikes = parseLightning(text);
 

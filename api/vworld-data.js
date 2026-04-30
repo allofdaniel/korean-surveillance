@@ -2,7 +2,7 @@
  * Vercel Serverless Function - V-World 2D Data Proxy
  * 건물, 특수건물, 도로망 등 V-World 공간데이터 프록시
  */
-import { setCorsHeaders } from './_utils/cors.js';
+import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 
 const VWORLD_KEY = process.env.VITE_VWORLD_API_KEY;
 
@@ -14,6 +14,7 @@ const DATA_CODES = {
 
 export default async function handler(req, res) {
   if (setCorsHeaders(req, res)) return;
+  if (await checkRateLimit(req, res)) return;
 
   const { type, minX, maxX, minY, maxY, size } = req.query;
   if (!VWORLD_KEY) return res.status(400).json({ error: 'V-World key not configured' });
@@ -21,8 +22,22 @@ export default async function handler(req, res) {
   const dataCode = DATA_CODES[type];
   if (!dataCode) return res.status(400).json({ error: `Invalid type. Use: ${Object.keys(DATA_CODES).join(', ')}` });
 
-  const boxSize = size || (type === 'roads' ? '500' : '1000');
-  const box = `BOX(${minX || 126},${minY || 35},${maxX || 128},${maxY || 37})`;
+  // Whitelist size to prevent URL injection
+  const ALLOWED_SIZES = ['100', '500', '1000'];
+  const boxSize = ALLOWED_SIZES.includes(String(size || '')) ? String(size) : (type === 'roads' ? '500' : '1000');
+
+  // Validate bounds as floats in KR coverage [122,132] x [33,43]; default to central KR if invalid
+  const KR_MIN_X = 122, KR_MAX_X = 132, KR_MIN_Y = 33, KR_MAX_Y = 43;
+  function parseBound(val, min, max, def) {
+    const n = parseFloat(val);
+    if (!Number.isFinite(n) || n < min || n > max) return def;
+    return n;
+  }
+  const safeMinX = parseBound(minX, KR_MIN_X, KR_MAX_X, 126);
+  const safeMaxX = parseBound(maxX, KR_MIN_X, KR_MAX_X, 128);
+  const safeMinY = parseBound(minY, KR_MIN_Y, KR_MAX_Y, 35);
+  const safeMaxY = parseBound(maxY, KR_MIN_Y, KR_MAX_Y, 37);
+  const box = `BOX(${safeMinX},${safeMinY},${safeMaxX},${safeMaxY})`;
 
   try {
     const url = `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=${dataCode}&key=${VWORLD_KEY}&geomFilter=${box}&size=${boxSize}&format=json&crs=EPSG:4326`;

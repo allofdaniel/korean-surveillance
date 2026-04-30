@@ -49,6 +49,8 @@ const useMapStyle = ({
   const prevStyleRef = useRef<string | null>(null);
   const prev3DViewRef = useRef<boolean | null>(null);
   const hiddenLayersRef = useRef<string[]>([]);
+  // setTimeout 추적 — unmount 시 setMapLoaded(true) 가 unmounted component 에서 호출되지 않도록
+  const styleReloadTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Mapbox 베이스 레이어 숨기기/복원
   const toggleMapboxBaseLayers = useCallback((m: MapboxMap, hide: boolean) => {
@@ -192,9 +194,24 @@ const useMapStyle = ({
       prev3DViewRef.current = is3DView;
 
       setMapLoaded(false);
-      setTimeout(() => setMapLoaded(true), 100);
+      // 이전 timer 가 아직 살아있으면 취소 (style 빠르게 연속 변경 시 누수 방지)
+      if (styleReloadTimeoutRef.current) clearTimeout(styleReloadTimeoutRef.current);
+      styleReloadTimeoutRef.current = setTimeout(() => {
+        setMapLoaded(true);
+        styleReloadTimeoutRef.current = null;
+      }, 100);
     });
   }, [map, isDarkMode, showSatellite, mapLoaded, setMapLoaded, is3DView, showTerrain, show3DAltitude]);
+
+  // unmount 시 살아있는 setTimeout 정리 — setMapLoaded 이 unmounted component 에서 불리지 않게
+  useEffect(() => {
+    return () => {
+      if (styleReloadTimeoutRef.current) {
+        clearTimeout(styleReloadTimeoutRef.current);
+        styleReloadTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   // Handle black background toggle
   useEffect(() => {
@@ -237,6 +254,9 @@ const useMapStyle = ({
   useEffect(() => {
     if (!map?.current || !mapLoaded) return;
 
+    // V-World WMTS 위성 래스터: 이 키는 V-World 포털에서 도메인 제한(koreasurveillance.com)으로
+    // 등록된 퍼블릭 타일 키입니다. /api/vworld-tile 프록시 라우트가 추가되면 그쪽으로 이전하세요.
+    // TODO: /api/vworld-tile 프록시 라우트가 추가되면 아래 WMTS URL을 프록시로 교체할 것.
     const vworldKey = import.meta.env.VITE_VWORLD_API_KEY;
     const sourceId = 'satellite-overlay';
     const layerId = 'satellite-overlay-layer';
@@ -247,6 +267,8 @@ const useMapStyle = ({
       try {
         if (showSatellite) {
           // V-World 위성 소스 추가
+          // 이 키는 V-World 포털에서 도메인 제한이 설정된 래스터 타일 키라 클라이언트 노출이 허용됩니다.
+          // TODO: route through /api/vworld-tile when proxy added
           if (!map.current.getSource(sourceId)) {
             if (vworldKey) {
               logger.info('MapStyle', 'Adding V-World satellite source');

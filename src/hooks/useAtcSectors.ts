@@ -5,6 +5,7 @@
 import { useEffect, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
 import { ftToM } from '../utils/geometry';
+import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
 
 interface SectorData {
   id: string;
@@ -57,20 +58,14 @@ const useAtcSectors = (
     const selectedIds = Array.from(selectedAtcSectors);
 
     // Remove only unselected sectors (not all)
+    const m = map.current;
     allSectors.forEach(sector => {
       if (!selectedAtcSectors.has(sector.id)) {
-        const sourceId = `atc-sector-${sector.id}`;
-        const layerId = `atc-layer-${sector.id}`;
-        const outlineId = `atc-outline-${sector.id}`;
-        const labelSourceId = `atc-label-source-${sector.id}`;
-        const labelLayerId = `atc-label-${sector.id}`;
-        try {
-          if (map.current?.getLayer(labelLayerId)) map.current.removeLayer(labelLayerId);
-          if (map.current?.getSource(labelSourceId)) map.current.removeSource(labelSourceId);
-          if (map.current?.getLayer(outlineId)) map.current.removeLayer(outlineId);
-          if (map.current?.getLayer(layerId)) map.current.removeLayer(layerId);
-          if (map.current?.getSource(sourceId)) map.current.removeSource(sourceId);
-        } catch { /* ignore */ }
+        safeRemoveLayer(m, `atc-label-${sector.id}`);
+        safeRemoveSource(m, `atc-label-source-${sector.id}`);
+        safeRemoveLayer(m, `atc-outline-${sector.id}`);
+        safeRemoveLayer(m, `atc-layer-${sector.id}`);
+        safeRemoveSource(m, `atc-sector-${sector.id}`);
       }
     });
 

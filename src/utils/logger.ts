@@ -73,7 +73,7 @@ class StructuredLogger {
       typeof import.meta !== 'undefined' && import.meta.env?.DEV === true;
     this.level = options.level ?? (this.isDev ? LogLevel.DEBUG : LogLevel.WARN);
     this.MAX_LOGS = options.maxLogs ?? 1000;
-    this.enableRemoteLogging = options.enableRemoteLogging ?? false;
+    this.enableRemoteLogging = options.enableRemoteLogging ?? !this.isDev;
     this.remoteEndpoint = options.remoteEndpoint;
   }
 
@@ -107,19 +107,24 @@ class StructuredLogger {
 
   /**
    * 원격 로깅 (프로덕션)
+   * 현재 백엔드: Vercel Analytics + Speed Insights (자동, no-config)
+   * + 선택적 사내 endpoint (this.remoteEndpoint 설정 시)
    */
-  private async sendToRemote(entry: LogEntry): Promise<void> {
-    if (!this.enableRemoteLogging || !this.remoteEndpoint) return;
-
+  private sendToRemote(entry: LogEntry): void {
+    if (!this.enableRemoteLogging) return;
     try {
-      await fetch(this.remoteEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(entry),
-      });
-    } catch {
-      // 원격 로깅 실패는 무시 (무한 루프 방지)
-    }
+      // 사내 원격 endpoint 설정 시 fire-and-forget POST
+      if (this.remoteEndpoint) {
+        void fetch(this.remoteEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(entry),
+          keepalive: true,
+        }).catch(() => { /* never throw from logger */ });
+      }
+      // Vercel Analytics 는 별도 SDK (@vercel/analytics) 가 자동 처리하므로 여기서는 추가 작업 불필요.
+      // 향후 Sentry 등 외부 RUM 도입 시 이 메서드에 capture 호출 추가.
+    } catch { /* never throw from logger */ }
   }
 
   /**
