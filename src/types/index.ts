@@ -271,6 +271,65 @@ export type AirspaceType =
   | 'ADIZ';
 
 // ============================================
+// ATC (관제) 타입 — 4개 hook/component 공통 사용
+// ============================================
+
+/**
+ * ATC sector — UI 표시 + 지도 렌더링 모두 커버하는 superset.
+ *
+ * 호출처별 사용 필드 (의도적 superset, 모두 optional):
+ *   - AtcPanel:       id, name, color?, vertical_limits?
+ *   - ControlPanel:   id, name, color?
+ *   - useAtcSectors:  id, name, coordinates? | (center? + radius_nm?), floor_ft?, ceiling_ft?, color?
+ *   - AircraftDetail: id, name, operator?, vertical_limits?, airspace_class?, frequencies?, color?, coordinates?
+ */
+export interface AtcSector {
+  id: string;
+  name: string;
+  /** UI 표시색 (#RRGGBB) — 검증되지 않은 외부 데이터일 수 있으므로 CSS 출력 시 hex 패턴 검사 권장 */
+  color?: string;
+  /** 폴리곤 좌표 (지도 렌더링용) */
+  coordinates?: [number, number][];
+  /** 원형 섹터: 중심 + 반경 (NM) */
+  center?: [number, number];
+  radius_nm?: number;
+  /** 고도 한계 */
+  floor_ft?: number;
+  ceiling_ft?: number;
+  /** UI 표시 정보 */
+  vertical_limits?: string;
+  airspace_class?: string;
+  frequencies?: string[];
+  operator?: string;
+}
+
+/**
+ * FIR 정보 — AtcPanel 헤더 등에서 사용. 단일 객체이므로 array 가 아닌 sector type.
+ */
+export interface AtcFir {
+  name: string;
+  /** 선택적 — UI 에 따라 사용 */
+  id?: string;
+  color?: string;
+}
+
+/**
+ * ATC 데이터 트리 — 호출처별 정확한 mismatch 방지를 위해 모든 sector 배열은 optional.
+ *
+ * Source data shape (atc-data.json):
+ *   { FIR: { name }, ACC: [...], TMA: [...], CTR: [...] }
+ */
+export interface AtcData {
+  FIR?: AtcFir;
+  ACC?: AtcSector[];
+  TMA?: AtcSector[];
+  CTR?: AtcSector[];
+}
+
+/** ATC 섹터 카테고리 — useUIStore 등에서 string union 으로 사용 */
+export type AtcSectorCategory = 'ACC' | 'TMA' | 'CTR';
+
+// ============================================
 // 절차 관련 타입
 // ============================================
 

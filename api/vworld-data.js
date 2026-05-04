@@ -46,10 +46,11 @@ export default async function handler(req, res) {
     const data = await resp.json();
     return res.status(200).json(data);
   } catch (err) {
-    const isDev = process.env.NODE_ENV === 'development';
+    // VERCEL_ENV 도 함께 체크 — preview deployment 에서 leak 방지
+    const isLocalDev = process.env.NODE_ENV === 'development' && !process.env.VERCEL_ENV;
     return res.status(500).json({
       error: 'Internal server error',
-      ...(isDev && { details: err.message }),
+      ...(isLocalDev && { details: err.message }),
     });
   }
 }

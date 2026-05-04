@@ -23,7 +23,8 @@ function getCurrentAiracCycle() {
 }
 
 const AIRAC_CYCLE = getCurrentAiracCycle();
-const CACHE_VERSION = 'v7';
+// v10: aircraft-labels layer guard, Trace 429 cooldown, Procedures DEBUG.
+const CACHE_VERSION = 'v10';
 
 // 캐시 이름 정의
 const CACHES = {
@@ -34,10 +35,8 @@ const CACHES = {
   api: `tbas-api-${CACHE_VERSION}`,
 };
 
-// App Shell - 핵심 UI 파일
+// App Shell - manifest 만 사전 캐시. HTML 은 항상 network 우선 (deploy 후 stale 방지)
 const APP_SHELL_FILES = [
-  '/',
-  '/index.html',
   '/manifest.json',
 ];
 
@@ -260,9 +259,32 @@ async function handleStaticAsset(request) {
 }
 
 /**
- * App Shell 처리 - Network First with Cache Fallback
+ * App Shell 처리 - Navigation 요청은 항상 network-only.
+ *
+ * HTML 캐싱은 deploy 직후 모바일에서 stale bundle hash 참조로 화면이 비는 원인.
+ * (Vite 가 빌드마다 /assets/index-XXXX.js 의 hash 를 바꾸므로 옛 HTML 이
+ * 옛 hash 를 가리키면 404). 따라서 navigation 은 캐시 안하고, 정적 자산만 캐시.
  */
 async function handleAppShell(request) {
+  // Navigation request (HTML) 은 항상 network — 캐시 사용 안함
+  const isNavigation = request.mode === 'navigation' ||
+    (request.headers.get('accept') || '').includes('text/html');
+
+  if (isNavigation) {
+    try {
+      return await fetch(request);
+    } catch {
+      // 오프라인 fallback — 가장 최근에 본 HTML 이 있으면 사용
+      const fallback = await caches.match(request);
+      if (fallback) return fallback;
+      return new Response(
+        '<!DOCTYPE html><html><body><p>오프라인 — 인터넷 연결을 확인하세요.</p></body></html>',
+        { status: 503, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+      );
+    }
+  }
+
+  // 비-navigation 요청 (예: 매니페스트, JSON 등) 은 network-first + cache fallback
   try {
     const response = await fetch(request);
     if (response.ok) {
@@ -272,7 +294,7 @@ async function handleAppShell(request) {
     return response;
   } catch {
     const cached = await caches.match(request);
-    return cached || caches.match('/index.html');
+    return cached || new Response('Offline', { status: 503 });
   }
 }
 

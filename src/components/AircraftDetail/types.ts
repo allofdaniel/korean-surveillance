@@ -145,22 +145,5 @@ export interface DataWithAirport {
   procedures?: Record<string, unknown>;
 }
 
-export interface AtcSector {
-  id: string;
-  name: string;
-  operator?: string;
-  vertical_limits?: string;
-  airspace_class?: string;
-  frequencies?: string[];
-  color?: string;
-  coordinates?: [number, number][];
-  floor_ft?: number;
-  ceiling_ft?: number;
-}
-
-export interface AtcData {
-  FIR?: AtcSector;
-  ACC?: AtcSector[];
-  TMA?: AtcSector[];
-  CTR?: AtcSector[];
-}
+// Canonical 타입은 src/types/index.ts 로 이동. 여기서는 re-export 만 (호환성).
+export type { AtcSector, AtcData } from '../../types';

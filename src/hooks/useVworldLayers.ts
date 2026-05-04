@@ -11,17 +11,37 @@ const DEBOUNCE_MS = 800;
 
 type LayerType = 'buildings' | 'special' | 'roads';
 
+// V-World API 가 자주 502/500 → circuit breaker 로 연속 실패 시 일시 차단.
+// 5분간 3회 이상 실패하면 그 후 5분간 호출 안함 — 콘솔 도배 + 서버 부하 방지.
+const vworldCircuit = { failures: 0, openedAt: 0, COOLDOWN_MS: 5 * 60 * 1000 };
+
 async function fetchVworldData(type: LayerType, bounds: { minX: number; maxX: number; minY: number; maxY: number }) {
+  // Circuit open — 지난 5분 안에 3회 이상 실패했으면 skip
+  if (vworldCircuit.failures >= 3) {
+    if (Date.now() - vworldCircuit.openedAt < vworldCircuit.COOLDOWN_MS) return null;
+    // cooldown 끝났으면 reset 하고 한 번 시도
+    vworldCircuit.failures = 0;
+  }
   try {
     const size = type === 'roads' ? 500 : 1000;
     // 보안: API 키를 브라우저에 노출하지 않기 위해 항상 서버사이드 프록시 사용
     const url = `/api/vworld-data?type=${type}&minX=${bounds.minX}&maxX=${bounds.maxX}&minY=${bounds.minY}&maxY=${bounds.maxY}&size=${size}`;
     const resp = await fetch(url);
-    if (!resp.ok) return null;
+    if (!resp.ok) {
+      vworldCircuit.failures++;
+      if (vworldCircuit.failures === 3) {
+        vworldCircuit.openedAt = Date.now();
+        logger.warn('VWorld', `Circuit OPEN — skipping requests for ${vworldCircuit.COOLDOWN_MS / 1000}s`);
+      }
+      return null;
+    }
     const data = await resp.json();
     if (data.response?.status !== 'OK') return null;
+    // 성공 — circuit 리셋
+    vworldCircuit.failures = 0;
     return data.response?.result?.featureCollection || null;
   } catch {
+    vworldCircuit.failures++;
     return null;
   }
 }

@@ -340,7 +340,8 @@ const useProcedureRendering = (
       }
     }
     if (!map.current || !data || !mapLoaded) {
-      logger.warn('Procedures', 'Early return - missing', {
+      // 정상 race — data 로딩 전이거나 map 초기화 전. WARN 아닌 DEBUG 로 격하.
+      logger.debug('Procedures', 'Early return - waiting for dependencies', {
         map: !map.current,
         data: !data,
         mapLoaded: !mapLoaded

@@ -6,23 +6,10 @@ import { useEffect, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
 import { ftToM } from '../utils/geometry';
 import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
+import type { AtcData, AtcSector } from '../types';
 
-interface SectorData {
-  id: string;
-  name: string;
-  coordinates?: [number, number][];
-  center?: [number, number];
-  radius_nm?: number;
-  floor_ft?: number;
-  ceiling_ft?: number;
-  color?: string;
-}
-
-interface AtcData {
-  ACC?: SectorData[];
-  TMA?: SectorData[];
-  CTR?: SectorData[];
-}
+// 이 hook 이 사용하는 sector subset alias — superset 의 일부 필드만 사용
+type SectorData = AtcSector;
 
 /**
  * 원형 폴리곤 좌표 생성

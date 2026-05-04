@@ -18,6 +18,7 @@ import AircraftControlPanel from './AircraftControlPanel';
 import { ProceduresPanel, ChartOverlayPanel } from './ProcedurePanel';
 
 import type { KoreaAirspaceData } from '../hooks/useDataLoading';
+import type { AtcData } from '../types';
 import { useMapStore, useUIStore } from '../stores';
 
 // ---- Shared sub-types ----
@@ -27,17 +28,7 @@ interface LabelOffset {
   y: number;
 }
 
-interface AtcSector {
-  id: string;
-  name: string;
-  color: string;
-}
-
-interface AtcData {
-  ACC: AtcSector[];
-  TMA: AtcSector[];
-  CTR: AtcSector[];
-}
+// Canonical AtcData/AtcSector — types/index.ts 의 superset 사용 (위에서 import)
 
 type VisibleState = Record<string, boolean>;
 type ColorRecord = Record<string, string>;
@@ -316,7 +307,11 @@ const ControlPanel: React.FC<ControlPanelProps> = React.memo(({
       className={`control-panel ${isPanelOpen ? 'open' : 'closed'}`}
       role="region"
       aria-label="제어 패널"
-      aria-hidden={!isPanelOpen}
+      // inert 속성 사용 — closed 상태에서 내부 focus 와 interaction 모두 차단.
+      // aria-hidden 만 사용하면 closed 패널 안의 button 에 focus 가 남아있을 때
+      // "Blocked aria-hidden on focused element" 접근성 경고 발생 (Chrome 119+).
+      // inert 는 focus 도 자동으로 빠져나가므로 안전.
+      {...(!isPanelOpen ? { inert: '' as unknown as boolean } : {})}
     >
       <div className="panel-header">
         <span className="panel-title">대한감시</span>
@@ -412,19 +407,22 @@ const ControlPanel: React.FC<ControlPanelProps> = React.memo(({
 
             {atcData && (
               <>
-                {/* ACC/TMA/CTR 일괄 선택 */}
+                {/* ACC/TMA/CTR 일괄 선택 — 카테고리는 optional 이므로 ?? [] fallback */}
                 <div className="atc-group-btns">
-                  {(['ACC', 'TMA', 'CTR'] as const).map((type) => (
-                    <button
-                      key={type}
-                      className={`mini-btn ${
-                        atcData[type].every((s) => selectedAtcSectors.has(s.id)) ? 'active' : ''
-                      }`}
-                      onClick={() => toggleSectorGroup(atcData[type].map((s) => s.id))}
-                    >
-                      {type} ({atcData[type].length})
-                    </button>
-                  ))}
+                  {(['ACC', 'TMA', 'CTR'] as const).map((type) => {
+                    const sectors = atcData[type] ?? [];
+                    return (
+                      <button
+                        key={type}
+                        className={`mini-btn ${
+                          sectors.length > 0 && sectors.every((s) => selectedAtcSectors.has(s.id)) ? 'active' : ''
+                        }`}
+                        onClick={() => toggleSectorGroup(sectors.map((s) => s.id))}
+                      >
+                        {type} ({sectors.length})
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {/* 섹터 목록 */}
@@ -442,7 +440,7 @@ const ControlPanel: React.FC<ControlPanelProps> = React.memo(({
                     </div>
                     {atcExpanded[type] && (
                       <div className="atc-sector-chips">
-                        {atcData[type].map((s) => (
+                        {(atcData[type] ?? []).map((s) => (
                           <label
                             key={s.id}
                             className={`atc-chip ${selectedAtcSectors.has(s.id) ? 'active' : ''}`}

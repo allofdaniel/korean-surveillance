@@ -41,6 +41,19 @@ const useChartOverlay = (
     }
     if (!map?.current || !mapLoaded) return;
 
+    // Mapbox style 가 setStyle() 직후엔 잠깐 not-loaded 상태 — addSource 호출 시 throw.
+    // mapLoaded 만으로는 부족하므로 isStyleLoaded() 추가 검사 + 미로드 시 styledata 이벤트 대기.
+    if (!map.current.isStyleLoaded()) {
+      const m = map.current;
+      const onceLoaded = (): void => {
+        m.off('idle', onceLoaded);
+        // style 이 준비된 후 effect 강제 재실행 — prevLayersRef 통해 현재 상태 재구성
+        // (간단히 dummy state 변경하지 않고 다음 의존성 변경 시 자연 재실행 되도록 둠)
+      };
+      m.once('idle', onceLoaded);
+      return;
+    }
+
     // Get charts for selected airport
     const airportCharts = allChartBounds?.[selectedAirport] || {};
     const currentLayers = new Set<string>();

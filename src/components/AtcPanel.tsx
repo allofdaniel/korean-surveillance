@@ -3,24 +3,10 @@
  * 관제구역 드롭다운 패널
  */
 import React from 'react';
+import type { AtcData, AtcSector } from '../types';
 
-interface SectorData {
-  id: string;
-  name: string;
-  color?: string;
-  vertical_limits?: string;
-}
-
-interface FirData {
-  name: string;
-}
-
-interface AtcData {
-  FIR: FirData;
-  ACC: SectorData[];
-  TMA: SectorData[];
-  CTR: SectorData[];
-}
+// 이 panel 이 표시하는 sector subset alias — UI 표시 필드만 사용 (id/name/color/vertical_limits)
+type SectorData = AtcSector;
 
 interface AtcExpandedState {
   ACC: boolean;
@@ -144,25 +130,30 @@ const BatchSelectionButtons: React.FC<BatchSelectionButtonsProps> = ({ atcData, 
     });
   };
 
+  // 각 카테고리는 optional — 빈 배열로 fallback 후 매핑
+  const acc = atcData.ACC ?? [];
+  const tma = atcData.TMA ?? [];
+  const ctr = atcData.CTR ?? [];
+
   return (
     <div className="atc-dropdown-batch">
       <button
-        className={`atc-mini-btn ${atcData.ACC.every(s => selectedAtcSectors.has(s.id)) ? 'active' : ''}`}
-        onClick={() => toggleAll(atcData.ACC)}
+        className={`atc-mini-btn ${acc.length > 0 && acc.every(s => selectedAtcSectors.has(s.id)) ? 'active' : ''}`}
+        onClick={() => toggleAll(acc)}
       >
-        ACC ({atcData.ACC.length})
+        ACC ({acc.length})
       </button>
       <button
-        className={`atc-mini-btn ${atcData.TMA.every(s => selectedAtcSectors.has(s.id)) ? 'active' : ''}`}
-        onClick={() => toggleAll(atcData.TMA)}
+        className={`atc-mini-btn ${tma.length > 0 && tma.every(s => selectedAtcSectors.has(s.id)) ? 'active' : ''}`}
+        onClick={() => toggleAll(tma)}
       >
-        TMA ({atcData.TMA.length})
+        TMA ({tma.length})
       </button>
       <button
-        className={`atc-mini-btn ${atcData.CTR.every(s => selectedAtcSectors.has(s.id)) ? 'active' : ''}`}
-        onClick={() => toggleAll(atcData.CTR)}
+        className={`atc-mini-btn ${ctr.length > 0 && ctr.every(s => selectedAtcSectors.has(s.id)) ? 'active' : ''}`}
+        onClick={() => toggleAll(ctr)}
       >
-        CTR ({atcData.CTR.length})
+        CTR ({ctr.length})
       </button>
     </div>
   );
@@ -246,7 +237,7 @@ const AtcPanel: React.FC<AtcPanelProps> = ({
       {showAtcPanel && atcData && (
         <div className="atc-dropdown">
           <div className="atc-dropdown-header">
-            <span className="atc-dropdown-title">{atcData.FIR.name}</span>
+            <span className="atc-dropdown-title">{atcData.FIR?.name ?? 'FIR'}</span>
             <button className="atc-clear-btn" onClick={() => setSelectedAtcSectors(new Set())}>
               초기화
             </button>
@@ -270,7 +261,7 @@ const AtcPanel: React.FC<AtcPanelProps> = ({
           <div className="atc-dropdown-sections">
             <SectorSection
               type="ACC"
-              sectors={atcData.ACC}
+              sectors={atcData.ACC ?? []}
               expanded={atcExpanded.ACC}
               onToggle={() => setAtcExpanded(p => ({ ...p, ACC: !p.ACC }))}
               selectedAtcSectors={selectedAtcSectors}
@@ -279,7 +270,7 @@ const AtcPanel: React.FC<AtcPanelProps> = ({
             />
             <SectorSection
               type="TMA"
-              sectors={atcData.TMA}
+              sectors={atcData.TMA ?? []}
               expanded={atcExpanded.TMA}
               onToggle={() => setAtcExpanded(p => ({ ...p, TMA: !p.TMA }))}
               selectedAtcSectors={selectedAtcSectors}
@@ -288,7 +279,7 @@ const AtcPanel: React.FC<AtcPanelProps> = ({
             />
             <SectorSection
               type="CTR"
-              sectors={atcData.CTR}
+              sectors={atcData.CTR ?? []}
               expanded={atcExpanded.CTR}
               onToggle={() => setAtcExpanded(p => ({ ...p, CTR: !p.CTR }))}
               selectedAtcSectors={selectedAtcSectors}

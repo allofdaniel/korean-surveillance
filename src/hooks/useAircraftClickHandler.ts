@@ -40,10 +40,25 @@ export default function useAircraftClickHandler(
     };
 
     const handleMapClick = (e: MapMouseEvent) => {
-      // 항공기 레이어 외부 클릭 시 선택 해제
-      const features = map.current?.queryRenderedFeatures(e.point, { layers: ['aircraft-labels', 'aircraft-3d', 'aircraft-2d', 'aircraft-heading-lines'] });
-      if (!features || features.length === 0) {
-        setSelectedAircraft(null);
+      // 항공기 레이어 외부 클릭 시 선택 해제.
+      // style 재구축 직후엔 layer 가 없을 수 있으므로 존재하는 layer 만 query —
+      // 그렇지 않으면 "layer does not exist" Mapbox throw → ErrorBoundary catch.
+      if (!map.current) return;
+      const candidateLayers = ['aircraft-labels', 'aircraft-3d', 'aircraft-2d', 'aircraft-heading-lines'];
+      const existingLayers = candidateLayers.filter(id => {
+        try { return !!map.current?.getLayer(id); } catch { return false; }
+      });
+      if (existingLayers.length === 0) {
+        // layer 가 아직 안 그려졌으면 클릭은 무시 (선택 해제 안함)
+        return;
+      }
+      try {
+        const features = map.current.queryRenderedFeatures(e.point, { layers: existingLayers });
+        if (!features || features.length === 0) {
+          setSelectedAircraft(null);
+        }
+      } catch {
+        // race: getLayer 통과 후 queryRenderedFeatures 사이 style 재구축 — 무시
       }
     };
 

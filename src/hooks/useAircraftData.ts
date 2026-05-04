@@ -103,14 +103,23 @@ export default function useAircraftData(
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // 개별 항공기의 과거 위치 히스토리 로드
+  // Trace API 429 cooldown — 429 한 번 받으면 60초 동안 trace fetch 자체 skip.
+  // 이전엔 매 polling tick (15s) 마다 새 항공기 5개씩 trace 호출 → free-tier 한도 초과로
+  // 콘솔 도배. 429 발생 시 모든 trace 호출을 잠깐 멈추는 게 합리적.
+  const traceCooldownUntilRef = useRef<number>(0);
+
   const loadAircraftTrace = useCallback(async (hex: string, signal?: AbortSignal): Promise<TrailPoint[] | null> => {
+    // 429 cooldown — 60초 기다린 후 다시 시도
+    if (Date.now() < traceCooldownUntilRef.current) return null;
     try {
       const response = await fetch(getAircraftTraceUrl(hex), { signal });
 
-      // 429 Too Many Requests 또는 다른 에러 상태 처리
+      // 429 Too Many Requests — cooldown 시작
       if (!response.ok) {
         if (response.status === 429) {
-          logger.warn('Aircraft', `Trace API 429 for ${hex}: rate limited`);
+          // WARN → DEBUG 로 격하 (free-tier rate limit 은 정상 fallback)
+          logger.debug('Aircraft', `Trace API 429 — cooldown 60s`, { hex });
+          traceCooldownUntilRef.current = Date.now() + 60_000;
         }
         return null;
       }

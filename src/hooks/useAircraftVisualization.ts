@@ -41,7 +41,16 @@ function setOrCreateSource(
   if (src) {
     src.setData(data);
   } else {
-    init();
+    // Style 이 로드되기 전 addSource 호출 시 Mapbox 가 throw — 가드 추가.
+    // styledata 이벤트 후 다음 effect 실행 시 자연 재호출 됨.
+    if (!map.current?.isStyleLoaded()) return;
+    try {
+      init();
+    } catch (e) {
+      // setStyle 직후 잠깐 false-positive 일 수 있음 — silent skip
+      if (e instanceof Error && /Style is not done loading/.test(e.message)) return;
+      throw e;
+    }
   }
 }
 
