@@ -23,8 +23,9 @@ function getCurrentAiracCycle() {
 }
 
 const AIRAC_CYCLE = getCurrentAiracCycle();
-// v11: NOTAM layer paint expression 수정 (Mapbox: zoom expr 은 top-level interpolate 안에서만).
-const CACHE_VERSION = 'v11';
+// v12: useChartOverlay onceLoaded 콜백 fix — styleReadyTick state 로 effect 재실행 trigger.
+// 이전엔 idle 이벤트 후 chart layer 가 추가되지 않는 silent bug.
+const CACHE_VERSION = 'v12';
 
 // 캐시 이름 정의
 const CACHES = {

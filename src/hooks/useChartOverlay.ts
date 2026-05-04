@@ -2,7 +2,7 @@
  * useChartOverlay Hook
  * 차트 오버레이 레이어 관리 (멀티 공항 지원)
  */
-import { useEffect, useRef, type MutableRefObject } from 'react';
+import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
 import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
 import { logger } from '../utils/logger';
@@ -28,6 +28,9 @@ const useChartOverlay = (
   selectedAirport: string
 ): void => {
   const prevLayersRef = useRef<Set<string>>(new Set());
+  // styleReady tick — style 미준비 시 idle 이벤트 후 effect 강제 재실행 trigger.
+  // 이전엔 onceLoaded 콜백이 비어있어 chart layer 가 영구히 추가 안됨.
+  const [styleReadyTick, setStyleReadyTick] = useState(0);
 
   useEffect(() => {
     if (import.meta.env.DEV) {
@@ -47,11 +50,11 @@ const useChartOverlay = (
       const m = map.current;
       const onceLoaded = (): void => {
         m.off('idle', onceLoaded);
-        // style 이 준비된 후 effect 강제 재실행 — prevLayersRef 통해 현재 상태 재구성
-        // (간단히 dummy state 변경하지 않고 다음 의존성 변경 시 자연 재실행 되도록 둠)
+        // styleReadyTick 증가 → effect 재실행 → 이번엔 isStyleLoaded() 통과
+        setStyleReadyTick(t => t + 1);
       };
       m.once('idle', onceLoaded);
-      return;
+      return () => { m.off('idle', onceLoaded); };
     }
 
     // Get charts for selected airport
@@ -112,7 +115,7 @@ const useChartOverlay = (
     });
 
     prevLayersRef.current = currentLayers;
-  }, [map, activeCharts, chartOpacities, allChartBounds, selectedAirport, mapLoaded]);
+  }, [map, activeCharts, chartOpacities, allChartBounds, selectedAirport, mapLoaded, styleReadyTick]);
 };
 
 export default useChartOverlay;
