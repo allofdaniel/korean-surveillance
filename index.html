@@ -26,51 +26,64 @@
     <!-- Mapbox CSS -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css" rel="stylesheet" />
 
-    <!-- Critical viewport CSS — iOS Safari + Android WebView 호환 -->
-    <!-- position: fixed 를 html 에 적용하지 않음 (iOS 비표준, 일부 모바일에서 렌더 실패) -->
-    <!-- 100dvh (dynamic viewport) 우선 사용, 미지원 시 --app-height JS fallback -->
+    <!-- Critical viewport CSS — 모든 모바일 환경에서 검은 화면 절대 방지 -->
+    <!-- 핵심 원칙: width/height 100% + min-height 100vh + 100dvh enhancement -->
+    <!-- iOS Safari 14, Android Chrome 100, PWA standalone 모두 height 0 안되게 보장 -->
     <style>
       html, body {
         margin: 0;
         padding: 0;
         width: 100%;
-        height: 100vh; /* fallback */
-        height: 100dvh; /* iOS 16.4+ / Android Chrome 108+ */
+        /* 무조건 viewport 만큼 보장 — 검은 화면 방지 */
+        min-height: 100vh;
+        height: 100%;
         overflow: hidden;
         -webkit-overflow-scrolling: touch;
-        -webkit-text-size-adjust: 100%; /* iOS 텍스트 자동 확대 차단 */
+        -webkit-text-size-adjust: 100%;
+        background: #1a1a2e; /* 첫 paint 흰 깜빡임 차단 */
       }
-      body {
-        background: #1a1a2e; /* 첫 paint 즉시 배경 표시 — 흰 깜빡임 방지 */
+      /* dvh 지원 브라우저는 더 정확한 동적 뷰포트 사용 */
+      @supports (height: 100dvh) {
+        html, body { min-height: 100dvh; height: 100dvh; }
       }
       #root {
         width: 100%;
-        height: 100%;
-        position: relative;
+        height: 100vh;
+        min-height: 100vh;
       }
-      /* dvh 미지원 환경에서 JS 가 채우는 fallback */
-      @supports not (height: 100dvh) {
-        html, body { height: var(--app-height, 100vh); }
+      @supports (height: 100dvh) {
+        #root { height: 100dvh; min-height: 100dvh; }
+      }
+      /* JS fallback (드물지만 dvh+vh 둘 다 0 인 경우 — 옛 Android WebView) */
+      html.has-app-height,
+      html.has-app-height body,
+      html.has-app-height #root {
+        height: var(--app-height) !important;
+        min-height: var(--app-height) !important;
       }
     </style>
     <script>
-      // Android WebView / 구형 iOS Safari 용 viewport height fallback.
-      // dvh 지원 브라우저는 CSS 만으로 동작하므로 이 JS 는 fallback only.
+      // 모바일 viewport fallback — JS 가 정확한 height 측정해서 CSS var 로 넘김.
+      // 정상 브라우저는 CSS 만으로 작동, JS 는 보험.
       (function() {
         function setAppHeight() {
           var vh = window.innerHeight;
-          if (!vh || vh < 100) return; // 비정상 값 무시
-          if (document.documentElement) {
-            document.documentElement.style.setProperty('--app-height', vh + 'px');
+          if (!vh || vh < 100) return;
+          var d = document.documentElement;
+          if (d) {
+            d.style.setProperty('--app-height', vh + 'px');
+            d.classList.add('has-app-height');
           }
         }
         setAppHeight();
         window.addEventListener('resize', setAppHeight, { passive: true });
         window.addEventListener('orientationchange', setAppHeight, { passive: true });
-        // iOS Safari 의 address bar 가 collapse 한 후 정확한 높이를 다시 측정
         if ('visualViewport' in window) {
           window.visualViewport.addEventListener('resize', setAppHeight, { passive: true });
         }
+        // delayed retry — iOS Safari 의 address bar collapse 후 정확한 높이로 갱신
+        setTimeout(setAppHeight, 100);
+        setTimeout(setAppHeight, 500);
       })();
     </script>
   </head>
@@ -102,11 +115,18 @@
             })
             .catch(() => { /* registration failed — silent */ });
 
-          // 새 SW 가 controller 가 되면 (skipWaiting 후) 페이지 reload — 모바일에서
-          // 옛 bundle 참조하던 stale state 를 한 번에 청소
+          // 새 SW 가 controller 가 되면 페이지 reload — 옛 bundle 참조하던 stale state 청소.
+          // 단, 무한 reload 루프 방지: localStorage 에 마지막 reload 시각 저장,
+          // 5초 안에 controllerchange 가 두 번 일어나면 두 번째는 skip (새 deploy 가
+          // 매우 빠르게 연속 발생하는 경우 모바일 사용자가 반복 reload 에 갇히는 것 차단).
           let reloading = false;
           navigator.serviceWorker.addEventListener('controllerchange', () => {
             if (reloading) return;
+            try {
+              const lastReload = parseInt(sessionStorage.getItem('sw-reload-at') || '0', 10);
+              if (Date.now() - lastReload < 5000) return; // recent reload — skip
+              sessionStorage.setItem('sw-reload-at', String(Date.now()));
+            } catch (e) { /* sessionStorage may fail in private mode — proceed */ }
             reloading = true;
             window.location.reload();
           });

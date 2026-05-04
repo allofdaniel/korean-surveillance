@@ -23,9 +23,9 @@ function getCurrentAiracCycle() {
 }
 
 const AIRAC_CYCLE = getCurrentAiracCycle();
-// v12: useChartOverlay onceLoaded 콜백 fix — styleReadyTick state 로 effect 재실행 trigger.
-// 이전엔 idle 이벤트 후 chart layer 가 추가되지 않는 silent bug.
-const CACHE_VERSION = 'v12';
+// v13: 모바일 검은 화면 fix — min-height 100vh + JS class fallback,
+// SW controllerchange 5초 cooldown 으로 무한 reload 루프 차단.
+const CACHE_VERSION = 'v13';
 
 // 캐시 이름 정의
 const CACHES = {
