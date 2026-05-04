@@ -23,8 +23,8 @@ function getCurrentAiracCycle() {
 }
 
 const AIRAC_CYCLE = getCurrentAiracCycle();
-// v10: aircraft-labels layer guard, Trace 429 cooldown, Procedures DEBUG.
-const CACHE_VERSION = 'v10';
+// v11: NOTAM layer paint expression 수정 (Mapbox: zoom expr 은 top-level interpolate 안에서만).
+const CACHE_VERSION = 'v11';
 
 // 캐시 이름 정의
 const CACHES = {

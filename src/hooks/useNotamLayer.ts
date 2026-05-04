@@ -210,14 +210,29 @@ export default function useNotamLayer(
           ['==', ['get', 'validity'], 'expired'], '#9E9E9E',
           '#FF9800'
         ],
-        // zoom 별 두께, 큰 NOTAM 은 더 얇게 — 작은 NOTAM 가독성 보호
+        // zoom 별 두께, 큰 NOTAM 은 더 얇게.
+        // Mapbox 제약: zoom expression 은 top-level interpolate/step 안에서만 가능.
+        // 따라서 interpolate(zoom) 을 outer 로 두고 안에서 case 분기.
         'line-width': [
-          'case',
-          ['==', ['get', 'radiusBucket'], 'wide'],
-            ['interpolate', ['linear'], ['zoom'], 4, 1.0, 12, 1.5],
-          ['==', ['get', 'radiusBucket'], 'large'],
-            ['interpolate', ['linear'], ['zoom'], 4, 1.5, 12, 2.5],
-          ['interpolate', ['linear'], ['zoom'], 4, 2.5, 8, 3.5, 12, 4.5]
+          'interpolate', ['linear'], ['zoom'],
+          4, [
+            'case',
+            ['==', ['get', 'radiusBucket'], 'wide'], 1.0,
+            ['==', ['get', 'radiusBucket'], 'large'], 1.5,
+            2.5,
+          ],
+          8, [
+            'case',
+            ['==', ['get', 'radiusBucket'], 'wide'], 1.2,
+            ['==', ['get', 'radiusBucket'], 'large'], 2.0,
+            3.5,
+          ],
+          12, [
+            'case',
+            ['==', ['get', 'radiusBucket'], 'wide'], 1.5,
+            ['==', ['get', 'radiusBucket'], 'large'], 2.5,
+            4.5,
+          ],
         ],
         'line-dasharray': [4, 2]
       }
@@ -229,19 +244,34 @@ export default function useNotamLayer(
       type: 'circle',
       source: 'notam-centers',
       paint: {
-        // 반경 버킷 + 줌 별 크기. 작은 NOTAM 도 시인성 확보, 큰 NOTAM 은 너무 두드러지지 않게
+        // 반경 버킷 + 줌 별 크기. 작은 NOTAM 도 시인성 확보, 큰 NOTAM 은 너무 두드러지지 않게.
+        // Mapbox 제약: zoom expression 은 top-level interpolate/step 안에서만 가능.
         'circle-radius': [
-          'case',
-          ['==', ['get', 'radiusBucket'], 'point'],
-            ['interpolate', ['linear'], ['zoom'], 4, 6, 8, 6, 12, 5],
-          ['==', ['get', 'radiusBucket'], 'small'],
-            ['interpolate', ['linear'], ['zoom'], 4, 8, 8, 7, 12, 6],
-          ['==', ['get', 'radiusBucket'], 'medium'],
-            ['interpolate', ['linear'], ['zoom'], 4, 9, 8, 8, 12, 7],
-          ['==', ['get', 'radiusBucket'], 'large'],
-            ['interpolate', ['linear'], ['zoom'], 4, 10, 8, 9, 12, 8],
-          // wide
-          ['interpolate', ['linear'], ['zoom'], 4, 11, 8, 10, 12, 9]
+          'interpolate', ['linear'], ['zoom'],
+          4, [
+            'case',
+            ['==', ['get', 'radiusBucket'], 'point'], 6,
+            ['==', ['get', 'radiusBucket'], 'small'], 8,
+            ['==', ['get', 'radiusBucket'], 'medium'], 9,
+            ['==', ['get', 'radiusBucket'], 'large'], 10,
+            11, // wide
+          ],
+          8, [
+            'case',
+            ['==', ['get', 'radiusBucket'], 'point'], 6,
+            ['==', ['get', 'radiusBucket'], 'small'], 7,
+            ['==', ['get', 'radiusBucket'], 'medium'], 8,
+            ['==', ['get', 'radiusBucket'], 'large'], 9,
+            10, // wide
+          ],
+          12, [
+            'case',
+            ['==', ['get', 'radiusBucket'], 'point'], 5,
+            ['==', ['get', 'radiusBucket'], 'small'], 6,
+            ['==', ['get', 'radiusBucket'], 'medium'], 7,
+            ['==', ['get', 'radiusBucket'], 'large'], 8,
+            9, // wide
+          ],
         ],
         'circle-color': [
           'case',
