@@ -91,9 +91,42 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
 
+    <!-- Emergency reset — ?reset=1 접속 시 모든 SW unregister + cache 삭제 후 다시 로드 -->
+    <!-- 모바일 사용자가 옛 SW (v6/v7) 에 stuck 일 때 escape hatch -->
+    <script>
+      (function() {
+        var search = window.location.search || '';
+        if (search.indexOf('reset') === -1) return;
+        if (!('serviceWorker' in navigator)) {
+          window.location.replace('/');
+          return;
+        }
+        document.documentElement.innerHTML =
+          '<body style="background:#1a1a2e;color:#7fcfff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center;padding:20px;">' +
+          '<div><div style="font-size:14px;opacity:.8;margin-bottom:8px;">Resetting cache...</div>' +
+          '<div style="font-size:11px;opacity:.5;">캐시 초기화 중 — 잠시 후 자동 새로고침</div></div></body>';
+        Promise.all([
+          navigator.serviceWorker.getRegistrations()
+            .then(function(regs) { return Promise.all(regs.map(function(r) { return r.unregister(); })); })
+            .catch(function() {}),
+          ('caches' in window ? caches.keys()
+            .then(function(keys) { return Promise.all(keys.map(function(k) { return caches.delete(k); })); })
+            .catch(function() {}) : Promise.resolve())
+        ]).finally(function() {
+          // sessionStorage / localStorage 도 정리 — 옛 reload-at 값 등
+          try { sessionStorage.clear(); } catch (e) {}
+          // 새 페이지 시작
+          setTimeout(function() { window.location.replace('/'); }, 500);
+        });
+        // SW 등록 흐름 진입 차단
+        window.__SKIP_SW__ = true;
+      })();
+    </script>
+
     <!-- Service Worker Registration — 새 버전 자동 적용 (모바일 stale cache 방지) -->
     <script>
-      if ('serviceWorker' in navigator) {
+      if (window.__SKIP_SW__) { /* reset mode — 등록 skip */ }
+      else if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js')
             .then(registration => {

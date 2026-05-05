@@ -1,346 +1,50 @@
 /**
- * Service Worker for TBAS PWA
- * DO-278A 요구사항 추적: SRS-PWA-001
+ * Service Worker — kill switch (v14)
  *
- * 캐싱 전략:
- * - App Shell: Cache First (기본 UI 파일)
- * - 정적 자산: Cache First with Network Fallback
- * - API 데이터: Network First with Cache Fallback
- * - 항공 데이터: AIRAC 주기 기반 버전 관리
+ * 모바일 사용자가 옛 SW (v6~v13) cache 에 stuck 되어 검은 화면이 발생하는
+ * 사례가 다수 보고됨. SW 캐싱 전략 자체가 실시간 NOTAM/항적 데이터에 부적합
+ * 하므로, 이 SW 는 단 한 가지 일만 한다:
+ *   1. 모든 cache 삭제
+ *   2. 모든 client claim 후 navigate(reload) 한 번
+ *   3. 자기 자신 unregister
+ *
+ * 결과: 옛 SW 가진 사용자는 v14 가 한 번 설치된 후 SW 가 영구 사라지고
+ * 일반 웹앱으로 동작. 새 사용자는 SW 등록 자체가 install 직후 사라지므로
+ * stale cache 위험이 원천 제거됨.
+ *
+ * 향후 PWA 오프라인 지원이 필요할 때 다시 도입하되, App Shell 사전 캐싱
+ * 패턴 (deploy 후 stale bundle hash) 은 절대 사용 금지.
  */
-/* global self, caches, Response, location */
+/* global self, caches, location */
 
-// AIRAC 기준일 (28일 주기)
-const AIRAC_BASE_DATE = new Date('2024-01-25');
-const AIRAC_CYCLE_DAYS = 28;
-
-// 현재 AIRAC 사이클 계산
-function getCurrentAiracCycle() {
-  const now = new Date();
-  const diffTime = Math.abs(now - AIRAC_BASE_DATE);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return Math.floor(diffDays / AIRAC_CYCLE_DAYS);
-}
-
-const AIRAC_CYCLE = getCurrentAiracCycle();
-// v13: 모바일 검은 화면 fix — min-height 100vh + JS class fallback,
-// SW controllerchange 5초 cooldown 으로 무한 reload 루프 차단.
-const CACHE_VERSION = 'v13';
-
-// 캐시 이름 정의
-const CACHES = {
-  appShell: `tbas-app-shell-${CACHE_VERSION}`,
-  static: `tbas-static-${CACHE_VERSION}`,
-  dynamic: `tbas-dynamic-${CACHE_VERSION}`,
-  aviation: `tbas-aviation-${CACHE_VERSION}-airac-${AIRAC_CYCLE}`,
-  api: `tbas-api-${CACHE_VERSION}`,
-};
-
-// App Shell - manifest 만 사전 캐시. HTML 은 항상 network 우선 (deploy 후 stale 방지)
-const APP_SHELL_FILES = [
-  '/manifest.json',
-];
-
-// 정적 자산 - 아이콘 (3D 모델은 온디맨드 로딩)
-// DO-278A 성능 최적화: 큰 GLB 파일(125MB)은 설치 시 캐시하지 않음
-const STATIC_ASSETS = [
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
-  '/radar_dome.glb', // 375KB - 작은 모델만 캐시
-];
-
-// 온디맨드 로딩 3D 모델 (요청 시 캐시)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Reserved for future on-demand 3D model caching.
-const ON_DEMAND_3D_MODELS = [
-  '/A380.glb',      // 51MB - 온디맨드
-  '/b737.glb',      // 19MB - 온디맨드
-  '/b777.glb',      // 53MB - 온디맨드
-  '/helicopter.glb', // 2.3MB - 온디맨드
-];
-
-// 항공 데이터 파일 - AIRAC 주기별 캐싱
-const AVIATION_DATA_FILES = [
-  '/aviation_data.json',
-  '/atc_sectors.json',
-  '/data/korea_airspace.json',
-];
-
-// API 캐시 TTL (초)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Reserved for future TTL-based cache invalidation policy.
-const API_CACHE_TTL = {
-  weather: 60,        // 기상 데이터: 1분
-  notam: 600,         // NOTAM: 10분
-  aircraft: 0,        // 실시간 항공기: 캐시 안함
-  default: 300,       // 기타: 5분
-};
-
-/**
- * Install - 초기 캐시 설정
- */
 self.addEventListener('install', (event) => {
-  console.info('[SW] Installing Service Worker');
-
-  event.waitUntil(
-    Promise.all([
-      // App Shell 캐시
-      caches.open(CACHES.appShell).then((cache) => {
-        console.info('[SW] Caching App Shell');
-        return cache.addAll(APP_SHELL_FILES);
-      }),
-      // 정적 자산 캐시 (실패해도 진행)
-      caches.open(CACHES.static).then((cache) => {
-        console.info('[SW] Caching Static Assets');
-        return Promise.allSettled(
-          STATIC_ASSETS.map((asset) => cache.add(asset).catch(() => null))
-        );
-      }),
-      // 항공 데이터 캐시
-      caches.open(CACHES.aviation).then((cache) => {
-        console.info('[SW] Caching Aviation Data (AIRAC:', AIRAC_CYCLE, ')');
-        return Promise.allSettled(
-          AVIATION_DATA_FILES.map((file) => cache.add(file).catch(() => null))
-        );
-      }),
-    ]).then(() => self.skipWaiting())
-  );
+  // 즉시 활성화로 진입 — waiting 단계 skip
+  event.waitUntil(self.skipWaiting());
 });
 
-/**
- * Activate - 오래된 캐시 정리
- */
 self.addEventListener('activate', (event) => {
-  console.info('[SW] Activating Service Worker');
-
-  const currentCaches = Object.values(CACHES);
-
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => !currentCaches.includes(name))
-          .map((name) => {
-            console.info('[SW] Deleting old cache:', name);
-            return caches.delete(name);
-          })
-      );
-    }).then(() => self.clients.claim())
-  );
-});
-
-/**
- * Fetch - 요청 처리
- */
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
-
-  // GET 요청만 처리
-  if (request.method !== 'GET') {
-    return;
-  }
-
-  // 외부 요청, 확장 프로그램 무시
-  if (url.origin !== location.origin || url.protocol === 'chrome-extension:') {
-    return;
-  }
-
-  // API 요청 처리
-  if (url.pathname.startsWith('/api/')) {
-    event.respondWith(handleApiRequest(request, url));
-    return;
-  }
-
-  // 항공 데이터 파일
-  if (AVIATION_DATA_FILES.some((f) => url.pathname.endsWith(f))) {
-    event.respondWith(handleAviationData(request));
-    return;
-  }
-
-  // 정적 자산 (3D 모델, 이미지)
-  if (url.pathname.match(/\.(glb|gltf|png|jpg|jpeg|svg|ico)$/)) {
-    event.respondWith(handleStaticAsset(request));
-    return;
-  }
-
-  // 기본: App Shell (네트워크 우선, 캐시 폴백)
-  event.respondWith(handleAppShell(request));
-});
-
-/**
- * API 요청 처리 - Network First with Cache Fallback
- */
-async function handleApiRequest(request, url) {
-  // 실시간 항공기 데이터는 항상 네트워크
-  if (url.pathname.includes('/aircraft')) {
+  event.waitUntil((async () => {
+    // 1. 모든 cache 삭제 (옛 v6~v13 cache 포함)
     try {
-      return await fetch(request);
-    } catch {
-      return new Response(JSON.stringify({ error: 'Offline', data: [] }), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-  }
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+    } catch (e) { /* ignore */ }
 
-  // 기타 API: Stale-While-Revalidate
-  const cache = await caches.open(CACHES.api);
-  const cached = await cache.match(request);
+    // 2. 모든 client claim
+    try { await self.clients.claim(); } catch (e) { /* ignore */ }
 
-  const fetchPromise = fetch(request).then((response) => {
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  }).catch(() => null);
-
-  // 캐시가 있으면 바로 반환하고 백그라운드에서 업데이트
-  if (cached) {
-    void fetchPromise; // 백그라운드 업데이트
-    return cached;
-  }
-
-  // 캐시 없으면 네트워크 대기
-  const networkResponse = await fetchPromise;
-  if (networkResponse) {
-    return networkResponse;
-  }
-
-  // 오프라인 폴백
-  return new Response(JSON.stringify({ error: 'Offline' }), {
-    status: 503,
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
-
-/**
- * 항공 데이터 처리 - Cache First (AIRAC 주기별)
- */
-async function handleAviationData(request) {
-  const cache = await caches.open(CACHES.aviation);
-  const cached = await cache.match(request);
-
-  if (cached) {
-    return cached;
-  }
-
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch {
-    return new Response(JSON.stringify({ error: 'Data unavailable' }), {
-      status: 503,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-}
-
-/**
- * 정적 자산 처리 - Cache First
- */
-async function handleStaticAsset(request) {
-  const cache = await caches.open(CACHES.static);
-  const cached = await cache.match(request);
-
-  if (cached) {
-    return cached;
-  }
-
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch {
-    // 이미지의 경우 플레이스홀더 반환 가능
-    return new Response('', { status: 404 });
-  }
-}
-
-/**
- * App Shell 처리 - Navigation 요청은 항상 network-only.
- *
- * HTML 캐싱은 deploy 직후 모바일에서 stale bundle hash 참조로 화면이 비는 원인.
- * (Vite 가 빌드마다 /assets/index-XXXX.js 의 hash 를 바꾸므로 옛 HTML 이
- * 옛 hash 를 가리키면 404). 따라서 navigation 은 캐시 안하고, 정적 자산만 캐시.
- */
-async function handleAppShell(request) {
-  // Navigation request (HTML) 은 항상 network — 캐시 사용 안함
-  const isNavigation = request.mode === 'navigation' ||
-    (request.headers.get('accept') || '').includes('text/html');
-
-  if (isNavigation) {
+    // 3. 모든 열린 client 에게 reload 명령 — stale bundle 즉시 새로고침
     try {
-      return await fetch(request);
-    } catch {
-      // 오프라인 fallback — 가장 최근에 본 HTML 이 있으면 사용
-      const fallback = await caches.match(request);
-      if (fallback) return fallback;
-      return new Response(
-        '<!DOCTYPE html><html><body><p>오프라인 — 인터넷 연결을 확인하세요.</p></body></html>',
-        { status: 503, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
-      );
-    }
-  }
+      const clients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      for (const client of clients) {
+        try { client.navigate(client.url); } catch (e) { /* ignore */ }
+      }
+    } catch (e) { /* ignore */ }
 
-  // 비-navigation 요청 (예: 매니페스트, JSON 등) 은 network-first + cache fallback
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      const cache = await caches.open(CACHES.appShell);
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch {
-    const cached = await caches.match(request);
-    return cached || new Response('Offline', { status: 503 });
-  }
-}
-
-/**
- * 메시지 처리 - 클라이언트와 통신
- */
-self.addEventListener('message', (event) => {
-  if (event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-
-  if (event.data.type === 'GET_CACHE_SIZE') {
-    getCacheSize().then((size) => {
-      event.ports[0].postMessage({ size });
-    });
-  }
-
-  if (event.data.type === 'CLEAR_CACHE') {
-    clearAllCaches().then(() => {
-      event.ports[0].postMessage({ success: true });
-    });
-  }
+    // 4. 자기 자신 unregister — 다음 navigation 부터는 SW 없는 일반 웹앱
+    try { await self.registration.unregister(); } catch (e) { /* ignore */ }
+  })());
 });
 
-/**
- * 캐시 크기 계산
- */
-async function getCacheSize() {
-  if (!('storage' in navigator && 'estimate' in navigator.storage)) {
-    return null;
-  }
-  const estimate = await navigator.storage.estimate();
-  return {
-    usage: estimate.usage,
-    quota: estimate.quota,
-    percent: ((estimate.usage / estimate.quota) * 100).toFixed(2),
-  };
-}
-
-/**
- * 모든 캐시 삭제
- */
-async function clearAllCaches() {
-  const keys = await caches.keys();
-  return Promise.all(keys.map((key) => caches.delete(key)));
-}
-
-console.info('[SW] Service Worker loaded (AIRAC cycle:', AIRAC_CYCLE, ')');
+// fetch 이벤트는 의도적으로 처리하지 않음 — 모든 요청이 network 직통.
+// (handler 등록 자체가 없으면 브라우저가 SW 우회)
