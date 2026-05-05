@@ -118,17 +118,44 @@
         var bootScreen = document.getElementById('boot-screen');
 
         // 단계별 도달 추적 — 무엇이 fail 했는지 정밀 진단
-        // main.tsx → react-render → app-mount 단계마다 stage 갱신.
-        // 'inline-script-ran' 만 도달 = ES module 자체가 fetch/parse 실패.
-        // 'main-tsx-evaluated' 까지 도달 = main 모듈은 됐지만 createRoot 가 throw.
-        // 'react-render-called' 도달 = React render 호출됨, App lazy 미해결.
-        // 'app-mounted' 도달 = 정상 동작.
         window.__BOOT_STAGE__ = 'inline-script-ran';
         window.__BOOT_STAGES_LOG__ = [{ stage: 'inline-script-ran', t: 0 }];
         window.__setBootStage__ = function(name) {
           window.__BOOT_STAGE__ = name;
           window.__BOOT_STAGES_LOG__.push({ stage: name, t: Date.now() - startedAt });
         };
+
+        // CRITICAL — console.error hook. 사용자 폰에서 발생하는 모든 console
+        // error 를 진단 패널 텍스트에 자동 노출. capture listener 가 못 잡는
+        // module evaluation error 도 console 에는 찍히므로 여기서 받아 보존.
+        window.__BOOT_CONSOLE_ERRORS__ = [];
+        try {
+          var origConsoleError = console.error;
+          console.error = function() {
+            try {
+              var parts = [];
+              for (var i = 0; i < arguments.length; i++) {
+                var a = arguments[i];
+                if (a && a.stack) parts.push(String(a.stack));
+                else if (typeof a === 'object') {
+                  try { parts.push(JSON.stringify(a)); } catch(e) { parts.push(String(a)); }
+                } else parts.push(String(a));
+              }
+              var msg = parts.join(' ').substring(0, 600);
+              window.__BOOT_CONSOLE_ERRORS__.push(msg);
+            } catch(e) {}
+            try { origConsoleError.apply(console, arguments); } catch(e) {}
+          };
+          var origConsoleWarn = console.warn;
+          console.warn = function() {
+            try {
+              var parts = [];
+              for (var i = 0; i < arguments.length; i++) parts.push(String(arguments[i]));
+              window.__BOOT_CONSOLE_ERRORS__.push('[warn] ' + parts.join(' ').substring(0, 400));
+            } catch(e) {}
+            try { origConsoleWarn.apply(console, arguments); } catch(e) {}
+          };
+        } catch (e) { /* ignore */ }
 
         // status 실시간 갱신 — 사용자가 어느 단계에서 멈춰있는지 즉시 봄.
         // 20 초 기다릴 필요 없음. 매 0.5s 단계 + 경과시간 노출.
@@ -199,6 +226,14 @@
                 'online:   ' + (navigator.onLine ? 'yes' : 'no') + '\n' +
                 'sw:       ' + (('serviceWorker' in navigator) ? 'supported' : 'unsupported') + '\n' +
                 (bootError ? 'error:    ' + bootError : 'error:    (none captured)') + '\n' +
+                '\n--- console errors (' + (window.__BOOT_CONSOLE_ERRORS__ || []).length + ') ---\n' +
+                ((window.__BOOT_CONSOLE_ERRORS__ || []).slice(-8).join('\n') || '(none)') + '\n' +
+                '\n--- script tags ---\n' +
+                Array.from(document.querySelectorAll('script')).map(function(s, i) {
+                  return i + ': ' + (s.type || 'classic') + ' ' +
+                    (s.src ? s.src.split('/').pop() : '(inline)') +
+                    (s.id ? ' #' + s.id : '');
+                }).join('\n').substring(0, 800) + '\n' +
                 '\n--- JS resources ---\n' + resourceDiag +
               '</div>' +
               '<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">' +

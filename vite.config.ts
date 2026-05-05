@@ -7,7 +7,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    // SamsungBrowser strict CORS 우회 — Vite 가 자동 추가하는
+    // crossorigin attribute 가 same-origin 요청에서도 fail 하는 사례 진단됨.
+    // 진단 패널에 'resource-link: index-XXX.css failed' 형태로 보고됨.
+    // build 후 HTML 에서 crossorigin attribute 제거.
+    {
+      name: 'remove-crossorigin-attr',
+      enforce: 'post' as const,
+      transformIndexHtml(html: string) {
+        return html.replace(/\s+crossorigin(?=\s|>)/g, '');
+      },
+    },
+  ],
   // SamsungBrowser 29 진단 결과: vite-plugin-legacy 의 detection script
   // (type=module) + dual-loading flow 가 SamsungBrowser 에서 깨짐.
   // polyfills-legacy 까지 다운로드 되지만 legacy entry 미다운로드.
@@ -75,6 +88,10 @@ export default defineConfig({
     sourcemap: false,
     // 큰 의존성 (Mapbox GL ~465KB gzip, Three.js ~122KB gzip) 청크 크기 경고 상향
     chunkSizeWarningLimit: 1800,
+    // modulePreload polyfill + crossorigin attribute 제거 — SamsungBrowser 가
+    // <link rel=modulepreload crossorigin> 의 strict CORS 정책에서 fail 하는
+    // 사례 진단됨 (CSS link 도 fail 표시). 단순 module bundle 만으로 충분.
+    modulePreload: false,
     // Build target — es2015 로 낮춤 (이전 es2018 도 SamsungBrowser 29 에서
     // 평가 fail 진단). es2015 = Chrome 51+, SamsungBrowser 5+, iOS 10+. 모든
     // 모바일 안전.
