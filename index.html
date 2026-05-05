@@ -68,15 +68,34 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-
-    <!-- Service Worker Registration (kill-switch v14 — install 후 자동 unregister) -->
+    <!--
+      SW kill — 옛 SW (v6~v13) 가 stale HTML/chunk cache 응답으로 검은 화면
+      유발 진단됨. v14 kill-switch SW 도 install + activate 후에야 unregister.
+      사용자가 검은 화면 보고 닫으면 activate 못 함 → 영구 stuck.
+      해결: 즉시 모든 SW unregister + 모든 cache 삭제. SW register 안 함.
+    -->
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js').catch(function() {});
-        });
-      }
+      (function() {
+        if ('serviceWorker' in navigator) {
+          try {
+            navigator.serviceWorker.getRegistrations().then(function(regs) {
+              for (var i = 0; i < regs.length; i++) {
+                try { regs[i].unregister(); } catch (e) {}
+              }
+            }).catch(function() {});
+          } catch (e) {}
+        }
+        if ('caches' in window) {
+          try {
+            caches.keys().then(function(keys) {
+              for (var i = 0; i < keys.length; i++) {
+                try { caches.delete(keys[i]); } catch (e) {}
+              }
+            }).catch(function() {});
+          } catch (e) {}
+        }
+      })();
     </script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
