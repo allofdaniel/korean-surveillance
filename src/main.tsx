@@ -3,16 +3,35 @@
  * Production observability: Vercel Speed Insights + Analytics + web-vitals
  */
 
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
-import { SpeedInsights } from '@vercel/speed-insights/react';
-import { Analytics } from '@vercel/analytics/react';
 import { onLCP, onINP, onCLS, onFCP, onTTFB } from 'web-vitals';
-import App from './App';
 import { ToastProvider } from './components/Toast';
 import ErrorBoundary from './components/ErrorBoundary';
 import { logger } from './utils/logger';
 import './index.css';
+
+// App 은 mapbox-gl (1.7 MB), three (482 KB) 등 무거운 의존성을 동기 import 한다.
+// 보급형 모바일에서 number 가 너무 커서 React mount 자체가 8초+ 걸렸음
+// (Samsung Internet/Android 10 384x585 진단 결과: error 없이 단순 시간 초과).
+// lazy 로 별도 chunk 분리 → React 는 즉시 mount, App chunk 가 백그라운드 로드되며
+// Suspense fallback 으로 진행 상태가 즉시 가시화된다.
+const App = lazy(() => import('./App'));
+
+// Vercel observability 도 main 번들에서 분리 — first-paint 까지 필요 없음.
+const VercelObservability = lazy(() =>
+  Promise.all([
+    import('@vercel/speed-insights/react'),
+    import('@vercel/analytics/react'),
+  ]).then(([si, an]) => ({
+    default: () => (
+      <>
+        <si.SpeedInsights />
+        <an.Analytics />
+      </>
+    ),
+  })),
+);
 
 const isProduction = import.meta.env.PROD;
 
@@ -45,6 +64,42 @@ if (!rootElement) {
   throw new Error('Root element not found');
 }
 
+// Suspense fallback — App chunk 가 로드되는 동안 보일 화면.
+// index.html 의 boot screen 과 동일한 시각 언어 (검은 화면 방지).
+const SuspenseLoader = (): React.ReactElement => (
+  <div
+    style={{
+      position: 'fixed',
+      inset: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: '#1a1a2e',
+      color: '#7fcfff',
+      fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',
+      padding: 20,
+      textAlign: 'center',
+    }}
+  >
+    <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 8, letterSpacing: '.05em' }}>
+      대한감시
+    </div>
+    <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 24 }}>저고도 항공감시 시스템</div>
+    <div
+      style={{
+        width: 32,
+        height: 32,
+        border: '3px solid rgba(127,207,255,.2)',
+        borderTopColor: '#7fcfff',
+        borderRadius: '50%',
+        animation: 'bootSpin 1s linear infinite',
+      }}
+    />
+    <div style={{ fontSize: 11, opacity: 0.5, marginTop: 16 }}>지도 엔진 로딩 중...</div>
+  </div>
+);
+
 // React render 자체가 throw 하면 #root 가 멈춰서 검은 화면. 모바일에서 원인 파악
 // 불가하므로 가시 fallback 으로 변환 + window.__BOOT_ERROR__ 에 evidence 보관.
 try {
@@ -52,12 +107,15 @@ try {
     <React.StrictMode>
       <ErrorBoundary>
         <ToastProvider>
-          <App />
+          <Suspense fallback={<SuspenseLoader />}>
+            <App />
+          </Suspense>
         </ToastProvider>
       </ErrorBoundary>
-      {/* Vercel observability — 프로덕션에서만 데이터 전송, dev에서는 no-op */}
-      <SpeedInsights />
-      <Analytics />
+      {/* Vercel observability — 프로덕션에서만 데이터 전송, lazy 로 분리해 first-paint 차단 안되게 */}
+      <Suspense fallback={null}>
+        <VercelObservability />
+      </Suspense>
     </React.StrictMode>
   );
 } catch (renderErr) {

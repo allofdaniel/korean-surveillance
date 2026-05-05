@@ -118,10 +118,12 @@
         var bootScreen = document.getElementById('boot-screen');
 
         // status 갱신 (사용자가 무엇을 기다리는지 알 수 있게)
+        // 보급형 모바일에서 mapbox 1.7MB 평가에 시간 걸림 — 단계 더 세분화.
         var phases = [
-          [500, '번들 로딩 중...'],
-          [2000, '컴포넌트 초기화 중...'],
-          [4000, '지도 엔진 준비 중...']
+          [500,  '번들 로딩 중...'],
+          [3000, '지도 엔진 평가 중... (~1.7 MB)'],
+          [8000, '컴포넌트 초기화 중... (느린 기기는 더 걸릴 수 있음)'],
+          [14000, '거의 완료... 잠시만 기다려 주세요']
         ];
         phases.forEach(function(p) {
           setTimeout(function() {
@@ -129,7 +131,9 @@
           }, p[0]);
         });
 
-        // 8 초 후에도 #boot-screen 이 살아있으면 React mount 실패 — 진단 패널 표시
+        // 20 초 후에도 #boot-screen 이 살아있으면 React mount 실패 — 진단 패널 표시.
+        // (이전 8초는 보급형 Android 에서 정상 케이스도 잘림. mapbox 1.7MB
+        // download+parse+evaluate 에 모바일 4G 에서 10-15s 걸리는 경우 다수.)
         setTimeout(function() {
           if (!bootScreen || !document.body.contains(bootScreen)) return; // React mounted OK
 
@@ -187,7 +191,7 @@
           if (resetBtn) resetBtn.addEventListener('click', function() {
             window.location.replace('/?reset=' + Date.now());
           });
-        }, 8000);
+        }, 20000);
 
         // 모듈 평가 단계 throw 캡처 — main.tsx import 실패시 evidence 보존
         window.addEventListener('error', function(ev) {
