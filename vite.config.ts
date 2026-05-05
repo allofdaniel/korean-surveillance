@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import legacy from '@vitejs/plugin-legacy';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -7,7 +8,21 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    // SamsungBrowser 29 (Android 10) 검은 화면 진단:
+    // - inline script 다 제거하고 minimal index.html (tbas 패턴) 적용했는데도
+    //   mount 안 됨. 즉 vendor chunk 평가 자체가 SamsungBrowser 에서 fail.
+    // - 진단 패널 없이 minimal 환경이므로 legacy plugin 의 detection script 도
+    //   문제 가능성 낮음. 진짜 syntax 호환성 문제로 보임.
+    // → renderModernChunks=false 로 단일 legacy bundle (SystemJS + ES2015)
+    //   만 emit. 진단 코드 없으니 SamsungBrowser dual-loading flow 도 영향 없음.
+    legacy({
+      targets: ['defaults', 'not IE 11', 'Samsung >= 5', 'Android >= 6'],
+      modernPolyfills: false,
+      renderModernChunks: false,
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
