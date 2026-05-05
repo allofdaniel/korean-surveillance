@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import legacy from '@vitejs/plugin-legacy';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -8,24 +7,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  plugins: [
-    react(),
-    // Legacy bundle — SamsungBrowser 29 / Android 10 같은 보급형 모바일이
-    // 최신 ES module 평가에 silent fail 하는 사례 진단됨. 이 플러그인이
-    // ES2015 호환 nomodule fallback bundle 을 emit, <script nomodule> 로
-    // 자동 주입하여 최신 ES 못 다루는 환경을 자동 커버.
-    legacy({
-      targets: ['defaults', 'not IE 11', 'Samsung >= 9', 'Android >= 7'],
-      modernPolyfills: true,
-      renderLegacyChunks: true,
-      // SamsungBrowser 29 진단 결과: modern + legacy dual-loading flow 가
-      // 어디선가 깨짐 (polyfills-legacy 까지 download 후 legacy entry
-      // 미다운로드). renderModernChunks=false 로 modern bundle 자체를 emit
-      // 안 하고 모든 사용자가 단일 legacy bundle (SystemJS + polyfills +
-      // ES2015 transpile) 사용 → dual-loading 흐름 자체 제거.
-      renderModernChunks: false,
-    }),
-  ],
+  plugins: [react()],
+  // SamsungBrowser 29 진단 결과: vite-plugin-legacy 의 detection script
+  // (type=module) + dual-loading flow 가 SamsungBrowser 에서 깨짐.
+  // polyfills-legacy 까지 다운로드 되지만 legacy entry 미다운로드.
+  // → legacy plugin 완전 제거하고 단일 module bundle + 보수적 syntax target
+  //   ('es2015') 으로 SamsungBrowser native module loader 사용.
+  esbuild: {
+    target: 'es2015',
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -85,13 +75,10 @@ export default defineConfig({
     sourcemap: false,
     // 큰 의존성 (Mapbox GL ~465KB gzip, Three.js ~122KB gzip) 청크 크기 경고 상향
     chunkSizeWarningLimit: 1800,
-    // Build target — 보수적으로 es2018 까지만 emit. SamsungBrowser 29
-    // (Android 10) 같은 보급형 모바일이 최신 syntax 일부 (private class fields,
-    // top-level await, Promise.withResolvers 등) 평가 단계에서 silent throw 하는
-    // 사례 진단됨. 진단 결과: error 캡처 안 되고 main-tsx-evaluated 마커 hit 안 됨
-    // → vendor chunk 평가 단계 실패 강력 의심. es2018 = Chrome 64+, SamsungBrowser
-    // 9+, iOS 12+ 모두 안전.
-    target: 'es2018',
+    // Build target — es2015 로 낮춤 (이전 es2018 도 SamsungBrowser 29 에서
+    // 평가 fail 진단). es2015 = Chrome 51+, SamsungBrowser 5+, iOS 10+. 모든
+    // 모바일 안전.
+    target: 'es2015',
     rollupOptions: {
       output: {
         // 청크 분리 최적화
