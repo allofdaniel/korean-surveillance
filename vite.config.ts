@@ -18,6 +18,12 @@ export default defineConfig({
       targets: ['defaults', 'not IE 11', 'Samsung >= 9', 'Android >= 7'],
       modernPolyfills: true,
       renderLegacyChunks: true,
+      // SamsungBrowser 29 진단 결과: modern + legacy dual-loading flow 가
+      // 어디선가 깨짐 (polyfills-legacy 까지 download 후 legacy entry
+      // 미다운로드). renderModernChunks=false 로 modern bundle 자체를 emit
+      // 안 하고 모든 사용자가 단일 legacy bundle (SystemJS + polyfills +
+      // ES2015 transpile) 사용 → dual-loading 흐름 자체 제거.
+      renderModernChunks: false,
     }),
   ],
   resolve: {
