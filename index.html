@@ -321,10 +321,14 @@
           window.location.replace('/');
           return;
         }
-        document.documentElement.innerHTML =
-          '<body style="background:#1a1a2e;color:#7fcfff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center;padding:20px;">' +
+        // CRITICAL: closing body tag 를 string 에 쓰지 말 것. vite-plugin-legacy 가
+        // HTML 의 closing body 직전에 nomodule script 를 inject 하는데, source 의
+        // string literal 안의 같은 tag 도 매칭해서 script 들을 끼워넣어 syntax
+        // error 가 발생함. document.body.innerHTML 로 우회.
+        document.body.style.cssText = 'background:#1a1a2e;color:#7fcfff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center;padding:20px;';
+        document.body.innerHTML =
           '<div><div style="font-size:14px;opacity:.8;margin-bottom:8px;">Resetting cache...</div>' +
-          '<div style="font-size:11px;opacity:.5;">캐시 초기화 중 — 잠시 후 자동 새로고침</div></div></body>';
+          '<div style="font-size:11px;opacity:.5;">캐시 초기화 중 — 잠시 후 자동 새로고침</div></div>';
         Promise.all([
           navigator.serviceWorker.getRegistrations()
             .then(function(regs) { return Promise.all(regs.map(function(r) { return r.unregister(); })); })

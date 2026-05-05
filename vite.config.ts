@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import legacy from '@vitejs/plugin-legacy';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -7,7 +8,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    // Legacy bundle — SamsungBrowser 29 / Android 10 같은 보급형 모바일이
+    // 최신 ES module 평가에 silent fail 하는 사례 진단됨. 이 플러그인이
+    // ES2015 호환 nomodule fallback bundle 을 emit, <script nomodule> 로
+    // 자동 주입하여 최신 ES 못 다루는 환경을 자동 커버.
+    legacy({
+      targets: ['defaults', 'not IE 11', 'Samsung >= 9', 'Android >= 7'],
+      modernPolyfills: true,
+      renderLegacyChunks: true,
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
