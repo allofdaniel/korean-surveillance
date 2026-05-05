@@ -67,6 +67,13 @@ export default defineConfig({
     sourcemap: false,
     // 큰 의존성 (Mapbox GL ~465KB gzip, Three.js ~122KB gzip) 청크 크기 경고 상향
     chunkSizeWarningLimit: 1800,
+    // Build target — 보수적으로 es2018 까지만 emit. SamsungBrowser 29
+    // (Android 10) 같은 보급형 모바일이 최신 syntax 일부 (private class fields,
+    // top-level await, Promise.withResolvers 등) 평가 단계에서 silent throw 하는
+    // 사례 진단됨. 진단 결과: error 캡처 안 되고 main-tsx-evaluated 마커 hit 안 됨
+    // → vendor chunk 평가 단계 실패 강력 의심. es2018 = Chrome 64+, SamsungBrowser
+    // 9+, iOS 12+ 모두 안전.
+    target: 'es2018',
     rollupOptions: {
       output: {
         // 청크 분리 최적화

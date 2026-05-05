@@ -234,18 +234,36 @@
           });
         }, 20000);
 
-        // 모듈 평가 단계 throw 캡처 — main.tsx import 실패시 evidence 보존
-        window.addEventListener('error', function(ev) {
+        // 모듈 평가 단계 throw 캡처 — 핵심: capture phase 로 document 에 등록.
+        // <script> element 의 error event 는 bubbling 안 하므로 window 의 일반
+        // listener 는 못 잡음. document + useCapture=true 로만 캡처 가능.
+        function captureBootError(label, msg) {
           if (window.__BOOT_ERROR__) return; // first error wins
-          window.__BOOT_ERROR__ =
+          window.__BOOT_ERROR__ = label + ': ' + msg;
+        }
+        // window 의 일반 (bubbling) error — runtime exception 잡음
+        window.addEventListener('error', function(ev) {
+          captureBootError('runtime',
             (ev.message || 'unknown') +
-            (ev.filename ? ' @ ' + ev.filename + ':' + (ev.lineno||'?') : '');
-        }, { once: false });
+            (ev.filename ? ' @ ' + ev.filename + ':' + (ev.lineno||'?') : ''));
+        }, false);
+        // document 의 capture phase — script/img/link 등 resource error 잡음.
+        // ES module evaluation error 가 여기에 노출되는 케이스가 핵심.
+        document.addEventListener('error', function(ev) {
+          var t = ev.target;
+          if (!t) return;
+          var tag = t.tagName ? t.tagName.toLowerCase() : 'unknown';
+          var src = t.src || t.href || '';
+          captureBootError('resource-' + tag,
+            (src ? src.split('/').pop() + ' ' : '') +
+            'failed to load/parse');
+        }, true /* useCapture */);
+        // promise rejection (lazy import 실패 등)
         window.addEventListener('unhandledrejection', function(ev) {
-          if (window.__BOOT_ERROR__) return;
           var r = ev && ev.reason;
-          window.__BOOT_ERROR__ = 'promise rejection: ' + (r && (r.message || r.toString()) || 'unknown');
-        }, { once: false });
+          captureBootError('promise',
+            (r && (r.message || r.toString())) || 'unknown');
+        }, false);
       })();
     </script>
 
@@ -260,6 +278,38 @@
     </script>
 
     <script type="module" src="/src/main.tsx"></script>
+
+    <!--
+      Module script watcher — main.tsx 의 <script type=module> tag 에 직접
+      error listener 부착. Vite 가 build 시 위 script 태그를 변환해 실제
+      bundle 을 src 로 가리킴. 평가 실패 시 그 element 에 error 이벤트 발생.
+      위의 document capture listener 와 별도로, element 에 직접 부착해서
+      놓치지 않게 한다.
+    -->
+    <script>
+      (function() {
+        // build 후 실제 module script 들을 찾아 error 핸들러 부착
+        function attachToModuleScripts() {
+          var scripts = document.querySelectorAll('script[type="module"]');
+          for (var i = 0; i < scripts.length; i++) {
+            (function(s) {
+              s.addEventListener('error', function(ev) {
+                if (window.__BOOT_ERROR__) return;
+                window.__BOOT_ERROR__ =
+                  'module-script-error: ' +
+                  (s.src ? s.src.split('/').pop() : 'inline') +
+                  ' ' + ((ev && ev.message) || 'evaluation/parse failed');
+              });
+            })(scripts[i]);
+          }
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', attachToModuleScripts);
+        } else {
+          attachToModuleScripts();
+        }
+      })();
+    </script>
 
     <!-- Emergency reset — ?reset=1 접속 시 모든 SW unregister + cache 삭제 후 다시 로드 -->
     <!-- 모바일 사용자가 옛 SW (v6/v7) 에 stuck 일 때 escape hatch -->
