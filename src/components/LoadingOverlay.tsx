@@ -49,16 +49,20 @@ export default function LoadingOverlay({ ready, aircraftCount }: LoadingOverlayP
     };
   }, []);
 
-  // 첫 데이터 도착 → 페이드아웃 → unmount
+  // 첫 데이터 도착 OR 15초 타임아웃 → 페이드아웃 → unmount.
+  // 타임아웃 시에도 자동 dismiss — Aircraft API 가 429 (rate limit) 등
+  // 일시적 문제일 때 사용자가 영구히 loading 화면에 갇히지 않도록 (지도라도
+  // 보이게). 사용자가 "다시 시도" 명시 클릭 안 해도 자동으로 지도 진입.
   useEffect(() => {
     if (!mounted || fading) return;
-    if (ready && aircraftCount > 0) {
+    const dataArrived = ready && aircraftCount > 0;
+    if (dataArrived || timedOut) {
       setFading(true);
       const t = setTimeout(() => setMounted(false), 600);
       return () => clearTimeout(t);
     }
     return undefined;
-  }, [ready, aircraftCount, mounted, fading]);
+  }, [ready, aircraftCount, mounted, fading, timedOut]);
 
   if (!mounted) return null;
 
