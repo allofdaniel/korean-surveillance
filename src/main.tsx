@@ -45,15 +45,34 @@ if (!rootElement) {
   throw new Error('Root element not found');
 }
 
-ReactDOM.createRoot(rootElement).render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <ToastProvider>
-        <App />
-      </ToastProvider>
-    </ErrorBoundary>
-    {/* Vercel observability — 프로덕션에서만 데이터 전송, dev에서는 no-op */}
-    <SpeedInsights />
-    <Analytics />
-  </React.StrictMode>
-);
+// React render 자체가 throw 하면 #root 가 멈춰서 검은 화면. 모바일에서 원인 파악
+// 불가하므로 가시 fallback 으로 변환 + window.__BOOT_ERROR__ 에 evidence 보관.
+try {
+  ReactDOM.createRoot(rootElement).render(
+    <React.StrictMode>
+      <ErrorBoundary>
+        <ToastProvider>
+          <App />
+        </ToastProvider>
+      </ErrorBoundary>
+      {/* Vercel observability — 프로덕션에서만 데이터 전송, dev에서는 no-op */}
+      <SpeedInsights />
+      <Analytics />
+    </React.StrictMode>
+  );
+} catch (renderErr) {
+  // boot watchdog 이 evidence 로 사용
+  const w = window as unknown as { __BOOT_ERROR__?: string };
+  if (!w.__BOOT_ERROR__) {
+    w.__BOOT_ERROR__ =
+      'render: ' + (renderErr instanceof Error ? renderErr.message : String(renderErr));
+  }
+  logger.error('Bootstrap', 'Initial render failed', renderErr instanceof Error ? renderErr : new Error(String(renderErr)));
+  // 사용자가 보는 화면 — boot-screen watchdog 이 8초 후 진단 패널로 전환하지만,
+  // 즉시 가시화하기 위해 여기서도 빠르게 대체.
+  rootElement.innerHTML =
+    '<div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#1a1a2e;color:#ff6b6b;font-family:sans-serif;padding:20px;text-align:center;font-size:13px;">' +
+    '앱 초기화 실패: ' + (renderErr instanceof Error ? renderErr.message : String(renderErr)) +
+    '<br><br><button onclick="window.location.replace(\'/?reset=\'+Date.now())" style="margin-top:12px;padding:10px 16px;background:#7fcfff;color:#0e1117;border:none;border-radius:4px;font-weight:600;cursor:pointer;">캐시 초기화 후 재시도</button>' +
+    '</div>';
+}

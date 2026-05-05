@@ -88,7 +88,132 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!--
+      Pre-mount boot screen — React replaces this DOM when App mounts.
+      배경이 검은색만 보이던 모바일 사용자를 위해 즉시 가시 컨텐츠를 제공.
+      만약 React 가 8 초 내 mount 안되면 #boot-fallback 의 watchdog 이 진단 패널 표시.
+    -->
+    <div id="root">
+      <div id="boot-screen" style="
+        position:fixed;inset:0;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        background:#1a1a2e;color:#7fcfff;
+        font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+        text-align:center;padding:20px;z-index:1;">
+        <div style="font-size:18px;font-weight:600;margin-bottom:8px;letter-spacing:.05em;">대한감시</div>
+        <div style="font-size:12px;opacity:.7;margin-bottom:24px;">저고도 항공감시 시스템</div>
+        <div style="width:32px;height:32px;border:3px solid rgba(127,207,255,.2);border-top-color:#7fcfff;border-radius:50%;animation:bootSpin 1s linear infinite;"></div>
+        <div id="boot-status" style="font-size:11px;opacity:.5;margin-top:16px;min-height:14px;">시스템 초기화 중...</div>
+      </div>
+      <style>
+        @keyframes bootSpin { to { transform: rotate(360deg); } }
+      </style>
+    </div>
+
+    <!-- Boot watchdog — React 가 8 초 내 mount 못하면 진단 패널 표시 -->
+    <script>
+      (function() {
+        var startedAt = Date.now();
+        var statusEl = document.getElementById('boot-status');
+        var bootScreen = document.getElementById('boot-screen');
+
+        // status 갱신 (사용자가 무엇을 기다리는지 알 수 있게)
+        var phases = [
+          [500, '번들 로딩 중...'],
+          [2000, '컴포넌트 초기화 중...'],
+          [4000, '지도 엔진 준비 중...']
+        ];
+        phases.forEach(function(p) {
+          setTimeout(function() {
+            if (statusEl && document.body.contains(statusEl)) statusEl.textContent = p[1];
+          }, p[0]);
+        });
+
+        // 8 초 후에도 #boot-screen 이 살아있으면 React mount 실패 — 진단 패널 표시
+        setTimeout(function() {
+          if (!bootScreen || !document.body.contains(bootScreen)) return; // React mounted OK
+
+          var ua = navigator.userAgent || 'unknown';
+          var hasWebGL = (function(){
+            try {
+              var c = document.createElement('canvas');
+              return !!(c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl'));
+            } catch (e) { return false; }
+          })();
+          var bootError = window.__BOOT_ERROR__ || null;
+
+          bootScreen.innerHTML =
+            '<div style="max-width:560px;width:100%;text-align:left;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;">' +
+              '<div style="color:#ff6b6b;font-size:16px;font-weight:600;margin-bottom:12px;">앱 시작에 실패했습니다</div>' +
+              '<div style="color:#cfd6e0;font-size:12px;line-height:1.6;margin-bottom:16px;opacity:.85;">8초 내에 화면이 준비되지 않았습니다. 아래 정보를 개발자에게 전달하면 빠르게 원인을 파악할 수 있습니다.</div>' +
+              '<div style="background:rgba(0,0,0,.35);border:1px solid rgba(127,207,255,.15);border-radius:6px;padding:12px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;color:#9fb3c8;white-space:pre-wrap;word-break:break-all;line-height:1.5;">' +
+                'time:    ' + new Date().toISOString() + '\n' +
+                'elapsed: ' + (Date.now() - startedAt) + ' ms\n' +
+                'ua:      ' + ua + '\n' +
+                'webgl:   ' + (hasWebGL ? 'available' : 'NOT available') + '\n' +
+                'pixels:  ' + window.innerWidth + 'x' + window.innerHeight + ' (dpr ' + (window.devicePixelRatio || 1) + ')\n' +
+                'online:  ' + (navigator.onLine ? 'yes' : 'no') + '\n' +
+                'sw:      ' + (('serviceWorker' in navigator) ? 'supported' : 'unsupported') + '\n' +
+                (bootError ? 'error:   ' + bootError : 'error:   (none captured)') +
+              '</div>' +
+              '<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">' +
+                '<button id="boot-debug-btn" style="flex:1;min-width:120px;padding:10px;background:#7fcfff;color:#0e1117;border:none;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;">디버그 콘솔 열기</button>' +
+                '<button id="boot-reset-btn" style="flex:1;min-width:120px;padding:10px;background:transparent;color:#7fcfff;border:1px solid #7fcfff;border-radius:4px;font-size:13px;cursor:pointer;">캐시 초기화 후 재시도</button>' +
+              '</div>' +
+            '</div>';
+
+          var debugBtn = document.getElementById('boot-debug-btn');
+          var resetBtn = document.getElementById('boot-reset-btn');
+          if (debugBtn) debugBtn.addEventListener('click', function() {
+            // Eruda mobile devtools — CDN 에서 로드해 console/network 검사 가능
+            var s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/eruda';
+            s.onload = function() {
+              try {
+                /* global eruda */
+                window.eruda && window.eruda.init();
+                debugBtn.textContent = '디버그 콘솔 활성화됨';
+                debugBtn.disabled = true;
+                debugBtn.style.opacity = '.6';
+              } catch (e) {
+                debugBtn.textContent = '콘솔 로드 실패: ' + (e && e.message);
+              }
+            };
+            s.onerror = function() {
+              debugBtn.textContent = '콘솔 CDN 접근 실패 (네트워크?)';
+            };
+            document.body.appendChild(s);
+          });
+          if (resetBtn) resetBtn.addEventListener('click', function() {
+            window.location.replace('/?reset=' + Date.now());
+          });
+        }, 8000);
+
+        // 모듈 평가 단계 throw 캡처 — main.tsx import 실패시 evidence 보존
+        window.addEventListener('error', function(ev) {
+          if (window.__BOOT_ERROR__) return; // first error wins
+          window.__BOOT_ERROR__ =
+            (ev.message || 'unknown') +
+            (ev.filename ? ' @ ' + ev.filename + ':' + (ev.lineno||'?') : '');
+        }, { once: false });
+        window.addEventListener('unhandledrejection', function(ev) {
+          if (window.__BOOT_ERROR__) return;
+          var r = ev && ev.reason;
+          window.__BOOT_ERROR__ = 'promise rejection: ' + (r && (r.message || r.toString()) || 'unknown');
+        }, { once: false });
+      })();
+    </script>
+
+    <!-- ?debug=1 즉시 Eruda 활성화 — 디버그 패널 기다릴 필요 없이 바로 콘솔 확인 -->
+    <script>
+      if (/[?&]debug=1\b/.test(window.location.search)) {
+        var s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/eruda';
+        s.onload = function() { try { window.eruda && window.eruda.init(); } catch(e){} };
+        document.head.appendChild(s);
+      }
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
 
     <!-- Emergency reset — ?reset=1 접속 시 모든 SW unregister + cache 삭제 후 다시 로드 -->
