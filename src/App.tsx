@@ -83,9 +83,21 @@ import {
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
+// Boot stage marker — App chunk 가 evaluated 됐다는 증거 (lazy import 해소 OK).
+(window as unknown as { __setBootStage__?: (s: string) => void }).__setBootStage__?.('app-module-evaluated');
+
 function App(): React.ReactElement | null {
+  // Boot stage marker — App component 가 첫 render 시작.
+  // 이 stage 만 도달하고 'app-mounted' 가 안 도달하면 useEffect 도달 전에 hang.
+  (window as unknown as { __setBootStage__?: (s: string) => void }).__setBootStage__?.('app-render-start');
+
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
+
+  // App 가 정상 mount 되면 boot screen 이 사라진다는 증거.
+  useEffect(() => {
+    (window as unknown as { __setBootStage__?: (s: string) => void }).__setBootStage__?.('app-mounted');
+  }, []);
 
   // ============================================
   // Zustand Stores

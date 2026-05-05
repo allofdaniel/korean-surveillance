@@ -11,6 +11,16 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { logger } from './utils/logger';
 import './index.css';
 
+// Boot stage marker — index.html watchdog 이 어디까지 도달했는지 진단 패널에 노출.
+// 'main-tsx-evaluated' 까지 도달했으면 ES module 로드는 됐다는 뜻 → React 단계 의심.
+declare global {
+  interface Window {
+    __setBootStage__?: (name: string) => void;
+    __BOOT_ERROR__?: string;
+  }
+}
+window.__setBootStage__?.('main-tsx-evaluated');
+
 // App 은 mapbox-gl (1.7 MB), three (482 KB) 등 무거운 의존성을 동기 import 한다.
 // 보급형 모바일에서 number 가 너무 커서 React mount 자체가 8초+ 걸렸음
 // (Samsung Internet/Android 10 384x585 진단 결과: error 없이 단순 시간 초과).
@@ -103,6 +113,7 @@ const SuspenseLoader = (): React.ReactElement => (
 // React render 자체가 throw 하면 #root 가 멈춰서 검은 화면. 모바일에서 원인 파악
 // 불가하므로 가시 fallback 으로 변환 + window.__BOOT_ERROR__ 에 evidence 보관.
 try {
+  window.__setBootStage__?.('react-render-start');
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <ErrorBoundary>
@@ -118,6 +129,7 @@ try {
       </Suspense>
     </React.StrictMode>
   );
+  window.__setBootStage__?.('react-render-called');
 } catch (renderErr) {
   // boot watchdog 이 evidence 로 사용
   const w = window as unknown as { __BOOT_ERROR__?: string };

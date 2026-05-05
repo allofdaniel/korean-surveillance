@@ -110,32 +110,66 @@
       </style>
     </div>
 
-    <!-- Boot watchdog — React 가 8 초 내 mount 못하면 진단 패널 표시 -->
+    <!-- Boot watchdog — React 가 20 초 내 mount 못하면 진단 패널 표시 -->
     <script>
       (function() {
         var startedAt = Date.now();
         var statusEl = document.getElementById('boot-status');
         var bootScreen = document.getElementById('boot-screen');
 
-        // status 갱신 (사용자가 무엇을 기다리는지 알 수 있게)
-        // 보급형 모바일에서 mapbox 1.7MB 평가에 시간 걸림 — 단계 더 세분화.
-        var phases = [
-          [500,  '번들 로딩 중...'],
-          [3000, '지도 엔진 평가 중... (~1.7 MB)'],
-          [8000, '컴포넌트 초기화 중... (느린 기기는 더 걸릴 수 있음)'],
-          [14000, '거의 완료... 잠시만 기다려 주세요']
-        ];
-        phases.forEach(function(p) {
-          setTimeout(function() {
-            if (statusEl && document.body.contains(statusEl)) statusEl.textContent = p[1];
-          }, p[0]);
-        });
+        // 단계별 도달 추적 — 무엇이 fail 했는지 정밀 진단
+        // main.tsx → react-render → app-mount 단계마다 stage 갱신.
+        // 'inline-script-ran' 만 도달 = ES module 자체가 fetch/parse 실패.
+        // 'main-tsx-evaluated' 까지 도달 = main 모듈은 됐지만 createRoot 가 throw.
+        // 'react-render-called' 도달 = React render 호출됨, App lazy 미해결.
+        // 'app-mounted' 도달 = 정상 동작.
+        window.__BOOT_STAGE__ = 'inline-script-ran';
+        window.__BOOT_STAGES_LOG__ = [{ stage: 'inline-script-ran', t: 0 }];
+        window.__setBootStage__ = function(name) {
+          window.__BOOT_STAGE__ = name;
+          window.__BOOT_STAGES_LOG__.push({ stage: name, t: Date.now() - startedAt });
+        };
+
+        // status 실시간 갱신 — 사용자가 어느 단계에서 멈춰있는지 즉시 봄.
+        // 20 초 기다릴 필요 없음. 매 0.5s 단계 + 경과시간 노출.
+        var statusTimer = setInterval(function() {
+          if (!statusEl || !document.body.contains(statusEl)) {
+            clearInterval(statusTimer);
+            return;
+          }
+          var elapsed = Math.round((Date.now() - startedAt) / 100) / 10;
+          statusEl.textContent = '단계: ' + window.__BOOT_STAGE__ + ' (' + elapsed + 's)';
+        }, 500);
+
+        // 리소스 진단 — 어떤 .js chunk 가 download 됐는지/실패했는지 검사.
+        // type=module 자체가 안 돈다면 entries 에 main.tsx 도 안 보인다.
+        function getResourceDiagnostics() {
+          try {
+            if (!performance || !performance.getEntriesByType) return 'performance API unavailable';
+            var entries = performance.getEntriesByType('resource');
+            var jsEntries = [];
+            for (var i = 0; i < entries.length; i++) {
+              var name = entries[i].name || '';
+              if (/\.(js|tsx|mjs)(\?|$)/.test(name) && name.indexOf(window.location.origin) === 0) {
+                var short = name.replace(window.location.origin, '');
+                if (short.length > 50) short = '...' + short.substr(short.length - 47);
+                jsEntries.push(
+                  short + ' [' +
+                  (entries[i].duration > 0 ? Math.round(entries[i].duration) + 'ms' : 'pending') +
+                  (entries[i].transferSize ? ', ' + Math.round(entries[i].transferSize/1024) + 'KB' : '') +
+                  (entries[i].responseStatus ? ', ' + entries[i].responseStatus : '') +
+                  ']'
+                );
+              }
+            }
+            return jsEntries.length ? jsEntries.join('\n') : '(no JS resources loaded)';
+          } catch (e) { return 'error: ' + (e && e.message); }
+        }
 
         // 20 초 후에도 #boot-screen 이 살아있으면 React mount 실패 — 진단 패널 표시.
-        // (이전 8초는 보급형 Android 에서 정상 케이스도 잘림. mapbox 1.7MB
-        // download+parse+evaluate 에 모바일 4G 에서 10-15s 걸리는 경우 다수.)
         setTimeout(function() {
           if (!bootScreen || !document.body.contains(bootScreen)) return; // React mounted OK
+          clearInterval(statusTimer);
 
           var ua = navigator.userAgent || 'unknown';
           var hasWebGL = (function(){
@@ -145,20 +179,27 @@
             } catch (e) { return false; }
           })();
           var bootError = window.__BOOT_ERROR__ || null;
+          var stage = window.__BOOT_STAGE__ || 'unknown';
+          var stagesLog = (window.__BOOT_STAGES_LOG__ || [])
+            .map(function(s){ return s.stage + '@' + s.t + 'ms'; }).join(' → ');
+          var resourceDiag = getResourceDiagnostics();
 
           bootScreen.innerHTML =
             '<div style="max-width:560px;width:100%;text-align:left;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;">' +
               '<div style="color:#ff6b6b;font-size:16px;font-weight:600;margin-bottom:12px;">앱 시작에 실패했습니다</div>' +
-              '<div style="color:#cfd6e0;font-size:12px;line-height:1.6;margin-bottom:16px;opacity:.85;">8초 내에 화면이 준비되지 않았습니다. 아래 정보를 개발자에게 전달하면 빠르게 원인을 파악할 수 있습니다.</div>' +
+              '<div style="color:#cfd6e0;font-size:12px;line-height:1.6;margin-bottom:16px;opacity:.85;">20초 내에 화면이 준비되지 않았습니다. 아래 정보를 개발자에게 전달하면 빠르게 원인을 파악할 수 있습니다.</div>' +
               '<div style="background:rgba(0,0,0,.35);border:1px solid rgba(127,207,255,.15);border-radius:6px;padding:12px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;color:#9fb3c8;white-space:pre-wrap;word-break:break-all;line-height:1.5;">' +
-                'time:    ' + new Date().toISOString() + '\n' +
-                'elapsed: ' + (Date.now() - startedAt) + ' ms\n' +
-                'ua:      ' + ua + '\n' +
-                'webgl:   ' + (hasWebGL ? 'available' : 'NOT available') + '\n' +
-                'pixels:  ' + window.innerWidth + 'x' + window.innerHeight + ' (dpr ' + (window.devicePixelRatio || 1) + ')\n' +
-                'online:  ' + (navigator.onLine ? 'yes' : 'no') + '\n' +
-                'sw:      ' + (('serviceWorker' in navigator) ? 'supported' : 'unsupported') + '\n' +
-                (bootError ? 'error:   ' + bootError : 'error:   (none captured)') +
+                'time:     ' + new Date().toISOString() + '\n' +
+                'elapsed:  ' + (Date.now() - startedAt) + ' ms\n' +
+                'last-stage: ' + stage + '\n' +
+                'stages:   ' + (stagesLog || '(none)') + '\n' +
+                'ua:       ' + ua + '\n' +
+                'webgl:    ' + (hasWebGL ? 'available' : 'NOT available') + '\n' +
+                'pixels:   ' + window.innerWidth + 'x' + window.innerHeight + ' (dpr ' + (window.devicePixelRatio || 1) + ')\n' +
+                'online:   ' + (navigator.onLine ? 'yes' : 'no') + '\n' +
+                'sw:       ' + (('serviceWorker' in navigator) ? 'supported' : 'unsupported') + '\n' +
+                (bootError ? 'error:    ' + bootError : 'error:    (none captured)') + '\n' +
+                '\n--- JS resources ---\n' + resourceDiag +
               '</div>' +
               '<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">' +
                 '<button id="boot-debug-btn" style="flex:1;min-width:120px;padding:10px;background:#7fcfff;color:#0e1117;border:none;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;">디버그 콘솔 열기</button>' +
