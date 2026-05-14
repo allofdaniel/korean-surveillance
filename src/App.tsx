@@ -600,28 +600,8 @@ function App(): React.ReactElement | null {
         parseMetarTime={parseMetarTime}
       />
 
-      {/* View Controls */}
+      {/* 우측 상단 — NOTAM 만 (나머지 9개 토글은 햄버거 안 "보기 & 오버레이" 로 통합됨) */}
       <ViewControlsBar
-        is3DView={is3DView}
-        setIs3DView={setIs3DView}
-        isDarkMode={isDarkMode}
-        setIsDarkMode={setIsDarkMode}
-        showSatellite={showSatellite}
-        setShowSatellite={setShowSatellite}
-        viewFilter={viewFilter}
-        cycleViewFilter={cycleViewFilter}
-        showSatellites={showSatellites}
-        setShowSatellites={setShowSatellites}
-        showCctv={showCctv}
-        setShowCctv={setShowCctv}
-        showShips={showShips}
-        setShowShips={setShowShips}
-        showVwBuildings={showVwBuildings}
-        setShowVwBuildings={setShowVwBuildings}
-        showVwSpecial={showVwSpecial}
-        setShowVwSpecial={setShowVwSpecial}
-        showVwRoads={showVwRoads}
-        setShowVwRoads={setShowVwRoads}
         showLightning={showLightning}
         setShowLightning={setShowLightning}
         showSigmet={showSigmet}
@@ -755,6 +735,26 @@ function App(): React.ReactElement | null {
         map={map}
         koreaAirspaceData={koreaAirspaceData}
         flyToAirport={flyToAirport}
+        // 5번째 카테고리: 보기 & 오버레이
+        isDarkMode={isDarkMode}
+        setIsDarkMode={setIsDarkMode}
+        setIs3DView={setIs3DView}
+        showSatellite={showSatellite}
+        setShowSatellite={setShowSatellite}
+        viewFilter={viewFilter}
+        cycleViewFilter={cycleViewFilter}
+        showSatellites={showSatellites}
+        setShowSatellites={setShowSatellites}
+        showCctv={showCctv}
+        setShowCctv={setShowCctv}
+        showShips={showShips}
+        setShowShips={setShowShips}
+        showVwBuildings={showVwBuildings}
+        setShowVwBuildings={setShowVwBuildings}
+        showVwSpecial={showVwSpecial}
+        setShowVwSpecial={setShowVwSpecial}
+        showVwRoads={showVwRoads}
+        setShowVwRoads={setShowVwRoads}
       />
 
       {/* Aircraft Detail Panel */}

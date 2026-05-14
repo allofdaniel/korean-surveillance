@@ -161,6 +161,29 @@ export interface ControlPanelProps {
 
   // Fly to airport
   flyToAirport: () => void;
+
+  // ─── 5번째 카테고리: 보기 & 오버레이 (옛 우측 상단 9버튼 통합) ───
+  // 지도 모드
+  isDarkMode: boolean;
+  setIsDarkMode: (v: boolean) => void;
+  setIs3DView: (v: boolean) => void;
+  showSatellite: boolean;
+  setShowSatellite: (v: boolean) => void;
+  viewFilter: 'none' | 'nvg' | 'flir' | 'crt';
+  cycleViewFilter: () => void;
+  // 외부 데이터 오버레이
+  showSatellites: boolean;
+  setShowSatellites: (v: boolean) => void;
+  showCctv: boolean;
+  setShowCctv: (v: boolean) => void;
+  showShips: boolean;
+  setShowShips: (v: boolean) => void;
+  showVwBuildings: boolean;
+  setShowVwBuildings: (v: boolean) => void;
+  showVwSpecial: boolean;
+  setShowVwSpecial: (v: boolean) => void;
+  showVwRoads: boolean;
+  setShowVwRoads: (v: boolean) => void;
 }
 
 // ---- Accent colours for the 4 major categories ----
@@ -262,6 +285,26 @@ const ControlPanel: React.FC<ControlPanelProps> = React.memo(({
   map,
   koreaAirspaceData,
   flyToAirport,
+  // 5번째 카테고리: 보기 & 오버레이
+  isDarkMode,
+  setIsDarkMode,
+  setIs3DView,
+  showSatellite,
+  setShowSatellite,
+  viewFilter,
+  cycleViewFilter,
+  showSatellites,
+  setShowSatellites,
+  showCctv,
+  setShowCctv,
+  showShips,
+  setShowShips,
+  showVwBuildings,
+  setShowVwBuildings,
+  showVwSpecial,
+  setShowVwSpecial,
+  showVwRoads,
+  setShowVwRoads,
 }) => {
   // 4분류 카테고리 상태 (UIStore)
   const catMapExpanded      = useUIStore(s => s.catMapExpanded);
@@ -273,11 +316,23 @@ const ControlPanel: React.FC<ControlPanelProps> = React.memo(({
   const catDisplayExpanded     = useUIStore(s => s.catDisplayExpanded);
   const setCatDisplayExpanded  = useUIStore(s => s.setCatDisplayExpanded);
 
+  // 5번째 카테고리 — local state (UIStore 마이그레이션 전까지)
+  const [catViewExpanded, setCatViewExpanded] = React.useState(false);
+  const [mapModeSubExpanded, setMapModeSubExpanded] = React.useState(true);
+  const [overlaySubExpanded, setOverlaySubExpanded] = React.useState(false);
+
   // Local expansion state for sub-groups that don't have a UIStore entry
   // Local expansion state for sub-groups (UI-only, no store needed)
   const [navaidsSubExpanded,    setNavaidsSubExpanded]    = React.useState(false);
   const [routesSubExpanded,     setRoutesSubExpanded]     = React.useState(false);
   const [waypointsSubExpanded,  setWaypointsSubExpanded]  = React.useState(false);
+
+  // 5번째 카테고리 활성 토글 개수
+  const viewActiveCount = [
+    is3DView, isDarkMode, showSatellite, viewFilter !== 'none',
+    showSatellites, showCctv, showShips,
+    showVwBuildings || showVwSpecial || showVwRoads,
+  ].filter(Boolean).length;
 
   // Active-toggle counts for each major category badge
   const mapActiveCount = [
@@ -655,6 +710,69 @@ const ControlPanel: React.FC<ControlPanelProps> = React.memo(({
             onToggle={() => {}}
           >
             <AltitudeLegend />
+          </SubGroup>
+        </CategoryGroup>
+
+        {/* ═══════════════════════════════════════════════════════════
+            5. 보기 & 오버레이 — 옛 우측 상단 9버튼 통합
+            ═══════════════════════════════════════════════════════════ */}
+        <CategoryGroup
+          title="보기 & 오버레이"
+          accentColor="#79e3ff"
+          expanded={catViewExpanded}
+          onToggle={() => setCatViewExpanded(!catViewExpanded)}
+          badge={viewActiveCount > 0 ? `${viewActiveCount} 켜짐` : undefined}
+        >
+          {/* 지도 모드 */}
+          <SubGroup
+            title="지도 모드"
+            expanded={mapModeSubExpanded}
+            onToggle={() => setMapModeSubExpanded(p => !p)}
+          >
+            <ToggleItem label="3D 보기"          checked={is3DView}      onChange={setIs3DView} />
+            <ToggleItem label="다크 모드"         checked={isDarkMode}    onChange={setIsDarkMode} />
+            <ToggleItem label="위성 이미지"        checked={showSatellite} onChange={setShowSatellite} />
+            <div className="toggle-item" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+              <span style={{ fontSize: 13 }}>시각 필터</span>
+              <button
+                onClick={cycleViewFilter}
+                style={{
+                  padding: '4px 10px',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  borderRadius: 4,
+                  border: '1px solid rgba(120,180,220,0.3)',
+                  background: viewFilter === 'none' ? 'rgba(40,50,70,0.4)' : 'rgba(0,255,255,0.15)',
+                  color: viewFilter === 'none' ? '#a8e3ff' : '#39ddff',
+                  cursor: 'pointer',
+                  letterSpacing: 0.5,
+                }}
+                title="시각 필터 순환 (OFF → NVG → FLIR → CRT)"
+                aria-label="시각 필터 전환"
+              >
+                {viewFilter === 'none' ? 'OFF' : viewFilter.toUpperCase()}
+              </button>
+            </div>
+          </SubGroup>
+
+          {/* 외부 데이터 */}
+          <SubGroup
+            title="외부 데이터 오버레이"
+            expanded={overlaySubExpanded}
+            onToggle={() => setOverlaySubExpanded(p => !p)}
+          >
+            <ToggleItem label="위성 궤도 (SAT)"             checked={showSatellites}  onChange={setShowSatellites} />
+            <ToggleItem label="CCTV 카메라"                 checked={showCctv}        onChange={setShowCctv} />
+            <ToggleItem label="선박 AIS"                    checked={showShips}       onChange={setShowShips} />
+            <ToggleItem
+              label="V-World (건물·도로)"
+              checked={showVwBuildings || showVwSpecial || showVwRoads}
+              onChange={(v) => {
+                setShowVwBuildings(v);
+                setShowVwSpecial(v);
+                setShowVwRoads(v);
+              }}
+            />
           </SubGroup>
         </CategoryGroup>
 
