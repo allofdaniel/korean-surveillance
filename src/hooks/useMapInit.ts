@@ -183,8 +183,37 @@ export default function useMapInit(
     // load 이벤트 발생하면 timeout 취소
     map.current.on('load', () => clearTimeout(loadTimeout));
 
+    // CRITICAL: container 가 0x0 으로 mount 됐다가 layout 후 resize 되는 케이스
+    // (flex/grid layout + StrictMode + Tailwind 등에서 흔함). Mapbox 는
+    // 초기 container 크기로 캔버스를 만들고 자동으로 resize 안 함 → 검은 화면.
+    // 직접 resize() 를 여러 시점에 강제 호출 + ResizeObserver 로 후속 변경 추적.
+    const forceResize = () => {
+      if (map.current) {
+        try { map.current.resize(); } catch { /* ignore */ }
+      }
+    };
+    // 즉시 + 100ms + 500ms + 1s 시점에 resize (layout 완료 보장)
+    forceResize();
+    const resizeT1 = setTimeout(forceResize, 100);
+    const resizeT2 = setTimeout(forceResize, 500);
+    const resizeT3 = setTimeout(forceResize, 1000);
+
+    // 이후 container 크기 변경 자동 추적
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && mapContainerRef.current) {
+      resizeObserver = new ResizeObserver(forceResize);
+      resizeObserver.observe(mapContainerRef.current);
+    }
+    // window resize 도 한 번 더 안전망
+    window.addEventListener('resize', forceResize);
+
     return () => {
       clearTimeout(loadTimeout);
+      clearTimeout(resizeT1);
+      clearTimeout(resizeT2);
+      clearTimeout(resizeT3);
+      window.removeEventListener('resize', forceResize);
+      if (resizeObserver) resizeObserver.disconnect();
       if (map.current) {
         map.current.remove();
         map.current = null;

@@ -49,7 +49,7 @@ export default function LoadingOverlay({ ready, aircraftCount }: LoadingOverlayP
     };
   }, []);
 
-  // 첫 데이터 도착 OR 15초 타임아웃 → 페이드아웃 → unmount.
+  // 첫 데이터 도착 OR 15초 타임아웃 → 페이드 트리거.
   // 타임아웃 시에도 자동 dismiss — Aircraft API 가 429 (rate limit) 등
   // 일시적 문제일 때 사용자가 영구히 loading 화면에 갇히지 않도록 (지도라도
   // 보이게). 사용자가 "다시 시도" 명시 클릭 안 해도 자동으로 지도 진입.
@@ -58,11 +58,19 @@ export default function LoadingOverlay({ ready, aircraftCount }: LoadingOverlayP
     const dataArrived = ready && aircraftCount > 0;
     if (dataArrived || timedOut) {
       setFading(true);
-      const t = setTimeout(() => setMounted(false), 600);
-      return () => clearTimeout(t);
     }
-    return undefined;
   }, [ready, aircraftCount, mounted, fading, timedOut]);
+
+  // 페이드 시작되면 600ms 후 unmount. 별도 effect 로 분리한 이유:
+  // 이전엔 setFading(true) + setTimeout 등록을 한 effect 에서 했는데,
+  // setFading 이 트리거한 re-render 가 cleanup 으로 setTimeout 을 취소해서
+  // 영원히 unmount 되지 않는 버그가 있었음. fading state 만 의존성으로 두면
+  // setFading(true) 한 번만 트리거되고 정확히 600ms 후 unmount.
+  useEffect(() => {
+    if (!fading) return;
+    const t = setTimeout(() => setMounted(false), 600);
+    return () => clearTimeout(t);
+  }, [fading]);
 
   if (!mounted) return null;
 
