@@ -1,4 +1,5 @@
-// Vercel Serverless Function - Proxy for airplanes.live trace API
+// Vercel Serverless Function - Proxy for adsb.lol hex API (airplanes.live 호환 스키마)
+// 2026-05: airplanes.live 가 anonymous 호출에 403 반환 → 동일 스키마 adsb.lol 로 전환
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -21,8 +22,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid hex parameter. Must be a 6-character hexadecimal ICAO address.' });
   }
 
-  // airplanes.live trace API - returns last 25 positions for an aircraft
-  const apiUrl = `https://api.airplanes.live/v2/hex/${hex.toLowerCase()}`;
+  // adsb.lol hex API - returns last positions for an aircraft (airplanes.live 호환)
+  const apiUrl = `https://api.adsb.lol/v2/hex/${hex.toLowerCase()}`;
 
   // Retry logic with exponential backoff
   const maxRetries = 3;
@@ -30,7 +31,12 @@ export default async function handler(req, res) {
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const response = await fetch(apiUrl);
+      const response = await fetch(apiUrl, {
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'koreasurveillance/1.0 (+https://www.koreasurveillance.com)'
+        }
+      });
 
       // Handle rate limiting (429)
       if (response.status === 429) {

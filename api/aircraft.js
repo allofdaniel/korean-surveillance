@@ -1,7 +1,8 @@
 /**
  * Vercel Serverless Function - Aircraft proxy
- * Sources: airplanes.live (primary) + OpenSky Network (merge for extra coverage)
- * 응답 스키마는 airplanes.live 형식을 유지 (프론트 변경 불필요)
+ * Sources: adsb.lol (primary, airplanes.live 호환 스키마) + OpenSky Network (merge for extra coverage)
+ *   - airplanes.live 는 2026-05 이후 anonymous 호출에 403 반환 → 동일 스키마의 adsb.lol 로 전환
+ *   - 응답 스키마는 그대로 유지 (프론트 변경 불필요)
  * DO-278A 요구사항 추적: SRS-API-002
  */
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
@@ -79,16 +80,23 @@ function bboxFromRadius(lat, lon, radiusNm) {
 }
 
 /**
- * airplanes.live `point` 호출
+ * adsb.lol `point` 호출 (airplanes.live 호환 스키마)
+ *   - 동일 응답 포맷: { ac: [{ hex, type, flight, lat, lon, alt_baro, ... }, ...] }
+ *   - GET only (HEAD 는 405 반환하지만 GET 정상)
  */
 async function fetchAirplanesLive(lat, lon, radius) {
-  const apiUrl = `https://api.airplanes.live/v2/point/${lat}/${lon}/${radius}`;
+  const apiUrl = `https://api.adsb.lol/v2/point/${lat}/${lon}/${radius}`;
   const maxRetries = 3;
   let lastError = null;
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const response = await fetch(apiUrl);
+      const response = await fetch(apiUrl, {
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'koreasurveillance/1.0 (+https://www.koreasurveillance.com)'
+        }
+      });
       if (response.status === 429) {
         const raHeader = response.headers.get('Retry-After');
         const ra = raHeader != null ? parseFloat(raHeader) : NaN;
@@ -99,7 +107,7 @@ async function fetchAirplanesLive(lat, lon, radius) {
         }
         return { ok: false, status: 429, ac: [] };
       }
-      if (!response.ok) throw new Error(`airplanes.live status ${response.status}`);
+      if (!response.ok) throw new Error(`adsb.lol status ${response.status}`);
       const data = await response.json();
       return { ok: true, ac: Array.isArray(data?.ac) ? data.ac : [] };
     } catch (e) {
@@ -107,7 +115,7 @@ async function fetchAirplanesLive(lat, lon, radius) {
       if (attempt < maxRetries - 1) await sleep((attempt + 1) * 1000);
     }
   }
-  console.warn('[aircraft] airplanes.live failed:', lastError?.message);
+  console.warn('[aircraft] adsb.lol failed:', lastError?.message);
   return { ok: false, status: 500, ac: [] };
 }
 
