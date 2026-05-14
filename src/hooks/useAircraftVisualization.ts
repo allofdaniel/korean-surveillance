@@ -45,21 +45,21 @@ function setOrCreateSource(
     src.setData(data);
     return;
   }
-  // Style 이 로드되기 전 addSource/addLayer 호출 시 Mapbox 가 throw.
-  // 다음 effect 실행 시 자연 재호출되도록 silent return.
-  if (!map.current.isStyleLoaded()) return;
-  // source 가 남아있고 layer 만 없는 상태(예: 이전 init() 에서 source 추가
-  // 직후 layer 추가 시 throw 발생)면 source 를 먼저 제거 → init() 재실행.
+  // source 가 남아있고 layer 만 없는 잔존 상태 (이전 init() 에서 layer 추가만
+  // 실패한 경우) → source 를 먼저 제거하고 init() 재실행.
   if (src && !hasLayer) {
     try { map.current.removeSource(id); } catch { /* ignore */ }
   }
+  // 이전엔 `if (!map.current.isStyleLoaded()) return;` 가드가 있었는데
+  // isStyleLoaded() 는 줌/팬/tile-load 중에 일시적으로 false 를 반환한다.
+  // 1Hz polling 환경에서 매 호출마다 false 가 걸리면 layer 가 영영 안
+  // 만들어지는 회귀가 있었다. style 이 아직 안 됐을 때 addSource 가 throw
+  // 하는 케이스는 아래 try/catch 가 잡고, 다음 polling 에서 자연 재시도.
   try {
     init();
   } catch (e) {
     // 어떤 이유로든 init() 이 실패해도 effect 자체를 throw 로 중단시키지 않음.
     // 다음 polling 사이클에서 자연 재시도. 로그만 남겨 디버깅 가능.
-    // (이전에는 'Style is not done loading' 만 silent skip, 나머진 throw 였음 —
-    //  layer add 시 일시적 race condition 등 다양한 에러에서 effect 가 죽었다)
     // eslint-disable-next-line no-console
     console.warn('[setOrCreateSource]', id, (e as Error)?.message);
   }
