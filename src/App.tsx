@@ -50,6 +50,7 @@ import {
   ControlPanel,
 } from './components';
 import LoadingOverlay from './components/LoadingOverlay';
+import OnboardingTour from './components/OnboardingTour';
 import AccessibleAircraftList from './components/AccessibleAircraftList';
 
 // Import hooks
@@ -569,6 +570,9 @@ function App(): React.ReactElement | null {
 
       {/* 첫 로드 시 항적 도착까지 표시 (페이드아웃 후 unmount) */}
       <LoadingOverlay ready={mapLoaded && !!data} aircraftCount={rawAircraft.length} />
+
+      {/* 신규 사용자 안내 (localStorage 한 번만 자동 표시 — 햄버거에서 재호출 가능) */}
+      <OnboardingTour />
       <AccessibleAircraftList aircraft={rawAircraft} />
 
       {/* Visual Filter Overlays (NVG/FLIR/CRT) */}

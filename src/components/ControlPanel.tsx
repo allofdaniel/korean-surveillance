@@ -370,13 +370,36 @@ const ControlPanel: React.FC<ControlPanelProps> = React.memo(({
     >
       <div className="panel-header">
         <span className="panel-title">대한감시</span>
-        <button
-          className="panel-close-btn"
-          onClick={() => setIsPanelOpen(false)}
-          aria-label="패널 닫기"
-        >
-          ✕
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <button
+            onClick={() => {
+              const w = window as unknown as { __reopenTour?: () => void };
+              if (w.__reopenTour) w.__reopenTour();
+            }}
+            title="처음 안내 튜토리얼 다시 보기"
+            aria-label="튜토리얼 보기"
+            style={{
+              padding: '4px 9px',
+              fontSize: 11,
+              fontWeight: 600,
+              background: 'rgba(57,221,255,0.12)',
+              border: '1px solid rgba(57,221,255,0.4)',
+              borderRadius: 4,
+              color: '#39ddff',
+              cursor: 'pointer',
+              letterSpacing: 0.3,
+            }}
+          >
+            튜토리얼
+          </button>
+          <button
+            className="panel-close-btn"
+            onClick={() => setIsPanelOpen(false)}
+            aria-label="패널 닫기"
+          >
+            ✕
+          </button>
+        </div>
       </div>
 
       <div className="panel-content">
