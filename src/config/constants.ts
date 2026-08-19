@@ -17,7 +17,7 @@ export const IS_DEVELOPMENT = import.meta.env.DEV;
 // ============================================
 
 export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'https://koreansurveillance.com';
+  import.meta.env.VITE_API_BASE_URL || 'https://koreasurveillance.com';
 
 // Mapbox 설정 - 환경변수 필수
 const mapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
