@@ -48,6 +48,7 @@ import {
   ViewControlsBar,
   MapContextMenu,
   ControlPanel,
+  ApiDashboardModal,
 } from './components';
 import LoadingOverlay from './components/LoadingOverlay';
 import OnboardingTour from './components/OnboardingTour';
@@ -94,10 +95,16 @@ function App(): React.ReactElement | null {
 
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [isApiDashboardOpen, setIsApiDashboardOpen] = useState<boolean>(false);
 
   // App 가 정상 mount 되면 boot screen 이 사라진다는 증거.
   useEffect(() => {
     (window as unknown as { __setBootStage__?: (s: string) => void }).__setBootStage__?.('app-mounted');
+
+    // Auto open dashboard if URL contains dashboard keyword
+    if (window.location.pathname.includes('dashboard') || window.location.search.includes('dashboard')) {
+      setIsApiDashboardOpen(true);
+    }
   }, []);
 
   // ============================================
@@ -626,6 +633,7 @@ function App(): React.ReactElement | null {
         notamLocationsOnMap={notamLocationsOnMap}
         setNotamLocationsOnMap={setNotamLocationsOnMap}
         fetchNotamData={fetchNotamData}
+        onOpenApiDashboard={() => setIsApiDashboardOpen(true)}
       />
 
       {/* Hamburger Menu Toggle Button */}
@@ -857,9 +865,16 @@ function App(): React.ReactElement | null {
         }}
       />
 
+      {/* 23개 연계 인터페이스 종합 대시보드 모달 */}
+      <ApiDashboardModal
+        isOpen={isApiDashboardOpen}
+        onClose={() => setIsApiDashboardOpen(false)}
+      />
+
     </div>
   );
 }
 
 export default App;
+
 // Build trigger: 1768659592

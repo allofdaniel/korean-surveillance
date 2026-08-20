@@ -1,8 +1,9 @@
-﻿// Vercel Serverless Function - Aviation Weather Data for Korea
+// Vercel Serverless Function - Aviation Weather Data for Korea
 // KMA API Hub (apihub.kma.go.kr) + International Sources
 // DO-278A ?붽뎄?ы빆 異붿쟻: SRS-SEC-001
 
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
+import { fetchLiveAmosData } from './_utils/amosScraper.js';
 
 /**
  * ?섍꼍蹂?섏뿉??KMA API ??濡쒕뱶
@@ -143,12 +144,25 @@ export default async function handler(req, res) {
   }
 }
 
-// AMOS - 怨듯빆湲곗긽愿痢?(aviationweather.gov ?곗꽑, KMA ?대갚)
+// AMOS - 실시간 공항 관제 기상관측장비 (항공기상청 AMO 실시간 우선, aviationweather.gov / KMA 폴백)
 async function handleAmos(req, res) {
+  const rawIcao = typeof req.query.icao === 'string' ? req.query.icao.toUpperCase() : null;
+
+  // 1. 항공기상청 AMO 실시간 관제기상 (전국 42개 활주로별 초단위 관측치)
+  try {
+    const amosList = await fetchLiveAmosData(rawIcao);
+    if (amosList && amosList.length > 0) {
+      res.setHeader('Cache-Control', 's-maxage=2, stale-while-revalidate=5');
+      return res.status(200).json(amosList);
+    }
+  } catch (e) {
+    console.warn('[Weather API] AMO live scraper failed:', e.message);
+  }
+
   let metar = null;
 
   // 1. aviationweather.gov 癒쇱? ?쒕룄 (API ??遺덊븘??
-  // RKPU(?몄궛)???곗씠?곌? ?놁쑝誘濡?RKPK(源?????④퍡 ?붿껌
+  // RKPU(?몄궛)???곗씠?곌? ?놁쑝誘€濡?RKPK(源€?????④퍡 ?붿껌
   try {
     const metarUrl = `https://aviationweather.gov/api/data/metar?ids=RKPU,RKPK&format=json`;
     const response = await fetchWithTimeout(metarUrl);

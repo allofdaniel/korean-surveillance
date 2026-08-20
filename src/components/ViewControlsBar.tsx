@@ -52,6 +52,7 @@ interface ViewControlsBarProps {
   notamLocationsOnMap: Set<string>;
   setNotamLocationsOnMap: (locations: Set<string>) => void;
   fetchNotamData: (period: string, forceRefresh?: boolean) => void;
+  onOpenApiDashboard?: () => void;
 }
 
 /**
@@ -79,10 +80,22 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
   setNotamExpanded,
   notamLocationsOnMap,
   setNotamLocationsOnMap,
-  fetchNotamData
+  fetchNotamData,
+  onOpenApiDashboard,
 }) => {
   return (
-    <div className="view-controls" role="toolbar" aria-label="NOTAM 패널">
+    <div className="view-controls flex items-center space-x-2" role="toolbar" aria-label="상단 패널">
+      {onOpenApiDashboard && (
+        <button
+          onClick={onOpenApiDashboard}
+          className="flex items-center px-3 py-1.5 bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-cyan-300 border border-cyan-500/40 rounded-xl text-xs font-semibold shadow-lg backdrop-blur transition group cursor-pointer"
+          title="23개 항공/기상/관제 인터페이스 및 연계 데이터 대시보드"
+        >
+          <span className="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-ping" />
+          <span className="text-cyan-400 font-bold mr-1">📡 23개 연계 API</span>
+          <span className="text-[10px] text-slate-400 hidden sm:inline">대시보드</span>
+        </button>
+      )}
       <NotamPanel
         showNotamPanel={showNotamPanel}
         setShowNotamPanel={setShowNotamPanel}
@@ -111,3 +124,4 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
 ViewControlsBar.displayName = 'ViewControlsBar';
 
 export default ViewControlsBar;
+

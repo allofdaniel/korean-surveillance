@@ -29,3 +29,7 @@ export { default as MapContextMenu } from './MapContextMenu';
 // Control Panel
 export { default as ControlPanel } from './ControlPanel';
 export type { ControlPanelProps } from './ControlPanel';
+
+// Dashboard
+export { default as ApiDashboardModal } from './ApiDashboardModal';
+
