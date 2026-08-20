@@ -204,6 +204,44 @@ async function handleAmos(req, res) {
     RKPK: [
       { rwy: '18L', stnNm: '김해', wd: '040', ws: '2.5', max: '4.0', mor: '9999', rvr: 'P2000', tmp: '30.1', dp: '25.2', hm: '75', qnh: '29.94', qnhOrigin: 10142, cld: '20000', ww: '-' },
       { rwy: '36R', stnNm: '김해', wd: '040', ws: '2.6', max: '4.2', mor: '9999', rvr: 'P2000', tmp: '30.1', dp: '25.2', hm: '75', qnh: '29.94', qnhOrigin: 10142, cld: '20000', ww: '-' },
+      { rwy: '18R', stnNm: '김해', wd: '040', ws: '2.5', max: '4.0', mor: '9999', rvr: 'P2000', tmp: '30.1', dp: '25.2', hm: '75', qnh: '29.94', qnhOrigin: 10142, cld: '20000', ww: '-' },
+      { rwy: '36L', stnNm: '김해', wd: '040', ws: '2.6', max: '4.2', mor: '9999', rvr: 'P2000', tmp: '30.1', dp: '25.2', hm: '75', qnh: '29.94', qnhOrigin: 10142, cld: '20000', ww: '-' }
+    ],
+    RKJY: [
+      { rwy: '17', stnNm: '여수', wd: '170', ws: '8.5', max: '12.5', mor: '9999', rvr: 'P2000', tmp: '32.6', dp: '23.9', hm: '61', qnh: '29.89', qnhOrigin: 10122, cld: '3000', ww: '-' },
+      { rwy: '35', stnNm: '여수', wd: '170', ws: '8.5', max: '12.5', mor: '9999', rvr: 'P2000', tmp: '32.6', dp: '23.9', hm: '61', qnh: '29.89', qnhOrigin: 10122, cld: '3000', ww: '-' }
+    ],
+    RKPU: [
+      { rwy: '18', stnNm: '울산', wd: '180', ws: '6.0', max: '9.0', mor: '9999', rvr: 'P2000', tmp: '31.5', dp: '24.0', hm: '65', qnh: '29.91', qnhOrigin: 10130, cld: '4000', ww: '-' },
+      { rwy: '36', stnNm: '울산', wd: '180', ws: '6.0', max: '9.0', mor: '9999', rvr: 'P2000', tmp: '31.5', dp: '24.0', hm: '65', qnh: '29.91', qnhOrigin: 10130, cld: '4000', ww: '-' }
+    ],
+    RKTN: [
+      { rwy: '13L', stnNm: '대구', wd: '130', ws: '5.0', max: '7.5', mor: '9999', rvr: 'P2000', tmp: '33.0', dp: '23.5', hm: '58', qnh: '29.90', qnhOrigin: 10125, cld: '5000', ww: '-' },
+      { rwy: '31R', stnNm: '대구', wd: '130', ws: '5.0', max: '7.5', mor: '9999', rvr: 'P2000', tmp: '33.0', dp: '23.5', hm: '58', qnh: '29.90', qnhOrigin: 10125, cld: '5000', ww: '-' }
+    ],
+    RKTU: [
+      { rwy: '06L', stnNm: '청주', wd: '060', ws: '4.5', max: '6.8', mor: '9999', rvr: 'P2000', tmp: '31.0', dp: '23.8', hm: '65', qnh: '29.92', qnhOrigin: 10135, cld: '4500', ww: '-' },
+      { rwy: '24R', stnNm: '청주', wd: '060', ws: '4.5', max: '6.8', mor: '9999', rvr: 'P2000', tmp: '31.0', dp: '23.8', hm: '65', qnh: '29.92', qnhOrigin: 10135, cld: '4500', ww: '-' }
+    ],
+    RKJJ: [
+      { rwy: '04L', stnNm: '광주', wd: '040', ws: '5.5', max: '8.0', mor: '9999', rvr: 'P2000', tmp: '32.0', dp: '24.1', hm: '63', qnh: '29.91', qnhOrigin: 10128, cld: '4000', ww: '-' },
+      { rwy: '22R', stnNm: '광주', wd: '040', ws: '5.5', max: '8.0', mor: '9999', rvr: 'P2000', tmp: '32.0', dp: '24.1', hm: '63', qnh: '29.91', qnhOrigin: 10128, cld: '4000', ww: '-' }
+    ],
+    RKJB: [
+      { rwy: '01', stnNm: '무안', wd: '010', ws: '6.0', max: '8.5', mor: '9999', rvr: 'P2000', tmp: '31.8', dp: '24.3', hm: '65', qnh: '29.91', qnhOrigin: 10128, cld: '3500', ww: '-' },
+      { rwy: '19', stnNm: '무안', wd: '010', ws: '6.0', max: '8.5', mor: '9999', rvr: 'P2000', tmp: '31.8', dp: '24.3', hm: '65', qnh: '29.91', qnhOrigin: 10128, cld: '3500', ww: '-' }
+    ],
+    RKNY: [
+      { rwy: '15', stnNm: '양양', wd: '150', ws: '7.0', max: '10.0', mor: '9999', rvr: 'P2000', tmp: '29.5', dp: '23.0', hm: '68', qnh: '29.93', qnhOrigin: 10138, cld: '4000', ww: '-' },
+      { rwy: '33', stnNm: '양양', wd: '150', ws: '7.0', max: '10.0', mor: '9999', rvr: 'P2000', tmp: '29.5', dp: '23.0', hm: '68', qnh: '29.93', qnhOrigin: 10138, cld: '4000', ww: '-' }
+    ],
+    RKTH: [
+      { rwy: '10', stnNm: '포항', wd: '100', ws: '6.5', max: '9.5', mor: '9999', rvr: 'P2000', tmp: '30.5', dp: '23.7', hm: '67', qnh: '29.92', qnhOrigin: 10132, cld: '3800', ww: '-' },
+      { rwy: '28', stnNm: '포항', wd: '100', ws: '6.5', max: '9.5', mor: '9999', rvr: 'P2000', tmp: '30.5', dp: '23.7', hm: '67', qnh: '29.92', qnhOrigin: 10132, cld: '3800', ww: '-' }
+    ],
+    RKPS: [
+      { rwy: '06L', stnNm: '사천', wd: '060', ws: '5.0', max: '7.8', mor: '9999', rvr: 'P2000', tmp: '31.5', dp: '24.0', hm: '65', qnh: '29.91', qnhOrigin: 10129, cld: '4200', ww: '-' },
+      { rwy: '24R', stnNm: '사천', wd: '060', ws: '5.0', max: '7.8', mor: '9999', rvr: 'P2000', tmp: '31.5', dp: '24.0', hm: '65', qnh: '29.91', qnhOrigin: 10129, cld: '4200', ww: '-' }
     ]
   };
 
@@ -212,7 +250,10 @@ async function handleAmos(req, res) {
     if (rawIcao === null || targetIcao === 'ALL') {
       targetList = Object.values(RUNWAYS_MAP).flat();
     } else {
-      targetList = RUNWAYS_MAP.RKSI;
+      targetList = [
+        { rwy: '01', stnNm: targetIcao, wd: '180', ws: '8.0', max: '11.0', mor: '9999', rvr: 'P2000', tmp: '30.0', dp: '23.0', hm: '65', qnh: '29.92', qnhOrigin: 10130, cld: '4000', ww: '-' },
+        { rwy: '19', stnNm: targetIcao, wd: '180', ws: '8.0', max: '11.0', mor: '9999', rvr: 'P2000', tmp: '30.0', dp: '23.0', hm: '65', qnh: '29.92', qnhOrigin: 10130, cld: '4000', ww: '-' }
+      ];
     }
   }
   const fullAmosItems = targetList.map((r, idx) => ({
