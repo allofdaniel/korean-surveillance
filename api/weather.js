@@ -146,9 +146,10 @@ export default async function handler(req, res) {
 
 // AMOS - 실시간 공항 관제 기상관측장비 (항공기상청 AMO 실시간 우선, aviationweather.gov / KMA 폴백)
 async function handleAmos(req, res) {
-  const rawIcao = typeof req.query.icao === 'string' ? req.query.icao.toUpperCase() : null;
+  const urlObj = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+  const rawIcao = (urlObj.searchParams.get('icao') || (typeof req.query?.icao === 'string' ? req.query.icao : null) || '').toUpperCase() || null;
 
-  // 1. 항공기상청 AMO 실시간 관제기상 (전국 42개 활주로별 초단위 관측치)
+  // 1. 항공기상청 AMO 실시간 관제기상 (전국 42개 활주로별 초단위 관측치 전수 송신)
   try {
     const amosList = await fetchLiveAmosData(rawIcao);
     if (amosList && amosList.length > 0) {
