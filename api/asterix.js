@@ -14,10 +14,11 @@ export default async function handler(req, res) {
   if (await checkRateLimit(req, res)) return;
 
   try {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const cat = parseInt(url.searchParams.get('cat') || '62', 10);
-    const typ = url.searchParams.get('typ') || 'COMBINED_PSR_SSR';
-    const limit = parseInt(url.searchParams.get('limit') || '50', 10);
+    const url = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+    const cat = parseInt(url.searchParams.get('cat') || req.query?.cat || '62', 10);
+    const typ = url.searchParams.get('typ') || req.query?.typ || 'COMBINED_PSR_SSR';
+    const limit = parseInt(url.searchParams.get('limit') || req.query?.limit || '50', 10);
+    const isRaw = (url.searchParams.get('raw') || req.query?.raw) === 'true';
 
     if (cat === 34) {
       const record = generateAsterixCat034(129, 239);

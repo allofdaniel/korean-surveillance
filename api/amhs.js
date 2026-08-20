@@ -17,20 +17,14 @@ export default async function handler(req, res) {
   if (await checkRateLimit(req, res)) return;
 
   try {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const type = (url.searchParams.get('type') || 'METAR').toUpperCase();
-    const icao = (url.searchParams.get('icao') || url.searchParams.get('location') || 'RKSI').toUpperCase();
-    const callsign = (url.searchParams.get('callsign') || 'KAL853').toUpperCase();
-    const origin = (url.searchParams.get('origin') || 'RKSI').toUpperCase();
-    const dest = (url.searchParams.get('dest') || 'RKPC').toUpperCase();
+    const url = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+    const type = (url.searchParams.get('type') || req.query?.type || 'METAR').toUpperCase();
+    const icao = (url.searchParams.get('icao') || url.searchParams.get('location') || req.query?.icao || req.query?.location || 'RKSI').toUpperCase();
+    const callsign = (url.searchParams.get('callsign') || req.query?.callsign || 'KAL853').toUpperCase();
+    const origin = (url.searchParams.get('origin') || req.query?.origin || 'RKSI').toUpperCase();
+    const dest = (url.searchParams.get('dest') || req.query?.dest || 'RKPC').toUpperCase();
 
-    const now = new Date();
-    const filingTime = getAtsFilingTime(now);
-    const day = String(now.getUTCDate()).padStart(2, '0');
-    const hour = String(now.getUTCHours()).padStart(2, '0');
-    const min = String(now.getUTCMinutes()).padStart(2, '0');
-
-    const isRaw = url.searchParams.get('raw') === 'true';
+    const isRaw = (url.searchParams.get('raw') || req.query?.raw) === 'true';
 
     let xmlOutput = '';
     let rawOutput = null;
