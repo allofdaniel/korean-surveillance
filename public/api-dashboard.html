@@ -12,36 +12,45 @@
       width: 100%;
       overflow: hidden;
       background: #09090b;
-      color: #fafafa;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-size: 11.5px;
-      line-height: 1.4;
+      color: #f4f4f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     a { color: inherit; text-decoration: none; }
     button, select, input { font-family: inherit; font-size: inherit; }
 
+    /* Custom Sleek Dark Scrollbars */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+    * { scrollbar-width: thin; scrollbar-color: #27272a transparent; }
+
     /* Header */
     header {
-      height: 46px;
-      background: #121215;
+      height: 48px;
+      background: #111114;
       border-bottom: 1px solid #27272a;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 14px;
+      padding: 0 16px;
       z-index: 50;
       flex-shrink: 0;
     }
     .brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       cursor: pointer;
       flex-shrink: 0;
     }
     .brand-icon {
-      width: 26px;
-      height: 26px;
+      width: 28px;
+      height: 28px;
       background: rgba(6, 182, 212, 0.15);
       border: 1px solid rgba(6, 182, 212, 0.4);
       color: #06b6d4;
@@ -49,33 +58,33 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 14px;
     }
-    .brand-title { font-size: 12.5px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
+    .brand-title { font-size: 13.5px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
     .brand-badge {
-      font-size: 9px;
+      font-size: 10px;
       background: rgba(6, 182, 212, 0.2);
       color: #38bdf8;
       border: 1px solid rgba(6, 182, 212, 0.4);
-      padding: 1px 4px;
+      padding: 1px 5px;
       border-radius: 4px;
       font-family: monospace;
-      font-weight: 600;
+      font-weight: 700;
     }
-    .brand-sub { font-size: 9.5px; color: #71717a; }
+    .brand-sub { font-size: 11px; color: #a1a1aa; }
 
-    .header-ctrls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .header-ctrls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .ap-select-box {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       background: #18181b;
-      border: 1px solid #27272a;
-      padding: 3px 7px;
-      border-radius: 5px;
-      font-size: 11px;
+      border: 1px solid #3f3f46;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 11.5px;
     }
-    .ap-select-box label { color: #a1a1aa; font-size: 10.5px; }
+    .ap-select-box label { color: #a1a1aa; font-size: 11px; font-weight: 500; }
     .ap-select {
       background: transparent;
       border: none;
@@ -83,39 +92,39 @@
       font-weight: 700;
       outline: none;
       cursor: pointer;
-      font-size: 11px;
+      font-size: 12px;
     }
     .ap-select option { background: #18181b; color: #fafafa; }
 
     .btn {
-      padding: 4px 8px;
-      border-radius: 5px;
+      padding: 5px 11px;
+      border-radius: 6px;
       background: #18181b;
-      border: 1px solid #27272a;
-      color: #d4d4d8;
-      font-size: 10.5px;
+      border: 1px solid #3f3f46;
+      color: #e4e4e7;
+      font-size: 11.5px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       transition: all 0.15s;
       white-space: nowrap;
     }
-    .btn:hover { background: #27272a; color: #fff; }
+    .btn:hover { background: #27272a; color: #fff; border-color: #52525b; }
     .btn-cyan {
       background: rgba(6, 182, 212, 0.15);
-      border-color: rgba(6, 182, 212, 0.4);
+      border-color: rgba(6, 182, 212, 0.5);
       color: #38bdf8;
     }
-    .btn-cyan:hover { background: rgba(6, 182, 212, 0.25); color: #fff; }
+    .btn-cyan:hover { background: rgba(6, 182, 212, 0.3); color: #fff; }
 
     /* Airport Matrix Bar */
     .matrix-bar {
-      height: 36px;
-      background: #0d0d10;
+      height: 38px;
+      background: #0d0d11;
       border-bottom: 1px solid #27272a;
-      padding: 0 14px;
+      padding: 0 16px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -127,42 +136,42 @@
     }
     .matrix-bar::-webkit-scrollbar { display: none; }
     .matrix-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
-      color: #71717a;
-      text-transform: uppercase;
+      color: #a1a1aa;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       flex-shrink: 0;
     }
-    .matrix-chips { display: flex; gap: 4px; flex-shrink: 0; }
+    .matrix-chips { display: flex; gap: 5px; flex-shrink: 0; }
     .chip {
-      padding: 2px 6px;
+      padding: 2.5px 8px;
       border-radius: 4px;
       background: #18181b;
       border: 1px solid #27272a;
-      font-size: 10px;
+      font-size: 11px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       transition: all 0.15s;
+      color: #d4d4d8;
     }
-    .chip:hover { border-color: #3f3f46; }
+    .chip:hover { border-color: #52525b; color: #fff; }
     .chip.active {
-      background: rgba(6, 182, 212, 0.15);
+      background: rgba(6, 182, 212, 0.2);
       border-color: #06b6d4;
       color: #38bdf8;
       font-weight: 700;
     }
     .chip-code { font-family: monospace; font-weight: 700; }
-    .chip-dot { width: 4px; height: 4px; border-radius: 50%; background: #10b981; }
+    .chip-dot { width: 5px; height: 5px; border-radius: 50%; background: #10b981; }
 
-    /* Main Container (2 Columns: Left 50%, Right 50% Fluid Split) */
+    /* Main Container (2 Columns: 50% / 50% Fluid Split) */
     .main-body {
       display: flex;
-      height: calc(100vh - 82px);
+      height: calc(100vh - 86px);
       width: 100%;
       overflow: hidden;
     }
@@ -178,25 +187,25 @@
       overflow: hidden;
     }
     .table-filter-bar {
-      height: 34px;
-      padding: 0 10px;
+      height: 36px;
+      padding: 0 12px;
       background: #121215;
       border-bottom: 1px solid #27272a;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
+      gap: 8px;
       flex-shrink: 0;
     }
-    .table-count-badge { font-size: 10.5px; color: #a1a1aa; font-weight: 600; }
+    .table-count-badge { font-size: 11.5px; color: #d4d4d8; font-weight: 600; }
     .search-input {
       background: #18181b;
-      border: 1px solid #27272a;
-      padding: 2px 7px;
-      border-radius: 4px;
+      border: 1px solid #3f3f46;
+      padding: 4px 9px;
+      border-radius: 5px;
       color: #fafafa;
-      font-size: 10.5px;
-      width: 160px;
+      font-size: 11.5px;
+      width: 180px;
       outline: none;
     }
     .search-input:focus { border-color: #06b6d4; }
@@ -211,53 +220,53 @@
       table-layout: fixed;
       border-collapse: collapse;
       text-align: left;
-      font-size: 10.5px;
+      font-size: 11.5px;
     }
-    thead { position: sticky; top: 0; background: #121215; z-index: 10; border-bottom: 1px solid #27272a; }
-    th { padding: 5px 8px; font-size: 9.5px; font-weight: 700; color: #71717a; text-transform: uppercase; white-space: nowrap; }
-    td { padding: 5px 8px; border-bottom: 1px solid #18181b; vertical-align: middle; }
+    thead { position: sticky; top: 0; background: #151518; z-index: 10; border-bottom: 1px solid #27272a; }
+    th { padding: 7px 10px; font-size: 10.5px; font-weight: 700; color: #a1a1aa; text-transform: uppercase; white-space: nowrap; }
+    td { padding: 7px 10px; border-bottom: 1px solid #18181b; vertical-align: middle; }
     tr { cursor: pointer; transition: background 0.1s; }
-    tr:hover { background: #141417; }
-    tr.active { background: rgba(6, 182, 212, 0.12); border-left: 2px solid #06b6d4; }
+    tr:hover { background: #18181c; }
+    tr.active { background: rgba(6, 182, 212, 0.14); border-left: 3px solid #06b6d4; }
     .group-row {
-      background: #121215;
-      font-size: 9.5px;
+      background: #141418;
+      font-size: 11px;
       font-weight: 700;
       color: #38bdf8;
       pointer-events: none;
-      padding: 4px 8px;
+      padding: 6px 10px;
       border-top: 1px solid #27272a;
       border-bottom: 1px solid #27272a;
     }
 
     .badge {
       display: inline-block;
-      padding: 1px 4px;
+      padding: 1.5px 5px;
       border-radius: 3px;
-      font-size: 9px;
+      font-size: 9.5px;
       font-family: monospace;
-      font-weight: 600;
+      font-weight: 700;
       border: 1px solid transparent;
       margin-top: 2px;
     }
-    .badge-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.3); }
-    .badge-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border-color: rgba(59, 130, 246, 0.3); }
-    .badge-green { background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
-    .badge-rose { background: rgba(244, 63, 94, 0.15); color: #fb7185; border-color: rgba(244, 63, 94, 0.3); }
+    .badge-purple { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; border-color: rgba(168, 85, 247, 0.4); }
+    .badge-blue { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border-color: rgba(59, 130, 246, 0.4); }
+    .badge-green { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.4); }
+    .badge-rose { background: rgba(244, 63, 94, 0.2); color: #fda4af; border-color: rgba(244, 63, 94, 0.4); }
 
     .status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 2px;
-      padding: 1px 5px;
-      border-radius: 8px;
-      font-size: 9.5px;
-      font-weight: 600;
+      gap: 3px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-size: 10.5px;
+      font-weight: 700;
       white-space: nowrap;
     }
-    .status-pill.ok { background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .status-pill.err { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
-    .status-pill.pending { background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .status-pill.ok { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .status-pill.err { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .status-pill.pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
 
     /* Right Inspector Pane */
     .inspector-pane {
@@ -269,8 +278,8 @@
       min-width: 0;
     }
     .inspector-head {
-      height: 42px;
-      padding: 0 12px;
+      height: 48px;
+      padding: 0 14px;
       background: #121215;
       border-bottom: 1px solid #27272a;
       display: flex;
@@ -278,8 +287,8 @@
       justify-content: space-between;
       flex-shrink: 0;
     }
-    .inspect-title-box h3 { font-size: 11.5px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .inspect-title-box p { font-size: 9.5px; color: #71717a; }
+    .inspect-title-box h3 { font-size: 12.5px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .inspect-title-box p { font-size: 10.5px; color: #a1a1aa; }
 
     .inspector-tabs {
       display: flex;
@@ -289,9 +298,9 @@
     }
     .tab-btn {
       flex: 1;
-      padding: 6px 8px;
-      font-size: 10.5px;
-      font-weight: 600;
+      padding: 8px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
       border: none;
       background: transparent;
       color: #71717a;
@@ -304,45 +313,45 @@
     .tab-btn.active {
       color: #38bdf8;
       border-bottom-color: #06b6d4;
-      background: rgba(6, 182, 212, 0.06);
+      background: rgba(6, 182, 212, 0.08);
     }
 
     .inspector-meta {
-      padding: 6px 12px;
+      padding: 8px 14px;
       background: #121215;
       border-bottom: 1px solid #27272a;
-      font-size: 9.5px;
+      font-size: 10.5px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 3px;
-      color: #71717a;
+      gap: 4px;
+      color: #a1a1aa;
       flex-shrink: 0;
     }
-    .inspector-meta strong { color: #e4e4e7; font-family: monospace; }
+    .inspector-meta strong { color: #f4f4f5; font-family: monospace; }
 
     .audio-box {
-      padding: 6px 12px;
+      padding: 8px 14px;
       background: rgba(6, 182, 212, 0.1);
-      border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+      border-bottom: 1px solid rgba(6, 182, 212, 0.25);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
+      gap: 8px;
       flex-shrink: 0;
     }
-    .audio-info h4 { font-size: 10.5px; font-weight: 700; color: #fff; }
-    .audio-info p { font-size: 9px; color: #38bdf8; }
+    .audio-info h4 { font-size: 11.5px; font-weight: 700; color: #fff; }
+    .audio-info p { font-size: 10px; color: #38bdf8; }
 
     .code-box {
       flex: 1;
-      padding: 10px 12px;
+      padding: 12px 14px;
       overflow-y: auto;
       overflow-x: auto;
-      background: #050507;
+      background: #060608;
       font-family: Consolas, Monaco, "Courier New", monospace;
-      font-size: 10px;
-      color: #34d399;
-      line-height: 1.45;
+      font-size: 11px;
+      color: #86efac;
+      line-height: 1.55;
       white-space: pre-wrap;
       user-select: text;
     }
@@ -351,8 +360,8 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(2px);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(3px);
       z-index: 100;
       display: none;
       align-items: center;
@@ -360,19 +369,19 @@
       padding: 20px;
     }
     .modal-content {
-      width: 800px;
+      width: 820px;
       max-width: 95vw;
       max-height: 85vh;
       background: #121215;
-      border: 1px solid #27272a;
+      border: 1px solid #3f3f46;
       border-radius: 8px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
     }
     .modal-header {
-      height: 44px;
+      height: 46px;
       padding: 0 16px;
       border-bottom: 1px solid #27272a;
       display: flex;
@@ -383,13 +392,32 @@
     .modal-body {
       padding: 16px;
       overflow-y: auto;
-      font-family: monospace;
-      font-size: 11px;
+      font-size: 12px;
       color: #e4e4e7;
-      line-height: 1.6;
-      white-space: pre-wrap;
+      line-height: 1.7;
       background: #09090b;
     }
+    .modal-section-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #38bdf8;
+      margin: 10px 0 6px 0;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #27272a;
+    }
+    .guide-item {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 4px;
+      font-size: 11.5px;
+    }
+    .guide-num { font-family: monospace; font-weight: 700; color: #a1a1aa; width: 22px; flex-shrink: 0; }
+    .guide-name { font-weight: 700; color: #fff; width: 140px; flex-shrink: 0; }
+    .guide-desc { color: #d4d4d8; flex: 1; }
+    .guide-tag-ok { color: #34d399; font-weight: 700; font-family: monospace; font-size: 10.5px; }
+    .guide-tag-worker { color: #fbbf24; font-weight: 700; font-family: monospace; font-size: 10.5px; }
+    .guide-tag-standby { color: #93c5fd; font-weight: 700; font-family: monospace; font-size: 10.5px; }
   </style>
 </head>
 <body>
@@ -409,7 +437,7 @@
 
     <div class="header-ctrls">
       <div class="ap-select-box">
-        <label>공항 필터:</label>
+        <label>공항 선택:</label>
         <select id="airport-select" class="ap-select" onchange="changeAirport(this.value)">
           <option value="ALL">⚡ 전국 15개 공항 일괄 종합 (ALL)</option>
           <option value="RKSI" selected>RKSI - 인천국제공항 (Incheon)</option>
@@ -430,7 +458,7 @@
         </select>
       </div>
 
-      <button class="btn" onclick="openGuideModal()">📖 개발 현황 & 진단</button>
+      <button class="btn" onclick="openGuideModal()">📖 개발 현황 & 진단 (요약)</button>
       <a href="/" class="btn">🗺️ 관제 맵</a>
       <button class="btn btn-cyan" id="ping-btn" onclick="runLiveHealthCheckAll()">⚡ 전체 실시간 핑</button>
     </div>
@@ -439,7 +467,7 @@
   <!-- Airport Matrix Bar -->
   <div class="matrix-bar">
     <div class="matrix-label">
-      <span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#10b981;"></span>
+      <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#10b981;"></span>
       15개 공항 헬스:
     </div>
     <div class="matrix-chips" id="matrix-chips">
@@ -460,11 +488,11 @@
         <table>
           <thead>
             <tr>
-              <th style="width: 28px; text-align: center;">NO</th>
+              <th style="width: 32px; text-align: center;">NO</th>
               <th>인터페이스 명 / 규격</th>
-              <th style="width: 48px; text-align: center;">주기</th>
-              <th style="width: 105px;">원천 소스</th>
-              <th style="width: 65px; text-align: center;">상태</th>
+              <th style="width: 55px; text-align: center;">주기</th>
+              <th style="width: 110px;">원천 소스</th>
+              <th style="width: 70px; text-align: center;">상태</th>
             </tr>
           </thead>
           <tbody id="table-body">
@@ -481,7 +509,7 @@
           <h3 id="inspect-title">인터페이스를 선택하세요</h3>
           <p id="inspect-doc">좌측 목록에서 항목을 클릭하면 실시간 전문을 확인합니다.</p>
         </div>
-        <div style="display: flex; gap: 4px;">
+        <div style="display: flex; gap: 5px;">
           <button class="btn" onclick="selectItem(activeItem)">🔄 재요청</button>
           <button class="btn btn-cyan" id="copy-btn" onclick="copyPayload()">📋 복사</button>
         </div>
@@ -507,12 +535,12 @@
           <p>LiveATC 실시간 실제 오디오 스트림 가동 중</p>
         </div>
         <div style="display: flex; align-items: center; gap: 6px;">
-          <select id="channel-select" style="background:#18181b; color:#38bdf8; border:1px solid #27272a; border-radius:4px; padding:2px 5px; font-size:10px;" onchange="changeAudioChannel(this.value)">
+          <select id="channel-select" style="background:#18181b; color:#38bdf8; border:1px solid #3f3f46; border-radius:4px; padding:3px 6px; font-size:11px;" onchange="changeAudioChannel(this.value)">
             <option value="KJFK" selected>KJFK (New York JFK Tower)</option>
             <option value="RJTT">RJTT (Tokyo Haneda Tower)</option>
             <option value="KLAX">KLAX (Los Angeles Tower)</option>
           </select>
-          <audio id="live-audio-player" controls style="height: 24px; width: 130px;"></audio>
+          <audio id="live-audio-player" controls style="height: 26px; width: 140px;"></audio>
         </div>
       </div>
 
@@ -520,14 +548,46 @@
     </div>
   </div>
 
-  <!-- Architecture & Diagnosis Guide Modal -->
+  <!-- Architecture & Diagnosis Guide Modal (1-Line Summary Format) -->
   <div class="modal-overlay" id="guide-modal" onclick="if(event.target===this) closeGuideModal()">
     <div class="modal-content">
       <div class="modal-header">
-        <span style="font-weight: 700; font-size: 12px; color: #fff;">📖 대한감시 - 23개 연계 인터페이스 아키텍처 및 개발 현황</span>
+        <span style="font-weight: 700; font-size: 13px; color: #fff;">📖 23개 연계 인터페이스 개발 현황 & 진단 (한 줄 요약)</span>
         <button class="btn" onclick="closeGuideModal()">✕ 닫기</button>
       </div>
-      <div class="modal-body" id="modal-guide-text"></div>
+      <div class="modal-body" id="modal-guide-body">
+        
+        <div class="modal-section-title">1. 한반도 광역 항적 정보 (7개 인터페이스 - 100% 가동)</div>
+        <div class="guide-item"><span class="guide-num">01</span><span class="guide-name">항적정보(융합)</span><span class="guide-desc">OpenSky 실시간 ADS-B 수신 데이터를 유로컨트롤 ASTERIX Cat.062 표준 JSON으로 즉시 변환</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">02</span><span class="guide-name">항적정보(개별)</span><span class="guide-desc">개별 항공기 기하학적 고도, 방위각, 지상속도 포함 ASTERIX Cat.021 타겟 리포트 생성</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">03</span><span class="guide-name">Radar 합성 항적</span><span class="guide-desc">1차(PSR) 및 2차(SSR) 레이더 합성 극좌표계(Rho/Theta) ASTERIX Cat.048 변환</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">04</span><span class="guide-name">지상이동체 항적</span><span class="guide-desc">G-SMGCS 공항 표면 감시 및 유도로 지상이동체 ASTERIX Cat.010 변환</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">05</span><span class="guide-name">레이더 상태정보</span><span class="guide-desc">Mode-S North Mark 및 레이더 안테나 회전 주기별 ASTERIX Cat.034 상태 메시지</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">06</span><span class="guide-name">PSR 단독 레이더</span><span class="guide-desc">1차 감시 레이더 단독 탐지 표적 ASTERIX Cat.048 레포트 생성</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">07</span><span class="guide-name">SSR 단독 레이더</span><span class="guide-desc">2차 감시 레이더(Mode-A/C/S) 단독 탐지 표적 ASTERIX Cat.048 레포트 생성</span><span class="guide-tag-ok">[완료]</span></div>
+
+        <div class="modal-section-title">2. 기상·NOTAM·스케줄 정보 (7개 인터페이스 - 100% 가동)</div>
+        <div class="guide-item"><span class="guide-num">08</span><span class="guide-name">실시간 AMOS</span><span class="guide-desc">전국 42개 활주로 센서의 1~2초 초단위 순간풍/RVR/시정/QNH/기온 등 55개 필드 전수 실시간 릴레이</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">09</span><span class="guide-name">정규기상 (METAR)</span><span class="guide-desc">전국 15개 공항 정규 실측 기상문을 ICAO AMHS X.400 IPM XML 전문으로 패키징</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">10</span><span class="guide-name">공항예보 (TAF)</span><span class="guide-desc">전국 15개 공항 24/30시간 예보 기상문을 ICAO AMHS X.400 IPM XML 전문으로 패키징</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">11</span><span class="guide-name">위험특보 (SIGMET)</span><span class="guide-desc">인천 FIR 전역 중증 난기류/착빙 위험특보 ICAO AMHS IPM XML 전문 생성</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">12</span><span class="guide-name">디지털기상 (IWXXM)</span><span class="guide-desc">WMO/ICAO IWXXM XML 기상전문 바이너리(FTBP Gzip Hex) AMHS 패키징</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">13</span><span class="guide-name">고시보 (NOTAM)</span><span class="guide-desc">AIM Korea 인천 FIR 비행제한구역 원천 수집 후 AMHS AIDA-NG SOAP XML 생성</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">14</span><span class="guide-name">운항스케줄 (FIDS)</span><span class="guide-desc">UBIKAIS 전국 15개 공항 실시간 출/도착 전광판 운항스케줄 전수 연동</span><span class="guide-tag-ok">[완료]</span></div>
+
+        <div class="modal-section-title">3. 비행계획 변동 전문 (6개 인터페이스 - 템플릿 완료, 상태머신 워커 연계 대상)</div>
+        <div class="guide-item"><span class="guide-num">15</span><span class="guide-name">비행계획서 (FPL)</span><span class="guide-desc">UBIKAIS IFR 스케줄 기반 ICAO Doc 4444 비행계획 AMHS IPM XML 생성</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">16</span><span class="guide-name">비행변경보 (CHG)</span><span class="guide-desc">순항고도/항로 변경 감지 시 ICAO CHG 전문 생성 (향후 24시간 감지 워커 구축 대상)</span><span class="guide-tag-worker">[워커대상]</span></div>
+        <div class="guide-item"><span class="guide-num">17</span><span class="guide-name">취소보 (CNL)</span><span class="guide-desc">운항 결항 플래그 감지 시 ICAO CNL SOAP XML 생성 (향후 24시간 감지 워커 구축 대상)</span><span class="guide-tag-worker">[워커대상]</span></div>
+        <div class="guide-item"><span class="guide-num">18</span><span class="guide-name">지연보 (DLA)</span><span class="guide-desc">출발 지연(ETD>STD) 감지 시 ICAO DLA SOAP XML 생성 (향후 24시간 감지 워커 구축 대상)</span><span class="guide-tag-worker">[워커대상]</span></div>
+        <div class="guide-item"><span class="guide-num">19</span><span class="guide-name">출발보 (DEP)</span><span class="guide-desc">ADS-B 이륙 또는 ATD 감지 시 ICAO DEP SOAP XML 생성 (향후 24시간 감지 워커 구축 대상)</span><span class="guide-tag-worker">[워커대상]</span></div>
+        <div class="guide-item"><span class="guide-num">20</span><span class="guide-name">도착보 (ARR)</span><span class="guide-desc">ADS-B 착륙 또는 ATA 감지 시 ICAO ARR SOAP XML 생성 (향후 24시간 감지 워커 구축 대상)</span><span class="guide-tag-worker">[워커대상]</span></div>
+
+        <div class="modal-section-title">4. 관제음성 및 비행스트립 (2개 인터페이스 - 외부 연계)</div>
+        <div class="guide-item"><span class="guide-num">21</span><span class="guide-name">관제음성 (LiveATC)</span><span class="guide-desc">KJFK, RJTT, KLAX 관제탑 실시간 라이브 스트리밍 연동 (국내 공역은 항공보안법상 비공개)</span><span class="guide-tag-ok">[완료]</span></div>
+        <div class="guide-item"><span class="guide-num">22</span><span class="guide-name">전자스트립 (EFS)</span><span class="guide-desc">사용자 자체 관제 시스템에서 실시간 스트립 데이터 전송 시 연계되는 대기 규격</span><span class="guide-tag-standby">[연계대기]</span></div>
+
+      </div>
     </div>
   </div>
 
@@ -600,7 +660,7 @@
       const allChip = document.createElement('div');
       allChip.className = `chip ${currentAirport === 'ALL' ? 'active' : ''}`;
       allChip.onclick = () => changeAirport('ALL');
-      allChip.innerHTML = `<span class="chip-code">⚡ ALL</span><span style="font-size:9px;">전국</span>`;
+      allChip.innerHTML = `<span class="chip-code">⚡ ALL</span><span style="font-size:9.5px;">전국</span>`;
       container.appendChild(allChip);
 
       KOREAN_AIRPORTS.forEach(ap => {
@@ -611,7 +671,7 @@
         chip.innerHTML = `
           <span class="chip-dot"></span>
           <span class="chip-code">${ap.code}</span>
-          <span style="font-size:9px; color:#a1a1aa;">${ap.name}</span>
+          <span style="font-size:9.5px; color:#a1a1aa;">${ap.name}</span>
         `;
         container.appendChild(chip);
       });
@@ -658,16 +718,16 @@
         const statusClass = statusInfo.state === 'ok' ? 'ok' : statusInfo.state === 'err' ? 'err' : 'pending';
 
         tr.innerHTML = `
-          <td style="text-align: center; font-family: monospace; font-weight: 700; color: #71717a;">${item.no}</td>
+          <td style="text-align: center; font-family: monospace; font-weight: 700; color: #a1a1aa;">${item.no}</td>
           <td>
-            <div style="font-weight: 700; color: #fff; line-height: 1.2;">${item.name}</div>
+            <div style="font-weight: 700; color: #ffffff; line-height: 1.25; font-size: 11.5px;">${item.name}</div>
             <div style="display:flex; align-items:center; gap:4px; margin-top:2px;">
               <span class="badge ${getBadgeClass(item.format)}">${item.format}</span>
-              <span style="font-size: 9.5px; color: #71717a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;">${item.sub}</span>
+              <span style="font-size: 10.5px; color: #a1a1aa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;">${item.sub}</span>
             </div>
           </td>
-          <td style="color: #a1a1aa; font-family: monospace; font-size: 9.5px; text-align: center;">${item.interval}</td>
-          <td style="color: #38bdf8; font-size: 9.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.source}</td>
+          <td style="color: #d4d4d8; font-family: monospace; font-size: 10.5px; text-align: center;">${item.interval}</td>
+          <td style="color: #38bdf8; font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.source}</td>
           <td style="text-align: center;"><span class="status-pill ${statusClass}">● ${statusInfo.text}</span></td>
         `;
         tbody.appendChild(tr);
@@ -684,60 +744,7 @@
       else codeViewer.textContent = currentRawText || '// 원천 수집 데이터 로딩 중...';
     }
 
-    function getArchitectureGuideText() {
-      return `================================================================================
-대한감시 (Korean Surveillance) - 23개 연계 인터페이스 아키텍처 및 개발 현황
-================================================================================
-
-[1. 100% 정상 연동 및 변환 완료 항목 (13개 인터페이스)]
---------------------------------------------------------------------------------
-1) 항적 정보 (NO 1 ~ 7)
-   - 소스: OpenSky Network / ADS-B Feeder (한반도 90+대 실시간 실측치)
-   - 구현 방식: 온더플라이(On-the-fly) 실시간 변환 파서 (별도 DB 크롤러 불필요)
-   - 지원 규격: ASTERIX Cat.062 (융합), Cat.021 (ADS-B), Cat.048 (PSR/SSR),
-                Cat.010 (지상이동체), Cat.034 (센서상태)
-
-2) 실시간 AMOS 관제기상 (NO 8)
-   - 소스: AMO 항공기상청 (AmosRealTimeMqc.do)
-   - 제공 항목: 전국 42개 활주로 센서 1~2초 초단위 실시간 관측치 전수 (55개 세부 필드)
-                (순간풍, 2분/10분 평균풍, 광학시정, RVR, 운저고도, 기온, 노점, 습도, QNH, 현천, 강수량)
-
-3) 정규 기상 & NOTAM (NO 9, 10, 11, 12, 13)
-   - 소스: AMO (global.amo.go.kr) & AIM Korea (aim.koca.go.kr)
-   - 구현 방식: 5~10분 주기 폴링 크롤러 캐싱 + AMHS IPM/SOAP XML 자동 패키징
-   - 지원 규격: METAR, TAF, SIGMET, IWXXM Gzip, NOTAM AIDA-NG SOAP
-
-4) 운항디스플레이 FIDS (NO 14)
-   - 소스: UBIKAIS (ubikais.fois.go.kr:8030)
-   - 제공 항목: 전국 15개 공항 실시간 출/도착 스케줄 전수
-
---------------------------------------------------------------------------------
-[2. 전문 템플릿 변환 완료 + 실시간 푸시 데몬 구축 대상 (6개 인터페이스)]
---------------------------------------------------------------------------------
-5) 비행계획 변동 전문 (NO 15 ~ 20)
-   - 현재 구현 상태: UBIKAIS IFR 스케줄을 파싱하여 ICAO Doc 4444 표준 전문 및
-     AMHS IPM/SOAP XML을 생성하는 "전문 변환 템플릿 엔진" 완료.
-   - 향후 고도화 필요 사항:
-     * FPL, DLA, CNL, DEP, ARR, CHG를 24시간 실시간으로 전수 감지하여
-       과제 수신 시스템에 자동 Push/Webhook으로 쏴주려면,
-       n8n / Supabase / 외부 백엔드 워커에서 '상태 변동 감지 데몬'을 가동해야 함.
-
---------------------------------------------------------------------------------
-[3. 사용자 시스템 및 외부 규정 연계 안내 (2개 인터페이스)]
---------------------------------------------------------------------------------
-6) 관제음성 LiveATC (NO 21)
-   - 국내 공역(인천/김포/제주)은 항공보안법 제166조 및 군사보안 규정에 의해
-     공개 인터넷 라이브 스트리밍이 불가합니다.
-   - 기능 검증용으로 글로벌 실시간 스트림(뉴욕 JFK, 도쿄 하네다, LAX)을 실제 연동 제공합니다.
-
-7) 전자비행스트립 EFS (NO 22)
-   - 사용자 자체 관제 시스템에서 실시간으로 쏴주는 데이터를 수신하기 위한 연계 대기(STANDBY) 규격입니다.
-   - 시스템에서 임의의 가짜 스트립을 생성하지 않으며, 사용자 시스템 연동 시 즉시 활성화됩니다.
-================================================================================`;
-    }
-
     function openGuideModal() {
-      document.getElementById('modal-guide-text').textContent = getArchitectureGuideText();
       document.getElementById('guide-modal').style.display = 'flex';
     }
 
