@@ -14,7 +14,7 @@
       background: #09090b;
       color: #fafafa;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-size: 12px;
+      font-size: 11.5px;
       line-height: 1.4;
     }
     a { color: inherit; text-decoration: none; }
@@ -22,24 +22,26 @@
 
     /* Header */
     header {
-      height: 48px;
+      height: 46px;
       background: #121215;
       border-bottom: 1px solid #27272a;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 16px;
+      padding: 0 14px;
       z-index: 50;
+      flex-shrink: 0;
     }
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       cursor: pointer;
+      flex-shrink: 0;
     }
     .brand-icon {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       background: rgba(6, 182, 212, 0.15);
       border: 1px solid rgba(6, 182, 212, 0.4);
       color: #06b6d4;
@@ -47,33 +49,33 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 13px;
     }
-    .brand-title { font-size: 13px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
+    .brand-title { font-size: 12.5px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
     .brand-badge {
       font-size: 9px;
       background: rgba(6, 182, 212, 0.2);
       color: #38bdf8;
       border: 1px solid rgba(6, 182, 212, 0.4);
-      padding: 1px 5px;
+      padding: 1px 4px;
       border-radius: 4px;
       font-family: monospace;
       font-weight: 600;
     }
-    .brand-sub { font-size: 10px; color: #71717a; }
+    .brand-sub { font-size: 9.5px; color: #71717a; }
 
-    .header-ctrls { display: flex; align-items: center; gap: 8px; }
+    .header-ctrls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
     .ap-select-box {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: #18181b;
       border: 1px solid #27272a;
-      padding: 3px 8px;
-      border-radius: 6px;
+      padding: 3px 7px;
+      border-radius: 5px;
       font-size: 11px;
     }
-    .ap-select-box label { color: #a1a1aa; font-size: 11px; }
+    .ap-select-box label { color: #a1a1aa; font-size: 10.5px; }
     .ap-select {
       background: transparent;
       border: none;
@@ -86,18 +88,19 @@
     .ap-select option { background: #18181b; color: #fafafa; }
 
     .btn {
-      padding: 4px 10px;
-      border-radius: 6px;
+      padding: 4px 8px;
+      border-radius: 5px;
       background: #18181b;
       border: 1px solid #27272a;
       color: #d4d4d8;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       transition: all 0.15s;
+      white-space: nowrap;
     }
     .btn:hover { background: #27272a; color: #fff; }
     .btn-cyan {
@@ -107,32 +110,35 @@
     }
     .btn-cyan:hover { background: rgba(6, 182, 212, 0.25); color: #fff; }
 
-    /* Airport Health Matrix Bar */
+    /* Airport Matrix Bar */
     .matrix-bar {
-      height: 42px;
+      height: 36px;
       background: #0d0d10;
       border-bottom: 1px solid #27272a;
-      padding: 0 16px;
+      padding: 0 14px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       overflow-x: auto;
       white-space: nowrap;
+      flex-shrink: 0;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
+    .matrix-bar::-webkit-scrollbar { display: none; }
     .matrix-label {
       font-size: 10px;
       font-weight: 700;
       color: #71717a;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       flex-shrink: 0;
     }
     .matrix-chips { display: flex; gap: 4px; flex-shrink: 0; }
     .chip {
-      padding: 2px 7px;
+      padding: 2px 6px;
       border-radius: 4px;
       background: #18181b;
       border: 1px solid #27272a;
@@ -151,66 +157,88 @@
       font-weight: 700;
     }
     .chip-code { font-family: monospace; font-weight: 700; }
-    .chip-dot { width: 5px; height: 5px; border-radius: 50%; background: #10b981; }
+    .chip-dot { width: 4px; height: 4px; border-radius: 50%; background: #10b981; }
 
-    /* Main Container (2 Columns) */
+    /* Main Container (2 Columns: Left 50%, Right 50% Fluid Split) */
     .main-body {
       display: flex;
-      height: calc(100vh - 90px);
+      height: calc(100vh - 82px);
       width: 100%;
       overflow: hidden;
     }
 
     /* Left Table Pane */
     .table-pane {
-      flex: 1;
+      flex: 1 1 50%;
       display: flex;
       flex-direction: column;
       border-right: 1px solid #27272a;
       background: #09090b;
       min-width: 0;
+      overflow: hidden;
     }
     .table-filter-bar {
-      height: 38px;
-      padding: 0 12px;
+      height: 34px;
+      padding: 0 10px;
       background: #121215;
       border-bottom: 1px solid #27272a;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
+      flex-shrink: 0;
     }
-    .table-count-badge { font-size: 11px; color: #a1a1aa; font-weight: 600; }
+    .table-count-badge { font-size: 10.5px; color: #a1a1aa; font-weight: 600; }
     .search-input {
       background: #18181b;
       border: 1px solid #27272a;
-      padding: 3px 8px;
-      border-radius: 5px;
+      padding: 2px 7px;
+      border-radius: 4px;
       color: #fafafa;
-      font-size: 11px;
-      width: 200px;
+      font-size: 10.5px;
+      width: 160px;
       outline: none;
     }
     .search-input:focus { border-color: #06b6d4; }
 
-    .table-scroll { flex: 1; overflow-y: auto; }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 11px; }
+    .table-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 10.5px;
+    }
     thead { position: sticky; top: 0; background: #121215; z-index: 10; border-bottom: 1px solid #27272a; }
-    th { padding: 6px 10px; font-size: 10px; font-weight: 700; color: #71717a; text-transform: uppercase; }
-    td { padding: 6px 10px; border-bottom: 1px solid #18181b; }
+    th { padding: 5px 8px; font-size: 9.5px; font-weight: 700; color: #71717a; text-transform: uppercase; white-space: nowrap; }
+    td { padding: 5px 8px; border-bottom: 1px solid #18181b; vertical-align: middle; }
     tr { cursor: pointer; transition: background 0.1s; }
     tr:hover { background: #141417; }
     tr.active { background: rgba(6, 182, 212, 0.12); border-left: 2px solid #06b6d4; }
-    .group-row { background: #121215; font-size: 10px; font-weight: 700; color: #38bdf8; pointer-events: none; padding: 5px 10px; border-top: 1px solid #27272a; border-bottom: 1px solid #27272a; }
+    .group-row {
+      background: #121215;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #38bdf8;
+      pointer-events: none;
+      padding: 4px 8px;
+      border-top: 1px solid #27272a;
+      border-bottom: 1px solid #27272a;
+    }
 
     .badge {
       display: inline-block;
-      padding: 1px 5px;
+      padding: 1px 4px;
       border-radius: 3px;
       font-size: 9px;
       font-family: monospace;
       font-weight: 600;
       border: 1px solid transparent;
+      margin-top: 2px;
     }
     .badge-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.3); }
     .badge-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border-color: rgba(59, 130, 246, 0.3); }
@@ -220,10 +248,10 @@
     .status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 3px;
-      padding: 1px 6px;
-      border-radius: 10px;
-      font-size: 10px;
+      gap: 2px;
+      padding: 1px 5px;
+      border-radius: 8px;
+      font-size: 9.5px;
       font-weight: 600;
       white-space: nowrap;
     }
@@ -233,34 +261,36 @@
 
     /* Right Inspector Pane */
     .inspector-pane {
-      width: 520px;
+      flex: 1 1 50%;
       background: #0c0c0f;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      flex-shrink: 0;
+      min-width: 0;
     }
     .inspector-head {
-      height: 48px;
-      padding: 0 14px;
+      height: 42px;
+      padding: 0 12px;
       background: #121215;
       border-bottom: 1px solid #27272a;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-shrink: 0;
     }
-    .inspect-title-box h3 { font-size: 12px; font-weight: 700; color: #fff; }
-    .inspect-title-box p { font-size: 10px; color: #71717a; }
+    .inspect-title-box h3 { font-size: 11.5px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .inspect-title-box p { font-size: 9.5px; color: #71717a; }
 
     .inspector-tabs {
       display: flex;
       background: #09090b;
       border-bottom: 1px solid #27272a;
+      flex-shrink: 0;
     }
     .tab-btn {
       flex: 1;
-      padding: 8px 10px;
-      font-size: 11px;
+      padding: 6px 8px;
+      font-size: 10.5px;
       font-weight: 600;
       border: none;
       background: transparent;
@@ -278,45 +308,87 @@
     }
 
     .inspector-meta {
-      padding: 8px 14px;
+      padding: 6px 12px;
       background: #121215;
       border-bottom: 1px solid #27272a;
-      font-size: 10px;
+      font-size: 9.5px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4px;
+      gap: 3px;
       color: #71717a;
+      flex-shrink: 0;
     }
     .inspector-meta strong { color: #e4e4e7; font-family: monospace; }
 
     .audio-box {
-      padding: 8px 14px;
+      padding: 6px 12px;
       background: rgba(6, 182, 212, 0.1);
       border-bottom: 1px solid rgba(6, 182, 212, 0.2);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
+      flex-shrink: 0;
     }
-    .audio-info h4 { font-size: 11px; font-weight: 700; color: #fff; }
+    .audio-info h4 { font-size: 10.5px; font-weight: 700; color: #fff; }
     .audio-info p { font-size: 9px; color: #38bdf8; }
 
     .code-box {
       flex: 1;
-      padding: 12px;
-      overflow: auto;
+      padding: 10px 12px;
+      overflow-y: auto;
+      overflow-x: auto;
       background: #050507;
       font-family: Consolas, Monaco, "Courier New", monospace;
-      font-size: 10.5px;
+      font-size: 10px;
       color: #34d399;
       line-height: 1.45;
       white-space: pre-wrap;
       user-select: text;
     }
 
-    @media (max-width: 900px) {
-      .main-body { flex-direction: column; height: auto; }
-      .inspector-pane { width: 100%; height: 400px; }
+    /* Modal for Architecture Guide */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(2px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-content {
+      width: 800px;
+      max-width: 95vw;
+      max-height: 85vh;
+      background: #121215;
+      border: 1px solid #27272a;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+    .modal-header {
+      height: 44px;
+      padding: 0 16px;
+      border-bottom: 1px solid #27272a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #18181b;
+    }
+    .modal-body {
+      padding: 16px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 11px;
+      color: #e4e4e7;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      background: #09090b;
     }
   </style>
 </head>
@@ -358,6 +430,7 @@
         </select>
       </div>
 
+      <button class="btn" onclick="openGuideModal()">📖 개발 현황 & 진단</button>
       <a href="/" class="btn">🗺️ 관제 맵</a>
       <button class="btn btn-cyan" id="ping-btn" onclick="runLiveHealthCheckAll()">⚡ 전체 실시간 핑</button>
     </div>
@@ -366,33 +439,32 @@
   <!-- Airport Matrix Bar -->
   <div class="matrix-bar">
     <div class="matrix-label">
-      <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#10b981;"></span>
-      전국 15개 공항 헬스비트:
+      <span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:#10b981;"></span>
+      15개 공항 헬스:
     </div>
     <div class="matrix-chips" id="matrix-chips">
       <!-- Generated dynamically -->
     </div>
   </div>
 
-  <!-- Main Body -->
+  <!-- Main Body (50% Table / 50% Inspector Fluid Split) -->
   <div class="main-body">
     <!-- Left Table -->
     <div class="table-pane">
       <div class="table-filter-bar">
-        <span class="table-count-badge" id="table-count">23개 인터페이스</span>
-        <input type="text" id="search-box" class="search-input" placeholder="인터페이스 / 형식 / 소스 검색..." oninput="renderTable()" />
+        <span class="table-count-badge" id="table-count">22개 인터페이스</span>
+        <input type="text" id="search-box" class="search-input" placeholder="인터페이스 검색..." oninput="renderTable()" />
       </div>
 
       <div class="table-scroll">
         <table>
           <thead>
             <tr>
-              <th style="width: 35px; text-align: center;">NO</th>
-              <th>시스템 / 인터페이스 명</th>
-              <th>데이터 규격</th>
-              <th>발생 주기</th>
-              <th>원천 수집처</th>
-              <th style="width: 90px; text-align: center;">실시간 상태</th>
+              <th style="width: 28px; text-align: center;">NO</th>
+              <th>인터페이스 명 / 규격</th>
+              <th style="width: 48px; text-align: center;">주기</th>
+              <th style="width: 105px;">원천 소스</th>
+              <th style="width: 65px; text-align: center;">상태</th>
             </tr>
           </thead>
           <tbody id="table-body">
@@ -415,10 +487,10 @@
         </div>
       </div>
 
+      <!-- Clean 2 Tabs Only (Converted vs Raw) -->
       <div class="inspector-tabs">
         <button class="tab-btn active" id="tab-converted" onclick="switchTab('converted')">📤 규격 변환 API 전문</button>
         <button class="tab-btn" id="tab-raw" onclick="switchTab('raw')">📥 원천 수집 데이터 (Raw)</button>
-        <button class="tab-btn" id="tab-guide" onclick="switchTab('guide')">📖 개발 현황 & 진단</button>
       </div>
 
       <div class="inspector-meta" id="inspect-meta">
@@ -435,16 +507,27 @@
           <p>LiveATC 실시간 실제 오디오 스트림 가동 중</p>
         </div>
         <div style="display: flex; align-items: center; gap: 6px;">
-          <select id="channel-select" style="background:#18181b; color:#38bdf8; border:1px solid #27272a; border-radius:4px; padding:2px 6px; font-size:10px;" onchange="changeAudioChannel(this.value)">
+          <select id="channel-select" style="background:#18181b; color:#38bdf8; border:1px solid #27272a; border-radius:4px; padding:2px 5px; font-size:10px;" onchange="changeAudioChannel(this.value)">
             <option value="KJFK" selected>KJFK (New York JFK Tower)</option>
             <option value="RJTT">RJTT (Tokyo Haneda Tower)</option>
             <option value="KLAX">KLAX (Los Angeles Tower)</option>
           </select>
-          <audio id="live-audio-player" controls style="height: 26px; width: 140px;"></audio>
+          <audio id="live-audio-player" controls style="height: 24px; width: 130px;"></audio>
         </div>
       </div>
 
       <div class="code-box" id="code-viewer">// 실시간 라이브 페이로드가 여기에 표시됩니다.</div>
+    </div>
+  </div>
+
+  <!-- Architecture & Diagnosis Guide Modal -->
+  <div class="modal-overlay" id="guide-modal" onclick="if(event.target===this) closeGuideModal()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span style="font-weight: 700; font-size: 12px; color: #fff;">📖 대한감시 - 23개 연계 인터페이스 아키텍처 및 개발 현황</span>
+        <button class="btn" onclick="closeGuideModal()">✕ 닫기</button>
+      </div>
+      <div class="modal-body" id="modal-guide-text"></div>
     </div>
   </div>
 
@@ -472,34 +555,34 @@
     function getCatalog(ap) {
       const isAll = ap === 'ALL';
       const apParam = isAll ? 'ALL' : ap;
-      const apLabel = isAll ? '전국 15개 공항 일괄 종합' : `${ap} 공항`;
+      const apLabel = isAll ? '전국 15개 공항 일괄' : `${ap}`;
 
       return [
         // Group 1: Airspace Surveillance
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 1, name: '항적정보(융합)', sub: '유로컨트롤 Cat.062 융합 System Track', format: 'ASTERIX Cat.062', interval: '1~2초', source: 'OpenSky Network (ADS-B)', endpoint: '/api/asterix?cat=62', doc: 'ASTERIX Cat.062 System Track Report' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 2, name: '항적정보(개별)', sub: 'ADS-B 개별 기하고도·속도 Target', format: 'ASTERIX Cat.021', interval: '1~2초', source: 'OpenSky Network (ADS-B)', endpoint: '/api/asterix?cat=21', doc: 'ASTERIX Cat.021 ADS-B Target Report' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 3, name: 'Radar 합성 항적', sub: '1차(PSR) / 2차(SSR) 레이더 합성 항적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (Radar 변환)', endpoint: '/api/asterix?cat=48&typ=COMBINED_PSR_SSR', doc: 'ASTERIX Cat.048 Monoradar Report' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 4, name: '지상이동체 항적', sub: 'G-SMGCS 공항 표면 감시 항적', format: 'ASTERIX Cat.010', interval: '1초', source: 'OpenSky (Surface)', endpoint: '/api/asterix?cat=10', doc: 'ASTERIX Cat.010 Surface Movement' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 5, name: '레이더 상태 정보', sub: 'Mode-S North Mark & 안테나 상태', format: 'ASTERIX Cat.034', interval: '4초', source: 'Mode-S Sensor State', endpoint: '/api/asterix?cat=34', doc: 'ASTERIX Cat.034 Sensor Message' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 6, name: 'Primary (PSR) 단독', sub: '1차 감시 레이더 단독 표적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (PSR)', endpoint: '/api/asterix?cat=48&typ=SINGLE_PSR', doc: 'ASTERIX Cat.048 PSR' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 7, name: 'Secondary (SSR) 단독', sub: '2차 감시 레이더 단독 표적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (SSR)', endpoint: '/api/asterix?cat=48&typ=SINGLE_SSR', doc: 'ASTERIX Cat.048 SSR' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 1, name: '항적정보(융합)', sub: '유로컨트롤 Cat.062 융합 System Track', format: 'ASTERIX Cat.062', interval: '1~2초', source: 'OpenSky Network', endpoint: '/api/asterix?cat=62', doc: 'ASTERIX Cat.062 System Track Report' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 2, name: '항적정보(개별)', sub: 'ADS-B 개별 기하고도·속도 Target', format: 'ASTERIX Cat.021', interval: '1~2초', source: 'OpenSky Network', endpoint: '/api/asterix?cat=21', doc: 'ASTERIX Cat.021 ADS-B Target Report' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 3, name: 'Radar 합성 항적', sub: '1차(PSR) / 2차(SSR) 레이더 합성 항적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (Radar)', endpoint: '/api/asterix?cat=48&typ=COMBINED_PSR_SSR', doc: 'ASTERIX Cat.048 Monoradar Report' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 4, name: '지상이동체 항적', sub: 'G-SMGCS 공항 표면 감시 항적', format: 'ASTERIX Cat.010', interval: '1초', source: 'OpenSky (Surface)', endpoint: '/api/asterix?cat=10', doc: 'ASTERIX Cat.010 Surface Movement' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 5, name: '레이더 상태 정보', sub: 'Mode-S North Mark & 안테나 상태', format: 'ASTERIX Cat.034', interval: '4초', source: 'Mode-S Sensor', endpoint: '/api/asterix?cat=34', doc: 'ASTERIX Cat.034 Sensor Message' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 6, name: 'Primary (PSR) 단독', sub: '1차 감시 레이더 단독 표적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (PSR)', endpoint: '/api/asterix?cat=48&typ=SINGLE_PSR', doc: 'ASTERIX Cat.048 PSR' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 7, name: 'Secondary (SSR) 단독', sub: '2차 감시 레이더 단독 표적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (SSR)', endpoint: '/api/asterix?cat=48&typ=SINGLE_SSR', doc: 'ASTERIX Cat.048 SSR' },
 
         // Group 2: Airport Operations & Weather
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 8, name: '실시간 관제기상 (AMOS)', sub: `${apLabel} 42개 활주로별 초단위 순간풍/RVR/QNH`, format: 'JSON (55개 필드)', interval: '1~2초', source: 'AMO 항공기상청 (AmosRealTimeMqc.do)', endpoint: `/api/weather?type=amos&icao=${apParam}`, doc: '42 Runway Sensors Realtime Readings' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 9, name: '정규 기상보고 (METAR)', sub: `${apLabel} 실측 정규 기상문`, format: 'AMHS IPM XML', interval: '매 30분', source: 'AMO (global.amo.go.kr)', endpoint: `/api/amhs?type=METAR&icao=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Annex 3 METAR in AMHS IPM' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 10, name: '공항 예보 (TAF)', sub: `${apLabel} 24/30시간 기상예보`, format: 'AMHS IPM XML', interval: '매 6시간', source: 'AMO (global.amo.go.kr)', endpoint: `/api/amhs?type=TAF&icao=${isAll ? 'RKSS' : ap}`, doc: 'ICAO Annex 3 TAF in AMHS IPM' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 11, name: '위험기상특보 (SIGMET)', sub: '인천 FIR 전역 중증 난기류/착빙/특보', format: 'AMHS IPM XML', interval: '발생시', source: 'AMO 항공기상청 SIGMET', endpoint: '/api/amhs?type=SIGMET', doc: 'ICAO Annex 3 SIGMET' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 12, name: '디지털 기상 (IWXXM)', sub: `${apLabel} IWXXM XML 바이너리 (FTBP Gzip)`, format: 'AMHS XML (Gzip Hex)', interval: '매 30분', source: 'AMO IWXXM Feed', endpoint: `/api/amhs?type=IWXXM&icao=${isAll ? 'RKSI' : ap}`, doc: 'WMO/ICAO IWXXM 2023-1' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 13, name: '항공고시보 (NOTAM)', sub: `${apLabel} 비행제한구역 및 시설정보`, format: 'AMHS SOAP XML', interval: '5분', source: 'AIM Korea (aim.koca.go.kr)', endpoint: `/api/amhs?type=NOTAM&location=${isAll ? 'RKSI' : ap}`, doc: 'AIDA-NG SOAP NOTAM' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 14, name: '운항스케줄 (FIDS)', sub: `${apLabel} 실시간 출/도착 전광판 스케줄`, format: 'FIDS JSON', interval: '10초', source: 'UBIKAIS (fois.go.kr:8030)', endpoint: `/api/flight-schedule?airport=${apParam}`, doc: 'FIDS Master Schedule' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 15, name: '비행계획서 (FPL)', sub: `${apLabel} 발 ICAO Doc 4444 비행계획 전문`, format: 'AMHS IPM XML', interval: '스케줄 동기화', source: 'UBIKAIS IFR 스케줄', endpoint: `/api/amhs?type=FPL&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 FPL' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 16, name: '비행계획 변경보 (CHG)', sub: '순항고도/항로/도착지 변경 전문 템플릿', format: 'AMHS IPM XML', interval: '변경 발생시', source: 'UBIKAIS IFR 변경 감지', endpoint: `/api/amhs?type=CHG&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 CHG' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 17, name: '비행계획 취소보 (CNL)', sub: '운항 취소/결항 전문 템플릿', format: 'AMHS SOAP XML', interval: '결항 발생시', source: 'UBIKAIS 결항 플래그', endpoint: `/api/amhs?type=CNL&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 CNL' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 18, name: '비행 지연보 (DLA)', sub: '지연 출발 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '지연 발생시', source: 'UBIKAIS ETD 지연 플래그', endpoint: `/api/amhs?type=DLA&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 DLA' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 8, name: '실시간 관제기상 (AMOS)', sub: `${apLabel} 42개 활주로별 초단위 순간풍/RVR/QNH`, format: 'JSON (55개 필드)', interval: '1~2초', source: 'AMO 항공기상청', endpoint: `/api/weather?type=amos&icao=${apParam}`, doc: '42 Runway Sensors Realtime Readings' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 9, name: '정규 기상보고 (METAR)', sub: `${apLabel} 실측 정규 기상문`, format: 'AMHS IPM XML', interval: '매 30분', source: 'AMO 기상청', endpoint: `/api/amhs?type=METAR&icao=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Annex 3 METAR in AMHS IPM' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 10, name: '공항 예보 (TAF)', sub: `${apLabel} 24/30시간 기상예보`, format: 'AMHS IPM XML', interval: '매 6시간', source: 'AMO 기상청', endpoint: `/api/amhs?type=TAF&icao=${isAll ? 'RKSS' : ap}`, doc: 'ICAO Annex 3 TAF in AMHS IPM' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 11, name: '위험기상특보 (SIGMET)', sub: '인천 FIR 전역 중증 난기류/착빙/특보', format: 'AMHS IPM XML', interval: '발생시', source: 'AMO 항공기상청', endpoint: '/api/amhs?type=SIGMET', doc: 'ICAO Annex 3 SIGMET' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 12, name: '디지털 기상 (IWXXM)', sub: `${apLabel} IWXXM XML 바이너리 (FTBP Gzip)`, format: 'AMHS XML (Gzip)', interval: '매 30분', source: 'AMO IWXXM Feed', endpoint: `/api/amhs?type=IWXXM&icao=${isAll ? 'RKSI' : ap}`, doc: 'WMO/ICAO IWXXM 2023-1' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 13, name: '항공고시보 (NOTAM)', sub: `${apLabel} 비행제한구역 및 시설정보`, format: 'AMHS SOAP XML', interval: '5분', source: 'AIM Korea', endpoint: `/api/amhs?type=NOTAM&location=${isAll ? 'RKSI' : ap}`, doc: 'AIDA-NG SOAP NOTAM' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 14, name: '운항스케줄 (FIDS)', sub: `${apLabel} 실시간 출/도착 전광판 스케줄`, format: 'FIDS JSON', interval: '10초', source: 'UBIKAIS (FOIS)', endpoint: `/api/flight-schedule?airport=${apParam}`, doc: 'FIDS Master Schedule' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 15, name: '비행계획서 (FPL)', sub: `${apLabel} 발 ICAO Doc 4444 비행계획 전문`, format: 'AMHS IPM XML', interval: '스케줄 동기화', source: 'UBIKAIS (FOIS)', endpoint: `/api/amhs?type=FPL&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 FPL' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 16, name: '비행계획 변경보 (CHG)', sub: '순항고도/항로/도착지 변경 전문 템플릿', format: 'AMHS IPM XML', interval: '변경 발생시', source: 'UBIKAIS (FOIS)', endpoint: `/api/amhs?type=CHG&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 CHG' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 17, name: '비행계획 취소보 (CNL)', sub: '운항 취소/결항 전문 템플릿', format: 'AMHS SOAP XML', interval: '결항 발생시', source: 'UBIKAIS (FOIS)', endpoint: `/api/amhs?type=CNL&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 CNL' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 18, name: '비행 지연보 (DLA)', sub: '지연 출발 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '지연 발생시', source: 'UBIKAIS (FOIS)', endpoint: `/api/amhs?type=DLA&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 DLA' },
         { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 19, name: '출발보 (DEP)', sub: '실제 이륙(ATD) 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '이륙 발생시', source: 'ADS-B + UBIKAIS', endpoint: `/api/amhs?type=DEP&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 DEP' },
         { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 20, name: '도착보 (ARR)', sub: '실제 착륙(ATA) 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '착륙 발생시', source: 'ADS-B + UBIKAIS', endpoint: `/api/amhs?type=ARR&dest=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 ARR' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 21, name: '관제음성 (LiveATC)', sub: '실시간 관제탑 오디오 라이브 스트림 (글로벌 테스트)', format: 'AUDIO/MPEG (MP3)', interval: '실시간 스트리밍', source: 'LiveATC.net (실시간 가동)', endpoint: '/api/voice?channel=KJFK', doc: 'Live ATC Stream Engine' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 22, name: '전자비행스트립 (EFS)', sub: '사용자 자체 관제 시스템 연계 (수신 대기)', format: 'EFS Standard JSON', interval: '사용자 송출주기', source: '사용자 자체 시스템 (연계 대기)', endpoint: `/api/flight-schedule?airport=${isAll ? 'RKSI' : ap}&efs=true`, doc: 'EFS Strip Gateway' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 21, name: '관제음성 (LiveATC)', sub: '실시간 관제탑 오디오 라이브 스트림 (글로벌)', format: 'AUDIO/MPEG', interval: '실시간', source: 'LiveATC.net', endpoint: '/api/voice?channel=KJFK', doc: 'Live ATC Stream Engine' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 22, name: '전자비행스트립 (EFS)', sub: '사용자 자체 관제 시스템 연계 (수신 대기)', format: 'EFS JSON', interval: '사용자 송출', source: '사용자 시스템 (대기)', endpoint: `/api/flight-schedule?airport=${isAll ? 'RKSI' : ap}&efs=true`, doc: 'EFS Strip Gateway' },
       ];
     }
 
@@ -514,7 +597,6 @@
       const container = document.getElementById('matrix-chips');
       container.innerHTML = '';
 
-      // Add ALL chip
       const allChip = document.createElement('div');
       allChip.className = `chip ${currentAirport === 'ALL' ? 'active' : ''}`;
       allChip.onclick = () => changeAirport('ALL');
@@ -560,7 +642,7 @@
           lastGroup = item.group;
           const grpTr = document.createElement('tr');
           grpTr.innerHTML = `
-            <td colspan="6" class="group-row">
+            <td colspan="5" class="group-row">
               ${item.group}
             </td>
           `;
@@ -572,18 +654,20 @@
         if (isActive) tr.className = 'active';
         tr.onclick = () => selectItem(item);
 
-        const statusInfo = liveStatusMap[item.no] || { state: 'pending', text: '대기 중...' };
+        const statusInfo = liveStatusMap[item.no] || { state: 'pending', text: '대기' };
         const statusClass = statusInfo.state === 'ok' ? 'ok' : statusInfo.state === 'err' ? 'err' : 'pending';
 
         tr.innerHTML = `
           <td style="text-align: center; font-family: monospace; font-weight: 700; color: #71717a;">${item.no}</td>
           <td>
-            <div style="font-weight: 700; color: #fff;">${item.name}</div>
-            <div style="font-size: 10px; color: #71717a; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.sub}</div>
+            <div style="font-weight: 700; color: #fff; line-height: 1.2;">${item.name}</div>
+            <div style="display:flex; align-items:center; gap:4px; margin-top:2px;">
+              <span class="badge ${getBadgeClass(item.format)}">${item.format}</span>
+              <span style="font-size: 9.5px; color: #71717a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;">${item.sub}</span>
+            </div>
           </td>
-          <td><span class="badge ${getBadgeClass(item.format)}">${item.format}</span></td>
-          <td style="color: #a1a1aa; font-family: monospace; font-size: 10px;">${item.interval}</td>
-          <td style="color: #38bdf8; font-size: 10px;">${item.source}</td>
+          <td style="color: #a1a1aa; font-family: monospace; font-size: 9.5px; text-align: center;">${item.interval}</td>
+          <td style="color: #38bdf8; font-size: 9.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.source}</td>
           <td style="text-align: center;"><span class="status-pill ${statusClass}">● ${statusInfo.text}</span></td>
         `;
         tbody.appendChild(tr);
@@ -594,15 +678,13 @@
       currentTab = tab;
       document.getElementById('tab-converted').className = tab === 'converted' ? 'tab-btn active' : 'tab-btn';
       document.getElementById('tab-raw').className = tab === 'raw' ? 'tab-btn active' : 'tab-btn';
-      document.getElementById('tab-guide').className = tab === 'guide' ? 'tab-btn active' : 'tab-btn';
 
       const codeViewer = document.getElementById('code-viewer');
       if (tab === 'converted') codeViewer.textContent = currentConvertedText || '// 규격 변환 전문 로딩 중...';
-      else if (tab === 'raw') codeViewer.textContent = currentRawText || '// 원천 수집 데이터 로딩 중...';
-      else codeViewer.textContent = getArchitectureGuide();
+      else codeViewer.textContent = currentRawText || '// 원천 수집 데이터 로딩 중...';
     }
 
-    function getArchitectureGuide() {
+    function getArchitectureGuideText() {
       return `================================================================================
 대한감시 (Korean Surveillance) - 23개 연계 인터페이스 아키텍처 및 개발 현황
 ================================================================================
@@ -654,6 +736,15 @@
 ================================================================================`;
     }
 
+    function openGuideModal() {
+      document.getElementById('modal-guide-text').textContent = getArchitectureGuideText();
+      document.getElementById('guide-modal').style.display = 'flex';
+    }
+
+    function closeGuideModal() {
+      document.getElementById('guide-modal').style.display = 'none';
+    }
+
     async function selectItem(item) {
       activeItem = item;
       renderTable();
@@ -693,7 +784,7 @@
           liveStatusMap[item.no] = { state: 'err', text: `HTTP ${res.status}` };
           currentConvertedText = `[HTTP ${res.status} 오류 발생]\n\n${errText}`;
         } else {
-          liveStatusMap[item.no] = { state: 'ok', text: `정상 (${elapsed}ms)` };
+          liveStatusMap[item.no] = { state: 'ok', text: `${elapsed}ms` };
           if (contentType.includes('json')) {
             const json = await res.json();
             currentConvertedText = JSON.stringify(json, null, 2);
@@ -755,11 +846,7 @@
     }
 
     function copyPayload() {
-      let textToCopy = '';
-      if (currentTab === 'converted') textToCopy = currentConvertedText;
-      else if (currentTab === 'raw') textToCopy = currentRawText;
-      else textToCopy = getArchitectureGuide();
-
+      const textToCopy = currentTab === 'converted' ? currentConvertedText : currentRawText;
       if (!textToCopy) return;
       navigator.clipboard.writeText(textToCopy);
       const btn = document.getElementById('copy-btn');
