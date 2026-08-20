@@ -35,11 +35,11 @@
     },
     {
       "source": "/api-dashboard",
-      "destination": "/index.html"
+      "destination": "/api-dashboard.html"
     },
     {
       "source": "/apidashboard",
-      "destination": "/index.html"
+      "destination": "/api-dashboard.html"
     },
     {
       "source": "/api/(.*)",

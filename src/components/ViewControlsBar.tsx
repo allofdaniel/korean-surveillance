@@ -85,17 +85,24 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
 }) => {
   return (
     <div className="view-controls flex items-center space-x-2" role="toolbar" aria-label="상단 패널">
-      {onOpenApiDashboard && (
-        <button
-          onClick={onOpenApiDashboard}
-          className="flex items-center px-3 py-1.5 bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-cyan-300 border border-cyan-500/40 rounded-xl text-xs font-semibold shadow-lg backdrop-blur transition group cursor-pointer"
-          title="23개 항공/기상/관제 인터페이스 및 연계 데이터 대시보드"
-        >
-          <span className="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-ping" />
-          <span className="text-cyan-400 font-bold mr-1">📡 23개 연계 API</span>
-          <span className="text-[10px] text-slate-400 hidden sm:inline">대시보드</span>
-        </button>
-      )}
+      <a
+        href="/api-dashboard"
+        className="view-btn notam-button"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '6px',
+          background: 'rgba(15, 23, 42, 0.95)',
+          borderColor: 'rgba(6, 182, 212, 0.4)',
+          color: '#38bdf8',
+          textDecoration: 'none',
+          cursor: 'pointer'
+        }}
+        title="23개 항공/기상/관제 인터페이스 및 연계 데이터 대시보드"
+      >
+        <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
+        <span>📡 연계 API 대시보드</span>
+      </a>
       <NotamPanel
         showNotamPanel={showNotamPanel}
         setShowNotamPanel={setShowNotamPanel}
