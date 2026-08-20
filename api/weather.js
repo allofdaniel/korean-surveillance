@@ -72,7 +72,10 @@ export default async function handler(req, res) {
     return; // Rate limit exceeded
   }
 
-  const type = typeof req.query.type === 'string' ? req.query.type.toLowerCase().trim() : 'metar';
+  const parsedUrl = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+  req.query = req.query || Object.fromEntries(parsedUrl.searchParams.entries());
+
+  const type = (parsedUrl.searchParams.get('type') || (typeof req.query.type === 'string' ? req.query.type : '') || 'metar').toLowerCase().trim();
   if (!ALLOWED_WEATHER_TYPES.has(type)) {
     return res.status(400).json({ error: 'Invalid type' });
   }
