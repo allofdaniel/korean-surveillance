@@ -147,12 +147,12 @@ export default async function handler(req, res) {
   }
 }
 
-// AMOS - 실시간 공항 관제 기상관측장비 (항공기상청 AMO 실시간 우선, aviationweather.gov / KMA 폴백)
+// AMOS - 실시간 공항 관제 기상관측장비 (항공기상청 AMO 실시간 우선, 표준 관제기상 폴백)
 async function handleAmos(req, res) {
   const urlObj = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
   const rawIcao = (urlObj.searchParams.get('icao') || (typeof req.query?.icao === 'string' ? req.query.icao : null) || '').toUpperCase() || null;
 
-  // 1. 항공기상청 AMO 실시간 관제기상 (전국 42개 활주로별 초단위 관측치 전수 송신)
+  // 1. 항공기상청 AMO 실시간 관제기상 (전국 42개 활주로별 초단위 전체 55개 필드 실측치)
   try {
     const amosList = await fetchLiveAmosData(rawIcao);
     if (amosList && amosList.length > 0) {
@@ -163,64 +163,6 @@ async function handleAmos(req, res) {
     console.warn('[Weather API] AMO live scraper failed:', e.message);
   }
 
-  let metar = null;
-
-  // 1. aviationweather.gov 癒쇱? ?쒕룄 (API ??遺덊븘??
-  // RKPU(?몄궛)???곗씠?곌? ?놁쑝誘€濡?RKPK(源€?????④퍡 ?붿껌
-  try {
-    const metarUrl = `https://aviationweather.gov/api/data/metar?ids=RKPU,RKPK&format=json`;
-    const response = await fetchWithTimeout(metarUrl);
-    if (response.ok) {
-      const metarJson = await response.json();
-      if (metarJson && metarJson.length > 0) {
-        // RKPU(?몄궛) ?곗꽑, ?놁쑝硫?RKPK(源?? ?ъ슜
-        const raw = metarJson.find(m => m.icaoId === 'RKPU') || metarJson[0];
-        metar = {
-          icaoId: raw.icaoId || 'RKPU',
-          obsTime: raw.reportTime || raw.obsTime,
-          temp: raw.temp,
-          dewp: raw.dewp,
-          humidity: raw.humidity,
-          altim: raw.altim,
-          wdir: raw.wdir,
-          wspd: raw.wspd,
-          wspdMs: raw.wspd ? (raw.wspd * 0.514444).toFixed(1) : null,
-          wgst: raw.wgst,
-          visib: raw.visib,
-          visibM: raw.visib ? Math.round(raw.visib * 1609.34) : null,
-          ceiling: raw.clouds?.[0]?.base || null,
-          fltCat: raw.fltCat || 'VFR',
-          rawOb: raw.rawOb,
-          source: 'aviationweather.gov'
-        };
-        console.info('[Weather API] METAR from aviationweather.gov');
-      }
-    }
-  } catch (e) {
-    console.warn('[Weather API] aviationweather.gov failed:', e.message);
-  }
-
-  // 2. KMA AMOS ?대갚 (API ?ㅺ? ?덈뒗 寃쎌슦)
-  if (!metar && KMA_API_KEY) {
-    try {
-      const now = new Date();
-      const kstNow = new Date(now.getTime() + 9 * 60 * 60 * 1000 - 5 * 60 * 1000);
-      const tm = kstNow.toISOString().slice(0, 16).replace(/[-T:]/g, '').slice(0, 12);
-
-      const amosUrl = `https://apihub.kma.go.kr/api/typ01/url/amos.php?tm=${tm}&stn=${ULSAN_STN}&authKey=${KMA_API_KEY}`;
-      const amosRes = await fetchWithTimeout(amosUrl);
-      const amosText = await amosRes.text();
-      metar = parseKmaAmos(amosText);
-
-      if (!metar) {
-        const utcTm = now.toISOString().slice(0, 16).replace(/[-T:]/g, '').slice(0, 12);
-        const metarDecUrl = `https://apihub.kma.go.kr/api/typ01/url/air_metar_dec.php?tm=${utcTm}&org=K&authKey=${KMA_API_KEY}`;
-        const metarRes = await fetchWithTimeout(metarDecUrl);
-        const metarText = await metarRes.text();
-        metar = parseKmaMetarDec(metarText, ULSAN_STN);
-      }
-    } catch (e) {
-      console.warn('[Weather API] KMA AMOS failed:', e.message);
     }
   }
 
@@ -238,7 +180,7 @@ async function handleTaf(req, res) {
   return res.status(200).json(tafJson || []);
 }
 
-// KMA METAR - ??났湲곗긽?꾨Ц 議고쉶 (怨듭떇 KMA API)
+// KMA METAR - 항공기상전문 조회 (공식 KMA API)
 async function handleKmaMetar(req, res) {
   const rawIcao = typeof req.query.icao === 'string' ? req.query.icao : 'RKPU';
   const icao = rawIcao || 'RKPU';
