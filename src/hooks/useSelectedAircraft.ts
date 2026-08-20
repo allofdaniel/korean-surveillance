@@ -382,7 +382,8 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
               aircraft_images: routeData.aircraft?.images || [],
               _source: routeData.source,
               _lastUpdated: routeData.lastUpdated,
-              _staleSchedule: isStaleSchedule()\n            });
+              _staleSchedule: isStaleSchedule()
+            });
             setFlightScheduleLoading(false);
             return;
           }
