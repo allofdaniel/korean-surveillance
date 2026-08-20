@@ -1,4 +1,4 @@
-// Vercel Serverless Function - 항공기 사진 프록시
+// Vercel Serverless Function - 초고속 병렬 항공기 사진 프록시
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 
 const REG_PATTERN = /^[A-Z0-9-]{2,14}$/i;
@@ -81,9 +81,7 @@ function getModelFallback(typeCode) {
 }
 
 export default async function handler(req, res) {
-  // DO-278A SRS-SEC-002: Use secure CORS headers
   if (setCorsHeaders(req, res)) return;
-  // DO-278A SRS-SEC-003: Rate Limiting
   if (await checkRateLimit(req, res)) return;
 
   const { hex, reg, callsign, type } = req.query;
@@ -98,131 +96,108 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'hex or reg parameter required' });
   }
 
-  // HexDB fallback metadata discovery
-  if (normalizedHex && (!normalizedReg || !discoveredType)) {
-    try {
-      const hexRes = await fetch(`https://hexdb.io/api/v1/aircraft/${normalizedHex}`, {
-        signal: AbortSignal.timeout(2000)
-      });
-      if (hexRes.ok) {
-        const hexData = await hexRes.json();
-        if (!normalizedReg && hexData.Registration) normalizedReg = hexData.Registration.trim().toUpperCase();
-        if (!discoveredType && (hexData.ICAOTypeCode || hexData.Type)) discoveredType = (hexData.ICAOTypeCode || hexData.Type).trim().toUpperCase();
-      }
-    } catch (e) {}
-  }
+  // Cache response in browser and CDN for 1 hour to ensure instant repeat loads
+  res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800');
 
-  try {
-    // 1. ADSBDB (by hex)
-    if (normalizedHex) {
-      try {
+  // Fast Parallel Photo Fetching
+  const fetchTasks = [];
+
+  // Task 1: ADSBDB
+  if (normalizedHex) {
+    fetchTasks.push(
+      (async () => {
         const adsbdbRes = await fetch(`https://api.adsbdb.com/v0/aircraft/${normalizedHex}`, {
           headers: { 'User-Agent': 'Mozilla/5.0' },
-          signal: AbortSignal.timeout(2500)
+          signal: AbortSignal.timeout(2200)
         });
         if (adsbdbRes.ok) {
           const adsbdbData = await adsbdbRes.json();
           const ac = adsbdbData.response?.aircraft;
           const img = ac?.url_photo || ac?.url_photo_thumbnail;
           if (img) {
-            return res.status(200).json({
+            return {
               source: 'adsbdb',
               image: img,
               photographer: ac.registered_owner || 'ADSBDB',
               link: `https://globe.adsbexchange.com/?icao=${normalizedHex}`
-            });
+            };
           }
         }
-      } catch (e) {}
-    }
+        throw new Error('No ADSBDB photo');
+      })()
+    );
+  }
 
-    // 2. airport-data.com (by registration)
-    if (normalizedReg) {
-      const regCandidates = [normalizedReg];
-      if (normalizedReg.includes('-')) regCandidates.push(normalizedReg.replace(/-/g, ''));
-      
-      for (const r of regCandidates) {
-        try {
-          const adRes = await fetch(`https://airport-data.com/api/ac_thumb.json?r=${encodeURIComponent(r)}&n=1`, {
-            headers: { 'User-Agent': 'Mozilla/5.0' },
-            signal: AbortSignal.timeout(2500)
-          });
-          if (adRes.ok) {
-            const adData = await adRes.json();
-            if (adData.data && adData.data.length > 0 && adData.data[0].image) {
-              return res.status(200).json({
-                source: 'airport-data',
-                image: adData.data[0].image,
-                photographer: adData.data[0].photographer || 'Airport-Data.com',
-                link: adData.data[0].link || `https://airport-data.com/aircraft/search.html?q=${encodeURIComponent(r)}`
-              });
-            }
-          }
-        } catch (e) {}
-      }
-    }
-
-    // 3. airport-data.com (by hex)
-    if (normalizedHex) {
-      try {
-        const adRes = await fetch(`https://airport-data.com/api/ac_thumb.json?m=${encodeURIComponent(normalizedHex)}&n=1`, {
+  // Task 2: Airport-Data by Reg
+  if (normalizedReg) {
+    fetchTasks.push(
+      (async () => {
+        const adRes = await fetch(`https://airport-data.com/api/ac_thumb.json?r=${encodeURIComponent(normalizedReg)}&n=1`, {
           headers: { 'User-Agent': 'Mozilla/5.0' },
-          signal: AbortSignal.timeout(2500)
+          signal: AbortSignal.timeout(2200)
         });
         if (adRes.ok) {
           const adData = await adRes.json();
           if (adData.data && adData.data.length > 0 && adData.data[0].image) {
-            return res.status(200).json({
+            return {
+              source: 'airport-data',
+              image: adData.data[0].image,
+              photographer: adData.data[0].photographer || 'Airport-Data.com',
+              link: adData.data[0].link || `https://airport-data.com/aircraft/search.html?q=${encodeURIComponent(normalizedReg)}`
+            };
+          }
+        }
+        throw new Error('No Airport-Data reg photo');
+      })()
+    );
+  }
+
+  // Task 3: Airport-Data by Hex
+  if (normalizedHex) {
+    fetchTasks.push(
+      (async () => {
+        const adRes = await fetch(`https://airport-data.com/api/ac_thumb.json?m=${encodeURIComponent(normalizedHex)}&n=1`, {
+          headers: { 'User-Agent': 'Mozilla/5.0' },
+          signal: AbortSignal.timeout(2200)
+        });
+        if (adRes.ok) {
+          const adData = await adRes.json();
+          if (adData.data && adData.data.length > 0 && adData.data[0].image) {
+            return {
               source: 'airport-data',
               image: adData.data[0].image,
               photographer: adData.data[0].photographer || 'Airport-Data.com',
               link: adData.data[0].link || `https://airport-data.com/aircraft/search.html?q=${encodeURIComponent(normalizedHex)}`
-            });
+            };
           }
         }
-      } catch (e) {}
-    }
-
-    // 4. Planespotters.net API
-    if (normalizedReg) {
-      try {
-        const psRes = await fetch(`https://api.planespotters.net/pub/photos/reg/${encodeURIComponent(normalizedReg)}`, {
-          headers: { 'User-Agent': 'Mozilla/5.0' },
-          signal: AbortSignal.timeout(2000)
-        });
-        if (psRes.ok) {
-          const psData = await psRes.json();
-          if (psData.photos && psData.photos.length > 0) {
-            const photo = psData.photos[0];
-            const imageUrl = photo.thumbnail_large?.src || photo.thumbnail?.src || photo.large?.src;
-            if (imageUrl) {
-              return res.status(200).json({
-                source: 'planespotters',
-                image: imageUrl,
-                photographer: photo.photographer,
-                link: photo.link
-              });
-            }
-          }
-        }
-      } catch (e) {}
-    }
-
-    // 5. Model Fallback Image (HD photograph of aircraft type)
-    const modelFallback = getModelFallback(discoveredType);
-    if (modelFallback) {
-      return res.status(200).json({
-        source: 'model-reference',
-        image: modelFallback.image,
-        photographer: `${modelFallback.model} (${modelFallback.photographer})`,
-        link: `https://www.planespotters.net/search?q=${encodeURIComponent(normalizedReg || normalizedHex || discoveredType)}`
-      });
-    }
-
-    return res.status(200).json({ source: null, image: null });
-
-  } catch (error) {
-    console.error('Photo API error:', error);
-    return res.status(500).json({ error: 'Failed to fetch aircraft photo' });
+        throw new Error('No Airport-Data hex photo');
+      })()
+    );
   }
+
+  // Execute all photo queries in parallel
+  if (fetchTasks.length > 0) {
+    try {
+      const fastestPhoto = await Promise.any(fetchTasks);
+      if (fastestPhoto && fastestPhoto.image) {
+        return res.status(200).json(fastestPhoto);
+      }
+    } catch (e) {
+      // All fast tasks failed or returned no photo
+    }
+  }
+
+  // Model Fallback Image (Instant HD photograph of aircraft type)
+  const modelFallback = getModelFallback(discoveredType);
+  if (modelFallback) {
+    return res.status(200).json({
+      source: 'model-reference',
+      image: modelFallback.image,
+      photographer: `${modelFallback.model} (${modelFallback.photographer})`,
+      link: `https://www.planespotters.net/search?q=${encodeURIComponent(normalizedReg || normalizedHex || discoveredType)}`
+    });
+  }
+
+  return res.status(200).json({ source: null, image: null });
 }
