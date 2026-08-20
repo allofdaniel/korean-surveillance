@@ -89,7 +89,7 @@ export default async function handler(req, res) {
 
       case 'METAR': {
         // 1. 항공날씨 (AMO domestic-airport) 실시간 우선, 2. NOAA 폴백
-        let rawMetar = `METAR ${icao} ${day}${hour}${min}Z 30007KT 10SM SKC 30/22 A3008=`;
+        let rawMetar = `METAR ${icao} ${day}${hour}00Z 18008KT 9999 SCT030 30/22 Q1012 NOSIG=`;
         try {
           const amoWx = await fetchLiveAmoMetarTaf(icao);
           if (amoWx.metar) {
@@ -101,7 +101,7 @@ export default async function handler(req, res) {
               if (txt && !txt.startsWith('<')) rawMetar = txt;
             }
           }
-        } catch { /* fallback to default */ }
+        } catch { /* fallback to stable default */ }
 
         if (isRaw) {
           return res.status(200).json({
@@ -112,7 +112,7 @@ export default async function handler(req, res) {
         }
 
         xmlOutput = generateAmhsIpmXml({
-          locId: `AMJJJPU000.M331424-${new Date().toISOString().slice(2, 10).replace(/-/g, '')}.${hour}${min}00`,
+          locId: `LOC-ID:AMO-${icao}-METAR`,
           originator: { c: 'XX', a: 'ICAO', p: 'REP-KOREA', o: 'RKSS', ou: icao, cn: `${icao}YPYX` },
           recipients: [{ c: 'XX', a: 'ICAO', p: 'REP-KOREA', o: 'RKSS', ou: 'RKSI', cn: 'RKSIYPYX' }],
           priority: 'GG',
@@ -124,20 +124,18 @@ export default async function handler(req, res) {
       }
 
       case 'TAF': {
-        // 1. 항공날씨 (AMO domestic-airport) 실시간 우선, 2. NOAA 폴백
-        let rawTaf = `TAF AMD ${icao} ${day}${hour}${min}Z ${day}${hour}/${day}12 00000KT P6SM SCT040 BKN080\n    TEMPO ${day}01/${day}03 VRB15G25KT 5SM -TSRA BR BKN040CB OVC080\n    RMK NXT FCST BY ${day}0600Z=`;
+        // 1. NOAA 항공기상청 실시간 우선, 2. AMO 폴백
+        let rawTaf = `TAF ${icao} ${day}${hour}00Z ${day}${hour}/${day + 1}06 18010KT 9999 SCT035 BKN200=`;
         try {
-          const amoWx = await fetchLiveAmoMetarTaf(icao);
-          if (amoWx.taf) {
-            rawTaf = amoWx.taf.trim();
+          const tafRes = await fetch(`https://aviationweather.gov/api/data/taf?ids=${icao}&format=raw`);
+          if (tafRes.ok) {
+            const txt = (await tafRes.text()).trim();
+            if (txt && !txt.startsWith('<')) rawTaf = txt;
           } else {
-            const tafRes = await fetch(`https://aviationweather.gov/api/data/taf?ids=${icao}&format=raw`);
-            if (tafRes.ok) {
-              const txt = (await tafRes.text()).trim();
-              if (txt && !txt.startsWith('<')) rawTaf = txt;
-            }
+            const amoWx = await fetchLiveAmoMetarTaf(icao);
+            if (amoWx.taf) rawTaf = amoWx.taf.trim();
           }
-        } catch { /* fallback to default */ }
+        } catch { /* fallback to stable default */ }
 
         if (isRaw) {
           return res.status(200).json({

@@ -34,8 +34,8 @@
       background: var(--bg);
       color: var(--primary-dim);
       font-family: var(--font-mono);
-      font-size: 13px;
-      line-height: 1.3;
+      font-size: 12.5px;
+      line-height: 1.25;
       user-select: none;
       -webkit-font-smoothing: antialiased;
     }
@@ -56,8 +56,8 @@
     .grid-header {
       background: var(--surface-high);
       border-bottom: 1px solid var(--outline);
-      padding: 3px 8px;
-      font-size: 10.5px;
+      padding: 2px 8px;
+      font-size: 10px;
       font-weight: 700;
       color: var(--primary-soft);
       letter-spacing: 0.08em;
@@ -65,7 +65,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 24px;
+      height: 22px;
       flex-shrink: 0;
     }
     .b-r { border-right: 1px solid var(--outline); }
@@ -73,23 +73,23 @@
 
     /* Top Nav Bar */
     header {
-      height: 38px;
+      height: 36px;
       background: var(--bg-dim);
       border-bottom: 1px solid var(--outline);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 12px;
+      padding: 0 10px;
       z-index: 50;
       flex-shrink: 0;
     }
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
     .brand-title {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 800;
       color: var(--primary-bright);
       letter-spacing: 0.05em;
@@ -99,7 +99,7 @@
       border: 1px solid var(--outline-light);
       color: var(--amber);
       font-family: var(--font-mono);
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       padding: 2px 6px;
       border-radius: 2px;
@@ -110,30 +110,23 @@
     .status-group {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
     .status-item {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--primary-soft);
     }
     .dot-live {
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--primary);
       box-shadow: 0 0 8px var(--primary);
       animation: beat 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
-    }
-    .dot-standby {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #52525b;
-      border: 1px solid #71717a;
     }
     .badge-standby {
       font-size: 9.5px;
@@ -153,46 +146,22 @@
     main {
       display: flex;
       flex-direction: column;
-      height: calc(100vh - 38px);
+      height: calc(100vh - 36px);
       padding: 4px;
       gap: 4px;
       overflow: hidden;
     }
 
-    /* Section 1: Weather Grid (2 per row vertical stack) */
-    .weather-filter-bar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: #141416;
-      padding: 2px 8px;
-      border-bottom: 1px solid var(--outline);
-      flex-shrink: 0;
-    }
-    .filter-chip {
-      font-size: 9.5px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 3px;
-      background: #1c1b1b;
-      border: 1px solid #3b4b35;
-      color: #a1a1aa;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .filter-chip:hover { border-color: var(--primary); color: #fff; }
-    .filter-chip.active { background: rgba(0, 255, 0, 0.15); border-color: var(--primary); color: var(--primary-bright); }
-
+    /* Section 1: Weather Grid (2 per row with Indicator on Right of Top 3 Rows) */
     .weather-grid-container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 4px;
-      max-height: 220px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 4px;
       background: #0a0a0a;
       flex-shrink: 0;
+    }
+    .weather-grid-container.dense {
+      grid-template-columns: repeat(4, 1fr);
     }
     .rwy-card {
       border: 1px solid var(--outline);
@@ -204,58 +173,67 @@
       border-color: rgba(0, 255, 0, 0.6);
       box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.05);
     }
+
+    /* Top Split: Left (Title + Wind Metrics) vs Right (Wind Indicator) */
+    .rwy-top-split {
+      display: flex;
+      width: 100%;
+    }
+    .rwy-top-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
     .rwy-title-bar {
       background: var(--surface-container);
-      padding: 3px 8px;
-      font-size: 10.5px;
+      padding: 2px 6px;
+      font-size: 10px;
       font-weight: 800;
       color: var(--amber);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--outline);
+      height: 20px;
     }
     .use-tag {
-      font-size: 9px;
+      font-size: 8.5px;
       background: var(--primary);
       color: #000;
-      padding: 1px 4px;
+      padding: 0.5px 3.5px;
       border-radius: 2px;
       font-weight: 800;
-      margin-left: 4px;
     }
 
-    /* Dynamic SVG Wind & Runway Rose Gauge Container */
-    .rwy-rose-wrap {
-      width: 84px;
-      height: 84px;
-      position: relative;
+    /* Wind Rose on Right side */
+    .rwy-top-right {
+      width: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #000;
-      border-radius: 3px;
       flex-shrink: 0;
     }
 
     .metric-row { display: flex; width: 100%; }
     .metric-col {
       flex: 1;
-      padding: 2px 3px;
+      padding: 1.5px 2px;
       text-align: center;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      min-width: 0;
     }
-    .metric-label { font-size: 9px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+    .metric-label { font-size: 8.5px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
     .metric-val {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 800;
       color: var(--primary-bright);
       line-height: 1.1;
     }
     .metric-val-sm {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--primary-bright);
       white-space: nowrap;
@@ -264,18 +242,16 @@
     /* Section 2: Raw MET Feed (MET REPORT, METAR, TAF) */
     .raw-met-box {
       background: #000;
-      padding: 4px 8px;
-      font-size: 11px;
+      padding: 3px 6px;
+      font-size: 10.5px;
       color: var(--primary-dim);
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 1.5px;
       flex-shrink: 0;
       border-bottom: 1px solid var(--outline);
-      max-height: 78px;
-      overflow-y: auto;
     }
-    .raw-met-line { display: flex; align-items: baseline; gap: 6px; }
+    .raw-met-line { display: flex; align-items: baseline; gap: 5px; }
     .raw-prompt { color: var(--text-muted); font-weight: 700; flex-shrink: 0; }
 
     /* Section 3: Middle Split Schedule Tables (DEP / ARR) */
@@ -295,11 +271,11 @@
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 11.5px;
+      font-size: 11px;
     }
     thead { position: sticky; top: 0; background: var(--surface-container); z-index: 10; border-bottom: 1px solid var(--outline); }
-    th { padding: 4px 6px; font-size: 9.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    td { padding: 3px 6px; border-bottom: 1px solid #1c1b1b; vertical-align: middle; }
+    th { padding: 3px 5px; font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    td { padding: 2.5px 5px; border-bottom: 1px solid #1c1b1b; vertical-align: middle; }
     tr:hover { background: #181818; }
     
     .status-dep { color: var(--primary); font-weight: 800; }
@@ -328,24 +304,24 @@
 
     /* Section 4: Bottom Clocks & System Notices */
     .bottom-bar {
-      height: 64px;
+      height: 54px;
       display: flex;
       gap: 4px;
       flex-shrink: 0;
     }
     .clock-box {
-      width: 220px;
+      width: 200px;
       display: flex;
       align-items: center;
       justify-content: space-around;
-      padding: 0 10px;
+      padding: 0 8px;
       background: var(--bg-dim);
       flex-shrink: 0;
     }
     .clock-group { display: flex; flex-direction: column; align-items: center; }
-    .clock-label { font-size: 9.5px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.1em; }
-    .clock-digits-utc { font-size: 16px; font-weight: 800; color: var(--primary); letter-spacing: 0.05em; }
-    .clock-digits-kst { font-size: 20px; font-weight: 800; color: var(--primary-bright); letter-spacing: 0.05em; }
+    .clock-label { font-size: 8.5px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.1em; }
+    .clock-digits-utc { font-size: 14.5px; font-weight: 800; color: var(--primary); letter-spacing: 0.05em; }
+    .clock-digits-kst { font-size: 18px; font-weight: 800; color: var(--primary-bright); letter-spacing: 0.05em; }
 
     .notices-box {
       flex: 1;
@@ -355,13 +331,13 @@
     }
     .notices-content {
       flex: 1;
-      padding: 4px 8px;
-      font-size: 10.5px;
+      padding: 3px 6px;
+      font-size: 10px;
       color: var(--primary-soft);
       overflow-y: auto;
-      line-height: 1.4;
+      line-height: 1.35;
     }
-    .notice-item { margin-bottom: 2px; }
+    .notice-item { margin-bottom: 1.5px; }
   </style>
 </head>
 <body>
@@ -403,21 +379,15 @@
 
   <!-- Main Display -->
   <main>
-    <!-- 1. Real-time Weather Section (2-per-row Vertical Grid with Filter) -->
+    <!-- 1. Real-time Weather Section (No Scroll, 2-per-row Vertical Grid) -->
     <div class="grid-box">
       <div class="grid-header">
         <span id="weather-section-title">WEATHER FEED [LIVE AMOS GATEWAY API]</span>
         <span id="amos-time" style="color: var(--amber);">SYNCING...</span>
       </div>
 
-      <!-- Runway Filter Bar -->
-      <div class="weather-filter-bar" id="weather-filter-bar">
-        <button class="filter-chip active" onclick="setRunwayFilter('ALL')">전체 활주로</button>
-        <button class="filter-chip" onclick="setRunwayFilter('IN_USE')">사용 활주로만 (IN-USE)</button>
-      </div>
-
       <div class="weather-grid-container" id="weather-runways-container">
-        <!-- Dynamically rendered (2 per row) -->
+        <!-- Dynamically rendered (2 per row, with indicator on right side of top 3 rows) -->
       </div>
     </div>
 
@@ -529,7 +499,6 @@
     const API_BASE = window.location.origin;
     let currentAirport = 'RKJY';
     let rawRunwaysData = [];
-    let currentRunwayFilter = 'ALL';
     
     // Persistent Status History for 5-time Blinking Detection
     const flightStatusHistory = new Map();
@@ -572,7 +541,6 @@
     }
 
     // 4. Render Custom SVG Wind Rose & Runway Graphic
-    // Aircraft is placed at the START of the runway in landing direction
     function createRunwayRoseSvg(rwyDirStr, rwyHeadingDeg, windDirDeg, isActiveRwy) {
       const numMatch = rwyDirStr.match(/\d+/);
       const num = numMatch ? parseInt(numMatch[0]) : 17;
@@ -589,58 +557,54 @@
       // Runway tilt relative to North (0 deg)
       const rwyTilt = rwyHeadingDeg - 180;
 
-      // Aircraft position at the START of the runway in the direction of flight:
-      // If landing heading is Southbound (num < 18, e.g. 17, 14, 06):
-      // The start of runway is North (TOP: y = -22). Plane points South (heading down along centerline).
-      // If landing heading is Northbound (num >= 18, e.g. 35, 32, 24):
-      // The start of runway is South (BOTTOM: y = 22). Plane points North (heading up along centerline).
-      let planeY = -22;
+      // Aircraft position at START of runway in landing direction
+      let planeY = -20;
       let planeRot = 0;
 
       if (num < 18) {
-        planeY = -22;
+        planeY = -20;
         planeRot = 0;
       } else {
-        planeY = 22;
+        planeY = 20;
         planeRot = 180;
       }
 
       const airplaneSvg = isActiveRwy ? `
         <g class="airplane-icon" transform="translate(0, ${planeY}) rotate(${planeRot})">
-          <path d="M0,-7 L2,-2.5 L6,-0.8 L6,0.8 L2,0 L1,5 L3.5,7 L3.5,8 L0,7 L-3.5,8 L-3.5,7 L-1,5 L-2,0 L-6,0.8 L-6,-0.8 L-2,-2.5 Z" fill="#eaffde" />
+          <path d="M0,-6 L1.8,-2 L5,-0.6 L5,0.6 L1.8,0 L1,4 L3,6 L3,6.8 L0,6 L-3,6.8 L-3,6 L-1,4 L-1.8,0 L-5,0.6 L-5,-0.6 L-1.8,-2 Z" fill="#eaffde" />
         </g>
       ` : '';
 
       return `
-        <svg viewBox="-54 -54 108 108" width="80" height="80" class="runway-rose-svg">
+        <svg viewBox="-50 -50 100 100" width="76" height="76" class="runway-rose-svg">
           <!-- Compass Circle -->
-          <circle cx="0" cy="0" r="39" stroke="#00ff00" stroke-width="1.8" fill="none" />
+          <circle cx="0" cy="0" r="36" stroke="#00ff00" stroke-width="1.6" fill="none" />
           
           <!-- Cardinal Labels -->
-          <text x="0" y="-42" fill="#00ff00" font-size="8.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">N</text>
-          <text x="0" y="50" fill="#00ff00" font-size="8.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">S</text>
-          <text x="-43" y="3" fill="#00ff00" font-size="8.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">W</text>
-          <text x="44" y="3" fill="#00ff00" font-size="8.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">E</text>
+          <text x="0" y="-39" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">N</text>
+          <text x="0" y="47" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">S</text>
+          <text x="-41" y="2.8" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">W</text>
+          <text x="42" y="2.8" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">E</text>
           
           <!-- Runway Numbers -->
-          <text x="-15" y="-42" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${topLabel}</text>
-          <text x="15" y="50" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${botLabel}</text>
+          <text x="-14" y="-39" fill="#00ff00" font-size="7.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${topLabel}</text>
+          <text x="14" y="47" fill="#00ff00" font-size="7.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${botLabel}</text>
           
           <!-- Runway Box (Tilted to true heading) -->
           <g transform="rotate(${rwyTilt})">
-            <rect x="-6" y="-30" width="12" height="60" stroke="#00ff00" stroke-width="1.4" fill="none" rx="1" />
+            <rect x="-5.5" y="-28" width="11" height="56" stroke="#00ff00" stroke-width="1.3" fill="none" rx="1" />
             <!-- Active Aircraft In-Use START Threshold Indicator -->
             ${airplaneSvg}
           </g>
 
           <!-- Wind Arrow (Exact unmodified degree from API packet) -->
           <g transform="rotate(${windDirDeg})">
-            <line x1="0" y1="-37" x2="0" y2="4" stroke="#00ff00" stroke-width="3.2" stroke-linecap="round" />
-            <polygon points="0,14 -5,0 5,0" fill="#00ff00" />
+            <line x1="0" y1="-34" x2="0" y2="4" stroke="#00ff00" stroke-width="3" stroke-linecap="round" />
+            <polygon points="0,13 -4.5,0 4.5,0" fill="#00ff00" />
           </g>
 
           <!-- Degree Text Overlay -->
-          <text x="21" y="-21" fill="#00ff00" font-size="9.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${String(windDirDeg).padStart(3, '0')}</text>
+          <text x="19" y="-19" fill="#00ff00" font-size="9" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${String(windDirDeg).padStart(3, '0')}</text>
         </svg>
       `;
     }
@@ -652,7 +616,6 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         
-        // Strict Airport Code Verification (Never mix up other airports)
         rawRunwaysData = Array.isArray(data) ? data.filter(d => !d.stnCd || d.stnCd.toUpperCase() === currentAirport.toUpperCase()) : [];
         if (rawRunwaysData.length === 0 && Array.isArray(data) && data.length > 0) {
           rawRunwaysData = data;
@@ -669,7 +632,7 @@
         console.warn('Weather sync error:', e.message);
       }
 
-      // Fetch Raw METAR & TAF Reports
+      // Fetch Raw METAR & TAF Reports (Stable non-flapping)
       try {
         const [metarRes, tafRes] = await Promise.all([
           fetch(`${API_BASE}/api/amhs?type=METAR&icao=${currentAirport}&_t=${Date.now()}`),
@@ -679,16 +642,17 @@
         if (metarRes.ok) {
           const xml = await metarRes.text();
           const match = xml.match(/METAR[\s\S]*?=/);
-          if (match) {
-            document.getElementById('raw-metar').textContent = match[0].replace(/\s+/g, ' ');
-            document.getElementById('raw-met-report').textContent = match[0].replace('METAR', 'MET REPORT').replace(/\s+/g, ' ');
+          if (match && match[0]) {
+            const clean = match[0].replace(/\s+/g, ' ');
+            document.getElementById('raw-metar').textContent = clean;
+            document.getElementById('raw-met-report').textContent = clean.replace('METAR', 'MET REPORT');
           }
         }
 
         if (tafRes.ok) {
           const xml = await tafRes.text();
           const match = xml.match(/TAF[\s\S]*?=/);
-          if (match) {
+          if (match && match[0]) {
             document.getElementById('raw-taf').textContent = match[0].replace(/\s+/g, ' ');
           }
         }
@@ -698,19 +662,20 @@
     function renderRunwaysGrid() {
       const container = document.getElementById('weather-runways-container');
       if (!rawRunwaysData || rawRunwaysData.length === 0) {
-        container.innerHTML = '<div style="padding: 10px; color: var(--amber); grid-column: span 2;">활주로 기상 센서 수신 대기 중...</div>';
+        container.innerHTML = '<div style="padding: 8px; color: var(--amber); grid-column: span 2;">활주로 기상 센서 수신 대기 중...</div>';
         return;
       }
 
-      let filtered = rawRunwaysData;
-      if (currentRunwayFilter === 'IN_USE') {
-        filtered = rawRunwaysData.filter(r => r.rwyUse === 'Y');
-        if (filtered.length === 0) filtered = [rawRunwaysData[0]];
+      // If Incheon (8 runways), use 4 columns grid to prevent vertical scrolling
+      if (rawRunwaysData.length >= 6) {
+        container.className = 'weather-grid-container dense';
+      } else {
+        container.className = 'weather-grid-container';
       }
 
       container.innerHTML = '';
 
-      filtered.forEach((rwy, idx) => {
+      rawRunwaysData.forEach((rwy, idx) => {
         const rwyDirStr = rwy.rwyDir || (idx === 0 ? '17' : '35');
         const rwyHeading = getRunwayHeading(rwyDirStr);
         
@@ -732,40 +697,52 @@
 
         const rwyEl = document.createElement('div');
         rwyEl.className = `rwy-card ${isActive ? 'active-use' : ''}`;
+        
+        // Requested Layout:
+        // Top section: Left has (Row 1: Title, Row 2: Wind labels, Row 3: Wind values)
+        //              Right has (Wind Indicator SVG)
+        // Bottom section: (Row 4: Vector labels, Row 5: Vector values)
         rwyEl.innerHTML = `
-          <div class="rwy-title-bar">
-            <div>
-              <span>RWY ${rwyDirStr} WIND DATA</span>
-              ${isActive ? '<span class="use-tag">IN-USE</span>' : ''}
+          <div class="rwy-top-split b-b">
+            <div class="rwy-top-left b-r">
+              <div class="rwy-title-bar b-b">
+                <span>RWY ${rwyDirStr} WIND DATA</span>
+                ${isActive ? '<span class="use-tag">IN-USE</span>' : ''}
+              </div>
+              <div class="metric-row b-b">
+                <div class="metric-col b-r"><span class="metric-label">풍향(°)</span></div>
+                <div class="metric-col b-r"><span class="metric-label">평균 풍속</span></div>
+                <div class="metric-col b-r"><span class="metric-label">최저 풍속</span></div>
+                <div class="metric-col b-r"><span class="metric-label">최대 풍속</span></div>
+                <div class="metric-col"><span class="metric-label">순간 돌풍</span></div>
+              </div>
+              <div class="metric-row">
+                <div class="metric-col b-r"><span class="metric-val">${String(wd).padStart(3, '0')}</span></div>
+                <div class="metric-col b-r"><span class="metric-val">${ws}</span></div>
+                <div class="metric-col b-r"><span class="metric-val">${minWs}</span></div>
+                <div class="metric-col b-r"><span class="metric-val">${maxWs}</span></div>
+                <div class="metric-col"><span class="metric-val" style="color: var(--primary-soft);">${gust}</span></div>
+              </div>
             </div>
-            <div class="rwy-rose-wrap">
+            <div class="rwy-top-right">
               ${createRunwayRoseSvg(rwyDirStr, rwyHeading, wd, isActive)}
             </div>
           </div>
           <div class="metric-row b-b">
-            <div class="metric-col b-r"><span class="metric-label">풍향(°)</span><span class="metric-val">${String(wd).padStart(3, '0')}</span></div>
-            <div class="metric-col b-r"><span class="metric-label">평균 풍속</span><span class="metric-val">${ws}</span></div>
-            <div class="metric-col b-r"><span class="metric-label">최저 풍속</span><span class="metric-val">${minWs}</span></div>
-            <div class="metric-col b-r"><span class="metric-label">최대 풍속</span><span class="metric-val">${maxWs}</span></div>
-            <div class="metric-col"><span class="metric-label">순간 돌풍</span><span class="metric-val" style="color: var(--primary-soft);">${gust}</span></div>
+            <div class="metric-col b-r"><span class="metric-label">정풍(H)/배풍(T)</span></div>
+            <div class="metric-col b-r"><span class="metric-label">좌(L)/우(R)측풍</span></div>
+            <div class="metric-col b-r"><span class="metric-label">QNH(hPa/inHg)</span></div>
+            <div class="metric-col"><span class="metric-label">RVR / 시정 (RWY ${rwyDirStr})</span></div>
           </div>
           <div class="metric-row">
-            <div class="metric-col b-r"><span class="metric-label">정풍(H)/배풍(T)</span><span class="metric-val-sm">${vectors.headTail}</span></div>
-            <div class="metric-col b-r"><span class="metric-label">좌(L)/우(R)측풍</span><span class="metric-val-sm">${vectors.cross}</span></div>
-            <div class="metric-col b-r"><span class="metric-label">QNH(hPa/inHg)</span><span class="metric-val-sm">${qnh} / ${qnhInhg}</span></div>
-            <div class="metric-col"><span class="metric-label">RVR / 시정 (RWY ${rwyDirStr})</span><span class="metric-val-sm">${rvr} / ${mor}</span></div>
+            <div class="metric-col b-r"><span class="metric-val-sm">${vectors.headTail}</span></div>
+            <div class="metric-col b-r"><span class="metric-val-sm">${vectors.cross}</span></div>
+            <div class="metric-col b-r"><span class="metric-val-sm">${qnh} / ${qnhInhg}</span></div>
+            <div class="metric-col"><span class="metric-val-sm">${rvr} / ${mor}</span></div>
           </div>
         `;
         container.appendChild(rwyEl);
       });
-    }
-
-    function setRunwayFilter(filterType) {
-      currentRunwayFilter = filterType;
-      document.querySelectorAll('.filter-chip').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent.includes(filterType === 'IN_USE' ? '사용' : '전체'));
-      });
-      renderRunwaysGrid();
     }
 
     // 6. Fetch Flight Schedules (FIDS DEP & ARR) with 5-time Blinking Animation on Status Change
@@ -863,7 +840,6 @@
             list.innerHTML = `
               <div class="notice-item">1. [SYSTEM] ${currentAirport} 공역 IFS 정보융합 게이트웨이 연계 정상 가동 중.</div>
               <div class="notice-item">2. [NOTAM ${notams[0].notamNumber || 'LIVE'}] ${(notams[0].itemE || 'NORMAL OPERATIONS').slice(0, 100)}</div>
-              ${notams[1] ? `<div class="notice-item">3. [NOTAM ${notams[1].notamNumber}] ${(notams[1].itemE || '').slice(0, 100)}</div>` : ''}
             `;
           }
         }
@@ -884,7 +860,6 @@
       syncFlightSchedules();
       syncSystemStatus();
 
-      // Periodic Pollers (No artificial simulation, raw data refresh)
       setInterval(syncWeatherData, 3000);
       setInterval(syncFlightSchedules, 4000);
       setInterval(syncSystemStatus, 15000);
