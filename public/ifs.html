@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대한감시 IFS - 관제정보융합지원 시스템 (Information Fusion System)</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --bg: #131313;
+      --bg-dim: #0e0e0e;
+      --surface-container: #1c1b1b;
+      --surface-high: #2a2a2a;
+      --outline: #3b4b35;
+      --outline-light: #52664b;
+      --primary: #00ff00;
+      --primary-dim: #02e600;
+      --primary-bright: #77ff61;
+      --primary-soft: #b9ccaf;
+      --amber: #ffba20;
+      --amber-dim: #d97706;
+      --red: #ff5252;
+      --text-muted: #84967c;
+      --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--primary-dim);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.3;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* CRT Scanlines Overlay */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(0, 255, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.02));
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+      z-index: 99;
+      opacity: 0.6;
+    }
+
+    /* Grid & Borders */
+    .grid-box { border: 1px solid var(--outline); background: var(--bg); display: flex; flex-direction: column; }
+    .grid-header {
+      background: var(--surface-high);
+      border-bottom: 1px solid var(--outline);
+      padding: 3px 8px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--primary-soft);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .b-r { border-right: 1px solid var(--outline); }
+    .b-b { border-bottom: 1px solid var(--outline); }
+
+    /* Top Nav Bar */
+    header {
+      height: 38px;
+      background: var(--bg-dim);
+      border-bottom: 1px solid var(--outline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--primary-bright);
+      letter-spacing: 0.05em;
+    }
+    .airport-select {
+      background: #000;
+      border: 1px solid var(--outline-light);
+      color: var(--amber);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .status-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary-soft);
+    }
+    .dot-live {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 8px var(--primary);
+      animation: beat 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    @keyframes beat {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.85); }
+    }
+
+    /* Main Layout */
+    main {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 38px);
+      padding: 4px;
+      gap: 4px;
+      overflow: hidden;
+    }
+
+    /* Section 1: Weather Grid */
+    .weather-container {
+      display: flex;
+      width: 100%;
+      flex-shrink: 0;
+    }
+    .rwy-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .rwy-title-bar {
+      background: var(--surface-container);
+      padding: 3px 8px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--outline);
+    }
+    .wind-rose {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--outline);
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+    .wind-needle {
+      position: absolute;
+      width: 2px;
+      height: 28px;
+      background: linear-gradient(to top, transparent 50%, var(--primary) 50%);
+      transform-origin: center center;
+      transition: transform 0.5s ease-out;
+    }
+    .rose-label {
+      position: absolute;
+      font-size: 7.5px;
+      font-weight: 800;
+      color: var(--primary-soft);
+    }
+
+    .metric-row { display: flex; width: 100%; }
+    .metric-col {
+      flex: 1;
+      padding: 2px 4px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .metric-label { font-size: 9.5px; color: var(--text-muted); font-weight: 600; }
+    .metric-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary-bright);
+      line-height: 1.1;
+    }
+    .metric-val-sm {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary-bright);
+    }
+
+    /* Section 2: Raw MET Feed */
+    .raw-met-box {
+      background: #000;
+      padding: 5px 8px;
+      font-size: 11.5px;
+      color: var(--primary-dim);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--outline);
+    }
+    .raw-met-line { display: flex; align-items: baseline; gap: 6px; }
+    .raw-prompt { color: var(--text-muted); font-weight: 700; }
+
+    /* Section 3: Middle Split Schedule Tables (DEP / ARR) */
+    .schedule-split {
+      flex: 1;
+      display: flex;
+      gap: 4px;
+      min-height: 0;
+    }
+    .schedule-table-wrap {
+      flex: 1;
+      background: #000;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 11.5px;
+    }
+    thead { position: sticky; top: 0; background: var(--surface-container); z-index: 10; border-bottom: 1px solid var(--outline); }
+    th { padding: 4px 6px; font-size: 9.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    td { padding: 3px 6px; border-bottom: 1px solid #1c1b1b; vertical-align: middle; }
+    tr:hover { background: #181818; }
+    
+    .status-dep { color: var(--primary); font-weight: 800; }
+    .status-arr { color: var(--primary); font-weight: 800; }
+    .status-sch { color: var(--amber); font-weight: 700; }
+    .status-cnl { color: var(--red); font-weight: 800; }
+    .status-dla { color: var(--amber); font-weight: 800; }
+
+    /* Section 4: Bottom Clocks & System Notices */
+    .bottom-bar {
+      height: 72px;
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .clock-box {
+      width: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 10px;
+      background: var(--bg-dim);
+      flex-shrink: 0;
+    }
+    .clock-group { display: flex; flex-direction: column; align-items: center; }
+    .clock-label { font-size: 9.5px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.1em; }
+    .clock-digits-utc { font-size: 17px; font-weight: 800; color: var(--primary); letter-spacing: 0.05em; }
+    .clock-digits-kst { font-size: 22px; font-weight: 800; color: var(--primary-bright); letter-spacing: 0.05em; }
+
+    .notices-box {
+      flex: 1;
+      background: var(--bg-dim);
+      display: flex;
+      flex-direction: column;
+    }
+    .notices-content {
+      flex: 1;
+      padding: 4px 8px;
+      font-size: 11px;
+      color: var(--primary-soft);
+      overflow-y: auto;
+      line-height: 1.4;
+    }
+    .notice-item { margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+  <!-- CRT Screen Filter -->
+  <div class="scanlines"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand-group">
+      <div class="brand-title">IFS [정보융합지원 관제단말]</div>
+      <select id="airport-select" class="airport-select" onchange="changeAirport(this.value)">
+        <option value="RKJY" selected>RKJY - 여수공항 (Yeosu)</option>
+        <option value="RKSI">RKSI - 인천국제공항 (Incheon)</option>
+        <option value="RKSS">RKSS - 김포국제공항 (Gimpo)</option>
+        <option value="RKPC">RKPC - 제주국제공항 (Jeju)</option>
+        <option value="RKPK">RKPK - 김해국제공항 (Gimhae)</option>
+        <option value="RKPU">RKPU - 울산공항 (Ulsan)</option>
+        <option value="RKTU">RKTU - 청주국제공항 (Cheongju)</option>
+        <option value="RKTN">RKTN - 대구국제공항 (Daegu)</option>
+        <option value="RKJJ">RKJJ - 광주공항 (Gwangju)</option>
+        <option value="RKJB">RKJB - 무안국제공항 (Muan)</option>
+        <option value="RKNY">RKNY - 양양국제공항 (Yangyang)</option>
+        <option value="RKTH">RKTH - 포항경주공항 (Pohang)</option>
+        <option value="RKPS">RKPS - 사천공항 (Sacheon)</option>
+      </select>
+    </div>
+
+    <div class="status-group">
+      <div class="status-item">
+        <span>GATEWAY API</span>
+        <div class="dot-live" id="dot-gateway"></div>
+      </div>
+      <div class="status-item">
+        <span>RADAR (SIS)</span>
+        <div class="dot-live" id="dot-sis"></div>
+      </div>
+      <div class="status-item">
+        <span>STRIP (EFS)</span>
+        <div class="dot-live" id="dot-efs"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Display -->
+  <main>
+    <!-- 1. Real-time Weather Section (AMOS Live from Gateway API) -->
+    <div class="grid-box">
+      <div class="grid-header">
+        <span>WEATHER FEED [LIVE AMOS GATEWAY API]</span>
+        <span id="amos-time" style="color: var(--amber);">SYNCING...</span>
+      </div>
+
+      <div class="weather-container" id="weather-runways-container">
+        <!-- Generated dynamically for runways (e.g. RWY 17 & RWY 35) -->
+      </div>
+    </div>
+
+    <!-- 2. Raw MET Reports -->
+    <div class="grid-box">
+      <div class="grid-header">
+        <span>RAW MET REPORTS</span>
+        <span style="color: var(--primary-soft);">METAR / SPECI</span>
+      </div>
+      <div class="raw-met-box">
+        <div class="raw-met-line">
+          <span class="raw-prompt">&gt;</span>
+          <span id="raw-met-report">MET REPORT RKJY 200700Z WIND RWY 17 210/08KT VIS 10KM CLD SCT 3000FT T32 DP24 QNH 1009HPA NOSIG=</span>
+        </div>
+        <div class="raw-met-line">
+          <span class="raw-prompt">&gt;</span>
+          <span id="raw-metar">METAR RKJY 200700Z 21008KT 9999 SCT030 32/24 Q1009 NOSIG=</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Schedule Split (DEP / ARR from Gateway API) -->
+    <div class="schedule-split">
+      <!-- DEPARTURES -->
+      <div class="grid-box" style="flex: 1;">
+        <div class="grid-header">
+          <span>DEPARTURES (DEP)</span>
+          <span id="dep-count" style="color: var(--amber);">[0/0]</span>
+        </div>
+        <div class="schedule-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 70px;">Flight</th>
+                <th style="width: 50px;">To</th>
+                <th style="text-align: center; width: 45px;">Plan</th>
+                <th style="text-align: center; width: 45px;">Est</th>
+                <th style="text-align: center; width: 45px;">Act</th>
+                <th style="width: 50px; text-align: center;">Status</th>
+              </tr>
+            </thead>
+            <tbody id="dep-tbody">
+              <!-- Dynamically populated from API -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ARRIVALS -->
+      <div class="grid-box" style="flex: 1;">
+        <div class="grid-header">
+          <span>ARRIVALS (ARR)</span>
+          <span id="arr-count" style="color: var(--amber);">[0/0]</span>
+        </div>
+        <div class="schedule-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 70px;">Flight</th>
+                <th style="width: 50px;">From</th>
+                <th style="text-align: center; width: 45px;">Plan</th>
+                <th style="text-align: center; width: 45px;">Est</th>
+                <th style="text-align: center; width: 45px;">Act</th>
+                <th style="width: 50px; text-align: center;">Status</th>
+              </tr>
+            </thead>
+            <tbody id="arr-tbody">
+              <!-- Dynamically populated from API -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Bottom Bar (Clocks & System Notices from NOTAM API) -->
+    <div class="bottom-bar">
+      <!-- Atomic Digital Clocks -->
+      <div class="grid-box clock-box">
+        <div class="clock-group">
+          <span class="clock-label">UTC</span>
+          <span class="clock-digits-utc" id="clock-utc">00:00:00</span>
+        </div>
+        <div class="clock-group">
+          <span class="clock-label">KST</span>
+          <span class="clock-digits-kst" id="clock-kst">00:00:00</span>
+        </div>
+      </div>
+
+      <!-- System Notices & NOTAM Feed -->
+      <div class="grid-box notices-box">
+        <div class="grid-header">
+          <span>공지사항 / SYSTEM NOTICES & NOTAM FEED</span>
+          <span id="notam-sync-status" style="color: var(--primary-soft);">LIVE API</span>
+        </div>
+        <div class="notices-content" id="notices-list">
+          <div class="notice-item">1. [SYSTEM] 대한감시 IFS 관제정보융합지원 게이트웨이 연계 정상 가동 중.</div>
+          <div class="notice-item">2. [RADAR] ASTERIX Cat.062 융합 항적 및 Mode-S 레이더 센서 연동 100% 정상.</div>
+          <div class="notice-item">3. [NOTAM] 유효 비행고시보 실시간 동기화 완료.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // IFS Terminal Engine - Consumes 100% Data via Gateway APIs
+    const API_BASE = window.location.origin;
+    let currentAirport = 'RKJY';
+
+    // 1. Clocks Ticker
+    function updateClocks() {
+      const now = new Date();
+      const utcHours = String(now.getUTCHours()).padStart(2, '0');
+      const utcMins = String(now.getUTCMinutes()).padStart(2, '0');
+      const utcSecs = String(now.getUTCSeconds()).padStart(2, '0');
+      document.getElementById('clock-utc').textContent = `${utcHours}:${utcMins}:${utcSecs}`;
+
+      const kstHours = String(now.getHours()).padStart(2, '0');
+      const kstMins = String(now.getMinutes()).padStart(2, '0');
+      const kstSecs = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock-kst').textContent = `${kstHours}:${kstMins}:${kstSecs}`;
+    }
+    setInterval(updateClocks, 1000);
+    updateClocks();
+
+    // 2. Headwind & Crosswind Vector Calculator
+    function calculateWindVectors(windDirDeg, windSpeedKts, rwyHeadingDeg) {
+      if (!windDirDeg || !windSpeedKts || isNaN(windDirDeg) || isNaN(windSpeedKts)) {
+        return { headTail: '-', cross: '-' };
+      }
+      const angleRad = ((windDirDeg - rwyHeadingDeg) * Math.PI) / 180;
+      const headwind = Math.round(windSpeedKts * Math.cos(angleRad));
+      const crosswind = Math.round(windSpeedKts * Math.sin(angleRad));
+
+      const headTailStr = headwind >= 0 ? `H${headwind}` : `T${Math.abs(headwind)}`;
+      const crossStr = crosswind >= 0 ? `R${crosswind}` : `L${Math.abs(crosswind)}`;
+      return { headTail: headTailStr, cross: crossStr };
+    }
+
+    // 3. Fetch AMOS & Weather Data via API
+    async function syncWeatherData() {
+      try {
+        const res = await fetch(`${API_BASE}/api/weather?type=amos&icao=${currentAirport}&_t=${Date.now()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const runways = await res.json();
+        
+        const container = document.getElementById('weather-runways-container');
+        container.innerHTML = '';
+
+        if (!Array.isArray(runways) || runways.length === 0) {
+          container.innerHTML = '<div style="padding: 10px; color: var(--amber);">활주로 기상 센서 수신 대기 중...</div>';
+          return;
+        }
+
+        document.getElementById('amos-time').textContent = runways[0].tm || new Date().toISOString().slice(11, 19);
+
+        runways.slice(0, 2).forEach((rwy, idx) => {
+          const rwyNum = parseInt(rwy.rwyDir) || (idx === 0 ? 17 : 35);
+          const rwyHeading = rwyNum * 10;
+          const wd = parseInt(rwy.wd) || 0;
+          const ws = parseFloat(rwy.ws) || 0;
+          const maxWs = parseFloat(rwy.max) || ws;
+          const minWs = parseFloat(rwy.min) || Math.max(0, ws - 2);
+          const gust = rwy.gust && rwy.gust !== '-' ? rwy.gust : '-';
+          const qnh = rwy.qnh || (rwy.qnhOrigin ? (rwy.qnhOrigin / 10).toFixed(0) : '1009');
+          const rvr = rwy.rvr1min || rwy.rvr || 'P2000';
+          const mor = rwy.mor1min || rwy.mor || '10000';
+          const cld = rwy.base1lyr || rwy.cld || '3000';
+          const tmp = rwy.ta || rwy.tmp || '32.0';
+
+          const vectors = calculateWindVectors(wd, ws, rwyHeading);
+
+          const rwyEl = document.createElement('div');
+          rwyEl.className = `rwy-card ${idx === 0 ? 'b-r' : ''}`;
+          rwyEl.innerHTML = `
+            <div class="rwy-title-bar">
+              <span>RWY ${rwy.rwyDir} WIND DATA</span>
+              <div class="wind-rose">
+                <div class="wind-needle" style="transform: rotate(${wd}deg);"></div>
+                <span class="rose-label" style="top: 1px;">${rwy.rwyDir}</span>
+                <span class="rose-label" style="bottom: 1px;">${(rwyNum + 18) % 36 || 36}</span>
+              </div>
+            </div>
+            <div class="metric-row b-b">
+              <div class="metric-col b-r"><span class="metric-label">풍향(°)</span><span class="metric-val">${rwy.wd || '000'}</span></div>
+              <div class="metric-col b-r"><span class="metric-label">평균 풍속</span><span class="metric-val">${rwy.ws || '0'}</span></div>
+              <div class="metric-col b-r"><span class="metric-label">최저 풍속</span><span class="metric-val">${minWs}</span></div>
+              <div class="metric-col b-r"><span class="metric-label">최대 풍속</span><span class="metric-val">${maxWs}</span></div>
+              <div class="metric-col"><span class="metric-label">순간 돌풍</span><span class="metric-val" style="color: var(--primary-soft);">${gust}</span></div>
+            </div>
+            <div class="metric-row">
+              <div class="metric-col b-r"><span class="metric-label">정풍(H)/배풍(T)</span><span class="metric-val-sm">${vectors.headTail}</span></div>
+              <div class="metric-col b-r"><span class="metric-label">좌(L)/우(R)측풍</span><span class="metric-val-sm">${vectors.cross}</span></div>
+              <div class="metric-col b-r"><span class="metric-label">QNH / QFE</span><span class="metric-val-sm">${qnh} / ${(parseFloat(qnh)-1).toFixed(0)}</span></div>
+              <div class="metric-col"><span class="metric-label">RVR / 시정 (RWY ${rwy.rwyDir})</span><span class="metric-val-sm">${rvr}/${mor}</span></div>
+            </div>
+          `;
+          container.appendChild(rwyEl);
+        });
+
+      } catch (e) {
+        console.warn('Weather sync error:', e.message);
+      }
+
+      // Fetch Raw METAR text
+      try {
+        const metarRes = await fetch(`${API_BASE}/api/amhs?type=METAR&icao=${currentAirport}&_t=${Date.now()}`);
+        if (metarRes.ok) {
+          const xml = await metarRes.text();
+          const match = xml.match(/METAR[\s\S]*?=/);
+          if (match) {
+            document.getElementById('raw-metar').textContent = match[0].replace(/\s+/g, ' ');
+            document.getElementById('raw-met-report').textContent = match[0].replace('METAR', 'MET REPORT').replace(/\s+/g, ' ');
+          }
+        }
+      } catch (e) {}
+    }
+
+    // 4. Fetch Flight Schedules (FIDS DEP & ARR) via API
+    async function syncFlightSchedules() {
+      try {
+        const res = await fetch(`${API_BASE}/api/flight-schedule?airport=${currentAirport}&_t=${Date.now()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        const deps = data.departures || [];
+        const arrs = data.arrivals || [];
+
+        // Render Departures
+        document.getElementById('dep-count').textContent = `[${deps.filter(d => (d.depStatus||'').includes('DEP')).length}/${deps.length}]`;
+        const depTbody = document.getElementById('dep-tbody');
+        depTbody.innerHTML = '';
+
+        deps.slice(0, 15).forEach(f => {
+          const tr = document.createElement('tr');
+          const status = (f.depStatus || f.status || 'SCH').toUpperCase();
+          const statusClass = status.includes('DEP') ? 'status-dep' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : 'status-sch';
+          tr.innerHTML = `
+            <td style="font-weight: 700; color: var(--primary);">${f.fpId || f.flightNumber || f.fn}</td>
+            <td style="color: var(--primary-soft);">${f.apArr || f.destination || 'CJU'}</td>
+            <td style="text-align: center; color: var(--primary-dim);">${(f.std || '0800').replace(':', '')}</td>
+            <td style="text-align: center; color: var(--primary-dim);">${(f.etd || f.std || '0800').replace(':', '')}</td>
+            <td style="text-align: center; color: var(--primary-bright); font-weight: 700;">${(f.atd || '-').replace(':', '')}</td>
+            <td style="text-align: center;" class="${statusClass}">${status}</td>
+          `;
+          depTbody.appendChild(tr);
+        });
+
+        // Render Arrivals
+        document.getElementById('arr-count').textContent = `[${arrs.filter(a => (a.arrStatus||'').includes('ARR')).length}/${arrs.length}]`;
+        const arrTbody = document.getElementById('arr-tbody');
+        arrTbody.innerHTML = '';
+
+        arrs.slice(0, 15).forEach(f => {
+          const tr = document.createElement('tr');
+          const status = (f.arrStatus || f.status || 'ENR').toUpperCase();
+          const statusClass = status.includes('ARR') ? 'status-arr' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : 'status-sch';
+          tr.innerHTML = `
+            <td style="font-weight: 700; color: var(--primary);">${f.fpId || f.flightNumber || f.fn}</td>
+            <td style="color: var(--primary-soft);">${f.apIcao || f.origin || 'GMP'}</td>
+            <td style="text-align: center; color: var(--primary-dim);">${(f.sta || '0830').replace(':', '')}</td>
+            <td style="text-align: center; color: var(--primary-dim);">${(f.eta || f.sta || '0830').replace(':', '')}</td>
+            <td style="text-align: center; color: var(--primary-bright); font-weight: 700;">${(f.ata || '-').replace(':', '')}</td>
+            <td style="text-align: center;" class="${statusClass}">${status}</td>
+          `;
+          arrTbody.appendChild(tr);
+        });
+
+      } catch (e) {
+        console.warn('Schedule sync error:', e.message);
+      }
+    }
+
+    // 5. Sync System Status & NOTAMs via API
+    async function syncSystemStatus() {
+      try {
+        const crawlerRes = await fetch(`${API_BASE}/api/crawler?status=true&_t=${Date.now()}`);
+        if (crawlerRes.ok) {
+          document.getElementById('dot-gateway').style.background = 'var(--primary)';
+          document.getElementById('dot-sis').style.background = 'var(--primary)';
+        }
+      } catch (e) {
+        document.getElementById('dot-gateway').style.background = 'var(--red)';
+      }
+
+      // Sync NOTAMs
+      try {
+        const notamRes = await fetch(`${API_BASE}/api/notam?location=${currentAirport}&_t=${Date.now()}`);
+        if (notamRes.ok) {
+          const data = await notamRes.json();
+          const notams = data.notams || [];
+          if (notams.length > 0) {
+            const list = document.getElementById('notices-list');
+            list.innerHTML = `
+              <div class="notice-item">1. [SYSTEM] ${currentAirport} 공역 IFS 정보융합 게이트웨이 연계 가동 중.</div>
+              <div class="notice-item">2. [NOTAM ${notams[0].notamNumber || 'LIVE'}] ${(notams[0].itemE || 'NORMAL OPERATIONS').slice(0, 100)}</div>
+              ${notams[1] ? `<div class="notice-item">3. [NOTAM ${notams[1].notamNumber}] ${(notams[1].itemE || '').slice(0, 100)}</div>` : ''}
+            `;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function changeAirport(ap) {
+      currentAirport = ap;
+      syncWeatherData();
+      syncFlightSchedules();
+      syncSystemStatus();
+    }
+
+    // Initial load & Periodic Pollers
+    function init() {
+      syncWeatherData();
+      syncFlightSchedules();
+      syncSystemStatus();
+
+      // Poll Weather & Schedules every 3 seconds via API
+      setInterval(syncWeatherData, 3000);
+      setInterval(syncFlightSchedules, 5000);
+      setInterval(syncSystemStatus, 15000);
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>

@@ -57,6 +57,14 @@
       "destination": "/docs.html"
     },
     {
+      "source": "/ifs",
+      "destination": "/ifs/index.html"
+    },
+    {
+      "source": "/IFS",
+      "destination": "/ifs/index.html"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     }
