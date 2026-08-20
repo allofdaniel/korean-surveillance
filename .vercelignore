@@ -16,13 +16,17 @@ ubikais-crawler
 *.test.*
 __tests__
 
-# Screenshots and images (but allow charts folder)
+# Screenshots and images (but allow charts and icons)
 *.png
 *.jpg
 *.jpeg
 *.gif
 !charts/**/*.png
 !public/charts/**/*.png
+!public/icons/*.png
+!public/icons/**/*.png
+!public/store-assets/*.png
+!public/store-assets/**/*.png
 !dist/charts/**/*.png
 
 # Python files
