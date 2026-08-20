@@ -472,7 +472,7 @@
     <!-- Left Table -->
     <div class="table-pane">
       <div class="table-filter-bar">
-        <span class="table-count-badge" id="table-count">22개 인터페이스</span>
+        <span class="table-count-badge" id="table-count">23개 인터페이스</span>
         <input type="text" id="search-box" class="search-input" placeholder="인터페이스 검색..." oninput="renderTable()" />
       </div>
 
@@ -635,6 +635,7 @@
         { group: '공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 20, name: '도착보 (ARR)', format: 'AMHS SOAP XML', interval: '착륙 발생시', source: 'ADS-B + UBIKAIS', endpoint: `/api/amhs?type=ARR&dest=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 ARR' },
         { group: '공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 21, name: '관제음성 (LiveATC)', format: 'AUDIO/MPEG', interval: '실시간', source: 'LiveATC.net', endpoint: '/api/voice?channel=KJFK', doc: 'Live ATC Stream Engine' },
         { group: '공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 22, name: '전자비행스트립 (EFS)', format: 'EFS JSON', interval: '사용자 송출', source: '사용자 시스템 (대기)', endpoint: `/api/flight-schedule?airport=${isAll ? 'RKSI' : ap}&efs=true`, doc: 'EFS Strip Gateway' },
+        { group: '공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 23, name: '무저장 동기화 크롤러', format: 'Vercel Cron', interval: '5분 주기', source: 'Vercel Pro Engine', endpoint: '/api/crawler?status=true', doc: 'Vercel Pro Zero-Storage In-Memory Sync Engine' },
       ];
     }
 
