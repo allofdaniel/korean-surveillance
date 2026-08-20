@@ -40,11 +40,398 @@ interface ApiDashboardModalProps {
   onClose: () => void;
 }
 
+const INITIAL_ITEMS: InterfaceItem[] = [
+  {
+    no: 1,
+    system: '항적정보',
+    name: '항적정보(융합)',
+    subData: '융합 항적 (System Track)',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'ASTERIX Cat.062 (JSON)',
+    interval: '1~2초 (실시간)',
+    sender: 'koreansurveillance.com',
+    receiver: 'TBAS / MSDP / 외부서버',
+    source: 'OpenSky Network / ADS-B Feeder',
+    status: 'ACTIVE',
+    endpoint: '/api/asterix?cat=62',
+    doc: 'ASTERIX Category 062 Eurocontrol Spec'
+  },
+  {
+    no: 2,
+    system: '항적정보',
+    name: '항적정보(개별)',
+    subData: 'ADS-B 개별 항적',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'ASTERIX Cat.021 (JSON)',
+    interval: '1~2초 (실시간)',
+    sender: 'koreansurveillance.com',
+    receiver: 'TBAS / ADS-B Ground Station',
+    source: 'OpenSky Network / 홈 Feeder',
+    status: 'ACTIVE',
+    endpoint: '/api/asterix?cat=21',
+    doc: 'ASTERIX Category 021 Target Report'
+  },
+  {
+    no: 3,
+    system: '항적정보',
+    name: '항적정보(개별)',
+    subData: 'Radar (PSR/SSR) 합성 항적',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'ASTERIX Cat.048 (JSON)',
+    interval: '4초 (회전주기)',
+    sender: 'koreansurveillance.com',
+    receiver: 'MSDP / Radar Processing',
+    source: 'ADS-B Radar Polar Synthesis',
+    status: 'ACTIVE',
+    endpoint: '/api/asterix?cat=48&typ=COMBINED_PSR_SSR',
+    doc: 'ASTERIX Category 048 Monoradar Target Report'
+  },
+  {
+    no: 4,
+    system: '항적정보',
+    name: '지상이동체 항적',
+    subData: 'G-SMGCS 표면 감시 항적',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'ASTERIX Cat.010 (JSON)',
+    interval: '1초 (실시간)',
+    sender: 'koreansurveillance.com',
+    receiver: 'A-SMGCS / EFS Strip',
+    source: 'Airport Surface Surveillance Feeder',
+    status: 'ACTIVE',
+    endpoint: '/api/asterix?cat=10',
+    doc: 'ASTERIX Category 010 Surface Movement'
+  },
+  {
+    no: 5,
+    system: '항적정보',
+    name: '상태 정보',
+    subData: 'Mode-S North Mark & 상태',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'ASTERIX Cat.034 (JSON)',
+    interval: '4초 (회전주기)',
+    sender: 'koreansurveillance.com',
+    receiver: 'MSDP System Monitoring',
+    source: 'Synthetic Radar North Mark Generator',
+    status: 'ACTIVE',
+    endpoint: '/api/asterix?cat=34',
+    doc: 'ASTERIX Category 034 Station Message'
+  },
+  {
+    no: 6,
+    system: '항적정보',
+    name: '항적정보(개별)',
+    subData: 'Primary Radar (PSR) 단독 항적',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'ASTERIX Cat.048 (JSON)',
+    interval: '4초 (회전주기)',
+    sender: 'koreansurveillance.com',
+    receiver: 'MSDP Radar Processor',
+    source: 'PSR Synthesis Engine',
+    status: 'ACTIVE',
+    endpoint: '/api/asterix?cat=48&typ=SINGLE_PSR',
+    doc: 'ASTERIX Category 048 Single PSR Report'
+  },
+  {
+    no: 7,
+    system: '항적정보',
+    name: '항적정보(개별)',
+    subData: 'Secondary Radar (SSR) 단독 항적',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'ASTERIX Cat.048 (JSON)',
+    interval: '4초 (회전주기)',
+    sender: 'koreansurveillance.com',
+    receiver: 'MSDP Radar Processor',
+    source: 'SSR Synthesis Engine',
+    status: 'ACTIVE',
+    endpoint: '/api/asterix?cat=48&typ=SINGLE_SSR',
+    doc: 'ASTERIX Category 048 Single SSR Report'
+  },
+  {
+    no: 8,
+    system: '항적정보',
+    name: '항적 통계 및 궤적',
+    subData: 'System Track Trace & History',
+    protocol: 'REST / WebSocket',
+    linkType: 'Stream / Pull',
+    format: 'JSON Array / GeoJSON',
+    interval: '1~2초',
+    sender: 'koreansurveillance.com',
+    receiver: 'TBAS Flight Tracker',
+    source: 'Realtime Track Fusion Engine',
+    status: 'ACTIVE',
+    endpoint: '/api/aircraft?history=true',
+    doc: 'Flight Path Trace Stream'
+  },
+  {
+    no: 9,
+    system: '기상정보',
+    name: '정규 기상보고 (METAR)',
+    subData: '공항 정규 항공기상 실측치',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'AMHS IPM XML (IA5 Text)',
+    interval: '매 30분 / 정시',
+    sender: 'koreansurveillance.com',
+    receiver: 'IFS / 기상연계서버 / TBAS',
+    source: 'AMO (항공기상청 domestic-airport)',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=METAR&icao=RKSI',
+    doc: 'ICAO Annex 3 METAR in X.400 IPM XML'
+  },
+  {
+    no: 10,
+    system: '기상정보',
+    name: '공항 예보 (TAF)',
+    subData: '공항 24/30시간 기상예보',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'AMHS IPM XML (IA5 Text)',
+    interval: '매 6시간',
+    sender: 'koreansurveillance.com',
+    receiver: 'IFS / 기상연계서버 / TBAS',
+    source: 'AMO (항공기상청 domestic-airport)',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=TAF&icao=RKSS',
+    doc: 'ICAO Annex 3 TAF in X.400 IPM XML'
+  },
+  {
+    no: 11,
+    system: '기상정보',
+    name: '위험기상특보 (SIGMET)',
+    subData: 'FIR 내 중증 난기류/착빙/화산재 특보',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'AMHS IPM XML (IA5 Text)',
+    interval: '발생시 (비정기)',
+    sender: 'koreansurveillance.com',
+    receiver: 'IFS / 기상연계서버 / TBAS',
+    source: 'AMO (항공기상청 SIGMET Feed)',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=SIGMET',
+    doc: 'ICAO Annex 3 SIGMET in X.400 IPM XML'
+  },
+  {
+    no: 12,
+    system: '기상정보',
+    name: '디지털 기상 (IWXXM)',
+    subData: 'XML 기상전문 FTBP Gzip 바이너리',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'AMHS XML (Gzip Hex FTBP)',
+    interval: '매 30분',
+    sender: 'koreansurveillance.com',
+    receiver: 'IFS / 차세대 기상시스템',
+    source: 'AMO / KMA IWXXM Feed',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=IWXXM&icao=RKSI',
+    doc: 'WMO/ICAO IWXXM 2023-1 FTBP Body'
+  },
+  {
+    no: '9-A',
+    system: '기상정보',
+    name: '실시간 관제기상 (AMOS)',
+    subData: '42개 활주로별 초단위 순간풍/RVR/QNH',
+    protocol: 'REST / WebSocket',
+    linkType: 'Push / Pull',
+    format: 'JSON / AMHS MET REPORT XML',
+    interval: '1~2초 (초고빈도 실시간)',
+    sender: 'koreansurveillance.com',
+    receiver: '관제탑 / EFS / TBAS',
+    source: 'AMO (AmosRealTimeMqc.do)',
+    status: 'ACTIVE',
+    endpoint: '/api/weather?type=amos&icao=RKSI',
+    doc: 'Real-time AMOS Sensor Readings'
+  },
+  {
+    no: 13,
+    system: '항공고시보',
+    name: '항공고시보 (NOTAM)',
+    subData: '공항/항로 시설 상태 및 비행제한구역',
+    protocol: 'SOAP / REST',
+    linkType: 'Pull / Push',
+    format: 'AMHS SOAP XML (receiveAmhsMessage)',
+    interval: '5분 (실시간 캐시)',
+    sender: 'koreansurveillance.com',
+    receiver: 'IFS / 비행정보시스템 / TBAS',
+    source: 'AIM Korea (aim.koca.go.kr)',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=NOTAM&location=RKSI',
+    doc: 'AIDA-NG SOAP Envelope for NOTAM'
+  },
+  {
+    no: 14,
+    system: '비행계획서',
+    name: '비행계획서 (FPL)',
+    subData: 'ICAO Doc 4444 비행계획 전문',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'AMHS IPM XML',
+    interval: '실시간 (운항스케줄 동기화)',
+    sender: 'koreansurveillance.com',
+    receiver: 'FDP / 관제시스템 / EFS',
+    source: 'UBIKAIS (fois.go.kr) / 공항공사',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=FPL&callsign=KAL867',
+    doc: 'ICAO Doc 4444 FPL in AMHS IPM'
+  },
+  {
+    no: 15,
+    system: '비행계획서',
+    name: '비행계획 변경보 (CHG)',
+    subData: '출발시간/항로/순항고도 변경 전문',
+    protocol: 'AMQP / REST',
+    linkType: 'Pub/Sub / Pull',
+    format: 'AMHS IPM XML',
+    interval: '변경 감지시',
+    sender: 'koreansurveillance.com',
+    receiver: 'FDP / 관제시스템',
+    source: 'UBIKAIS 변경 감지 이벤트',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=CHG&callsign=CES5052',
+    doc: 'ICAO Doc 4444 CHG in AMHS IPM'
+  },
+  {
+    no: 16,
+    system: '비행계획서',
+    name: '비행계획 취소보 (CNL)',
+    subData: '운항 취소/결항 전문',
+    protocol: 'SOAP / REST',
+    linkType: 'Push / Pull',
+    format: 'AMHS SOAP XML',
+    interval: '결항 감지시',
+    sender: 'koreansurveillance.com',
+    receiver: 'FDP / 관제시스템',
+    source: 'UBIKAIS 결항 감지 이벤트',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=CNL&callsign=KAL1847',
+    doc: 'ICAO Doc 4444 CNL in AMHS SOAP'
+  },
+  {
+    no: 17,
+    system: '비행계획서',
+    name: '비행 지연보 (DLA)',
+    subData: '지연 출발 통보 전문',
+    protocol: 'SOAP / REST',
+    linkType: 'Push / Pull',
+    format: 'AMHS SOAP XML',
+    interval: '지연 감지시',
+    sender: 'koreansurveillance.com',
+    receiver: 'FDP / 관제시스템 / EFS',
+    source: 'UBIKAIS (depStatus=DLA)',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=DLA&callsign=KAL867',
+    doc: 'ICAO Doc 4444 DLA in AMHS SOAP'
+  },
+  {
+    no: 18,
+    system: '비행계획서',
+    name: '출발보 (DEP)',
+    subData: '실제 이륙 시간(ATD) 통보',
+    protocol: 'SOAP / REST',
+    linkType: 'Push / Pull',
+    format: 'AMHS SOAP XML',
+    interval: '이륙 감지시 (속도 > 100kt)',
+    sender: 'koreansurveillance.com',
+    receiver: 'FDP / 관제시스템 / EFS',
+    source: 'ADS-B 이륙 감지 + UBIKAIS',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=DEP&callsign=CES5052',
+    doc: 'ICAO Doc 4444 DEP in AMHS SOAP'
+  },
+  {
+    no: 19,
+    system: '비행계획서',
+    name: '도착보 (ARR)',
+    subData: '실제 착륙 시간(ATA) 통보',
+    protocol: 'SOAP / REST',
+    linkType: 'Push / Pull',
+    format: 'AMHS SOAP XML',
+    interval: '착륙 감지시',
+    sender: 'koreansurveillance.com',
+    receiver: 'FDP / 관제시스템 / EFS',
+    source: 'ADS-B 착륙 감지 + UBIKAIS',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=ARR&callsign=DLH718',
+    doc: 'ICAO Doc 4444 ARR in AMHS SOAP'
+  },
+  {
+    no: 20,
+    system: '비행계획서',
+    name: '비행계획서 접수/통보 (IPN)',
+    subData: 'IPM 접수 확인 및 NDR 배달보고',
+    protocol: 'SOAP / REST',
+    linkType: 'Push / Pull',
+    format: 'AMHS SOAP XML',
+    interval: '전문 수신 직후',
+    sender: 'koreansurveillance.com',
+    receiver: 'AIDA-NG Message Switch',
+    source: 'AMHS Message Dispatcher',
+    status: 'ACTIVE',
+    endpoint: '/api/amhs?type=METREPORT&icao=RKSI',
+    doc: 'NonDeliveryReport / IPN in SOAP'
+  },
+  {
+    no: 21,
+    system: '관제음성',
+    name: '관제음성 스트림',
+    subData: '인천/김포/제주 TWR·APP 실시간 음성',
+    protocol: 'HTTP Stream (Icecast)',
+    linkType: 'Audio Stream',
+    format: 'AUDIO/MPEG (MP3)',
+    interval: '실시간 스트리밍',
+    sender: 'koreansurveillance.com',
+    receiver: '관제 콘솔 / TBAS Voice Panel',
+    source: 'LiveATC Relay (s1-fmt2.liveatc.net)',
+    status: 'ACTIVE',
+    endpoint: '/api/voice?airport=RKSI',
+    doc: 'Live ATC Audio Stream'
+  },
+  {
+    no: 22,
+    system: '운영정보',
+    name: '전자비행스트립 (EFS)',
+    subData: 'FPL + 실시간 항적 융합 전자 스트립',
+    protocol: 'REST / WebSocket',
+    linkType: 'Pub/Sub',
+    format: 'EFS Strip Standard JSON',
+    interval: '1~2초',
+    sender: 'koreansurveillance.com',
+    receiver: 'EFS 콘솔 / 관제석',
+    source: 'FPL + ADS-B Surveillance Fusion',
+    status: 'ACTIVE',
+    endpoint: '/api/flight-schedule',
+    doc: 'Electronic Flight Strip Object'
+  },
+  {
+    no: 23,
+    system: '운영정보',
+    name: '운항정보디스플레이 (FIDS)',
+    subData: '공항별 실시간 출/도착 전광판 데이터',
+    protocol: 'REST / WebSocket',
+    linkType: 'Pull / Push',
+    format: 'FIDS Schedule JSON',
+    interval: '10초 (실시간 캐시)',
+    sender: 'koreansurveillance.com',
+    receiver: 'FIDS 모니터 / 승객안내 / TBAS',
+    source: 'UBIKAIS (fois.go.kr) / 공항공사',
+    status: 'ACTIVE',
+    endpoint: '/api/flight-schedule',
+    doc: 'FIDS Flight Schedule JSON'
+  },
+];
+
 export const ApiDashboardModal: React.FC<ApiDashboardModalProps> = ({ isOpen, onClose }) => {
-  const [items, setItems] = useState<InterfaceItem[]>([]);
+  const [items, setItems] = useState<InterfaceItem[]>(INITIAL_ITEMS);
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeItem, setActiveItem] = useState<InterfaceItem | null>(null);
+  const [activeItem, setActiveItem] = useState<InterfaceItem | null>(INITIAL_ITEMS[0]);
   const [liveSample, setLiveSample] = useState<string>('');
   const [loadingSample, setLoadingSample] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
@@ -54,6 +441,9 @@ export const ApiDashboardModal: React.FC<ApiDashboardModalProps> = ({ isOpen, on
   useEffect(() => {
     if (isOpen) {
       fetchCatalog();
+      if (!activeItem) {
+        handleInspectSample(INITIAL_ITEMS[0]);
+      }
     }
   }, [isOpen]);
 
@@ -62,10 +452,12 @@ export const ApiDashboardModal: React.FC<ApiDashboardModalProps> = ({ isOpen, on
       const res = await fetch('/api/data-status');
       if (res.ok) {
         const json = await res.json();
-        setItems(json.items || []);
+        if (json.items && json.items.length > 0) {
+          setItems(json.items);
+        }
       }
     } catch {
-      // Fallback
+      // Fallback already in place
     }
   };
 
