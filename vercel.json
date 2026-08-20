@@ -1,7 +1,14 @@
 {
   "functions": {
-    "api/aircraft.js": { "maxDuration": 30 }
+    "api/aircraft.js": { "maxDuration": 30 },
+    "api/crawler.js": { "maxDuration": 60 }
   },
+  "crons": [
+    {
+      "path": "/api/crawler",
+      "schedule": "*/5 * * * *"
+    }
+  ],
   "redirects": [
     {
       "source": "/:path*",
