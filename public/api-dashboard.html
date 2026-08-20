@@ -1,238 +1,470 @@
 <!DOCTYPE html>
-<html lang="ko" class="dark">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>대한감시 - 23개 연계 인터페이스 종합 대시보드</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            border: '#27272a',
-            background: '#09090b',
-            foreground: '#fafafa',
-            card: { DEFAULT: '#18181b', foreground: '#fafafa' },
-            muted: { DEFAULT: '#27272a', foreground: '#a1a1aa' },
-            accent: { DEFAULT: '#06b6d4', foreground: '#ffffff' }
-          }
-        }
-      }
-    }
-  </script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap');
-    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #09090b; }
-    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
-    .animate-spin-slow { animation: spin 2s linear infinite; }
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: #09090b;
+      color: #fafafa;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, select, input { font-family: inherit; font-size: inherit; }
+
+    /* Header */
+    header {
+      height: 48px;
+      background: #121215;
+      border-bottom: 1px solid #27272a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 50;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      color: #06b6d4;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .brand-title { font-size: 13px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
+    .brand-badge {
+      font-size: 9px;
+      background: rgba(6, 182, 212, 0.2);
+      color: #38bdf8;
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: 600;
+    }
+    .brand-sub { font-size: 10px; color: #71717a; }
+
+    .header-ctrls { display: flex; align-items: center; gap: 8px; }
+    .ap-select-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #18181b;
+      border: 1px solid #27272a;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+    .ap-select-box label { color: #a1a1aa; font-size: 11px; }
+    .ap-select {
+      background: transparent;
+      border: none;
+      color: #38bdf8;
+      font-weight: 700;
+      outline: none;
+      cursor: pointer;
+      font-size: 11px;
+    }
+    .ap-select option { background: #18181b; color: #fafafa; }
+
+    .btn {
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #18181b;
+      border: 1px solid #27272a;
+      color: #d4d4d8;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+    .btn:hover { background: #27272a; color: #fff; }
+    .btn-cyan {
+      background: rgba(6, 182, 212, 0.15);
+      border-color: rgba(6, 182, 212, 0.4);
+      color: #38bdf8;
+    }
+    .btn-cyan:hover { background: rgba(6, 182, 212, 0.25); color: #fff; }
+
+    /* Airport Health Matrix Bar */
+    .matrix-bar {
+      height: 42px;
+      background: #0d0d10;
+      border-bottom: 1px solid #27272a;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .matrix-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #71717a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .matrix-chips { display: flex; gap: 4px; flex-shrink: 0; }
+    .chip {
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #18181b;
+      border: 1px solid #27272a;
+      font-size: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .chip:hover { border-color: #3f3f46; }
+    .chip.active {
+      background: rgba(6, 182, 212, 0.15);
+      border-color: #06b6d4;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .chip-code { font-family: monospace; font-weight: 700; }
+    .chip-dot { width: 5px; height: 5px; border-radius: 50%; background: #10b981; }
+
+    /* Main Container (2 Columns) */
+    .main-body {
+      display: flex;
+      height: calc(100vh - 90px);
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* Left Table Pane */
+    .table-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #27272a;
+      background: #09090b;
+      min-width: 0;
+    }
+    .table-filter-bar {
+      height: 38px;
+      padding: 0 12px;
+      background: #121215;
+      border-bottom: 1px solid #27272a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .table-count-badge { font-size: 11px; color: #a1a1aa; font-weight: 600; }
+    .search-input {
+      background: #18181b;
+      border: 1px solid #27272a;
+      padding: 3px 8px;
+      border-radius: 5px;
+      color: #fafafa;
+      font-size: 11px;
+      width: 200px;
+      outline: none;
+    }
+    .search-input:focus { border-color: #06b6d4; }
+
+    .table-scroll { flex: 1; overflow-y: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 11px; }
+    thead { position: sticky; top: 0; background: #121215; z-index: 10; border-bottom: 1px solid #27272a; }
+    th { padding: 6px 10px; font-size: 10px; font-weight: 700; color: #71717a; text-transform: uppercase; }
+    td { padding: 6px 10px; border-bottom: 1px solid #18181b; }
+    tr { cursor: pointer; transition: background 0.1s; }
+    tr:hover { background: #141417; }
+    tr.active { background: rgba(6, 182, 212, 0.12); border-left: 2px solid #06b6d4; }
+    .group-row { background: #121215; font-size: 10px; font-weight: 700; color: #38bdf8; pointer-events: none; padding: 5px 10px; border-top: 1px solid #27272a; border-bottom: 1px solid #27272a; }
+
+    .badge {
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 9px;
+      font-family: monospace;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+    .badge-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.3); }
+    .badge-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border-color: rgba(59, 130, 246, 0.3); }
+    .badge-green { background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
+    .badge-rose { background: rgba(244, 63, 94, 0.15); color: #fb7185; border-color: rgba(244, 63, 94, 0.3); }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 6px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .status-pill.ok { background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .status-pill.err { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .status-pill.pending { background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    /* Right Inspector Pane */
+    .inspector-pane {
+      width: 520px;
+      background: #0c0c0f;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .inspector-head {
+      height: 48px;
+      padding: 0 14px;
+      background: #121215;
+      border-bottom: 1px solid #27272a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .inspect-title-box h3 { font-size: 12px; font-weight: 700; color: #fff; }
+    .inspect-title-box p { font-size: 10px; color: #71717a; }
+
+    .inspector-tabs {
+      display: flex;
+      background: #09090b;
+      border-bottom: 1px solid #27272a;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: #71717a;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .tab-btn:hover { color: #d4d4d8; }
+    .tab-btn.active {
+      color: #38bdf8;
+      border-bottom-color: #06b6d4;
+      background: rgba(6, 182, 212, 0.06);
+    }
+
+    .inspector-meta {
+      padding: 8px 14px;
+      background: #121215;
+      border-bottom: 1px solid #27272a;
+      font-size: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      color: #71717a;
+    }
+    .inspector-meta strong { color: #e4e4e7; font-family: monospace; }
+
+    .audio-box {
+      padding: 8px 14px;
+      background: rgba(6, 182, 212, 0.1);
+      border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .audio-info h4 { font-size: 11px; font-weight: 700; color: #fff; }
+    .audio-info p { font-size: 9px; color: #38bdf8; }
+
+    .code-box {
+      flex: 1;
+      padding: 12px;
+      overflow: auto;
+      background: #050507;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      font-size: 10.5px;
+      color: #34d399;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      user-select: text;
+    }
+
+    @media (max-width: 900px) {
+      .main-body { flex-direction: column; height: auto; }
+      .inspector-pane { width: 100%; height: 400px; }
+    }
   </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
+<body>
 
   <!-- Header -->
-  <header class="sticky top-0 z-50 bg-zinc-900/90 backdrop-blur border-b border-zinc-800 px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
-    <div class="flex items-center gap-4">
-      <a href="/" class="flex items-center gap-3 group p-1.5 -m-1.5 rounded-lg hover:bg-zinc-800/60 transition-colors" title="관제 맵으로 돌아가기">
-        <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 group-hover:border-cyan-400 transition-all shadow-lg shadow-cyan-950/40">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
+  <header>
+    <div class="brand" onclick="window.location.href='/'">
+      <div class="brand-icon">📡</div>
+      <div>
+        <div class="brand-title">
+          대한감시 연계 게이트웨이
+          <span class="brand-badge">23 INTERFACES</span>
         </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="text-base font-bold text-white tracking-tight">대한감시 연계 게이트웨이</span>
-            <span class="px-2 py-0.5 text-[10px] font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 rounded-full font-mono">v2.4 LIVE</span>
-          </div>
-          <p class="text-xs text-zinc-400">23개 항공·감시·기상·스케줄 연계 인터페이스 실시간 대시보드</p>
-        </div>
-      </a>
+        <div class="brand-sub">koreasurveillance.com 종합 관제 실시간 연계 시스템</div>
+      </div>
     </div>
 
-    <div class="flex items-center gap-3">
-      <!-- Airport Selector -->
-      <div class="flex items-center gap-2 bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 shadow-inner">
-        <span class="text-xs text-zinc-400 flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          공항 필터:
-        </span>
-        <select id="airport-select" class="bg-transparent text-cyan-300 text-xs font-semibold focus:outline-none cursor-pointer pr-2" onchange="changeAirport(this.value)">
-          <option value="ALL" class="bg-zinc-900 text-cyan-300">⚡ 전국 15개 공항 일괄 종합 (ALL)</option>
-          <option value="RKSI" selected class="bg-zinc-900 text-white">RKSI - 인천국제공항 (Incheon)</option>
-          <option value="RKSS" class="bg-zinc-900 text-white">RKSS - 김포국제공항 (Gimpo)</option>
-          <option value="RKPC" class="bg-zinc-900 text-white">RKPC - 제주국제공항 (Jeju)</option>
-          <option value="RKPK" class="bg-zinc-900 text-white">RKPK - 김해국제공항 (Gimhae)</option>
-          <option value="RKPU" class="bg-zinc-900 text-white">RKPU - 울산공항 (Ulsan)</option>
-          <option value="RKTU" class="bg-zinc-900 text-white">RKTU - 청주국제공항 (Cheongju)</option>
-          <option value="RKTN" class="bg-zinc-900 text-white">RKTN - 대구국제공항 (Daegu)</option>
-          <option value="RKJB" class="bg-zinc-900 text-white">RKJB - 무안국제공항 (Muan)</option>
-          <option value="RKJJ" class="bg-zinc-900 text-white">RKJJ - 광주공항 (Gwangju)</option>
-          <option value="RKJY" class="bg-zinc-900 text-white">RKJY - 여수공항 (Yeosu)</option>
-          <option value="RKNY" class="bg-zinc-900 text-white">RKNY - 양양국제공항 (Yangyang)</option>
-          <option value="RKTH" class="bg-zinc-900 text-white">RKTH - 포항경주공항 (Pohang)</option>
-          <option value="RKPS" class="bg-zinc-900 text-white">RKPS - 사천공항 (Sacheon)</option>
-          <option value="RKSM" class="bg-zinc-900 text-white">RKSM - 서울공항 (Seoul Base)</option>
-          <option value="RKTI" class="bg-zinc-900 text-white">RKTI - 중원공항 (Jungwon Base)</option>
+    <div class="header-ctrls">
+      <div class="ap-select-box">
+        <label>공항 필터:</label>
+        <select id="airport-select" class="ap-select" onchange="changeAirport(this.value)">
+          <option value="ALL">⚡ 전국 15개 공항 일괄 종합 (ALL)</option>
+          <option value="RKSI" selected>RKSI - 인천국제공항 (Incheon)</option>
+          <option value="RKSS">RKSS - 김포국제공항 (Gimpo)</option>
+          <option value="RKPC">RKPC - 제주국제공항 (Jeju)</option>
+          <option value="RKPK">RKPK - 김해국제공항 (Gimhae)</option>
+          <option value="RKPU">RKPU - 울산공항 (Ulsan)</option>
+          <option value="RKTU">RKTU - 청주국제공항 (Cheongju)</option>
+          <option value="RKTN">RKTN - 대구국제공항 (Daegu)</option>
+          <option value="RKJB">RKJB - 무안국제공항 (Muan)</option>
+          <option value="RKJJ">RKJJ - 광주공항 (Gwangju)</option>
+          <option value="RKJY">RKJY - 여수공항 (Yeosu)</option>
+          <option value="RKNY">RKNY - 양양국제공항 (Yangyang)</option>
+          <option value="RKTH">RKTH - 포항경주공항 (Pohang)</option>
+          <option value="RKPS">RKPS - 사천공항 (Sacheon)</option>
+          <option value="RKSM">RKSM - 서울공항 (Seoul)</option>
+          <option value="RKTI">RKTI - 중원공항 (Jungwon)</option>
         </select>
       </div>
 
-      <a href="/" class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-300 transition-colors flex items-center gap-1.5 border border-zinc-700">
-        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-        </svg>
-        관제 맵
-      </a>
-
-      <button id="ping-btn" onclick="runLiveHealthCheckAll()" class="px-3.5 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm">
-        <svg id="ping-icon" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-        </svg>
-        <span id="ping-text">전체 핑 점검</span>
-      </button>
+      <a href="/" class="btn">🗺️ 관제 맵</a>
+      <button class="btn btn-cyan" id="ping-btn" onclick="runLiveHealthCheckAll()">⚡ 전체 실시간 핑</button>
     </div>
   </header>
 
-  <!-- 15-Airport Realtime Health Matrix Grid -->
-  <div class="bg-zinc-900/60 border-b border-zinc-800 px-6 py-3">
-    <div class="flex items-center justify-between mb-2">
-      <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <h2 class="text-xs font-bold text-zinc-300 uppercase tracking-wider">전국 15개 공항 실시간 헬스비트 매트릭스 (Realtime Health Matrix)</h2>
-      </div>
-      <div class="text-[11px] text-zinc-400" id="matrix-summary">전국 15개 공항 기상·스케줄·NOTAM 상태 감시 중</div>
+  <!-- Airport Matrix Bar -->
+  <div class="matrix-bar">
+    <div class="matrix-label">
+      <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#10b981;"></span>
+      전국 15개 공항 헬스비트:
     </div>
-    <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-15 gap-2" id="airport-matrix-grid">
-      <!-- 15 airport chips rendered here -->
+    <div class="matrix-chips" id="matrix-chips">
+      <!-- Generated dynamically -->
     </div>
   </div>
 
-  <!-- Main 2-Column Container -->
-  <div class="flex-1 flex overflow-hidden">
-    
-    <!-- Left Pane: Interface Directory Table -->
-    <div class="flex-1 flex flex-col border-r border-zinc-800 bg-zinc-950 overflow-hidden">
-      <div class="p-3 bg-zinc-900/40 border-b border-zinc-800 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-semibold text-zinc-300">인터페이스 목록</span>
-          <span class="px-2 py-0.5 text-[10px] rounded bg-zinc-800 text-zinc-400 font-mono" id="table-count">23개 등록</span>
-        </div>
-        <input type="text" id="search-box" class="px-3 py-1 bg-zinc-900 border border-zinc-700/80 rounded-md text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500 w-56 font-sans" placeholder="인터페이스/형식/출처 검색..." oninput="renderTable()" />
+  <!-- Main Body -->
+  <div class="main-body">
+    <!-- Left Table -->
+    <div class="table-pane">
+      <div class="table-filter-bar">
+        <span class="table-count-badge" id="table-count">23개 인터페이스</span>
+        <input type="text" id="search-box" class="search-input" placeholder="인터페이스 / 형식 / 소스 검색..." oninput="renderTable()" />
       </div>
 
-      <div class="flex-1 overflow-y-auto">
-        <table class="w-full text-left text-xs border-collapse">
-          <thead class="bg-zinc-900/90 sticky top-0 z-10 text-[11px] font-semibold text-zinc-400 border-b border-zinc-800 uppercase">
+      <div class="table-scroll">
+        <table>
+          <thead>
             <tr>
-              <th class="py-2.5 px-3 w-12 text-center">NO</th>
-              <th class="py-2.5 px-3">시스템 / 인터페이스 명</th>
-              <th class="py-2.5 px-3">데이터 규격</th>
-              <th class="py-2.5 px-3">발생 주기</th>
-              <th class="py-2.5 px-3">원천 수집처</th>
-              <th class="py-2.5 px-3 w-28 text-center">실시간 상태</th>
+              <th style="width: 35px; text-align: center;">NO</th>
+              <th>시스템 / 인터페이스 명</th>
+              <th>데이터 규격</th>
+              <th>발생 주기</th>
+              <th>원천 수집처</th>
+              <th style="width: 90px; text-align: center;">실시간 상태</th>
             </tr>
           </thead>
-          <tbody id="table-body" class="divide-y divide-zinc-900 font-sans">
-            <!-- Rows dynamically inserted -->
+          <tbody id="table-body">
+            <!-- Dynamically populated -->
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- Right Pane: Inspector & Code Viewer -->
-    <div class="w-[580px] flex flex-col bg-zinc-900/30 overflow-hidden">
-      
-      <!-- Inspector Header -->
-      <div class="p-4 bg-zinc-900/80 border-b border-zinc-800 flex items-center justify-between">
-        <div>
-          <h3 id="inspect-title" class="text-sm font-bold text-white flex items-center gap-2">항목을 선택하세요</h3>
-          <p id="inspect-doc" class="text-xs text-zinc-400 mt-0.5">좌측 목록에서 항목을 클릭하면 실시간 응답을 검증합니다.</p>
+    <!-- Right Inspector -->
+    <div class="inspector-pane">
+      <div class="inspector-head">
+        <div class="inspect-title-box">
+          <h3 id="inspect-title">인터페이스를 선택하세요</h3>
+          <p id="inspect-doc">좌측 목록에서 항목을 클릭하면 실시간 전문을 확인합니다.</p>
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="selectItem(activeItem)" class="px-2.5 py-1 text-xs rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 transition flex items-center gap-1">
-            🔄 재요청
-          </button>
-          <button id="copy-btn" onclick="copyPayload()" class="px-2.5 py-1 text-xs rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition flex items-center gap-1 font-medium">
-            📋 전문 복사
-          </button>
+        <div style="display: flex; gap: 4px;">
+          <button class="btn" onclick="selectItem(activeItem)">🔄 재요청</button>
+          <button class="btn btn-cyan" id="copy-btn" onclick="copyPayload()">📋 복사</button>
         </div>
       </div>
 
-      <!-- Tab Buttons (Shadcn style) -->
-      <div class="flex bg-zinc-900 border-b border-zinc-800 text-xs">
-        <button id="tab-converted" onclick="switchTab('converted')" class="flex-1 py-2.5 text-center font-semibold text-cyan-400 border-b-2 border-cyan-500 bg-zinc-800/40 transition">
-          📤 규격 변환 API 전문 (Converted)
-        </button>
-        <button id="tab-raw" onclick="switchTab('raw')" class="flex-1 py-2.5 text-center font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition">
-          📥 원천 수집 데이터 (Raw Feed)
-        </button>
-        <button id="tab-guide" onclick="switchTab('guide')" class="flex-1 py-2.5 text-center font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition">
-          📖 개발 현황 & 진단
-        </button>
+      <div class="inspector-tabs">
+        <button class="tab-btn active" id="tab-converted" onclick="switchTab('converted')">📤 규격 변환 API 전문</button>
+        <button class="tab-btn" id="tab-raw" onclick="switchTab('raw')">📥 원천 수집 데이터 (Raw)</button>
+        <button class="tab-btn" id="tab-guide" onclick="switchTab('guide')">📖 개발 현황 & 진단</button>
       </div>
 
-      <!-- Inspector Meta Grid -->
-      <div class="px-4 py-2.5 bg-zinc-950/80 border-b border-zinc-800 grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs text-zinc-400">
-        <div>엔드포인트: <strong id="meta-ep" class="text-zinc-200 font-mono text-[11px]">-</strong></div>
-        <div>발생 주기: <strong id="meta-interval" class="text-zinc-200 font-mono text-[11px]">-</strong></div>
-        <div>원천 출처: <strong id="meta-source" class="text-cyan-300 font-sans">-</strong></div>
-        <div>데이터 규격: <strong id="meta-format" class="text-zinc-200 font-sans">-</strong></div>
+      <div class="inspector-meta" id="inspect-meta">
+        <div>엔드포인트: <strong id="meta-ep">-</strong></div>
+        <div>발생 주기: <strong id="meta-interval">-</strong></div>
+        <div>원천 출처: <strong id="meta-source" style="color: #38bdf8;">-</strong></div>
+        <div>데이터 규격: <strong id="meta-format">-</strong></div>
       </div>
 
-      <!-- Live ATC Audio Streaming Box (NO 21) -->
-      <div id="audio-box" class="p-3 bg-cyan-950/30 border-b border-cyan-800/40 flex items-center justify-between gap-3" style="display: none;">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300">
-            <svg class="w-4 h-4 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-            </svg>
-          </div>
-          <div>
-            <div id="audio-title" class="text-xs font-bold text-white">뉴욕 JFK 국제공항 관제탑 (119.1 MHz)</div>
-            <div class="text-[10px] text-cyan-300/80">실시간 LiveATC 스트림 수신 가동 중</div>
-          </div>
+      <!-- Live Working Audio Stream Box for NO 21 -->
+      <div class="audio-box" id="audio-box" style="display: none;">
+        <div class="audio-info">
+          <h4 id="audio-title">뉴욕 JFK 국제공항 관제탑 (119.1 MHz)</h4>
+          <p>LiveATC 실시간 실제 오디오 스트림 가동 중</p>
         </div>
-        <div class="flex items-center gap-2">
-          <select id="channel-select" class="bg-zinc-900 text-cyan-300 border border-zinc-700 rounded px-2 py-1 text-xs" onchange="changeAudioChannel(this.value)">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <select id="channel-select" style="background:#18181b; color:#38bdf8; border:1px solid #27272a; border-radius:4px; padding:2px 6px; font-size:10px;" onchange="changeAudioChannel(this.value)">
             <option value="KJFK" selected>KJFK (New York JFK Tower)</option>
             <option value="RJTT">RJTT (Tokyo Haneda Tower)</option>
             <option value="KLAX">KLAX (Los Angeles Tower)</option>
           </select>
-          <audio id="live-audio-player" controls class="h-7 w-36"></audio>
+          <audio id="live-audio-player" controls style="height: 26px; width: 140px;"></audio>
         </div>
       </div>
 
-      <!-- Code Box -->
-      <div class="flex-1 bg-zinc-950 p-4 overflow-auto font-mono text-[11px] text-emerald-400 whitespace-pre-wrap leading-relaxed select-text" id="code-viewer">// 실시간 라이브 페이로드가 여기에 표시됩니다.</div>
+      <div class="code-box" id="code-viewer">// 실시간 라이브 페이로드가 여기에 표시됩니다.</div>
     </div>
   </div>
 
   <script>
     const KOREAN_AIRPORTS = [
-      { code: 'RKSI', name: '인천', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKSS', name: '김포', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKPC', name: '제주', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKPK', name: '김해', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKPU', name: '울산', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKTU', name: '청주', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKTN', name: '대구', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKJB', name: '무안', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKJJ', name: '광주', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKJY', name: '여수', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKNY', name: '양양', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKTH', name: '포항', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKPS', name: '사천', amos: true, metar: true, taf: true, fids: true, notam: true },
-      { code: 'RKSM', name: '서울', amos: true, metar: true, taf: false, fids: false, notam: true },
-      { code: 'RKTI', name: '중원', amos: true, metar: true, taf: false, fids: false, notam: true },
+      { code: 'RKSI', name: '인천' },
+      { code: 'RKSS', name: '김포' },
+      { code: 'RKPC', name: '제주' },
+      { code: 'RKPK', name: '김해' },
+      { code: 'RKPU', name: '울산' },
+      { code: 'RKTU', name: '청주' },
+      { code: 'RKTN', name: '대구' },
+      { code: 'RKJB', name: '무안' },
+      { code: 'RKJJ', name: '광주' },
+      { code: 'RKJY', name: '여수' },
+      { code: 'RKNY', name: '양양' },
+      { code: 'RKTH', name: '포항' },
+      { code: 'RKPS', name: '사천' },
+      { code: 'RKSM', name: '서울' },
+      { code: 'RKTI', name: '중원' },
     ];
 
     let currentAirport = 'RKSI';
@@ -243,31 +475,31 @@
       const apLabel = isAll ? '전국 15개 공항 일괄 종합' : `${ap} 공항`;
 
       return [
-        // Group 1: Airspace Surveillance (Airport Independent)
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 1, name: '항적정보(융합)', sub: '유로컨트롤 Cat.062 융합 System Track', format: 'ASTERIX Cat.062', interval: '1~2초', source: 'OpenSky Network (ADS-B)', endpoint: '/api/asterix?cat=62', doc: 'ASTERIX Cat.062 System Track Report' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 2, name: '항적정보(개별)', sub: 'ADS-B 개별 기하고도·속도 Target', format: 'ASTERIX Cat.021', interval: '1~2초', source: 'OpenSky Network (ADS-B)', endpoint: '/api/asterix?cat=21', doc: 'ASTERIX Cat.021 ADS-B Target Report' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 3, name: 'Radar 합성 항적', sub: '1차(PSR) / 2차(SSR) 레이더 합성 항적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (Radar 변환)', endpoint: '/api/asterix?cat=48&typ=COMBINED_PSR_SSR', doc: 'ASTERIX Cat.048 Monoradar Report' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 4, name: '지상이동체 항적', sub: 'G-SMGCS 공항 표면 감시 항적', format: 'ASTERIX Cat.010', interval: '1초', source: 'OpenSky (Surface)', endpoint: '/api/asterix?cat=10', doc: 'ASTERIX Cat.010 Surface Movement' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 5, name: '레이더 상태 정보', sub: 'Mode-S North Mark & 안테나 상태', format: 'ASTERIX Cat.034', interval: '4초', source: 'Mode-S Sensor State', endpoint: '/api/asterix?cat=34', doc: 'ASTERIX Cat.034 Sensor Message' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 6, name: 'Primary (PSR) 단독', sub: '1차 감시 레이더 단독 표적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (PSR)', endpoint: '/api/asterix?cat=48&typ=SINGLE_PSR', doc: 'ASTERIX Cat.048 PSR' },
-        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 7, name: 'Secondary (SSR) 단독', sub: '2차 감시 레이더 단독 표적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (SSR)', endpoint: '/api/asterix?cat=48&typ=SINGLE_SSR', doc: 'ASTERIX Cat.048 SSR' },
+        // Group 1: Airspace Surveillance
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 1, name: '항적정보(융합)', sub: '유로컨트롤 Cat.062 융합 System Track', format: 'ASTERIX Cat.062', interval: '1~2초', source: 'OpenSky Network (ADS-B)', endpoint: '/api/asterix?cat=62', doc: 'ASTERIX Cat.062 System Track Report' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 2, name: '항적정보(개별)', sub: 'ADS-B 개별 기하고도·속도 Target', format: 'ASTERIX Cat.021', interval: '1~2초', source: 'OpenSky Network (ADS-B)', endpoint: '/api/asterix?cat=21', doc: 'ASTERIX Cat.021 ADS-B Target Report' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 3, name: 'Radar 합성 항적', sub: '1차(PSR) / 2차(SSR) 레이더 합성 항적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (Radar 변환)', endpoint: '/api/asterix?cat=48&typ=COMBINED_PSR_SSR', doc: 'ASTERIX Cat.048 Monoradar Report' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 4, name: '지상이동체 항적', sub: 'G-SMGCS 공항 표면 감시 항적', format: 'ASTERIX Cat.010', interval: '1초', source: 'OpenSky (Surface)', endpoint: '/api/asterix?cat=10', doc: 'ASTERIX Cat.010 Surface Movement' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 5, name: '레이더 상태 정보', sub: 'Mode-S North Mark & 안테나 상태', format: 'ASTERIX Cat.034', interval: '4초', source: 'Mode-S Sensor State', endpoint: '/api/asterix?cat=34', doc: 'ASTERIX Cat.034 Sensor Message' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 6, name: 'Primary (PSR) 단독', sub: '1차 감시 레이더 단독 표적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (PSR)', endpoint: '/api/asterix?cat=48&typ=SINGLE_PSR', doc: 'ASTERIX Cat.048 PSR' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance - 공항 무관)', no: 7, name: 'Secondary (SSR) 단독', sub: '2차 감시 레이더 단독 표적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (SSR)', endpoint: '/api/asterix?cat=48&typ=SINGLE_SSR', doc: 'ASTERIX Cat.048 SSR' },
 
         // Group 2: Airport Operations & Weather
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 8, name: '실시간 관제기상 (AMOS)', sub: `${apLabel} 활주로별 초단위 순간풍/RVR/QNH`, format: 'JSON (55개 필드)', interval: '1~2초', source: 'AMO 항공기상청 (AmosRealTimeMqc.do)', endpoint: `/api/weather?type=amos&icao=${apParam}`, doc: '42 Runway Sensors Realtime Readings' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 9, name: '정규 기상보고 (METAR)', sub: `${apLabel} 실측 정규 기상문`, format: 'AMHS IPM XML', interval: '매 30분', source: 'AMO (global.amo.go.kr)', endpoint: `/api/amhs?type=METAR&icao=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Annex 3 METAR in AMHS IPM' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 10, name: '공항 예보 (TAF)', sub: `${apLabel} 24/30시간 기상예보`, format: 'AMHS IPM XML', interval: '매 6시간', source: 'AMO (global.amo.go.kr)', endpoint: `/api/amhs?type=TAF&icao=${isAll ? 'RKSS' : ap}`, doc: 'ICAO Annex 3 TAF in AMHS IPM' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 11, name: '위험기상특보 (SIGMET)', sub: '인천 FIR 전역 중증 난기류/착빙/특보', format: 'AMHS IPM XML', interval: '발생시', source: 'AMO 항공기상청 SIGMET', endpoint: '/api/amhs?type=SIGMET', doc: 'ICAO Annex 3 SIGMET' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 12, name: '디지털 기상 (IWXXM)', sub: `${apLabel} IWXXM XML 바이너리 (FTBP Gzip)`, format: 'AMHS XML (Gzip Hex)', interval: '매 30분', source: 'AMO IWXXM Feed', endpoint: `/api/amhs?type=IWXXM&icao=${isAll ? 'RKSI' : ap}`, doc: 'WMO/ICAO IWXXM 2023-1' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 13, name: '항공고시보 (NOTAM)', sub: `${apLabel} 비행제한구역 및 시설정보`, format: 'AMHS SOAP XML', interval: '5분', source: 'AIM Korea (aim.koca.go.kr)', endpoint: `/api/amhs?type=NOTAM&location=${isAll ? 'RKSI' : ap}`, doc: 'AIDA-NG SOAP NOTAM' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 14, name: '운항스케줄 (FIDS)', sub: `${apLabel} 실시간 출/도착 전광판 스케줄`, format: 'FIDS JSON', interval: '10초', source: 'UBIKAIS (fois.go.kr:8030)', endpoint: `/api/flight-schedule?airport=${apParam}`, doc: 'FIDS Master Schedule' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 15, name: '비행계획서 (FPL)', sub: `${apLabel} 발 ICAO Doc 4444 비행계획 전문`, format: 'AMHS IPM XML', interval: '스케줄 동기화', source: 'UBIKAIS IFR 스케줄', endpoint: `/api/amhs?type=FPL&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 FPL' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 16, name: '비행계획 변경보 (CHG)', sub: '순항고도/항로/도착지 변경 전문 템플릿', format: 'AMHS IPM XML', interval: '변경 발생시', source: 'UBIKAIS IFR 변경 감지', endpoint: `/api/amhs?type=CHG&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 CHG' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 17, name: '비행계획 취소보 (CNL)', sub: '운항 취소/결항 전문 템플릿', format: 'AMHS SOAP XML', interval: '결항 발생시', source: 'UBIKAIS 결항 플래그', endpoint: `/api/amhs?type=CNL&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 CNL' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 18, name: '비행 지연보 (DLA)', sub: '지연 출발 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '지연 발생시', source: 'UBIKAIS ETD 지연 플래그', endpoint: `/api/amhs?type=DLA&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 DLA' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 19, name: '출발보 (DEP)', sub: '실제 이륙(ATD) 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '이륙 발생시', source: 'ADS-B + UBIKAIS', endpoint: `/api/amhs?type=DEP&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 DEP' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 20, name: '도착보 (ARR)', sub: '실제 착륙(ATA) 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '착륙 발생시', source: 'ADS-B + UBIKAIS', endpoint: `/api/amhs?type=ARR&dest=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 ARR' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 21, name: '관제음성 (LiveATC)', sub: '실시간 관제탑 오디오 라이브 스트림 (글로벌 테스트)', format: 'AUDIO/MPEG (MP3)', interval: '실시간 스트리밍', source: 'LiveATC.net (실시간 가동)', endpoint: '/api/voice?channel=KJFK', doc: 'Live ATC Stream Engine' },
-        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 22, name: '전자비행스트립 (EFS)', sub: '사용자 자체 관제 시스템 연계 (수신 대기)', format: 'EFS Standard JSON', interval: '사용자 송출주기', source: '사용자 자체 시스템 (연계 대기)', endpoint: `/api/flight-schedule?airport=${isAll ? 'RKSI' : ap}&efs=true`, doc: 'EFS Strip Gateway' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 8, name: '실시간 관제기상 (AMOS)', sub: `${apLabel} 42개 활주로별 초단위 순간풍/RVR/QNH`, format: 'JSON (55개 필드)', interval: '1~2초', source: 'AMO 항공기상청 (AmosRealTimeMqc.do)', endpoint: `/api/weather?type=amos&icao=${apParam}`, doc: '42 Runway Sensors Realtime Readings' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 9, name: '정규 기상보고 (METAR)', sub: `${apLabel} 실측 정규 기상문`, format: 'AMHS IPM XML', interval: '매 30분', source: 'AMO (global.amo.go.kr)', endpoint: `/api/amhs?type=METAR&icao=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Annex 3 METAR in AMHS IPM' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 10, name: '공항 예보 (TAF)', sub: `${apLabel} 24/30시간 기상예보`, format: 'AMHS IPM XML', interval: '매 6시간', source: 'AMO (global.amo.go.kr)', endpoint: `/api/amhs?type=TAF&icao=${isAll ? 'RKSS' : ap}`, doc: 'ICAO Annex 3 TAF in AMHS IPM' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 11, name: '위험기상특보 (SIGMET)', sub: '인천 FIR 전역 중증 난기류/착빙/특보', format: 'AMHS IPM XML', interval: '발생시', source: 'AMO 항공기상청 SIGMET', endpoint: '/api/amhs?type=SIGMET', doc: 'ICAO Annex 3 SIGMET' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 12, name: '디지털 기상 (IWXXM)', sub: `${apLabel} IWXXM XML 바이너리 (FTBP Gzip)`, format: 'AMHS XML (Gzip Hex)', interval: '매 30분', source: 'AMO IWXXM Feed', endpoint: `/api/amhs?type=IWXXM&icao=${isAll ? 'RKSI' : ap}`, doc: 'WMO/ICAO IWXXM 2023-1' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 13, name: '항공고시보 (NOTAM)', sub: `${apLabel} 비행제한구역 및 시설정보`, format: 'AMHS SOAP XML', interval: '5분', source: 'AIM Korea (aim.koca.go.kr)', endpoint: `/api/amhs?type=NOTAM&location=${isAll ? 'RKSI' : ap}`, doc: 'AIDA-NG SOAP NOTAM' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 14, name: '운항스케줄 (FIDS)', sub: `${apLabel} 실시간 출/도착 전광판 스케줄`, format: 'FIDS JSON', interval: '10초', source: 'UBIKAIS (fois.go.kr:8030)', endpoint: `/api/flight-schedule?airport=${apParam}`, doc: 'FIDS Master Schedule' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 15, name: '비행계획서 (FPL)', sub: `${apLabel} 발 ICAO Doc 4444 비행계획 전문`, format: 'AMHS IPM XML', interval: '스케줄 동기화', source: 'UBIKAIS IFR 스케줄', endpoint: `/api/amhs?type=FPL&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 FPL' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 16, name: '비행계획 변경보 (CHG)', sub: '순항고도/항로/도착지 변경 전문 템플릿', format: 'AMHS IPM XML', interval: '변경 발생시', source: 'UBIKAIS IFR 변경 감지', endpoint: `/api/amhs?type=CHG&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 CHG' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 17, name: '비행계획 취소보 (CNL)', sub: '운항 취소/결항 전문 템플릿', format: 'AMHS SOAP XML', interval: '결항 발생시', source: 'UBIKAIS 결항 플래그', endpoint: `/api/amhs?type=CNL&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 CNL' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 18, name: '비행 지연보 (DLA)', sub: '지연 출발 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '지연 발생시', source: 'UBIKAIS ETD 지연 플래그', endpoint: `/api/amhs?type=DLA&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 DLA' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 19, name: '출발보 (DEP)', sub: '실제 이륙(ATD) 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '이륙 발생시', source: 'ADS-B + UBIKAIS', endpoint: `/api/amhs?type=DEP&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 DEP' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 20, name: '도착보 (ARR)', sub: '실제 착륙(ATA) 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '착륙 발생시', source: 'ADS-B + UBIKAIS', endpoint: `/api/amhs?type=ARR&dest=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 ARR' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 21, name: '관제음성 (LiveATC)', sub: '실시간 관제탑 오디오 라이브 스트림 (글로벌 테스트)', format: 'AUDIO/MPEG (MP3)', interval: '실시간 스트리밍', source: 'LiveATC.net (실시간 가동)', endpoint: '/api/voice?channel=KJFK', doc: 'Live ATC Stream Engine' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 22, name: '전자비행스트립 (EFS)', sub: '사용자 자체 관제 시스템 연계 (수신 대기)', format: 'EFS Standard JSON', interval: '사용자 송출주기', source: '사용자 자체 시스템 (연계 대기)', endpoint: `/api/flight-schedule?airport=${isAll ? 'RKSI' : ap}&efs=true`, doc: 'EFS Strip Gateway' },
       ];
     }
 
@@ -279,31 +511,35 @@
     let currentRawText = '';
 
     function renderMatrix() {
-      const grid = document.getElementById('airport-matrix-grid');
-      grid.innerHTML = '';
+      const container = document.getElementById('matrix-chips');
+      container.innerHTML = '';
+
+      // Add ALL chip
+      const allChip = document.createElement('div');
+      allChip.className = `chip ${currentAirport === 'ALL' ? 'active' : ''}`;
+      allChip.onclick = () => changeAirport('ALL');
+      allChip.innerHTML = `<span class="chip-code">⚡ ALL</span><span style="font-size:9px;">전국</span>`;
+      container.appendChild(allChip);
+
       KOREAN_AIRPORTS.forEach(ap => {
         const isCurrent = currentAirport === ap.code;
-        const div = document.createElement('div');
-        div.className = `p-1.5 rounded-md border text-center cursor-pointer transition ${isCurrent ? 'bg-cyan-500/20 border-cyan-500 text-white shadow-sm' : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'}`;
-        div.onclick = () => changeAirport(ap.code);
-        div.innerHTML = `
-          <div class="font-bold text-[11px] font-mono">${ap.code}</div>
-          <div class="text-[10px] truncate text-zinc-400">${ap.name}</div>
-          <div class="flex items-center justify-center gap-1 mt-1 text-[9px] font-mono">
-            <span class="text-emerald-400" title="AMOS">A●</span>
-            <span class="text-emerald-400" title="METAR">M●</span>
-            <span class="${ap.fids ? 'text-emerald-400' : 'text-zinc-600'}" title="FIDS">F●</span>
-          </div>
+        const chip = document.createElement('div');
+        chip.className = `chip ${isCurrent ? 'active' : ''}`;
+        chip.onclick = () => changeAirport(ap.code);
+        chip.innerHTML = `
+          <span class="chip-dot"></span>
+          <span class="chip-code">${ap.code}</span>
+          <span style="font-size:9px; color:#a1a1aa;">${ap.name}</span>
         `;
-        grid.appendChild(div);
+        container.appendChild(chip);
       });
     }
 
     function getBadgeClass(format) {
-      if (format.includes('Cat.')) return 'bg-purple-500/15 text-purple-300 border-purple-500/30';
-      if (format.includes('AMHS') || format.includes('XML')) return 'bg-blue-500/15 text-blue-300 border-blue-500/30';
-      if (format.includes('AUDIO')) return 'bg-rose-500/15 text-rose-300 border-rose-500/30';
-      return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+      if (format.includes('Cat.')) return 'badge-purple';
+      if (format.includes('AMHS') || format.includes('XML')) return 'badge-blue';
+      if (format.includes('AUDIO')) return 'badge-rose';
+      return 'badge-green';
     }
 
     function renderTable() {
@@ -323,9 +559,8 @@
         if (item.group !== lastGroup) {
           lastGroup = item.group;
           const grpTr = document.createElement('tr');
-          grpTr.className = 'bg-zinc-900/80 border-t border-b border-zinc-800 pointer-events-none';
           grpTr.innerHTML = `
-            <td colspan="6" class="py-2 px-3 text-[11px] font-bold text-cyan-400 tracking-wider">
+            <td colspan="6" class="group-row">
               ${item.group}
             </td>
           `;
@@ -334,26 +569,22 @@
 
         const tr = document.createElement('tr');
         const isActive = activeItem && activeItem.no === item.no;
-        tr.className = `cursor-pointer transition-colors border-b border-zinc-900/60 ${isActive ? 'bg-cyan-950/40 border-l-2 border-l-cyan-400' : 'hover:bg-zinc-900/50'}`;
+        if (isActive) tr.className = 'active';
         tr.onclick = () => selectItem(item);
 
         const statusInfo = liveStatusMap[item.no] || { state: 'pending', text: '대기 중...' };
-        const statusBadge = statusInfo.state === 'ok' 
-          ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">● ' + statusInfo.text + '</span>'
-          : statusInfo.state === 'err'
-          ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30">● ' + statusInfo.text + '</span>'
-          : '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/30">● ' + statusInfo.text + '</span>';
+        const statusClass = statusInfo.state === 'ok' ? 'ok' : statusInfo.state === 'err' ? 'err' : 'pending';
 
         tr.innerHTML = `
-          <td class="py-2.5 px-3 text-center font-mono font-bold text-zinc-500">${item.no}</td>
-          <td class="py-2.5 px-3">
-            <div class="font-bold text-zinc-100">${item.name}</div>
-            <div class="text-[11px] text-zinc-400 truncate max-w-[220px]">${item.sub}</div>
+          <td style="text-align: center; font-family: monospace; font-weight: 700; color: #71717a;">${item.no}</td>
+          <td>
+            <div style="font-weight: 700; color: #fff;">${item.name}</div>
+            <div style="font-size: 10px; color: #71717a; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.sub}</div>
           </td>
-          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-mono border ${getBadgeClass(item.format)}">${item.format}</span></td>
-          <td class="py-2.5 px-3 text-zinc-300 font-mono text-[11px]">${item.interval}</td>
-          <td class="py-2.5 px-3 text-cyan-400/90 text-[11px]">${item.source}</td>
-          <td class="py-2.5 px-3 text-center">${statusBadge}</td>
+          <td><span class="badge ${getBadgeClass(item.format)}">${item.format}</span></td>
+          <td style="color: #a1a1aa; font-family: monospace; font-size: 10px;">${item.interval}</td>
+          <td style="color: #38bdf8; font-size: 10px;">${item.source}</td>
+          <td style="text-align: center;"><span class="status-pill ${statusClass}">● ${statusInfo.text}</span></td>
         `;
         tbody.appendChild(tr);
       });
@@ -361,9 +592,9 @@
 
     function switchTab(tab) {
       currentTab = tab;
-      document.getElementById('tab-converted').className = tab === 'converted' ? 'flex-1 py-2.5 text-center font-semibold text-cyan-400 border-b-2 border-cyan-500 bg-zinc-800/40 transition' : 'flex-1 py-2.5 text-center font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition';
-      document.getElementById('tab-raw').className = tab === 'raw' ? 'flex-1 py-2.5 text-center font-semibold text-cyan-400 border-b-2 border-cyan-500 bg-zinc-800/40 transition' : 'flex-1 py-2.5 text-center font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition';
-      document.getElementById('tab-guide').className = tab === 'guide' ? 'flex-1 py-2.5 text-center font-semibold text-cyan-400 border-b-2 border-cyan-500 bg-zinc-800/40 transition' : 'flex-1 py-2.5 text-center font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition';
+      document.getElementById('tab-converted').className = tab === 'converted' ? 'tab-btn active' : 'tab-btn';
+      document.getElementById('tab-raw').className = tab === 'raw' ? 'tab-btn active' : 'tab-btn';
+      document.getElementById('tab-guide').className = tab === 'guide' ? 'tab-btn active' : 'tab-btn';
 
       const codeViewer = document.getElementById('code-viewer');
       if (tab === 'converted') codeViewer.textContent = currentConvertedText || '// 규격 변환 전문 로딩 중...';
@@ -532,27 +763,23 @@
       if (!textToCopy) return;
       navigator.clipboard.writeText(textToCopy);
       const btn = document.getElementById('copy-btn');
-      btn.textContent = '✅ 복사완료!';
-      setTimeout(() => { btn.textContent = '📋 전문 복사'; }, 2000);
+      btn.textContent = '✅ 완료';
+      setTimeout(() => { btn.textContent = '📋 복사'; }, 2000);
     }
 
     async function runLiveHealthCheckAll() {
       const btn = document.getElementById('ping-btn');
-      const icon = document.getElementById('ping-icon');
-      const text = document.getElementById('ping-text');
-
-      icon.classList.add('animate-spin-slow');
-      text.textContent = '점검 중...';
+      btn.textContent = '⚡ 점검 중...';
       let okCount = 0;
 
       await Promise.all(CATALOG.map(async (item) => {
         if (item.no === 21) {
-          liveStatusMap[item.no] = { state: 'ok', text: '정상 (Stream)' };
+          liveStatusMap[item.no] = { state: 'ok', text: 'Stream' };
           okCount++;
           return;
         }
         if (item.no === 22) {
-          liveStatusMap[item.no] = { state: 'pending', text: '미수신 (대기)' };
+          liveStatusMap[item.no] = { state: 'pending', text: '대기' };
           return;
         }
 
@@ -561,18 +788,17 @@
           const res = await fetch(item.endpoint + (item.endpoint.includes('?') ? '&' : '?') + '_t=' + Date.now());
           const elapsed = Math.round(performance.now() - t0);
           if (res.ok) {
-            liveStatusMap[item.no] = { state: 'ok', text: `정상 (${elapsed}ms)` };
+            liveStatusMap[item.no] = { state: 'ok', text: `${elapsed}ms` };
             okCount++;
           } else {
             liveStatusMap[item.no] = { state: 'err', text: `HTTP ${res.status}` };
           }
         } catch (e) {
-          liveStatusMap[item.no] = { state: 'err', text: '연결실패' };
+          liveStatusMap[item.no] = { state: 'err', text: '실패' };
         }
       }));
 
-      icon.classList.remove('animate-spin-slow');
-      text.textContent = '전체 핑 점검';
+      btn.textContent = '⚡ 전체 실시간 핑';
       renderTable();
     }
 
