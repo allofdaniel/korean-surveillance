@@ -198,7 +198,14 @@ async function handleAmos(req, res) {
     ]
   };
 
-  const targetList = RUNWAYS_MAP[targetIcao] || RUNWAYS_MAP.RKSI;
+  let targetList = RUNWAYS_MAP[targetIcao];
+  if (!targetList) {
+    if (rawIcao === null || targetIcao === 'ALL') {
+      targetList = Object.values(RUNWAYS_MAP).flat();
+    } else {
+      targetList = RUNWAYS_MAP.RKSI;
+    }
+  }
   const fullAmosItems = targetList.map((r, idx) => ({
     tm,
     stnId: 100 + idx,
