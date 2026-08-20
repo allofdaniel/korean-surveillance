@@ -58,7 +58,8 @@ export default async function handler(req, res) {
           return res.status(200).json({
             dataSource: 'AMO 항공기상청 (AmosRealTimeMqc.do 원천 관측치)',
             timestamp: new Date().toISOString(),
-            rawAmosRecord: amosItem
+            rawAmosRecord: amosItem,
+            rawAviationWeatherText: metReportText
           });
         }
 

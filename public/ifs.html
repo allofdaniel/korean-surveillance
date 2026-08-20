@@ -34,7 +34,7 @@
       background: var(--bg);
       color: var(--primary-dim);
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11.5px;
       line-height: 1.25;
       user-select: none;
       -webkit-font-smoothing: antialiased;
@@ -151,7 +151,31 @@
       overflow: hidden;
     }
 
-    /* Section 1: Weather Grid (Flush layout, no dead space) */
+    /* Weather Mode Selector Button in Header */
+    .wind-mode-group {
+      display: flex;
+      gap: 4px;
+    }
+    .wind-mode-btn {
+      background: #1c1b1b;
+      border: 1px solid var(--outline);
+      color: #a1a1aa;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .wind-mode-btn:hover { border-color: var(--primary); color: #fff; }
+    .wind-mode-btn.active {
+      background: rgba(0, 255, 0, 0.18);
+      border-color: var(--primary);
+      color: var(--primary-bright);
+    }
+
+    /* Section 1: Weather Grid */
     .weather-grid-container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -169,6 +193,8 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      min-width: 0;
+      overflow: hidden;
     }
     .rwy-card.active-use {
       border-color: rgba(0, 255, 0, 0.6);
@@ -190,27 +216,27 @@
     }
     .rwy-title-bar {
       background: var(--surface-container);
-      padding: 3px 6px;
-      font-size: 10.5px;
+      padding: 2px 5px;
+      font-size: 10px;
       font-weight: 800;
       color: var(--amber);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 22px;
+      height: 20px;
     }
     .use-tag {
-      font-size: 8.5px;
+      font-size: 8px;
       background: var(--primary);
       color: #000;
-      padding: 0.5px 4px;
+      padding: 0.5px 3.5px;
       border-radius: 2px;
       font-weight: 800;
     }
 
     /* Wind Rose on Right side */
     .rwy-top-right {
-      width: 82px;
+      width: 76px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -226,33 +252,44 @@
     }
     .metric-col {
       flex: 1;
-      padding: 2px 2px;
+      padding: 1.5px 2px;
       text-align: center;
       display: flex;
       flex-direction: column;
       justify-content: center;
       min-width: 0;
       height: 100%;
+      overflow: hidden;
     }
-    .metric-label { font-size: 8.5px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+    .metric-label {
+      font-size: 8.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .metric-val {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: var(--primary-bright);
       line-height: 1.1;
+      white-space: nowrap;
     }
     .metric-val-sm {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       color: var(--primary-bright);
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* Section 2: Raw MET Feed */
     .raw-met-box {
       background: #000;
       padding: 4px 8px;
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--primary-dim);
       display: flex;
       flex-direction: column;
@@ -280,11 +317,11 @@
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 11.5px;
+      font-size: 11px;
     }
     thead { position: sticky; top: 0; background: var(--surface-container); z-index: 10; border-bottom: 1px solid var(--outline); }
-    th { padding: 3px 6px; font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    td { padding: 2.5px 6px; border-bottom: 1px solid #1c1b1b; vertical-align: middle; }
+    th { padding: 3px 5px; font-size: 8.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    td { padding: 2px 5px; border-bottom: 1px solid #1c1b1b; vertical-align: middle; }
     tr:hover { background: #181818; }
     
     .status-dep { color: var(--primary); font-weight: 800; }
@@ -313,19 +350,19 @@
 
     /* Section 4: Bottom Clocks & Editable Airport Notices */
     .bottom-bar {
-      height: 86px;
+      height: 82px;
       display: flex;
       gap: 4px;
       flex-shrink: 0;
     }
     .clock-box {
-      width: 210px;
+      width: 200px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      padding: 4px 8px;
+      gap: 5px;
+      padding: 4px 6px;
       background: var(--bg-dim);
       flex-shrink: 0;
     }
@@ -337,13 +374,13 @@
       padding: 0 4px;
     }
     .clock-tag {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
       color: var(--text-muted);
       letter-spacing: 0.08em;
     }
     .clock-digits-unified {
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 800;
       color: var(--primary-bright);
       letter-spacing: 0.06em;
@@ -365,9 +402,9 @@
       background: rgba(0, 255, 0, 0.15);
       border: 1px solid var(--primary);
       color: var(--primary-bright);
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
-      padding: 1px 7px;
+      padding: 1px 6px;
       border-radius: 2px;
       cursor: pointer;
       font-family: var(--font-mono);
@@ -383,11 +420,11 @@
       border: none;
       color: var(--primary-soft);
       font-family: var(--font-mono);
-      font-size: 11.5px;
-      padding: 5px 8px;
+      font-size: 11px;
+      padding: 4px 8px;
       resize: none;
       outline: none;
-      line-height: 1.4;
+      line-height: 1.35;
     }
     .notices-textarea:focus {
       background: rgba(0, 0, 0, 0.4);
@@ -433,18 +470,22 @@
 
   <!-- Main Display -->
   <main>
-    <!-- 1. Real-time Weather Section (Flush layout, no gaps) -->
+    <!-- 1. Real-time Weather Section with 2-Min MAG / 10-Min TRUE Toggle -->
     <div class="grid-box">
       <div class="grid-header">
         <span>WEATHER FEED</span>
+        <div class="wind-mode-group">
+          <button id="btn-wind-2min" class="wind-mode-btn active" onclick="setWindMode('2min')">2분 자방위 (MAG)</button>
+          <button id="btn-wind-10min" class="wind-mode-btn" onclick="setWindMode('10min')">10분 진방위 (TRUE)</button>
+        </div>
       </div>
 
       <div class="weather-grid-container" id="weather-runways-container">
-        <!-- Dynamically rendered (2 per row, indicator on right of top 3 rows) -->
+        <!-- Dynamically rendered -->
       </div>
     </div>
 
-    <!-- 2. Raw MET Reports (Clean, Non-flickering) -->
+    <!-- 2. Raw MET Reports (Clean Independent Updates) -->
     <div class="grid-box">
       <div class="grid-header">
         <span>RAW MET REPORTS</span>
@@ -465,7 +506,7 @@
       </div>
     </div>
 
-    <!-- 3. Schedule Split (DEP / ARR from Gateway API with [출발도착완료수 / 전체 스케줄수]) -->
+    <!-- 3. Schedule Split (Full 24-Hour Schedule with [출발도착완료수 / 하루 전체 스케줄수]) -->
     <div class="schedule-split">
       <!-- DEPARTURES -->
       <div class="grid-box" style="flex: 1;">
@@ -520,7 +561,7 @@
 
     <!-- 4. Bottom Bar (Unified High-Visibility Clocks & Editable Airport Notices) -->
     <div class="bottom-bar">
-      <!-- Atomic Digital Clocks (Unified Font Size & Formatting) -->
+      <!-- Atomic Digital Clocks -->
       <div class="grid-box clock-box">
         <div class="clock-row-item">
           <span class="clock-tag">UTC</span>
@@ -551,6 +592,7 @@
     const API_BASE = window.location.origin;
     let currentAirport = 'RKJY';
     let rawRunwaysData = [];
+    let windMode = '2min'; // '2min' (자방위) or '10min' (진방위)
     
     // Persistent Status History for 5-time Blinking Detection
     const flightStatusHistory = new Map();
@@ -628,7 +670,6 @@
       const rwyTilt = rwyHeadingDeg - 180;
 
       // Aircraft symbol at START/Approach threshold (y = -19), rotated 180 to face landing/takeoff heading
-      // Displayed on ALL runways for clear heading orientation
       const planeFill = isActiveRwy ? '#eaffde' : '#77ff61';
       const planeOpacity = isActiveRwy ? '1' : '0.75';
 
@@ -639,7 +680,7 @@
       `;
 
       return `
-        <svg viewBox="-50 -50 100 100" width="76" height="76" class="runway-rose-svg">
+        <svg viewBox="-50 -50 100 100" width="72" height="72" class="runway-rose-svg">
           <!-- Compass Circle -->
           <circle cx="0" cy="0" r="36" stroke="#00ff00" stroke-width="1.6" fill="none" />
           
@@ -656,11 +697,11 @@
           <!-- Runway Box (Tilted to true heading) -->
           <g transform="rotate(${rwyTilt})">
             <rect x="-5.5" y="-28" width="11" height="56" stroke="#00ff00" stroke-width="1.3" fill="none" rx="1" />
-            <!-- Aircraft START Threshold Indicator (Displayed for ALL runways) -->
+            <!-- Aircraft START Threshold Indicator -->
             ${airplaneSvg}
           </g>
 
-          <!-- Wind Arrow (Exact unmodified degree from API packet) -->
+          <!-- Wind Arrow -->
           <g transform="rotate(${windDirDeg})">
             <line x1="0" y1="-34" x2="0" y2="4" stroke="#00ff00" stroke-width="3" stroke-linecap="round" />
             <polygon points="0,13 -4.5,0 4.5,0" fill="#00ff00" />
@@ -686,7 +727,6 @@
         console.warn('Weather sync error:', e.message);
       }
 
-      // If empty, generate fallback runways for this airport so it's NEVER blank
       if (!rawRunwaysData || rawRunwaysData.length === 0) {
         rawRunwaysData = [
           { rwyDir: '17', wd: '170', ws: '8.5', max: '12.5', min: '6.5', tmp: '29.0', dp: '24.0', base1lyr: 'FEW 3000FT', qnhHpa: '1012', rvr: 'P2000', mor: '10000', rwyUse: 'Y' },
@@ -696,12 +736,23 @@
 
       renderRunwaysGrid();
 
-      // Fetch Raw METAR & TAF Reports (Clean plain-text strings, only update on change)
+      // Fetch MET REPORT, METAR, and TAF cleanly and independently
       try {
-        const [metarRes, tafRes] = await Promise.all([
+        const [metRepRes, metarRes, tafRes] = await Promise.all([
+          fetch(`${API_BASE}/api/amhs?type=METREPORT&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
           fetch(`${API_BASE}/api/amhs?type=METAR&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
           fetch(`${API_BASE}/api/amhs?type=TAF&raw=true&icao=${currentAirport}&_t=${Date.now()}`)
         ]);
+
+        if (metRepRes.ok) {
+          const rData = await metRepRes.json();
+          const txt = rData.rawAviationWeatherText || '';
+          if (txt && !txt.includes('<')) {
+            const clean = txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
+            const elMetReport = document.getElementById('raw-met-report');
+            if (elMetReport && elMetReport.textContent !== clean) elMetReport.textContent = clean;
+          }
+        }
 
         if (metarRes.ok) {
           const mData = await metarRes.json();
@@ -709,9 +760,7 @@
           if (txt && !txt.includes('<')) {
             const clean = txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
             const elMetar = document.getElementById('raw-metar');
-            const elMetReport = document.getElementById('raw-met-report');
             if (elMetar && elMetar.textContent !== clean) elMetar.textContent = clean;
-            if (elMetReport && elMetReport.textContent !== clean.replace('METAR', 'MET REPORT')) elMetReport.textContent = clean.replace('METAR', 'MET REPORT');
           }
         }
 
@@ -725,6 +774,13 @@
           }
         }
       } catch (e) {}
+    }
+
+    function setWindMode(mode) {
+      windMode = mode;
+      document.getElementById('btn-wind-2min').classList.toggle('active', mode === '2min');
+      document.getElementById('btn-wind-10min').classList.toggle('active', mode === '10min');
+      renderRunwaysGrid();
     }
 
     function renderRunwaysGrid() {
@@ -743,10 +799,11 @@
         const rwyDirStr = rwy.rwyDir || (idx === 0 ? '17' : '35');
         const rwyHeading = getRunwayHeading(rwyDirStr);
         
-        // Exact unmodified raw packet values (2-Min Magnetic Avg)
-        const wd = parseInt(rwy.wd || rwy.wd2minAvg || rwy.wd10minAvg) || 170;
-        const ws = parseFloat(rwy.ws || rwy.wspd2minAvg || rwy.wspd10minAvg) || 8.5;
-        const maxWs = parseFloat(rwy.max || rwy.wspd2minMax || rwy.wspd10minMax) || ws;
+        // Use 2-min MAG or 10-min TRUE according to active toggle
+        const is10Min = windMode === '10min';
+        const wd = parseInt(is10Min ? (rwy.wd10minAvg || rwy.wd) : (rwy.wd2minAvg || rwy.wd)) || 170;
+        const ws = parseFloat(is10Min ? (rwy.wspd10minAvg || rwy.ws) : (rwy.wspd2minAvg || rwy.ws)) || 8.5;
+        const maxWs = parseFloat(is10Min ? (rwy.wspd10minMax || rwy.max) : (rwy.wspd2minMax || rwy.max)) || ws;
         const minWs = parseFloat(rwy.min) || Math.max(0, parseFloat((ws - 2).toFixed(1)));
         const gust = rwy.gust && rwy.gust !== '-' ? rwy.gust : '-';
         
@@ -754,10 +811,10 @@
         const tmp = rwy.tmp ? `${parseFloat(rwy.tmp).toFixed(1)}°C` : '29.0°C';
         const dp = rwy.dp ? `${parseFloat(rwy.dp).toFixed(1)}°C` : '24.0°C';
         const humidity = rwy.hm ? `${rwy.hm}%` : calculateHumidity(rwy.tmp || 29, rwy.dp || 24);
-        const tmpDpHum = `${tmp} / ${dp} (${humidity})`;
+        const tmpDpHum = `${tmp}/${dp}(${humidity})`;
 
         let cldBase = rwy.base1lyr || rwy.cld || 'FEW 3000FT';
-        if (cldBase === 'NCD') cldBase = 'NCD (운고 미검출)';
+        if (cldBase === 'NCD') cldBase = 'NCD';
         else if (/^\d+$/.test(cldBase)) cldBase = `FEW ${cldBase}FT`;
 
         const qnh = rwy.qnhHpa || (rwy.qnhOrigin ? (rwy.qnhOrigin / 10).toFixed(0) : '1012');
@@ -772,20 +829,20 @@
         const rwyEl = document.createElement('div');
         rwyEl.className = `rwy-card ${isActive ? 'active-use' : ''}`;
         
-        // Requested Complete Layout: Top Section + Bottom Section (Including Temp, DP, Humidity, Cloud Base)
+        // Clean layout with 2 well-proportioned bottom rows (Zero overlap)
         rwyEl.innerHTML = `
           <div class="rwy-top-split b-b">
             <div class="rwy-top-left b-r">
               <div class="rwy-title-bar b-b">
-                <span>RWY ${rwyDirStr} WIND DATA (2분 자방위)</span>
+                <span>RWY ${rwyDirStr} WIND DATA</span>
                 ${isActive ? '<span class="use-tag">IN-USE</span>' : ''}
               </div>
               <div class="metric-row b-b">
                 <div class="metric-col b-r"><span class="metric-label">풍향(°)</span></div>
-                <div class="metric-col b-r"><span class="metric-label">평균풍속(kt)</span></div>
-                <div class="metric-col b-r"><span class="metric-label">최저풍속(kt)</span></div>
-                <div class="metric-col b-r"><span class="metric-label">최대풍속(kt)</span></div>
-                <div class="metric-col"><span class="metric-label">순간돌풍(kt)</span></div>
+                <div class="metric-col b-r"><span class="metric-label">평균(kt)</span></div>
+                <div class="metric-col b-r"><span class="metric-label">최저(kt)</span></div>
+                <div class="metric-col b-r"><span class="metric-label">최대(kt)</span></div>
+                <div class="metric-col"><span class="metric-label">돌풍(kt)</span></div>
               </div>
               <div class="metric-row">
                 <div class="metric-col b-r"><span class="metric-val">${String(wd).padStart(3, '0')}</span></div>
@@ -799,28 +856,24 @@
               ${createRunwayRoseSvg(rwyDirStr, rwyHeading, wd, isActive)}
             </div>
           </div>
+          <!-- Sub-Row 1: Wind Vectors & Aerodrome Basics -->
           <div class="metric-row b-b">
-            <div class="metric-col b-r"><span class="metric-label">정풍(H)/배풍(T)</span></div>
-            <div class="metric-col b-r"><span class="metric-label">좌(L)/우(R)측풍</span></div>
-            <div class="metric-col b-r"><span class="metric-label">기온 / 노점(습도)</span></div>
-            <div class="metric-col b-r"><span class="metric-label">운고 / 운량</span></div>
-            <div class="metric-col b-r"><span class="metric-label">QNH(hPa/inHg)</span></div>
-            <div class="metric-col"><span class="metric-label">RVR / 시정 (RWY ${rwyDirStr})</span></div>
+            <div class="metric-col b-r"><span class="metric-label">정풍/배풍</span><span class="metric-val-sm">${vectors.headTail}</span></div>
+            <div class="metric-col b-r"><span class="metric-label">좌/우측풍</span><span class="metric-val-sm">${vectors.cross}</span></div>
+            <div class="metric-col b-r" style="flex: 1.4;"><span class="metric-label">기온/노점(습도)</span><span class="metric-val-sm">${tmpDpHum}</span></div>
+            <div class="metric-col" style="flex: 1.2;"><span class="metric-label">QNH(hPa/inHg)</span><span class="metric-val-sm">${qnh}/${qnhInhg}</span></div>
           </div>
+          <!-- Sub-Row 2: Ceiling & Vis / RVR -->
           <div class="metric-row">
-            <div class="metric-col b-r"><span class="metric-val-sm">${vectors.headTail}</span></div>
-            <div class="metric-col b-r"><span class="metric-val-sm">${vectors.cross}</span></div>
-            <div class="metric-col b-r"><span class="metric-val-sm">${tmpDpHum}</span></div>
-            <div class="metric-col b-r"><span class="metric-val-sm">${cldBase}</span></div>
-            <div class="metric-col b-r"><span class="metric-val-sm">${qnh} / ${qnhInhg}</span></div>
-            <div class="metric-col"><span class="metric-val-sm">${rvr} / ${mor}</span></div>
+            <div class="metric-col b-r"><span class="metric-label">운고 / 운량</span><span class="metric-val-sm">${cldBase}</span></div>
+            <div class="metric-col"><span class="metric-label">RVR / 시정 (RWY ${rwyDirStr})</span><span class="metric-val-sm">${rvr} / ${mor}</span></div>
           </div>
         `;
         container.appendChild(rwyEl);
       });
     }
 
-    // 6. Fetch Flight Schedules (FIDS DEP & ARR) with [출발도착완료수 / 전체 스케줄수]
+    // 6. Fetch Flight Schedules (FIDS DEP & ARR) Full 24H with [출발도착완료수 / 전체 스케줄수]
     async function syncFlightSchedules() {
       try {
         const res = await fetch(`${API_BASE}/api/flight-schedule?airport=${currentAirport}&_t=${Date.now()}`);
@@ -836,7 +889,7 @@
         const depTbody = document.getElementById('dep-tbody');
         depTbody.innerHTML = '';
 
-        deps.slice(0, 15).forEach(f => {
+        deps.forEach(f => {
           const fId = f.fpId || f.flightNumber || f.fn;
           const status = (f.depStatus || f.status || 'SCH').toUpperCase();
           const prevStatus = flightStatusHistory.get(`DEP_${fId}`);
@@ -865,7 +918,7 @@
         const arrTbody = document.getElementById('arr-tbody');
         arrTbody.innerHTML = '';
 
-        arrs.slice(0, 15).forEach(f => {
+        arrs.forEach(f => {
           const fId = f.fpId || f.flightNumber || f.fn;
           const status = (f.arrStatus || f.status || 'ENR').toUpperCase();
           const prevStatus = flightStatusHistory.get(`ARR_${fId}`);
