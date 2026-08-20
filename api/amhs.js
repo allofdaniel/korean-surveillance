@@ -26,6 +26,12 @@ export default async function handler(req, res) {
 
     const isRaw = (url.searchParams.get('raw') || req.query?.raw) === 'true';
 
+    const now = new Date();
+    const filingTime = getAtsFilingTime(now);
+    const day = String(now.getUTCDate()).padStart(2, '0');
+    const hour = String(now.getUTCHours()).padStart(2, '0');
+    const min = String(now.getUTCMinutes()).padStart(2, '0');
+
     let xmlOutput = '';
     let rawOutput = null;
     let contentType = 'application/xml; charset=utf-8';

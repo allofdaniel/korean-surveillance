@@ -508,6 +508,15 @@
       let okCount = 0;
 
       await Promise.all(CATALOG.map(async (item) => {
+        if (item.no === 21) {
+          liveStatusMap[item.no] = { state: 'pending', text: '보안제한' };
+          return;
+        }
+        if (item.no === 22) {
+          liveStatusMap[item.no] = { state: 'pending', text: '미수신 (대기)' };
+          return;
+        }
+
         const t0 = performance.now();
         try {
           const res = await fetch(item.endpoint + (item.endpoint.includes('?') ? '&' : '?') + '_t=' + Date.now());
@@ -523,7 +532,8 @@
         }
       }));
 
-      document.getElementById('stat-health').textContent = `● ${okCount}/${CATALOG.length}개 정상 가동 (${Math.round(okCount/CATALOG.length*100)}%)`;
+      const totalActive = CATALOG.length - 2; // excluding restricted 21 & standby 22
+      document.getElementById('stat-health').textContent = `● ${okCount}/${totalActive}개 정상 가동 (21개 연동 / 2개 대기·제한)`;
       renderTable();
     }
 

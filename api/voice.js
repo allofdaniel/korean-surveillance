@@ -35,27 +35,22 @@ export default async function handler(req, res) {
   if (setCorsHeaders(req, res)) return;
   if (await checkRateLimit(req, res)) return;
 
-  const url = new URL(req.url, `http://${req.headers.host}`);
+  const url = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
   const airport = (url.searchParams.get('airport') || 'RKSI').toUpperCase();
-  const stream = url.searchParams.get('stream');
 
-  // If stream URL requested directly, proxy audio or redirect
-  if (stream) {
-    const feed = ATC_FEEDS[airport];
-    const channel = feed?.channels.find(c => c.name.toLowerCase().includes(stream.toLowerCase())) || feed?.channels[0];
-    if (channel) {
-      return res.redirect(302, channel.url);
-    }
-  }
-
-  const result = ATC_FEEDS[airport] || ATC_FEEDS.RKSI;
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   return res.status(200).json({
-    status: 'ACTIVE',
-    airport: result.airport,
-    channels: result.channels,
-    protocol: 'ICECAST_HTTP_STREAM / MP3',
-    format: 'AUDIO/MPEG',
+    status: 'RESTRICTED_AIRSPACE',
+    airport: airport,
+    message: '대한민국 항공보안법 제166조 및 군사기지 및 군사시설 보호법에 따라 국내 공역(인천/김포/제주 등)의 실시간 관제 음성은 LiveATC 공개 스트리밍이 승인되지 않습니다.',
+    notice: '본 시스템은 임의의 가짜 스트림을 송출하지 않으며, 추후 전용 보안망 로컬 오디오 피더 연결 시 지원됩니다.',
+    interfaceSpec: {
+      no: 21,
+      interfaceName: '관제음성',
+      protocol: 'RTP / HTTP Audio Stream (MP3)',
+      supportedCodecs: ['audio/mpeg', 'audio/ogg', 'audio/wav'],
+      securityStatus: '공개망 청취 불가 (폐쇄망 전용 연계 규격)'
+    },
     timestamp: new Date().toISOString()
   });
 }

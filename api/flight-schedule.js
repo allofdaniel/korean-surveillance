@@ -41,7 +41,31 @@ export default async function handler(req, res) {
   const airport = (parsedUrl.searchParams.get('airport') || req.query?.airport || 'RKSI').toUpperCase();
   const depArr = parsedUrl.searchParams.get('depArr') || req.query?.depArr || 'dep';
 
-  // 1. If general FIDS / EFS schedule list is requested
+  const isEfs = parsedUrl.searchParams.get('efs') === 'true' || req.query?.efs === 'true';
+
+  if (isEfs) {
+    return res.status(200).json({
+      status: 'STANDBY',
+      interfaceNo: 22,
+      interfaceName: '전자비행스트립 (EFS)',
+      source: '사용자 자체 관제 시스템 (미수신/연계 대기)',
+      message: '사용자 측 관제 시스템으로부터 전자비행스트립(EFS) 데이터 연계 대기 중입니다. (미수신)',
+      notice: '본 시스템은 임의의 가짜 스트립 데이터를 생성하지 않으며, 사용자 관제 서버 연동 시 실시간 중계됩니다.',
+      expectedSchema: {
+        callsign: 'string (e.g. KAL867)',
+        ssrCode: 'string (4-digit octal)',
+        acType: 'string (ICAO code)',
+        origin: 'string (ICAO)',
+        destination: 'string (ICAO)',
+        clearedAltitude: 'number (ft)',
+        assignedRunway: 'string',
+        controlState: 'PRE_FLIGHT | TAXI | AIRBORNE | HANDOVER'
+      },
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  // 1. If general FIDS schedule list is requested
   if (!flight) {
     try {
       const [depList, arrList] = await Promise.all([
