@@ -25,16 +25,28 @@ export default async function handler(req, res) {
       return res.status(200).json(record);
     }
 
-    // Fetch live aircraft from internal API or airplanes.live
+    // Fetch live aircraft from adsb.lol or airplanes.live
     let aircraftList = [];
     try {
-      const liveRes = await fetch(`https://api.airplanes.live/v2/point/${KOREA_CENTER.lat}/${KOREA_CENTER.lon}/${KOREA_CENTER.radius}`);
+      const liveRes = await fetch(`https://api.adsb.lol/v2/point/${KOREA_CENTER.lat}/${KOREA_CENTER.lon}/${KOREA_CENTER.radius}`, {
+        headers: { 'User-Agent': 'KoreanSurveillance/1.0' }
+      });
       if (liveRes.ok) {
         const json = await liveRes.json();
-        aircraftList = json.ac || [];
+        aircraftList = (json.ac || []).map(ac => ({
+          hex: ac.hex || '',
+          flight: (ac.flight || '').trim() || ac.hex,
+          lat: ac.lat,
+          lon: ac.lon,
+          altitude_ft: ac.alt_geom || ac.alt_baro || 0,
+          ground_speed: ac.gs || 0,
+          track: ac.track || 0,
+          squawk: ac.squawk || '7000',
+          category: ac.category || 'A3'
+        })).filter(a => a.lat && a.lon);
       }
     } catch (e) {
-      console.warn('Live ADS-B fetch error, synthesizing fallback:', e.message);
+      console.warn('Live ADS-B fetch error, trying backup:', e.message);
     }
 
     if (aircraftList.length === 0) {

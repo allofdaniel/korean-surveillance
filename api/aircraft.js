@@ -297,14 +297,12 @@ export default async function handler(req, res) {
   if (await checkRateLimit(req, res)) return;
 
   // 1초 폴링 환경 — edge cache 짧게(1s) + stale-while-revalidate 로 끊김 방지
-  res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate=3');
+  const parsedUrl = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+  const queryLat = parsedUrl.searchParams.get('lat') || req.query?.lat || '37.5';
+  const queryLon = parsedUrl.searchParams.get('lon') || req.query?.lon || '127.0';
+  const queryRadius = parsedUrl.searchParams.get('radius') || req.query?.radius || '250';
 
-  const { lat, lon, radius } = req.query;
-  if (!lat || !lon) {
-    return res.status(400).json({ error: 'lat and lon parameters are required', ac: [] });
-  }
-
-  const validation = validateCoordinates(lat, lon, radius);
+  const validation = validateCoordinates(queryLat, queryLon, queryRadius);
   if (!validation.valid) {
     return res.status(400).json({ error: validation.error, ac: [] });
   }
