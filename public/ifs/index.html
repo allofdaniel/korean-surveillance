@@ -143,21 +143,27 @@
       overflow: hidden;
     }
 
-    /* Section 1: Weather Grid */
+    /* Section 1: Weather Grid (Multi-Runway Support) */
     .weather-container {
       display: flex;
       width: 100%;
       flex-shrink: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
     }
     .rwy-card {
+      min-width: 320px;
       flex: 1;
       display: flex;
       flex-direction: column;
     }
+    .rwy-card.active-use {
+      background: rgba(0, 255, 0, 0.02);
+    }
     .rwy-title-bar {
       background: var(--surface-container);
-      padding: 4px 10px;
-      font-size: 11px;
+      padding: 3px 8px;
+      font-size: 10.5px;
       font-weight: 800;
       color: var(--amber);
       display: flex;
@@ -165,46 +171,57 @@
       justify-content: space-between;
       border-bottom: 1px solid var(--outline);
     }
+    .use-tag {
+      font-size: 9px;
+      background: var(--primary);
+      color: #000;
+      padding: 1px 4px;
+      border-radius: 2px;
+      font-weight: 800;
+      margin-left: 4px;
+    }
 
     /* Dynamic SVG Wind & Runway Rose Gauge Container */
     .rwy-rose-wrap {
-      width: 96px;
-      height: 96px;
+      width: 88px;
+      height: 88px;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #000;
-      border-radius: 4px;
+      border-radius: 3px;
+      flex-shrink: 0;
     }
 
     .metric-row { display: flex; width: 100%; }
     .metric-col {
       flex: 1;
-      padding: 2px 4px;
+      padding: 2px 3px;
       text-align: center;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
-    .metric-label { font-size: 9.5px; color: var(--text-muted); font-weight: 600; }
+    .metric-label { font-size: 9px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
     .metric-val {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
       color: var(--primary-bright);
       line-height: 1.1;
     }
     .metric-val-sm {
-      font-size: 13.5px;
+      font-size: 12.5px;
       font-weight: 700;
       color: var(--primary-bright);
+      white-space: nowrap;
     }
 
     /* Section 2: Raw MET Feed */
     .raw-met-box {
       background: #000;
-      padding: 5px 8px;
-      font-size: 11.5px;
+      padding: 4px 8px;
+      font-size: 11px;
       color: var(--primary-dim);
       display: flex;
       flex-direction: column;
@@ -293,19 +310,19 @@
     <div class="brand-group">
       <div class="brand-title">IFS [정보융합지원 관제단말]</div>
       <select id="airport-select" class="airport-select" onchange="changeAirport(this.value)">
-        <option value="RKJY" selected>RKJY - 여수공항 (Yeosu)</option>
-        <option value="RKSI">RKSI - 인천국제공항 (Incheon)</option>
-        <option value="RKSS">RKSS - 김포국제공항 (Gimpo)</option>
-        <option value="RKPC">RKPC - 제주국제공항 (Jeju)</option>
-        <option value="RKPK">RKPK - 김해국제공항 (Gimhae)</option>
-        <option value="RKPU">RKPU - 울산공항 (Ulsan)</option>
-        <option value="RKTU">RKTU - 청주국제공항 (Cheongju)</option>
-        <option value="RKTN">RKTN - 대구국제공항 (Daegu)</option>
-        <option value="RKJJ">RKJJ - 광주공항 (Gwangju)</option>
-        <option value="RKJB">RKJB - 무안국제공항 (Muan)</option>
-        <option value="RKNY">RKNY - 양양국제공항 (Yangyang)</option>
-        <option value="RKTH">RKTH - 포항경주공항 (Pohang)</option>
-        <option value="RKPS">RKPS - 사천공항 (Sacheon)</option>
+        <option value="RKJY" selected>RKJY - 여수공항 (2본 엔드: 17/35)</option>
+        <option value="RKSI">RKSI - 인천국제공항 (4본 8개 엔드: 15/33/16/34)</option>
+        <option value="RKSS">RKSS - 김포국제공항 (2본 4개 엔드: 14/32 L/R)</option>
+        <option value="RKPC">RKPC - 제주국제공항 (2본 4개 엔드: 07/25, 13/31)</option>
+        <option value="RKPK">RKPK - 김해국제공항 (2본 4개 엔드: 18/36 L/R)</option>
+        <option value="RKPU">RKPU - 울산공항 (1본 2개 엔드: 18/36)</option>
+        <option value="RKTU">RKTU - 청주국제공항 (2본 4개 엔드: 06/24 L/R)</option>
+        <option value="RKTN">RKTN - 대구국제공항 (2본 4개 엔드: 13/31 L/R)</option>
+        <option value="RKJJ">RKJJ - 광주공항 (2본 4개 엔드: 04/22 L/R)</option>
+        <option value="RKJB">RKJB - 무안국제공항 (1본 2개 엔드: 01/19)</option>
+        <option value="RKNY">RKNY - 양양국제공항 (1본 2개 엔드: 15/33)</option>
+        <option value="RKTH">RKTH - 포항경주공항 (1본 2개 엔드: 10/28)</option>
+        <option value="RKPS">RKPS - 사천공항 (2본 4개 엔드: 06/24 L/R)</option>
       </select>
     </div>
 
@@ -327,15 +344,15 @@
 
   <!-- Main Display -->
   <main>
-    <!-- 1. Real-time Weather Section (AMOS Live from Gateway API) -->
+    <!-- 1. Real-time Weather Section (All Multi-Runways Live from AMOS Gateway API) -->
     <div class="grid-box">
       <div class="grid-header">
-        <span>WEATHER FEED [LIVE AMOS GATEWAY API]</span>
+        <span id="weather-section-title">WEATHER FEED [전국 42개 활주로 AMOS 센서 전수 연계]</span>
         <span id="amos-time" style="color: var(--amber);">SYNCING...</span>
       </div>
 
       <div class="weather-container" id="weather-runways-container">
-        <!-- Generated dynamically with full SVG Rose Gauge for each runway -->
+        <!-- Dynamically rendered for ALL runway ends of selected airport -->
       </div>
     </div>
 
@@ -445,23 +462,6 @@
     let currentAirport = 'RKJY';
     let activeRunwaysData = [];
 
-    // Airport Physical Runway Headings Map
-    const AIRPORT_RUNWAY_HEADINGS = {
-      RKJY: { '17': 170, '35': 350 },
-      RKSI: { '15L': 155, '15R': 155, '16L': 160, '16R': 160, '33L': 335, '33R': 335, '34L': 340, '34R': 340 },
-      RKSS: { '14L': 142, '14R': 142, '32L': 322, '32R': 322 },
-      RKPC: { '07': 70, '25': 250, '13': 130, '31': 310 },
-      RKPK: { '18L': 180, '18R': 180, '36L': 360, '36R': 360 },
-      RKPU: { '18': 180, '36': 360 },
-      RKTU: { '06R': 60, '24L': 240 },
-      RKTN: { '13R': 135, '31L': 315 },
-      RKJJ: { '04L': 40, '22R': 220 },
-      RKJB: { '01': 10, '19': 190 },
-      RKNY: { '15': 150, '33': 330 },
-      RKTH: { '10': 100, '28': 280 },
-      RKPS: { '06L': 60, '24R': 240 }
-    };
-
     // 1. Clocks Ticker
     function updateClocks() {
       const now = new Date();
@@ -478,7 +478,14 @@
     setInterval(updateClocks, 1000);
     updateClocks();
 
-    // 2. Headwind & Crosswind Vector Calculator
+    // 2. Exact Runway Physical Heading Calculation
+    function getRunwayHeading(rwyDirStr) {
+      const numMatch = rwyDirStr.match(/\d+/);
+      const num = numMatch ? parseInt(numMatch[0]) : 17;
+      return num * 10; // e.g. 17 -> 170 deg, 35 -> 350 deg, 06 -> 60 deg, 14 -> 140 deg
+    }
+
+    // 3. Headwind & Crosswind Vector Calculator
     function calculateWindVectors(windDirDeg, windSpeedKts, rwyHeadingDeg) {
       if (isNaN(windDirDeg) || isNaN(windSpeedKts)) {
         return { headTail: '-', cross: '-' };
@@ -492,55 +499,87 @@
       return { headTail: headTailStr, cross: crossStr };
     }
 
-    // 3. Render Custom SVG Wind Rose & Runway Graphic matching Reference Images
-    function createRunwayRoseSvg(rwyNumStr, rwyHeadingDeg, windDirDeg, isActiveRwy) {
-      const rwyNum = parseInt(rwyNumStr) || 17;
-      const oppNum = (rwyNum + 18) % 36 || 36;
-      const rwyTilt = rwyHeadingDeg - 180; // Tilt angle of runway bar
+    // 4. Render Custom SVG Wind Rose & Runway Graphic matching Reference Images
+    function createRunwayRoseSvg(rwyDirStr, rwyHeadingDeg, windDirDeg, isActiveRwy) {
+      const numMatch = rwyDirStr.match(/\d+/);
+      const num = numMatch ? parseInt(numMatch[0]) : 17;
+      const oppNum = (num + 18) % 36 || 36;
+      
+      // Suffix (L/R)
+      const isL = rwyDirStr.includes('L');
+      const isR = rwyDirStr.includes('R');
+      const suffix = isL ? 'L' : isR ? 'R' : '';
+      const oppSuffix = isL ? 'R' : isR ? 'L' : '';
 
-      // Airplane icon path (centered at 0,0)
-      const airplaneSvg = `
-        <g class="airplane-icon" transform="translate(0, ${isActiveRwy ? (rwyNum < 18 ? -22 : 22) : 0}) rotate(${isActiveRwy ? (rwyNum < 18 ? 180 : 0) : 0})">
-          <path d="M0,-8 L2,-3 L7,-1 L7,1 L2,0 L1,6 L4,8 L4,9 L0,8 L-4,9 L-4,8 L-1,6 L-2,0 L-7,1 L-7,-1 L-2,-3 Z" fill="#eaffde" />
+      const topLabel = `${String(num).padStart(2, '0')}${suffix}`;
+      const botLabel = `${String(oppNum).padStart(2, '0')}${oppSuffix}`;
+
+      // Runway tilt angle relative to North (0 deg)
+      // For heading 170 deg (South-bound), runway strip is vertical tilted -10 deg.
+      const rwyTilt = rwyHeadingDeg - 180;
+
+      // Active Aircraft positioning:
+      // If landing heading is 170 deg (North to South): Airplane at top entry threshold (y=-22) pointing South (0 deg tilt relative to rwy)
+      // If landing heading is 350 deg (South to North): Airplane at bottom entry threshold (y=22) pointing North (180 deg)
+      // If landing heading < 180: Plane starts near North end (y=-22) pointing South along runway
+      // If landing heading >= 180: Plane starts near South end (y=22) pointing North along runway
+      const isNorthThreshold = (rwyHeadingDeg >= 0 && rwyHeadingDeg <= 90) || (rwyHeadingDeg >= 270 && rwyHeadingDeg <= 360);
+      
+      let planeY = -22;
+      let planeRot = 0;
+
+      if (num < 18) {
+        // e.g. RWY 17, 14, 06, 07: Starts near top end, heads down
+        planeY = -22;
+        planeRot = 0;
+      } else {
+        // e.g. RWY 35, 32, 24, 25: Starts near bottom end, heads up
+        planeY = 22;
+        planeRot = 180;
+      }
+
+      const airplaneSvg = isActiveRwy ? `
+        <g class="airplane-icon" transform="translate(0, ${planeY}) rotate(${planeRot})">
+          <path d="M0,-7 L2,-2.5 L6,-0.8 L6,0.8 L2,0 L1,5 L3.5,7 L3.5,8 L0,7 L-3.5,8 L-3.5,7 L-1,5 L-2,0 L-6,0.8 L-6,-0.8 L-2,-2.5 Z" fill="#eaffde" />
         </g>
-      `;
+      ` : '';
 
       return `
-        <svg viewBox="-54 -54 108 108" width="92" height="92" class="runway-rose-svg">
+        <svg viewBox="-54 -54 108 108" width="84" height="84" class="runway-rose-svg">
           <!-- Compass Circle -->
-          <circle cx="0" cy="0" r="42" stroke="#00ff00" stroke-width="1.8" fill="none" />
+          <circle cx="0" cy="0" r="40" stroke="#00ff00" stroke-width="1.8" fill="none" />
           
           <!-- Cardinal Labels -->
-          <text x="0" y="-45" fill="#00ff00" font-size="9" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">N</text>
-          <text x="0" y="53" fill="#00ff00" font-size="9" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">S</text>
-          <text x="-46" y="3" fill="#00ff00" font-size="9" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">W</text>
-          <text x="47" y="3" fill="#00ff00" font-size="9" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">E</text>
+          <text x="0" y="-43" fill="#00ff00" font-size="8.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">N</text>
+          <text x="0" y="51" fill="#00ff00" font-size="8.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">S</text>
+          <text x="-44" y="3" fill="#00ff00" font-size="8.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">W</text>
+          <text x="45" y="3" fill="#00ff00" font-size="8.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">E</text>
           
           <!-- Runway Numbers -->
-          <text x="-14" y="-45" fill="#00ff00" font-size="9" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${rwyNumStr}</text>
-          <text x="14" y="53" fill="#00ff00" font-size="9" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${oppNum}</text>
+          <text x="-16" y="-43" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${topLabel}</text>
+          <text x="16" y="51" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${botLabel}</text>
           
           <!-- Runway Box (Tilted to true heading) -->
           <g transform="rotate(${rwyTilt})">
-            <rect x="-6" y="-34" width="12" height="68" stroke="#00ff00" stroke-width="1.4" fill="none" rx="1" />
+            <rect x="-6" y="-32" width="12" height="64" stroke="#00ff00" stroke-width="1.4" fill="none" rx="1" />
             <!-- Active Aircraft In-Use Threshold Indicator -->
             ${airplaneSvg}
           </g>
 
           <!-- Wind Arrow (Rotated dynamically towards wind direction) -->
-          <g id="svg-wind-arrow-${rwyNumStr}" transform="rotate(${windDirDeg})">
+          <g id="svg-wind-arrow-${rwyDirStr}" transform="rotate(${windDirDeg})">
             <!-- Thick Wind Flow Arrow pointing inwards/flow direction -->
-            <line x1="0" y1="-40" x2="0" y2="4" stroke="#00ff00" stroke-width="3.6" stroke-linecap="round" />
-            <polygon points="0,16 -6,0 6,0" fill="#00ff00" />
+            <line x1="0" y1="-38" x2="0" y2="4" stroke="#00ff00" stroke-width="3.4" stroke-linecap="round" />
+            <polygon points="0,15 -5.5,0 5.5,0" fill="#00ff00" />
           </g>
 
           <!-- Degree Text Overlay -->
-          <text id="svg-wind-txt-${rwyNumStr}" x="22" y="-24" fill="#00ff00" font-size="10.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${String(windDirDeg).padStart(3, '0')}</text>
+          <text id="svg-wind-txt-${rwyDirStr}" x="22" y="-22" fill="#00ff00" font-size="9.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${String(windDirDeg).padStart(3, '0')}</text>
         </svg>
       `;
     }
 
-    // 4. Fetch AMOS & Weather Data via API
+    // 5. Fetch AMOS & Weather Data via API for ALL runway ends
     async function syncWeatherData() {
       try {
         const res = await fetch(`${API_BASE}/api/weather?type=amos&icao=${currentAirport}&_t=${Date.now()}`);
@@ -555,13 +594,13 @@
 
         activeRunwaysData = runways;
         document.getElementById('amos-time').textContent = runways[0].tm ? `${runways[0].tm} ${runways[0].mi || ''}` : new Date().toISOString().slice(11, 19);
+        document.getElementById('weather-section-title').textContent = `WEATHER FEED [${currentAirport} - ${runways.length}개 활주로 센서 전수 연계]`;
 
         container.innerHTML = '';
-        const airportHeadings = AIRPORT_RUNWAY_HEADINGS[currentAirport] || { '17': 170, '35': 350 };
 
-        runways.slice(0, 2).forEach((rwy, idx) => {
+        runways.forEach((rwy, idx) => {
           const rwyDirStr = rwy.rwyDir || (idx === 0 ? '17' : '35');
-          const rwyHeading = airportHeadings[rwyDirStr] || (parseInt(rwyDirStr) * 10) || (idx === 0 ? 170 : 350);
+          const rwyHeading = getRunwayHeading(rwyDirStr);
           
           const wd = parseInt(rwy.wd || rwy.wd2minAvg || rwy.wd10minAvg) || 170;
           const ws = parseFloat(rwy.ws || rwy.wspd2minAvg || rwy.wspd10minAvg) || 8.5;
@@ -576,13 +615,16 @@
           const mor = rwy.mor1min || rwy.mor || '10000';
 
           const vectors = calculateWindVectors(wd, ws, rwyHeading);
-          const isActive = (rwy.rwyUse === 'Y') || (idx === 0);
+          const isActive = (rwy.rwyUse === 'Y') || (idx === 0 && !runways.some(r => r.rwyUse === 'Y'));
 
           const rwyEl = document.createElement('div');
-          rwyEl.className = `rwy-card ${idx === 0 ? 'b-r' : ''}`;
+          rwyEl.className = `rwy-card ${idx < runways.length - 1 ? 'b-r' : ''} ${isActive ? 'active-use' : ''}`;
           rwyEl.innerHTML = `
             <div class="rwy-title-bar">
-              <span>RWY ${rwyDirStr} WIND DATA</span>
+              <div>
+                <span>RWY ${rwyDirStr} WIND DATA</span>
+                ${isActive ? '<span class="use-tag">IN-USE</span>' : ''}
+              </div>
               <div class="rwy-rose-wrap">
                 ${createRunwayRoseSvg(rwyDirStr, rwyHeading, wd, isActive)}
               </div>
@@ -622,11 +664,11 @@
       } catch (e) {}
     }
 
-    // 5. Active Wind Micro-Jitter Simulator (Real Analog ATC Needle Feel)
+    // 6. Active Wind Micro-Jitter Simulator (Real Analog ATC Needle Dynamics)
     function simulateWindMicroDynamics() {
       if (!activeRunwaysData || activeRunwaysData.length === 0) return;
 
-      activeRunwaysData.slice(0, 2).forEach((rwy, idx) => {
+      activeRunwaysData.forEach((rwy, idx) => {
         const rwyDirStr = rwy.rwyDir || (idx === 0 ? '17' : '35');
         const arrowEl = document.getElementById(`svg-wind-arrow-${rwyDirStr}`);
         const txtEl = document.getElementById(`svg-wind-txt-${rwyDirStr}`);
@@ -638,10 +680,9 @@
 
         const baseWd = parseInt(rwy.wd || rwy.wd2minAvg || rwy.wd10minAvg) || 170;
         const baseWs = parseFloat(rwy.ws || rwy.wspd2minAvg || rwy.wspd10minAvg) || 8.5;
-        const airportHeadings = AIRPORT_RUNWAY_HEADINGS[currentAirport] || { '17': 170, '35': 350 };
-        const rwyHeading = airportHeadings[rwyDirStr] || (parseInt(rwyDirStr) * 10) || 170;
+        const rwyHeading = getRunwayHeading(rwyDirStr);
 
-        // Minor realistic flutter: +/- 1~2 deg, +/- 0.3 kts
+        // Minor realistic aerodynamic flutter: +/- 1~2 deg, +/- 0.3 kts
         const jitterDeg = Math.floor(Math.sin(Date.now() / 900 + idx) * 2);
         const jitterWs = (Math.sin(Date.now() / 1200 + idx) * 0.3).toFixed(1);
         
@@ -660,7 +701,7 @@
     }
     setInterval(simulateWindMicroDynamics, 500);
 
-    // 6. Fetch Flight Schedules (FIDS DEP & ARR) with Continuous Auto-Refresh
+    // 7. Fetch Flight Schedules (FIDS DEP & ARR) with Continuous Auto-Refresh
     async function syncFlightSchedules() {
       try {
         const res = await fetch(`${API_BASE}/api/flight-schedule?airport=${currentAirport}&_t=${Date.now()}`);
@@ -719,7 +760,7 @@
       }
     }
 
-    // 7. Sync System Status & NOTAMs via API
+    // 8. Sync System Status & NOTAMs via API
     async function syncSystemStatus() {
       try {
         const crawlerRes = await fetch(`${API_BASE}/api/crawler?status=true&_t=${Date.now()}`);
