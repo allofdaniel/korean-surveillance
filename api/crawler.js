@@ -1,4 +1,4 @@
-import { setCorsHeaders, checkRateLimit } from './_cors.js';
+import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 
 // In-Memory Lightweight Cache & Event Diff Buffer (Zero Storage Overhead)
 let lastRunTimestamp = null;
