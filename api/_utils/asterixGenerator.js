@@ -106,7 +106,7 @@ export function generateAsterixCat021(ac) {
       longitude: Number(Number(ac.lon).toFixed(6)),
     },
     targetAddress: (ac.hex || '').toUpperCase(),
-    geometricAltitudeFt: Number(altFt.toFixed(1)),
+    geometricAltitudeFt: Number(Number(altFt || 0).toFixed(1)),
     flightLevel: fl,
     airborneVelocity: {
       subType: 'GROUND_SPEED',
