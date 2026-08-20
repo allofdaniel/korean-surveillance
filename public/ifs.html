@@ -89,10 +89,10 @@
       gap: 10px;
     }
     .brand-title {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 800;
       color: var(--primary-bright);
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
     }
     .airport-select {
       background: #000;
@@ -110,7 +110,7 @@
     .status-group {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
     }
     .status-item {
       display: flex;
@@ -136,16 +136,6 @@
       box-shadow: 0 0 8px var(--amber);
       animation: beat 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
     }
-    .badge-amber-standby {
-      font-size: 9.5px;
-      color: var(--amber);
-      background: rgba(255, 186, 32, 0.1);
-      border: 1px solid rgba(255, 186, 32, 0.4);
-      padding: 1px 5px;
-      border-radius: 2px;
-      font-family: var(--font-mono);
-      font-weight: 700;
-    }
     @keyframes beat {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.3; transform: scale(0.85); }
@@ -161,14 +151,14 @@
       overflow: hidden;
     }
 
-    /* Section 1: Weather Grid (2 per row with Indicator on Right of Top 3 Rows) */
+    /* Section 1: Weather Grid (Flush layout, no dead space) */
     .weather-grid-container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 4px;
       background: #0a0a0a;
       flex-shrink: 0;
-      min-height: 140px;
+      padding: 0;
     }
     .weather-grid-container.dense {
       grid-template-columns: repeat(4, 1fr);
@@ -178,6 +168,7 @@
       background: var(--bg);
       display: flex;
       flex-direction: column;
+      height: 100%;
     }
     .rwy-card.active-use {
       border-color: rgba(0, 255, 0, 0.6);
@@ -188,36 +179,38 @@
     .rwy-top-split {
       display: flex;
       width: 100%;
+      flex: 1;
     }
     .rwy-top-left {
       flex: 1;
       display: flex;
       flex-direction: column;
       min-width: 0;
+      justify-content: space-between;
     }
     .rwy-title-bar {
       background: var(--surface-container);
-      padding: 2px 6px;
-      font-size: 10px;
+      padding: 3px 6px;
+      font-size: 10.5px;
       font-weight: 800;
       color: var(--amber);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 20px;
+      height: 22px;
     }
     .use-tag {
       font-size: 8.5px;
       background: var(--primary);
       color: #000;
-      padding: 0.5px 3.5px;
+      padding: 0.5px 4px;
       border-radius: 2px;
       font-weight: 800;
     }
 
     /* Wind Rose on Right side */
     .rwy-top-right {
-      width: 78px;
+      width: 82px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -225,39 +218,45 @@
       flex-shrink: 0;
     }
 
-    .metric-row { display: flex; width: 100%; }
+    .metric-row {
+      display: flex;
+      width: 100%;
+      flex: 1;
+      align-items: center;
+    }
     .metric-col {
       flex: 1;
-      padding: 1.5px 2px;
+      padding: 2px 2px;
       text-align: center;
       display: flex;
       flex-direction: column;
       justify-content: center;
       min-width: 0;
+      height: 100%;
     }
-    .metric-label { font-size: 8.5px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+    .metric-label { font-size: 9px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
     .metric-val {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 800;
       color: var(--primary-bright);
       line-height: 1.1;
     }
     .metric-val-sm {
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--primary-bright);
       white-space: nowrap;
     }
 
-    /* Section 2: Raw MET Feed (Clean Raw Plain-text Strings) */
+    /* Section 2: Raw MET Feed */
     .raw-met-box {
       background: #000;
-      padding: 3px 6px;
-      font-size: 10.5px;
+      padding: 4px 8px;
+      font-size: 11px;
       color: var(--primary-dim);
       display: flex;
       flex-direction: column;
-      gap: 1.5px;
+      gap: 2px;
       flex-shrink: 0;
       border-bottom: 1px solid var(--outline);
     }
@@ -281,11 +280,11 @@
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 11px;
+      font-size: 11.5px;
     }
     thead { position: sticky; top: 0; background: var(--surface-container); z-index: 10; border-bottom: 1px solid var(--outline); }
-    th { padding: 3px 5px; font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    td { padding: 2.5px 5px; border-bottom: 1px solid #1c1b1b; vertical-align: middle; }
+    th { padding: 3px 6px; font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    td { padding: 2.5px 6px; border-bottom: 1px solid #1c1b1b; vertical-align: middle; }
     tr:hover { background: #181818; }
     
     .status-dep { color: var(--primary); font-weight: 800; }
@@ -314,24 +313,42 @@
 
     /* Section 4: Bottom Clocks & Editable Airport Notices */
     .bottom-bar {
-      height: 82px;
+      height: 86px;
       display: flex;
       gap: 4px;
       flex-shrink: 0;
     }
     .clock-box {
-      width: 190px;
+      width: 210px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-around;
-      padding: 0 6px;
+      justify-content: center;
+      gap: 6px;
+      padding: 4px 8px;
       background: var(--bg-dim);
       flex-shrink: 0;
     }
-    .clock-group { display: flex; flex-direction: column; align-items: center; }
-    .clock-label { font-size: 8.5px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.1em; }
-    .clock-digits-utc { font-size: 14px; font-weight: 800; color: var(--primary); letter-spacing: 0.05em; }
-    .clock-digits-kst { font-size: 17px; font-weight: 800; color: var(--primary-bright); letter-spacing: 0.05em; }
+    .clock-row-item {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 4px;
+    }
+    .clock-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+    .clock-digits-unified {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--primary-bright);
+      letter-spacing: 0.06em;
+      line-height: 1;
+    }
 
     .notices-box {
       flex: 1;
@@ -366,8 +383,8 @@
       border: none;
       color: var(--primary-soft);
       font-family: var(--font-mono);
-      font-size: 11px;
-      padding: 4px 8px;
+      font-size: 11.5px;
+      padding: 5px 8px;
       resize: none;
       outline: none;
       line-height: 1.4;
@@ -384,7 +401,7 @@
   <!-- Header -->
   <header>
     <div class="brand-group">
-      <div class="brand-title">IFS [정보융합지원 관제단말]</div>
+      <div class="brand-title">IFS</div>
       <select id="airport-select" class="airport-select" onchange="changeAirport(this.value)">
         <option value="RKJY" selected>RKJY - 여수공항 (17/35)</option>
         <option value="RKSI">RKSI - 인천국제공항 (4본 8개 엔드: 15/33/16/34)</option>
@@ -410,30 +427,27 @@
       <div class="status-item">
         <span>STRIP (EFS)</span>
         <div class="dot-amber"></div>
-        <span class="badge-amber-standby">[대기 / 미수신]</span>
       </div>
     </div>
   </header>
 
   <!-- Main Display -->
   <main>
-    <!-- 1. Real-time Weather Section (No Scroll, 2-per-row Vertical Grid) -->
+    <!-- 1. Real-time Weather Section (Flush layout, no gaps) -->
     <div class="grid-box">
       <div class="grid-header">
-        <span id="weather-section-title">WEATHER FEED [LIVE AMOS GATEWAY API]</span>
-        <span id="amos-time" style="color: var(--amber);">SYNCING...</span>
+        <span>WEATHER FEED</span>
       </div>
 
       <div class="weather-grid-container" id="weather-runways-container">
-        <!-- Dynamically rendered (2 per row, with indicator on right side of top 3 rows) -->
+        <!-- Dynamically rendered (2 per row, indicator on right of top 3 rows) -->
       </div>
     </div>
 
-    <!-- 2. Raw MET Reports (MET REPORT, METAR, TAF) -->
+    <!-- 2. Raw MET Reports (Clean, Non-flickering) -->
     <div class="grid-box">
       <div class="grid-header">
         <span>RAW MET REPORTS</span>
-        <span style="color: var(--primary-soft);">METAR / SPECI / TAF</span>
       </div>
       <div class="raw-met-box">
         <div class="raw-met-line">
@@ -504,24 +518,24 @@
       </div>
     </div>
 
-    <!-- 4. Bottom Bar (Clocks & Editable Airport Notices with LocalStorage Persistence) -->
+    <!-- 4. Bottom Bar (Unified High-Visibility Clocks & Editable Airport Notices) -->
     <div class="bottom-bar">
-      <!-- Atomic Digital Clocks -->
+      <!-- Atomic Digital Clocks (Unified Font Size & Formatting) -->
       <div class="grid-box clock-box">
-        <div class="clock-group">
-          <span class="clock-label">UTC</span>
-          <span class="clock-digits-utc" id="clock-utc">00:00:00</span>
+        <div class="clock-row-item">
+          <span class="clock-tag">UTC</span>
+          <span class="clock-digits-unified" id="clock-utc">00:00:00</span>
         </div>
-        <div class="clock-group">
-          <span class="clock-label">KST</span>
-          <span class="clock-digits-kst" id="clock-kst">00:00:00</span>
+        <div class="clock-row-item">
+          <span class="clock-tag">KST</span>
+          <span class="clock-digits-unified" id="clock-kst">00:00:00</span>
         </div>
       </div>
 
-      <!-- Editable System Notices & NOTAM Feed -->
+      <!-- Editable System Notices & Directives -->
       <div class="grid-box notices-box">
         <div class="grid-header">
-          <span>공지사항 / SYSTEM NOTICES & AIRPORT DIRECTIVES</span>
+          <span>공지사항</span>
           <div class="notices-header-actions">
             <span id="notice-save-msg" style="color: var(--primary); font-size: 9px; display: none;">저장됨</span>
             <button class="btn-save-notice" onclick="saveCurrentNotices()">저장 (SAVE)</button>
@@ -669,12 +683,7 @@
 
       renderRunwaysGrid();
 
-      if (rawRunwaysData.length > 0) {
-        document.getElementById('amos-time').textContent = rawRunwaysData[0].tm ? `${rawRunwaysData[0].tm} ${rawRunwaysData[0].mi || ''}` : new Date().toISOString().slice(11, 19);
-        document.getElementById('weather-section-title').textContent = `WEATHER FEED [${currentAirport} - ${rawRunwaysData.length}개 활주로 센서 연계]`;
-      }
-
-      // Fetch Raw METAR & TAF Reports (Clean plain-text strings)
+      // Fetch Raw METAR & TAF Reports (Clean plain-text strings, only update on change)
       try {
         const [metarRes, tafRes] = await Promise.all([
           fetch(`${API_BASE}/api/amhs?type=METAR&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
@@ -686,8 +695,10 @@
           const txt = mData.rawAviationWeatherText || '';
           if (txt && !txt.includes('<')) {
             const clean = txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
-            document.getElementById('raw-metar').textContent = clean;
-            document.getElementById('raw-met-report').textContent = clean.replace('METAR', 'MET REPORT');
+            const elMetar = document.getElementById('raw-metar');
+            const elMetReport = document.getElementById('raw-met-report');
+            if (elMetar && elMetar.textContent !== clean) elMetar.textContent = clean;
+            if (elMetReport && elMetReport.textContent !== clean.replace('METAR', 'MET REPORT')) elMetReport.textContent = clean.replace('METAR', 'MET REPORT');
           }
         }
 
@@ -696,7 +707,8 @@
           const txt = tData.rawAviationWeatherText || '';
           if (txt && !txt.includes('<')) {
             const clean = txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
-            document.getElementById('raw-taf').textContent = clean;
+            const elTaf = document.getElementById('raw-taf');
+            if (elTaf && elTaf.textContent !== clean) elTaf.textContent = clean;
           }
         }
       } catch (e) {}
@@ -706,7 +718,6 @@
       const container = document.getElementById('weather-runways-container');
       if (!container) return;
 
-      // If Incheon (8 runways), use 4 columns grid to prevent vertical scrolling
       if (rawRunwaysData.length >= 6) {
         container.className = 'weather-grid-container dense';
       } else {
@@ -719,7 +730,7 @@
         const rwyDirStr = rwy.rwyDir || (idx === 0 ? '17' : '35');
         const rwyHeading = getRunwayHeading(rwyDirStr);
         
-        // Exact unmodified raw packet values
+        // Exact unmodified raw packet values (2-Min Magnetic Avg)
         const wd = parseInt(rwy.wd || rwy.wd2minAvg || rwy.wd10minAvg) || 170;
         const ws = parseFloat(rwy.ws || rwy.wspd2minAvg || rwy.wspd10minAvg) || 8.5;
         const maxWs = parseFloat(rwy.max || rwy.wspd2minMax || rwy.wspd10minMax) || ws;
@@ -742,15 +753,15 @@
           <div class="rwy-top-split b-b">
             <div class="rwy-top-left b-r">
               <div class="rwy-title-bar b-b">
-                <span>RWY ${rwyDirStr} WIND DATA</span>
+                <span>RWY ${rwyDirStr} WIND DATA (2분 자방위)</span>
                 ${isActive ? '<span class="use-tag">IN-USE</span>' : ''}
               </div>
               <div class="metric-row b-b">
                 <div class="metric-col b-r"><span class="metric-label">풍향(°)</span></div>
-                <div class="metric-col b-r"><span class="metric-label">평균 풍속</span></div>
-                <div class="metric-col b-r"><span class="metric-label">최저 풍속</span></div>
-                <div class="metric-col b-r"><span class="metric-label">최대 풍속</span></div>
-                <div class="metric-col"><span class="metric-label">순간 돌풍</span></div>
+                <div class="metric-col b-r"><span class="metric-label">평균풍속(kt)</span></div>
+                <div class="metric-col b-r"><span class="metric-label">최저풍속(kt)</span></div>
+                <div class="metric-col b-r"><span class="metric-label">최대풍속(kt)</span></div>
+                <div class="metric-col"><span class="metric-label">순간돌풍(kt)</span></div>
               </div>
               <div class="metric-row">
                 <div class="metric-col b-r"><span class="metric-val">${String(wd).padStart(3, '0')}</span></div>
