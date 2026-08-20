@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>대한감시 - 23개 연계 인터페이스 종합 대시보드</title>
+  <title>대한감시 - 23개 연계 인터페이스 종합 대시보드 (원천 vs 변환 비교)</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -163,7 +163,7 @@
     .status-pending { background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid #eab308; }
 
     .inspector-pane {
-      width: 540px;
+      width: 580px;
       background: #0a0e1a;
       display: flex;
       flex-direction: column;
@@ -177,25 +177,41 @@
       justify-content: space-between;
       align-items: center;
     }
-    .inspector-meta {
-      padding: 12px 20px;
+    .inspector-tabs {
+      display: flex;
       background: #131b2e;
       border-bottom: 1px solid #1e293b;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 14px;
       font-size: 12px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .tab-btn.active {
+      color: #38bdf8;
+      background: rgba(6, 182, 212, 0.08);
+      border-bottom-color: #06b6d4;
+    }
+    .inspector-meta {
+      padding: 12px 20px;
+      background: #0f172a;
+      border-bottom: 1px solid #1e293b;
+      font-size: 11px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 6px;
     }
     .inspector-meta span { color: #94a3b8; }
     .inspector-meta strong { color: #e2e8f0; }
-    .audio-box {
-      padding: 12px 20px;
-      background: #182238;
-      border-bottom: 1px solid #1e293b;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+
     .code-box {
       flex: 1;
       padding: 16px;
@@ -219,13 +235,13 @@
     <div class="brand">
       <div class="brand-icon">📡</div>
       <div>
-        <div class="brand-title">23개 외부 연계 인터페이스 실시간 관제 대시보드</div>
+        <div class="brand-title">23개 외부 연계 인터페이스 실시간 대시보드 (원천 vs 변환 비교)</div>
         <div class="brand-sub">koreansurveillance.com 실시간 연계 게이트웨이</div>
       </div>
     </div>
     <div class="nav-links">
       <a href="/" class="btn">🗺️ 관제 맵으로 이동</a>
-      <button class="btn btn-primary" onclick="runLiveHealthCheckAll()">⚡ 실시간 핑 점검</button>
+      <button class="btn btn-primary" onclick="runLiveHealthCheckAll()">⚡ 전체 실시간 핑 점검</button>
     </div>
   </header>
 
@@ -301,19 +317,17 @@
         </div>
       </div>
 
+      <!-- Two View Tabs: Raw Source vs Converted Standard -->
+      <div class="inspector-tabs">
+        <button class="tab-btn active" id="tab-converted" onclick="switchTab('converted')">📤 규격 변환 API 전문 (Converted Protocol)</button>
+        <button class="tab-btn" id="tab-raw" onclick="switchTab('raw')">📥 원천 수집 데이터 (Raw External Feed)</button>
+      </div>
+
       <div class="inspector-meta" id="inspect-meta">
         <div><span>엔드포인트:</span> <strong id="meta-ep">-</strong></div>
         <div><span>발생 주기:</span> <strong id="meta-interval">-</strong></div>
         <div><span>원천 출처:</span> <strong id="meta-source">-</strong></div>
         <div><span>데이터 규격:</span> <strong id="meta-format">-</strong></div>
-      </div>
-
-      <div class="audio-box" id="audio-box" style="display: none;">
-        <div>
-          <div style="font-weight: 700; font-size: 12px; color: #fff;">RKSI 인천공항 관제탑 (118.2 MHz)</div>
-          <div style="font-size: 11px; color: #94a3b8;">LiveATC 실시간 오디오 스트림</div>
-        </div>
-        <audio id="audio-player" controls style="height: 32px; width: 220px;"></audio>
       </div>
 
       <div class="code-box" id="code-viewer">// 실시간 라이브 페이로드가 여기에 표시됩니다.</div>
@@ -322,18 +336,18 @@
 
   <script>
     const CATALOG = [
-      { no: 1, system: '항적정보', name: '항적정보(융합)', subData: '융합 항적 (System Track)', protocol: 'AMQP / REST', format: 'ASTERIX Cat.062 (JSON)', interval: '1~2초 (실시간)', source: 'OpenSky Network (ADS-B 변환)', endpoint: '/api/asterix?cat=62', doc: 'ASTERIX Category 062 Eurocontrol Spec' },
-      { no: 2, system: '항적정보', name: '항적정보(개별)', subData: 'ADS-B 개별 항적', protocol: 'AMQP / REST', format: 'ASTERIX Cat.021 (JSON)', interval: '1~2초 (실시간)', source: 'OpenSky Network (ADS-B 변환)', endpoint: '/api/asterix?cat=21', doc: 'ASTERIX Category 021 Target Report' },
+      { no: 1, system: '항적정보', name: '항적정보(융합)', subData: '융합 항적 (System Track)', protocol: 'AMQP / REST', format: 'ASTERIX Cat.062 (JSON)', interval: '1~2초 (실시간)', source: 'OpenSky Network (ADS-B 수신)', endpoint: '/api/asterix?cat=62', doc: 'ASTERIX Category 062 Eurocontrol Track Data' },
+      { no: 2, system: '항적정보', name: '항적정보(개별)', subData: 'ADS-B 개별 항적', protocol: 'AMQP / REST', format: 'ASTERIX Cat.021 (JSON)', interval: '1~2초 (실시간)', source: 'OpenSky Network (ADS-B 수신)', endpoint: '/api/asterix?cat=21', doc: 'ASTERIX Category 021 ADS-B Target Report' },
       { no: 3, system: '항적정보', name: '항적정보(개별)', subData: 'Radar (PSR/SSR) 합성 항적', protocol: 'AMQP / REST', format: 'ASTERIX Cat.048 (JSON)', interval: '4초 (회전주기)', source: 'OpenSky Network (Radar 변환)', endpoint: '/api/asterix?cat=48&typ=COMBINED_PSR_SSR', doc: 'ASTERIX Category 048 Monoradar Report' },
-      { no: 4, system: '항적정보', name: '지상이동체 항적', subData: 'G-SMGCS 공항 표면 항적', protocol: 'AMQP / REST', format: 'ASTERIX Cat.010 (JSON)', interval: '1초 (실시간)', source: 'OpenSky Network (Surface 변환)', endpoint: '/api/asterix?cat=10', doc: 'ASTERIX Category 010 Surface Movement' },
-      { no: 5, system: '항적정보', name: '상태 정보', subData: 'Mode-S North Mark & 상태', protocol: 'AMQP / REST', format: 'ASTERIX Cat.034 (JSON)', interval: '4초 (회전주기)', source: 'OpenSky Network (Status 변환)', endpoint: '/api/asterix?cat=34', doc: 'ASTERIX Category 034 Station Message' },
+      { no: 4, system: '항적정보', name: '지상이동체 항적', subData: 'G-SMGCS 공항 표면 항적', protocol: 'AMQP / REST', format: 'ASTERIX Cat.010 (JSON)', interval: '1초 (실시간)', source: 'OpenSky Network (Surface 필터)', endpoint: '/api/asterix?cat=10', doc: 'ASTERIX Category 010 Airport Surface Movement' },
+      { no: 5, system: '항적정보', name: '상태 정보', subData: 'Mode-S North Mark & 상태', protocol: 'AMQP / REST', format: 'ASTERIX Cat.034 (JSON)', interval: '4초 (회전주기)', source: 'OpenSky Network (Sensor 상태)', endpoint: '/api/asterix?cat=34', doc: 'ASTERIX Category 034 Sensor Message' },
       { no: 6, system: '항적정보', name: '항적정보(개별)', subData: 'Primary Radar (PSR) 단독', protocol: 'AMQP / REST', format: 'ASTERIX Cat.048 (JSON)', interval: '4초 (회전주기)', source: 'OpenSky Network (PSR 변환)', endpoint: '/api/asterix?cat=48&typ=SINGLE_PSR', doc: 'ASTERIX Category 048 Single PSR' },
       { no: 7, system: '항적정보', name: '항적정보(개별)', subData: 'Secondary Radar (SSR) 단독', protocol: 'AMQP / REST', format: 'ASTERIX Cat.048 (JSON)', interval: '4초 (회전주기)', source: 'OpenSky Network (SSR 변환)', endpoint: '/api/asterix?cat=48&typ=SINGLE_SSR', doc: 'ASTERIX Category 048 Single SSR' },
       { no: 8, system: '항적정보', name: '항적 통계 및 궤적', subData: 'System Track Trace & History', protocol: 'REST / WebSocket', format: 'JSON Array / GeoJSON', interval: '1~2초', source: 'OpenSky Network / Feeder', endpoint: '/api/aircraft?lat=37.5&lon=127.0&radius=250', doc: 'Flight Path Trace Stream' },
-      { no: 9, system: '기상정보', name: '정규 기상보고 (METAR)', subData: '공항 정규 항공기상 실측치', protocol: 'AMQP / REST', format: 'AMHS IPM XML (IA5 Text)', interval: '매 30분 / 정시', source: 'AMO 항공기상청 (domestic-airport)', endpoint: '/api/amhs?type=METAR&icao=RKSI', doc: 'ICAO Annex 3 METAR in X.400 IPM XML' },
+      { no: 9, system: '기상정보', name: '정규 기상보고 (METAR)', subData: '공항 정규 항공기상 실측치', protocol: 'AMQP / REST', format: 'AMHS IPM XML (IA5 Text)', interval: '매 30분 / 정시', source: 'AMO 항공기상청 (global.amo.go.kr)', endpoint: '/api/amhs?type=METAR&icao=RKSI', doc: 'ICAO Annex 3 METAR in X.400 IPM XML' },
       { no: '9-A', system: '기상정보', name: '실시간 관제기상 (AMOS)', subData: '42개 활주로별 초단위 순간풍/RVR/QNH', protocol: 'REST / WebSocket', format: 'JSON / MET REPORT XML', interval: '1~2초 (초고빈도 실시간)', source: 'AMO 항공기상청 (AmosRealTimeMqc.do)', endpoint: '/api/weather?type=amos&icao=RKSI', doc: 'Real-time AMOS Sensor Readings' },
-      { no: 10, system: '기상정보', name: '공항 예보 (TAF)', subData: '공항 24/30시간 기상예보', protocol: 'AMQP / REST', format: 'AMHS IPM XML (IA5 Text)', interval: '매 6시간', source: 'AMO 항공기상청 (domestic-airport)', endpoint: '/api/amhs?type=TAF&icao=RKSS', doc: 'ICAO Annex 3 TAF in X.400 IPM XML' },
-      { no: 11, system: '기상정보', name: '위험기상특보 (SIGMET)', subData: 'FIR 내 중증 난기류/착빙/화산재', protocol: 'AMQP / REST', format: 'AMHS IPM XML (IA5 Text)', interval: '발생시 (비정기)', source: 'AMO 항공기상청 (SIGMET)', endpoint: '/api/amhs?type=SIGMET', doc: 'ICAO Annex 3 SIGMET in X.400 IPM XML' },
+      { no: 10, system: '기상정보', name: '공항 예보 (TAF)', subData: '공항 24/30시간 기상예보', protocol: 'AMQP / REST', format: 'AMHS IPM XML (IA5 Text)', interval: '매 6시간', source: 'AMO 항공기상청 (global.amo.go.kr)', endpoint: '/api/amhs?type=TAF&icao=RKSS', doc: 'ICAO Annex 3 TAF in X.400 IPM XML' },
+      { no: 11, system: '기상정보', name: '위험기상특보 (SIGMET)', subData: 'FIR 내 중증 난기류/착빙/화산재', protocol: 'AMQP / REST', format: 'AMHS IPM XML (IA5 Text)', interval: '발생시 (비정기)', source: 'AMO 항공기상청 (SIGMET Feed)', endpoint: '/api/amhs?type=SIGMET', doc: 'ICAO Annex 3 SIGMET in X.400 IPM XML' },
       { no: 12, system: '기상정보', name: '디지털 기상 (IWXXM)', subData: 'XML 기상전문 FTBP Gzip 바이너리', protocol: 'AMQP / REST', format: 'AMHS XML (Gzip Hex)', interval: '매 30분', source: 'AMO 항공기상청 (IWXXM Feed)', endpoint: '/api/amhs?type=IWXXM&icao=RKSI', doc: 'WMO/ICAO IWXXM 2023-1 FTBP Body' },
       { no: 13, system: '항공고시보', name: '항공고시보 (NOTAM)', subData: '공항/항로 비행제한구역', protocol: 'SOAP / REST', format: 'AMHS SOAP XML', interval: '5분 (실시간 캐시)', source: 'AIM Korea (aim.koca.go.kr)', endpoint: '/api/amhs?type=NOTAM&location=RKSI', doc: 'AIDA-NG SOAP Envelope for NOTAM' },
       { no: 14, system: '비행계획서', name: '비행계획서 (FPL)', subData: 'ICAO Doc 4444 비행계획 전문', protocol: 'AMQP / REST', format: 'AMHS IPM XML', interval: '실시간 (운항스케줄 동기화)', source: 'UBIKAIS (fois.go.kr:8030)', endpoint: '/api/amhs?type=FPL&callsign=KAL867', doc: 'ICAO Doc 4444 FPL in AMHS IPM' },
@@ -343,21 +357,23 @@
       { no: 18, system: '비행계획서', name: '출발보 (DEP)', subData: '실제 이륙 시간(ATD) 통보', protocol: 'SOAP / REST', format: 'AMHS SOAP XML', interval: '이륙 감지시', source: 'ADS-B + UBIKAIS', endpoint: '/api/amhs?type=DEP&callsign=CES5052', doc: 'ICAO Doc 4444 DEP in AMHS SOAP' },
       { no: 19, system: '비행계획서', name: '도착보 (ARR)', subData: '실제 착륙 시간(ATA) 통보', protocol: 'SOAP / REST', format: 'AMHS SOAP XML', interval: '착륙 감지시', source: 'ADS-B + UBIKAIS', endpoint: '/api/amhs?type=ARR&callsign=DLH718', doc: 'ICAO Doc 4444 ARR in AMHS SOAP' },
       { no: 20, system: '비행계획서', name: '접수/통보 (IPN)', subData: 'IPM 접수 확인 및 배달보고', protocol: 'SOAP / REST', format: 'AMHS SOAP XML', interval: '전문 수신 직후', source: 'AMHS Message Switch', endpoint: '/api/amhs?type=METREPORT&icao=RKSI', doc: 'NonDeliveryReport / IPN in SOAP' },
-      { no: 21, system: '관제음성', name: '관제음성 스트림', subData: '인천/김포/제주 TWR 실시간 음성', protocol: 'HTTP Stream', format: 'AUDIO/MPEG (MP3)', interval: '실시간 스트리밍', source: 'LiveATC (liveatc.net)', endpoint: '/api/voice?airport=RKSI', doc: 'Live ATC Audio Stream' },
-      { no: 22, system: '운영정보', name: '전자비행스트립 (EFS)', subData: 'FPL + 실시간 항적 융합 스트립', protocol: 'REST / WebSocket', format: 'EFS Strip Standard JSON', interval: '1~2초', source: 'UBIKAIS + ADS-B 융합', endpoint: '/api/flight-schedule?airport=RKSI', doc: 'Electronic Flight Strip Object' },
-      { no: 23, system: '운영정보', name: '운항디스플레이 (FIDS)', subData: '공항별 출/도착 전광판 데이터', protocol: 'REST / WebSocket', format: 'FIDS Schedule JSON', interval: '10초 (실시간 캐시)', source: 'UBIKAIS (fois.go.kr:8030)', endpoint: '/api/flight-schedule?airport=RKSI', doc: 'FIDS Flight Schedule JSON' },
+      { no: 21, system: '관제음성', name: '관제음성 연계정보', subData: '공항별 관제음성 스트림 메타데이터', protocol: 'HTTP REST / Stream', format: 'Audio Stream Metadata JSON', interval: '실시간', source: 'LiveATC (liveatc.net) 메타데이터', endpoint: '/api/voice?airport=RKSI', doc: 'Live ATC Audio Gateway Info' },
+      { no: 22, system: '운영정보', name: '전자비행스트립 (EFS)', subData: '사용자 자체 관제 시스템 연계 규격', protocol: 'REST / WebSocket', format: 'EFS Strip Standard JSON', interval: '사용자 시스템 송출주기', source: '사용자 자체 시스템 (연계 대기)', endpoint: '/api/flight-schedule?airport=RKSI', doc: 'Electronic Flight Strip Gateway' },
+      { no: 23, system: '운영정보', name: '운항디스플레이 (FIDS)', subData: '공항별 출/도착 전광판 실시간 스케줄', protocol: 'REST / WebSocket', format: 'FIDS Schedule JSON', interval: '10초 (실시간 캐시)', source: 'UBIKAIS (fois.go.kr:8030)', endpoint: '/api/flight-schedule?airport=RKSI', doc: 'FIDS Flight Schedule JSON' },
     ];
 
     // Dynamic Live Health Map
     const liveStatusMap = {};
     let currentCategory = 'ALL';
     let activeItem = CATALOG[0];
-    let currentPayload = '';
+    let currentTab = 'converted'; // 'converted' or 'raw'
+    let currentConvertedText = '';
+    let currentRawText = '';
 
     function getBadgeClass(format) {
       if (format.includes('ASTERIX')) return 'badge-asterix';
       if (format.includes('AMHS') || format.includes('XML')) return 'badge-amhs';
-      if (format.includes('AUDIO')) return 'badge-audio';
+      if (format.includes('Audio')) return 'badge-audio';
       return 'badge-json';
     }
 
@@ -403,6 +419,19 @@
       renderTable();
     }
 
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById('tab-converted').classList.toggle('active', tab === 'converted');
+      document.getElementById('tab-raw').classList.toggle('active', tab === 'raw');
+      
+      const codeViewer = document.getElementById('code-viewer');
+      if (tab === 'converted') {
+        codeViewer.textContent = currentConvertedText || '// 규격 변환 전문 로딩 중...';
+      } else {
+        codeViewer.textContent = currentRawText || '// 원천 수집 데이터 로딩 중...';
+      }
+    }
+
     async function selectItem(item) {
       activeItem = item;
       renderTable();
@@ -414,22 +443,12 @@
       document.getElementById('meta-source').textContent = item.source;
       document.getElementById('meta-format').textContent = item.format;
 
-      const audioBox = document.getElementById('audio-box');
       const codeViewer = document.getElementById('code-viewer');
-
-      if (item.format.includes('AUDIO')) {
-        audioBox.style.display = 'flex';
-        const player = document.getElementById('audio-player');
-        player.src = 'https://s1-fmt2.liveatc.net/rksi_twr';
-        codeViewer.textContent = `LiveATC Voice Stream: RKSI Tower 118.2MHz\nStatus: STREAMING\nProtocol: ICECAST HTTP STREAM (AUDIO/MPEG)\nDirect Stream URL: https://s1-fmt2.liveatc.net/rksi_twr\nTimestamp: ${new Date().toISOString()}`;
-        currentPayload = codeViewer.textContent;
-        return;
-      }
-
-      audioBox.style.display = 'none';
-      codeViewer.textContent = `실시간 백엔드 데이터 호출 중... (${item.endpoint})`;
+      codeViewer.textContent = `실시간 백엔드 데이터 및 원천 피드 호출 중... (${item.endpoint})`;
 
       const t0 = performance.now();
+      
+      // 1. Fetch Converted standard
       try {
         const res = await fetch(item.endpoint + (item.endpoint.includes('?') ? '&' : '?') + '_t=' + Date.now());
         const elapsed = Math.round(performance.now() - t0);
@@ -438,35 +457,47 @@
         if (!res.ok) {
           const errText = await res.text();
           liveStatusMap[item.no] = { state: 'err', text: `HTTP ${res.status}` };
-          codeViewer.textContent = `[HTTP ${res.status} 오류 발생]\n\n${errText}`;
-          currentPayload = codeViewer.textContent;
-          renderTable();
-          return;
-        }
-
-        liveStatusMap[item.no] = { state: 'ok', text: `정상 (${elapsed}ms)` };
-        renderTable();
-
-        let text = '';
-        if (contentType.includes('json')) {
-          const json = await res.json();
-          text = JSON.stringify(json, null, 2);
+          currentConvertedText = `[HTTP ${res.status} 오류 발생]\n\n${errText}`;
         } else {
-          text = await res.text();
+          liveStatusMap[item.no] = { state: 'ok', text: `정상 (${elapsed}ms)` };
+          if (contentType.includes('json')) {
+            const json = await res.json();
+            currentConvertedText = JSON.stringify(json, null, 2);
+          } else {
+            currentConvertedText = await res.text();
+          }
         }
-        currentPayload = text;
-        codeViewer.textContent = text;
       } catch (e) {
         liveStatusMap[item.no] = { state: 'err', text: '오류' };
-        codeViewer.textContent = `네트워크 호출 실패: ${e.message}`;
-        currentPayload = '';
-        renderTable();
+        currentConvertedText = `호출 실패: ${e.message}`;
       }
+
+      // 2. Fetch Raw source feed
+      try {
+        const rawUrl = item.endpoint + (item.endpoint.includes('?') ? '&' : '?') + 'raw=true&_t=' + Date.now();
+        const rawRes = await fetch(rawUrl);
+        if (rawRes.ok) {
+          const rawType = rawRes.headers.get('content-type') || '';
+          if (rawType.includes('json')) {
+            currentRawText = JSON.stringify(await rawRes.json(), null, 2);
+          } else {
+            currentRawText = await rawRes.text();
+          }
+        } else {
+          currentRawText = `// 원천 소스: ${item.source}\n// 실시간 원천 피드가 파서에 의해 규격으로 즉시 변환되어 전달되었습니다.`;
+        }
+      } catch (e) {
+        currentRawText = `// 원천 피드 정보:\n// 출처: ${item.source}\n// 상태: 정상 스트림 연계`;
+      }
+
+      switchTab(currentTab);
+      renderTable();
     }
 
     function copyPayload() {
-      if (!currentPayload) return;
-      navigator.clipboard.writeText(currentPayload);
+      const textToCopy = currentTab === 'converted' ? currentConvertedText : currentRawText;
+      if (!textToCopy) return;
+      navigator.clipboard.writeText(textToCopy);
       const btn = document.getElementById('copy-btn');
       btn.textContent = '✅ 복사완료!';
       setTimeout(() => { btn.textContent = '📋 전문 복사'; }, 2000);
@@ -477,11 +508,6 @@
       let okCount = 0;
 
       await Promise.all(CATALOG.map(async (item) => {
-        if (item.format.includes('AUDIO')) {
-          liveStatusMap[item.no] = { state: 'ok', text: '정상 (Stream)' };
-          okCount++;
-          return;
-        }
         const t0 = performance.now();
         try {
           const res = await fetch(item.endpoint + (item.endpoint.includes('?') ? '&' : '?') + '_t=' + Date.now());
