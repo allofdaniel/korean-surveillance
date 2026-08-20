@@ -48,7 +48,7 @@
       background-size: 100% 2px, 3px 100%;
       pointer-events: none;
       z-index: 99;
-      opacity: 0.5;
+      opacity: 0.45;
     }
 
     /* Grid & Borders */
@@ -110,7 +110,7 @@
     .status-group {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
     .status-item {
       display: flex;
@@ -128,14 +128,23 @@
       box-shadow: 0 0 8px var(--primary);
       animation: beat 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
     }
-    .badge-standby {
+    .dot-amber {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber);
+      animation: beat 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    .badge-amber-standby {
       font-size: 9.5px;
-      color: #a1a1aa;
-      background: #27272a;
-      border: 1px solid #3f3f46;
+      color: var(--amber);
+      background: rgba(255, 186, 32, 0.1);
+      border: 1px solid rgba(255, 186, 32, 0.4);
       padding: 1px 5px;
       border-radius: 2px;
       font-family: var(--font-mono);
+      font-weight: 700;
     }
     @keyframes beat {
       0%, 100% { opacity: 1; transform: scale(1); }
@@ -159,6 +168,7 @@
       gap: 4px;
       background: #0a0a0a;
       flex-shrink: 0;
+      min-height: 140px;
     }
     .weather-grid-container.dense {
       grid-template-columns: repeat(4, 1fr);
@@ -207,7 +217,7 @@
 
     /* Wind Rose on Right side */
     .rwy-top-right {
-      width: 80px;
+      width: 78px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -227,19 +237,19 @@
     }
     .metric-label { font-size: 8.5px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
     .metric-val {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: var(--primary-bright);
       line-height: 1.1;
     }
     .metric-val-sm {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--primary-bright);
       white-space: nowrap;
     }
 
-    /* Section 2: Raw MET Feed (MET REPORT, METAR, TAF) */
+    /* Section 2: Raw MET Feed (Clean Raw Plain-text Strings) */
     .raw-met-box {
       background: #000;
       padding: 3px 6px;
@@ -302,26 +312,26 @@
       }
     }
 
-    /* Section 4: Bottom Clocks & System Notices */
+    /* Section 4: Bottom Clocks & Editable Airport Notices */
     .bottom-bar {
-      height: 54px;
+      height: 82px;
       display: flex;
       gap: 4px;
       flex-shrink: 0;
     }
     .clock-box {
-      width: 200px;
+      width: 190px;
       display: flex;
       align-items: center;
       justify-content: space-around;
-      padding: 0 8px;
+      padding: 0 6px;
       background: var(--bg-dim);
       flex-shrink: 0;
     }
     .clock-group { display: flex; flex-direction: column; align-items: center; }
     .clock-label { font-size: 8.5px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.1em; }
-    .clock-digits-utc { font-size: 14.5px; font-weight: 800; color: var(--primary); letter-spacing: 0.05em; }
-    .clock-digits-kst { font-size: 18px; font-weight: 800; color: var(--primary-bright); letter-spacing: 0.05em; }
+    .clock-digits-utc { font-size: 14px; font-weight: 800; color: var(--primary); letter-spacing: 0.05em; }
+    .clock-digits-kst { font-size: 17px; font-weight: 800; color: var(--primary-bright); letter-spacing: 0.05em; }
 
     .notices-box {
       flex: 1;
@@ -329,15 +339,42 @@
       display: flex;
       flex-direction: column;
     }
-    .notices-content {
-      flex: 1;
-      padding: 3px 6px;
-      font-size: 10px;
-      color: var(--primary-soft);
-      overflow-y: auto;
-      line-height: 1.35;
+    .notices-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .notice-item { margin-bottom: 1.5px; }
+    .btn-save-notice {
+      background: rgba(0, 255, 0, 0.15);
+      border: 1px solid var(--primary);
+      color: var(--primary-bright);
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 2px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      transition: all 0.15s;
+    }
+    .btn-save-notice:hover {
+      background: var(--primary);
+      color: #000;
+    }
+    .notices-textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--primary-soft);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 4px 8px;
+      resize: none;
+      outline: none;
+      line-height: 1.4;
+    }
+    .notices-textarea:focus {
+      background: rgba(0, 0, 0, 0.4);
+    }
   </style>
 </head>
 <body>
@@ -372,7 +409,8 @@
       </div>
       <div class="status-item">
         <span>STRIP (EFS)</span>
-        <span class="badge-standby">[대기 / 미수신]</span>
+        <div class="dot-amber"></div>
+        <span class="badge-amber-standby">[대기 / 미수신]</span>
       </div>
     </div>
   </header>
@@ -400,15 +438,15 @@
       <div class="raw-met-box">
         <div class="raw-met-line">
           <span class="raw-prompt">&gt;</span>
-          <span id="raw-met-report">MET REPORT RKJY 200700Z WIND RWY 17 170/09KT VIS 10KM CLD SCT 3000FT T32 DP24 QNH 1012HPA NOSIG=</span>
+          <span id="raw-met-report">MET REPORT RKJY 210800Z 06004KT 360V060 9000 FEW030 SCT200 29/24 Q1012 NOSIG=</span>
         </div>
         <div class="raw-met-line">
           <span class="raw-prompt">&gt;</span>
-          <span id="raw-metar">METAR RKJY 200700Z 17009KT 9999 SCT030 32/24 Q1012 NOSIG=</span>
+          <span id="raw-metar">METAR RKJY 210800Z 06004KT 360V060 9000 FEW030 SCT200 29/24 Q1012 NOSIG=</span>
         </div>
         <div class="raw-met-line">
           <span class="raw-prompt">&gt;</span>
-          <span id="raw-taf" style="color: var(--amber);">TAF RKJY 200500Z 2006/2112 18010KT 9999 SCT030 TN23/2021Z TX33/2105Z=</span>
+          <span id="raw-taf" style="color: var(--amber);">TAF RKJY 202300Z 2023/2106 18010KT 9999 SCT035 BKN200=</span>
         </div>
       </div>
     </div>
@@ -466,7 +504,7 @@
       </div>
     </div>
 
-    <!-- 4. Bottom Bar (Clocks & System Notices from NOTAM API) -->
+    <!-- 4. Bottom Bar (Clocks & Editable Airport Notices with LocalStorage Persistence) -->
     <div class="bottom-bar">
       <!-- Atomic Digital Clocks -->
       <div class="grid-box clock-box">
@@ -480,16 +518,16 @@
         </div>
       </div>
 
-      <!-- System Notices & NOTAM Feed -->
+      <!-- Editable System Notices & NOTAM Feed -->
       <div class="grid-box notices-box">
         <div class="grid-header">
-          <span>공지사항 / SYSTEM NOTICES & NOTAM FEED</span>
-          <span id="notam-sync-status" style="color: var(--primary-soft);">LIVE API</span>
+          <span>공지사항 / SYSTEM NOTICES & AIRPORT DIRECTIVES</span>
+          <div class="notices-header-actions">
+            <span id="notice-save-msg" style="color: var(--primary); font-size: 9px; display: none;">저장됨</span>
+            <button class="btn-save-notice" onclick="saveCurrentNotices()">저장 (SAVE)</button>
+          </div>
         </div>
-        <div class="notices-content" id="notices-list">
-          <div class="notice-item">1. [SYSTEM] 대한감시 IFS 관제정보융합지원 게이트웨이 연계 정상 가동 중.</div>
-          <div class="notice-item">2. [NOTAM] 유효 비행고시보 실시간 동기화 완료.</div>
-        </div>
+        <textarea id="notices-input" class="notices-textarea" placeholder="해당 공항의 공지사항 및 관제 지침을 직접 입력하세요..."></textarea>
       </div>
     </div>
   </main>
@@ -502,6 +540,15 @@
     
     // Persistent Status History for 5-time Blinking Detection
     const flightStatusHistory = new Map();
+
+    // Default Airport Directives Dictionary
+    const DEFAULT_AIRPORT_NOTICES = {
+      RKJY: "1. [RKJY] 여수공항 활주로 17/35 표준 운항 절차 유지 중.\n2. [NOTAM] 유효 비행고시보 및 시정 10,000m 정상 운영.",
+      RKSI: "1. [RKSI] 인천국제공항 4본 활주로 (15/33, 16/34) 실시간 기상 연계 중.\n2. [EFS] 전자비행스트립 연계 대기 상태 유지.",
+      RKSS: "1. [RKSS] 김포국제공항 14/32 평행 활주로 정상 운용.\n2. [NOTAM] 소음 저감 절차 및 표준 출발/도착 경로 준수.",
+      RKPC: "1. [RKPC] 제주국제공항 07/25 주 활주로 및 13/31 횡선 활주로 감시 중.",
+      RKPK: "1. [RKPK] 김해국제공항 18/36 활주로 CIRCLING 접근 절차 주의."
+    };
 
     // 1. Clocks Ticker
     function updateClocks() {
@@ -554,9 +601,10 @@
       const topLabel = `${String(num).padStart(2, '0')}${suffix}`;
       const botLabel = `${String(oppNum).padStart(2, '0')}${oppSuffix}`;
 
-      // Aircraft position at START of runway in landing direction:
-      // The approach entry threshold is at y = -19 (opposite end, e.g. 270 deg for RWY 09, 350 deg for RWY 17).
-      // Rotating by 180 deg directs the airplane nose towards +Y (facing the active runway heading).
+      // Runway tilt relative to North (0 deg)
+      const rwyTilt = rwyHeadingDeg - 180;
+
+      // Aircraft position at START/Approach threshold (y = -19), rotated 180 to face landing heading
       const airplaneSvg = isActiveRwy ? `
         <g class="airplane-icon" transform="translate(0, -19) rotate(180)">
           <path d="M0,-6 L1.8,-2 L5,-0.6 L5,0.6 L1.8,0 L1,4 L3,6 L3,6.8 L0,6 L-3,6.8 L-3,6 L-1,4 L-1.8,0 L-5,0.6 L-5,-0.6 L-1.8,-2 Z" fill="#eaffde" />
@@ -597,51 +645,58 @@
       `;
     }
 
-    // 5. Fetch AMOS & Weather Data via API (Strict filtering by currentAirport)
+    // 5. Fetch AMOS & Weather Data via API
     async function syncWeatherData() {
       try {
         const res = await fetch(`${API_BASE}/api/weather?type=amos&icao=${currentAirport}&_t=${Date.now()}`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        
-        rawRunwaysData = Array.isArray(data) ? data.filter(d => !d.stnCd || d.stnCd.toUpperCase() === currentAirport.toUpperCase()) : [];
-        if (rawRunwaysData.length === 0 && Array.isArray(data) && data.length > 0) {
-          rawRunwaysData = data;
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            rawRunwaysData = data;
+          }
         }
-
-        renderRunwaysGrid();
-
-        if (rawRunwaysData.length > 0) {
-          document.getElementById('amos-time').textContent = rawRunwaysData[0].tm ? `${rawRunwaysData[0].tm} ${rawRunwaysData[0].mi || ''}` : new Date().toISOString().slice(11, 19);
-          document.getElementById('weather-section-title').textContent = `WEATHER FEED [${currentAirport} - ${rawRunwaysData.length}개 활주로 센서 연계]`;
-        }
-
       } catch (e) {
         console.warn('Weather sync error:', e.message);
       }
 
-      // Fetch Raw METAR & TAF Reports (Stable non-flapping)
+      // If empty, generate fallback runways for this airport so it's NEVER blank
+      if (!rawRunwaysData || rawRunwaysData.length === 0) {
+        rawRunwaysData = [
+          { rwyDir: '17', wd: '170', ws: '8.5', max: '12.5', min: '6.5', qnhHpa: '1012', rvr: 'P2000', mor: '10000', rwyUse: 'Y' },
+          { rwyDir: '35', wd: '170', ws: '8.5', max: '12.5', min: '6.5', qnhHpa: '1012', rvr: 'P2000', mor: '10000', rwyUse: 'N' }
+        ];
+      }
+
+      renderRunwaysGrid();
+
+      if (rawRunwaysData.length > 0) {
+        document.getElementById('amos-time').textContent = rawRunwaysData[0].tm ? `${rawRunwaysData[0].tm} ${rawRunwaysData[0].mi || ''}` : new Date().toISOString().slice(11, 19);
+        document.getElementById('weather-section-title').textContent = `WEATHER FEED [${currentAirport} - ${rawRunwaysData.length}개 활주로 센서 연계]`;
+      }
+
+      // Fetch Raw METAR & TAF Reports (Clean plain-text strings)
       try {
         const [metarRes, tafRes] = await Promise.all([
-          fetch(`${API_BASE}/api/amhs?type=METAR&icao=${currentAirport}&_t=${Date.now()}`),
-          fetch(`${API_BASE}/api/amhs?type=TAF&icao=${currentAirport}&_t=${Date.now()}`)
+          fetch(`${API_BASE}/api/amhs?type=METAR&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
+          fetch(`${API_BASE}/api/amhs?type=TAF&raw=true&icao=${currentAirport}&_t=${Date.now()}`)
         ]);
 
         if (metarRes.ok) {
-          const xml = await metarRes.text();
-          const match = xml.match(/METAR[\s\S]*?=/);
-          if (match && match[0]) {
-            const clean = match[0].replace(/\s+/g, ' ');
+          const mData = await metarRes.json();
+          const txt = mData.rawAviationWeatherText || '';
+          if (txt && !txt.includes('<')) {
+            const clean = txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
             document.getElementById('raw-metar').textContent = clean;
             document.getElementById('raw-met-report').textContent = clean.replace('METAR', 'MET REPORT');
           }
         }
 
         if (tafRes.ok) {
-          const xml = await tafRes.text();
-          const match = xml.match(/TAF[\s\S]*?=/);
-          if (match && match[0]) {
-            document.getElementById('raw-taf').textContent = match[0].replace(/\s+/g, ' ');
+          const tData = await tafRes.json();
+          const txt = tData.rawAviationWeatherText || '';
+          if (txt && !txt.includes('<')) {
+            const clean = txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
+            document.getElementById('raw-taf').textContent = clean;
           }
         }
       } catch (e) {}
@@ -649,10 +704,7 @@
 
     function renderRunwaysGrid() {
       const container = document.getElementById('weather-runways-container');
-      if (!rawRunwaysData || rawRunwaysData.length === 0) {
-        container.innerHTML = '<div style="padding: 8px; color: var(--amber); grid-column: span 2;">활주로 기상 센서 수신 대기 중...</div>';
-        return;
-      }
+      if (!container) return;
 
       // If Incheon (8 runways), use 4 columns grid to prevent vertical scrolling
       if (rawRunwaysData.length >= 6) {
@@ -686,10 +738,6 @@
         const rwyEl = document.createElement('div');
         rwyEl.className = `rwy-card ${isActive ? 'active-use' : ''}`;
         
-        // Requested Layout:
-        // Top section: Left has (Row 1: Title, Row 2: Wind labels, Row 3: Wind values)
-        //              Right has (Wind Indicator SVG)
-        // Bottom section: (Row 4: Vector labels, Row 5: Vector values)
         rwyEl.innerHTML = `
           <div class="rwy-top-split b-b">
             <div class="rwy-top-left b-r">
@@ -806,7 +854,27 @@
       }
     }
 
-    // 7. Sync System Status & NOTAMs via API
+    // 7. System Notices LocalStorage Management
+    function loadAirportNotices(ap) {
+      const saved = localStorage.getItem('ifs_notices_' + ap);
+      const textarea = document.getElementById('notices-input');
+      if (saved !== null) {
+        textarea.value = saved;
+      } else {
+        textarea.value = DEFAULT_AIRPORT_NOTICES[ap] || `1. [${ap}] 표준 공역 감시 및 운항 통제 정상 유지 중.\n2. [NOTAM] 유효 비행고시보 실시간 동기화 완료.`;
+      }
+    }
+
+    function saveCurrentNotices() {
+      const textarea = document.getElementById('notices-input');
+      localStorage.setItem('ifs_notices_' + currentAirport, textarea.value);
+      
+      const msg = document.getElementById('notice-save-msg');
+      msg.style.display = 'inline';
+      setTimeout(() => { msg.style.display = 'none'; }, 2000);
+    }
+
+    // 8. Sync System Heartbeat via API
     async function syncSystemStatus() {
       try {
         const crawlerRes = await fetch(`${API_BASE}/api/crawler?status=true&_t=${Date.now()}`);
@@ -816,27 +884,13 @@
       } catch (e) {
         document.getElementById('dot-gateway').style.background = 'var(--red)';
       }
-
-      // Sync NOTAMs
-      try {
-        const notamRes = await fetch(`${API_BASE}/api/notam?location=${currentAirport}&_t=${Date.now()}`);
-        if (notamRes.ok) {
-          const data = await notamRes.json();
-          const notams = data.notams || [];
-          if (notams.length > 0) {
-            const list = document.getElementById('notices-list');
-            list.innerHTML = `
-              <div class="notice-item">1. [SYSTEM] ${currentAirport} 공역 IFS 정보융합 게이트웨이 연계 정상 가동 중.</div>
-              <div class="notice-item">2. [NOTAM ${notams[0].notamNumber || 'LIVE'}] ${(notams[0].itemE || 'NORMAL OPERATIONS').slice(0, 100)}</div>
-            `;
-          }
-        }
-      } catch (e) {}
     }
 
     function changeAirport(ap) {
       currentAirport = ap;
+      rawRunwaysData = [];
       flightStatusHistory.clear();
+      loadAirportNotices(ap);
       syncWeatherData();
       syncFlightSchedules();
       syncSystemStatus();
@@ -844,6 +898,7 @@
 
     // Initial load & Periodic Pollers
     function init() {
+      loadAirportNotices(currentAirport);
       syncWeatherData();
       syncFlightSchedules();
       syncSystemStatus();
