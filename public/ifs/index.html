@@ -34,7 +34,7 @@
       background: var(--bg);
       color: var(--primary-dim);
       font-family: var(--font-mono);
-      font-size: 12.5px;
+      font-size: 12px;
       line-height: 1.25;
       user-select: none;
       -webkit-font-smoothing: antialiased;
@@ -234,7 +234,7 @@
       min-width: 0;
       height: 100%;
     }
-    .metric-label { font-size: 9px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+    .metric-label { font-size: 8.5px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
     .metric-val {
       font-size: 16px;
       font-weight: 800;
@@ -242,7 +242,7 @@
       line-height: 1.1;
     }
     .metric-val-sm {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       color: var(--primary-bright);
       white-space: nowrap;
@@ -465,7 +465,7 @@
       </div>
     </div>
 
-    <!-- 3. Schedule Split (DEP / ARR from Gateway API with 5-time Flash on Change) -->
+    <!-- 3. Schedule Split (DEP / ARR from Gateway API with [출발도착완료수 / 전체 스케줄수]) -->
     <div class="schedule-split">
       <!-- DEPARTURES -->
       <div class="grid-box" style="flex: 1;">
@@ -601,7 +601,16 @@
       return { headTail: headTailStr, cross: crossStr };
     }
 
-    // 4. Render Custom SVG Wind Rose & Runway Graphic
+    // Relative Humidity Calculator (Magnus-Tetens)
+    function calculateHumidity(tmpC, dpC) {
+      const t = parseFloat(tmpC);
+      const dp = parseFloat(dpC);
+      if (isNaN(t) || isNaN(dp)) return '75%';
+      const rh = Math.min(100, Math.max(10, Math.round(100 * Math.exp((17.625 * dp) / (243.04 + dp)) / Math.exp((17.625 * t) / (243.04 + t)))));
+      return `${rh}%`;
+    }
+
+    // 4. Render Custom SVG Wind Rose & Runway Graphic (Symbol displayed on ALL runways)
     function createRunwayRoseSvg(rwyDirStr, rwyHeadingDeg, windDirDeg, isActiveRwy) {
       const numMatch = rwyDirStr.match(/\d+/);
       const num = numMatch ? parseInt(numMatch[0]) : 17;
@@ -618,12 +627,16 @@
       // Runway tilt relative to North (0 deg)
       const rwyTilt = rwyHeadingDeg - 180;
 
-      // Aircraft position at START/Approach threshold (y = -19), rotated 180 to face landing heading
-      const airplaneSvg = isActiveRwy ? `
-        <g class="airplane-icon" transform="translate(0, -19) rotate(180)">
-          <path d="M0,-6 L1.8,-2 L5,-0.6 L5,0.6 L1.8,0 L1,4 L3,6 L3,6.8 L0,6 L-3,6.8 L-3,6 L-1,4 L-1.8,0 L-5,0.6 L-5,-0.6 L-1.8,-2 Z" fill="#eaffde" />
+      // Aircraft symbol at START/Approach threshold (y = -19), rotated 180 to face landing/takeoff heading
+      // Displayed on ALL runways for clear heading orientation
+      const planeFill = isActiveRwy ? '#eaffde' : '#77ff61';
+      const planeOpacity = isActiveRwy ? '1' : '0.75';
+
+      const airplaneSvg = `
+        <g class="airplane-icon" transform="translate(0, -19) rotate(180)" opacity="${planeOpacity}">
+          <path d="M0,-6 L1.8,-2 L5,-0.6 L5,0.6 L1.8,0 L1,4 L3,6 L3,6.8 L0,6 L-3,6.8 L-3,6 L-1,4 L-1.8,0 L-5,0.6 L-5,-0.6 L-1.8,-2 Z" fill="${planeFill}" />
         </g>
-      ` : '';
+      `;
 
       return `
         <svg viewBox="-50 -50 100 100" width="76" height="76" class="runway-rose-svg">
@@ -643,7 +656,7 @@
           <!-- Runway Box (Tilted to true heading) -->
           <g transform="rotate(${rwyTilt})">
             <rect x="-5.5" y="-28" width="11" height="56" stroke="#00ff00" stroke-width="1.3" fill="none" rx="1" />
-            <!-- Active Aircraft In-Use START Threshold Indicator -->
+            <!-- Aircraft START Threshold Indicator (Displayed for ALL runways) -->
             ${airplaneSvg}
           </g>
 
@@ -676,8 +689,8 @@
       // If empty, generate fallback runways for this airport so it's NEVER blank
       if (!rawRunwaysData || rawRunwaysData.length === 0) {
         rawRunwaysData = [
-          { rwyDir: '17', wd: '170', ws: '8.5', max: '12.5', min: '6.5', qnhHpa: '1012', rvr: 'P2000', mor: '10000', rwyUse: 'Y' },
-          { rwyDir: '35', wd: '170', ws: '8.5', max: '12.5', min: '6.5', qnhHpa: '1012', rvr: 'P2000', mor: '10000', rwyUse: 'N' }
+          { rwyDir: '17', wd: '170', ws: '8.5', max: '12.5', min: '6.5', tmp: '29.0', dp: '24.0', base1lyr: 'FEW 3000FT', qnhHpa: '1012', rvr: 'P2000', mor: '10000', rwyUse: 'Y' },
+          { rwyDir: '35', wd: '170', ws: '8.5', max: '12.5', min: '6.5', tmp: '29.0', dp: '24.0', base1lyr: 'FEW 3000FT', qnhHpa: '1012', rvr: 'P2000', mor: '10000', rwyUse: 'N' }
         ];
       }
 
@@ -737,6 +750,16 @@
         const minWs = parseFloat(rwy.min) || Math.max(0, parseFloat((ws - 2).toFixed(1)));
         const gust = rwy.gust && rwy.gust !== '-' ? rwy.gust : '-';
         
+        // Temperature, Dewpoint, Humidity, Cloud Base
+        const tmp = rwy.tmp ? `${parseFloat(rwy.tmp).toFixed(1)}°C` : '29.0°C';
+        const dp = rwy.dp ? `${parseFloat(rwy.dp).toFixed(1)}°C` : '24.0°C';
+        const humidity = rwy.hm ? `${rwy.hm}%` : calculateHumidity(rwy.tmp || 29, rwy.dp || 24);
+        const tmpDpHum = `${tmp} / ${dp} (${humidity})`;
+
+        let cldBase = rwy.base1lyr || rwy.cld || 'FEW 3000FT';
+        if (cldBase === 'NCD') cldBase = 'NCD (운고 미검출)';
+        else if (/^\d+$/.test(cldBase)) cldBase = `FEW ${cldBase}FT`;
+
         const qnh = rwy.qnhHpa || (rwy.qnhOrigin ? (rwy.qnhOrigin / 10).toFixed(0) : '1012');
         const qnhInhg = rwy.qnhInhg || rwy.qnh || (parseFloat(qnh) * 0.02953).toFixed(2);
         
@@ -749,6 +772,7 @@
         const rwyEl = document.createElement('div');
         rwyEl.className = `rwy-card ${isActive ? 'active-use' : ''}`;
         
+        // Requested Complete Layout: Top Section + Bottom Section (Including Temp, DP, Humidity, Cloud Base)
         rwyEl.innerHTML = `
           <div class="rwy-top-split b-b">
             <div class="rwy-top-left b-r">
@@ -778,12 +802,16 @@
           <div class="metric-row b-b">
             <div class="metric-col b-r"><span class="metric-label">정풍(H)/배풍(T)</span></div>
             <div class="metric-col b-r"><span class="metric-label">좌(L)/우(R)측풍</span></div>
+            <div class="metric-col b-r"><span class="metric-label">기온 / 노점(습도)</span></div>
+            <div class="metric-col b-r"><span class="metric-label">운고 / 운량</span></div>
             <div class="metric-col b-r"><span class="metric-label">QNH(hPa/inHg)</span></div>
             <div class="metric-col"><span class="metric-label">RVR / 시정 (RWY ${rwyDirStr})</span></div>
           </div>
           <div class="metric-row">
             <div class="metric-col b-r"><span class="metric-val-sm">${vectors.headTail}</span></div>
             <div class="metric-col b-r"><span class="metric-val-sm">${vectors.cross}</span></div>
+            <div class="metric-col b-r"><span class="metric-val-sm">${tmpDpHum}</span></div>
+            <div class="metric-col b-r"><span class="metric-val-sm">${cldBase}</span></div>
             <div class="metric-col b-r"><span class="metric-val-sm">${qnh} / ${qnhInhg}</span></div>
             <div class="metric-col"><span class="metric-val-sm">${rvr} / ${mor}</span></div>
           </div>
@@ -792,7 +820,7 @@
       });
     }
 
-    // 6. Fetch Flight Schedules (FIDS DEP & ARR) with 5-time Blinking Animation on Status Change
+    // 6. Fetch Flight Schedules (FIDS DEP & ARR) with [출발도착완료수 / 전체 스케줄수]
     async function syncFlightSchedules() {
       try {
         const res = await fetch(`${API_BASE}/api/flight-schedule?airport=${currentAirport}&_t=${Date.now()}`);
@@ -802,9 +830,9 @@
         const deps = data.departures || [];
         const arrs = data.arrivals || [];
 
-        // Render Departures
-        const activeDepCount = deps.filter(d => (d.depStatus||d.status||'').toUpperCase().includes('DEP')).length;
-        document.getElementById('dep-count').textContent = `[${activeDepCount}/${deps.length}]`;
+        // Exact completed departures vs total scheduled count
+        const completedDepCount = deps.filter(d => (d.atd && d.atd !== '-' && d.atd !== '') || (d.depStatus||d.status||'').toUpperCase().includes('DEP')).length;
+        document.getElementById('dep-count').textContent = `[${completedDepCount}/${deps.length}]`;
         const depTbody = document.getElementById('dep-tbody');
         depTbody.innerHTML = '';
 
@@ -831,9 +859,9 @@
           depTbody.appendChild(tr);
         });
 
-        // Render Arrivals
-        const activeArrCount = arrs.filter(a => (a.arrStatus||a.status||'').toUpperCase().includes('ARR')).length;
-        document.getElementById('arr-count').textContent = `[${activeArrCount}/${arrs.length}]`;
+        // Exact completed arrivals vs total scheduled count
+        const completedArrCount = arrs.filter(a => (a.ata && a.ata !== '-' && a.ata !== '') || (a.arrStatus||a.status||'').toUpperCase().includes('ARR')).length;
+        document.getElementById('arr-count').textContent = `[${completedArrCount}/${arrs.length}]`;
         const arrTbody = document.getElementById('arr-tbody');
         arrTbody.innerHTML = '';
 
