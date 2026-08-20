@@ -18,8 +18,9 @@ function normalizeHex(value) {
   return trimmed;
 }
 
-// Verified High Quality Aircraft Model Photographs (Wikimedia Commons)
+// Verified High Quality Aircraft & Helicopter Model Photographs (Wikimedia Commons)
 const MODEL_PHOTOS = {
+  // Airbus Airliners
   'A320': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Airbus_A320-214%2C_Airbus_Industrie_JP7617615.jpg/640px-Airbus_A320-214%2C_Airbus_Industrie_JP7617615.jpg', photographer: 'Airbus Industrie / Wikimedia Commons', model: 'Airbus A320' },
   'A321': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Airbus_A321-231%2C_Airbus_Industrie_JP7617616.jpg/640px-Airbus_A321-231%2C_Airbus_Industrie_JP7617616.jpg', photographer: 'Airbus Industrie / Wikimedia Commons', model: 'Airbus A321' },
   'A20N': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Airbus_A320-214%2C_Airbus_Industrie_JP7617615.jpg/640px-Airbus_A320-214%2C_Airbus_Industrie_JP7617615.jpg', photographer: 'Airbus Industrie / Wikimedia Commons', model: 'Airbus A320neo' },
@@ -30,6 +31,8 @@ const MODEL_PHOTOS = {
   'A359': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/EGLF_-_Airbus_A350-941_-_F-WZNW.jpg/640px-EGLF_-_Airbus_A350-941_-_F-WZNW.jpg', photographer: 'Airbus / Wikimedia Commons', model: 'Airbus A350-900' },
   'A35K': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/EGLF_-_Airbus_A350-941_-_F-WZNW.jpg/640px-EGLF_-_Airbus_A350-941_-_F-WZNW.jpg', photographer: 'Airbus / Wikimedia Commons', model: 'Airbus A350-1000' },
   'A388': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/A6-EDY_A380_Emirates_31_jan_2013_jfk_%288442269364%29_%28cropped%29.jpg/640px-A6-EDY_A380_Emirates_31_jan_2013_jfk_%288442269364%29_%28cropped%29.jpg', photographer: 'Wikimedia Commons', model: 'Airbus A380-800' },
+
+  // Boeing Airliners
   'B737': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Delta_Boeing_737-800_N371DA_departing_Boston_June_2025.jpg/640px-Delta_Boeing_737-800_N371DA_departing_Boston_June_2025.jpg', photographer: 'Boeing / Wikimedia Commons', model: 'Boeing 737' },
   'B738': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Delta_Boeing_737-800_N371DA_departing_Boston_June_2025.jpg/640px-Delta_Boeing_737-800_N371DA_departing_Boston_June_2025.jpg', photographer: 'Boeing / Wikimedia Commons', model: 'Boeing 737-800' },
   'B739': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Delta_Boeing_737-800_N371DA_departing_Boston_June_2025.jpg/640px-Delta_Boeing_737-800_N371DA_departing_Boston_June_2025.jpg', photographer: 'Boeing / Wikimedia Commons', model: 'Boeing 737-900' },
@@ -43,7 +46,17 @@ const MODEL_PHOTOS = {
   'B789': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Boeing_787_N1015B_ANA_Airlines_%2827611880663%29_%28cropped%29.jpg/640px-Boeing_787_N1015B_ANA_Airlines_%2827611880663%29_%28cropped%29.jpg', photographer: 'Boeing / Wikimedia Commons', model: 'Boeing 787-9' },
   'B78X': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Boeing_787_N1015B_ANA_Airlines_%2827611880663%29_%28cropped%29.jpg/640px-Boeing_787_N1015B_ANA_Airlines_%2827611880663%29_%28cropped%29.jpg', photographer: 'Boeing / Wikimedia Commons', model: 'Boeing 787-10' },
   'B752': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Delta_Air_Lines_Boeing_757-200_N6705Y_departing_Boston_August_2025.jpg/640px-Delta_Air_Lines_Boeing_757-200_N6705Y_departing_Boston_August_2025.jpg', photographer: 'Boeing / Wikimedia Commons', model: 'Boeing 757-200' },
-  'B763': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Boeing_767-300ER_Austrian_OE-LAT_01.jpg/640px-Boeing_767-300ER_Austrian_OE-LAT_01.jpg', photographer: 'Boeing / Wikimedia Commons', model: 'Boeing 767-300ER' }
+  'B763': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Boeing_767-300ER_Austrian_OE-LAT_01.jpg/640px-Boeing_767-300ER_Austrian_OE-LAT_01.jpg', photographer: 'Boeing / Wikimedia Commons', model: 'Boeing 767-300ER' },
+
+  // Helicopters & GA
+  'KA27': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Kamov_Ka-32A11BC_%282500000000000000000%29.jpg/640px-Kamov_Ka-32A11BC_%282500000000000000000%29.jpg', photographer: 'Wikimedia Commons', model: 'Kamov Ka-32/27' },
+  'KA32': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Kamov_Ka-32A11BC_%282500000000000000000%29.jpg/640px-Kamov_Ka-32A11BC_%282500000000000000000%29.jpg', photographer: 'Wikimedia Commons', model: 'Kamov Ka-32' },
+  'S76': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Sikorsky_S-76C%2B_N761SA_01.jpg/640px-Sikorsky_S-76C%2B_N761SA_01.jpg', photographer: 'Wikimedia Commons', model: 'Sikorsky S-76' },
+  'H145': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/ADAC_Airbus_Helicopters_H145_D-HJAR_EDJA_02.jpg/640px-ADAC_Airbus_Helicopters_H145_D-HJAR_EDJA_02.jpg', photographer: 'Wikimedia Commons', model: 'Airbus H145' },
+  'EC45': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/ADAC_Airbus_Helicopters_H145_D-HJAR_EDJA_02.jpg/640px-ADAC_Airbus_Helicopters_H145_D-HJAR_EDJA_02.jpg', photographer: 'Wikimedia Commons', model: 'Eurocopter EC145' },
+  'AS50': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Airbus_H125_Ecureuil_OE-XRM_01.jpg/640px-Airbus_H125_Ecureuil_OE-XRM_01.jpg', photographer: 'Wikimedia Commons', model: 'Airbus H125 / AS350' },
+  'C172': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Cessna_172S_Skyhawk_SP%2C_Private_JP68185.jpg/640px-Cessna_172S_Skyhawk_SP%2C_Private_JP68185.jpg', photographer: 'Wikimedia Commons', model: 'Cessna 172 Skyhawk' },
+  'C208': { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Cessna_208B_Grand_Caravan_EX_N842EX_01.jpg/640px-Cessna_208B_Grand_Caravan_EX_N842EX_01.jpg', photographer: 'Wikimedia Commons', model: 'Cessna 208 Caravan' }
 };
 
 function getModelFallback(typeCode) {
@@ -63,6 +76,7 @@ function getModelFallback(typeCode) {
   if (clean.startsWith('A33')) return MODEL_PHOTOS['A333'];
   if (clean.startsWith('A35')) return MODEL_PHOTOS['A359'];
   if (clean.startsWith('B74')) return MODEL_PHOTOS['B744'];
+  if (clean.startsWith('KA2') || clean.startsWith('KA3')) return MODEL_PHOTOS['KA32'];
   return null;
 }
 
