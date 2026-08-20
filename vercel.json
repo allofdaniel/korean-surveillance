@@ -49,6 +49,14 @@
       "destination": "/api-dashboard.html"
     },
     {
+      "source": "/swagger",
+      "destination": "/swagger.html"
+    },
+    {
+      "source": "/docs",
+      "destination": "/docs.html"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     }

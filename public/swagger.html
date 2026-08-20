@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대한감시 - 23개 연계 인터페이스 API Swagger 명세서</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #09090b;
+      color: #fafafa;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .custom-topbar {
+      height: 48px;
+      background: #121215;
+      border-bottom: 1px solid #27272a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+    .brand-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-badge {
+      font-size: 10px;
+      background: rgba(6, 182, 212, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(6, 182, 212, 0.35);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: 700;
+    }
+    .top-links { display: flex; gap: 8px; }
+    .top-link {
+      padding: 4px 10px;
+      border-radius: 5px;
+      background: #18181b;
+      border: 1px solid #3f3f46;
+      color: #e4e4e7;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .top-link:hover { background: #27272a; color: #fff; border-color: #52525b; }
+    
+    /* Dark Theme Swagger UI Overrides */
+    .swagger-ui .topbar { display: none; }
+    .swagger-ui {
+      background: #09090b;
+      color: #e4e4e7;
+      padding-bottom: 40px;
+    }
+    .swagger-ui .info .title { color: #ffffff; }
+    .swagger-ui .info p, .swagger-ui .info li, .swagger-ui .info td { color: #d4d4d8; }
+    .swagger-ui .scheme-container { background: #121215; border-bottom: 1px solid #27272a; box-shadow: none; }
+    .swagger-ui select { background: #18181b; color: #38bdf8; border: 1px solid #3f3f46; }
+    .swagger-ui .opblock .opblock-summary-operation-id, .swagger-ui .opblock .opblock-summary-path, .swagger-ui .opblock .opblock-summary-path__deprecated { color: #fafafa; }
+    .swagger-ui .opblock .opblock-summary-description { color: #a1a1aa; }
+    .swagger-ui .opblock.opblock-get { background: rgba(59, 130, 246, 0.08); border-color: #3b82f6; }
+    .swagger-ui .opblock.opblock-get .opblock-summary-method { background: #2563eb; }
+    .swagger-ui .opblock.opblock-post { background: rgba(16, 185, 129, 0.08); border-color: #10b981; }
+    .swagger-ui .opblock.opblock-post .opblock-summary-method { background: #059669; }
+    .swagger-ui .opblock-body { background: #0c0c0f; }
+    .swagger-ui table thead tr td, .swagger-ui table thead tr th { color: #a1a1aa; border-bottom: 1px solid #27272a; }
+    .swagger-ui .tabli button { color: #a1a1aa; }
+    .swagger-ui .tabli.active button { color: #38bdf8; }
+    .swagger-ui .response-col_status { color: #34d399; }
+    .swagger-ui .highlight-code { background: #050507; }
+    .swagger-ui .btn { border-color: #3f3f46; color: #e4e4e7; background: #18181b; }
+    .swagger-ui .btn.execute { background: #0284c7; color: #fff; border-color: #0284c7; }
+    .swagger-ui input[type=text], .swagger-ui textarea { background: #18181b; color: #fafafa; border: 1px solid #3f3f46; }
+  </style>
+</head>
+<body>
+  <div class="custom-topbar">
+    <div class="brand-title">
+      대한감시 연계 게이트웨이
+      <span class="brand-badge">OPENAPI 3.0 SWAGGER</span>
+    </div>
+    <div class="top-links">
+      <a href="/api-dashboard" class="top-link">실시간 대시보드</a>
+      <a href="/" class="top-link">관제 맵 이동</a>
+    </div>
+  </div>
+
+  <div id="swagger-ui"></div>
+
+  <script src="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui-bundle.js"></script>
+  <script>
+    window.onload = function() {
+      SwaggerUIBundle({
+        url: '/openapi.json',
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout"
+      });
+    };
+  </script>
+</body>
+</html>
