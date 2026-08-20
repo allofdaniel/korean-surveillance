@@ -554,23 +554,11 @@
       const topLabel = `${String(num).padStart(2, '0')}${suffix}`;
       const botLabel = `${String(oppNum).padStart(2, '0')}${oppSuffix}`;
 
-      // Runway tilt relative to North (0 deg)
-      const rwyTilt = rwyHeadingDeg - 180;
-
-      // Aircraft position at START of runway in landing direction
-      let planeY = -20;
-      let planeRot = 0;
-
-      if (num < 18) {
-        planeY = -20;
-        planeRot = 0;
-      } else {
-        planeY = 20;
-        planeRot = 180;
-      }
-
+      // Aircraft position at START of runway in landing direction:
+      // The approach entry threshold is at y = -19 (opposite end, e.g. 270 deg for RWY 09, 350 deg for RWY 17).
+      // Rotating by 180 deg directs the airplane nose towards +Y (facing the active runway heading).
       const airplaneSvg = isActiveRwy ? `
-        <g class="airplane-icon" transform="translate(0, ${planeY}) rotate(${planeRot})">
+        <g class="airplane-icon" transform="translate(0, -19) rotate(180)">
           <path d="M0,-6 L1.8,-2 L5,-0.6 L5,0.6 L1.8,0 L1,4 L3,6 L3,6.8 L0,6 L-3,6.8 L-3,6 L-1,4 L-1.8,0 L-5,0.6 L-5,-0.6 L-1.8,-2 Z" fill="#eaffde" />
         </g>
       ` : '';
