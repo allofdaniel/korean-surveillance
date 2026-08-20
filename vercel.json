@@ -58,11 +58,11 @@
     },
     {
       "source": "/ifs",
-      "destination": "/ifs/index.html"
+      "destination": "/ifs.html"
     },
     {
       "source": "/IFS",
-      "destination": "/ifs/index.html"
+      "destination": "/ifs.html"
     },
     {
       "source": "/api/(.*)",
