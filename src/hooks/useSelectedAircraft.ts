@@ -130,6 +130,10 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
         const params = new URLSearchParams();
         if (hex) params.append('hex', hex);
         if (reg) params.append('reg', reg);
+        const callsign = selectedAircraft.callsign?.trim();
+        const type = selectedAircraft.icao_type || selectedAircraft.type;
+        if (callsign) params.append('callsign', callsign);
+        if (type) params.append('type', type);
 
         const res = await fetch(`/api/aircraft-photo?${params}`, { signal: controller.signal });
         if (cancelled) return;
@@ -378,8 +382,7 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
               aircraft_images: routeData.aircraft?.images || [],
               _source: routeData.source,
               _lastUpdated: routeData.lastUpdated,
-              _staleSchedule: isStaleSchedule()
-            });
+              _staleSchedule: isStaleSchedule()\n            });
             setFlightScheduleLoading(false);
             return;
           }
