@@ -150,7 +150,8 @@ export default async function handler(req, res) {
 // AMOS - 실시간 공항 관제 기상관측장비 (항공기상청 AMO 실시간 우선, 표준 관제기상 폴백)
 async function handleAmos(req, res) {
   const urlObj = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
-  const rawIcao = (urlObj.searchParams.get('icao') || (typeof req.query?.icao === 'string' ? req.query.icao : null) || '').toUpperCase() || null;
+  let rawIcao = (urlObj.searchParams.get('icao') || (typeof req.query?.icao === 'string' ? req.query.icao : null) || '').toUpperCase() || null;
+  if (rawIcao === 'ALL') rawIcao = null;
 
   // 1. 항공기상청 AMO 실시간 관제기상 (전국 42개 활주로별 초단위 전체 55개 필드 실측치)
   try {

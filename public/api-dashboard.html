@@ -1,445 +1,309 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>대한감시 - 23개 연계 인터페이스 종합 대시보드 (원천 vs 변환 비교 & 전국 공항)</title>
+  <title>대한감시 - 23개 연계 인터페이스 종합 대시보드</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            border: '#27272a',
+            background: '#09090b',
+            foreground: '#fafafa',
+            card: { DEFAULT: '#18181b', foreground: '#fafafa' },
+            muted: { DEFAULT: '#27272a', foreground: '#a1a1aa' },
+            accent: { DEFAULT: '#06b6d4', foreground: '#ffffff' }
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: #0b0f19;
-      color: #e2e8f0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header {
-      background: #0f172a;
-      border-bottom: 1px solid #1e293b;
-      padding: 14px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand-icon {
-      background: rgba(6, 182, 212, 0.15);
-      border: 1px solid rgba(6, 182, 212, 0.4);
-      color: #06b6d4;
-      padding: 8px;
-      border-radius: 10px;
-      font-size: 20px;
-    }
-    .brand-title { font-size: 17px; font-weight: 700; color: #fff; }
-    .brand-sub { font-size: 11px; color: #94a3b8; }
-    .nav-links { display: flex; gap: 8px; align-items: center; }
-    .btn {
-      padding: 7px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      border: 1px solid #334155;
-      background: #1e293b;
-      color: #cbd5e1;
-      text-decoration: none;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn:hover { background: #334155; color: #fff; }
-    .btn-primary {
-      background: rgba(6, 182, 212, 0.2);
-      border-color: #06b6d4;
-      color: #38bdf8;
-    }
-    .btn-primary:hover { background: rgba(6, 182, 212, 0.35); color: #fff; }
-    
-    .airport-select {
-      background: #1e293b;
-      color: #38bdf8;
-      border: 1px solid #06b6d4;
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 700;
-      outline: none;
-      cursor: pointer;
-    }
-
-    .stats-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      padding: 12px 24px;
-      background: #0a0e1a;
-      border-bottom: 1px solid #1e293b;
-    }
-    .stat-card {
-      background: #131b2e;
-      border: 1px solid #1e293b;
-      padding: 12px 16px;
-      border-radius: 10px;
-    }
-    .stat-label { font-size: 11px; color: #94a3b8; }
-    .stat-val { font-size: 20px; font-weight: 700; color: #fff; margin-top: 2px; }
-    .stat-badge { font-size: 11px; color: #10b981; margin-top: 2px; }
-
-    .main-container {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-      height: calc(100vh - 165px);
-    }
-    .table-pane {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid #1e293b;
-      overflow: hidden;
-    }
-    .filter-bar {
-      padding: 10px 16px;
-      background: #0f172a;
-      border-bottom: 1px solid #1e293b;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .cat-tabs { display: flex; gap: 5px; overflow-x: auto; }
-    .cat-btn {
-      padding: 5px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      border-radius: 6px;
-      background: #1e293b;
-      border: 1px solid transparent;
-      color: #94a3b8;
-      cursor: pointer;
-    }
-    .cat-btn.active {
-      background: rgba(6, 182, 212, 0.2);
-      border-color: #06b6d4;
-      color: #38bdf8;
-    }
-    .search-input {
-      padding: 5px 10px;
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 6px;
-      color: #fff;
-      font-size: 12px;
-      outline: none;
-      width: 180px;
-    }
-    .table-scroll { flex: 1; overflow-y: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
-    thead { background: #0f172a; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #334155; }
-    th, td { padding: 9px 12px; border-bottom: 1px solid #1e293b; }
-    th { color: #94a3b8; font-weight: 600; }
-    tr { cursor: pointer; transition: background 0.15s; }
-    tr:hover { background: rgba(6, 182, 212, 0.08); }
-    tr.active { background: rgba(6, 182, 212, 0.18); border-left: 3px solid #06b6d4; }
-    .badge {
-      display: inline-block;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 10px;
-      font-family: monospace;
-      font-weight: 600;
-    }
-    .badge-asterix { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
-    .badge-amhs { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
-    .badge-audio { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
-    .badge-json { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
-    
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .status-ok { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; }
-    .status-err { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid #ef4444; }
-    .status-pending { background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid #eab308; }
-
-    .inspector-pane {
-      width: 580px;
-      background: #0a0e1a;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .inspector-head {
-      padding: 12px 18px;
-      background: #0f172a;
-      border-bottom: 1px solid #1e293b;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .inspector-tabs {
-      display: flex;
-      background: #131b2e;
-      border-bottom: 1px solid #1e293b;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 9px 12px;
-      font-size: 11px;
-      font-weight: 700;
-      border: none;
-      background: transparent;
-      color: #94a3b8;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-      text-align: center;
-    }
-    .tab-btn.active {
-      color: #38bdf8;
-      background: rgba(6, 182, 212, 0.08);
-      border-bottom-color: #06b6d4;
-    }
-    .inspector-meta {
-      padding: 10px 18px;
-      background: #0f172a;
-      border-bottom: 1px solid #1e293b;
-      font-size: 11px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5px;
-    }
-    .inspector-meta span { color: #94a3b8; }
-    .inspector-meta strong { color: #e2e8f0; }
-
-    .audio-player-box {
-      padding: 12px 18px;
-      background: #182238;
-      border-bottom: 1px solid #1e293b;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .code-box {
-      flex: 1;
-      padding: 14px;
-      overflow: auto;
-      background: #070a12;
-      font-family: Consolas, Monaco, "Courier New", monospace;
-      font-size: 11px;
-      color: #34d399;
-      line-height: 1.5;
-      white-space: pre-wrap;
-    }
-    @media (max-width: 1024px) {
-      .main-container { flex-direction: column; height: auto; }
-      .inspector-pane { width: 100%; height: 500px; }
-    }
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap');
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #09090b; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+    .animate-spin-slow { animation: spin 2s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   </style>
 </head>
-<body>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
 
-  <header>
-    <div class="brand">
-      <div class="brand-icon">📡</div>
-      <div>
-        <div class="brand-title">23개 외부 연계 인터페이스 실시간 대시보드</div>
-        <div class="brand-sub">koreansurveillance.com 실시간 연계 게이트웨이</div>
-      </div>
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-zinc-900/90 backdrop-blur border-b border-zinc-800 px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-4">
+      <a href="/" class="flex items-center gap-3 group p-1.5 -m-1.5 rounded-lg hover:bg-zinc-800/60 transition-colors" title="관제 맵으로 돌아가기">
+        <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 group-hover:border-cyan-400 transition-all shadow-lg shadow-cyan-950/40">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-base font-bold text-white tracking-tight">대한감시 연계 게이트웨이</span>
+            <span class="px-2 py-0.5 text-[10px] font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 rounded-full font-mono">v2.4 LIVE</span>
+          </div>
+          <p class="text-xs text-zinc-400">23개 항공·감시·기상·스케줄 연계 인터페이스 실시간 대시보드</p>
+        </div>
+      </a>
     </div>
-    <div class="nav-links">
-      <label style="font-size: 11px; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
-        <span>전국 공항 선택:</span>
-        <select id="airport-select" class="airport-select" onchange="changeAirport(this.value)">
-          <option value="RKSI" selected>RKSI - 인천국제공항 (Incheon)</option>
-          <option value="RKSS">RKSS - 김포국제공항 (Gimpo)</option>
-          <option value="RKPC">RKPC - 제주국제공항 (Jeju)</option>
-          <option value="RKPK">RKPK - 김해국제공항 (Gimhae)</option>
-          <option value="RKPU">RKPU - 울산공항 (Ulsan)</option>
-          <option value="RKTU">RKTU - 청주국제공항 (Cheongju)</option>
-          <option value="RKTN">RKTN - 대구국제공항 (Daegu)</option>
-          <option value="RKJB">RKJB - 무안국제공항 (Muan)</option>
-          <option value="RKJJ">RKJJ - 광주공항 (Gwangju)</option>
-          <option value="RKJY">RKJY - 여수공항 (Yeosu)</option>
-          <option value="RKNY">RKNY - 양양국제공항 (Yangyang)</option>
-          <option value="RKTH">RKTH - 포항경주공항 (Pohang)</option>
-          <option value="RKPS">RKPS - 사천공항 (Sacheon)</option>
-          <option value="RKSM">RKSM - 서울공항 (Seoul Base)</option>
-          <option value="RKTI">RKTI - 중원공항 (Jungwon Base)</option>
+
+    <div class="flex items-center gap-3">
+      <!-- Airport Selector -->
+      <div class="flex items-center gap-2 bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 shadow-inner">
+        <span class="text-xs text-zinc-400 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          공항 필터:
+        </span>
+        <select id="airport-select" class="bg-transparent text-cyan-300 text-xs font-semibold focus:outline-none cursor-pointer pr-2" onchange="changeAirport(this.value)">
+          <option value="ALL" class="bg-zinc-900 text-cyan-300">⚡ 전국 15개 공항 일괄 종합 (ALL)</option>
+          <option value="RKSI" selected class="bg-zinc-900 text-white">RKSI - 인천국제공항 (Incheon)</option>
+          <option value="RKSS" class="bg-zinc-900 text-white">RKSS - 김포국제공항 (Gimpo)</option>
+          <option value="RKPC" class="bg-zinc-900 text-white">RKPC - 제주국제공항 (Jeju)</option>
+          <option value="RKPK" class="bg-zinc-900 text-white">RKPK - 김해국제공항 (Gimhae)</option>
+          <option value="RKPU" class="bg-zinc-900 text-white">RKPU - 울산공항 (Ulsan)</option>
+          <option value="RKTU" class="bg-zinc-900 text-white">RKTU - 청주국제공항 (Cheongju)</option>
+          <option value="RKTN" class="bg-zinc-900 text-white">RKTN - 대구국제공항 (Daegu)</option>
+          <option value="RKJB" class="bg-zinc-900 text-white">RKJB - 무안국제공항 (Muan)</option>
+          <option value="RKJJ" class="bg-zinc-900 text-white">RKJJ - 광주공항 (Gwangju)</option>
+          <option value="RKJY" class="bg-zinc-900 text-white">RKJY - 여수공항 (Yeosu)</option>
+          <option value="RKNY" class="bg-zinc-900 text-white">RKNY - 양양국제공항 (Yangyang)</option>
+          <option value="RKTH" class="bg-zinc-900 text-white">RKTH - 포항경주공항 (Pohang)</option>
+          <option value="RKPS" class="bg-zinc-900 text-white">RKPS - 사천공항 (Sacheon)</option>
+          <option value="RKSM" class="bg-zinc-900 text-white">RKSM - 서울공항 (Seoul Base)</option>
+          <option value="RKTI" class="bg-zinc-900 text-white">RKTI - 중원공항 (Jungwon Base)</option>
         </select>
-      </label>
-      <a href="/" class="btn">🗺️ 관제 맵</a>
-      <button class="btn btn-primary" onclick="runLiveHealthCheckAll()">⚡ 전체 실시간 핑</button>
+      </div>
+
+      <a href="/" class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-300 transition-colors flex items-center gap-1.5 border border-zinc-700">
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+        </svg>
+        관제 맵
+      </a>
+
+      <button id="ping-btn" onclick="runLiveHealthCheckAll()" class="px-3.5 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm">
+        <svg id="ping-icon" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span id="ping-text">전체 핑 점검</span>
+      </button>
     </div>
   </header>
 
-  <div class="stats-bar">
-    <div class="stat-card">
-      <div class="stat-label">총 연계 인터페이스</div>
-      <div class="stat-val" id="stat-total">23개</div>
-      <div class="stat-badge" id="stat-health">실시간 핑 점검 중...</div>
+  <!-- 15-Airport Realtime Health Matrix Grid -->
+  <div class="bg-zinc-900/60 border-b border-zinc-800 px-6 py-3">
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <h2 class="text-xs font-bold text-zinc-300 uppercase tracking-wider">전국 15개 공항 실시간 헬스비트 매트릭스 (Realtime Health Matrix)</h2>
+      </div>
+      <div class="text-[11px] text-zinc-400" id="matrix-summary">전국 15개 공항 기상·스케줄·NOTAM 상태 감시 중</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">실시간 관제기상 (AMOS)</div>
-      <div class="stat-val" id="stat-amos">42개 활주로</div>
-      <div class="stat-badge">● 1~2초 초단위 실시간</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">한반도 감시 항적</div>
-      <div class="stat-val" id="stat-tracks">90+ 대</div>
-      <div class="stat-badge">● OpenSky / ADS-B Feeder</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">인천 FIR 유효 NOTAM</div>
-      <div class="stat-val" id="stat-notam">460 건</div>
-      <div class="stat-badge">● AIM Korea SOAP XML</div>
+    <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-15 gap-2" id="airport-matrix-grid">
+      <!-- 15 airport chips rendered here -->
     </div>
   </div>
 
-  <div class="main-container">
-    <!-- Left Table -->
-    <div class="table-pane">
-      <div class="filter-bar">
-        <div class="cat-tabs">
-          <button class="cat-btn active" onclick="filterCat('ALL', this)">전체 (23)</button>
-          <button class="cat-btn" onclick="filterCat('항적정보', this)">항적정보 (8)</button>
-          <button class="cat-btn" onclick="filterCat('기상정보', this)">기상정보 (5)</button>
-          <button class="cat-btn" onclick="filterCat('항공고시보', this)">항공고시보 (1)</button>
-          <button class="cat-btn" onclick="filterCat('비행계획서', this)">비행계획서 (7)</button>
-          <button class="cat-btn" onclick="filterCat('관제음성', this)">관제음성 (1)</button>
-          <button class="cat-btn" onclick="filterCat('운영정보', this)">운영정보 (2)</button>
+  <!-- Main 2-Column Container -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- Left Pane: Interface Directory Table -->
+    <div class="flex-1 flex flex-col border-r border-zinc-800 bg-zinc-950 overflow-hidden">
+      <div class="p-3 bg-zinc-900/40 border-b border-zinc-800 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold text-zinc-300">인터페이스 목록</span>
+          <span class="px-2 py-0.5 text-[10px] rounded bg-zinc-800 text-zinc-400 font-mono" id="table-count">23개 등록</span>
         </div>
-        <input type="text" id="search-box" class="search-input" placeholder="인터페이스/형식/출처 검색..." oninput="renderTable()" />
+        <input type="text" id="search-box" class="px-3 py-1 bg-zinc-900 border border-zinc-700/80 rounded-md text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500 w-56 font-sans" placeholder="인터페이스/형식/출처 검색..." oninput="renderTable()" />
       </div>
 
-      <div class="table-scroll">
-        <table>
-          <thead>
+      <div class="flex-1 overflow-y-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead class="bg-zinc-900/90 sticky top-0 z-10 text-[11px] font-semibold text-zinc-400 border-b border-zinc-800 uppercase">
             <tr>
-              <th style="width: 45px; text-align: center;">NO</th>
-              <th>시스템 / 인터페이스 명</th>
-              <th>데이터 형식</th>
-              <th>프로토콜</th>
-              <th>발생 주기</th>
-              <th>원천 소스</th>
-              <th style="text-align: center; width: 100px;">실시간 상태</th>
+              <th class="py-2.5 px-3 w-12 text-center">NO</th>
+              <th class="py-2.5 px-3">시스템 / 인터페이스 명</th>
+              <th class="py-2.5 px-3">데이터 규격</th>
+              <th class="py-2.5 px-3">발생 주기</th>
+              <th class="py-2.5 px-3">원천 수집처</th>
+              <th class="py-2.5 px-3 w-28 text-center">실시간 상태</th>
             </tr>
           </thead>
-          <tbody id="table-body">
-            <!-- Rows dynamically rendered -->
+          <tbody id="table-body" class="divide-y divide-zinc-900 font-sans">
+            <!-- Rows dynamically inserted -->
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- Right Inspector -->
-    <div class="inspector-pane">
-      <div class="inspector-head">
+    <!-- Right Pane: Inspector & Code Viewer -->
+    <div class="w-[580px] flex flex-col bg-zinc-900/30 overflow-hidden">
+      
+      <!-- Inspector Header -->
+      <div class="p-4 bg-zinc-900/80 border-b border-zinc-800 flex items-center justify-between">
         <div>
-          <h3 id="inspect-title" style="font-size: 14px; font-weight: 700; color: #fff;">인터페이스를 선택하세요</h3>
-          <p id="inspect-doc" style="font-size: 11px; color: #94a3b8; margin-top: 2px;">좌측 목록에서 항목을 클릭하면 실시간 전문을 확인합니다.</p>
+          <h3 id="inspect-title" class="text-sm font-bold text-white flex items-center gap-2">항목을 선택하세요</h3>
+          <p id="inspect-doc" class="text-xs text-zinc-400 mt-0.5">좌측 목록에서 항목을 클릭하면 실시간 응답을 검증합니다.</p>
         </div>
-        <div style="display: flex; gap: 6px;">
-          <button class="btn" onclick="selectItem(activeItem)">🔄 실시간 재요청</button>
-          <button class="btn" id="copy-btn" onclick="copyPayload()">📋 전문 복사</button>
+        <div class="flex items-center gap-2">
+          <button onclick="selectItem(activeItem)" class="px-2.5 py-1 text-xs rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 transition flex items-center gap-1">
+            🔄 재요청
+          </button>
+          <button id="copy-btn" onclick="copyPayload()" class="px-2.5 py-1 text-xs rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition flex items-center gap-1 font-medium">
+            📋 전문 복사
+          </button>
         </div>
       </div>
 
-      <!-- Two View Tabs: Raw Source vs Converted Standard vs Guide -->
-      <div class="inspector-tabs">
-        <button class="tab-btn active" id="tab-converted" onclick="switchTab('converted')">📤 규격 변환 API 전문 (Converted Protocol)</button>
-        <button class="tab-btn" id="tab-raw" onclick="switchTab('raw')">📥 원천 수집 데이터 (Raw Feed)</button>
-        <button class="tab-btn" id="tab-guide" onclick="switchTab('guide')">📖 개발 현황 & 진단 명세</button>
+      <!-- Tab Buttons (Shadcn style) -->
+      <div class="flex bg-zinc-900 border-b border-zinc-800 text-xs">
+        <button id="tab-converted" onclick="switchTab('converted')" class="flex-1 py-2.5 text-center font-semibold text-cyan-400 border-b-2 border-cyan-500 bg-zinc-800/40 transition">
+          📤 규격 변환 API 전문 (Converted)
+        </button>
+        <button id="tab-raw" onclick="switchTab('raw')" class="flex-1 py-2.5 text-center font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition">
+          📥 원천 수집 데이터 (Raw Feed)
+        </button>
+        <button id="tab-guide" onclick="switchTab('guide')" class="flex-1 py-2.5 text-center font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition">
+          📖 개발 현황 & 진단
+        </button>
       </div>
 
-      <div class="inspector-meta" id="inspect-meta">
-        <div><span>엔드포인트:</span> <strong id="meta-ep">-</strong></div>
-        <div><span>발생 주기:</span> <strong id="meta-interval">-</strong></div>
-        <div><span>원천 출처:</span> <strong id="meta-source">-</strong></div>
-        <div><span>데이터 규격:</span> <strong id="meta-format">-</strong></div>
+      <!-- Inspector Meta Grid -->
+      <div class="px-4 py-2.5 bg-zinc-950/80 border-b border-zinc-800 grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs text-zinc-400">
+        <div>엔드포인트: <strong id="meta-ep" class="text-zinc-200 font-mono text-[11px]">-</strong></div>
+        <div>발생 주기: <strong id="meta-interval" class="text-zinc-200 font-mono text-[11px]">-</strong></div>
+        <div>원천 출처: <strong id="meta-source" class="text-cyan-300 font-sans">-</strong></div>
+        <div>데이터 규격: <strong id="meta-format" class="text-zinc-200 font-sans">-</strong></div>
       </div>
 
-      <!-- Live Working Audio Stream Box for NO 21 -->
-      <div class="audio-player-box" id="audio-box" style="display: none;">
-        <div>
-          <div style="font-weight: 700; font-size: 12px; color: #fff;" id="audio-title">뉴욕 JFK 국제공항 관제탑 (119.1 MHz)</div>
-          <div style="font-size: 11px; color: #94a3b8;">LiveATC 실시간 실제 오디오 스트림 가동 중</div>
+      <!-- Live ATC Audio Streaming Box (NO 21) -->
+      <div id="audio-box" class="p-3 bg-cyan-950/30 border-b border-cyan-800/40 flex items-center justify-between gap-3" style="display: none;">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300">
+            <svg class="w-4 h-4 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            </svg>
+          </div>
+          <div>
+            <div id="audio-title" class="text-xs font-bold text-white">뉴욕 JFK 국제공항 관제탑 (119.1 MHz)</div>
+            <div class="text-[10px] text-cyan-300/80">실시간 LiveATC 스트림 수신 가동 중</div>
+          </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <select id="channel-select" style="background:#0f172a; color:#38bdf8; border:1px solid #334155; border-radius:6px; padding:4px 8px; font-size:11px;" onchange="changeAudioChannel(this.value)">
+        <div class="flex items-center gap-2">
+          <select id="channel-select" class="bg-zinc-900 text-cyan-300 border border-zinc-700 rounded px-2 py-1 text-xs" onchange="changeAudioChannel(this.value)">
             <option value="KJFK" selected>KJFK (New York JFK Tower)</option>
             <option value="RJTT">RJTT (Tokyo Haneda Tower)</option>
             <option value="KLAX">KLAX (Los Angeles Tower)</option>
           </select>
-          <audio id="live-audio-player" controls style="height: 30px; width: 180px;"></audio>
+          <audio id="live-audio-player" controls class="h-7 w-36"></audio>
         </div>
       </div>
 
-      <div class="code-box" id="code-viewer">// 실시간 라이브 페이로드가 여기에 표시됩니다.</div>
+      <!-- Code Box -->
+      <div class="flex-1 bg-zinc-950 p-4 overflow-auto font-mono text-[11px] text-emerald-400 whitespace-pre-wrap leading-relaxed select-text" id="code-viewer">// 실시간 라이브 페이로드가 여기에 표시됩니다.</div>
     </div>
   </div>
 
   <script>
+    const KOREAN_AIRPORTS = [
+      { code: 'RKSI', name: '인천', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKSS', name: '김포', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKPC', name: '제주', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKPK', name: '김해', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKPU', name: '울산', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKTU', name: '청주', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKTN', name: '대구', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKJB', name: '무안', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKJJ', name: '광주', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKJY', name: '여수', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKNY', name: '양양', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKTH', name: '포항', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKPS', name: '사천', amos: true, metar: true, taf: true, fids: true, notam: true },
+      { code: 'RKSM', name: '서울', amos: true, metar: true, taf: false, fids: false, notam: true },
+      { code: 'RKTI', name: '중원', amos: true, metar: true, taf: false, fids: false, notam: true },
+    ];
+
     let currentAirport = 'RKSI';
 
-    function getCatalogForAirport(ap) {
+    function getCatalog(ap) {
+      const isAll = ap === 'ALL';
+      const apParam = isAll ? 'ALL' : ap;
+      const apLabel = isAll ? '전국 15개 공항 일괄 종합' : `${ap} 공항`;
+
       return [
-        { no: 1, system: '항적정보', name: '항적정보(융합)', subData: '융합 항적 (System Track)', protocol: 'AMQP / REST', format: 'ASTERIX Cat.062 (JSON)', interval: '1~2초 (실시간)', source: 'OpenSky Network (ADS-B 수신)', endpoint: '/api/asterix?cat=62', doc: 'ASTERIX Category 062 Eurocontrol Track Data' },
-        { no: 2, system: '항적정보', name: '항적정보(개별)', subData: 'ADS-B 개별 항적', protocol: 'AMQP / REST', format: 'ASTERIX Cat.021 (JSON)', interval: '1~2초 (실시간)', source: 'OpenSky Network (ADS-B 수신)', endpoint: '/api/asterix?cat=21', doc: 'ASTERIX Category 021 ADS-B Target Report' },
-        { no: 3, system: '항적정보', name: '항적정보(개별)', subData: 'Radar (PSR/SSR) 합성 항적', protocol: 'AMQP / REST', format: 'ASTERIX Cat.048 (JSON)', interval: '4초 (회전주기)', source: 'OpenSky Network (Radar 변환)', endpoint: '/api/asterix?cat=48&typ=COMBINED_PSR_SSR', doc: 'ASTERIX Category 048 Monoradar Report' },
-        { no: 4, system: '항적정보', name: '지상이동체 항적', subData: 'G-SMGCS 공항 표면 항적', protocol: 'AMQP / REST', format: 'ASTERIX Cat.010 (JSON)', interval: '1초 (실시간)', source: 'OpenSky Network (Surface 필터)', endpoint: '/api/asterix?cat=10', doc: 'ASTERIX Category 010 Airport Surface Movement' },
-        { no: 5, system: '항적정보', name: '상태 정보', subData: 'Mode-S North Mark & 상태', protocol: 'AMQP / REST', format: 'ASTERIX Cat.034 (JSON)', interval: '4초 (회전주기)', source: 'OpenSky Network (Sensor 상태)', endpoint: '/api/asterix?cat=34', doc: 'ASTERIX Category 034 Sensor Message' },
-        { no: 6, system: '항적정보', name: '항적정보(개별)', subData: 'Primary Radar (PSR) 단독', protocol: 'AMQP / REST', format: 'ASTERIX Cat.048 (JSON)', interval: '4초 (회전주기)', source: 'OpenSky Network (PSR 변환)', endpoint: '/api/asterix?cat=48&typ=SINGLE_PSR', doc: 'ASTERIX Category 048 Single PSR' },
-        { no: 7, system: '항적정보', name: '항적정보(개별)', subData: 'Secondary Radar (SSR) 단독', protocol: 'AMQP / REST', format: 'ASTERIX Cat.048 (JSON)', interval: '4초 (회전주기)', source: 'OpenSky Network (SSR 변환)', endpoint: '/api/asterix?cat=48&typ=SINGLE_SSR', doc: 'ASTERIX Category 048 Single SSR' },
-        { no: 8, system: '항적정보', name: '항적 통계 및 궤적', subData: 'System Track Trace & History', protocol: 'REST / WebSocket', format: 'JSON Array / GeoJSON', interval: '1~2초', source: 'OpenSky Network / Feeder', endpoint: '/api/aircraft?lat=37.5&lon=127.0&radius=250', doc: 'Flight Path Trace Stream' },
-        { no: 9, system: '기상정보', name: '정규 기상보고 (METAR)', subData: `${ap} 정규 항공기상 실측치`, protocol: 'AMQP / REST', format: 'AMHS IPM XML (IA5 Text)', interval: '매 30분 / 정시', source: 'AMO 항공기상청 (global.amo.go.kr)', endpoint: `/api/amhs?type=METAR&icao=${ap}`, doc: 'ICAO Annex 3 METAR in X.400 IPM XML' },
-        { no: '9-A', system: '기상정보', name: '실시간 관제기상 (AMOS)', subData: `${ap} 활주로별 초단위 순간풍/RVR/QNH`, protocol: 'REST / WebSocket', format: 'JSON / MET REPORT XML', interval: '1~2초 (초고빈도 실시간)', source: 'AMO 항공기상청 (AmosRealTimeMqc.do)', endpoint: `/api/weather?type=amos&icao=${ap}`, doc: 'Real-time AMOS Sensor Readings' },
-        { no: 10, system: '기상정보', name: '공항 예보 (TAF)', subData: `${ap} 24/30시간 기상예보`, protocol: 'AMQP / REST', format: 'AMHS IPM XML (IA5 Text)', interval: '매 6시간', source: 'AMO 항공기상청 (global.amo.go.kr)', endpoint: `/api/amhs?type=TAF&icao=${ap}`, doc: 'ICAO Annex 3 TAF in X.400 IPM XML' },
-        { no: 11, system: '기상정보', name: '위험기상특보 (SIGMET)', subData: '인천 FIR 내 위험기상특보', protocol: 'AMQP / REST', format: 'AMHS IPM XML (IA5 Text)', interval: '발생시 (비정기)', source: 'AMO 항공기상청 (SIGMET Feed)', endpoint: '/api/amhs?type=SIGMET', doc: 'ICAO Annex 3 SIGMET in X.400 IPM XML' },
-        { no: 12, system: '기상정보', name: '디지털 기상 (IWXXM)', subData: `${ap} IWXXM Gzip 바이너리 전문`, protocol: 'AMQP / REST', format: 'AMHS XML (Gzip Hex)', interval: '매 30분', source: 'AMO 항공기상청 (IWXXM Feed)', endpoint: `/api/amhs?type=IWXXM&icao=${ap}`, doc: 'WMO/ICAO IWXXM 2023-1 FTBP Body' },
-        { no: 13, system: '항공고시보', name: '항공고시보 (NOTAM)', subData: `${ap} 공항/항로 비행제한구역`, protocol: 'SOAP / REST', format: 'AMHS SOAP XML', interval: '5분 (실시간 캐시)', source: 'AIM Korea (aim.koca.go.kr)', endpoint: `/api/amhs?type=NOTAM&location=${ap}`, doc: 'AIDA-NG SOAP Envelope for NOTAM' },
-        { no: 14, system: '비행계획서', name: '비행계획서 (FPL)', subData: `${ap} 발 ICAO Doc 4444 비행계획 전문`, protocol: 'AMQP / REST', format: 'AMHS IPM XML', interval: '요청시 / 스케줄 동기화', source: 'UBIKAIS (ubikais.fois.go.kr:8030)', endpoint: `/api/amhs?type=FPL&origin=${ap}`, doc: 'ICAO Doc 4444 FPL in AMHS IPM' },
-        { no: 15, system: '비행계획서', name: '비행계획 변경보 (CHG)', subData: '출발/항로/순항고도 변경 전문 템플릿', protocol: 'AMQP / REST', format: 'AMHS IPM XML', interval: '변경 발생시', source: 'UBIKAIS IFR 스케줄 기반', endpoint: `/api/amhs?type=CHG&origin=${ap}`, doc: 'ICAO Doc 4444 CHG in AMHS IPM' },
-        { no: 16, system: '비행계획서', name: '비행계획 취소보 (CNL)', subData: '운항 취소/결항 전문 템플릿', protocol: 'SOAP / REST', format: 'AMHS SOAP XML', interval: '결항 발생시', source: 'UBIKAIS IFR 결항 플래그', endpoint: `/api/amhs?type=CNL&origin=${ap}`, doc: 'ICAO Doc 4444 CNL in AMHS SOAP' },
-        { no: 17, system: '비행계획서', name: '비행 지연보 (DLA)', subData: '지연 출발 통보 전문 템플릿', protocol: 'SOAP / REST', format: 'AMHS SOAP XML', interval: '지연 발생시', source: 'UBIKAIS ETD 지연 플래그', endpoint: `/api/amhs?type=DLA&origin=${ap}`, doc: 'ICAO Doc 4444 DLA in AMHS SOAP' },
-        { no: 18, system: '비행계획서', name: '출발보 (DEP)', subData: '실제 이륙 시간(ATD) 통보 템플릿', protocol: 'SOAP / REST', format: 'AMHS SOAP XML', interval: '이륙 발생시', source: 'UBIKAIS ATD / ADS-B', endpoint: `/api/amhs?type=DEP&origin=${ap}`, doc: 'ICAO Doc 4444 DEP in AMHS SOAP' },
-        { no: 19, system: '비행계획서', name: '도착보 (ARR)', subData: '실제 착륙 시간(ATA) 통보 템플릿', protocol: 'SOAP / REST', format: 'AMHS SOAP XML', interval: '착륙 발생시', source: 'UBIKAIS ATA / ADS-B', endpoint: `/api/amhs?type=ARR&dest=${ap}`, doc: 'ICAO Doc 4444 ARR in AMHS SOAP' },
-        { no: 20, system: '비행계획서', name: '접수/통보 (IPN)', subData: 'IPM 접수 확인 및 배달보고 전문', protocol: 'SOAP / REST', format: 'AMHS SOAP XML', interval: '전문 수신 직후', source: 'AMHS Message Switch', endpoint: `/api/amhs?type=METREPORT&icao=${ap}`, doc: 'NonDeliveryReport / IPN in SOAP' },
-        { no: 21, system: '관제음성', name: '관제음성 (LiveATC)', subData: '실시간 관제음성 라이브 스트림 (글로벌 테스트)', protocol: 'HTTP Stream', format: 'AUDIO/MPEG (MP3)', interval: '실시간 스트리밍', source: 'LiveATC.net (실시간 실제 가동)', endpoint: '/api/voice?channel=KJFK', doc: 'Live ATC Audio Stream Engine' },
-        { no: 22, system: '운영정보', name: '전자비행스트립 (EFS)', subData: '사용자 자체 관제 시스템 연계 (대기중)', protocol: 'REST / WebSocket', format: 'EFS Strip Standard JSON', interval: '사용자 시스템 송출주기', source: '사용자 자체 시스템 (미수신/연계 대기)', endpoint: `/api/flight-schedule?airport=${ap}&efs=true`, doc: 'Electronic Flight Strip Gateway' },
-        { no: 23, system: '운영정보', name: '운항디스플레이 (FIDS)', subData: `${ap} 실시간 출/도착 운항스케줄`, protocol: 'REST / WebSocket', format: 'FIDS Schedule JSON', interval: '10초 (실시간 캐시)', source: 'UBIKAIS (fois.go.kr:8030)', endpoint: `/api/flight-schedule?airport=${ap}`, doc: 'FIDS Flight Schedule JSON' },
+        // Group 1: Airspace Surveillance (Airport Independent)
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 1, name: '항적정보(융합)', sub: '유로컨트롤 Cat.062 융합 System Track', format: 'ASTERIX Cat.062', interval: '1~2초', source: 'OpenSky Network (ADS-B)', endpoint: '/api/asterix?cat=62', doc: 'ASTERIX Cat.062 System Track Report' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 2, name: '항적정보(개별)', sub: 'ADS-B 개별 기하고도·속도 Target', format: 'ASTERIX Cat.021', interval: '1~2초', source: 'OpenSky Network (ADS-B)', endpoint: '/api/asterix?cat=21', doc: 'ASTERIX Cat.021 ADS-B Target Report' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 3, name: 'Radar 합성 항적', sub: '1차(PSR) / 2차(SSR) 레이더 합성 항적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (Radar 변환)', endpoint: '/api/asterix?cat=48&typ=COMBINED_PSR_SSR', doc: 'ASTERIX Cat.048 Monoradar Report' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 4, name: '지상이동체 항적', sub: 'G-SMGCS 공항 표면 감시 항적', format: 'ASTERIX Cat.010', interval: '1초', source: 'OpenSky (Surface)', endpoint: '/api/asterix?cat=10', doc: 'ASTERIX Cat.010 Surface Movement' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 5, name: '레이더 상태 정보', sub: 'Mode-S North Mark & 안테나 상태', format: 'ASTERIX Cat.034', interval: '4초', source: 'Mode-S Sensor State', endpoint: '/api/asterix?cat=34', doc: 'ASTERIX Cat.034 Sensor Message' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 6, name: 'Primary (PSR) 단독', sub: '1차 감시 레이더 단독 표적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (PSR)', endpoint: '/api/asterix?cat=48&typ=SINGLE_PSR', doc: 'ASTERIX Cat.048 PSR' },
+        { group: '🛰️ 한반도 광역 항적 (Airspace Surveillance)', no: 7, name: 'Secondary (SSR) 단독', sub: '2차 감시 레이더 단독 표적', format: 'ASTERIX Cat.048', interval: '4초', source: 'OpenSky (SSR)', endpoint: '/api/asterix?cat=48&typ=SINGLE_SSR', doc: 'ASTERIX Cat.048 SSR' },
+
+        // Group 2: Airport Operations & Weather
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 8, name: '실시간 관제기상 (AMOS)', sub: `${apLabel} 활주로별 초단위 순간풍/RVR/QNH`, format: 'JSON (55개 필드)', interval: '1~2초', source: 'AMO 항공기상청 (AmosRealTimeMqc.do)', endpoint: `/api/weather?type=amos&icao=${apParam}`, doc: '42 Runway Sensors Realtime Readings' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 9, name: '정규 기상보고 (METAR)', sub: `${apLabel} 실측 정규 기상문`, format: 'AMHS IPM XML', interval: '매 30분', source: 'AMO (global.amo.go.kr)', endpoint: `/api/amhs?type=METAR&icao=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Annex 3 METAR in AMHS IPM' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 10, name: '공항 예보 (TAF)', sub: `${apLabel} 24/30시간 기상예보`, format: 'AMHS IPM XML', interval: '매 6시간', source: 'AMO (global.amo.go.kr)', endpoint: `/api/amhs?type=TAF&icao=${isAll ? 'RKSS' : ap}`, doc: 'ICAO Annex 3 TAF in AMHS IPM' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 11, name: '위험기상특보 (SIGMET)', sub: '인천 FIR 전역 중증 난기류/착빙/특보', format: 'AMHS IPM XML', interval: '발생시', source: 'AMO 항공기상청 SIGMET', endpoint: '/api/amhs?type=SIGMET', doc: 'ICAO Annex 3 SIGMET' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 12, name: '디지털 기상 (IWXXM)', sub: `${apLabel} IWXXM XML 바이너리 (FTBP Gzip)`, format: 'AMHS XML (Gzip Hex)', interval: '매 30분', source: 'AMO IWXXM Feed', endpoint: `/api/amhs?type=IWXXM&icao=${isAll ? 'RKSI' : ap}`, doc: 'WMO/ICAO IWXXM 2023-1' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 13, name: '항공고시보 (NOTAM)', sub: `${apLabel} 비행제한구역 및 시설정보`, format: 'AMHS SOAP XML', interval: '5분', source: 'AIM Korea (aim.koca.go.kr)', endpoint: `/api/amhs?type=NOTAM&location=${isAll ? 'RKSI' : ap}`, doc: 'AIDA-NG SOAP NOTAM' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 14, name: '운항스케줄 (FIDS)', sub: `${apLabel} 실시간 출/도착 전광판 스케줄`, format: 'FIDS JSON', interval: '10초', source: 'UBIKAIS (fois.go.kr:8030)', endpoint: `/api/flight-schedule?airport=${apParam}`, doc: 'FIDS Master Schedule' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 15, name: '비행계획서 (FPL)', sub: `${apLabel} 발 ICAO Doc 4444 비행계획 전문`, format: 'AMHS IPM XML', interval: '스케줄 동기화', source: 'UBIKAIS IFR 스케줄', endpoint: `/api/amhs?type=FPL&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 FPL' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 16, name: '비행계획 변경보 (CHG)', sub: '순항고도/항로/도착지 변경 전문 템플릿', format: 'AMHS IPM XML', interval: '변경 발생시', source: 'UBIKAIS IFR 변경 감지', endpoint: `/api/amhs?type=CHG&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 CHG' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 17, name: '비행계획 취소보 (CNL)', sub: '운항 취소/결항 전문 템플릿', format: 'AMHS SOAP XML', interval: '결항 발생시', source: 'UBIKAIS 결항 플래그', endpoint: `/api/amhs?type=CNL&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 CNL' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 18, name: '비행 지연보 (DLA)', sub: '지연 출발 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '지연 발생시', source: 'UBIKAIS ETD 지연 플래그', endpoint: `/api/amhs?type=DLA&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 DLA' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 19, name: '출발보 (DEP)', sub: '실제 이륙(ATD) 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '이륙 발생시', source: 'ADS-B + UBIKAIS', endpoint: `/api/amhs?type=DEP&origin=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 DEP' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 20, name: '도착보 (ARR)', sub: '실제 착륙(ATA) 통보 전문 템플릿', format: 'AMHS SOAP XML', interval: '착륙 발생시', source: 'ADS-B + UBIKAIS', endpoint: `/api/amhs?type=ARR&dest=${isAll ? 'RKSI' : ap}`, doc: 'ICAO Doc 4444 ARR' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 21, name: '관제음성 (LiveATC)', sub: '실시간 관제탑 오디오 라이브 스트림 (글로벌 테스트)', format: 'AUDIO/MPEG (MP3)', interval: '실시간 스트리밍', source: 'LiveATC.net (실시간 가동)', endpoint: '/api/voice?channel=KJFK', doc: 'Live ATC Stream Engine' },
+        { group: '🛫 공항별 관제·기상·스케줄 (Airport Operations)', no: 22, name: '전자비행스트립 (EFS)', sub: '사용자 자체 관제 시스템 연계 (수신 대기)', format: 'EFS Standard JSON', interval: '사용자 송출주기', source: '사용자 자체 시스템 (연계 대기)', endpoint: `/api/flight-schedule?airport=${isAll ? 'RKSI' : ap}&efs=true`, doc: 'EFS Strip Gateway' },
       ];
     }
 
-    let CATALOG = getCatalogForAirport(currentAirport);
+    let CATALOG = getCatalog(currentAirport);
     const liveStatusMap = {};
-    let currentCategory = 'ALL';
     let activeItem = CATALOG[0];
     let currentTab = 'converted';
     let currentConvertedText = '';
     let currentRawText = '';
 
+    function renderMatrix() {
+      const grid = document.getElementById('airport-matrix-grid');
+      grid.innerHTML = '';
+      KOREAN_AIRPORTS.forEach(ap => {
+        const isCurrent = currentAirport === ap.code;
+        const div = document.createElement('div');
+        div.className = `p-1.5 rounded-md border text-center cursor-pointer transition ${isCurrent ? 'bg-cyan-500/20 border-cyan-500 text-white shadow-sm' : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'}`;
+        div.onclick = () => changeAirport(ap.code);
+        div.innerHTML = `
+          <div class="font-bold text-[11px] font-mono">${ap.code}</div>
+          <div class="text-[10px] truncate text-zinc-400">${ap.name}</div>
+          <div class="flex items-center justify-center gap-1 mt-1 text-[9px] font-mono">
+            <span class="text-emerald-400" title="AMOS">A●</span>
+            <span class="text-emerald-400" title="METAR">M●</span>
+            <span class="${ap.fids ? 'text-emerald-400' : 'text-zinc-600'}" title="FIDS">F●</span>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
     function getBadgeClass(format) {
-      if (format.includes('ASTERIX')) return 'badge-asterix';
-      if (format.includes('AMHS') || format.includes('XML')) return 'badge-amhs';
-      if (format.includes('AUDIO')) return 'badge-audio';
-      return 'badge-json';
+      if (format.includes('Cat.')) return 'bg-purple-500/15 text-purple-300 border-purple-500/30';
+      if (format.includes('AMHS') || format.includes('XML')) return 'bg-blue-500/15 text-blue-300 border-blue-500/30';
+      if (format.includes('AUDIO')) return 'bg-rose-500/15 text-rose-300 border-rose-500/30';
+      return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
     }
 
     function renderTable() {
@@ -448,72 +312,79 @@
       tbody.innerHTML = '';
 
       const filtered = CATALOG.filter(item => {
-        const matchCat = currentCategory === 'ALL' || item.system === currentCategory;
-        const matchSearch = item.name.toLowerCase().includes(search) || item.subData.toLowerCase().includes(search) || item.format.toLowerCase().includes(search) || item.source.toLowerCase().includes(search);
-        return matchCat && matchSearch;
+        return item.name.toLowerCase().includes(search) || item.sub.toLowerCase().includes(search) || item.format.toLowerCase().includes(search) || item.source.toLowerCase().includes(search);
       });
 
+      document.getElementById('table-count').textContent = `${filtered.length}개 인터페이스`;
+
+      let lastGroup = '';
+
       filtered.forEach(item => {
+        if (item.group !== lastGroup) {
+          lastGroup = item.group;
+          const grpTr = document.createElement('tr');
+          grpTr.className = 'bg-zinc-900/80 border-t border-b border-zinc-800 pointer-events-none';
+          grpTr.innerHTML = `
+            <td colspan="6" class="py-2 px-3 text-[11px] font-bold text-cyan-400 tracking-wider">
+              ${item.group}
+            </td>
+          `;
+          tbody.appendChild(grpTr);
+        }
+
         const tr = document.createElement('tr');
-        if (activeItem && activeItem.no === item.no) tr.className = 'active';
+        const isActive = activeItem && activeItem.no === item.no;
+        tr.className = `cursor-pointer transition-colors border-b border-zinc-900/60 ${isActive ? 'bg-cyan-950/40 border-l-2 border-l-cyan-400' : 'hover:bg-zinc-900/50'}`;
         tr.onclick = () => selectItem(item);
 
-        const statusInfo = liveStatusMap[item.no] || { state: 'pending', text: '점검 중...' };
-        const statusClass = statusInfo.state === 'ok' ? 'status-ok' : statusInfo.state === 'err' ? 'status-err' : 'status-pending';
+        const statusInfo = liveStatusMap[item.no] || { state: 'pending', text: '대기 중...' };
+        const statusBadge = statusInfo.state === 'ok' 
+          ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">● ' + statusInfo.text + '</span>'
+          : statusInfo.state === 'err'
+          ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30">● ' + statusInfo.text + '</span>'
+          : '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/30">● ' + statusInfo.text + '</span>';
 
         tr.innerHTML = `
-          <td style="text-align: center; font-weight: 700; color: #94a3b8; font-family: monospace;">${item.no}</td>
-          <td>
-            <div style="font-weight: 700; color: #fff;">${item.name}</div>
-            <div style="font-size: 11px; color: #94a3b8;">${item.subData}</div>
+          <td class="py-2.5 px-3 text-center font-mono font-bold text-zinc-500">${item.no}</td>
+          <td class="py-2.5 px-3">
+            <div class="font-bold text-zinc-100">${item.name}</div>
+            <div class="text-[11px] text-zinc-400 truncate max-w-[220px]">${item.sub}</div>
           </td>
-          <td><span class="badge ${getBadgeClass(item.format)}">${item.format}</span></td>
-          <td style="color: #cbd5e1;">${item.protocol}</td>
-          <td style="color: #e2e8f0; font-family: monospace;">${item.interval}</td>
-          <td style="color: #38bdf8; font-size: 11px;">${item.source}</td>
-          <td style="text-align: center;"><span class="status-badge ${statusClass}">${statusInfo.text}</span></td>
+          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-mono border ${getBadgeClass(item.format)}">${item.format}</span></td>
+          <td class="py-2.5 px-3 text-zinc-300 font-mono text-[11px]">${item.interval}</td>
+          <td class="py-2.5 px-3 text-cyan-400/90 text-[11px]">${item.source}</td>
+          <td class="py-2.5 px-3 text-center">${statusBadge}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function filterCat(cat, btn) {
-      currentCategory = cat;
-      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderTable();
-    }
-
     function switchTab(tab) {
       currentTab = tab;
-      document.getElementById('tab-converted').classList.toggle('active', tab === 'converted');
-      document.getElementById('tab-raw').classList.toggle('active', tab === 'raw');
-      document.getElementById('tab-guide').classList.toggle('active', tab === 'guide');
-      
+      document.getElementById('tab-converted').className = tab === 'converted' ? 'flex-1 py-2.5 text-center font-semibold text-cyan-400 border-b-2 border-cyan-500 bg-zinc-800/40 transition' : 'flex-1 py-2.5 text-center font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition';
+      document.getElementById('tab-raw').className = tab === 'raw' ? 'flex-1 py-2.5 text-center font-semibold text-cyan-400 border-b-2 border-cyan-500 bg-zinc-800/40 transition' : 'flex-1 py-2.5 text-center font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition';
+      document.getElementById('tab-guide').className = tab === 'guide' ? 'flex-1 py-2.5 text-center font-semibold text-cyan-400 border-b-2 border-cyan-500 bg-zinc-800/40 transition' : 'flex-1 py-2.5 text-center font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition';
+
       const codeViewer = document.getElementById('code-viewer');
-      if (tab === 'converted') {
-        codeViewer.textContent = currentConvertedText || '// 규격 변환 전문 로딩 중...';
-      } else if (tab === 'raw') {
-        codeViewer.textContent = currentRawText || '// 원천 수집 데이터 로딩 중...';
-      } else {
-        codeViewer.textContent = getDevelopmentStatusGuide();
-      }
+      if (tab === 'converted') codeViewer.textContent = currentConvertedText || '// 규격 변환 전문 로딩 중...';
+      else if (tab === 'raw') codeViewer.textContent = currentRawText || '// 원천 수집 데이터 로딩 중...';
+      else codeViewer.textContent = getArchitectureGuide();
     }
 
-    function getDevelopmentStatusGuide() {
+    function getArchitectureGuide() {
       return `================================================================================
-대한감시 (Korean Surveillance) - 23개 연계 인터페이스 현황 및 아키텍처 진단
+대한감시 (Korean Surveillance) - 23개 연계 인터페이스 아키텍처 및 개발 현황
 ================================================================================
 
 [1. 100% 정상 연동 및 변환 완료 항목 (13개 인터페이스)]
 --------------------------------------------------------------------------------
-1) 항적 정보 (NO 1 ~ 8)
+1) 항적 정보 (NO 1 ~ 7)
    - 소스: OpenSky Network / ADS-B Feeder (한반도 90+대 실시간 실측치)
    - 구현 방식: 온더플라이(On-the-fly) 실시간 변환 파서 (별도 DB 크롤러 불필요)
    - 지원 규격: ASTERIX Cat.062 (융합), Cat.021 (ADS-B), Cat.048 (PSR/SSR),
-                Cat.010 (지상이동체), Cat.034 (상태), 궤적 스트림
+                Cat.010 (지상이동체), Cat.034 (센서상태)
 
-2) 실시간 AMOS 관제기상 (NO 9-A)
+2) 실시간 AMOS 관제기상 (NO 8)
    - 소스: AMO 항공기상청 (AmosRealTimeMqc.do)
    - 제공 항목: 전국 42개 활주로 센서 1~2초 초단위 실시간 관측치 전수 (55개 세부 필드)
                 (순간풍, 2분/10분 평균풍, 광학시정, RVR, 운저고도, 기온, 노점, 습도, QNH, 현천, 강수량)
@@ -523,14 +394,14 @@
    - 구현 방식: 5~10분 주기 폴링 크롤러 캐싱 + AMHS IPM/SOAP XML 자동 패키징
    - 지원 규격: METAR, TAF, SIGMET, IWXXM Gzip, NOTAM AIDA-NG SOAP
 
-4) 운항디스플레이 FIDS (NO 23)
+4) 운항디스플레이 FIDS (NO 14)
    - 소스: UBIKAIS (ubikais.fois.go.kr:8030)
    - 제공 항목: 전국 15개 공항 실시간 출/도착 스케줄 전수
 
 --------------------------------------------------------------------------------
-[2. 전문 템플릿 변환 완료 + 실시간 푸시 데몬 구축 대상 (7개 인터페이스)]
+[2. 전문 템플릿 변환 완료 + 실시간 푸시 데몬 구축 대상 (6개 인터페이스)]
 --------------------------------------------------------------------------------
-5) 비행계획 변동 전문 (NO 14 ~ 20)
+5) 비행계획 변동 전문 (NO 15 ~ 20)
    - 현재 구현 상태: UBIKAIS IFR 스케줄을 파싱하여 ICAO Doc 4444 표준 전문 및
      AMHS IPM/SOAP XML을 생성하는 "전문 변환 템플릿 엔진" 완료.
    - 향후 고도화 필요 사항:
@@ -644,7 +515,9 @@
 
     function changeAirport(ap) {
       currentAirport = ap;
-      CATALOG = getCatalogForAirport(ap);
+      document.getElementById('airport-select').value = ap;
+      CATALOG = getCatalog(ap);
+      renderMatrix();
       renderTable();
       if (CATALOG.length > 0) selectItem(CATALOG[0]);
       runLiveHealthCheckAll();
@@ -654,7 +527,7 @@
       let textToCopy = '';
       if (currentTab === 'converted') textToCopy = currentConvertedText;
       else if (currentTab === 'raw') textToCopy = currentRawText;
-      else textToCopy = getDevelopmentStatusGuide();
+      else textToCopy = getArchitectureGuide();
 
       if (!textToCopy) return;
       navigator.clipboard.writeText(textToCopy);
@@ -664,7 +537,12 @@
     }
 
     async function runLiveHealthCheckAll() {
-      document.getElementById('stat-health').textContent = '실시간 전체 핑 점검 중...';
+      const btn = document.getElementById('ping-btn');
+      const icon = document.getElementById('ping-icon');
+      const text = document.getElementById('ping-text');
+
+      icon.classList.add('animate-spin-slow');
+      text.textContent = '점검 중...';
       let okCount = 0;
 
       await Promise.all(CATALOG.map(async (item) => {
@@ -693,17 +571,19 @@
         }
       }));
 
-      document.getElementById('stat-health').textContent = `● 23개 항목 중 ${okCount}개 실시간 가동 (EFS 미수신 연계대기)`;
+      icon.classList.remove('animate-spin-slow');
+      text.textContent = '전체 핑 점검';
       renderTable();
     }
 
-    async function loadCatalog() {
+    function init() {
+      renderMatrix();
       renderTable();
       if (CATALOG.length > 0) selectItem(CATALOG[0]);
       runLiveHealthCheckAll();
     }
 
-    window.onload = loadCatalog;
+    window.onload = init;
   </script>
 </body>
 </html>

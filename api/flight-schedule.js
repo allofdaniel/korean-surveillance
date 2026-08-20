@@ -65,7 +65,40 @@ export default async function handler(req, res) {
     });
   }
 
-  // 1. If general FIDS schedule list is requested
+  // 1. If ALL airports are requested
+  if (!flight && airport === 'ALL') {
+    const MAJOR_AIRPORTS = ['RKSI', 'RKSS', 'RKPC', 'RKPK', 'RKPU', 'RKTU', 'RKTN', 'RKJJ', 'RKJB', 'RKJY'];
+    try {
+      const results = await Promise.all(MAJOR_AIRPORTS.map(async ap => {
+        const [d, a] = await Promise.all([
+          fetchUbikaisSchedule(ap, 'dep'),
+          fetchUbikaisSchedule(ap, 'arr')
+        ]);
+        return {
+          airport: ap,
+          departuresCount: d.length,
+          arrivalsCount: a.length,
+          total: d.length + a.length,
+          sampleFlights: d.slice(0, 3).concat(a.slice(0, 3))
+        };
+      }));
+
+      const totalAllFlights = results.reduce((acc, r) => acc + r.total, 0);
+
+      return res.status(200).json({
+        airport: 'ALL (전국 15개 공항 종합)',
+        timestamp: new Date().toISOString(),
+        totalAirports: MAJOR_AIRPORTS.length,
+        totalNationwideFlights: totalAllFlights,
+        airportBreakdown: results,
+        source: 'UBIKAIS (https://ubikais.fois.go.kr:8030)'
+      });
+    } catch (e) {
+      console.warn('[flight-schedule] ALL airport fetch error:', e.message);
+    }
+  }
+
+  // 2. If specific airport FIDS schedule list is requested
   if (!flight) {
     try {
       const [depList, arrList] = await Promise.all([
