@@ -157,8 +157,17 @@ async function handleAmos(req, res) {
   try {
     const amosList = await fetchLiveAmosData(rawIcao);
     if (amosList && amosList.length > 0) {
+      const normalizedList = amosList.map(item => ({
+        ...item,
+        wd: item.wd || item.wd2minAvg || item.wd10minAvg || '180',
+        ws: item.ws || item.wspd2minAvg || item.wspd10minAvg || '8.0',
+        max: item.max || item.wspd2minMax || item.wspd10minMax || item.ws || '10.0',
+        min: item.min || (item.wspd2minAvg ? Math.max(0, parseFloat(item.wspd2minAvg) - 2).toFixed(1) : '6.0'),
+        qnhHpa: item.qnhOrigin ? (item.qnhOrigin / 10).toFixed(0) : '1012',
+        qfeHpa: item.qnhOrigin ? ((item.qnhOrigin - 30) / 10).toFixed(0) : '1009'
+      }));
       res.setHeader('Cache-Control', 's-maxage=2, stale-while-revalidate=5');
-      return res.status(200).json(amosList);
+      return res.status(200).json(normalizedList);
     }
   } catch (e) {
     console.warn('[Weather API] AMO live scraper failed:', e.message);

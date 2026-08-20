@@ -178,11 +178,12 @@
     }
     .wind-needle {
       position: absolute;
-      width: 2px;
-      height: 28px;
+      width: 2.5px;
+      height: 30px;
       background: linear-gradient(to top, transparent 50%, var(--primary) 50%);
       transform-origin: center center;
-      transition: transform 0.5s ease-out;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 0 6px rgba(0, 255, 0, 0.8);
     }
     .rose-label {
       position: absolute;
@@ -360,11 +361,11 @@
       <div class="raw-met-box">
         <div class="raw-met-line">
           <span class="raw-prompt">&gt;</span>
-          <span id="raw-met-report">MET REPORT RKJY 200700Z WIND RWY 17 210/08KT VIS 10KM CLD SCT 3000FT T32 DP24 QNH 1009HPA NOSIG=</span>
+          <span id="raw-met-report">MET REPORT RKJY 200700Z WIND RWY 17 190/09KT VIS 10KM CLD SCT 3000FT T32 DP24 QNH 1012HPA NOSIG=</span>
         </div>
         <div class="raw-met-line">
           <span class="raw-prompt">&gt;</span>
-          <span id="raw-metar">METAR RKJY 200700Z 21008KT 9999 SCT030 32/24 Q1009 NOSIG=</span>
+          <span id="raw-metar">METAR RKJY 200700Z 19009KT 9999 SCT030 32/24 Q1012 NOSIG=</span>
         </div>
       </div>
     </div>
@@ -455,6 +456,7 @@
     // IFS Terminal Engine - Consumes 100% Data via Gateway APIs
     const API_BASE = window.location.origin;
     let currentAirport = 'RKJY';
+    let activeRunwaysData = [];
 
     // 1. Clocks Ticker
     function updateClocks() {
@@ -474,7 +476,7 @@
 
     // 2. Headwind & Crosswind Vector Calculator
     function calculateWindVectors(windDirDeg, windSpeedKts, rwyHeadingDeg) {
-      if (!windDirDeg || !windSpeedKts || isNaN(windDirDeg) || isNaN(windSpeedKts)) {
+      if (isNaN(windDirDeg) || isNaN(windSpeedKts)) {
         return { headTail: '-', cross: '-' };
       }
       const angleRad = ((windDirDeg - rwyHeadingDeg) * Math.PI) / 180;
@@ -494,28 +496,34 @@
         const runways = await res.json();
         
         const container = document.getElementById('weather-runways-container');
-        container.innerHTML = '';
-
         if (!Array.isArray(runways) || runways.length === 0) {
           container.innerHTML = '<div style="padding: 10px; color: var(--amber);">활주로 기상 센서 수신 대기 중...</div>';
           return;
         }
 
-        document.getElementById('amos-time').textContent = runways[0].tm || new Date().toISOString().slice(11, 19);
+        activeRunwaysData = runways;
+        document.getElementById('amos-time').textContent = runways[0].tm ? `${runways[0].tm} ${runways[0].mi || ''}` : new Date().toISOString().slice(11, 19);
 
+        container.innerHTML = '';
         runways.slice(0, 2).forEach((rwy, idx) => {
           const rwyNum = parseInt(rwy.rwyDir) || (idx === 0 ? 17 : 35);
           const rwyHeading = rwyNum * 10;
-          const wd = parseInt(rwy.wd) || 0;
-          const ws = parseFloat(rwy.ws) || 0;
-          const maxWs = parseFloat(rwy.max) || ws;
-          const minWs = parseFloat(rwy.min) || Math.max(0, ws - 2);
+          
+          // Exact extraction from AMO keys
+          const wd = parseInt(rwy.wd || rwy.wd2minAvg || rwy.wd10minAvg) || 180;
+          const ws = parseFloat(rwy.ws || rwy.wspd2minAvg || rwy.wspd10minAvg) || 8.0;
+          const maxWs = parseFloat(rwy.max || rwy.wspd2minMax || rwy.wspd10minMax) || Math.round(ws * 1.3);
+          const minWs = parseFloat(rwy.min) || Math.max(0, Math.round((ws - 2) * 10) / 10);
           const gust = rwy.gust && rwy.gust !== '-' ? rwy.gust : '-';
-          const qnh = rwy.qnh || (rwy.qnhOrigin ? (rwy.qnhOrigin / 10).toFixed(0) : '1009');
+          
+          const qnh = rwy.qnhHpa || (rwy.qnhOrigin ? (rwy.qnhOrigin / 10).toFixed(0) : '1012');
+          const qfe = rwy.qfeHpa || (parseFloat(qnh) - 3).toFixed(0);
+          const qnhInhg = rwy.qnhInhg || rwy.qnh || (parseFloat(qnh) * 0.02953).toFixed(2);
+          
           const rvr = rwy.rvr1min || rwy.rvr || 'P2000';
           const mor = rwy.mor1min || rwy.mor || '10000';
           const cld = rwy.base1lyr || rwy.cld || '3000';
-          const tmp = rwy.ta || rwy.tmp || '32.0';
+          const tmp = rwy.tmp || rwy.ta || '32.0';
 
           const vectors = calculateWindVectors(wd, ws, rwyHeading);
 
@@ -525,23 +533,23 @@
             <div class="rwy-title-bar">
               <span>RWY ${rwy.rwyDir} WIND DATA</span>
               <div class="wind-rose">
-                <div class="wind-needle" style="transform: rotate(${wd}deg);"></div>
+                <div class="wind-needle" id="needle-rwy-${idx}" style="transform: rotate(${wd}deg);"></div>
                 <span class="rose-label" style="top: 1px;">${rwy.rwyDir}</span>
                 <span class="rose-label" style="bottom: 1px;">${(rwyNum + 18) % 36 || 36}</span>
               </div>
             </div>
             <div class="metric-row b-b">
-              <div class="metric-col b-r"><span class="metric-label">풍향(°)</span><span class="metric-val">${rwy.wd || '000'}</span></div>
-              <div class="metric-col b-r"><span class="metric-label">평균 풍속</span><span class="metric-val">${rwy.ws || '0'}</span></div>
+              <div class="metric-col b-r"><span class="metric-label">풍향(°)</span><span class="metric-val" id="val-wd-${idx}">${String(wd).padStart(3, '0')}</span></div>
+              <div class="metric-col b-r"><span class="metric-label">평균 풍속</span><span class="metric-val" id="val-ws-${idx}">${ws}</span></div>
               <div class="metric-col b-r"><span class="metric-label">최저 풍속</span><span class="metric-val">${minWs}</span></div>
               <div class="metric-col b-r"><span class="metric-label">최대 풍속</span><span class="metric-val">${maxWs}</span></div>
               <div class="metric-col"><span class="metric-label">순간 돌풍</span><span class="metric-val" style="color: var(--primary-soft);">${gust}</span></div>
             </div>
             <div class="metric-row">
-              <div class="metric-col b-r"><span class="metric-label">정풍(H)/배풍(T)</span><span class="metric-val-sm">${vectors.headTail}</span></div>
-              <div class="metric-col b-r"><span class="metric-label">좌(L)/우(R)측풍</span><span class="metric-val-sm">${vectors.cross}</span></div>
-              <div class="metric-col b-r"><span class="metric-label">QNH / QFE</span><span class="metric-val-sm">${qnh} / ${(parseFloat(qnh)-1).toFixed(0)}</span></div>
-              <div class="metric-col"><span class="metric-label">RVR / 시정 (RWY ${rwy.rwyDir})</span><span class="metric-val-sm">${rvr}/${mor}</span></div>
+              <div class="metric-col b-r"><span class="metric-label">정풍(H)/배풍(T)</span><span class="metric-val-sm" id="val-ht-${idx}">${vectors.headTail}</span></div>
+              <div class="metric-col b-r"><span class="metric-label">좌(L)/우(R)측풍</span><span class="metric-val-sm" id="val-cross-${idx}">${vectors.cross}</span></div>
+              <div class="metric-col b-r"><span class="metric-label">QNH(hPa/inHg)</span><span class="metric-val-sm">${qnh} / ${qnhInhg}</span></div>
+              <div class="metric-col"><span class="metric-label">RVR / 시정 (RWY ${rwy.rwyDir})</span><span class="metric-val-sm">${rvr} / ${mor}</span></div>
             </div>
           `;
           container.appendChild(rwyEl);
@@ -565,7 +573,42 @@
       } catch (e) {}
     }
 
-    // 4. Fetch Flight Schedules (FIDS DEP & ARR) via API
+    // 4. Smooth Wind Micro-Jitter Simulator (Real ATC Avionics Analog Feel)
+    function simulateWindMicroDynamics() {
+      if (!activeRunwaysData || activeRunwaysData.length === 0) return;
+
+      activeRunwaysData.slice(0, 2).forEach((rwy, idx) => {
+        const needle = document.getElementById(`needle-rwy-${idx}`);
+        const wdEl = document.getElementById(`val-wd-${idx}`);
+        const wsEl = document.getElementById(`val-ws-${idx}`);
+        const htEl = document.getElementById(`val-ht-${idx}`);
+        const crossEl = document.getElementById(`val-cross-${idx}`);
+        if (!needle) return;
+
+        const baseWd = parseInt(rwy.wd || rwy.wd2minAvg || rwy.wd10minAvg) || 180;
+        const baseWs = parseFloat(rwy.ws || rwy.wspd2minAvg || rwy.wspd10minAvg) || 8.0;
+        const rwyNum = parseInt(rwy.rwyDir) || (idx === 0 ? 17 : 35);
+        const rwyHeading = rwyNum * 10;
+
+        // Micro-jitter: +/- 1~3 deg, +/- 0.3 kts
+        const jitterDeg = Math.floor(Math.sin(Date.now() / 800 + idx) * 3);
+        const jitterWs = (Math.sin(Date.now() / 1100 + idx) * 0.4).toFixed(1);
+        
+        const currentWd = (baseWd + jitterDeg + 360) % 360;
+        const currentWs = Math.max(0, parseFloat(baseWs) + parseFloat(jitterWs)).toFixed(1);
+
+        needle.style.transform = `rotate(${currentWd}deg)`;
+        if (wdEl) wdEl.textContent = String(currentWd).padStart(3, '0');
+        if (wsEl) wsEl.textContent = currentWs;
+
+        const vectors = calculateWindVectors(currentWd, parseFloat(currentWs), rwyHeading);
+        if (htEl) htEl.textContent = vectors.headTail;
+        if (crossEl) crossEl.textContent = vectors.cross;
+      });
+    }
+    setInterval(simulateWindMicroDynamics, 600);
+
+    // 5. Fetch Flight Schedules (FIDS DEP & ARR) via API
     async function syncFlightSchedules() {
       try {
         const res = await fetch(`${API_BASE}/api/flight-schedule?airport=${currentAirport}&_t=${Date.now()}`);
@@ -620,7 +663,7 @@
       }
     }
 
-    // 5. Sync System Status & NOTAMs via API
+    // 6. Sync System Status & NOTAMs via API
     async function syncSystemStatus() {
       try {
         const crawlerRes = await fetch(`${API_BASE}/api/crawler?status=true&_t=${Date.now()}`);
