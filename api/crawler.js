@@ -1,4 +1,6 @@
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
+import { fetchLiveAmosData } from './_utils/amosScraper.js';
+import { fetchUbikaisSchedule } from './_utils/ubikaisScraper.js';
 
 // In-Memory Lightweight Cache & Event Diff Buffer (Zero Storage Overhead)
 let lastRunTimestamp = null;
@@ -7,15 +9,14 @@ let lastSyncResult = {
   airportsSynced: 0,
   flightsTracked: 0,
   weatherStationsSynced: 0,
-  notamsSynced: 0,
   changesDetected: 0,
   executionTimeMs: 0
 };
 
 // In-memory snapshots for diffing without database bloat
 let previousFlightMap = new Map();
-const eventLog = []; // Ring buffer of last 100 detected flight events
-const MAX_LOG_SIZE = 100;
+const eventLog = []; // Ring buffer of last 50 detected flight events
+const MAX_LOG_SIZE = 50;
 
 function pushEvent(event) {
   eventLog.unshift({
@@ -64,65 +65,55 @@ export default async function handler(req, res) {
     });
   }
 
-  // 3. Execute Crawler Sync Routine
+  // 3. Execute Direct Crawler Sync Routine
   const startTime = Date.now();
   let totalFlights = 0;
   let changesCount = 0;
   const currentFlightMap = new Map();
 
   try {
-    const host = req.headers?.host || 'www.koreasurveillance.com';
-    const protocol = host.includes('localhost') ? 'http' : 'https';
-
-    // A. Sync Nationwide Schedules in Parallel (UBIKAIS)
+    // A. Sync Nationwide Schedules in Parallel (Direct Scraper Calls)
     const schedulePromises = NATIONWIDE_AIRPORTS.map(async (ap) => {
       try {
-        const url = `${protocol}://${host}/api/flight-schedule?airport=${ap}&_t=${Date.now()}`;
-        const resp = await fetch(url, { headers: { 'User-Agent': 'Vercel-Pro-Crawler/2.0' } });
-        if (resp.ok) {
-          const data = await resp.json();
-          const items = Array.isArray(data.items) ? data.items : [];
-          return { airport: ap, items };
-        }
+        const [depRecords, arrRecords] = await Promise.all([
+          fetchUbikaisSchedule(ap, 'dep'),
+          fetchUbikaisSchedule(ap, 'arr')
+        ]);
+        return {
+          airport: ap,
+          items: [
+            ...(Array.isArray(depRecords) ? depRecords.map(r => ({ ...r, depArr: 'dep' })) : []),
+            ...(Array.isArray(arrRecords) ? arrRecords.map(r => ({ ...r, depArr: 'arr' })) : [])
+          ]
+        };
       } catch (e) {
-        // Continue on airport error
+        return { airport: ap, items: [] };
       }
-      return { airport: ap, items: [] };
     });
 
-    // B. Sync Real-time Weather & NOTAM in Parallel
+    // B. Sync Real-time AMOS Weather in Parallel (Direct Scraper Call)
     const weatherPromise = (async () => {
       try {
-        const resp = await fetch(`${protocol}://${host}/api/weather?type=amos&icao=ALL&_t=${Date.now()}`);
-        return resp.ok ? (await resp.json()).length : 0;
+        const data = await fetchLiveAmosData(null);
+        return Array.isArray(data) ? data.length : 0;
       } catch {
         return 0;
       }
     })();
 
-    const notamPromise = (async () => {
-      try {
-        const resp = await fetch(`${protocol}://${host}/api/notam?location=RKRR&_t=${Date.now()}`);
-        return resp.ok ? (await resp.json()).count || 0 : 0;
-      } catch {
-        return 0;
-      }
-    })();
-
-    const [scheduleResults, weatherRunwaysCount, notamsCount] = await Promise.all([
+    const [scheduleResults, weatherRunwaysCount] = await Promise.all([
       Promise.all(schedulePromises),
-      weatherPromise,
-      notamPromise
+      weatherPromise
     ]);
 
     // C. Perform In-Memory Diffing without DB Storage
     scheduleResults.forEach(({ airport, items }) => {
       items.forEach(flight => {
-        const callsign = flight.flightNumber || flight.fn || flight.callsign;
+        const callsign = flight.fn || flight.flightNumber || flight.callsign;
         if (!callsign) return;
 
         const flightKey = `${airport}_${flight.depArr || 'dep'}_${callsign}`;
-        const currentStatus = flight.status || flight.remark || 'NORMAL';
+        const currentStatus = (flight.rmk || flight.status || '').toUpperCase();
         const std = flight.std || flight.etd || '';
         const etd = flight.etd || flight.std || '';
 
@@ -130,8 +121,8 @@ export default async function handler(req, res) {
           callsign,
           airport,
           depArr: flight.depArr,
-          origin: flight.origin || flight.depAirport,
-          destination: flight.destination || flight.arrAirport,
+          origin: flight.depAirport || flight.origin,
+          destination: flight.arrAirport || flight.destination,
           status: currentStatus,
           std,
           etd,
@@ -139,48 +130,48 @@ export default async function handler(req, res) {
         });
         totalFlights++;
 
-        // Compare with previous cycle
+        // Compare with previous cycle in memory
         if (previousFlightMap.has(flightKey)) {
           const prev = previousFlightMap.get(flightKey);
 
           // 1. Detect Cancellation (CNL)
           if (currentStatus.includes('결항') || currentStatus.includes('CNL') || currentStatus.includes('CANCEL')) {
-            if (!prev.status.includes('결항')) {
+            if (!prev.status.includes('결항') && !prev.status.includes('CNL')) {
               changesCount++;
               pushEvent({
                 type: 'CNL',
                 callsign,
                 airport,
                 description: `[결항 감지] ${callsign}편이 결항(CNL) 처리되었습니다.`,
-                flight
+                timestamp: new Date().toISOString()
               });
             }
           }
 
           // 2. Detect Departure (DEP)
           if (currentStatus.includes('출발') || currentStatus.includes('이륙') || currentStatus.includes('DEP')) {
-            if (!prev.status.includes('출발') && !prev.status.includes('이륙')) {
+            if (!prev.status.includes('출발') && !prev.status.includes('DEP')) {
               changesCount++;
               pushEvent({
                 type: 'DEP',
                 callsign,
                 airport,
                 description: `[이륙 감지] ${callsign}편이 ${airport}에서 이륙(DEP)하였습니다.`,
-                flight
+                timestamp: new Date().toISOString()
               });
             }
           }
 
           // 3. Detect Arrival (ARR)
           if (currentStatus.includes('도착') || currentStatus.includes('착륙') || currentStatus.includes('ARR')) {
-            if (!prev.status.includes('도착') && !prev.status.includes('착륙')) {
+            if (!prev.status.includes('도착') && !prev.status.includes('ARR')) {
               changesCount++;
               pushEvent({
                 type: 'ARR',
                 callsign,
                 airport,
                 description: `[착륙 감지] ${callsign}편이 ${airport}에 착륙(ARR)하였습니다.`,
-                flight
+                timestamp: new Date().toISOString()
               });
             }
           }
@@ -193,7 +184,7 @@ export default async function handler(req, res) {
               callsign,
               airport,
               description: `[지연 감지] ${callsign}편 출발이 ${std}에서 ${etd}로 지연(DLA)되었습니다.`,
-              flight
+              timestamp: new Date().toISOString()
             });
           }
         }
@@ -209,7 +200,6 @@ export default async function handler(req, res) {
       airportsSynced: scheduleResults.length,
       flightsTracked: totalFlights,
       weatherStationsSynced: weatherRunwaysCount,
-      notamsSynced: notamsCount,
       changesDetected: changesCount,
       executionTimeMs: Date.now() - startTime
     };
