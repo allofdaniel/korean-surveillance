@@ -35,4 +35,40 @@ export default defineConfig({
           const lat = params.get('lat');
           const lon = params.get('lon');
           const radius = params.get('radius') || '100';
-          return `/v2/point/${lat}/${lon}/${radius}`;\n        },\n      },\n      '/api/weather': {\n        target: 'https://aviationweather.gov',\n        changeOrigin: true,\n        rewrite: (path) => {\n          const params = new URLSearchParams(path.split('?')[1] || '');\n          const type = params.get('type') || 'metar';\n          if (type === 'metar') {\n            return `/api/data/metar?ids=RKPU&format=json`;\n          } else if (type === 'taf') {\n            return `/api/data/taf?ids=RKPU,RKPK&format=json`;\n          }\n          return `/api/data/metar?ids=RKPU&format=json`;\n        },\n      },\n      '/api/charts': {\n        target: 'http://localhost:8080',\n        changeOrigin: true,\n      },\n    },\n  },\n  build: {\n    sourcemap: false,\n    target: 'es2018',\n    chunkSizeWarningLimit: 1800,\n    rollupOptions: {\n      output: {\n        manualChunks: (id) => {\n          // React 및 React 의존 UI 라이브러리를 단일 청크로 묶어 createContext 초기화 오류 방지\n          if (\n            id.includes('node_modules/react') ||\n            id.includes('node_modules/react-dom') ||\n            id.includes('node_modules/lucide-react') ||\n            id.includes('node_modules/zustand') ||\n            id.includes('node_modules/scheduler')\n          ) {\n            return 'vendor-react';\n          }\n          // Mapbox GL 분리\n          if (id.includes('node_modules/mapbox-gl')) {\n            return 'vendor-mapbox';\n          }\n          // Three.js 분리\n          if (id.includes('node_modules/three')) {\n            return 'vendor-three';\n          }\n        },\n      },\n    },\n  },\n});\n
+          return `/v2/point/${lat}/${lon}/${radius}`;
+        },
+      },
+      '/api/weather': {
+        target: 'https://aviationweather.gov',
+        changeOrigin: true,
+        rewrite: (path) => {
+          const params = new URLSearchParams(path.split('?')[1] || '');
+          const type = params.get('type') || 'metar';
+          if (type === 'metar') {
+            return `/api/data/metar?ids=RKPU&format=json`;
+          } else if (type === 'taf') {
+            return `/api/data/taf?ids=RKPU,RKPK&format=json`;
+          }
+          return `/api/data/metar?ids=RKPU&format=json`;
+        },
+      },
+      '/api/charts': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+    },
+  },
+  build: {
+    sourcemap: false,
+    target: 'es2018',
+    chunkSizeWarningLimit: 1800,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-mapbox': ['mapbox-gl'],
+          'vendor-three': ['three'],
+        },
+      },
+    },
+  },
+});
