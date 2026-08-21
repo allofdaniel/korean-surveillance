@@ -1,5 +1,8 @@
 import crypto from 'crypto';
 
+// Allow government GPKI / self-signed certificate on port 8030
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 // UBIKAIS User Credentials
 const UBI_USER_ID = 'allofdanie';
 const UBI_USER_PWD = 'pr12pr34!!';
@@ -46,7 +49,7 @@ async function authenticateUbikais() {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
     },
-    signal: AbortSignal.timeout(8000)
+    signal: AbortSignal.timeout(10000)
   });
   saveCookies(loginPageRes);
 
@@ -100,7 +103,7 @@ async function authenticateUbikais() {
       userId: encId,
       userPass: encPwd
     }).toString(),
-    signal: AbortSignal.timeout(8000)
+    signal: AbortSignal.timeout(10000)
   });
   saveCookies(loginProcRes);
 
@@ -150,7 +153,7 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSS') {
         'X-Requested-With': 'XMLHttpRequest',
         'Accept': 'application/json, text/javascript, */*; q=0.01'
       },
-      signal: AbortSignal.timeout(9000)
+      signal: AbortSignal.timeout(12000)
     }),
     fetch(arrUrl, {
       headers: {
@@ -160,7 +163,7 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSS') {
         'X-Requested-With': 'XMLHttpRequest',
         'Accept': 'application/json, text/javascript, */*; q=0.01'
       },
-      signal: AbortSignal.timeout(9000)
+      signal: AbortSignal.timeout(12000)
     })
   ]);
 
@@ -180,7 +183,7 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSS') {
           'X-Requested-With': 'XMLHttpRequest',
           'Accept': 'application/json, text/javascript, */*; q=0.01'
         },
-        signal: AbortSignal.timeout(9000)
+        signal: AbortSignal.timeout(12000)
       }),
       fetch(arrUrl, {
         headers: {
@@ -190,7 +193,7 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSS') {
           'X-Requested-With': 'XMLHttpRequest',
           'Accept': 'application/json, text/javascript, */*; q=0.01'
         },
-        signal: AbortSignal.timeout(9000)
+        signal: AbortSignal.timeout(12000)
       })
     ]);
     dTxt = await dRes.text();
