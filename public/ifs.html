@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" class="dark">
+<html lang="ko" class="theme-crt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,8 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
-    :root {
+    /* 1. Base Theme: Tactical CRT Green (Default) */
+    :root, html.theme-crt {
       --bg: #131313;
       --bg-dim: #0e0e0e;
       --surface-container: #1c1b1b;
@@ -27,6 +28,60 @@
       --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
     }
 
+    /* 2. Theme: Dark Mono White (검은 배경에 흰색 글씨 모드) */
+    html.theme-mono {
+      --bg: #09090b;
+      --bg-dim: #000000;
+      --surface-container: #18181b;
+      --surface-high: #27272a;
+      --outline: #3f3f46;
+      --outline-light: #52525b;
+      --primary: #ffffff;
+      --primary-dim: #f4f4f5;
+      --primary-bright: #ffffff;
+      --primary-soft: #e4e4e7;
+      --amber: #fbbf24;
+      --amber-dim: #d97706;
+      --red: #f87171;
+      --text-muted: #a1a1aa;
+    }
+
+    /* 3. Theme: Deep Navy Blue (진한 파란 배경 모드 - VS Code Dark+ / ATC Oceanic) */
+    html.theme-navy {
+      --bg: #0b1329;
+      --bg-dim: #060b18;
+      --surface-container: #132247;
+      --surface-high: #1c3266;
+      --outline: #223e7c;
+      --outline-light: #3056a8;
+      --primary: #38bdf8;
+      --primary-dim: #0ea5e9;
+      --primary-bright: #7dd3fc;
+      --primary-soft: #bae6fd;
+      --amber: #fbbf24;
+      --amber-dim: #d97706;
+      --red: #f87171;
+      --text-muted: #64748b;
+    }
+
+    /* 4. Theme: Daylight Radar (라이트 모드) */
+    html.theme-light {
+      --bg: #f4f4f5;
+      --bg-dim: #e4e4e7;
+      --surface-container: #ffffff;
+      --surface-high: #d4d4d8;
+      --outline: #a1a1aa;
+      --outline-light: #71717a;
+      --primary: #16a34a;
+      --primary-dim: #15803d;
+      --primary-bright: #059669;
+      --primary-soft: #27272a;
+      --amber: #b45309;
+      --amber-dim: #78350f;
+      --red: #dc2626;
+      --text-muted: #52525b;
+    }
+
     html, body {
       height: 100%;
       width: 100%;
@@ -38,6 +93,7 @@
       line-height: 1.25;
       user-select: none;
       -webkit-font-smoothing: antialiased;
+      transition: background 0.2s, color 0.2s;
     }
 
     /* CRT Scanlines Overlay */
@@ -50,6 +106,7 @@
       z-index: 99;
       opacity: 0.45;
     }
+    .scanlines.hidden { display: none; }
 
     /* Grid & Borders */
     .grid-box { border: 1px solid var(--outline); background: var(--bg); display: flex; flex-direction: column; }
@@ -95,7 +152,7 @@
       letter-spacing: 0.08em;
     }
     .airport-select {
-      background: #000;
+      background: var(--bg-dim);
       border: 1px solid var(--outline-light);
       color: var(--amber);
       font-family: var(--font-mono);
@@ -110,7 +167,7 @@
     .status-group {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
     .status-item {
       display: flex;
@@ -120,6 +177,23 @@
       font-weight: 700;
       color: var(--primary-soft);
     }
+    .btn-settings {
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
+      color: var(--primary-soft);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .btn-settings:hover { border-color: var(--primary); color: var(--primary-bright); }
+
     .dot-live {
       width: 8px;
       height: 8px;
@@ -158,9 +232,9 @@
       align-items: center;
     }
     .wind-mode-btn {
-      background: #1c1b1b;
+      background: var(--surface-container);
       border: 1px solid var(--outline);
-      color: #a1a1aa;
+      color: var(--text-muted);
       font-family: var(--font-mono);
       font-size: 9px;
       font-weight: 700;
@@ -169,19 +243,22 @@
       cursor: pointer;
       transition: all 0.15s;
     }
-    .wind-mode-btn:hover { border-color: var(--primary); color: #fff; }
+    .wind-mode-btn:hover { border-color: var(--primary); color: var(--primary-bright); }
     .wind-mode-btn.active {
       background: rgba(0, 255, 0, 0.18);
       border-color: var(--primary);
       color: var(--primary-bright);
     }
+    html.theme-mono .wind-mode-btn.active { background: rgba(255, 255, 255, 0.2); }
+    html.theme-navy .wind-mode-btn.active { background: rgba(56, 189, 248, 0.25); }
+    html.theme-light .wind-mode-btn.active { background: rgba(22, 163, 74, 0.2); }
 
     /* Section 1: Weather Grid */
     .weather-grid-container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 4px;
-      background: #0a0a0a;
+      background: var(--bg-dim);
       flex-shrink: 0;
       padding: 0;
     }
@@ -198,7 +275,7 @@
       overflow: hidden;
     }
     .rwy-card.active-use {
-      border-color: rgba(0, 255, 0, 0.6);
+      border-color: var(--primary);
       box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.05);
     }
 
@@ -234,6 +311,8 @@
       border-radius: 2px;
       font-weight: 800;
     }
+    html.theme-mono .use-tag { color: #000; }
+    html.theme-light .use-tag { color: #fff; }
 
     /* Wind Rose on Right side */
     .rwy-top-right {
@@ -241,7 +320,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #000;
+      background: var(--bg-dim);
       flex-shrink: 0;
     }
 
@@ -288,7 +367,7 @@
 
     /* Section 2: Raw MET Feed */
     .raw-met-box {
-      background: #000;
+      background: var(--bg-dim);
       padding: 4px 8px;
       font-size: 10.5px;
       color: var(--primary-dim);
@@ -310,9 +389,10 @@
     }
     .schedule-table-wrap {
       flex: 1;
-      background: #000;
+      background: var(--bg-dim);
       overflow-y: auto;
       overflow-x: hidden;
+      scroll-behavior: smooth;
     }
     table {
       width: 100%;
@@ -322,8 +402,10 @@
     }
     thead { position: sticky; top: 0; background: var(--surface-container); z-index: 10; border-bottom: 1px solid var(--outline); }
     th { padding: 3px 5px; font-size: 8.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    td { padding: 2px 5px; border-bottom: 1px solid #1c1b1b; vertical-align: middle; }
-    tr:hover { background: #181818; }
+    td { padding: 2px 5px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); vertical-align: middle; }
+    html.theme-light td { border-bottom: 1px solid rgba(0, 0, 0, 0.06); }
+    tr:hover { background: rgba(255, 255, 255, 0.04); }
+    html.theme-light tr:hover { background: rgba(0, 0, 0, 0.03); }
     
     .status-dep { color: var(--primary); font-weight: 800; }
     .status-arr { color: var(--primary); font-weight: 800; }
@@ -448,13 +530,112 @@
       line-height: 1.35;
     }
     .notices-textarea:focus {
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Settings Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(2px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-card {
+      background: var(--surface-container);
+      border: 1px solid var(--outline-light);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      width: 380px;
+      border-radius: 4px;
+      overflow: hidden;
+      font-family: var(--font-mono);
+    }
+    .modal-header {
+      background: var(--surface-high);
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary-bright);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--outline);
+    }
+    .modal-body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .modal-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .modal-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--primary-soft);
+    }
+    .theme-select-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+    .theme-btn {
+      padding: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      border: 1px solid var(--outline);
+      background: var(--bg);
+      color: var(--primary-dim);
+      border-radius: 2px;
+      cursor: pointer;
+      text-align: center;
+      font-family: var(--font-mono);
+      transition: all 0.15s;
+    }
+    .theme-btn:hover { border-color: var(--primary); }
+    .theme-btn.active {
+      border-color: var(--primary);
+      background: rgba(0, 255, 0, 0.15);
+      color: var(--primary-bright);
+    }
+    .modal-footer {
+      padding: 8px 12px;
+      background: var(--surface-high);
+      border-top: 1px solid var(--outline);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .btn-modal-action {
+      padding: 3px 10px;
+      font-size: 10.5px;
+      font-weight: 700;
+      border-radius: 2px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+    }
+    .btn-modal-save {
+      background: var(--primary);
+      color: #000;
+      border: 1px solid var(--primary);
+    }
+    .btn-modal-cancel {
+      background: var(--surface-container);
+      color: var(--primary-soft);
+      border: 1px solid var(--outline);
     }
   </style>
 </head>
 <body>
   <!-- CRT Screen Filter -->
-  <div class="scanlines"></div>
+  <div class="scanlines" id="scanlines-overlay"></div>
 
   <!-- Header -->
   <header>
@@ -467,6 +648,7 @@
         <option value="RKPC">RKPC - 제주국제공항 (2본 4개 엔드: 07/25, 13/31)</option>
         <option value="RKPK">RKPK - 김해국제공항 (2본 4개 엔드: 18/36 L/R)</option>
         <option value="RKTL">RKTL - 울진공항 (VFR 훈련비행 특화: 17/35)</option>
+        <option value="RKPD">RKPD - 정석비행장 (대한항공 비행훈련원: 01/19)</option>
         <option value="RKPU">RKPU - 울산공항 (1본 2개 엔드: 18/36)</option>
         <option value="RKTU">RKTU - 청주국제공항 (2본 4개 엔드: 06/24 L/R)</option>
         <option value="RKTN">RKTN - 대구국제공항 (2본 4개 엔드: 13/31 L/R)</option>
@@ -479,6 +661,9 @@
     </div>
 
     <div class="status-group">
+      <button class="btn-settings" onclick="openSettingsModal()">
+        <span>⚙️ 테마/설정</span>
+      </button>
       <div class="status-item">
         <span>GATEWAY API</span>
         <div class="dot-live" id="dot-gateway"></div>
@@ -492,14 +677,14 @@
 
   <!-- Main Display -->
   <main>
-    <!-- 1. Real-time Weather Section with Wind Toggle & Rounding Switch -->
+    <!-- 1. Real-time Weather Section with Wind Toggle & Decimal Switch -->
     <div class="grid-box">
       <div class="grid-header">
         <span>WEATHER FEED</span>
         <div class="wind-mode-group">
           <button id="btn-wind-2min" class="wind-mode-btn active" onclick="setWindMode('2min')">2분 자방위 (MAG)</button>
           <button id="btn-wind-10min" class="wind-mode-btn" onclick="setWindMode('10min')">10분 진방위 (TRUE)</button>
-          <button id="btn-wind-round" class="wind-mode-btn" onclick="toggleWindRounding()">정수 반올림: OFF</button>
+          <button id="btn-wind-round" class="wind-mode-btn" onclick="toggleWindDecimal()">풍속 소수점: ON</button>
         </div>
       </div>
 
@@ -529,7 +714,7 @@
       </div>
     </div>
 
-    <!-- 3. Schedule Split (Full 24-Hour Schedule with IFR/VFR and [출발도착완료수 / 하루 전체 스케줄수]) -->
+    <!-- 3. Schedule Split (Full 24-Hour Schedule with IFR/VFR, Auto-Scroll 5th Row, and [완료수/전체]) -->
     <div class="schedule-split">
       <!-- DEPARTURES -->
       <div class="grid-box" style="flex: 1;">
@@ -537,7 +722,7 @@
           <span>DEPARTURES (DEP)</span>
           <span id="dep-count" style="color: var(--amber);">[0/0]</span>
         </div>
-        <div class="schedule-table-wrap">
+        <div class="schedule-table-wrap" id="dep-table-wrap">
           <table>
             <thead>
               <tr>
@@ -562,7 +747,7 @@
           <span>ARRIVALS (ARR)</span>
           <span id="arr-count" style="color: var(--amber);">[0/0]</span>
         </div>
-        <div class="schedule-table-wrap">
+        <div class="schedule-table-wrap" id="arr-table-wrap">
           <table>
             <thead>
               <tr>
@@ -610,13 +795,46 @@
     </div>
   </main>
 
+  <!-- Settings & Theme Modal -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span>⚙️ 관제단말 환경설정 (SETTINGS)</span>
+        <span style="cursor: pointer;" onclick="closeSettingsModal()">✕</span>
+      </div>
+      <div class="modal-body">
+        <div class="modal-row">
+          <div class="modal-label">테마 모드 (Color Theme)</div>
+          <div class="theme-select-grid">
+            <button class="theme-btn" id="tbtn-crt" onclick="selectModalTheme('theme-crt')">Tactical CRT Green</button>
+            <button class="theme-btn" id="tbtn-mono" onclick="selectModalTheme('theme-mono')">Dark Mono White</button>
+            <button class="theme-btn" id="tbtn-navy" onclick="selectModalTheme('theme-navy')">Deep Navy Blue</button>
+            <button class="theme-btn" id="tbtn-light" onclick="selectModalTheme('theme-light')">Daylight Radar</button>
+          </div>
+        </div>
+        <div class="modal-row" style="margin-top: 6px;">
+          <div class="modal-label">CRT 스캔라인 이펙트</div>
+          <select id="setting-scanlines" class="airport-select" style="width: 100%;">
+            <option value="true">ON (클래식 CRT 스캔라인)</option>
+            <option value="false">OFF (선명한 디지털 클린 뷰)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal-action btn-modal-cancel" onclick="closeSettingsModal()">취소</button>
+        <button class="btn-modal-action btn-modal-save" onclick="applyAndSaveSettings()">저장 및 적용</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // IFS Terminal Engine - Consumes 100% Data via Gateway APIs
     const API_BASE = window.location.origin;
     let currentAirport = 'RKJY';
     let rawRunwaysData = [];
     let windMode = '2min'; // '2min' (자방위) or '10min' (진방위)
-    let isWindRounded = false; // Wind speed rounding on/off
+    let showWindDecimal = true; // Wind speed decimal on/off
+    let hasAutoScrolledSchedule = false;
     
     // Persistent Status History for 5-time Blinking Detection
     const flightStatusHistory = new Map();
@@ -628,7 +846,8 @@
       RKSS: "1. [RKSS] 김포국제공항 14/32 평행 활주로 정상 운용.\n2. [NOTAM] 소음 저감 절차 및 표준 출발/도착 경로 준수.",
       RKPC: "1. [RKPC] 제주국제공항 07/25 주 활주로 및 13/31 횡선 활주로 감시 중.",
       RKPK: "1. [RKPK] 김해국제공항 18/36 활주로 CIRCLING 접근 절차 주의.",
-      RKTL: "1. [RKTL] 울진비행장 비행교육원 훈련기 VFR 교통 집중 (CIRCUIT / LOCAL).\n2. [ATC] IFR 민항기 접근 시 VFR 훈련기 장주 분리 철저."
+      RKTL: "1. [RKTL] 울진비행장 비행교육원 훈련기 VFR 교통 집중 (CIRCUIT / LOCAL).\n2. [ATC] IFR 민항기 접근 시 VFR 훈련기 장주 분리 철저.",
+      RKPD: "1. [RKPD] 정석비행장 대한항공 비행훈련원 전용 훈련 공역 운용 중.\n2. [ATC] 01/19 활주로 훈련기 터치앤고(Touch & Go) 절차 준수."
     };
 
     // 1. Clocks Ticker
@@ -647,14 +866,65 @@
     setInterval(updateClocks, 1000);
     updateClocks();
 
-    // 2. Exact Runway Heading Calculation
+    // 2. Theme & Settings Management (LocalStorage Persistence per user)
+    let selectedModalThemeName = 'theme-crt';
+
+    function initThemeSettings() {
+      const savedTheme = localStorage.getItem('ifs_theme') || 'theme-crt';
+      const savedScanlines = localStorage.getItem('ifs_scanlines') !== 'false';
+      const savedDecimal = localStorage.getItem('ifs_wind_decimal') !== 'false';
+
+      applyTheme(savedTheme);
+      setScanlines(savedScanlines);
+      showWindDecimal = savedDecimal;
+      updateDecimalButton();
+    }
+
+    function applyTheme(themeName) {
+      document.documentElement.className = themeName;
+      localStorage.setItem('ifs_theme', themeName);
+    }
+
+    function setScanlines(show) {
+      const overlay = document.getElementById('scanlines-overlay');
+      if (overlay) overlay.classList.toggle('hidden', !show);
+      localStorage.setItem('ifs_scanlines', show ? 'true' : 'false');
+    }
+
+    function openSettingsModal() {
+      const currentTheme = localStorage.getItem('ifs_theme') || 'theme-crt';
+      selectModalTheme(currentTheme);
+      document.getElementById('setting-scanlines').value = localStorage.getItem('ifs_scanlines') !== 'false' ? 'true' : 'false';
+      document.getElementById('settings-modal').classList.add('open');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settings-modal').classList.remove('open');
+    }
+
+    function selectModalTheme(themeName) {
+      selectedModalThemeName = themeName;
+      ['crt', 'mono', 'navy', 'light'].forEach(t => {
+        const btn = document.getElementById(`tbtn-${t}`);
+        if (btn) btn.classList.toggle('active', `theme-${t}` === themeName);
+      });
+    }
+
+    function applyAndSaveSettings() {
+      applyTheme(selectedModalThemeName);
+      const scanlinesVal = document.getElementById('setting-scanlines').value === 'true';
+      setScanlines(scanlinesVal);
+      closeSettingsModal();
+    }
+
+    // 3. Exact Runway Heading Calculation
     function getRunwayHeading(rwyDirStr) {
       const numMatch = rwyDirStr.match(/\d+/);
       const num = numMatch ? parseInt(numMatch[0]) : 17;
       return num * 10;
     }
 
-    // 3. Headwind & Crosswind Vector Calculator
+    // 4. Headwind & Crosswind Vector Calculator
     function calculateWindVectors(windDirDeg, windSpeedKts, rwyHeadingDeg) {
       if (isNaN(windDirDeg) || isNaN(windSpeedKts)) {
         return { headTail: '-', cross: '-' };
@@ -677,7 +947,7 @@
       return `${rh}%`;
     }
 
-    // 4. Render Custom SVG Wind Rose & Runway Graphic (Active = Bright White #ffffff, Inactive = Subtle Gray #71717a)
+    // 5. Render Custom SVG Wind Rose & Runway Graphic
     function createRunwayRoseSvg(rwyDirStr, rwyHeadingDeg, windDirDeg, isActiveRwy) {
       const numMatch = rwyDirStr.match(/\d+/);
       const num = numMatch ? parseInt(numMatch[0]) : 17;
@@ -694,8 +964,7 @@
       // Runway tilt relative to North (0 deg)
       const rwyTilt = rwyHeadingDeg - 180;
 
-      // Aircraft symbol at START/Approach threshold (y = -19), rotated 180 to face landing/takeoff heading
-      // In-Use: Bright White #ffffff | Non-In-Use: Subtle Tactical Gray #71717a
+      // In-Use: Bright Solid White #ffffff | Non-In-Use: Subtle Tactical Gray #71717a
       const planeFill = isActiveRwy ? '#ffffff' : '#71717a';
       const planeOpacity = isActiveRwy ? '1' : '0.65';
 
@@ -708,38 +977,38 @@
       return `
         <svg viewBox="-50 -50 100 100" width="72" height="72" class="runway-rose-svg">
           <!-- Compass Circle -->
-          <circle cx="0" cy="0" r="36" stroke="#00ff00" stroke-width="1.6" fill="none" />
+          <circle cx="0" cy="0" r="36" stroke="var(--primary)" stroke-width="1.6" fill="none" />
           
           <!-- Cardinal Labels -->
-          <text x="0" y="-39" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">N</text>
-          <text x="0" y="47" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">S</text>
-          <text x="-41" y="2.8" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">W</text>
-          <text x="42" y="2.8" fill="#00ff00" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">E</text>
+          <text x="0" y="-39" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">N</text>
+          <text x="0" y="47" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">S</text>
+          <text x="-41" y="2.8" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">W</text>
+          <text x="42" y="2.8" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">E</text>
           
           <!-- Runway Numbers -->
-          <text x="-14" y="-39" fill="#00ff00" font-size="7.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${topLabel}</text>
-          <text x="14" y="47" fill="#00ff00" font-size="7.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${botLabel}</text>
+          <text x="-14" y="-39" fill="var(--primary)" font-size="7.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${topLabel}</text>
+          <text x="14" y="47" fill="var(--primary)" font-size="7.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${botLabel}</text>
           
           <!-- Runway Box (Tilted to true heading) -->
           <g transform="rotate(${rwyTilt})">
-            <rect x="-5.5" y="-28" width="11" height="56" stroke="#00ff00" stroke-width="1.3" fill="none" rx="1" />
+            <rect x="-5.5" y="-28" width="11" height="56" stroke="var(--primary)" stroke-width="1.3" fill="none" rx="1" />
             <!-- Aircraft START Threshold Indicator -->
             ${airplaneSvg}
           </g>
 
           <!-- Wind Arrow -->
           <g transform="rotate(${windDirDeg})">
-            <line x1="0" y1="-34" x2="0" y2="4" stroke="#00ff00" stroke-width="3" stroke-linecap="round" />
-            <polygon points="0,13 -4.5,0 4.5,0" fill="#00ff00" />
+            <line x1="0" y1="-34" x2="0" y2="4" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" />
+            <polygon points="0,13 -4.5,0 4.5,0" fill="var(--primary)" />
           </g>
 
           <!-- Degree Text Overlay -->
-          <text x="19" y="-19" fill="#00ff00" font-size="9" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${String(windDirDeg).padStart(3, '0')}</text>
+          <text x="19" y="-19" fill="var(--primary)" font-size="9" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${String(windDirDeg).padStart(3, '0')}</text>
         </svg>
       `;
     }
 
-    // 5. Fetch AMOS & Weather Data via API
+    // 6. Fetch AMOS & Weather Data via API
     async function syncWeatherData() {
       try {
         const res = await fetch(`${API_BASE}/api/weather?type=amos&icao=${currentAirport}&_t=${Date.now()}`);
@@ -809,12 +1078,19 @@
       renderRunwaysGrid();
     }
 
-    function toggleWindRounding() {
-      isWindRounded = !isWindRounded;
-      const btn = document.getElementById('btn-wind-round');
-      btn.classList.toggle('active', isWindRounded);
-      btn.textContent = isWindRounded ? '정수 반올림: ON' : '정수 반올림: OFF';
+    function toggleWindDecimal() {
+      showWindDecimal = !showWindDecimal;
+      localStorage.setItem('ifs_wind_decimal', showWindDecimal ? 'true' : 'false');
+      updateDecimalButton();
       renderRunwaysGrid();
+    }
+
+    function updateDecimalButton() {
+      const btn = document.getElementById('btn-wind-round');
+      if (btn) {
+        btn.classList.toggle('active', showWindDecimal);
+        btn.textContent = showWindDecimal ? '풍속 소수점: ON' : '풍속 소수점: OFF';
+      }
     }
 
     function renderRunwaysGrid() {
@@ -833,19 +1109,19 @@
         const rwyDirStr = rwy.rwyDir || (idx === 0 ? '17' : '35');
         const rwyHeading = getRunwayHeading(rwyDirStr);
         
-        // Use 2-min MAG or 10-min TRUE according to active toggle
+        // Use 2-min MAG or 10-min TRUE
         const is10Min = windMode === '10min';
         const rawWd = parseInt(is10Min ? (rwy.wd10minAvg || rwy.wd) : (rwy.wd2minAvg || rwy.wd)) || 170;
         const rawWs = parseFloat(is10Min ? (rwy.wspd10minAvg || rwy.ws) : (rwy.wspd2minAvg || rwy.ws)) || 8.5;
         const rawMaxWs = parseFloat(is10Min ? (rwy.wspd10minMax || rwy.max) : (rwy.wspd2minMax || rwy.max)) || rawWs;
         const rawMinWs = parseFloat(rwy.min) || Math.max(0, parseFloat((rawWs - 2).toFixed(1)));
         
-        // Wind speed values with optional integer rounding
+        // Format according to decimal toggle
         const wd = rawWd;
-        const ws = isWindRounded ? Math.round(rawWs) : rawWs;
-        const maxWs = isWindRounded ? Math.round(rawMaxWs) : rawMaxWs;
-        const minWs = isWindRounded ? Math.round(rawMinWs) : rawMinWs;
-        const gust = rwy.gust && rwy.gust !== '-' ? (isWindRounded ? Math.round(parseFloat(rwy.gust)) : rwy.gust) : '-';
+        const ws = showWindDecimal ? rawWs : Math.round(rawWs);
+        const maxWs = showWindDecimal ? rawMaxWs : Math.round(rawMaxWs);
+        const minWs = showWindDecimal ? rawMinWs : Math.round(rawMinWs);
+        const gust = rwy.gust && rwy.gust !== '-' ? (showWindDecimal ? rwy.gust : Math.round(parseFloat(rwy.gust))) : '-';
         
         // Temperature, Dewpoint, Humidity (Without °C clutter for clean fit)
         const tmpNum = rwy.tmp ? parseFloat(rwy.tmp).toFixed(1) : '25.9';
@@ -913,7 +1189,41 @@
       });
     }
 
-    // 6. Fetch Flight Schedules (FIDS DEP & ARR) Full 24H with IFR/VFR Badges & [완료수 / 전체 스케줄수]
+    // 7. Auto-Scroll Schedule to Current Time at 5th Row
+    function autoScrollScheduleToCurrentTime() {
+      const now = new Date();
+      const kstNow = new Date(now.getTime() + 9 * 3600 * 1000);
+      const curTimeNum = parseInt(`${String(kstNow.getUTCHours()).padStart(2, '0')}${String(kstNow.getUTCMinutes()).padStart(2, '0')}`);
+
+      ['dep', 'arr'].forEach(type => {
+        const tbody = document.getElementById(`${type}-tbody`);
+        const wrap = document.getElementById(`${type}-table-wrap`);
+        if (!tbody || !wrap) return;
+
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        if (rows.length === 0) return;
+
+        let matchIdx = 0;
+        for (let i = 0; i < rows.length; i++) {
+          const planTd = rows[i].children[2];
+          const planTime = parseInt((planTd?.textContent || '0000').replace(':', ''));
+          if (planTime >= curTimeNum) {
+            matchIdx = i;
+            break;
+          }
+          matchIdx = i;
+        }
+
+        // Place current flight at the 5th visible position (index 4)
+        const targetIdx = Math.max(0, matchIdx - 4);
+        const targetRow = rows[targetIdx];
+        if (targetRow) {
+          wrap.scrollTop = targetRow.offsetTop - rows[0].offsetTop;
+        }
+      });
+    }
+
+    // 8. Fetch Flight Schedules (FIDS DEP & ARR) Full 24H with IFR/VFR Badges & [완료수 / 전체 스케줄수]
     async function syncFlightSchedules() {
       try {
         const res = await fetch(`${API_BASE}/api/flight-schedule?airport=${currentAirport}&_t=${Date.now()}`);
@@ -991,12 +1301,18 @@
           arrTbody.appendChild(tr);
         });
 
+        // Perform auto-scroll to 5th row on first load or airport switch
+        if (!hasAutoScrolledSchedule) {
+          setTimeout(autoScrollScheduleToCurrentTime, 100);
+          hasAutoScrolledSchedule = true;
+        }
+
       } catch (e) {
         console.warn('Schedule sync error:', e.message);
       }
     }
 
-    // 7. System Notices LocalStorage Management
+    // 9. System Notices LocalStorage Management
     function loadAirportNotices(ap) {
       const saved = localStorage.getItem('ifs_notices_' + ap);
       const textarea = document.getElementById('notices-input');
@@ -1016,7 +1332,7 @@
       setTimeout(() => { msg.style.display = 'none'; }, 2000);
     }
 
-    // 8. Sync System Heartbeat via API
+    // 10. Sync System Heartbeat via API
     async function syncSystemStatus() {
       try {
         const crawlerRes = await fetch(`${API_BASE}/api/crawler?status=true&_t=${Date.now()}`);
@@ -1031,6 +1347,7 @@
     function changeAirport(ap) {
       currentAirport = ap;
       rawRunwaysData = [];
+      hasAutoScrolledSchedule = false;
       flightStatusHistory.clear();
       loadAirportNotices(ap);
       syncWeatherData();
@@ -1040,6 +1357,7 @@
 
     // Initial load & Periodic Pollers
     function init() {
+      initThemeSettings();
       loadAirportNotices(currentAirport);
       syncWeatherData();
       syncFlightSchedules();

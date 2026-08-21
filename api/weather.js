@@ -242,6 +242,14 @@ async function handleAmos(req, res) {
     RKPS: [
       { rwy: '06L', stnNm: '사천', wd: '060', ws: '5.0', max: '7.8', mor: '9999', rvr: 'P2000', tmp: '31.5', dp: '24.0', hm: '65', qnh: '29.91', qnhOrigin: 10129, cld: '4200', ww: '-' },
       { rwy: '24R', stnNm: '사천', wd: '060', ws: '5.0', max: '7.8', mor: '9999', rvr: 'P2000', tmp: '31.5', dp: '24.0', hm: '65', qnh: '29.91', qnhOrigin: 10129, cld: '4200', ww: '-' }
+    ],
+    RKPD: [
+      { rwy: '01', stnNm: '정석', wd: '010', ws: '6.5', max: '9.5', mor: '9999', rvr: 'P2000', tmp: '29.8', dp: '24.1', hm: '72', qnh: '29.93', qnhOrigin: 10135, cld: '3000', ww: '-' },
+      { rwy: '19', stnNm: '정석', wd: '010', ws: '6.5', max: '9.5', mor: '9999', rvr: 'P2000', tmp: '29.8', dp: '24.1', hm: '72', qnh: '29.93', qnhOrigin: 10135, cld: '3000', ww: '-' }
+    ],
+    RKTL: [
+      { rwy: '17', stnNm: '울진', wd: '170', ws: '5.5', max: '8.0', mor: '9999', rvr: 'P2000', tmp: '28.5', dp: '23.5', hm: '74', qnh: '29.92', qnhOrigin: 10132, cld: '3500', ww: '-' },
+      { rwy: '35', stnNm: '울진', wd: '170', ws: '5.5', max: '8.0', mor: '9999', rvr: 'P2000', tmp: '28.5', dp: '23.5', hm: '74', qnh: '29.92', qnhOrigin: 10132, cld: '3500', ww: '-' }
     ]
   };
 

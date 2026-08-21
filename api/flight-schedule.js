@@ -55,6 +55,12 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
       destinations: ['RKTL', 'RKTH', 'RKNY', 'RKPS'],
       origins: ['RKTL', 'RKTH', 'RKNY', 'RKPS'],
       countPerDay: 35
+    },
+    RKPD: { // 정석비행장 (대한항공 비행훈련원)
+      airlines: ['KAL', 'HL1', 'HL2', 'FTC'],
+      destinations: ['RKPD', 'RKPC', 'RKPK', 'RKJY'],
+      origins: ['RKPD', 'RKPC', 'RKPK', 'RKJY'],
+      countPerDay: 30
     }
   };
 
