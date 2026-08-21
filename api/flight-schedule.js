@@ -17,7 +17,7 @@ function normalizeFlight(rawFlight) {
   return rawFlight.trim().toUpperCase().replace(/\s+/g, '');
 }
 
-// 24-Hour Schedule Generator with IFR / VFR Flight Rules
+// 24-Hour Schedule Generator with IFR / VFR Flight Rules for ALL 15 Korean Airports
 function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
   const now = new Date();
   const kstNow = new Date(now.getTime() + 9 * 3600 * 1000);
@@ -30,37 +30,106 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
       airlines: ['KAL', 'AAR', 'JJA', 'TWB', 'JNA', 'CPA', 'CES', 'DAL', 'DLH', 'THY', 'AFR', 'SIA', 'CCA', 'ANA', 'JAL', 'UAE'],
       destinations: ['ZBAA', 'ZSPD', 'RJAA', 'RJBB', 'VHHH', 'VVDN', 'VVTS', 'WSSS', 'VTBS', 'KLAX', 'KJFK', 'KDTW', 'EGLL', 'EDDF', 'LFPG', 'OMDB', 'RKPC', 'RKPK'],
       origins: ['ZBAA', 'ZSPD', 'RJAA', 'RJBB', 'VHHH', 'VVDN', 'VVTS', 'WSSS', 'VTBS', 'KLAX', 'KJFK', 'KDTW', 'EGLL', 'EDDF', 'LFPG', 'OMDB', 'RKPC', 'RKPK'],
-      countPerDay: 75
+      countPerDay: 75,
+      baseNum: 100
     },
     RKSS: {
       airlines: ['KAL', 'AAR', 'JJA', 'TWB', 'JNA', 'EOK'],
       destinations: ['RKPC', 'RKPK', 'RKPU', 'RKJY', 'RKTH', 'RJTT', 'ZSSS'],
       origins: ['RKPC', 'RKPK', 'RKPU', 'RKJY', 'RKTH', 'RJTT', 'ZSSS'],
-      countPerDay: 45
+      countPerDay: 45,
+      baseNum: 1100
     },
     RKPC: {
       airlines: ['KAL', 'AAR', 'JJA', 'TWB', 'JNA', 'EOK'],
-      destinations: ['RKSS', 'RKSI', 'RKPK', 'RKTN', 'RKTU', 'RKJJ', 'RKJY', 'RKPU'],
-      origins: ['RKSS', 'RKSI', 'RKPK', 'RKTN', 'RKTU', 'RKJJ', 'RKJY', 'RKPU'],
-      countPerDay: 50
+      destinations: ['RKSS', 'RKSI', 'RKPK', 'RKTN', 'RKTU', 'RKJJ', 'RKJY', 'RKPU', 'RKJB', 'RKNY'],
+      origins: ['RKSS', 'RKSI', 'RKPK', 'RKTN', 'RKTU', 'RKJJ', 'RKJY', 'RKPU', 'RKJB', 'RKNY'],
+      countPerDay: 50,
+      baseNum: 1200
+    },
+    RKPK: {
+      airlines: ['KAL', 'AAR', 'JJA', 'TWB', 'JNA', 'CCA', 'HVN'],
+      destinations: ['RKSS', 'RKPC', 'RJFF', 'RJAA', 'VHHH', 'VVTS', 'ZSPD', 'RCTP'],
+      origins: ['RKSS', 'RKPC', 'RJFF', 'RJAA', 'VHHH', 'VVTS', 'ZSPD', 'RCTP'],
+      countPerDay: 40,
+      baseNum: 1400
+    },
+    RKPU: {
+      airlines: ['KAL', 'AAR', 'JNA'],
+      destinations: ['RKSS', 'RKPC'],
+      origins: ['RKSS', 'RKPC'],
+      countPerDay: 12,
+      baseNum: 1600
+    },
+    RKTU: {
+      airlines: ['AAR', 'TWB', 'JJA', 'EOK'],
+      destinations: ['RKPC', 'ZYTL', 'RCTP', 'RJAA'],
+      origins: ['RKPC', 'ZYTL', 'RCTP', 'RJAA'],
+      countPerDay: 25,
+      baseNum: 1700
+    },
+    RKTN: {
+      airlines: ['TWB', 'JJA', 'KAL'],
+      destinations: ['RKPC', 'RJAA', 'RCTP', 'ZBAA'],
+      origins: ['RKPC', 'RJAA', 'RCTP', 'ZBAA'],
+      countPerDay: 20,
+      baseNum: 1800
+    },
+    RKJJ: {
+      airlines: ['KAL', 'AAR', 'JJA'],
+      destinations: ['RKPC', 'RKSS'],
+      origins: ['RKPC', 'RKSS'],
+      countPerDay: 16,
+      baseNum: 1900
+    },
+    RKJB: {
+      airlines: ['TWB', 'JJA', 'HL1', 'HL2'],
+      destinations: ['RKPC', 'VVDN', 'ZBAA', 'RKJB'],
+      origins: ['RKPC', 'VVDN', 'ZBAA', 'RKJB'],
+      countPerDay: 14,
+      baseNum: 2000
+    },
+    RKNY: {
+      airlines: ['HL1', 'HL2', 'TWB'],
+      destinations: ['RKPC', 'RKSS', 'RKNY'],
+      origins: ['RKPC', 'RKSS', 'RKNY'],
+      countPerDay: 10,
+      baseNum: 2100
+    },
+    RKTH: {
+      airlines: ['JNA', 'KAL'],
+      destinations: ['RKSS', 'RKPC'],
+      origins: ['RKSS', 'RKPC'],
+      countPerDay: 8,
+      baseNum: 2200
+    },
+    RKPS: {
+      airlines: ['KAL', 'JNA'],
+      destinations: ['RKSS', 'RKPC'],
+      origins: ['RKSS', 'RKPC'],
+      countPerDay: 8,
+      baseNum: 2300
     },
     RKJY: {
       airlines: ['AAR', 'JNA', 'KAL'],
       destinations: ['RKSS', 'RKPC'],
       origins: ['RKSS', 'RKPC'],
-      countPerDay: 8
+      countPerDay: 14,
+      baseNum: 2400
     },
     RKTL: { // 울진공항 (VFR 훈련기 위주)
       airlines: ['UFA', 'KNA', 'HL1', 'HL2'],
       destinations: ['RKTL', 'RKTH', 'RKNY', 'RKPS'],
       origins: ['RKTL', 'RKTH', 'RKNY', 'RKPS'],
-      countPerDay: 35
+      countPerDay: 35,
+      baseNum: 3000
     },
     RKPD: { // 정석비행장 (대한항공 비행훈련원)
       airlines: ['KAL', 'HL1', 'HL2', 'FTC'],
       destinations: ['RKPD', 'RKPC', 'RKPK', 'RKJY'],
       origins: ['RKPD', 'RKPC', 'RKPK', 'RKJY'],
-      countPerDay: 30
+      countPerDay: 30,
+      baseNum: 4000
     }
   };
 
@@ -68,7 +137,8 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
     airlines: ['KAL', 'AAR', 'JJA', 'TWB', 'HL1'],
     destinations: ['RKSS', 'RKPC', 'RKPK', 'RKSI'],
     origins: ['RKSS', 'RKPC', 'RKPK', 'RKSI'],
-    countPerDay: 20
+    countPerDay: 15,
+    baseNum: 5000
   };
 
   const fullDeps = [];
@@ -80,7 +150,7 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
     const fId = d.fpId || d.flightNumber;
     if (fId) {
       seenDepIds.add(fId);
-      const isVfr = (d.fpId && d.fpId.startsWith('HL')) || airport === 'RKTL' || (d.fltRule && d.fltRule.includes('V'));
+      const isVfr = (d.fpId && d.fpId.startsWith('HL')) || airport === 'RKTL' || airport === 'RKPD' || (d.fltRule && d.fltRule.includes('V'));
       fullDeps.push({
         ...d,
         flightRules: isVfr ? 'VFR' : 'IFR'
@@ -93,7 +163,7 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
     const fId = a.fpId || a.flightNumber;
     if (fId) {
       seenArrIds.add(fId);
-      const isVfr = (a.fpId && a.fpId.startsWith('HL')) || airport === 'RKTL' || (a.fltRule && a.fltRule.includes('V'));
+      const isVfr = (a.fpId && a.fpId.startsWith('HL')) || airport === 'RKTL' || airport === 'RKPD' || (a.fltRule && a.fltRule.includes('V'));
       fullArrs.push({
         ...a,
         flightRules: isVfr ? 'VFR' : 'IFR'
@@ -111,8 +181,8 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
 
     const stepIdx = Math.floor(m / intervalMins);
     const airline = tmpl.airlines[stepIdx % tmpl.airlines.length];
-    const isVfr = airline.startsWith('HL') || airline === 'UFA' || airline === 'KNA' || airport === 'RKTL' || (m % 5 === 0 && airport !== 'RKSI');
-    const flightNum = isVfr ? (1000 + ((m * 3) % 890)) : (100 + ((m * 7) % 890));
+    const isVfr = airline.startsWith('HL') || airline === 'UFA' || airline === 'KNA' || airline === 'FTC' || airport === 'RKTL' || airport === 'RKPD' || (m % 5 === 0 && airport !== 'RKSI');
+    const flightNum = isVfr ? (1000 + ((tmpl.baseNum + m * 3) % 890)) : (tmpl.baseNum + ((m * 7) % 890));
     const fpId = isVfr ? `HL${flightNum}` : `${airline}${flightNum}`;
 
     if (!seenDepIds.has(fpId)) {
@@ -149,8 +219,8 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
 
     // Arrivals
     const arrAirline = tmpl.airlines[(stepIdx + 3) % tmpl.airlines.length];
-    const isArrVfr = arrAirline.startsWith('HL') || arrAirline === 'UFA' || arrAirline === 'KNA' || airport === 'RKTL' || (m % 5 === 0 && airport !== 'RKSI');
-    const arrFlightNum = isArrVfr ? (1000 + ((m * 5) % 890)) : (200 + ((m * 11) % 790));
+    const isArrVfr = arrAirline.startsWith('HL') || arrAirline === 'UFA' || arrAirline === 'KNA' || arrAirline === 'FTC' || airport === 'RKTL' || airport === 'RKPD' || (m % 5 === 0 && airport !== 'RKSI');
+    const arrFlightNum = isArrVfr ? (1000 + ((tmpl.baseNum + m * 5) % 890)) : (tmpl.baseNum + 50 + ((m * 11) % 790));
     const arrFpId = isArrVfr ? `HL${arrFlightNum}` : `${arrAirline}${arrFlightNum}`;
 
     if (!seenArrIds.has(arrFpId)) {

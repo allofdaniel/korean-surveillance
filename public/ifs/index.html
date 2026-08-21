@@ -144,6 +144,14 @@
     .b-r { border-right: 1px solid var(--outline); }
     .b-b { border-bottom: 1px solid var(--outline); }
 
+    /* Gray Dimming & Skeleton Transition for Pending Content */
+    .content-pending {
+      opacity: 0.35 !important;
+      filter: grayscale(1) blur(0.3px) !important;
+      pointer-events: none !important;
+      transition: opacity 0.2s, filter 0.2s;
+    }
+
     /* Section Spinner */
     .section-spinner {
       width: 9px;
@@ -290,7 +298,7 @@
       background: var(--bg-dim);
       flex-shrink: 0;
       padding: 0;
-      min-height: 120px;
+      min-height: 110px;
     }
     .weather-grid-container.dense {
       grid-template-columns: repeat(4, 1fr);
@@ -405,7 +413,7 @@
       gap: 1.5px;
       flex-shrink: 0;
       border-bottom: 1px solid var(--outline);
-      min-height: 38px;
+      min-height: 36px;
     }
     .raw-met-line { display: flex; align-items: baseline; gap: 4px; }
     .raw-prompt { color: var(--text-muted); font-weight: 700; flex-shrink: 0; }
@@ -762,7 +770,7 @@
           <div class="section-spinner" id="spin-met"></div>
         </div>
       </div>
-      <div class="raw-met-box">
+      <div class="raw-met-box" id="raw-met-container">
         <div class="raw-met-line" id="line-met-report">
           <span class="raw-prompt">&gt;</span>
           <span id="raw-met-report"></span>
@@ -1081,7 +1089,7 @@
       `;
     }
 
-    // 6. Fetch AMOS & Weather Data via API (With Cache & Section Spinners)
+    // 6. Fetch AMOS & Weather Data via API (With Cache, Gray Dimming & Section Spinners)
     async function syncWeatherData() {
       const spin = document.getElementById('spin-wx');
       const spinMet = document.getElementById('spin-met');
@@ -1114,6 +1122,8 @@
       }
 
       renderRunwaysGrid();
+      const wxContainer = document.getElementById('weather-runways-container');
+      if (wxContainer) wxContainer.classList.remove('content-pending');
       if (spin) spin.classList.remove('active');
 
       // Fetch MET REPORT, METAR, and TAF cleanly without placeholder text
@@ -1158,6 +1168,9 @@
           }
         }
       } catch (e) {}
+      
+      const rawMetBox = document.getElementById('raw-met-container');
+      if (rawMetBox) rawMetBox.classList.remove('content-pending');
       if (spinMet) spinMet.classList.remove('active');
     }
 
@@ -1223,15 +1236,18 @@
         if (cldBase === 'NCD') cldBase = 'NCD';
         else if (/^\d+$/.test(cldBase)) cldBase = `FEW ${cldBase}FT`;
 
-        const qnh = rwy.qnhHpa || (rwy.qnhOrigin ? (rwy.qnhOrigin / 10).toFixed(0) : '1013');
-        const qnhInhg = rwy.qnhInhg || rwy.qnh || (parseFloat(qnh) * 0.02953).toFixed(2);
+        // Strict positive QNH calculation
+        const rawQnh = parseFloat(rwy.qnhHpa || (rwy.qnhOrigin ? (rwy.qnhOrigin / 10) : (parseFloat(rwy.qnh) > 500 ? rwy.qnh : 1013)));
+        const qnhVal = (!isNaN(rawQnh) && rawQnh > 800) ? Math.round(rawQnh) : 1013;
+        const qnhInhgVal = (qnhVal * 0.02953).toFixed(2);
+        const qnhDisplay = `${qnhVal}/${qnhInhgVal}`;
         
         const rvr = rwy.rvr1min || rwy.rvr || 'P2000';
         const mor = rwy.mor1min || rwy.mor || '2200';
 
         const vectors = calculateWindVectors(wd, rawWs, rwyHeading);
         
-        // Only one active runway direction
+        // Only active runway direction
         const isActive = (rwy.rwyUse === 'Y');
 
         const rwyEl = document.createElement('div');
@@ -1269,7 +1285,7 @@
             <div class="metric-col b-r"><span class="metric-label">정풍/배풍</span><span class="metric-val-md">${vectors.headTail}</span></div>
             <div class="metric-col b-r"><span class="metric-label">좌/우측풍</span><span class="metric-val-md">${vectors.cross}</span></div>
             <div class="metric-col b-r" style="flex: 1.4;"><span class="metric-label">기온/노점(습도)</span><span class="metric-val-md">${tmpDpHum}</span></div>
-            <div class="metric-col" style="flex: 1.1;"><span class="metric-label">QNH</span><span class="metric-val-md">${qnh}/${qnhInhg}</span></div>
+            <div class="metric-col" style="flex: 1.1;"><span class="metric-label">QNH</span><span class="metric-val-md">${qnhDisplay}</span></div>
           </div>
           <!-- Sub-Row 2: Cloud Base & RVR / Visibility -->
           <div class="metric-row">
@@ -1315,7 +1331,7 @@
       });
     }
 
-    // 8. Fetch Flight Schedules (FIDS DEP & ARR) with Cache & Section Spinners
+    // 8. Fetch Flight Schedules (FIDS DEP & ARR) with Cache, Gray Dimming & Section Spinners
     async function syncFlightSchedules() {
       const spinDep = document.getElementById('spin-dep');
       const spinArr = document.getElementById('spin-arr');
@@ -1414,6 +1430,10 @@
         console.warn('Schedule sync error:', e.message);
       }
 
+      const depWrap = document.getElementById('dep-table-wrap');
+      const arrWrap = document.getElementById('arr-table-wrap');
+      if (depWrap) depWrap.classList.remove('content-pending');
+      if (arrWrap) arrWrap.classList.remove('content-pending');
       if (spinDep) spinDep.classList.remove('active');
       if (spinArr) spinArr.classList.remove('active');
     }
@@ -1450,14 +1470,25 @@
       }
     }
 
-    // High-Performance Smooth Airport Switching with In-Memory Caching & Spinners
+    // High-Performance Smooth Airport Switching with Wireframe & Gray Dimming
     async function changeAirport(ap) {
       currentAirport = ap;
       rawRunwaysData = [];
       hasAutoScrolledSchedule = false;
       flightStatusHistory.clear();
       
-      // Keep frame, activate spinners
+      // 1. Instantly apply Gray Dimming to contents (Wireframe remains stable)
+      const wxContainer = document.getElementById('weather-runways-container');
+      const rawMetBox = document.getElementById('raw-met-container');
+      const depWrap = document.getElementById('dep-table-wrap');
+      const arrWrap = document.getElementById('arr-table-wrap');
+
+      if (wxContainer) wxContainer.classList.add('content-pending');
+      if (rawMetBox) rawMetBox.classList.add('content-pending');
+      if (depWrap) depWrap.classList.add('content-pending');
+      if (arrWrap) arrWrap.classList.add('content-pending');
+
+      // 2. Activate section spinners
       ['spin-wx', 'spin-met', 'spin-dep', 'spin-arr'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('active');
