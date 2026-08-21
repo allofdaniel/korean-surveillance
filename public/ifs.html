@@ -1083,15 +1083,25 @@
 
     // 3. Exact Runway Heading Calculation
     function getRunwayHeading(rwyDirStr) {
-      const numMatch = rwyDirStr.match(/\d+/);
+      const numMatch = (rwyDirStr || '').match(/\d+/);
       const num = numMatch ? parseInt(numMatch[0]) : 17;
       return num * 10;
+    }
+
+    function getOppositeRunway(rwyDirStr) {
+      const numMatch = (rwyDirStr || '').match(/\d+/);
+      const num = numMatch ? parseInt(numMatch[0]) : 17;
+      const oppNum = (num + 18) % 36 || 36;
+      const isL = (rwyDirStr || '').includes('L');
+      const isR = (rwyDirStr || '').includes('R');
+      const oppSuffix = isL ? 'R' : isR ? 'L' : '';
+      return `${String(oppNum).padStart(2, '0')}${oppSuffix}`;
     }
 
     // 4. Headwind & Crosswind Vector Calculator
     function calculateWindVectors(windDirDeg, windSpeedKts, rwyHeadingDeg) {
       if (isNaN(windDirDeg) || isNaN(windSpeedKts)) {
-        return { headTail: '-', cross: '-' };
+        return { headTail: '-', cross: '-', headwindStr: '-', crosswindStr: '-' };
       }
       const angleRad = ((windDirDeg - rwyHeadingDeg) * Math.PI) / 180;
       const headwind = Math.round(windSpeedKts * Math.cos(angleRad));
@@ -1099,7 +1109,7 @@
 
       const headTailStr = headwind >= 0 ? `H${headwind}` : `T${Math.abs(headwind)}`;
       const crossStr = crosswind >= 0 ? `R${crosswind}` : `L${Math.abs(crosswind)}`;
-      return { headTail: headTailStr, cross: crossStr };
+      return { headTail: headTailStr, cross: crossStr, headwindStr: headTailStr, crosswindStr: crossStr };
     }
 
     // Relative Humidity Calculator (Magnus-Tetens)
