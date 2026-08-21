@@ -23,10 +23,7 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
   }
 
   try {
-    const kst = new Date(now + 9 * 3600 * 1000);
-    const now_date = `${kst.getUTCFullYear()}.${String(kst.getUTCMonth() + 1).padStart(2, '0')}.${String(kst.getUTCDate()).padStart(2, '0')}.${String(kst.getUTCHours()).padStart(2, '0')}:${String(kst.getUTCMinutes()).padStart(2, '0')}`;
-
-    const url = `https://global.amo.go.kr/airportWeather/getAmosData.do?stnCd=${icao}&now_date=${encodeURIComponent(now_date)}`;
+    const url = `https://global.amo.go.kr/airportWeather/getAmosData.do?stnCd=${icao}`;
     const res = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
