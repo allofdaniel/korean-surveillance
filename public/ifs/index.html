@@ -393,7 +393,7 @@
       letter-spacing: -0.02em;
     }
     .metric-val-md {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--primary-bright);
       white-space: nowrap;
@@ -402,7 +402,7 @@
       line-height: 1.15;
     }
 
-    /* Section 2: Raw MET Feed */
+    /* Section 2: Raw MET Feed with Warnings & SIGMET */
     .raw-met-box {
       background: var(--bg-dim);
       padding: 3px 6px;
@@ -417,6 +417,8 @@
     }
     .raw-met-line { display: flex; align-items: baseline; gap: 4px; }
     .raw-prompt { color: var(--text-muted); font-weight: 700; flex-shrink: 0; }
+    .raw-sigmet-text { color: var(--amber); font-weight: 800; }
+    .raw-warning-text { color: var(--red); font-weight: 800; }
 
     /* Section 3: Middle Split Schedule Tables (DEP / ARR) */
     .schedule-split {
@@ -484,10 +486,11 @@
     /* IFR / VFR Flight Rules Badges */
     .badge-rule {
       font-size: 7.5px;
-      padding: 0.5px 2.5px;
+      padding: 0.5px 3.5px;
       border-radius: 2px;
       font-weight: 800;
-      margin-right: 2px;
+      margin-right: 4px;
+      display: inline-block;
     }
     .badge-ifr {
       color: #38bdf8;
@@ -498,6 +501,9 @@
       color: #f59e0b;
       background: rgba(245, 158, 11, 0.15);
       border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+    .flight-callsign {
+      letter-spacing: 0.03em;
     }
 
     /* 5-Time Blinking Animation on Status Change */
@@ -762,7 +768,7 @@
       </div>
     </div>
 
-    <!-- 2. Raw MET Reports (Clean Independent Updates) -->
+    <!-- 2. Raw MET Reports (Clean Independent Updates with SIGMET & WARNING) -->
     <div class="grid-box">
       <div class="grid-header">
         <div class="grid-header-left">
@@ -783,6 +789,14 @@
           <span class="raw-prompt">&gt;</span>
           <span id="raw-taf" style="color: var(--amber);"></span>
         </div>
+        <div class="raw-met-line" id="line-sigmet" style="display: none;">
+          <span class="raw-prompt">&gt;</span>
+          <span id="raw-sigmet" class="raw-sigmet-text"></span>
+        </div>
+        <div class="raw-met-line" id="line-warning" style="display: none;">
+          <span class="raw-prompt">&gt;</span>
+          <span id="raw-warning" class="raw-warning-text"></span>
+        </div>
       </div>
     </div>
 
@@ -801,7 +815,7 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 82px;">Flight</th>
+                <th style="width: 88px;">Flight</th>
                 <th style="width: 48px;">To</th>
                 <th style="text-align: center; width: 42px;">Plan</th>
                 <th style="text-align: center; width: 42px;">Est</th>
@@ -829,7 +843,7 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 82px;">Flight</th>
+                <th style="width: 88px;">Flight</th>
                 <th style="width: 48px;">From</th>
                 <th style="text-align: center; width: 42px;">Plan</th>
                 <th style="text-align: center; width: 42px;">Est</th>
@@ -1025,6 +1039,26 @@
       return `${rh}%`;
     }
 
+    // Statute Miles (SM) Conversion for Aviation Visibility
+    function formatVisibility(morMeters) {
+      const mor = parseFloat(morMeters);
+      if (isNaN(mor) || mor <= 0) return '10,000m (6SM)';
+      
+      let smStr = '';
+      if (mor >= 9600) smStr = '6SM';
+      else if (mor >= 8000) smStr = '5SM';
+      else if (mor >= 6400) smStr = '4SM';
+      else if (mor >= 4800) smStr = '3SM';
+      else if (mor >= 3200) smStr = '2SM';
+      else if (mor >= 1600) smStr = '1SM';
+      else if (mor >= 800) smStr = '1/2SM';
+      else if (mor >= 400) smStr = '1/4SM';
+      else smStr = '<1/4SM';
+
+      const mStr = mor >= 10000 ? '10,000m' : `${Math.round(mor).toLocaleString()}m`;
+      return `${mStr} (${smStr})`;
+    }
+
     // 5. Render Custom SVG Wind Rose & Runway Graphic
     function createRunwayRoseSvg(rwyDirStr, rwyHeadingDeg, windDirDeg, isActiveRwy) {
       const numMatch = rwyDirStr.match(/\d+/);
@@ -1086,7 +1120,7 @@
       `;
     }
 
-    // 6. Fetch AMOS & Weather Data via API (Including Precipitation, Visibility, RVR, Cloud Base)
+    // 6. Fetch AMOS & Weather Data via API (Including Precipitation, Visibility in m & SM, RVR, Cloud Base)
     async function syncWeatherData() {
       const spin = document.getElementById('spin-wx');
       const spinMet = document.getElementById('spin-met');
@@ -1123,17 +1157,21 @@
       if (wxContainer) wxContainer.classList.remove('content-pending');
       if (spin) spin.classList.remove('active');
 
-      // Fetch MET REPORT, METAR, and TAF cleanly without placeholder text
+      // Fetch MET REPORT, METAR, TAF, SIGMET & WARNINGS cleanly
       try {
-        const [metRepRes, metarRes, tafRes] = await Promise.all([
+        const [metRepRes, metarRes, tafRes, sigmetRes, warnRes] = await Promise.all([
           fetch(`${API_BASE}/api/amhs?type=METREPORT&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
           fetch(`${API_BASE}/api/amhs?type=METAR&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
-          fetch(`${API_BASE}/api/amhs?type=TAF&raw=true&icao=${currentAirport}&_t=${Date.now()}`)
+          fetch(`${API_BASE}/api/amhs?type=TAF&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
+          fetch(`${API_BASE}/api/amhs?type=SIGMET&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
+          fetch(`${API_BASE}/api/weather?type=warning&icao=${currentAirport}&_t=${Date.now()}`).catch(() => null)
         ]);
 
         const elMetReport = document.getElementById('raw-met-report');
         const elMetar = document.getElementById('raw-metar');
         const elTaf = document.getElementById('raw-taf');
+        const elSigmet = document.getElementById('raw-sigmet');
+        const elWarn = document.getElementById('raw-warning');
 
         if (metRepRes.ok) {
           const rData = await metRepRes.json();
@@ -1162,6 +1200,27 @@
           if (elTaf) {
             elTaf.textContent = clean;
             document.getElementById('line-taf').style.display = clean ? 'flex' : 'none';
+          }
+        }
+
+        // SIGMET Display
+        if (sigmetRes && sigmetRes.ok) {
+          const sData = await sigmetRes.json();
+          const sTxt = sData.rawSigmetText || sData.rawAviationWeatherText || '';
+          const cleanSig = (sTxt && !sTxt.includes('<')) ? sTxt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim() : '';
+          if (elSigmet) {
+            elSigmet.textContent = cleanSig ? `SIGMET: ${cleanSig}` : '';
+            document.getElementById('line-sigmet').style.display = cleanSig ? 'flex' : 'none';
+          }
+        }
+
+        // WARNING Display
+        if (warnRes && warnRes.ok) {
+          const wData = await warnRes.json();
+          const wTxt = Array.isArray(wData) && wData.length > 0 ? (wData[0].warningText || wData[0].title || '') : (wData?.warningText || '');
+          if (elWarn) {
+            elWarn.textContent = wTxt ? `WARNING: ${wTxt}` : '';
+            document.getElementById('line-warning').style.display = wTxt ? 'flex' : 'none';
           }
         }
       } catch (e) {}
@@ -1244,11 +1303,11 @@
         const qnhInhgVal = (qnhVal * 0.02953).toFixed(2);
         const qnhDisplay = `${qnhVal}/${qnhInhgVal}`;
         
-        // Visibility (시정) & RVR
+        // Visibility (시정 in m & Statute Miles SM) & RVR
         const morRaw = rwy.mor1min || rwy.mor || '10000';
-        const morDisplay = morRaw >= 10000 ? '10,000m' : `${morRaw}m`;
+        const visFormatted = formatVisibility(morRaw);
         const rvrRaw = rwy.rvr1min || rwy.rvr || 'P2000';
-        const rvrDisplay = `${morDisplay} / ${rvrRaw}`;
+        const rvrDisplay = `${visFormatted} / ${rvrRaw}`;
 
         const vectors = calculateWindVectors(wd, rawWs, rwyHeading);
         
@@ -1296,7 +1355,7 @@
           <div class="metric-row">
             <div class="metric-col b-r" style="flex: 1.1;"><span class="metric-label">운고 / 운량</span><span class="metric-val-md">${cldBase}</span></div>
             <div class="metric-col b-r" style="flex: 1.1;"><span class="metric-label">강수량 / 일기</span><span class="metric-val-md">${precipDisplay}</span></div>
-            <div class="metric-col" style="flex: 1.4;"><span class="metric-label">시정 / RVR (RWY ${rwyDirStr})</span><span class="metric-val-md">${rvrDisplay}</span></div>
+            <div class="metric-col" style="flex: 1.4;"><span class="metric-label">시정(m / SM) / RVR (RWY ${rwyDirStr})</span><span class="metric-val-md">${rvrDisplay}</span></div>
           </div>
         `;
         container.appendChild(rwyEl);
@@ -1337,7 +1396,7 @@
       });
     }
 
-    // 8. Fetch Flight Schedules (FIDS DEP & ARR) with Pure UBIKAIS Records
+    // 8. Fetch Flight Schedules (FIDS DEP & ARR) with Pure UBIKAIS Records and Spaced Badges
     async function syncFlightSchedules() {
       const spinDep = document.getElementById('spin-dep');
       const spinArr = document.getElementById('spin-arr');
@@ -1378,7 +1437,7 @@
           tr.className = `${rowClass} ${blinkClass}`;
           tr.innerHTML = `
             <td class="flight-id-cell" style="white-space: nowrap;">
-              <span class="badge-rule ${badgeClass}">${rules}</span>${fId}
+              <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
             </td>
             <td style="color: var(--primary-soft);">${f.apArr || f.destination || 'RKPC'}</td>
             <td class="flight-time-cell" style="text-align: center;">${(f.std || '0800').replace(':', '')}</td>
@@ -1415,7 +1474,7 @@
           tr.className = `${rowClass} ${blinkClass}`;
           tr.innerHTML = `
             <td class="flight-id-cell" style="white-space: nowrap;">
-              <span class="badge-rule ${badgeClass}">${rules}</span>${fId}
+              <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
             </td>
             <td style="color: var(--primary-soft);">${f.apIcao || f.origin || 'RKSS'}</td>
             <td class="flight-time-cell" style="text-align: center;">${(f.sta || '0830').replace(':', '')}</td>
