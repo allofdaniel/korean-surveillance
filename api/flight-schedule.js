@@ -1,9 +1,5 @@
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
-import { fetchUbikaisSchedule } from './_utils/ubikaisScraper.js';
-import { fetchKacLiveSchedules } from './_utils/kacGovScraper.js';
-import { rksiOfficialDepartures, rksiOfficialArrivals } from './_utils/ubikaisRksiMaster.js';
-
-const API_TIMEOUT_MS = 8000;
+import { fetchUbikaisAirportLive } from './_utils/ubikaisAuthScraper.js';
 
 function normalizeFlight(rawFlight) {
   if (typeof rawFlight !== 'string') return '';
@@ -111,154 +107,17 @@ export default async function handler(req, res) {
     });
   }
 
-  // 1. Fetch Real-time Raw Records from UBIKAIS Network Database (selectIfr.fois)
-  let liveDeps = [];
-  let liveArrs = [];
+  // 1. Fetch 100% Genuine Live Database from UBIKAIS Authenticated Crawler
   try {
-    [liveDeps, liveArrs] = await Promise.all([
-      fetchUbikaisSchedule(airport, 'dep'),
-      fetchUbikaisSchedule(airport, 'arr'),
-    ]);
-  } catch (e) {
-    console.warn('[flight-schedule] UBIKAIS live fetch failed:', e.message);
-  }
-
-  // A. Incheon (RKSI) - Official 100% Raw UBIKAIS Master (650 DEP / 646 ARR) with Live Real-time UBIKAIS Overlays
-  if (airport === 'RKSI') {
-    const liveDepMap = new Map();
-    liveDeps.forEach(d => {
-      let id = (d.fpId || d.flightNumber || d.flt || '').trim().toUpperCase();
-      if (id.startsWith('IFR') && id.length > 3) id = id.substring(3);
-      if (id.startsWith('VFR') && id.length > 3) id = id.substring(3);
-      if (id) liveDepMap.set(id, d);
-    });
-
-    const mergedDeps = rksiOfficialDepartures.map(d => {
-      let fltKey = d.flt.trim().toUpperCase();
-      if (fltKey.startsWith('IFR') && fltKey.length > 3) fltKey = fltKey.substring(3);
-      if (fltKey.startsWith('VFR') && fltKey.length > 3) fltKey = fltKey.substring(3);
-      const live = liveDepMap.get(fltKey);
-      if (live) {
-        return {
-          ...d,
-          reg: live.acId || live.reg || d.reg,
-          spt: live.standDep || live.spt || d.spt,
-          etd: (live.etd || d.etd).replace(':', ''),
-          atd: (live.atd && live.atd !== '' && live.atd !== '-') ? live.atd.replace(':', '') : d.atd,
-          sts: (live.depStatus || d.sts).toUpperCase(),
-          cha: (live.depStatus === 'DLA' ? 'Y' : d.cha)
-        };
-      }
-      return d;
-    });
-
-    const liveArrMap = new Map();
-    liveArrs.forEach(a => {
-      let id = (a.fpId || a.flightNumber || a.flt || '').trim().toUpperCase();
-      if (id.startsWith('IFR') && id.length > 3) id = id.substring(3);
-      if (id.startsWith('VFR') && id.length > 3) id = id.substring(3);
-      if (id) liveArrMap.set(id, a);
-    });
-
-    const mergedArrs = rksiOfficialArrivals.map(a => {
-      let fltKey = a.flt.trim().toUpperCase();
-      if (fltKey.startsWith('IFR') && fltKey.length > 3) fltKey = fltKey.substring(3);
-      if (fltKey.startsWith('VFR') && fltKey.length > 3) fltKey = fltKey.substring(3);
-      const live = liveArrMap.get(fltKey);
-      if (live) {
-        return {
-          ...a,
-          reg: live.acId || live.reg || a.reg,
-          spt: live.standArr || live.spt || a.spt,
-          eta: (live.eta || a.eta).replace(':', ''),
-          ata: (live.ata && live.ata !== '' && live.ata !== '-') ? live.ata.replace(':', '') : a.ata,
-          sts: (live.arrStatus || a.sts).toUpperCase(),
-          cha: (live.arrStatus === 'DLA' ? 'Y' : a.cha)
-        };
-      }
-      return a;
-    });
-
-    return res.status(200).json({
-      airport: 'RKSI',
-      timestamp: new Date().toISOString(),
-      totalFlights: mergedDeps.length + mergedArrs.length,
-      departures: mergedDeps,
-      arrivals: mergedArrs,
-      fids: mergedDeps.concat(mergedArrs),
-      source: 'UBIKAIS Official FPL Daily Master (650 DEP / 646 ARR) & Real-Time Gateway'
-    });
-  }
-
-  // B. Secondary Priority: Official Government DATA.GO.KR (KAC) Live REST API
-  // For RKSS(GMP), RKPC(CJU), RKPK(PUS), RKTU(CJJ), RKTN(TAE), RKJJ(KWJ), RKPU(USN), RKJB(MWX), RKNY(YNY), RKTH(KPO), RKPS(HIN)
-  if (['RKSS', 'RKPC', 'RKPK', 'RKTU', 'RKTN', 'RKJJ', 'RKPU', 'RKJB', 'RKNY', 'RKTH', 'RKPS'].includes(airport)) {
-    const govData = await fetchKacLiveSchedules(airport);
-    if (govData && govData.totalFlights > 0) {
-      return res.status(200).json(govData);
+    const liveData = await fetchUbikaisAirportLive(airport);
+    if (liveData && (liveData.departures.length > 0 || liveData.arrivals.length > 0)) {
+      return res.status(200).json(liveData);
     }
+  } catch (e) {
+    console.error(`[flight-schedule] UBIKAIS live query failed for ${airport}:`, e.message);
   }
 
-  // C. Fallback: Pure Direct UBIKAIS Scraped Feed (selectIfr.fois)
-  if (liveDeps.length > 0 || liveArrs.length > 0) {
-    const formattedDeps = liveDeps.map(d => {
-      const flt = d.fpId || d.flightNumber || d.flt || 'UNKNOWN';
-      const etd = (d.etd || d.std || '').replace(':', '') || '-';
-
-      return {
-        flt,
-        typ: d.acType || d.acTyp || '-',
-        reg: d.acId || d.reg || '-',
-        nat: d.nat || (flt.startsWith('HL') ? 'TRN' : 'PAX'),
-        fpl: d.fplYn || d.fpl || (d.fpId ? 'Y' : '-'),
-        des: d.apArr || d.des || d.destination || '-',
-        spt: d.standDep || d.spt || '-',
-        ram: d.blockOffTime || d.ram || '-',
-        std: (d.std || '').replace(':', '') || '-',
-        etd,
-        atd: (d.atd && d.atd !== '' && d.atd !== '-') ? d.atd.replace(':', '') : '-',
-        eta: (d.eta || '').replace(':', '') || '-',
-        cha: d.chaYn || d.cha || (d.depStatus === 'DLA' || (d.atd && d.atd !== d.etd) ? 'Y' : '-'),
-        sts: (d.depStatus || d.status || 'SCH').toUpperCase(),
-        flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR'
-      };
-    }).sort((a, b) => parseInt((a.etd || '0').replace(':', '')) - parseInt((b.etd || '0').replace(':', '')));
-
-    const formattedArrs = liveArrs.map(a => {
-      const flt = a.fpId || a.flightNumber || a.flt || 'UNKNOWN';
-      const eta = (a.eta || a.sta || '').replace(':', '') || '-';
-
-      return {
-        flt,
-        typ: a.acType || a.acTyp || '-',
-        reg: a.acId || a.reg || '-',
-        sts: (a.arrStatus || a.status || 'ENR').toUpperCase(),
-        org: a.apIcao || a.org || a.origin || '-',
-        nat: a.nat || (flt.startsWith('HL') ? 'TRN' : 'PAX'),
-        fpl: a.fplYn || a.fpl || (a.fpId ? 'Y' : '-'),
-        spt: a.standArr || a.spt || '-',
-        ram: a.blockOffTime || a.ram || '-',
-        etd: (a.etd || '').replace(':', '') || '-',
-        sta: (a.sta || '').replace(':', '') || '-',
-        eta,
-        ata: (a.ata && a.ata !== '' && a.ata !== '-') ? a.ata.replace(':', '') : '-',
-        cha: a.chaYn || a.cha || (a.arrStatus === 'DLA' || (a.ata && a.ata !== a.eta) ? 'Y' : '-'),
-        flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR'
-      };
-    }).sort((a, b) => parseInt((a.eta || '0').replace(':', '')) - parseInt((b.eta || '0').replace(':', '')));
-
-    return res.status(200).json({
-      airport,
-      timestamp: new Date().toISOString(),
-      totalFlights: formattedDeps.length + formattedArrs.length,
-      departures: formattedDeps,
-      arrivals: formattedArrs,
-      fids: formattedDeps.concat(formattedArrs),
-      source: 'UBIKAIS Real-Time Gateway (https://ubikais.fois.go.kr:8030)'
-    });
-  }
-
-  // D. Training airfields (RKTL, RKPD)
+  // 2. Training airfields (RKTL, RKPD)
   const { departures, arrivals } = generateTrainingSchedules(airport);
 
   return res.status(200).json({
