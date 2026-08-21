@@ -1166,6 +1166,31 @@
           <!-- Cardinal Labels -->
           <text x="0" y="-39" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">N</text>
           <text x="0" y="47" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">S</text>
+          <text x="-41" y="2.8" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">W</text>
+          <text x="42" y="2.8" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">E</text>
+          
+          <!-- Runway Numbers -->
+          <text x="-14" y="-39" fill="var(--primary)" font-size="7.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${topLabel}</text>
+          <text x="14" y="47" fill="var(--primary)" font-size="7.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${botLabel}</text>
+          
+          <!-- Runway Box -->
+          <g transform="rotate(${rwyTilt})">
+            <rect x="-5.5" y="-28" width="11" height="56" stroke="var(--primary)" stroke-width="1.3" fill="none" rx="1" />
+            ${airplaneSvg}
+          </g>
+
+          <!-- Wind Arrow -->
+          <g transform="rotate(${windDirDeg})">
+            <line x1="0" y1="-34" x2="0" y2="4" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" />
+            <polygon points="0,13 -4.5,0 4.5,0" fill="var(--primary)" />
+          </g>
+
+          <!-- Degree Text Overlay -->
+          <text x="19" y="-19" fill="var(--primary)" font-size="9" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${String(windDirDeg).padStart(3, '0')}</text>
+        </svg>
+      `;
+    }
+
     // 6. Fetch AMOS & Weather Data via API (Including Precipitation, Visibility in m & SM, RVR, Cloud Base)
     async function syncWeatherData() {
       const spin = document.getElementById('spin-wx');
