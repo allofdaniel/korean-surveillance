@@ -1072,23 +1072,23 @@
       return `${rh}%`;
     }
 
-    // Statute Miles (SM) Conversion for Aviation Visibility
+    // Statute Miles (SM) Conversion for Aviation Visibility (7 SM for >=10,000m Clear)
     function formatVisibility(morMeters) {
       const mor = parseFloat(morMeters);
-      if (isNaN(mor) || mor <= 0) return '10,000m (6SM)';
+      if (isNaN(mor) || mor <= 0 || mor >= 10000) return '10,000m (7 SM)';
       
       let smStr = '';
-      if (mor >= 9600) smStr = '6SM';
-      else if (mor >= 8000) smStr = '5SM';
-      else if (mor >= 6400) smStr = '4SM';
-      else if (mor >= 4800) smStr = '3SM';
-      else if (mor >= 3200) smStr = '2SM';
-      else if (mor >= 1600) smStr = '1SM';
-      else if (mor >= 800) smStr = '1/2SM';
-      else if (mor >= 400) smStr = '1/4SM';
-      else smStr = '<1/4SM';
+      if (mor >= 9600) smStr = '6 SM';
+      else if (mor >= 8000) smStr = '5 SM';
+      else if (mor >= 6400) smStr = '4 SM';
+      else if (mor >= 4800) smStr = '3 SM';
+      else if (mor >= 3200) smStr = '2 SM';
+      else if (mor >= 1600) smStr = '1 SM';
+      else if (mor >= 800) smStr = '1/2 SM';
+      else if (mor >= 400) smStr = '1/4 SM';
+      else smStr = '<1/4 SM';
 
-      const mStr = mor >= 10000 ? '10,000m' : `${Math.round(mor).toLocaleString()}m`;
+      const mStr = `${Math.round(mor).toLocaleString()}m`;
       return `${mStr} (${smStr})`;
     }
 
