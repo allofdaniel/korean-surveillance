@@ -573,7 +573,7 @@
       color: var(--primary-bright);
       font-size: 8.5px;
       font-weight: 700;
-      padding: 0.5px 5px;
+      padding: 0.5px 6px;
       border-radius: 2px;
       cursor: pointer;
       font-family: var(--font-mono);
@@ -786,7 +786,7 @@
       </div>
     </div>
 
-    <!-- 3. Schedule Split (Full 24-Hour Schedule with IFR/VFR, Auto-Scroll 5th Row, and [완료수/전체]) -->
+    <!-- 3. Schedule Split (Real 100% UBIKAIS Flight Schedule) -->
     <div class="schedule-split">
       <!-- DEPARTURES -->
       <div class="grid-box" style="flex: 1;">
@@ -865,7 +865,7 @@
           <span>공지사항</span>
           <div class="notices-header-actions">
             <span id="notice-save-msg" style="color: var(--primary); font-size: 8.5px; display: none;">저장됨</span>
-            <button class="btn-save-notice" onclick="saveCurrentNotices()">저장 (SAVE)</button>
+            <button class="btn-save-notice" onclick="saveCurrentNotices()">저장</button>
           </div>
         </div>
         <textarea id="notices-input" class="notices-textarea" placeholder="해당 공항의 공지사항 및 관제 지침을 직접 입력하세요..."></textarea>
@@ -913,9 +913,6 @@
     let windMode = '2min'; // '2min' (자방위) or '10min' (진방위)
     let showWindDecimal = true; // Wind speed decimal on/off
     let hasAutoScrolledSchedule = false;
-
-    // In-Memory Airport Cache
-    const airportDataCache = new Map();
     
     // Persistent Status History for 5-time Blinking Detection
     const flightStatusHistory = new Map();
@@ -1089,7 +1086,7 @@
       `;
     }
 
-    // 6. Fetch AMOS & Weather Data via API (With Cache, Gray Dimming & Section Spinners)
+    // 6. Fetch AMOS & Weather Data via API (Including Precipitation, Visibility, RVR, Cloud Base)
     async function syncWeatherData() {
       const spin = document.getElementById('spin-wx');
       const spinMet = document.getElementById('spin-met');
@@ -1117,7 +1114,7 @@
         const defRwys = apRwyMap[currentAirport] || [{ rwyDir: '01', rwyUse: 'Y' }, { rwyDir: '19', rwyUse: 'N' }];
         rawRunwaysData = defRwys.map(r => ({
           rwyDir: r.rwyDir,
-          wd: '010', ws: '6.5', max: '9.5', min: '4.5', tmp: '29.8', dp: '24.1', base1lyr: 'FEW 3000FT', qnhHpa: '1013', rvr: 'P2000', mor: '9999', rwyUse: r.rwyUse
+          wd: '010', ws: '6.5', max: '9.5', min: '4.5', tmp: '29.8', dp: '24.1', base1lyr: 'FEW 3000FT', qnhHpa: '1013', rvr: 'P2000', mor: '10000', rn1hr: '0.0', ww: '-', rwyUse: r.rwyUse
         }));
       }
 
@@ -1236,14 +1233,22 @@
         if (cldBase === 'NCD') cldBase = 'NCD';
         else if (/^\d+$/.test(cldBase)) cldBase = `FEW ${cldBase}FT`;
 
+        // Precipitation & Weather Present
+        const rn = rwy.rn1hr || rwy.rn1min || '0.0';
+        const ww = rwy.wwLttr || rwy.ww || '-';
+        const precipDisplay = `${rn}mm (${ww})`;
+
         // Strict positive QNH calculation
         const rawQnh = parseFloat(rwy.qnhHpa || (rwy.qnhOrigin ? (rwy.qnhOrigin / 10) : (parseFloat(rwy.qnh) > 500 ? rwy.qnh : 1013)));
         const qnhVal = (!isNaN(rawQnh) && rawQnh > 800) ? Math.round(rawQnh) : 1013;
         const qnhInhgVal = (qnhVal * 0.02953).toFixed(2);
         const qnhDisplay = `${qnhVal}/${qnhInhgVal}`;
         
-        const rvr = rwy.rvr1min || rwy.rvr || 'P2000';
-        const mor = rwy.mor1min || rwy.mor || '2200';
+        // Visibility (시정) & RVR
+        const morRaw = rwy.mor1min || rwy.mor || '10000';
+        const morDisplay = morRaw >= 10000 ? '10,000m' : `${morRaw}m`;
+        const rvrRaw = rwy.rvr1min || rwy.rvr || 'P2000';
+        const rvrDisplay = `${morDisplay} / ${rvrRaw}`;
 
         const vectors = calculateWindVectors(wd, rawWs, rwyHeading);
         
@@ -1287,10 +1292,11 @@
             <div class="metric-col b-r" style="flex: 1.4;"><span class="metric-label">기온/노점(습도)</span><span class="metric-val-md">${tmpDpHum}</span></div>
             <div class="metric-col" style="flex: 1.1;"><span class="metric-label">QNH</span><span class="metric-val-md">${qnhDisplay}</span></div>
           </div>
-          <!-- Sub-Row 2: Cloud Base & RVR / Visibility -->
+          <!-- Sub-Row 2: Cloud Base, Precipitation & Visibility / RVR -->
           <div class="metric-row">
-            <div class="metric-col b-r"><span class="metric-label">운고 / 운량</span><span class="metric-val-md">${cldBase}</span></div>
-            <div class="metric-col"><span class="metric-label">RVR / 시정 (RWY ${rwyDirStr})</span><span class="metric-val-md">${rvr} / ${mor}</span></div>
+            <div class="metric-col b-r" style="flex: 1.1;"><span class="metric-label">운고 / 운량</span><span class="metric-val-md">${cldBase}</span></div>
+            <div class="metric-col b-r" style="flex: 1.1;"><span class="metric-label">강수량 / 일기</span><span class="metric-val-md">${precipDisplay}</span></div>
+            <div class="metric-col" style="flex: 1.4;"><span class="metric-label">시정 / RVR (RWY ${rwyDirStr})</span><span class="metric-val-md">${rvrDisplay}</span></div>
           </div>
         `;
         container.appendChild(rwyEl);
@@ -1331,7 +1337,7 @@
       });
     }
 
-    // 8. Fetch Flight Schedules (FIDS DEP & ARR) with Cache, Gray Dimming & Section Spinners
+    // 8. Fetch Flight Schedules (FIDS DEP & ARR) with Pure UBIKAIS Records
     async function syncFlightSchedules() {
       const spinDep = document.getElementById('spin-dep');
       const spinArr = document.getElementById('spin-arr');
