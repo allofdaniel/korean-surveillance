@@ -87,7 +87,7 @@ async function getAmoAuthenticatedCookies() {
 export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
   const now = Date.now();
   const lastTime = lastMetarTafFetch.get(icao) || 0;
-  if (cachedMetarTaf.has(icao) && (now - lastTime) < 30000) {
+  if (cachedMetarTaf.has(icao) && (now - lastTime) < 30000 && cachedMetarTaf.get(icao)?.metar) {
     return cachedMetarTaf.get(icao);
   }
 
@@ -119,8 +119,10 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
         source: metar ? '대한민국 항공기상청 (AMO / global.amo.go.kr)' : '미수신 (관측소 없음)'
       };
 
-      cachedMetarTaf.set(icao, result);
-      lastMetarTafFetch.set(icao, now);
+      if (result.metar || result.taf) {
+        cachedMetarTaf.set(icao, result);
+        lastMetarTafFetch.set(icao, now);
+      }
       return result;
     }
   } catch (e) {
@@ -135,7 +137,7 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
  */
 export async function fetchLiveAmosData(icao = null) {
   const now = Date.now();
-  if (cachedAmosData && (now - lastAmosFetchTime) < 30000) {
+  if (cachedAmosData && (now - lastAmosFetchTime) < 30000 && cachedAmosData.length > 0) {
     if (icao) {
       return cachedAmosData.filter(d => d.stnCd === icao);
     }
@@ -181,5 +183,10 @@ export async function fetchLiveAmosData(icao = null) {
     console.error('[AMOS Live Scraper] Error:', e.message);
   }
 
-  return cachedAmosData || [];
+  if (cachedAmosData && cachedAmosData.length > 0) {
+    if (icao) return cachedAmosData.filter(d => d.stnCd === icao);
+    return cachedAmosData;
+  }
+
+  return [];
 }
