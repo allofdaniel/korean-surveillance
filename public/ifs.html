@@ -1279,12 +1279,14 @@
       `;
     }
 
-    // 6. Fetch AMOS & Weather Data via API (Including Precipitation, Visibility in m & SM, RVR, Cloud Base)
-    async function syncWeatherData() {
+    // 6. Fetch AMOS & Weather Data via API (Single-request RAW_ALL & Stable Diff Rendering)
+    async function syncWeatherData(isManual = false) {
       const spin = document.getElementById('spin-wx');
       const spinMet = document.getElementById('spin-met');
-      if (spin) spin.classList.add('active');
-      if (spinMet) spinMet.classList.add('active');
+      if (isManual) {
+        if (spin) spin.classList.add('active');
+        if (spinMet) spinMet.classList.add('active');
+      }
 
       try {
         const res = await fetch(`${API_BASE}/api/weather?type=amos&icao=${currentAirport}&_t=${Date.now()}`);
@@ -1296,20 +1298,16 @@
         }
       } catch (e) {
         console.warn('Weather sync error:', e.message);
-        rawRunwaysData = [];
       }
 
       renderRunwaysGrid();
       if (spin) spin.classList.remove('active');
 
-      // Fetch MET REPORT, METAR, TAF, SIGMET & WARNINGS cleanly
+      // Fetch MET REPORT, METAR, TAF, SIGMET & WARNINGS via SINGLE RAW_ALL endpoint
       try {
-        const [metRepRes, metarRes, tafRes, sigmetRes, warnRes] = await Promise.all([
-          fetch(`${API_BASE}/api/amhs?type=METREPORT&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
-          fetch(`${API_BASE}/api/amhs?type=METAR&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
-          fetch(`${API_BASE}/api/amhs?type=TAF&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
-          fetch(`${API_BASE}/api/amhs?type=SIGMET&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
-          fetch(`${API_BASE}/api/weather?type=warning&icao=${currentAirport}&_t=${Date.now()}`).catch(() => null)
+        const [rawAllRes, sigmetRes] = await Promise.all([
+          fetch(`${API_BASE}/api/amhs?type=RAW_ALL&icao=${currentAirport}&_t=${Date.now()}`),
+          fetch(`${API_BASE}/api/amhs?type=SIGMET&raw=true&icao=${currentAirport}&_t=${Date.now()}`).catch(() => null)
         ]);
 
         const elMetReport = document.getElementById('raw-met-report');
@@ -1318,57 +1316,59 @@
         const elSigmet = document.getElementById('raw-sigmet');
         const elWarn = document.getElementById('raw-warning');
 
-        if (metRepRes.ok) {
-          const rData = await metRepRes.json();
-          const txt = rData.rawAviationWeatherText || '';
-          const clean = (txt && !txt.includes('<')) ? txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim() : '';
+        if (rawAllRes && rawAllRes.ok) {
+          const data = await rawAllRes.json();
+          
+          // 1. MET REPORT
+          const repTxt = (data.metReport || '').replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
           if (elMetReport) {
-            elMetReport.textContent = clean;
-            document.getElementById('line-met-report').style.display = clean ? 'flex' : 'none';
+            if (repTxt && !repTxt.includes('<')) {
+              elMetReport.textContent = repTxt;
+              document.getElementById('line-met-report').style.display = 'flex';
+            }
           }
-        }
 
-        if (metarRes.ok) {
-          const mData = await metarRes.json();
-          const txt = mData.rawAviationWeatherText || '';
-          const clean = (txt && !txt.includes('<')) ? txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim() : '';
+          // 2. METAR / SPECI
+          const metarTxt = (data.speci || data.metar || '').replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
           if (elMetar) {
-            elMetar.textContent = clean;
-            document.getElementById('line-metar').style.display = clean ? 'flex' : 'none';
+            if (metarTxt && !metarTxt.includes('<')) {
+              elMetar.textContent = metarTxt;
+              document.getElementById('line-metar').style.display = 'flex';
+            }
           }
-        }
 
-        if (tafRes.ok) {
-          const tData = await tafRes.json();
-          const txt = tData.rawAviationWeatherText || '';
-          const clean = (txt && !txt.includes('<')) ? txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim() : '';
+          // 3. TAF
+          const tafTxt = (data.taf || '').replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
           if (elTaf) {
-            elTaf.textContent = clean;
-            document.getElementById('line-taf').style.display = clean ? 'flex' : 'none';
+            if (tafTxt && !tafTxt.includes('<')) {
+              elTaf.textContent = tafTxt;
+              document.getElementById('line-taf').style.display = 'flex';
+            }
+          }
+
+          // 4. WARNINGS
+          const warnList = data.warnings || [];
+          if (elWarn) {
+            if (warnList.length > 0) {
+              const wTxt = warnList[0].warningText || warnList[0].title || '';
+              elWarn.textContent = `WARNING: ${wTxt}`;
+              document.getElementById('line-warning').style.display = 'flex';
+            }
           }
         }
 
-        // SIGMET Display
+        // 5. SIGMET
         if (sigmetRes && sigmetRes.ok) {
           const sData = await sigmetRes.json();
-          const sTxt = sData.rawSigmetText || sData.rawAviationWeatherText || '';
-          const cleanSig = (sTxt && !sTxt.includes('<')) ? sTxt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim() : '';
-          if (elSigmet) {
-            elSigmet.textContent = cleanSig ? `SIGMET: ${cleanSig}` : '';
-            document.getElementById('line-sigmet').style.display = cleanSig ? 'flex' : 'none';
+          const sTxt = (sData.rawSigmetText || sData.rawAviationWeatherText || '').replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
+          if (elSigmet && sTxt && !sTxt.includes('<')) {
+            elSigmet.textContent = `SIGMET: ${sTxt}`;
+            document.getElementById('line-sigmet').style.display = 'flex';
           }
         }
-
-        // WARNING Display
-        if (warnRes && warnRes.ok) {
-          const wData = await warnRes.json();
-          const wTxt = Array.isArray(wData) && wData.length > 0 ? (wData[0].warningText || wData[0].title || '') : (wData?.warningText || '');
-          if (elWarn) {
-            elWarn.textContent = wTxt ? `WARNING: ${wTxt}` : '';
-            document.getElementById('line-warning').style.display = wTxt ? 'flex' : 'none';
-          }
-        }
-      } catch (e) {}
+      } catch (e) {
+        console.warn('RAW MET sync error:', e);
+      }
       
       if (spinMet) spinMet.classList.remove('active');
     }
@@ -1817,7 +1817,7 @@
       
       // 3. Populate fresh data step-by-step
       await Promise.all([
-        syncWeatherData(),
+        syncWeatherData(true),
         syncFlightSchedules(),
         syncSystemStatus()
       ]);
@@ -1827,13 +1827,14 @@
     function init() {
       initThemeSettings();
       loadAirportNotices(currentAirport);
-      syncWeatherData();
+      syncWeatherData(true);
       syncFlightSchedules();
       syncSystemStatus();
 
-      setInterval(syncWeatherData, 3000);
-      setInterval(syncFlightSchedules, 4000);
-      setInterval(syncSystemStatus, 15000);
+      // Stable non-flickering background pollers
+      setInterval(() => syncWeatherData(false), 10000);
+      setInterval(syncFlightSchedules, 15000);
+      setInterval(syncSystemStatus, 20000);
     }
 
     window.onload = init;

@@ -36,6 +36,39 @@ export default async function handler(req, res) {
     let contentType = 'application/xml; charset=utf-8';
 
     switch (type) {
+      case 'ALL':
+      case 'RAW_ALL': {
+        const amoWx = await fetchLiveAmoMetarTaf(icao);
+        const amosList = await fetchLiveAmosData(icao);
+        const amosItem = amosList.length > 0 ? amosList[0] : null;
+
+        let metReportText = amoWx.metReport?.content || '';
+        if (!metReportText && amosItem) {
+          const rwy = amosItem.rwyDir || '15L';
+          const wd = String(amosItem.wd2minAvg || amosItem.wd || '150').padStart(3, '0');
+          const ws = String(Math.round(parseFloat(amosItem.wspd2minAvg || amosItem.ws || '5'))).padStart(2, '0');
+          const maxGust = amosItem.wspd2minMax ? ` MAX${String(Math.round(parseFloat(amosItem.wspd2minMax))).padStart(2, '0')}` : '';
+          const vis = amosItem.mor1min ? ` VIS ${amosItem.mor1min}M` : ' VIS 9999M';
+          const rvr = amosItem.rvr1min ? ` RVR RWY ${rwy} ${amosItem.rvr1min}M` : '';
+          const tmp = amosItem.tmp ? ` T${Math.round(parseFloat(amosItem.tmp))}` : '';
+          const dp = amosItem.dp ? ` DP${Math.round(parseFloat(amosItem.dp))}` : '';
+          const qnhVal = amosItem.qnhOrigin ? Math.round(amosItem.qnhOrigin / 10) : (amosItem.qnhHpa || 1015);
+          const qnh = ` QNH ${qnhVal}HPA`;
+          metReportText = `MET REPORT ${icao} ${day}${hour}${min}Z RWY ${rwy} WIND ${wd}/${ws}KT${maxGust}${vis}${rvr} CLD FEW030${tmp}${dp}${qnh}=`;
+        }
+
+        return res.status(200).json({
+          dataSource: '대한민국 항공기상청 (AMO / global.amo.go.kr)',
+          timestamp: new Date().toISOString(),
+          icao,
+          metReport: metReportText,
+          metar: amoWx.metar || '',
+          taf: amoWx.taf || '',
+          speci: amoWx.speci || '',
+          warnings: amoWx.warnings || []
+        });
+      }
+
       case 'METREPORT':
       case 'AMOS': {
         const amoWx = await fetchLiveAmoMetarTaf(icao);

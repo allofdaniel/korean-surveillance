@@ -159,13 +159,33 @@ async function handleAmos(req, res) {
   try {
     const amosList = await fetchLiveAmosData(rawIcao);
     if (amosList && amosList.length > 0) {
+      const amoWx = await fetchLiveAmoMetarTaf(targetIcao).catch(() => ({}));
+      const metReport = amoWx?.metReport?.content || '';
+      const metRepRwy = metReport.match(/WIND\s+RWY\s+(\d{2}[LRC]?)/i)?.[1] || '';
+
       const normalizedList = amosList.map(item => {
         const qnhVal = item.qnhOrigin ? (item.qnhOrigin / 10).toFixed(0) : (item.qnh ? Math.round(parseFloat(item.qnh)) : '1012');
         const qfeVal = item.qnhOrigin ? ((item.qnhOrigin - 30) / 10).toFixed(0) : (item.qfe ? Math.round(parseFloat(item.qfe)) : String(parseInt(qnhVal) - 3));
         const wwText = item.wwLttr && item.wwLttr !== '-9999' ? item.wwLttr : (item.wwCo && item.wwCo !== '-9999' ? item.wwCo : '-');
 
+        const curWd = parseFloat(item.wd2minAvg || item.wd10minAvg || item.wd || '0') || 0;
+        const rwyNumMatch = (item.rwyDir || '').match(/\d+/);
+        const rwyHeading = rwyNumMatch ? parseInt(rwyNumMatch[0]) * 10 : 180;
+        const angleRad = ((curWd - rwyHeading) * Math.PI) / 180;
+        const headwind = Math.cos(angleRad);
+
+        let isActiveRwy = false;
+        if (item.rwyUse === 'Y') {
+          isActiveRwy = true;
+        } else if (metRepRwy && (item.rwyDir === metRepRwy || item.rwyDir?.startsWith(metRepRwy))) {
+          isActiveRwy = true;
+        } else if (item.rwyUse === 'X' || !item.rwyUse) {
+          isActiveRwy = (headwind >= 0);
+        }
+
         return {
           ...item,
+          rwyUse: isActiveRwy ? 'Y' : 'N',
           wd: item.wd2minAvg || item.wd10minAvg || item.wd || '0',
           ws: item.wspd2minAvg || item.wspd10minAvg || item.ws || '0',
           max: item.wspd2minMax || item.wspd10minMax || item.max || item.wspd2minAvg || '0',
