@@ -400,18 +400,19 @@
     /* Section 2: Raw MET Feed with Warnings & SIGMET */
     .raw-met-box {
       background: var(--bg-dim);
-      padding: 3px 6px;
-      font-size: 9.5px;
+      padding: 4px 8px;
+      font-size: 11.5px;
+      line-height: 1.35;
       color: var(--primary-dim);
       display: flex;
       flex-direction: column;
-      gap: 1.5px;
+      gap: 2.5px;
       flex-shrink: 0;
       border-bottom: 1px solid var(--outline);
-      min-height: 36px;
+      min-height: 42px;
+      font-weight: 600;
     }
-    .raw-met-line { display: flex; align-items: baseline; gap: 4px; }
-    .raw-prompt { color: var(--text-muted); font-weight: 700; flex-shrink: 0; }
+    .raw-met-line { display: flex; align-items: baseline; gap: 0; }
     .raw-sigmet-text { color: var(--amber); font-weight: 800; }
     .raw-warning-text { color: var(--red); font-weight: 800; }
 
@@ -791,23 +792,18 @@
       </div>
       <div class="raw-met-box" id="raw-met-container">
         <div class="raw-met-line" id="line-met-report" style="display: none;">
-          <span class="raw-prompt">&gt;</span>
           <span id="raw-met-report"></span>
         </div>
         <div class="raw-met-line" id="line-metar" style="display: none;">
-          <span class="raw-prompt">&gt;</span>
           <span id="raw-metar"></span>
         </div>
         <div class="raw-met-line" id="line-taf" style="display: none;">
-          <span class="raw-prompt">&gt;</span>
           <span id="raw-taf" style="color: var(--amber);"></span>
         </div>
         <div class="raw-met-line" id="line-sigmet" style="display: none;">
-          <span class="raw-prompt">&gt;</span>
           <span id="raw-sigmet" class="raw-sigmet-text"></span>
         </div>
         <div class="raw-met-line" id="line-warning" style="display: none;">
-          <span class="raw-prompt">&gt;</span>
           <span id="raw-warning" class="raw-warning-text"></span>
         </div>
       </div>
