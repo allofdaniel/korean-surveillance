@@ -1166,32 +1166,6 @@
           <!-- Cardinal Labels -->
           <text x="0" y="-39" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">N</text>
           <text x="0" y="47" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">S</text>
-          <text x="-41" y="2.8" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">W</text>
-          <text x="42" y="2.8" fill="var(--primary)" font-size="8" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">E</text>
-          
-          <!-- Runway Numbers -->
-          <text x="-14" y="-39" fill="var(--primary)" font-size="7.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${topLabel}</text>
-          <text x="14" y="47" fill="var(--primary)" font-size="7.5" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${botLabel}</text>
-          
-          <!-- Runway Box (Tilted to true heading) -->
-          <g transform="rotate(${rwyTilt})">
-            <rect x="-5.5" y="-28" width="11" height="56" stroke="var(--primary)" stroke-width="1.3" fill="none" rx="1" />
-            <!-- Aircraft START Threshold Indicator -->
-            ${airplaneSvg}
-          </g>
-
-          <!-- Wind Arrow -->
-          <g transform="rotate(${windDirDeg})">
-            <line x1="0" y1="-34" x2="0" y2="4" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" />
-            <polygon points="0,13 -4.5,0 4.5,0" fill="var(--primary)" />
-          </g>
-
-          <!-- Degree Text Overlay -->
-          <text x="19" y="-19" fill="var(--primary)" font-size="9" font-weight="800" text-anchor="middle" font-family="var(--font-mono)">${String(windDirDeg).padStart(3, '0')}</text>
-        </svg>
-      `;
-    }
-
     // 6. Fetch AMOS & Weather Data via API (Including Precipitation, Visibility in m & SM, RVR, Cloud Base)
     async function syncWeatherData() {
       const spin = document.getElementById('spin-wx');
@@ -1203,25 +1177,13 @@
         const res = await fetch(`${API_BASE}/api/weather?type=amos&icao=${currentAirport}&_t=${Date.now()}`);
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            rawRunwaysData = data;
-          }
+          rawRunwaysData = Array.isArray(data) ? data : [];
+        } else {
+          rawRunwaysData = [];
         }
       } catch (e) {
         console.warn('Weather sync error:', e.message);
-      }
-
-      if (!rawRunwaysData || rawRunwaysData.length === 0) {
-        const apRwyMap = {
-          RKPD: [{ rwyDir: '01', rwyUse: 'Y' }],
-          RKTL: [{ rwyDir: '17', rwyUse: 'Y' }, { rwyDir: '35', rwyUse: 'N' }],
-          RKJY: [{ rwyDir: '17', rwyUse: 'Y' }, { rwyDir: '35', rwyUse: 'N' }]
-        };
-        const defRwys = apRwyMap[currentAirport] || [{ rwyDir: '01', rwyUse: 'Y' }, { rwyDir: '19', rwyUse: 'N' }];
-        rawRunwaysData = defRwys.map(r => ({
-          rwyDir: r.rwyDir,
-          wd: '010', ws: '6.5', max: '9.5', min: '4.5', tmp: '29.8', dp: '24.1', base1lyr: 'FEW 3000FT', qnhHpa: '1013', rvr: 'P2000', mor: '10000', rn1hr: '0.0', ww: '-', rwyUse: r.rwyUse
-        }));
+        rawRunwaysData = [];
       }
 
       renderRunwaysGrid();
@@ -1324,13 +1286,17 @@
       const container = document.getElementById('weather-runways-container');
       if (!container) return;
 
-      // Filter runways: For Jeongseok (RKPD), only display the active in-use runway card
-      let displayRunways = rawRunwaysData;
-      if (currentAirport === 'RKPD') {
-        displayRunways = rawRunwaysData.filter(r => r.rwyUse === 'Y');
-        if (displayRunways.length === 0) displayRunways = [rawRunwaysData[0]];
+      if (!rawRunwaysData || rawRunwaysData.length === 0) {
+        container.className = 'weather-grid-container single';
+        container.innerHTML = `
+          <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; color: var(--primary-dim); font-size: 13px; font-weight: 600; background: var(--bg-dim); border: 1px solid var(--outline);">
+            [${currentAirport}] 대한민국 항공기상청(AMO) AMOS 관제기상 관측소 미설치 (기상 관측 데이터 없음)
+          </div>
+        `;
+        return;
       }
 
+      let displayRunways = rawRunwaysData;
       if (displayRunways.length === 1) {
         container.className = 'weather-grid-container single';
       } else if (displayRunways.length >= 6) {
@@ -1342,13 +1308,13 @@
       container.innerHTML = '';
 
       displayRunways.forEach((rwy, idx) => {
-        const rwyDirStr = rwy.rwyDir || (idx === 0 ? '17' : '35');
+        const rwyDirStr = rwy.rwyDir || '01';
         const rwyHeading = getRunwayHeading(rwyDirStr);
         
         // Use 2-min MAG or 10-min TRUE
         const is10Min = windMode === '10min';
-        const rawWd = parseInt(is10Min ? (rwy.wd10minAvg || rwy.wd) : (rwy.wd2minAvg || rwy.wd)) || 170;
-        const rawWs = parseFloat(is10Min ? (rwy.wspd10minAvg || rwy.ws) : (rwy.wspd2minAvg || rwy.ws)) || 8.5;
+        const rawWd = parseInt(is10Min ? (rwy.wd10minAvg || rwy.wd) : (rwy.wd2minAvg || rwy.wd)) || 0;
+        const rawWs = parseFloat(is10Min ? (rwy.wspd10minAvg || rwy.ws) : (rwy.wspd2minAvg || rwy.ws)) || 0;
         const rawMaxWs = parseFloat(is10Min ? (rwy.wspd10minMax || rwy.max) : (rwy.wspd2minMax || rwy.max)) || rawWs;
         const rawMinWs = parseFloat(rwy.min) || Math.max(0, parseFloat((rawWs - 2).toFixed(1)));
         
@@ -1360,12 +1326,12 @@
         const gust = rwy.gust && rwy.gust !== '-' ? (showWindDecimal ? rwy.gust : Math.round(parseFloat(rwy.gust))) : '-';
         
         // Temperature, Dewpoint, Humidity (Clean bold metrics)
-        const tmpNum = rwy.tmp ? parseFloat(rwy.tmp).toFixed(1) : '25.9';
-        const dpNum = rwy.dp ? parseFloat(rwy.dp).toFixed(1) : '25.4';
-        const humidity = rwy.hm ? `${rwy.hm}%` : calculateHumidity(rwy.tmp || 25.9, rwy.dp || 25.4);
+        const tmpNum = rwy.tmp !== undefined && rwy.tmp !== '' && rwy.tmp !== '-' ? parseFloat(rwy.tmp).toFixed(1) : '-';
+        const dpNum = rwy.dp !== undefined && rwy.dp !== '' && rwy.dp !== '-' ? parseFloat(rwy.dp).toFixed(1) : '-';
+        const humidity = rwy.hm !== undefined && rwy.hm !== '' && rwy.hm !== '-' ? `${rwy.hm}%` : (tmpNum !== '-' && dpNum !== '-' ? calculateHumidity(rwy.tmp, rwy.dp) : '-');
         const tmpDpHum = `${tmpNum}/${dpNum}(${humidity})`;
 
-        let cldBase = rwy.base1lyr || rwy.cld || 'FEW 800FT';
+        let cldBase = rwy.base1lyr || rwy.cld || '-';
         if (cldBase === 'NCD') cldBase = 'NCD';
         else if (/^\d+$/.test(cldBase)) cldBase = `FEW ${cldBase}FT`;
 
@@ -1418,21 +1384,40 @@
               </div>
             </div>
             <div class="rwy-top-right">
-              ${createRunwayRoseSvg(rwyDirStr, rwyHeading, wd, isActive)}
+              <div class="compass-wrap">
+                <div class="compass-box">
+                  <div class="compass-label n">N</div>
+                  <div class="compass-label s">S</div>
+                  <div class="compass-label w">W</div>
+                  <div class="compass-label e">E</div>
+                  <div class="rwy-strip-line" style="transform: translate(-50%, -50%) rotate(${rwyHeading}deg);">
+                    <span class="rwy-num top">${rwyDirStr}</span>
+                    <span class="rwy-num bot">${getOppositeRunway(rwyDirStr)}</span>
+                  </div>
+                  <div class="wind-arrow" style="transform: translate(-50%, -50%) rotate(${wd}deg);">
+                    <div class="wind-arrow-head"></div>
+                  </div>
+                  <div class="wind-deg-center">${String(wd).padStart(3, '0')}</div>
+                </div>
+              </div>
+              <div class="vector-display">
+                <div class="vector-line"><span class="v-label">정풍/배풍</span><span class="v-val">${vectors.headwindStr}</span></div>
+                <div class="vector-line"><span class="v-label">좌/우측풍</span><span class="v-val">${vectors.crosswindStr}</span></div>
+              </div>
             </div>
           </div>
-          <!-- Sub-Row 1: Vectors, Temp/DP(Humidity), QNH -->
-          <div class="metric-row b-b">
-            <div class="metric-col b-r"><span class="metric-label">정풍/배풍</span><span class="metric-val-md">${vectors.headTail}</span></div>
-            <div class="metric-col b-r"><span class="metric-label">좌/우측풍</span><span class="metric-val-md">${vectors.cross}</span></div>
-            <div class="metric-col b-r" style="flex: 1.4;"><span class="metric-label">기온/노점(습도)</span><span class="metric-val-md">${tmpDpHum}</span></div>
-            <div class="metric-col" style="flex: 1.1;"><span class="metric-label">QNH</span><span class="metric-val-md">${qnhDisplay}</span></div>
-          </div>
-          <!-- Sub-Row 2: Cloud Base, Precipitation & Visibility / RVR -->
-          <div class="metric-row">
-            <div class="metric-col b-r" style="flex: 1.1;"><span class="metric-label">운고 / 운량</span><span class="metric-val-md">${cldBase}</span></div>
-            <div class="metric-col b-r" style="flex: 1.1;"><span class="metric-label">강수량 / 일기</span><span class="metric-val-md">${precipDisplay}</span></div>
-            <div class="metric-col" style="flex: 1.4;"><span class="metric-label">시정(m / SM) / RVR (RWY ${rwyDirStr})</span><span class="metric-val-md">${rvrDisplay}</span></div>
+          <div class="rwy-bottom-split">
+            <div class="env-row b-b">
+              <div class="env-col b-r"><span class="env-label">기온/노점(습도)</span><span class="env-val">${tmpDpHum}</span></div>
+              <div class="env-col"><span class="env-label">QNH</span><span class="env-val">${qnhDisplay}</span></div>
+            </div>
+            <div class="env-row b-b">
+              <div class="env-col b-r"><span class="env-label">운고 / 운량</span><span class="env-val">${cldBase}</span></div>
+              <div class="env-col"><span class="env-label">강수량 / 일기</span><span class="env-val">${precipDisplay}</span></div>
+            </div>
+            <div class="env-row single-env">
+              <div class="env-col"><span class="env-label">시정(m / SM) / RVR (RWY ${rwyDirStr})</span><span class="env-val">${rvrDisplay}</span></div>
+            </div>
           </div>
         `;
         container.appendChild(rwyEl);
@@ -1493,6 +1478,11 @@
         if (!depTbody) return;
         depTbody.innerHTML = '';
 
+        if (!loadedDeps || loadedDeps.length === 0) {
+          depTbody.innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; font-weight: 600;">UBIKAIS 실시간 출발 비행계획(DEP FPL) 없음</td></tr>';
+          return;
+        }
+
         const sorted = sortFlightList(loadedDeps, currentSort.dep.col, currentSort.dep.asc);
         sorted.forEach(f => {
           const fId = f.flt || f.fpId || 'UNKNOWN';
@@ -1539,6 +1529,11 @@
         if (!arrTbody) return;
         arrTbody.innerHTML = '';
 
+        if (!loadedArrs || loadedArrs.length === 0) {
+          arrTbody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; font-weight: 600;">UBIKAIS 실시간 도착 비행계획(ARR FPL) 없음</td></tr>';
+          return;
+        }
+
         const sorted = sortFlightList(loadedArrs, currentSort.arr.col, currentSort.arr.asc);
         sorted.forEach(f => {
           const fId = f.flt || f.fpId || 'UNKNOWN';
@@ -1554,7 +1549,7 @@
           const isStatusChanged = prevStatus && prevStatus !== status && status !== 'ENR';
           flightStatusHistory.set(`ARR_${fId}`, status);
 
-          const statusClass = status.includes('ARR') ? 'status-arr' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('DEP') ? 'status-dep' : status.includes('LND') ? 'status-lnd' : status.includes('ENR') ? 'status-enr' : 'status-sch';
+          const statusClass = status.includes('ARR') ? 'status-arr' : status.includes('LND') ? 'status-lnd' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('DEP') ? 'status-dep' : 'status-sch';
           const blinkClass = isStatusChanged ? 'blink-status-5' : '';
           const fplHtml = isFplFiled ? '<span class="fpl-tag-y">Y</span>' : '<span class="fpl-tag-n">-</span>';
 
@@ -1566,10 +1561,10 @@
             </td>
             <td style="color: var(--text-muted);">${f.typ || '-'}</td>
             <td style="color: var(--primary-soft);">${f.reg || '-'}</td>
-            <td class="${statusClass} ${blinkClass}">${status}</td>
+            <td style="color: var(--amber); font-weight: 700;">${status}</td>
             <td style="color: var(--text-muted);">${f.nat || 'PAX'}</td>
             <td>${fplHtml}</td>
-            <td style="color: var(--amber); font-weight: 700;">${f.org || f.apIcao || '-'}</td>
+            <td style="color: var(--primary-bright); font-weight: 700;">${f.org || f.apIcao || '-'}</td>
             <td style="color: var(--primary-bright); font-weight: 700;">${f.spt || '-'}</td>
             <td style="color: var(--text-muted);">${(f.ram || '-').replace(':', '')}</td>
             <td style="color: var(--text-muted);">${(f.etd || '-').replace(':', '')}</td>

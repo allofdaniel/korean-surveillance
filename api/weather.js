@@ -159,15 +159,30 @@ async function handleAmos(req, res) {
   try {
     const amosList = await fetchLiveAmosData(rawIcao);
     if (amosList && amosList.length > 0) {
-      const normalizedList = amosList.map(item => ({
-        ...item,
-        wd: item.wd || item.wd2minAvg || item.wd10minAvg || '180',
-        ws: item.ws || item.wspd2minAvg || item.wspd10minAvg || '8.0',
-        max: item.max || item.wspd2minMax || item.wspd10minMax || item.ws || '10.0',
-        min: item.min || (item.wspd2minAvg ? Math.max(0, parseFloat(item.wspd2minAvg) - 2).toFixed(1) : '6.0'),
-        qnhHpa: item.qnhOrigin ? (item.qnhOrigin / 10).toFixed(0) : '1012',
-        qfeHpa: item.qnhOrigin ? ((item.qnhOrigin - 30) / 10).toFixed(0) : '1009'
-      }));
+      const normalizedList = amosList.map(item => {
+        const qnhVal = item.qnhOrigin ? (item.qnhOrigin / 10).toFixed(0) : (item.qnh ? Math.round(parseFloat(item.qnh)) : '1012');
+        const qfeVal = item.qnhOrigin ? ((item.qnhOrigin - 30) / 10).toFixed(0) : (item.qfe ? Math.round(parseFloat(item.qfe)) : String(parseInt(qnhVal) - 3));
+        const wwText = item.wwLttr && item.wwLttr !== '-9999' ? item.wwLttr : (item.wwCo && item.wwCo !== '-9999' ? item.wwCo : '-');
+
+        return {
+          ...item,
+          wd: item.wd2minAvg || item.wd10minAvg || item.wd || '0',
+          ws: item.wspd2minAvg || item.wspd10minAvg || item.ws || '0',
+          max: item.wspd2minMax || item.wspd10minMax || item.max || item.wspd2minAvg || '0',
+          min: item.wspd2minMin || (item.wspd2minAvg && parseFloat(item.wspd2minAvg) > 2 ? (parseFloat(item.wspd2minAvg) - 2).toFixed(1) : '0'),
+          tmp: item.tmp !== undefined && item.tmp !== '' ? item.tmp : '-',
+          dp: item.dp !== undefined && item.dp !== '' ? item.dp : '-',
+          hm: item.hm !== undefined && item.hm !== '' ? item.hm : '-',
+          qnhHpa: qnhVal,
+          qfeHpa: qfeVal,
+          mor: item.mor1min || item.mor1minMid || '10000',
+          rvr: item.rvr1min || item.rvr1minMid || 'P2000',
+          rn1hr: item.rn1hr !== undefined && item.rn1hr !== '' ? item.rn1hr : '0.0',
+          rn1dd: item.rn1dd !== undefined && item.rn1dd !== '' ? item.rn1dd : '0.0',
+          ww: wwText,
+          cld: item.base1lyr && item.base1lyr !== '-9999' ? item.base1lyr : '-'
+        };
+      });
       res.setHeader('Cache-Control', 's-maxage=2, stale-while-revalidate=5');
       return res.status(200).json(normalizedList);
     }
@@ -175,146 +190,9 @@ async function handleAmos(req, res) {
     console.warn('[Weather API] AMO live scraper failed:', e.message);
   }
 
-  // 2. 실시간 항공기상청 METAR 원본 데이터 기반 활주로별 관측치 생성
-  const amoWx = await fetchLiveAmoMetarTaf(targetIcao);
-  const metar = amoWx.metar || '';
-
-  // Parse Live METAR parameters
-  let windDeg = '180';
-  let windSpd = '8.0';
-  let windGust = '10.0';
-  let visM = '9999';
-  let tempC = '28.0';
-  let dpC = '24.0';
-  let qnhVal = '1012';
-  let cldTxt = 'SCT 3000FT';
-  let wwTxt = '-';
-
-  if (metar) {
-    const wMatch = metar.match(/(\d{3}|VRB)(\d{2})(G\d{2})?KT/);
-    if (wMatch) {
-      windDeg = wMatch[1] === 'VRB' ? '180' : wMatch[1];
-      windSpd = String(parseFloat(wMatch[2]));
-      windGust = wMatch[3] ? String(parseFloat(wMatch[3].substring(1))) : (parseFloat(windSpd) + 2).toFixed(1);
-    }
-    const visMatch = metar.match(/\s(\d{4})\s/) || (metar.includes('CAVOK') ? [null, '9999'] : null);
-    if (visMatch) visM = visMatch[1];
-
-    const tMatch = metar.match(/\s(M?\d{2})\/(M?\d{2})\s/);
-    if (tMatch) {
-      tempC = tMatch[1].startsWith('M') ? `-${tMatch[1].slice(1)}` : String(parseInt(tMatch[1]));
-      dpC = tMatch[2].startsWith('M') ? `-${tMatch[2].slice(1)}` : String(parseInt(tMatch[2]));
-    }
-
-    const qMatch = metar.match(/Q(\d{4})/);
-    if (qMatch) qnhVal = qMatch[1];
-
-    if (metar.includes('TSRA') || metar.includes('TS')) wwTxt = 'TSRA';
-    else if (metar.includes('SHRA') || metar.includes('RA')) wwTxt = 'RA';
-    else if (metar.includes('BR')) wwTxt = 'BR';
-    else if (metar.includes('FG')) wwTxt = 'FG';
-    else if (metar.includes('HZ')) wwTxt = 'HZ';
-  }
-
-  const RUNWAYS_MAP = {
-    RKSI: ['15L', '15R', '16L', '16R', '33L', '33R', '34L', '34R'],
-    RKSS: ['14L', '14R', '32L', '32R'],
-    RKPC: ['07', '25'],
-    RKPK: ['18L', '36R', '18R', '36L'],
-    RKJY: ['17', '35'],
-    RKPU: ['18', '36'],
-    RKTN: ['13L', '31R'],
-    RKTU: ['06L', '24R'],
-    RKJJ: ['04L', '22R'],
-    RKJB: ['01', '19'],
-    RKNY: ['15', '33'],
-    RKTH: ['10', '28'],
-    RKPS: ['06L', '24R'],
-    RKPD: ['01', '19'],
-    RKTL: ['17', '35']
-  };
-
-  const rwys = RUNWAYS_MAP[targetIcao] || ['01', '19'];
-  const now = new Date();
-  const kst = new Date(now.getTime() + 9 * 3600 * 1000);
-  const tm = `${kst.getUTCFullYear()}-${String(kst.getUTCMonth() + 1).padStart(2, '0')}-${String(kst.getUTCDate()).padStart(2, '0')}`;
-  const mi = `${String(kst.getUTCHours()).padStart(2, '0')}:${String(kst.getUTCMinutes()).padStart(2, '0')}`;
-
-  const fullAmosItems = rwys.map((rwy, idx) => {
-    const numMatch = (rwy || '').match(/\d+/);
-    const rwyHdg = numMatch ? parseInt(numMatch[0]) * 10 : 180;
-    const degNum = parseInt(windDeg) || 180;
-    const angleRad = ((degNum - rwyHdg) * Math.PI) / 180;
-    const headwind = Math.cos(angleRad);
-    const isPrimaryUse = headwind >= 0;
-
-    return {
-      tm,
-      stnId: 100 + idx,
-      rwyDir: rwy,
-      sRwyDir: rwy,
-      dispNum: idx + 1,
-      dispFlag: 1,
-      nextrow: null,
-      count: rwys.length,
-      stnNm: targetIcao,
-      stnCd: targetIcao,
-      stdDir: rwy,
-      rwyUse: isPrimaryUse ? 'Y' : 'N',
-      mi,
-      runFlag: 0,
-      mor1min: visM,
-      rvr1min: parseInt(visM) < 2000 ? visM : 'P2000',
-      base1lyr: cldTxt,
-      mor1minMid: visM,
-      rvr1minMid: parseInt(visM) < 2000 ? visM : 'P2000',
-      wspd2minAvg: windSpd,
-      wspd2minMax: windGust,
-      wd2minAvg: windDeg,
-      wspd10minAvg: windSpd,
-      wspd10minMax: windGust,
-      wd10minAvg: windDeg,
-      wd: windDeg,
-      ws: windSpd,
-      max: windGust,
-      min: parseFloat(windSpd) > 2 ? (parseFloat(windSpd) - 2).toFixed(1) : '1.0',
-      tmp: tempC,
-      dp: dpC,
-      hm: '75',
-      qfe: (parseFloat(qnhVal) * 0.02953 - 0.02).toFixed(2),
-      qnh: (parseFloat(qnhVal) * 0.02953).toFixed(2),
-      qnhInhg: (parseFloat(qnhVal) * 0.02953).toFixed(2),
-      qnhHpa: qnhVal,
-      qfeHpa: String(parseInt(qnhVal) - 3),
-      rn1hr: '0.0',
-      rn1dd: '0.0',
-      rn24hr: '',
-      wwCo: '10',
-      wwLttr: wwTxt,
-      fhsc: '-',
-      fhsc1hr: '-',
-      dsnw: '-',
-      dsnw1min: '-',
-      rainYn: wwTxt === 'RA' || wwTxt === 'TSRA' ? '1' : '0',
-      qnhOrigin: parseInt(qnhVal) * 10,
-      cfgMor1min: 'C',
-      cfgMor1minMid: 'C',
-      cfgRvr1min: 'C',
-      cfgRvr1minMid: 'C',
-      cfgWd2minAvg: 'C',
-      cfgWspd2minAvg: 'C',
-      cfgWspd2minMax: 'C',
-      cfgWd10minAvg: 'C',
-      cfgWspd10minAvg: 'C',
-      cfgWspd10minMax: 'C',
-      cfgRn1hr: 'C',
-      cfgRn1dd: 'C',
-      rn1min: ''
-    };
-  });
-
+  // 2. 항공기상청 관측소가 없는 비행장 (e.g. RKPD)의 경우 빈 배열 반환 (가짜 데이터 0%)
   res.setHeader('Cache-Control', 's-maxage=2, stale-while-revalidate=5');
-  return res.status(200).json(fullAmosItems);
+  return res.status(200).json([]);
 }
 
 // TAF - 공항예보 (대한민국 항공기상청 AMO 실측치)
