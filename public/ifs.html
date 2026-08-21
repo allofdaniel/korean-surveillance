@@ -296,11 +296,10 @@
     .weather-grid-container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 3px;
+      gap: 4px;
       background: var(--bg-dim);
       flex-shrink: 0;
       padding: 0;
-      min-height: 110px;
     }
     .weather-grid-container.dense {
       grid-template-columns: repeat(4, 1fr);
@@ -315,16 +314,18 @@
       flex-direction: column;
       min-width: 0;
       overflow: hidden;
+      border-radius: 2px;
     }
     .rwy-card.active-use {
       border-color: var(--primary);
-      box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.05);
+      box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.08);
     }
 
     /* Top Split: Left (Title + Wind Metrics) vs Right (Wind Indicator) */
     .rwy-top-split {
       display: flex;
       width: 100%;
+      min-height: 52px;
     }
     .rwy-top-left {
       flex: 1;
@@ -335,34 +336,63 @@
     }
     .rwy-title-bar {
       background: var(--surface-container);
-      padding: 1px 5px;
+      padding: 1px 6px;
       font-size: 9px;
       font-weight: 800;
       color: var(--amber);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 17px;
+      height: 18px;
     }
     .use-tag {
       font-size: 7.5px;
       background: var(--primary);
       color: #000;
-      padding: 0.5px 3px;
+      padding: 0.5px 4px;
       border-radius: 2px;
       font-weight: 800;
+      letter-spacing: 0.03em;
     }
     html.theme-mono .use-tag { color: #000; }
     html.theme-light .use-tag { color: #fff; }
 
-    /* Wind Rose on Right side */
+    /* Wind Rose & Vectors on Right side */
     .rwy-top-right {
-      width: 72px;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 6px;
+      padding: 2px 6px;
       background: var(--bg-dim);
       flex-shrink: 0;
+      border-left: 1px solid var(--outline);
+    }
+    .vector-display {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3px;
+      min-width: 48px;
+    }
+    .vector-item {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 4px;
+    }
+    .v-label {
+      font-size: 8px;
+      color: var(--text-muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .v-val {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary-bright);
+      font-family: var(--font-mono);
+      white-space: nowrap;
     }
 
     .metric-row {
@@ -390,7 +420,7 @@
       line-height: 1.1;
     }
     .metric-val {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 800;
       color: var(--primary-bright);
       line-height: 1.1;
@@ -405,6 +435,54 @@
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 1.15;
+    }
+
+    /* Bottom Split: Atmospheric & Environmental Metrics */
+    .rwy-bottom-split {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      border-top: 1px solid var(--outline);
+    }
+    .env-row {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    html.theme-light .env-row {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    }
+    .env-row:last-child {
+      border-bottom: none;
+    }
+    .env-col {
+      flex: 1;
+      padding: 2px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      min-width: 0;
+      font-size: 8.5px;
+    }
+    .env-col.b-r {
+      border-right: 1px solid var(--outline);
+    }
+    .env-label {
+      color: var(--text-muted);
+      font-weight: 700;
+      white-space: nowrap;
+      font-size: 8px;
+    }
+    .env-val {
+      color: var(--primary-bright);
+      font-weight: 800;
+      white-space: nowrap;
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* Section 2: Raw MET Feed with Warnings & SIGMET */
@@ -1169,7 +1247,7 @@
       `;
 
       return `
-        <svg viewBox="-50 -50 100 100" width="68" height="68" class="runway-rose-svg">
+        <svg viewBox="-50 -50 100 100" width="50" height="50" class="runway-rose-svg">
           <!-- Compass Circle -->
           <circle cx="0" cy="0" r="36" stroke="var(--primary)" stroke-width="1.6" fill="none" />
           
@@ -1397,8 +1475,8 @@
         
         // High-legibility controller-centric metrics (Large digits, small labels)
         rwyEl.innerHTML = `
-          <div class="rwy-top-split b-b">
-            <div class="rwy-top-left b-r">
+          <div class="rwy-top-split">
+            <div class="rwy-top-left">
               <div class="rwy-title-bar b-b">
                 <span>RWY ${rwyDirStr} WIND DATA</span>
                 ${isActive ? '<span class="use-tag">IN-USE</span>' : ''}
@@ -1419,38 +1497,23 @@
               </div>
             </div>
             <div class="rwy-top-right">
-              <div class="compass-wrap">
-                <div class="compass-box">
-                  <div class="compass-label n">N</div>
-                  <div class="compass-label s">S</div>
-                  <div class="compass-label w">W</div>
-                  <div class="compass-label e">E</div>
-                  <div class="rwy-strip-line" style="transform: translate(-50%, -50%) rotate(${rwyHeading}deg);">
-                    <span class="rwy-num top">${rwyDirStr}</span>
-                    <span class="rwy-num bot">${getOppositeRunway(rwyDirStr)}</span>
-                  </div>
-                  <div class="wind-arrow" style="transform: translate(-50%, -50%) rotate(${wd}deg);">
-                    <div class="wind-arrow-head"></div>
-                  </div>
-                  <div class="wind-deg-center">${String(wd).padStart(3, '0')}</div>
-                </div>
-              </div>
+              ${createRunwayRoseSvg(rwyDirStr, rwyHeading, wd, isActive)}
               <div class="vector-display">
-                <div class="vector-line"><span class="v-label">정풍/배풍</span><span class="v-val">${vectors.headwindStr}</span></div>
-                <div class="vector-line"><span class="v-label">좌/우측풍</span><span class="v-val">${vectors.crosswindStr}</span></div>
+                <div class="vector-item"><span class="v-label">정풍/배풍</span><span class="v-val">${vectors.headTail}</span></div>
+                <div class="vector-item"><span class="v-label">좌/우측풍</span><span class="v-val">${vectors.cross}</span></div>
               </div>
             </div>
           </div>
           <div class="rwy-bottom-split">
-            <div class="env-row b-b">
+            <div class="env-row">
               <div class="env-col b-r"><span class="env-label">기온/노점(습도)</span><span class="env-val">${tmpDpHum}</span></div>
               <div class="env-col"><span class="env-label">QNH</span><span class="env-val">${qnhDisplay}</span></div>
             </div>
-            <div class="env-row b-b">
+            <div class="env-row">
               <div class="env-col b-r"><span class="env-label">운고 / 운량</span><span class="env-val">${cldBase}</span></div>
               <div class="env-col"><span class="env-label">강수량 / 일기</span><span class="env-val">${precipDisplay}</span></div>
             </div>
-            <div class="env-row single-env">
+            <div class="env-row">
               <div class="env-col"><span class="env-label">시정(m / SM) / RVR (RWY ${rwyDirStr})</span><span class="env-val">${rvrDisplay}</span></div>
             </div>
           </div>
