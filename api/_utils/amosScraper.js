@@ -4,11 +4,11 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 /**
  * 대한민국 항공기상청 (AMO / global.amo.go.kr) 실시간 공식 기상 게이트웨이
- * - METAR, SPECI, TAF, AMOS 관제기상, 공항경보(WARNING), 급변풍(LLWS) 실측 원문 수집
+ * - METAR, SPECI, TAF, MET REPORT, AMOS 관제기상, 공항경보(WARNING), 급변풍(LLWS) 실측 원문 수집
  */
 
-let cachedMetarTaf = {};
-let lastMetarTafFetch = {};
+const cachedMetarTaf = new Map();
+const lastMetarTafFetch = new Map();
 
 let cachedAmosData = null;
 let lastAmosFetchTime = 0;
@@ -18,8 +18,9 @@ let lastAmosFetchTime = 0;
  */
 export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
   const now = Date.now();
-  if (cachedMetarTaf[icao] && (now - (lastMetarTafFetch[icao] || 0)) < 15000) {
-    return cachedMetarTaf[icao];
+  const lastTime = lastMetarTafFetch.get(icao) || 0;
+  if (cachedMetarTaf.has(icao) && (now - lastTime) < 60000) {
+    return cachedMetarTaf.get(icao);
   }
 
   try {
@@ -30,7 +31,7 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
         'Accept': 'application/json, text/javascript, */*; q=0.01',
         'Referer': 'https://global.amo.go.kr/airportWeather/domestic-airport.do'
       },
-      signal: AbortSignal.timeout(6000)
+      signal: AbortSignal.timeout(8000)
     });
 
     if (res.ok) {
@@ -39,12 +40,13 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
       let taf = (json.tafData?.content || json.taf || '').trim();
       const warnings = json.warningList || [];
       const speci = (json.speciList?.[0]?.content || '').trim();
+      const metReport = json.metReportData || null;
 
       // If AMO doesn't have METAR (e.g. military/training or international), check NOAA as secondary source
       if (!metar) {
         try {
           const noaaRes = await fetch(`https://aviationweather.gov/api/data/metar?ids=${icao}&format=raw`, {
-            signal: AbortSignal.timeout(4000)
+            signal: AbortSignal.timeout(5000)
           });
           if (noaaRes.ok) {
             const noaaTxt = (await noaaRes.text()).trim();
@@ -56,7 +58,7 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
       if (!taf) {
         try {
           const noaaTafRes = await fetch(`https://aviationweather.gov/api/data/taf?ids=${icao}&format=raw`, {
-            signal: AbortSignal.timeout(4000)
+            signal: AbortSignal.timeout(5000)
           });
           if (noaaTafRes.ok) {
             const noaaTafTxt = (await noaaTafRes.text()).trim();
@@ -70,13 +72,13 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
         taf: taf || null,
         speci: speci || null,
         warnings: warnings,
-        metReport: json.metReportData || null,
+        metReport: metReport,
         timestamp: new Date().toISOString(),
         source: '대한민국 항공기상청 (AMO / global.amo.go.kr)'
       };
 
-      cachedMetarTaf[icao] = result;
-      lastMetarTafFetch[icao] = now;
+      cachedMetarTaf.set(icao, result);
+      lastMetarTafFetch.set(icao, now);
       return result;
     }
   } catch (e) {
@@ -86,26 +88,27 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
   // Fallback to NOAA if AMO request failed
   try {
     const [noaaMetar, noaaTaf] = await Promise.all([
-      fetch(`https://aviationweather.gov/api/data/metar?ids=${icao}&format=raw`, { signal: AbortSignal.timeout(4000) }).then(r => r.text()).catch(() => ''),
-      fetch(`https://aviationweather.gov/api/data/taf?ids=${icao}&format=raw`, { signal: AbortSignal.timeout(4000) }).then(r => r.text()).catch(() => '')
+      fetch(`https://aviationweather.gov/api/data/metar?ids=${icao}&format=raw`, { signal: AbortSignal.timeout(5000) }).then(r => r.text()).catch(() => ''),
+      fetch(`https://aviationweather.gov/api/data/taf?ids=${icao}&format=raw`, { signal: AbortSignal.timeout(5000) }).then(r => r.text()).catch(() => '')
     ]);
 
     const result = {
-      metar: (noaaMetar && !noaaMetar.startsWith('<')) ? noaaMetar.trim() : (cachedMetarTaf[icao]?.metar || null),
-      taf: (noaaTaf && !noaaTaf.startsWith('<')) ? noaaTaf.trim() : (cachedMetarTaf[icao]?.taf || null),
-      warnings: cachedMetarTaf[icao]?.warnings || [],
+      metar: (noaaMetar && !noaaMetar.startsWith('<')) ? noaaMetar.trim() : (cachedMetarTaf.get(icao)?.metar || null),
+      taf: (noaaTaf && !noaaTaf.startsWith('<')) ? noaaTaf.trim() : (cachedMetarTaf.get(icao)?.taf || null),
+      warnings: cachedMetarTaf.get(icao)?.warnings || [],
+      metReport: cachedMetarTaf.get(icao)?.metReport || null,
       timestamp: new Date().toISOString(),
       source: 'NOAA Aviation Weather Gateway'
     };
 
     if (result.metar || result.taf) {
-      cachedMetarTaf[icao] = result;
-      lastMetarTafFetch[icao] = now;
+      cachedMetarTaf.set(icao, result);
+      lastMetarTafFetch.set(icao, now);
       return result;
     }
   } catch {}
 
-  return cachedMetarTaf[icao] || { metar: null, taf: null, warnings: [] };
+  return cachedMetarTaf.get(icao) || { metar: null, taf: null, warnings: [], metReport: null };
 }
 
 /**
@@ -113,7 +116,7 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
  */
 export async function fetchLiveAmosData(icao = null) {
   const now = Date.now();
-  if (cachedAmosData && (now - lastAmosFetchTime) < 3000) {
+  if (cachedAmosData && (now - lastAmosFetchTime) < 5000) {
     if (icao) {
       return cachedAmosData.filter(d => d.stnCd === icao);
     }
@@ -139,7 +142,7 @@ export async function fetchLiveAmosData(icao = null) {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       },
       body: `tm=${encodeURIComponent(tmStr)}`,
-      signal: AbortSignal.timeout(5000)
+      signal: AbortSignal.timeout(6000)
     });
 
     if (res.ok) {
