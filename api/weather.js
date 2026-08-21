@@ -3,7 +3,7 @@
 // DO-278A ?붽뎄?ы빆 異붿쟻: SRS-SEC-001
 
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
-import { fetchLiveAmosData } from './_utils/amosScraper.js';
+import { fetchLiveAmosData, fetchLiveAmoMetarTaf } from './_utils/amosScraper.js';
 
 /**
  * ?섍꼍蹂?섏뿉??KMA API ??濡쒕뱶
