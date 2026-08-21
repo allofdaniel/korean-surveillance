@@ -161,31 +161,83 @@ async function handleAmos(req, res) {
     if (amosList && amosList.length > 0) {
       const amoWx = await fetchLiveAmoMetarTaf(targetIcao).catch(() => ({}));
       const metReport = amoWx?.metReport?.content || '';
-      const metRepRwy = metReport.match(/WIND\s+RWY\s+(\d{2}[LRC]?)/i)?.[1] || '';
+      const metar = amoWx?.metar || '';
+
+      // 1. Parse active RWYs from official MET REPORT
+      const metRepRwys = new Set([...metReport.matchAll(/RWY\s+(\d{2}[LRC]?)/gi)].map(m => m[1].toUpperCase()));
+
+      // 2. Parse dominant wind from METAR or first AMOS entry
+      let dominantWd = 0;
+      const metarWMatch = metar.match(/(\d{3}|VRB)(\d{2})(G\d{2})?KT/);
+      if (metarWMatch && metarWMatch[1] !== 'VRB') {
+        dominantWd = parseInt(metarWMatch[1]);
+      }
+
+      // 3. Group by physical runway strip (e.g. 17/35 -> strip '17')
+      const stripPairs = new Map();
+      amosList.forEach(r => {
+        const dir = (r.rwyDir || r.stdDir || '').toUpperCase();
+        const numMatch = dir.match(/\d+/);
+        const num = numMatch ? parseInt(numMatch[0]) : 1;
+        const baseNum = Math.min(num, (num + 18) % 36 || 36);
+        const isL = dir.includes('L');
+        const isR = dir.includes('R');
+        // Handle RKPK (36 vs 18, 36L vs 18R)
+        const suffixKey = (targetIcao === 'RKPK') ? (dir.includes('L') || dir.includes('R') ? 'PARALLEL_2' : 'PARALLEL_1') : (isL ? 'L' : isR ? 'R' : 'S');
+        const stripKey = `${baseNum}_${suffixKey}`;
+
+        if (!stripPairs.has(stripKey)) stripPairs.set(stripKey, []);
+        stripPairs.get(stripKey).push(r);
+      });
+
+      const activeRwySet = new Set();
+
+      for (const [stripKey, runways] of stripPairs.entries()) {
+        // Priority A: Explicit in official MET REPORT
+        const metRepMatch = runways.find(r => metRepRwys.has(r.rwyDir?.toUpperCase()));
+        if (metRepMatch) {
+          activeRwySet.add(metRepMatch.rwyDir.toUpperCase());
+          continue;
+        }
+
+        // Priority B: AMOS official rwyUse flag (if single Y)
+        const amosY = runways.filter(r => r.rwyUse === 'Y');
+        if (amosY.length === 1) {
+          activeRwySet.add(amosY[0].rwyDir.toUpperCase());
+          continue;
+        }
+
+        // Priority C: Best Headwind Vector
+        let bestRwy = runways[0].rwyDir?.toUpperCase();
+        let bestHw = -999;
+
+        runways.forEach(r => {
+          const curWd = parseFloat(r.wd2minAvg || r.wd || dominantWd) || dominantWd;
+          const curWs = parseFloat(r.wspd2minAvg || r.ws || 5) || 5;
+          const numMatch = (r.rwyDir || '').match(/\d+/);
+          const hdg = numMatch ? parseInt(numMatch[0]) * 10 : 180;
+          const angleRad = ((curWd - hdg) * Math.PI) / 180;
+          const hw = Math.cos(angleRad) * curWs;
+
+          if (hw > bestHw) {
+            bestHw = hw;
+            bestRwy = r.rwyDir?.toUpperCase();
+          }
+        });
+
+        activeRwySet.add(bestRwy);
+      }
 
       const normalizedList = amosList.map(item => {
         const qnhVal = item.qnhOrigin ? (item.qnhOrigin / 10).toFixed(0) : (item.qnh ? Math.round(parseFloat(item.qnh)) : '1012');
         const qfeVal = item.qnhOrigin ? ((item.qnhOrigin - 30) / 10).toFixed(0) : (item.qfe ? Math.round(parseFloat(item.qfe)) : String(parseInt(qnhVal) - 3));
         const wwText = item.wwLttr && item.wwLttr !== '-9999' ? item.wwLttr : (item.wwCo && item.wwCo !== '-9999' ? item.wwCo : '-');
 
-        const curWd = parseFloat(item.wd2minAvg || item.wd10minAvg || item.wd || '0') || 0;
-        const rwyNumMatch = (item.rwyDir || '').match(/\d+/);
-        const rwyHeading = rwyNumMatch ? parseInt(rwyNumMatch[0]) * 10 : 180;
-        const angleRad = ((curWd - rwyHeading) * Math.PI) / 180;
-        const headwind = Math.cos(angleRad);
-
-        let isActiveRwy = false;
-        if (item.rwyUse === 'Y') {
-          isActiveRwy = true;
-        } else if (metRepRwy && (item.rwyDir === metRepRwy || item.rwyDir?.startsWith(metRepRwy))) {
-          isActiveRwy = true;
-        } else if (item.rwyUse === 'X' || !item.rwyUse) {
-          isActiveRwy = (headwind >= 0);
-        }
+        const isActive = activeRwySet.has((item.rwyDir || item.stdDir || '').toUpperCase());
 
         return {
           ...item,
-          rwyUse: isActiveRwy ? 'Y' : 'N',
+          rwyUse: isActive ? 'Y' : 'N',
           wd: item.wd2minAvg || item.wd10minAvg || item.wd || '0',
           ws: item.wspd2minAvg || item.wspd10minAvg || item.ws || '0',
           max: item.wspd2minMax || item.wspd10minMax || item.max || item.wspd2minAvg || '0',
