@@ -1,5 +1,5 @@
-import fs from 'fs';
 import vm from 'vm';
+import { rsaBundleCode } from './rsaBundle.js';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -20,11 +20,6 @@ async function authenticateUbikais() {
   if (cachedCookieHeader && (now - lastLoginTime) < 10 * 60 * 1000) {
     return cachedCookieHeader;
   }
-
-  const jsbnCode = fs.readFileSync('C:/Users/allof/.gemini/antigravity/scratch/jsbn.js', 'utf8');
-  const prng4Code = fs.readFileSync('C:/Users/allof/.gemini/antigravity/scratch/prng4.js', 'utf8');
-  const rngCode = fs.readFileSync('C:/Users/allof/.gemini/antigravity/scratch/rng.js', 'utf8');
-  const rsaCode = fs.readFileSync('C:/Users/allof/.gemini/antigravity/scratch/rsa.js', 'utf8');
 
   const context = {
     window: {},
@@ -48,10 +43,7 @@ async function authenticateUbikais() {
     };
   `, context);
 
-  vm.runInContext(jsbnCode, context);
-  vm.runInContext(prng4Code, context);
-  vm.runInContext(rngCode, context);
-  vm.runInContext(rsaCode, context);
+  vm.runInContext(rsaBundleCode, context);
 
   const cookieJar = new Map();
 
