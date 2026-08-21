@@ -2,11 +2,24 @@ import crypto from 'crypto';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
+/**
+ * 대한민국 항공기상청 (AMO / global.amo.go.kr) 실시간 공식 기상 관제 게이트웨이
+ * - 사용자 공식 계정(kal05 / pr12pr34!!) SHA256 암호화 인증 세션 수립
+ * - 전국 공항 활주로별 실시간 AMOS 관제기상(순간풍, 2분/10분 평균풍, 기온, 이슬점, QNH, 강수량, 시정, RVR) 실측 수집
+ * - METAR, TAF, SPECI, MET REPORT 100% 원문 직결 (NOAA 배제, 오직 대한민국 항공기상청 단일 소스)
+ */
+
 const AMO_USER_ID = 'kal05';
 const AMO_USER_PWD = 'pr12pr34!!';
 
 let amoSessionCookie = null;
 let amoSessionExpires = 0;
+
+const cachedMetarTaf = new Map();
+const lastMetarTafFetch = new Map();
+
+let cachedAmosData = null;
+let lastAmosFetchTime = 0;
 
 function hashPassword(pw) {
   let chgPassword = pw;
@@ -18,6 +31,9 @@ function hashPassword(pw) {
   return crypto.createHash('sha256').update(chgPassword, 'utf-8').digest('base64');
 }
 
+/**
+ * 항공기상청(global.amo.go.kr) 공식 계정 인증 세션 획득 및 유지
+ */
 async function getAmoAuthenticatedCookies() {
   const now = Date.now();
   if (amoSessionCookie && now < amoSessionExpires) {
@@ -65,7 +81,16 @@ async function getAmoAuthenticatedCookies() {
   return amoSessionCookie;
 }
 
+/**
+ * 항공기상청(AMO) 실시간 METAR, TAF, SPECI, WARNING 100% 원문 직결 수집 (오직 항공기상청만 사용)
+ */
 export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
+  const now = Date.now();
+  const lastTime = lastMetarTafFetch.get(icao) || 0;
+  if (cachedMetarTaf.has(icao) && (now - lastTime) < 30000) {
+    return cachedMetarTaf.get(icao);
+  }
+
   try {
     const url = `https://global.amo.go.kr/airportWeather/getAmosData.do?stnCd=${icao}`;
     const res = await fetch(url, {
@@ -84,7 +109,7 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
       const speci = (json.speciList?.[0]?.content || '').trim();
       const metReport = json.metReportData || null;
 
-      return {
+      const result = {
         metar: metar || null,
         taf: taf || null,
         speci: speci || null,
@@ -93,18 +118,33 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
         timestamp: new Date().toISOString(),
         source: metar ? '대한민국 항공기상청 (AMO / global.amo.go.kr)' : '미수신 (관측소 없음)'
       };
+
+      cachedMetarTaf.set(icao, result);
+      lastMetarTafFetch.set(icao, now);
+      return result;
     }
   } catch (e) {
     console.error(`[AMO Weather Scraper] Error for ${icao}:`, e.message);
   }
 
-  return { metar: null, taf: null, warnings: [], metReport: null, source: '미수신 (관측소 없음)' };
+  return cachedMetarTaf.get(icao) || { metar: null, taf: null, warnings: [], metReport: null, source: '미수신 (관측소 없음)' };
 }
 
+/**
+ * 항공기상청(AMO) 실시간 AMOS 활주로별 55개 전체 필드 실측치 수집 (AmosRealTimeMqc.do)
+ */
 export async function fetchLiveAmosData(icao = null) {
+  const now = Date.now();
+  if (cachedAmosData && (now - lastAmosFetchTime) < 30000) {
+    if (icao) {
+      return cachedAmosData.filter(d => d.stnCd === icao);
+    }
+    return cachedAmosData;
+  }
+
   try {
     const cookies = await getAmoAuthenticatedCookies();
-    const kst = new Date(Date.now() + 9 * 3600 * 1000);
+    const kst = new Date(now + 9 * 3600 * 1000);
     const y = kst.getUTCFullYear();
     const mo = String(kst.getUTCMonth() + 1).padStart(2, '0');
     const d = String(kst.getUTCDate()).padStart(2, '0');
@@ -129,15 +169,17 @@ export async function fetchLiveAmosData(icao = null) {
     if (res.ok) {
       const json = await res.json();
       if (json.results && json.results.length > 0) {
+        cachedAmosData = json.results;
+        lastAmosFetchTime = now;
         if (icao) {
-          return json.results.filter(d => d.stnCd === icao);
+          return cachedAmosData.filter(d => d.stnCd === icao);
         }
-        return json.results;
+        return cachedAmosData;
       }
     }
   } catch (e) {
     console.error('[AMOS Live Scraper] Error:', e.message);
   }
 
-  return [];
+  return cachedAmosData || [];
 }
