@@ -295,6 +295,9 @@
     .weather-grid-container.dense {
       grid-template-columns: repeat(4, 1fr);
     }
+    .weather-grid-container.single {
+      grid-template-columns: 1fr;
+    }
     .rwy-card {
       border: 1px solid var(--outline);
       background: var(--bg);
@@ -412,7 +415,7 @@
     .raw-sigmet-text { color: var(--amber); font-weight: 800; }
     .raw-warning-text { color: var(--red); font-weight: 800; }
 
-    /* Section 3: Middle Split Schedule Tables (DEP / ARR - Exact UBIKAIS Columns) */
+    /* Section 3: Middle Split Schedule Tables (DEP / ARR - Clickable Sort Columns) */
     .schedule-split {
       flex: 1;
       display: flex;
@@ -434,7 +437,24 @@
       white-space: nowrap;
     }
     thead { position: sticky; top: 0; background: var(--surface-container); z-index: 10; border-bottom: 1px solid var(--outline); }
-    th { padding: 2px 3px; font-size: 8px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; text-align: center; }
+    th {
+      padding: 2.5px 3px;
+      font-size: 8px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s, background 0.15s;
+    }
+    th:hover {
+      color: var(--primary-bright);
+      background: var(--surface-high);
+    }
+    th.sorted-asc::after { content: ' ▲'; color: var(--primary); font-size: 7.5px; }
+    th.sorted-desc::after { content: ' ▼'; color: var(--primary); font-size: 7.5px; }
+
     td { padding: 2px 3px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); vertical-align: middle; text-align: center; }
     html.theme-light td { border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
     
@@ -499,7 +519,7 @@
       letter-spacing: 0.03em;
     }
 
-    /* 5-Time Blinking Animation on Status Change */
+    /* 5-Time Blinking Animation on Real Status Change */
     .blink-status-5 {
       animation: statusFlash5 3.5s ease-in-out;
     }
@@ -713,7 +733,7 @@
         <option value="RKPC">RKPC - 제주국제공항 (2본 4개 엔드: 07/25, 13/31)</option>
         <option value="RKPK">RKPK - 김해국제공항 (2본 4개 엔드: 18/36 L/R)</option>
         <option value="RKTL">RKTL - 울진공항 (VFR 훈련비행: 17/35)</option>
-        <option value="RKPD">RKPD - 정석비행장 (KAL 비행훈련원: 01/19)</option>
+        <option value="RKPD">RKPD - 정석비행장 (KAL 비행훈련원: 01)</option>
         <option value="RKPU">RKPU - 울산공항 (1본 2개 엔드: 18/36)</option>
         <option value="RKTU">RKTU - 청주국제공항 (2본 4개 엔드: 06/24 L/R)</option>
         <option value="RKTN">RKTN - 대구국제공항 (2본 4개 엔드: 13/31 L/R)</option>
@@ -793,7 +813,7 @@
       </div>
     </div>
 
-    <!-- 3. Schedule Split (Exact UBIKAIS Database Schema Columns) -->
+    <!-- 3. Schedule Split (Exact UBIKAIS Database Schema Columns with Clickable Sorting) -->
     <div class="schedule-split">
       <!-- DEPARTURES (DEP) -->
       <div class="grid-box" style="flex: 1;">
@@ -808,17 +828,17 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 78px; text-align: left; padding-left: 5px;">FLT</th>
-                <th style="width: 36px;">TYP</th>
-                <th style="width: 52px;">REG</th>
-                <th style="width: 32px;">NAT</th>
-                <th style="width: 38px;">DES</th>
-                <th style="width: 32px;">SPT</th>
-                <th style="width: 36px;">RAM</th>
-                <th style="width: 36px;">ETD</th>
-                <th style="width: 36px;">ATD</th>
-                <th style="width: 36px;">ETA</th>
-                <th style="width: 28px;">CHA</th>
+                <th id="th-dep-flt" onclick="sortTable('dep', 'flt')" style="width: 78px; text-align: left; padding-left: 5px;">FLT</th>
+                <th id="th-dep-typ" onclick="sortTable('dep', 'typ')" style="width: 36px;">TYP</th>
+                <th id="th-dep-reg" onclick="sortTable('dep', 'reg')" style="width: 52px;">REG</th>
+                <th id="th-dep-nat" onclick="sortTable('dep', 'nat')" style="width: 32px;">NAT</th>
+                <th id="th-dep-des" onclick="sortTable('dep', 'des')" style="width: 38px;">DES</th>
+                <th id="th-dep-spt" onclick="sortTable('dep', 'spt')" style="width: 32px;">SPT</th>
+                <th id="th-dep-ram" onclick="sortTable('dep', 'ram')" style="width: 36px;">RAM</th>
+                <th id="th-dep-etd" onclick="sortTable('dep', 'etd')" style="width: 36px;" class="sorted-asc">ETD</th>
+                <th id="th-dep-atd" onclick="sortTable('dep', 'atd')" style="width: 36px;">ATD</th>
+                <th id="th-dep-eta" onclick="sortTable('dep', 'eta')" style="width: 36px;">ETA</th>
+                <th id="th-dep-cha" onclick="sortTable('dep', 'cha')" style="width: 28px;">CHA</th>
               </tr>
             </thead>
             <tbody id="dep-tbody">
@@ -841,17 +861,17 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 78px; text-align: left; padding-left: 5px;">FLT</th>
-                <th style="width: 36px;">TYP</th>
-                <th style="width: 52px;">REG</th>
-                <th style="width: 34px;">STS</th>
-                <th style="width: 38px;">ORG</th>
-                <th style="width: 32px;">SPT</th>
-                <th style="width: 36px;">RAM</th>
-                <th style="width: 36px;">ETD</th>
-                <th style="width: 36px;">ETA</th>
-                <th style="width: 36px;">ATA</th>
-                <th style="width: 28px;">CHA</th>
+                <th id="th-arr-flt" onclick="sortTable('arr', 'flt')" style="width: 78px; text-align: left; padding-left: 5px;">FLT</th>
+                <th id="th-arr-typ" onclick="sortTable('arr', 'typ')" style="width: 36px;">TYP</th>
+                <th id="th-arr-reg" onclick="sortTable('arr', 'reg')" style="width: 52px;">REG</th>
+                <th id="th-arr-sts" onclick="sortTable('arr', 'sts')" style="width: 34px;">STS</th>
+                <th id="th-arr-org" onclick="sortTable('arr', 'org')" style="width: 38px;">ORG</th>
+                <th id="th-arr-spt" onclick="sortTable('arr', 'spt')" style="width: 32px;">SPT</th>
+                <th id="th-arr-ram" onclick="sortTable('arr', 'ram')" style="width: 36px;">RAM</th>
+                <th id="th-arr-etd" onclick="sortTable('arr', 'etd')" style="width: 36px;">ETD</th>
+                <th id="th-arr-eta" onclick="sortTable('arr', 'eta')" style="width: 36px;" class="sorted-asc">ETA</th>
+                <th id="th-arr-ata" onclick="sortTable('arr', 'ata')" style="width: 36px;">ATA</th>
+                <th id="th-arr-cha" onclick="sortTable('arr', 'cha')" style="width: 28px;">CHA</th>
               </tr>
             </thead>
             <tbody id="arr-tbody">
@@ -930,8 +950,18 @@
     let windMode = '2min'; // '2min' (자방위) or '10min' (진방위)
     let showWindDecimal = true; // Wind speed decimal on/off
     let hasAutoScrolledSchedule = false;
+
+    // In-memory active flight list for sorting
+    let loadedDeps = [];
+    let loadedArrs = [];
+
+    // Sorting state
+    const currentSort = {
+      dep: { col: 'etd', asc: true },
+      arr: { col: 'eta', asc: true }
+    };
     
-    // Persistent Status History for 5-time Blinking Detection
+    // Persistent Status History for Real State Change Detection
     const flightStatusHistory = new Map();
 
     // Default Airport Directives Dictionary
@@ -942,7 +972,7 @@
       RKPC: "1. [RKPC] 제주국제공항 07/25 주 활주로 및 13/31 횡선 활주로 감시 중.",
       RKPK: "1. [RKPK] 김해국제공항 18/36 활주로 CIRCLING 접근 절차 주의.",
       RKTL: "1. [RKTL] 울진비행장 비행교육원 훈련기 VFR 교통 집중 (CIRCUIT / LOCAL).\n2. [ATC] IFR 민항기 접근 시 VFR 훈련기 장주 분리 철저.",
-      RKPD: "1. [RKPD] 정석비행장 대한항공 비행훈련원 전용 훈련 공역 운용 중.\n2. [ATC] 01/19 활주로 훈련기 터치앤고(Touch & Go) 절차 준수."
+      RKPD: "1. [RKPD] 정석비행장 대한항공 비행훈련원 전용 훈련 공역 운용 중.\n2. [ATC] 01 활주로 훈련기 터치앤고(Touch & Go) 절차 준수."
     };
 
     // 1. Clocks Ticker
@@ -1144,7 +1174,7 @@
 
       if (!rawRunwaysData || rawRunwaysData.length === 0) {
         const apRwyMap = {
-          RKPD: [{ rwyDir: '01', rwyUse: 'Y' }, { rwyDir: '19', rwyUse: 'N' }],
+          RKPD: [{ rwyDir: '01', rwyUse: 'Y' }],
           RKTL: [{ rwyDir: '17', rwyUse: 'Y' }, { rwyDir: '35', rwyUse: 'N' }],
           RKJY: [{ rwyDir: '17', rwyUse: 'Y' }, { rwyDir: '35', rwyUse: 'N' }]
         };
@@ -1255,7 +1285,16 @@
       const container = document.getElementById('weather-runways-container');
       if (!container) return;
 
-      if (rawRunwaysData.length >= 6) {
+      // Filter runways: For Jeongseok (RKPD), only display the active in-use runway card
+      let displayRunways = rawRunwaysData;
+      if (currentAirport === 'RKPD') {
+        displayRunways = rawRunwaysData.filter(r => r.rwyUse === 'Y');
+        if (displayRunways.length === 0) displayRunways = [rawRunwaysData[0]];
+      }
+
+      if (displayRunways.length === 1) {
+        container.className = 'weather-grid-container single';
+      } else if (displayRunways.length >= 6) {
         container.className = 'weather-grid-container dense';
       } else {
         container.className = 'weather-grid-container';
@@ -1263,7 +1302,7 @@
 
       container.innerHTML = '';
 
-      rawRunwaysData.forEach((rwy, idx) => {
+      displayRunways.forEach((rwy, idx) => {
         const rwyDirStr = rwy.rwyDir || (idx === 0 ? '17' : '35');
         const rwyHeading = getRunwayHeading(rwyDirStr);
         
@@ -1361,7 +1400,143 @@
       });
     }
 
-    // 7. Auto-Scroll Schedule to Current Time at 5th Row
+    // 7. Interactive Column Sorting Engine
+    function sortTable(tableType, colKey) {
+      if (currentSort[tableType].col === colKey) {
+        currentSort[tableType].asc = !currentSort[tableType].asc;
+      } else {
+        currentSort[tableType].col = colKey;
+        currentSort[tableType].asc = true;
+      }
+      renderScheduleTable(tableType);
+    }
+
+    function updateSortHeaderIcons(tableType) {
+      const { col, asc } = currentSort[tableType];
+      const cols = tableType === 'dep' 
+        ? ['flt', 'typ', 'reg', 'nat', 'des', 'spt', 'ram', 'etd', 'atd', 'eta', 'cha']
+        : ['flt', 'typ', 'reg', 'sts', 'org', 'spt', 'ram', 'etd', 'eta', 'ata', 'cha'];
+
+      cols.forEach(c => {
+        const th = document.getElementById(`th-${tableType}-${c}`);
+        if (th) {
+          th.classList.remove('sorted-asc', 'sorted-desc');
+          if (c === col) {
+            th.classList.add(asc ? 'sorted-asc' : 'sorted-desc');
+          }
+        }
+      });
+    }
+
+    function sortFlightList(list, colKey, asc) {
+      return [...list].sort((a, b) => {
+        let valA = a[colKey] || '';
+        let valB = b[colKey] || '';
+
+        // If numeric/time field
+        const numA = parseInt(String(valA).replace(/[^0-9]/g, ''));
+        const numB = parseInt(String(valB).replace(/[^0-9]/g, ''));
+
+        if (!isNaN(numA) && !isNaN(numB) && ['spt', 'ram', 'std', 'etd', 'atd', 'sta', 'eta', 'ata'].includes(colKey)) {
+          return asc ? numA - numB : numB - numA;
+        }
+
+        const comp = String(valA).localeCompare(String(valB));
+        return asc ? comp : -comp;
+      });
+    }
+
+    function renderScheduleTable(tableType) {
+      updateSortHeaderIcons(tableType);
+
+      if (tableType === 'dep') {
+        const depTbody = document.getElementById('dep-tbody');
+        if (!depTbody) return;
+        depTbody.innerHTML = '';
+
+        const sorted = sortFlightList(loadedDeps, currentSort.dep.col, currentSort.dep.asc);
+        sorted.forEach(f => {
+          const fId = f.flt || f.fpId || 'UNKNOWN';
+          const status = (f.sts || f.depStatus || 'SCH').toUpperCase();
+          const rules = (f.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
+          const badgeClass = rules === 'VFR' ? 'badge-vfr' : 'badge-ifr';
+
+          const isCompleted = (f.atd && f.atd !== '-' && f.atd !== '') || status.includes('DEP');
+          const rowClass = isCompleted ? 'flight-completed' : 'flight-upcoming';
+
+          // Detect real status changes without false polling flashes
+          const prevStatus = flightStatusHistory.get(`DEP_${fId}`);
+          const isStatusChanged = prevStatus && prevStatus !== status && status !== 'SCH';
+          flightStatusHistory.set(`DEP_${fId}`, status);
+
+          const statusClass = status.includes('DEP') ? 'status-dep' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('ARR') ? 'status-arr' : status.includes('LND') ? 'status-lnd' : 'status-sch';
+          const blinkClass = isStatusChanged ? 'blink-status-5' : '';
+
+          const tr = document.createElement('tr');
+          tr.className = `${rowClass} ${blinkClass}`;
+          tr.innerHTML = `
+            <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
+              <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
+            </td>
+            <td style="color: var(--text-muted);">${f.typ || 'A321'}</td>
+            <td style="color: var(--primary-soft);">${f.reg || 'HL8234'}</td>
+            <td style="color: var(--text-muted);">${f.nat || 'PAX'}</td>
+            <td style="color: var(--amber); font-weight: 700;">${f.des || f.apArr || 'RKPC'}</td>
+            <td style="color: var(--primary-bright); font-weight: 700;">${f.spt || '-'}</td>
+            <td style="color: var(--text-muted);">${(f.ram || '-').replace(':', '')}</td>
+            <td class="flight-time-cell" style="color: var(--primary-dim);">${(f.etd || f.std || '-').replace(':', '')}</td>
+            <td style="color: var(--primary-bright); font-weight: 700;">${(f.atd || '-').replace(':', '')}</td>
+            <td style="color: var(--text-muted);">${(f.eta || '-').replace(':', '')}</td>
+            <td style="color: ${f.cha === 'Y' ? 'var(--amber)' : 'var(--text-muted)'}; font-weight: 700;">${f.cha || '-'}</td>
+          `;
+          depTbody.appendChild(tr);
+        });
+
+      } else if (tableType === 'arr') {
+        const arrTbody = document.getElementById('arr-tbody');
+        if (!arrTbody) return;
+        arrTbody.innerHTML = '';
+
+        const sorted = sortFlightList(loadedArrs, currentSort.arr.col, currentSort.arr.asc);
+        sorted.forEach(f => {
+          const fId = f.flt || f.fpId || 'UNKNOWN';
+          const status = (f.sts || f.arrStatus || 'ENR').toUpperCase();
+          const rules = (f.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
+          const badgeClass = rules === 'VFR' ? 'badge-vfr' : 'badge-ifr';
+
+          const isCompleted = (f.ata && f.ata !== '-' && f.ata !== '') || status.includes('ARR') || status.includes('LND');
+          const rowClass = isCompleted ? 'flight-completed' : 'flight-upcoming';
+
+          const prevStatus = flightStatusHistory.get(`ARR_${fId}`);
+          const isStatusChanged = prevStatus && prevStatus !== status && status !== 'ENR';
+          flightStatusHistory.set(`ARR_${fId}`, status);
+
+          const statusClass = status.includes('ARR') ? 'status-arr' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('DEP') ? 'status-dep' : status.includes('LND') ? 'status-lnd' : status.includes('ENR') ? 'status-enr' : 'status-sch';
+          const blinkClass = isStatusChanged ? 'blink-status-5' : '';
+
+          const tr = document.createElement('tr');
+          tr.className = `${rowClass} ${blinkClass}`;
+          tr.innerHTML = `
+            <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
+              <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
+            </td>
+            <td style="color: var(--text-muted);">${f.typ || 'B738'}</td>
+            <td style="color: var(--primary-soft);">${f.reg || 'HL8234'}</td>
+            <td class="${statusClass} ${blinkClass}">${status}</td>
+            <td style="color: var(--amber); font-weight: 700;">${f.org || f.apIcao || 'RKSS'}</td>
+            <td style="color: var(--primary-bright); font-weight: 700;">${f.spt || '-'}</td>
+            <td style="color: var(--text-muted);">${(f.ram || '-').replace(':', '')}</td>
+            <td style="color: var(--text-muted);">${(f.etd || '-').replace(':', '')}</td>
+            <td class="flight-time-cell" style="color: var(--primary-dim);">${(f.eta || f.sta || '-').replace(':', '')}</td>
+            <td style="color: var(--primary-bright); font-weight: 700;">${(f.ata || '-').replace(':', '')}</td>
+            <td style="color: ${f.cha === 'Y' ? 'var(--amber)' : 'var(--text-muted)'}; font-weight: 700;">${f.cha || '-'}</td>
+          `;
+          arrTbody.appendChild(tr);
+        });
+      }
+    }
+
+    // 8. Auto-Scroll Schedule to Current Time at 5th Row
     function autoScrollScheduleToCurrentTime() {
       const now = new Date();
       const kstNow = new Date(now.getTime() + 9 * 3600 * 1000);
@@ -1395,7 +1570,7 @@
       });
     }
 
-    // 8. Fetch Flight Schedules (FIDS DEP & ARR) with Exact UBIKAIS Columns
+    // 9. Fetch Flight Schedules via Gateway API
     async function syncFlightSchedules() {
       const spinDep = document.getElementById('spin-dep');
       const spinArr = document.getElementById('spin-arr');
@@ -1407,96 +1582,21 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
 
-        const deps = data.departures || [];
-        const arrs = data.arrivals || [];
+        loadedDeps = data.departures || [];
+        loadedArrs = data.arrivals || [];
 
         // Exact completed departures vs total scheduled count
-        const completedDepCount = deps.filter(d => (d.atd && d.atd !== '-' && d.atd !== '') || (d.sts||d.depStatus||d.status||'').toUpperCase().includes('DEP')).length;
-        document.getElementById('dep-count').textContent = `[${completedDepCount}/${deps.length}]`;
-        const depTbody = document.getElementById('dep-tbody');
-        depTbody.innerHTML = '';
-
-        deps.forEach(f => {
-          const fId = f.flt || f.fpId || f.flightNumber || 'UNKNOWN';
-          const status = (f.sts || f.depStatus || f.status || 'SCH').toUpperCase();
-          const rules = (f.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
-          const badgeClass = rules === 'VFR' ? 'badge-vfr' : 'badge-ifr';
-
-          const isCompleted = (f.atd && f.atd !== '-' && f.atd !== '') || status.includes('DEP');
-          const rowClass = isCompleted ? 'flight-completed' : 'flight-upcoming';
-
-          const prevStatus = flightStatusHistory.get(`DEP_${fId}`);
-          const isStatusChanged = prevStatus && prevStatus !== status;
-          flightStatusHistory.set(`DEP_${fId}`, status);
-
-          const statusClass = status.includes('DEP') ? 'status-dep' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('ARR') ? 'status-arr' : status.includes('LND') ? 'status-lnd' : 'status-sch';
-          const blinkClass = isStatusChanged ? 'blink-status-5' : '';
-
-          // Exact DEP columns: FLT, TYP, REG, NAT, DES, SPT, RAM, ETD, ATD, ETA, CHA
-          const tr = document.createElement('tr');
-          tr.className = `${rowClass} ${blinkClass}`;
-          tr.innerHTML = `
-            <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
-              <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
-            </td>
-            <td style="color: var(--text-muted);">${f.typ || 'A321'}</td>
-            <td style="color: var(--primary-soft);">${f.reg || 'HL8234'}</td>
-            <td style="color: var(--text-muted);">${f.nat || 'PAX'}</td>
-            <td style="color: var(--amber); font-weight: 700;">${f.des || f.apArr || 'RKPC'}</td>
-            <td style="color: var(--primary-bright); font-weight: 700;">${f.spt || '-'}</td>
-            <td style="color: var(--text-muted);">${(f.ram || '-').replace(':', '')}</td>
-            <td class="flight-time-cell" style="color: var(--primary-dim);">${(f.etd || f.std || '-').replace(':', '')}</td>
-            <td style="color: var(--primary-bright); font-weight: 700;">${(f.atd || '-').replace(':', '')}</td>
-            <td style="color: var(--text-muted);">${(f.eta || '-').replace(':', '')}</td>
-            <td style="color: ${f.cha === 'Y' ? 'var(--amber)' : 'var(--text-muted)'}; font-weight: 700;">${f.cha || '-'}</td>
-          `;
-          depTbody.appendChild(tr);
-        });
+        const completedDepCount = loadedDeps.filter(d => (d.atd && d.atd !== '-' && d.atd !== '') || (d.sts||d.depStatus||'').toUpperCase().includes('DEP')).length;
+        document.getElementById('dep-count').textContent = `[${completedDepCount}/${loadedDeps.length}]`;
 
         // Exact completed arrivals vs total scheduled count
-        const completedArrCount = arrs.filter(a => (a.ata && a.ata !== '-' && a.ata !== '') || (a.sts||a.arrStatus||a.status||'').toUpperCase().includes('ARR') || (a.sts||'').includes('LND')).length;
-        document.getElementById('arr-count').textContent = `[${completedArrCount}/${arrs.length}]`;
-        const arrTbody = document.getElementById('arr-tbody');
-        arrTbody.innerHTML = '';
+        const completedArrCount = loadedArrs.filter(a => (a.ata && a.ata !== '-' && a.ata !== '') || (a.sts||a.arrStatus||'').toUpperCase().includes('ARR') || (a.sts||'').includes('LND')).length;
+        document.getElementById('arr-count').textContent = `[${completedArrCount}/${loadedArrs.length}]`;
 
-        arrs.forEach(f => {
-          const fId = f.flt || f.fpId || f.flightNumber || 'UNKNOWN';
-          const status = (f.sts || f.arrStatus || f.status || 'ENR').toUpperCase();
-          const rules = (f.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
-          const badgeClass = rules === 'VFR' ? 'badge-vfr' : 'badge-ifr';
+        renderScheduleTable('dep');
+        renderScheduleTable('arr');
 
-          const isCompleted = (f.ata && f.ata !== '-' && f.ata !== '') || status.includes('ARR') || status.includes('LND');
-          const rowClass = isCompleted ? 'flight-completed' : 'flight-upcoming';
-
-          const prevStatus = flightStatusHistory.get(`ARR_${fId}`);
-          const isStatusChanged = prevStatus && prevStatus !== status;
-          flightStatusHistory.set(`ARR_${fId}`, status);
-
-          const statusClass = status.includes('ARR') ? 'status-arr' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('DEP') ? 'status-dep' : status.includes('LND') ? 'status-lnd' : status.includes('ENR') ? 'status-enr' : 'status-sch';
-          const blinkClass = isStatusChanged ? 'blink-status-5' : '';
-
-          // Exact ARR columns: FLT, TYP, REG, STS, ORG, SPT, RAM, ETD, ETA, ATA, CHA
-          const tr = document.createElement('tr');
-          tr.className = `${rowClass} ${blinkClass}`;
-          tr.innerHTML = `
-            <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
-              <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
-            </td>
-            <td style="color: var(--text-muted);">${f.typ || 'B738'}</td>
-            <td style="color: var(--primary-soft);">${f.reg || 'HL8234'}</td>
-            <td class="${statusClass} ${blinkClass}">${status}</td>
-            <td style="color: var(--amber); font-weight: 700;">${f.org || f.apIcao || 'RKSS'}</td>
-            <td style="color: var(--primary-bright); font-weight: 700;">${f.spt || '-'}</td>
-            <td style="color: var(--text-muted);">${(f.ram || '-').replace(':', '')}</td>
-            <td style="color: var(--text-muted);">${(f.etd || '-').replace(':', '')}</td>
-            <td class="flight-time-cell" style="color: var(--primary-dim);">${(f.eta || f.sta || '-').replace(':', '')}</td>
-            <td style="color: var(--primary-bright); font-weight: 700;">${(f.ata || '-').replace(':', '')}</td>
-            <td style="color: ${f.cha === 'Y' ? 'var(--amber)' : 'var(--text-muted)'}; font-weight: 700;">${f.cha || '-'}</td>
-          `;
-          arrTbody.appendChild(tr);
-        });
-
-        // Auto-scroll to 5th row on airport load
+        // Auto-scroll to 5th row on initial airport load
         if (!hasAutoScrolledSchedule) {
           setTimeout(autoScrollScheduleToCurrentTime, 100);
           hasAutoScrolledSchedule = true;
@@ -1510,7 +1610,7 @@
       if (spinArr) spinArr.classList.remove('active');
     }
 
-    // 9. System Notices LocalStorage Management
+    // 10. System Notices LocalStorage Management
     function loadAirportNotices(ap) {
       const saved = localStorage.getItem('ifs_notices_' + ap);
       const textarea = document.getElementById('notices-input');
@@ -1530,7 +1630,7 @@
       setTimeout(() => { msg.style.display = 'none'; }, 2000);
     }
 
-    // 10. Sync System Heartbeat via API
+    // 11. Sync System Heartbeat via API
     async function syncSystemStatus() {
       try {
         const crawlerRes = await fetch(`${API_BASE}/api/crawler?status=true&_t=${Date.now()}`);
@@ -1546,6 +1646,8 @@
     async function changeAirport(ap) {
       currentAirport = ap;
       rawRunwaysData = [];
+      loadedDeps = [];
+      loadedArrs = [];
       hasAutoScrolledSchedule = false;
       flightStatusHistory.clear();
       
