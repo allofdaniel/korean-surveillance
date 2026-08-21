@@ -1,7 +1,8 @@
 {
   "functions": {
     "api/aircraft.js": { "maxDuration": 30 },
-    "api/crawler.js": { "maxDuration": 60 }
+    "api/crawler.js": { "maxDuration": 60 },
+    "api/flight-schedule.js": { "maxDuration": 30 }
   },
   "crons": [
     {

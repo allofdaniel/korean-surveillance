@@ -1,7 +1,6 @@
 /**
  * 한국공항공사 (KAC) 및 국토교통부 공공데이터포털(data.go.kr) 공식 정부 실시간 항공기 운항정보 게이트웨이
  * - 인증키: ad18cf3ccfe7c13784d08dec1c24a66da282fcb500dd6a9adf50ab7a3264eb8b
- * - 대상 공항: 김포(RKSS), 제주(RKPC), 김해(RKPK), 청주(RKTU), 대구(RKTN), 광주(RKJJ), 여수(RKJY), 울산(RKPU), 무안(RKJB), 양양(RKNY), 포항(RKTH), 사천(RKPS), 군산(RKJK), 원주(RKNW)
  */
 
 const GOV_API_KEY = 'ad18cf3ccfe7c13784d08dec1c24a66da282fcb500dd6a9adf50ab7a3264eb8b';
@@ -66,44 +65,63 @@ export async function fetchKacLiveSchedules(airportIcao = 'RKSS') {
   }
 
   try {
-    // 1. First Page
+    // Try raw key and encoded key
     const url1 = `https://apis.data.go.kr/B551178/flight-status/info?serviceKey=${GOV_API_KEY}&type=json&numOfRows=100&pageNo=1&schAirCode=${iataCode}`;
-    const res1 = await fetch(url1, { signal: AbortSignal.timeout(6000) });
+    const res1 = await fetch(url1, {
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+      },
+      signal: AbortSignal.timeout(7000)
+    });
+
     if (!res1.ok) throw new Error(`HTTP ${res1.status}`);
 
     const j1 = await res1.json();
-    const body1 = j1.response?.body || {};
+    const body1 = j1.response?.body || j1.body || {};
     const totalCount = body1.totalCount || 0;
     const totalPages = Math.min(8, Math.ceil(totalCount / 100));
 
     let allItems = body1.items?.item || [];
 
-    // 2. Fetch Remaining Pages in Parallel
+    // Fetch Remaining Pages in Parallel
     if (totalPages > 1) {
       const pagePromises = [];
       for (let p = 2; p <= totalPages; p++) {
         pagePromises.push(
-          fetch(`https://apis.data.go.kr/B551178/flight-status/info?serviceKey=${GOV_API_KEY}&type=json&numOfRows=100&pageNo=${p}&schAirCode=${iataCode}`, { signal: AbortSignal.timeout(6000) })
+          fetch(`https://apis.data.go.kr/B551178/flight-status/info?serviceKey=${GOV_API_KEY}&type=json&numOfRows=100&pageNo=${p}&schAirCode=${iataCode}`, {
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+            },
+            signal: AbortSignal.timeout(7000)
+          })
             .then(r => r.json())
-            .then(j => j.response?.body?.items?.item || [])
+            .then(j => (j.response?.body || j.body)?.items?.item || [])
             .catch(() => [])
         );
       }
       const restResults = await Promise.all(pagePromises);
       restResults.forEach(items => {
-        allItems = allItems.concat(items);
+        if (Array.isArray(items)) {
+          allItems = allItems.concat(items);
+        }
       });
     }
 
-    // 3. Format into standardized 11-column IFS schema
+    if (!Array.isArray(allItems) || allItems.length === 0) {
+      return null;
+    }
+
+    // Format into standardized 11-column IFS schema
     const deps = [];
     const arrs = [];
 
     allItems.forEach(item => {
       const flt = item.airFln || 'UNKNOWN';
       const isDep = item.io === 'O';
-      const std = item.std || '-';
-      const etd = item.etd || std;
+      const std = (item.std || '').replace(':', '') || '-';
+      const etd = (item.etd || std || '').replace(':', '');
       const cityIata = item.city || '';
       const cityIcao = AIRPORT_IATA_TO_ICAO[cityIata] || cityIata || (isDep ? 'RKPC' : 'RKSS');
       
@@ -120,8 +138,8 @@ export async function fetchKacLiveSchedules(airportIcao = 'RKSS') {
       const isChanged = (sts === 'DLA') || (std !== '-' && etd !== '-' && std !== etd);
       const isCompleted = sts === 'DEP' || sts === 'ARR';
 
-      // Estimate Ramp time ~8 mins before std/etd
-      const tNum = parseInt(etd.replace(':', '')) || parseInt(std.replace(':', '')) || 1200;
+      // Ramp time ~8 mins before std/etd
+      const tNum = parseInt(etd) || parseInt(std) || 1200;
       const h = Math.floor(tNum / 100);
       const m = tNum % 100;
       let ramMins = h * 60 + m - 8;
