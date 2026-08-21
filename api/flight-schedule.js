@@ -17,7 +17,7 @@ function normalizeFlight(rawFlight) {
   return rawFlight.trim().toUpperCase().replace(/\s+/g, '');
 }
 
-// 24-Hour Schedule Generator (From -2 Hours through +22 Hours)
+// 24-Hour Schedule Generator with IFR / VFR Flight Rules
 function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
   const now = new Date();
   const kstNow = new Date(now.getTime() + 9 * 3600 * 1000);
@@ -49,11 +49,17 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
       destinations: ['RKSS', 'RKPC'],
       origins: ['RKSS', 'RKPC'],
       countPerDay: 8
+    },
+    RKTL: { // 울진공항 (VFR 훈련기 위주)
+      airlines: ['UFA', 'KNA', 'HL1', 'HL2'],
+      destinations: ['RKTL', 'RKTH', 'RKNY', 'RKPS'],
+      origins: ['RKTL', 'RKTH', 'RKNY', 'RKPS'],
+      countPerDay: 35
     }
   };
 
   const tmpl = AIRPORT_TEMPLATES[airport] || {
-    airlines: ['KAL', 'AAR', 'JJA', 'TWB'],
+    airlines: ['KAL', 'AAR', 'JJA', 'TWB', 'HL1'],
     destinations: ['RKSS', 'RKPC', 'RKPK', 'RKSI'],
     origins: ['RKSS', 'RKPC', 'RKPK', 'RKSI'],
     countPerDay: 20
@@ -68,7 +74,11 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
     const fId = d.fpId || d.flightNumber;
     if (fId) {
       seenDepIds.add(fId);
-      fullDeps.push(d);
+      const isVfr = (d.fpId && d.fpId.startsWith('HL')) || airport === 'RKTL' || (d.fltRule && d.fltRule.includes('V'));
+      fullDeps.push({
+        ...d,
+        flightRules: isVfr ? 'VFR' : 'IFR'
+      });
     }
   });
 
@@ -77,7 +87,11 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
     const fId = a.fpId || a.flightNumber;
     if (fId) {
       seenArrIds.add(fId);
-      fullArrs.push(a);
+      const isVfr = (a.fpId && a.fpId.startsWith('HL')) || airport === 'RKTL' || (a.fltRule && a.fltRule.includes('V'));
+      fullArrs.push({
+        ...a,
+        flightRules: isVfr ? 'VFR' : 'IFR'
+      });
     }
   });
 
@@ -89,12 +103,14 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
     const minStr = String(m % 60).padStart(2, '0');
     const stdStr = `${hStr}${minStr}`;
 
-    const airline = tmpl.airlines[(m / intervalMins) % tmpl.airlines.length];
-    const flightNum = 100 + ((m * 7) % 890);
-    const fpId = `${airline}${flightNum}`;
+    const stepIdx = Math.floor(m / intervalMins);
+    const airline = tmpl.airlines[stepIdx % tmpl.airlines.length];
+    const isVfr = airline.startsWith('HL') || airline === 'UFA' || airline === 'KNA' || airport === 'RKTL' || (m % 5 === 0 && airport !== 'RKSI');
+    const flightNum = isVfr ? (1000 + ((m * 3) % 890)) : (100 + ((m * 7) % 890));
+    const fpId = isVfr ? `HL${flightNum}` : `${airline}${flightNum}`;
 
     if (!seenDepIds.has(fpId)) {
-      const dest = tmpl.destinations[(m / intervalMins) % tmpl.destinations.length];
+      const dest = tmpl.destinations[stepIdx % tmpl.destinations.length];
       let status = 'SCH';
       let atd = '-';
       let etd = stdStr;
@@ -120,17 +136,19 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
         etd,
         atd,
         depStatus: status,
-        acTyp: airline === 'KAL' ? 'B77W' : 'A321'
+        acTyp: isVfr ? 'C172' : airline === 'KAL' ? 'B77W' : 'A321',
+        flightRules: isVfr ? 'VFR' : 'IFR'
       });
     }
 
     // Arrivals
-    const arrAirline = tmpl.airlines[((m / intervalMins) + 3) % tmpl.airlines.length];
-    const arrFlightNum = 200 + ((m * 11) % 790);
-    const arrFpId = `${arrAirline}${arrFlightNum}`;
+    const arrAirline = tmpl.airlines[(stepIdx + 3) % tmpl.airlines.length];
+    const isArrVfr = arrAirline.startsWith('HL') || arrAirline === 'UFA' || arrAirline === 'KNA' || airport === 'RKTL' || (m % 5 === 0 && airport !== 'RKSI');
+    const arrFlightNum = isArrVfr ? (1000 + ((m * 5) % 890)) : (200 + ((m * 11) % 790));
+    const arrFpId = isArrVfr ? `HL${arrFlightNum}` : `${arrAirline}${arrFlightNum}`;
 
     if (!seenArrIds.has(arrFpId)) {
-      const origin = tmpl.origins[((m / intervalMins) + 2) % tmpl.origins.length];
+      const origin = tmpl.origins[(stepIdx + 2) % tmpl.origins.length];
       let arrStatus = 'ENR';
       let ata = '-';
       let eta = stdStr;
@@ -153,7 +171,8 @@ function generate24HourSchedules(airport, liveDeps = [], liveArrs = []) {
         eta,
         ata,
         arrStatus,
-        acTyp: arrAirline === 'AAR' ? 'A359' : 'B738'
+        acTyp: isArrVfr ? 'DA40' : arrAirline === 'AAR' ? 'A359' : 'B738',
+        flightRules: isArrVfr ? 'VFR' : 'IFR'
       });
     }
   }
@@ -186,7 +205,7 @@ export default async function handler(req, res) {
     });
   }
 
-  // 1. Specific airport full 24-hour FIDS schedule
+  // 1. Specific airport full 24-hour FIDS schedule with IFR & VFR
   if (!flight) {
     let liveDeps = [];
     let liveArrs = [];
@@ -208,7 +227,7 @@ export default async function handler(req, res) {
       departures,
       arrivals,
       fids: departures.slice(0, 10).concat(arrivals.slice(0, 10)),
-      source: 'UBIKAIS 24H Synchronized Schedule Gateway'
+      source: 'UBIKAIS 24H Synchronized Schedule Gateway (IFR + VFR)'
     });
   }
 

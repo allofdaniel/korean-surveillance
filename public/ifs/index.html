@@ -151,10 +151,11 @@
       overflow: hidden;
     }
 
-    /* Weather Mode Selector Button in Header */
+    /* Weather Mode Selector Buttons in Header */
     .wind-mode-group {
       display: flex;
       gap: 4px;
+      align-items: center;
     }
     .wind-mode-btn {
       background: #1c1b1b;
@@ -330,6 +331,26 @@
     .status-enr { color: var(--amber); font-weight: 700; }
     .status-cnl { color: var(--red); font-weight: 800; }
     .status-dla { color: var(--amber); font-weight: 800; }
+    .status-lnd { color: var(--primary-bright); font-weight: 800; }
+
+    /* IFR / VFR Flight Rules Badges */
+    .badge-rule {
+      font-size: 8px;
+      padding: 0.5px 3px;
+      border-radius: 2px;
+      font-weight: 800;
+      margin-right: 3px;
+    }
+    .badge-ifr {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+    }
+    .badge-vfr {
+      color: #f59e0b;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
 
     /* 5-Time Blinking Animation on Status Change */
     .blink-status-5 {
@@ -445,6 +466,7 @@
         <option value="RKSS">RKSS - 김포국제공항 (2본 4개 엔드: 14/32 L/R)</option>
         <option value="RKPC">RKPC - 제주국제공항 (2본 4개 엔드: 07/25, 13/31)</option>
         <option value="RKPK">RKPK - 김해국제공항 (2본 4개 엔드: 18/36 L/R)</option>
+        <option value="RKTL">RKTL - 울진공항 (VFR 훈련비행 특화: 17/35)</option>
         <option value="RKPU">RKPU - 울산공항 (1본 2개 엔드: 18/36)</option>
         <option value="RKTU">RKTU - 청주국제공항 (2본 4개 엔드: 06/24 L/R)</option>
         <option value="RKTN">RKTN - 대구국제공항 (2본 4개 엔드: 13/31 L/R)</option>
@@ -470,13 +492,14 @@
 
   <!-- Main Display -->
   <main>
-    <!-- 1. Real-time Weather Section with 2-Min MAG / 10-Min TRUE Toggle -->
+    <!-- 1. Real-time Weather Section with Wind Toggle & Rounding Switch -->
     <div class="grid-box">
       <div class="grid-header">
         <span>WEATHER FEED</span>
         <div class="wind-mode-group">
           <button id="btn-wind-2min" class="wind-mode-btn active" onclick="setWindMode('2min')">2분 자방위 (MAG)</button>
           <button id="btn-wind-10min" class="wind-mode-btn" onclick="setWindMode('10min')">10분 진방위 (TRUE)</button>
+          <button id="btn-wind-round" class="wind-mode-btn" onclick="toggleWindRounding()">정수 반올림: OFF</button>
         </div>
       </div>
 
@@ -506,7 +529,7 @@
       </div>
     </div>
 
-    <!-- 3. Schedule Split (Full 24-Hour Schedule with [출발도착완료수 / 하루 전체 스케줄수]) -->
+    <!-- 3. Schedule Split (Full 24-Hour Schedule with IFR/VFR and [출발도착완료수 / 하루 전체 스케줄수]) -->
     <div class="schedule-split">
       <!-- DEPARTURES -->
       <div class="grid-box" style="flex: 1;">
@@ -518,12 +541,12 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 70px;">Flight</th>
-                <th style="width: 50px;">To</th>
-                <th style="text-align: center; width: 45px;">Plan</th>
-                <th style="text-align: center; width: 45px;">Est</th>
-                <th style="text-align: center; width: 45px;">Act</th>
-                <th style="width: 55px; text-align: center;">Status</th>
+                <th style="width: 82px;">Flight</th>
+                <th style="width: 48px;">To</th>
+                <th style="text-align: center; width: 42px;">Plan</th>
+                <th style="text-align: center; width: 42px;">Est</th>
+                <th style="text-align: center; width: 42px;">Act</th>
+                <th style="width: 50px; text-align: center;">Status</th>
               </tr>
             </thead>
             <tbody id="dep-tbody">
@@ -543,12 +566,12 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 70px;">Flight</th>
-                <th style="width: 50px;">From</th>
-                <th style="text-align: center; width: 45px;">Plan</th>
-                <th style="text-align: center; width: 45px;">Est</th>
-                <th style="text-align: center; width: 45px;">Act</th>
-                <th style="width: 55px; text-align: center;">Status</th>
+                <th style="width: 82px;">Flight</th>
+                <th style="width: 48px;">From</th>
+                <th style="text-align: center; width: 42px;">Plan</th>
+                <th style="text-align: center; width: 42px;">Est</th>
+                <th style="text-align: center; width: 42px;">Act</th>
+                <th style="width: 50px; text-align: center;">Status</th>
               </tr>
             </thead>
             <tbody id="arr-tbody">
@@ -593,6 +616,7 @@
     let currentAirport = 'RKJY';
     let rawRunwaysData = [];
     let windMode = '2min'; // '2min' (자방위) or '10min' (진방위)
+    let isWindRounded = false; // Wind speed rounding on/off
     
     // Persistent Status History for 5-time Blinking Detection
     const flightStatusHistory = new Map();
@@ -603,7 +627,8 @@
       RKSI: "1. [RKSI] 인천국제공항 4본 활주로 (15/33, 16/34) 실시간 기상 연계 중.\n2. [EFS] 전자비행스트립 연계 대기 상태 유지.",
       RKSS: "1. [RKSS] 김포국제공항 14/32 평행 활주로 정상 운용.\n2. [NOTAM] 소음 저감 절차 및 표준 출발/도착 경로 준수.",
       RKPC: "1. [RKPC] 제주국제공항 07/25 주 활주로 및 13/31 횡선 활주로 감시 중.",
-      RKPK: "1. [RKPK] 김해국제공항 18/36 활주로 CIRCLING 접근 절차 주의."
+      RKPK: "1. [RKPK] 김해국제공항 18/36 활주로 CIRCLING 접근 절차 주의.",
+      RKTL: "1. [RKTL] 울진비행장 비행교육원 훈련기 VFR 교통 집중 (CIRCUIT / LOCAL).\n2. [ATC] IFR 민항기 접근 시 VFR 훈련기 장주 분리 철저."
     };
 
     // 1. Clocks Ticker
@@ -652,7 +677,7 @@
       return `${rh}%`;
     }
 
-    // 4. Render Custom SVG Wind Rose & Runway Graphic (Symbol displayed on ALL runways)
+    // 4. Render Custom SVG Wind Rose & Runway Graphic (Active = Bright White #ffffff, Inactive = Subtle Gray #71717a)
     function createRunwayRoseSvg(rwyDirStr, rwyHeadingDeg, windDirDeg, isActiveRwy) {
       const numMatch = rwyDirStr.match(/\d+/);
       const num = numMatch ? parseInt(numMatch[0]) : 17;
@@ -670,12 +695,13 @@
       const rwyTilt = rwyHeadingDeg - 180;
 
       // Aircraft symbol at START/Approach threshold (y = -19), rotated 180 to face landing/takeoff heading
-      const planeFill = isActiveRwy ? '#eaffde' : '#77ff61';
-      const planeOpacity = isActiveRwy ? '1' : '0.75';
+      // In-Use: Bright White #ffffff | Non-In-Use: Subtle Tactical Gray #71717a
+      const planeFill = isActiveRwy ? '#ffffff' : '#71717a';
+      const planeOpacity = isActiveRwy ? '1' : '0.65';
 
       const airplaneSvg = `
         <g class="airplane-icon" transform="translate(0, -19) rotate(180)" opacity="${planeOpacity}">
-          <path d="M0,-6 L1.8,-2 L5,-0.6 L5,0.6 L1.8,0 L1,4 L3,6 L3,6.8 L0,6 L-3,6.8 L-3,6 L-1,4 L-1.8,0 L-5,0.6 L-5,-0.6 L-1.8,-2 Z" fill="${planeFill}" />
+          <path d="M0,-6 L1.8,-2 L5,-0.6 L5,0.6 L1.8,0 L1,4 L3,6 L3,6.8 L0,6 L-3,6.8 L-3,6 L-1,4 L-1.8,0 L-5,0.6 L-5,-0.6 L-1.8,-2 Z" fill="${planeFill}" stroke="${isActiveRwy ? '#ffffff' : 'none'}" stroke-width="0.3" />
         </g>
       `;
 
@@ -783,6 +809,14 @@
       renderRunwaysGrid();
     }
 
+    function toggleWindRounding() {
+      isWindRounded = !isWindRounded;
+      const btn = document.getElementById('btn-wind-round');
+      btn.classList.toggle('active', isWindRounded);
+      btn.textContent = isWindRounded ? '정수 반올림: ON' : '정수 반올림: OFF';
+      renderRunwaysGrid();
+    }
+
     function renderRunwaysGrid() {
       const container = document.getElementById('weather-runways-container');
       if (!container) return;
@@ -801,35 +835,41 @@
         
         // Use 2-min MAG or 10-min TRUE according to active toggle
         const is10Min = windMode === '10min';
-        const wd = parseInt(is10Min ? (rwy.wd10minAvg || rwy.wd) : (rwy.wd2minAvg || rwy.wd)) || 170;
-        const ws = parseFloat(is10Min ? (rwy.wspd10minAvg || rwy.ws) : (rwy.wspd2minAvg || rwy.ws)) || 8.5;
-        const maxWs = parseFloat(is10Min ? (rwy.wspd10minMax || rwy.max) : (rwy.wspd2minMax || rwy.max)) || ws;
-        const minWs = parseFloat(rwy.min) || Math.max(0, parseFloat((ws - 2).toFixed(1)));
-        const gust = rwy.gust && rwy.gust !== '-' ? rwy.gust : '-';
+        const rawWd = parseInt(is10Min ? (rwy.wd10minAvg || rwy.wd) : (rwy.wd2minAvg || rwy.wd)) || 170;
+        const rawWs = parseFloat(is10Min ? (rwy.wspd10minAvg || rwy.ws) : (rwy.wspd2minAvg || rwy.ws)) || 8.5;
+        const rawMaxWs = parseFloat(is10Min ? (rwy.wspd10minMax || rwy.max) : (rwy.wspd2minMax || rwy.max)) || rawWs;
+        const rawMinWs = parseFloat(rwy.min) || Math.max(0, parseFloat((rawWs - 2).toFixed(1)));
         
-        // Temperature, Dewpoint, Humidity, Cloud Base
-        const tmp = rwy.tmp ? `${parseFloat(rwy.tmp).toFixed(1)}°C` : '29.0°C';
-        const dp = rwy.dp ? `${parseFloat(rwy.dp).toFixed(1)}°C` : '24.0°C';
-        const humidity = rwy.hm ? `${rwy.hm}%` : calculateHumidity(rwy.tmp || 29, rwy.dp || 24);
-        const tmpDpHum = `${tmp}/${dp}(${humidity})`;
+        // Wind speed values with optional integer rounding
+        const wd = rawWd;
+        const ws = isWindRounded ? Math.round(rawWs) : rawWs;
+        const maxWs = isWindRounded ? Math.round(rawMaxWs) : rawMaxWs;
+        const minWs = isWindRounded ? Math.round(rawMinWs) : rawMinWs;
+        const gust = rwy.gust && rwy.gust !== '-' ? (isWindRounded ? Math.round(parseFloat(rwy.gust)) : rwy.gust) : '-';
+        
+        // Temperature, Dewpoint, Humidity (Without °C clutter for clean fit)
+        const tmpNum = rwy.tmp ? parseFloat(rwy.tmp).toFixed(1) : '25.9';
+        const dpNum = rwy.dp ? parseFloat(rwy.dp).toFixed(1) : '25.4';
+        const humidity = rwy.hm ? `${rwy.hm}%` : calculateHumidity(rwy.tmp || 25.9, rwy.dp || 25.4);
+        const tmpDpHum = `${tmpNum}/${dpNum}(${humidity})`;
 
-        let cldBase = rwy.base1lyr || rwy.cld || 'FEW 3000FT';
+        let cldBase = rwy.base1lyr || rwy.cld || 'FEW 800FT';
         if (cldBase === 'NCD') cldBase = 'NCD';
         else if (/^\d+$/.test(cldBase)) cldBase = `FEW ${cldBase}FT`;
 
-        const qnh = rwy.qnhHpa || (rwy.qnhOrigin ? (rwy.qnhOrigin / 10).toFixed(0) : '1012');
+        const qnh = rwy.qnhHpa || (rwy.qnhOrigin ? (rwy.qnhOrigin / 10).toFixed(0) : '1013');
         const qnhInhg = rwy.qnhInhg || rwy.qnh || (parseFloat(qnh) * 0.02953).toFixed(2);
         
         const rvr = rwy.rvr1min || rwy.rvr || 'P2000';
-        const mor = rwy.mor1min || rwy.mor || '10000';
+        const mor = rwy.mor1min || rwy.mor || '2200';
 
-        const vectors = calculateWindVectors(wd, ws, rwyHeading);
+        const vectors = calculateWindVectors(wd, rawWs, rwyHeading);
         const isActive = (rwy.rwyUse === 'Y') || (idx === 0 && !rawRunwaysData.some(r => r.rwyUse === 'Y'));
 
         const rwyEl = document.createElement('div');
         rwyEl.className = `rwy-card ${isActive ? 'active-use' : ''}`;
         
-        // Clean layout with 2 well-proportioned bottom rows (Zero overlap)
+        // 2-tier bottom layout with zero text collision
         rwyEl.innerHTML = `
           <div class="rwy-top-split b-b">
             <div class="rwy-top-left b-r">
@@ -856,14 +896,14 @@
               ${createRunwayRoseSvg(rwyDirStr, rwyHeading, wd, isActive)}
             </div>
           </div>
-          <!-- Sub-Row 1: Wind Vectors & Aerodrome Basics -->
+          <!-- Sub-Row 1: Vectors, Temp/DP(Humidity), QNH -->
           <div class="metric-row b-b">
             <div class="metric-col b-r"><span class="metric-label">정풍/배풍</span><span class="metric-val-sm">${vectors.headTail}</span></div>
             <div class="metric-col b-r"><span class="metric-label">좌/우측풍</span><span class="metric-val-sm">${vectors.cross}</span></div>
             <div class="metric-col b-r" style="flex: 1.4;"><span class="metric-label">기온/노점(습도)</span><span class="metric-val-sm">${tmpDpHum}</span></div>
-            <div class="metric-col" style="flex: 1.2;"><span class="metric-label">QNH(hPa/inHg)</span><span class="metric-val-sm">${qnh}/${qnhInhg}</span></div>
+            <div class="metric-col" style="flex: 1.1;"><span class="metric-label">QNH(hPa/inHg)</span><span class="metric-val-sm">${qnh}/${qnhInhg}</span></div>
           </div>
-          <!-- Sub-Row 2: Ceiling & Vis / RVR -->
+          <!-- Sub-Row 2: Cloud Base & RVR / Visibility -->
           <div class="metric-row">
             <div class="metric-col b-r"><span class="metric-label">운고 / 운량</span><span class="metric-val-sm">${cldBase}</span></div>
             <div class="metric-col"><span class="metric-label">RVR / 시정 (RWY ${rwyDirStr})</span><span class="metric-val-sm">${rvr} / ${mor}</span></div>
@@ -873,7 +913,7 @@
       });
     }
 
-    // 6. Fetch Flight Schedules (FIDS DEP & ARR) Full 24H with [출발도착완료수 / 전체 스케줄수]
+    // 6. Fetch Flight Schedules (FIDS DEP & ARR) Full 24H with IFR/VFR Badges & [완료수 / 전체 스케줄수]
     async function syncFlightSchedules() {
       try {
         const res = await fetch(`${API_BASE}/api/flight-schedule?airport=${currentAirport}&_t=${Date.now()}`);
@@ -892,17 +932,22 @@
         deps.forEach(f => {
           const fId = f.fpId || f.flightNumber || f.fn;
           const status = (f.depStatus || f.status || 'SCH').toUpperCase();
+          const rules = (f.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
+          const badgeClass = rules === 'VFR' ? 'badge-vfr' : 'badge-ifr';
+
           const prevStatus = flightStatusHistory.get(`DEP_${fId}`);
           const isStatusChanged = prevStatus && prevStatus !== status;
           flightStatusHistory.set(`DEP_${fId}`, status);
 
-          const statusClass = status.includes('DEP') ? 'status-dep' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('ARR') ? 'status-arr' : 'status-sch';
+          const statusClass = status.includes('DEP') ? 'status-dep' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('ARR') ? 'status-arr' : status.includes('LND') ? 'status-lnd' : 'status-sch';
           const blinkClass = isStatusChanged ? 'blink-status-5' : '';
 
           const tr = document.createElement('tr');
           if (blinkClass) tr.className = blinkClass;
           tr.innerHTML = `
-            <td style="font-weight: 700; color: var(--primary);">${fId}</td>
+            <td style="font-weight: 700; color: var(--primary); white-space: nowrap;">
+              <span class="badge-rule ${badgeClass}">${rules}</span>${fId}
+            </td>
             <td style="color: var(--primary-soft);">${f.apArr || f.destination || 'RKPC'}</td>
             <td style="text-align: center; color: var(--primary-dim);">${(f.std || '0800').replace(':', '')}</td>
             <td style="text-align: center; color: var(--primary-dim);">${(f.etd || f.std || '0800').replace(':', '')}</td>
@@ -921,17 +966,22 @@
         arrs.forEach(f => {
           const fId = f.fpId || f.flightNumber || f.fn;
           const status = (f.arrStatus || f.status || 'ENR').toUpperCase();
+          const rules = (f.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
+          const badgeClass = rules === 'VFR' ? 'badge-vfr' : 'badge-ifr';
+
           const prevStatus = flightStatusHistory.get(`ARR_${fId}`);
           const isStatusChanged = prevStatus && prevStatus !== status;
           flightStatusHistory.set(`ARR_${fId}`, status);
 
-          const statusClass = status.includes('ARR') ? 'status-arr' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('DEP') ? 'status-dep' : status.includes('ENR') ? 'status-enr' : 'status-sch';
+          const statusClass = status.includes('ARR') ? 'status-arr' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('DEP') ? 'status-dep' : status.includes('LND') ? 'status-lnd' : status.includes('ENR') ? 'status-enr' : 'status-sch';
           const blinkClass = isStatusChanged ? 'blink-status-5' : '';
 
           const tr = document.createElement('tr');
           if (blinkClass) tr.className = blinkClass;
           tr.innerHTML = `
-            <td style="font-weight: 700; color: var(--primary);">${fId}</td>
+            <td style="font-weight: 700; color: var(--primary); white-space: nowrap;">
+              <span class="badge-rule ${badgeClass}">${rules}</span>${fId}
+            </td>
             <td style="color: var(--primary-soft);">${f.apIcao || f.origin || 'RKSS'}</td>
             <td style="text-align: center; color: var(--primary-dim);">${(f.sta || '0830').replace(':', '')}</td>
             <td style="text-align: center; color: var(--primary-dim);">${(f.eta || f.sta || '0830').replace(':', '')}</td>
