@@ -327,8 +327,9 @@ async function handleAmos(req, res) {
     cfgWspd10minMax: 'C',
     cfgRn1hr: 'C',
     cfgRn1dd: 'C',
-    rn1min: ''
-  }));
+      rn1min: ''
+    };
+  });
 
   res.setHeader('Cache-Control', 's-maxage=2, stale-while-revalidate=5');
   return res.status(200).json(fullAmosItems);
