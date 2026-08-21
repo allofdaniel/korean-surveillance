@@ -1,14 +1,15 @@
 /**
  * CORS �?Rate Limiting ?�정 ?�틸리티
- * DO-278A ?�구?�항 추적: SRS-SEC-002, SRS-SEC-003
+ * CORS 설정 유틸리티
+ * DO-278A 요구사항 추적: SRS-SEC-002, SRS-SEC-003
  *
- * ?�경변??기반 CORS ?�이?�리?�트 �?Rate Limiting 관�?
- * Upstash Redis 지??(분산 rate limiting)
+ * 환경변수 기반 CORS 화이트리스트 및 Rate Limiting 관리
+ * Upstash Redis 지원(분산 rate limiting)
  */
 
-// Rate Limiting ?�정
+// Rate Limiting 설정
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1분
-const RATE_LIMIT_MAX_REQUESTS = parseInt(process.env.RATE_LIMIT_MAX || '100', 10); // 분당 최대 요청 수
+const RATE_LIMIT_MAX_REQUESTS = parseInt(process.env.RATE_LIMIT_MAX || '600', 10); // 분당 최대 요청 수 (관제 대시보드 고빈도 동기화 대응)
 
 // Warn once at module load if production and Upstash env vars are missing
 if (process.env.NODE_ENV === 'production') {
