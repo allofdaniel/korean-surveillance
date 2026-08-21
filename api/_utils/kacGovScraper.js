@@ -65,7 +65,6 @@ export async function fetchKacLiveSchedules(airportIcao = 'RKSS') {
   }
 
   try {
-    // Try raw key and encoded key
     const url1 = `https://apis.data.go.kr/B551178/flight-status/info?serviceKey=${GOV_API_KEY}&type=json&numOfRows=100&pageNo=1&schAirCode=${iataCode}`;
     const res1 = await fetch(url1, {
       headers: {
@@ -113,7 +112,7 @@ export async function fetchKacLiveSchedules(airportIcao = 'RKSS') {
       return null;
     }
 
-    // Format into standardized 11-column IFS schema
+    // Format into standardized 12-column IFS schema with FPL='Y'
     const deps = [];
     const arrs = [];
 
@@ -152,6 +151,7 @@ export async function fetchKacLiveSchedules(airportIcao = 'RKSS') {
           typ: flt.startsWith('KE') || flt.startsWith('KAL') ? 'B738' : (flt.startsWith('OZ') || flt.startsWith('AAR') ? 'A321' : 'B738'),
           reg: `HL${7500 + (Math.abs(hash(flt)) % 1000)}`,
           nat: item.line === '국제' ? 'INT' : 'DOM',
+          fpl: 'Y',
           des: cityIcao,
           spt: item.gate || `G${1 + (Math.abs(hash(flt)) % 15)}`,
           ram,
@@ -170,6 +170,8 @@ export async function fetchKacLiveSchedules(airportIcao = 'RKSS') {
           reg: `HL${7500 + (Math.abs(hash(flt)) % 1000)}`,
           sts,
           org: cityIcao,
+          nat: item.line === '국제' ? 'INT' : 'DOM',
+          fpl: 'Y',
           spt: item.gate || `G${1 + (Math.abs(hash(flt)) % 15)}`,
           ram,
           etd: `${String((h - 1 + 24) % 24).padStart(2, '0')}${String((m - 10 + 60) % 60).padStart(2, '0')}`,
