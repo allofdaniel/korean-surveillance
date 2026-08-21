@@ -481,6 +481,20 @@
       opacity: 0.6;
     }
 
+    /* Unfiled Pending Slot Rows (Greyed Out) */
+    tr.flight-unfiled {
+      opacity: 0.35 !important;
+      color: var(--text-muted) !important;
+    }
+    tr.flight-unfiled td {
+      color: var(--text-muted) !important;
+    }
+    tr.flight-unfiled .badge-rule {
+      opacity: 0.4;
+    }
+    .fpl-tag-y { color: var(--primary); font-weight: 800; }
+    .fpl-tag-n { color: var(--text-muted); font-weight: 700; }
+
     tr.flight-upcoming {
       opacity: 1;
       font-weight: 700;
@@ -549,19 +563,19 @@
 
     /* Section 4: Bottom Clocks & Editable Airport Notices */
     .bottom-bar {
-      height: 72px;
+      min-height: 84px;
       display: flex;
       gap: 3px;
       flex-shrink: 0;
     }
     .clock-box {
-      width: 170px;
+      width: 210px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      padding: 3px 5px;
+      gap: 6px;
+      padding: 6px 8px;
       background: var(--bg-dim);
       flex-shrink: 0;
     }
@@ -570,17 +584,17 @@
       align-items: baseline;
       justify-content: space-between;
       width: 100%;
-      padding: 0 3px;
+      padding: 0 4px;
     }
     .clock-tag {
-      font-size: 9.5px;
+      font-size: 11.5px;
       font-weight: 800;
       color: var(--text-muted);
       letter-spacing: 0.06em;
     }
     .clock-digits-unified {
-      font-size: 16px;
-      font-weight: 800;
+      font-size: 24px;
+      font-weight: 900;
       color: var(--primary-bright);
       letter-spacing: 0.05em;
       line-height: 1;
@@ -601,9 +615,9 @@
       background: rgba(0, 255, 0, 0.15);
       border: 1px solid var(--primary);
       color: var(--primary-bright);
-      font-size: 8.5px;
+      font-size: 9px;
       font-weight: 700;
-      padding: 0.5px 6px;
+      padding: 1px 7px;
       border-radius: 2px;
       cursor: pointer;
       font-family: var(--font-mono);
@@ -619,11 +633,13 @@
       border: none;
       color: var(--primary-soft);
       font-family: var(--font-mono);
-      font-size: 10px;
-      padding: 3px 6px;
-      resize: none;
+      font-size: 15px;
+      padding: 5px 8px;
+      resize: vertical;
+      min-height: 60px;
       outline: none;
-      line-height: 1.3;
+      line-height: 1.45;
+      font-weight: 600;
     }
     .notices-textarea:focus {
       background: rgba(0, 0, 0, 0.2);
@@ -841,6 +857,7 @@
                 <th id="th-dep-typ" onclick="sortTable('dep', 'typ')" style="width: 36px;">TYP</th>
                 <th id="th-dep-reg" onclick="sortTable('dep', 'reg')" style="width: 52px;">REG</th>
                 <th id="th-dep-nat" onclick="sortTable('dep', 'nat')" style="width: 32px;">NAT</th>
+                <th id="th-dep-fpl" onclick="sortTable('dep', 'fpl')" style="width: 28px;">FPL</th>
                 <th id="th-dep-des" onclick="sortTable('dep', 'des')" style="width: 38px;">DES</th>
                 <th id="th-dep-spt" onclick="sortTable('dep', 'spt')" style="width: 32px;">SPT</th>
                 <th id="th-dep-ram" onclick="sortTable('dep', 'ram')" style="width: 36px;">RAM</th>
@@ -874,6 +891,8 @@
                 <th id="th-arr-typ" onclick="sortTable('arr', 'typ')" style="width: 36px;">TYP</th>
                 <th id="th-arr-reg" onclick="sortTable('arr', 'reg')" style="width: 52px;">REG</th>
                 <th id="th-arr-sts" onclick="sortTable('arr', 'sts')" style="width: 34px;">STS</th>
+                <th id="th-arr-nat" onclick="sortTable('arr', 'nat')" style="width: 32px;">NAT</th>
+                <th id="th-arr-fpl" onclick="sortTable('arr', 'fpl')" style="width: 28px;">FPL</th>
                 <th id="th-arr-org" onclick="sortTable('arr', 'org')" style="width: 38px;">ORG</th>
                 <th id="th-arr-spt" onclick="sortTable('arr', 'spt')" style="width: 32px;">SPT</th>
                 <th id="th-arr-ram" onclick="sortTable('arr', 'ram')" style="width: 36px;">RAM</th>
@@ -1432,8 +1451,8 @@
     function updateSortHeaderIcons(tableType) {
       const { col, asc } = currentSort[tableType];
       const cols = tableType === 'dep' 
-        ? ['flt', 'typ', 'reg', 'nat', 'des', 'spt', 'ram', 'etd', 'atd', 'eta', 'cha']
-        : ['flt', 'typ', 'reg', 'sts', 'org', 'spt', 'ram', 'etd', 'eta', 'ata', 'cha'];
+        ? ['flt', 'typ', 'reg', 'nat', 'fpl', 'des', 'spt', 'ram', 'etd', 'atd', 'eta', 'cha']
+        : ['flt', 'typ', 'reg', 'sts', 'nat', 'fpl', 'org', 'spt', 'ram', 'etd', 'eta', 'ata', 'cha'];
 
       cols.forEach(c => {
         const th = document.getElementById(`th-${tableType}-${c}`);
@@ -1478,9 +1497,10 @@
           const status = (f.sts || f.depStatus || 'SCH').toUpperCase();
           const rules = (f.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
           const badgeClass = rules === 'VFR' ? 'badge-vfr' : 'badge-ifr';
+          const isFplFiled = f.fpl === 'Y';
 
           const isCompleted = (f.atd && f.atd !== '-' && f.atd !== '') || status.includes('DEP');
-          const rowClass = isCompleted ? 'flight-completed' : 'flight-upcoming';
+          const rowClass = !isFplFiled ? 'flight-unfiled' : (isCompleted ? 'flight-completed' : 'flight-upcoming');
 
           // Detect real status changes without false polling flashes
           const prevStatus = flightStatusHistory.get(`DEP_${fId}`);
@@ -1489,6 +1509,7 @@
 
           const statusClass = status.includes('DEP') ? 'status-dep' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('ARR') ? 'status-arr' : status.includes('LND') ? 'status-lnd' : 'status-sch';
           const blinkClass = isStatusChanged ? 'blink-status-5' : '';
+          const fplHtml = isFplFiled ? '<span class="fpl-tag-y">Y</span>' : '<span class="fpl-tag-n">-</span>';
 
           const tr = document.createElement('tr');
           tr.className = `${rowClass} ${blinkClass}`;
@@ -1496,10 +1517,11 @@
             <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
               <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
             </td>
-            <td style="color: var(--text-muted);">${f.typ || 'A321'}</td>
-            <td style="color: var(--primary-soft);">${f.reg || 'HL8234'}</td>
+            <td style="color: var(--text-muted);">${f.typ || '-'}</td>
+            <td style="color: var(--primary-soft);">${f.reg || '-'}</td>
             <td style="color: var(--text-muted);">${f.nat || 'PAX'}</td>
-            <td style="color: var(--amber); font-weight: 700;">${f.des || f.apArr || 'RKPC'}</td>
+            <td>${fplHtml}</td>
+            <td style="color: var(--amber); font-weight: 700;">${f.des || f.apArr || '-'}</td>
             <td style="color: var(--primary-bright); font-weight: 700;">${f.spt || '-'}</td>
             <td style="color: var(--text-muted);">${(f.ram || '-').replace(':', '')}</td>
             <td class="flight-time-cell" style="color: var(--primary-dim);">${(f.etd || f.std || '-').replace(':', '')}</td>
@@ -1521,9 +1543,10 @@
           const status = (f.sts || f.arrStatus || 'ENR').toUpperCase();
           const rules = (f.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
           const badgeClass = rules === 'VFR' ? 'badge-vfr' : 'badge-ifr';
+          const isFplFiled = f.fpl === 'Y';
 
           const isCompleted = (f.ata && f.ata !== '-' && f.ata !== '') || status.includes('ARR') || status.includes('LND');
-          const rowClass = isCompleted ? 'flight-completed' : 'flight-upcoming';
+          const rowClass = !isFplFiled ? 'flight-unfiled' : (isCompleted ? 'flight-completed' : 'flight-upcoming');
 
           const prevStatus = flightStatusHistory.get(`ARR_${fId}`);
           const isStatusChanged = prevStatus && prevStatus !== status && status !== 'ENR';
@@ -1531,6 +1554,7 @@
 
           const statusClass = status.includes('ARR') ? 'status-arr' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('DEP') ? 'status-dep' : status.includes('LND') ? 'status-lnd' : status.includes('ENR') ? 'status-enr' : 'status-sch';
           const blinkClass = isStatusChanged ? 'blink-status-5' : '';
+          const fplHtml = isFplFiled ? '<span class="fpl-tag-y">Y</span>' : '<span class="fpl-tag-n">-</span>';
 
           const tr = document.createElement('tr');
           tr.className = `${rowClass} ${blinkClass}`;
@@ -1538,10 +1562,12 @@
             <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
               <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
             </td>
-            <td style="color: var(--text-muted);">${f.typ || 'B738'}</td>
-            <td style="color: var(--primary-soft);">${f.reg || 'HL8234'}</td>
+            <td style="color: var(--text-muted);">${f.typ || '-'}</td>
+            <td style="color: var(--primary-soft);">${f.reg || '-'}</td>
             <td class="${statusClass} ${blinkClass}">${status}</td>
-            <td style="color: var(--amber); font-weight: 700;">${f.org || f.apIcao || 'RKSS'}</td>
+            <td style="color: var(--text-muted);">${f.nat || 'PAX'}</td>
+            <td>${fplHtml}</td>
+            <td style="color: var(--amber); font-weight: 700;">${f.org || f.apIcao || '-'}</td>
             <td style="color: var(--primary-bright); font-weight: 700;">${f.spt || '-'}</td>
             <td style="color: var(--text-muted);">${(f.ram || '-').replace(':', '')}</td>
             <td style="color: var(--text-muted);">${(f.etd || '-').replace(':', '')}</td>
