@@ -1,7 +1,6 @@
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 import { fetchUbikaisSchedule } from './_utils/ubikaisScraper.js';
-import fs from 'fs';
-import path from 'path';
+import { rksiFullDeps, rksiFullArrs } from './_data/ubikais_rksi_data.js';
 
 const API_TIMEOUT_MS = 8000;
 
@@ -17,22 +16,6 @@ function withTimeout(timeoutMs = API_TIMEOUT_MS) {
 function normalizeFlight(rawFlight) {
   if (typeof rawFlight !== 'string') return '';
   return rawFlight.trim().toUpperCase().replace(/\s+/g, '');
-}
-
-// Load static full 653-flight RKSI dataset parsed from official UBIKAIS excel
-let rksiFullDeps = [];
-let rksiFullArrs = [];
-try {
-  const depPath = path.join(process.cwd(), 'api', '_data', 'ubikais_rksi_dep_full.json');
-  const arrPath = path.join(process.cwd(), 'api', '_data', 'ubikais_rksi_arr_full.json');
-  if (fs.existsSync(depPath)) {
-    rksiFullDeps = JSON.parse(fs.readFileSync(depPath, 'utf8'));
-  }
-  if (fs.existsSync(arrPath)) {
-    rksiFullArrs = JSON.parse(fs.readFileSync(arrPath, 'utf8'));
-  }
-} catch (e) {
-  console.warn('[flight-schedule] Could not load static full RKSI data:', e.message);
 }
 
 function hashStr(str) {
@@ -362,7 +345,7 @@ export default async function handler(req, res) {
     }
 
     // A. For Incheon (RKSI) - 100% full 653-flight official UBIKAIS schedule with live state merge
-    if (airport === 'RKSI' && rksiFullDeps.length > 0) {
+    if (airport === 'RKSI' && rksiFullDeps && rksiFullDeps.length > 0) {
       const liveDepMap = new Map();
       liveDeps.forEach(d => {
         const id = d.fpId || d.flightNumber || d.flt;
