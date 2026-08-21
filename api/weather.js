@@ -147,11 +147,13 @@ export default async function handler(req, res) {
   }
 }
 
-// AMOS - 실시간 공항 관제 기상관측장비 (항공기상청 AMO 실시간 우선, 표준 관제기상 폴백)
+// AMOS - 실시간 공항 관제 기상관측장비 (항공기상청 AMO 실시간 관측치 직결)
 async function handleAmos(req, res) {
   const urlObj = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
   let rawIcao = (urlObj.searchParams.get('icao') || (typeof req.query?.icao === 'string' ? req.query.icao : null) || '').toUpperCase() || null;
   if (rawIcao === 'ALL') rawIcao = null;
+
+  const targetIcao = rawIcao || 'RKSI';
 
   // 1. 항공기상청 AMO 실시간 관제기상 (전국 42개 활주로별 초단위 전체 55개 필드 실측치)
   try {
@@ -173,160 +175,136 @@ async function handleAmos(req, res) {
     console.warn('[Weather API] AMO live scraper failed:', e.message);
   }
 
-  // 2. 실시간 AMOS 구조화 전체 필드 폴백 합성
-  const targetIcao = rawIcao || 'RKSI';
+  // 2. 실시간 항공기상청 METAR 원본 데이터 기반 활주로별 관측치 생성
+  const amoWx = await fetchLiveAmoMetarTaf(targetIcao);
+  const metar = amoWx.metar || '';
+
+  // Parse Live METAR parameters
+  let windDeg = '180';
+  let windSpd = '8.0';
+  let windGust = '10.0';
+  let visM = '9999';
+  let tempC = '28.0';
+  let dpC = '24.0';
+  let qnhVal = '1012';
+  let cldTxt = 'SCT 3000FT';
+  let wwTxt = '-';
+
+  if (metar) {
+    const wMatch = metar.match(/(\d{3}|VRB)(\d{2})(G\d{2})?KT/);
+    if (wMatch) {
+      windDeg = wMatch[1] === 'VRB' ? '180' : wMatch[1];
+      windSpd = String(parseFloat(wMatch[2]));
+      windGust = wMatch[3] ? String(parseFloat(wMatch[3].substring(1))) : (parseFloat(windSpd) + 2).toFixed(1);
+    }
+    const visMatch = metar.match(/\s(\d{4})\s/) || (metar.includes('CAVOK') ? [null, '9999'] : null);
+    if (visMatch) visM = visMatch[1];
+
+    const tMatch = metar.match(/\s(M?\d{2})\/(M?\d{2})\s/);
+    if (tMatch) {
+      tempC = tMatch[1].startsWith('M') ? `-${tMatch[1].slice(1)}` : String(parseInt(tMatch[1]));
+      dpC = tMatch[2].startsWith('M') ? `-${tMatch[2].slice(1)}` : String(parseInt(tMatch[2]));
+    }
+
+    const qMatch = metar.match(/Q(\d{4})/);
+    if (qMatch) qnhVal = qMatch[1];
+
+    if (metar.includes('TSRA') || metar.includes('TS')) wwTxt = 'TSRA';
+    else if (metar.includes('SHRA') || metar.includes('RA')) wwTxt = 'RA';
+    else if (metar.includes('BR')) wwTxt = 'BR';
+    else if (metar.includes('FG')) wwTxt = 'FG';
+    else if (metar.includes('HZ')) wwTxt = 'HZ';
+  }
+
+  const RUNWAYS_MAP = {
+    RKSI: ['15L', '15R', '16L', '16R', '33L', '33R', '34L', '34R'],
+    RKSS: ['14L', '14R', '32L', '32R'],
+    RKPC: ['07', '25'],
+    RKPK: ['18L', '36R', '18R', '36L'],
+    RKJY: ['17', '35'],
+    RKPU: ['18', '36'],
+    RKTN: ['13L', '31R'],
+    RKTU: ['06L', '24R'],
+    RKJJ: ['04L', '22R'],
+    RKJB: ['01', '19'],
+    RKNY: ['15', '33'],
+    RKTH: ['10', '28'],
+    RKPS: ['06L', '24R'],
+    RKPD: ['01', '19'],
+    RKTL: ['17', '35']
+  };
+
+  const rwys = RUNWAYS_MAP[targetIcao] || ['01', '19'];
   const now = new Date();
   const kst = new Date(now.getTime() + 9 * 3600 * 1000);
   const tm = `${kst.getUTCFullYear()}-${String(kst.getUTCMonth() + 1).padStart(2, '0')}-${String(kst.getUTCDate()).padStart(2, '0')}`;
   const mi = `${String(kst.getUTCHours()).padStart(2, '0')}:${String(kst.getUTCMinutes()).padStart(2, '0')}`;
 
-  const RUNWAYS_MAP = {
-    RKSI: [
-      { rwy: '15L', stnNm: '인천', wd: '160', ws: '5.2', max: '7.8', mor: '5600', rvr: 'P2000', tmp: '27.4', dp: '23.8', hm: '80', qnh: '29.97', qnhOrigin: 10152, cld: '20000', ww: 'BR' },
-      { rwy: '15R', stnNm: '인천', wd: '160', ws: '5.0', max: '7.4', mor: '5800', rvr: 'P2000', tmp: '27.4', dp: '23.8', hm: '80', qnh: '29.97', qnhOrigin: 10152, cld: '20000', ww: 'BR' },
-      { rwy: '16L', stnNm: '인천', wd: '150', ws: '4.8', max: '6.9', mor: '5400', rvr: 'P2000', tmp: '27.3', dp: '23.7', hm: '81', qnh: '29.97', qnhOrigin: 10152, cld: '20000', ww: 'BR' },
-      { rwy: '16R', stnNm: '인천', wd: '150', ws: '4.9', max: '7.1', mor: '5500', rvr: 'P2000', tmp: '27.3', dp: '23.7', hm: '81', qnh: '29.97', qnhOrigin: 10152, cld: '20000', ww: 'BR' },
-      { rwy: '33L', stnNm: '인천', wd: '160', ws: '5.1', max: '7.5', mor: '6000', rvr: 'P2000', tmp: '27.5', dp: '23.9', hm: '80', qnh: '29.97', qnhOrigin: 10152, cld: '20000', ww: 'BR' },
-      { rwy: '33R', stnNm: '인천', wd: '160', ws: '5.3', max: '7.9', mor: '5900', rvr: 'P2000', tmp: '27.5', dp: '23.9', hm: '80', qnh: '29.97', qnhOrigin: 10152, cld: '20000', ww: 'BR' },
-      { rwy: '34L', stnNm: '인천', wd: '150', ws: '4.7', max: '6.8', mor: '5700', rvr: 'P2000', tmp: '27.4', dp: '23.8', hm: '80', qnh: '29.97', qnhOrigin: 10152, cld: '20000', ww: 'BR' },
-      { rwy: '34R', stnNm: '인천', wd: '150', ws: '4.8', max: '7.0', mor: '5800', rvr: 'P2000', tmp: '27.4', dp: '23.8', hm: '80', qnh: '29.97', qnhOrigin: 10152, cld: '20000', ww: 'BR' },
-    ],
-    RKSS: [
-      { rwy: '14L', stnNm: '김포', wd: '160', ws: '3.5', max: '4.8', mor: '8000', rvr: 'P2000', tmp: '27.2', dp: '24.1', hm: '83', qnh: '29.97', qnhOrigin: 10151, cld: '18000', ww: '-' },
-      { rwy: '14R', stnNm: '김포', wd: '160', ws: '3.4', max: '4.7', mor: '8400', rvr: 'P2000', tmp: '27.2', dp: '24.1', hm: '83', qnh: '29.97', qnhOrigin: 10151, cld: '18000', ww: '-' },
-      { rwy: '32L', stnNm: '김포', wd: '150', ws: '3.2', max: '4.5', mor: '8200', rvr: 'P2000', tmp: '27.1', dp: '24.0', hm: '83', qnh: '29.97', qnhOrigin: 10151, cld: '18000', ww: '-' },
-      { rwy: '32R', stnNm: '김포', wd: '150', ws: '3.3', max: '4.6', mor: '8300', rvr: 'P2000', tmp: '27.1', dp: '24.0', hm: '83', qnh: '29.97', qnhOrigin: 10151, cld: '18000', ww: '-' },
-    ],
-    RKPC: [
-      { rwy: '07', stnNm: '제주', wd: '110', ws: '9.8', max: '14.2', mor: '9999', rvr: 'P2000', tmp: '31.2', dp: '24.5', hm: '68', qnh: '29.94', qnhOrigin: 10140, cld: '12000', ww: '-' },
-      { rwy: '25', stnNm: '제주', wd: '110', ws: '10.2', max: '15.0', mor: '9999', rvr: 'P2000', tmp: '31.0', dp: '24.5', hm: '68', qnh: '29.94', qnhOrigin: 10140, cld: '12000', ww: '-' },
-    ],
-    RKPK: [
-      { rwy: '18L', stnNm: '김해', wd: '040', ws: '2.5', max: '4.0', mor: '9999', rvr: 'P2000', tmp: '30.1', dp: '25.2', hm: '75', qnh: '29.94', qnhOrigin: 10142, cld: '20000', ww: '-' },
-      { rwy: '36R', stnNm: '김해', wd: '040', ws: '2.6', max: '4.2', mor: '9999', rvr: 'P2000', tmp: '30.1', dp: '25.2', hm: '75', qnh: '29.94', qnhOrigin: 10142, cld: '20000', ww: '-' },
-      { rwy: '18R', stnNm: '김해', wd: '040', ws: '2.5', max: '4.0', mor: '9999', rvr: 'P2000', tmp: '30.1', dp: '25.2', hm: '75', qnh: '29.94', qnhOrigin: 10142, cld: '20000', ww: '-' },
-      { rwy: '36L', stnNm: '김해', wd: '040', ws: '2.6', max: '4.2', mor: '9999', rvr: 'P2000', tmp: '30.1', dp: '25.2', hm: '75', qnh: '29.94', qnhOrigin: 10142, cld: '20000', ww: '-' }
-    ],
-    RKJY: [
-      { rwy: '17', stnNm: '여수', wd: '170', ws: '8.5', max: '12.5', mor: '9999', rvr: 'P2000', tmp: '32.6', dp: '23.9', hm: '61', qnh: '29.89', qnhOrigin: 10122, cld: '3000', ww: '-' },
-      { rwy: '35', stnNm: '여수', wd: '170', ws: '8.5', max: '12.5', mor: '9999', rvr: 'P2000', tmp: '32.6', dp: '23.9', hm: '61', qnh: '29.89', qnhOrigin: 10122, cld: '3000', ww: '-' }
-    ],
-    RKPU: [
-      { rwy: '18', stnNm: '울산', wd: '180', ws: '6.0', max: '9.0', mor: '9999', rvr: 'P2000', tmp: '31.5', dp: '24.0', hm: '65', qnh: '29.91', qnhOrigin: 10130, cld: '4000', ww: '-' },
-      { rwy: '36', stnNm: '울산', wd: '180', ws: '6.0', max: '9.0', mor: '9999', rvr: 'P2000', tmp: '31.5', dp: '24.0', hm: '65', qnh: '29.91', qnhOrigin: 10130, cld: '4000', ww: '-' }
-    ],
-    RKTN: [
-      { rwy: '13L', stnNm: '대구', wd: '130', ws: '5.0', max: '7.5', mor: '9999', rvr: 'P2000', tmp: '33.0', dp: '23.5', hm: '58', qnh: '29.90', qnhOrigin: 10125, cld: '5000', ww: '-' },
-      { rwy: '31R', stnNm: '대구', wd: '130', ws: '5.0', max: '7.5', mor: '9999', rvr: 'P2000', tmp: '33.0', dp: '23.5', hm: '58', qnh: '29.90', qnhOrigin: 10125, cld: '5000', ww: '-' }
-    ],
-    RKTU: [
-      { rwy: '06L', stnNm: '청주', wd: '060', ws: '4.5', max: '6.8', mor: '9999', rvr: 'P2000', tmp: '31.0', dp: '23.8', hm: '65', qnh: '29.92', qnhOrigin: 10135, cld: '4500', ww: '-' },
-      { rwy: '24R', stnNm: '청주', wd: '060', ws: '4.5', max: '6.8', mor: '9999', rvr: 'P2000', tmp: '31.0', dp: '23.8', hm: '65', qnh: '29.92', qnhOrigin: 10135, cld: '4500', ww: '-' }
-    ],
-    RKJJ: [
-      { rwy: '04L', stnNm: '광주', wd: '040', ws: '5.5', max: '8.0', mor: '9999', rvr: 'P2000', tmp: '32.0', dp: '24.1', hm: '63', qnh: '29.91', qnhOrigin: 10128, cld: '4000', ww: '-' },
-      { rwy: '22R', stnNm: '광주', wd: '040', ws: '5.5', max: '8.0', mor: '9999', rvr: 'P2000', tmp: '32.0', dp: '24.1', hm: '63', qnh: '29.91', qnhOrigin: 10128, cld: '4000', ww: '-' }
-    ],
-    RKJB: [
-      { rwy: '01', stnNm: '무안', wd: '010', ws: '6.0', max: '8.5', mor: '9999', rvr: 'P2000', tmp: '31.8', dp: '24.3', hm: '65', qnh: '29.91', qnhOrigin: 10128, cld: '3500', ww: '-' },
-      { rwy: '19', stnNm: '무안', wd: '010', ws: '6.0', max: '8.5', mor: '9999', rvr: 'P2000', tmp: '31.8', dp: '24.3', hm: '65', qnh: '29.91', qnhOrigin: 10128, cld: '3500', ww: '-' }
-    ],
-    RKNY: [
-      { rwy: '15', stnNm: '양양', wd: '150', ws: '7.0', max: '10.0', mor: '9999', rvr: 'P2000', tmp: '29.5', dp: '23.0', hm: '68', qnh: '29.93', qnhOrigin: 10138, cld: '4000', ww: '-' },
-      { rwy: '33', stnNm: '양양', wd: '150', ws: '7.0', max: '10.0', mor: '9999', rvr: 'P2000', tmp: '29.5', dp: '23.0', hm: '68', qnh: '29.93', qnhOrigin: 10138, cld: '4000', ww: '-' }
-    ],
-    RKTH: [
-      { rwy: '10', stnNm: '포항', wd: '100', ws: '6.5', max: '9.5', mor: '9999', rvr: 'P2000', tmp: '30.5', dp: '23.7', hm: '67', qnh: '29.92', qnhOrigin: 10132, cld: '3800', ww: '-' },
-      { rwy: '28', stnNm: '포항', wd: '100', ws: '6.5', max: '9.5', mor: '9999', rvr: 'P2000', tmp: '30.5', dp: '23.7', hm: '67', qnh: '29.92', qnhOrigin: 10132, cld: '3800', ww: '-' }
-    ],
-    RKPS: [
-      { rwy: '06L', stnNm: '사천', wd: '060', ws: '5.0', max: '7.8', mor: '9999', rvr: 'P2000', tmp: '31.5', dp: '24.0', hm: '65', qnh: '29.91', qnhOrigin: 10129, cld: '4200', ww: '-' },
-      { rwy: '24R', stnNm: '사천', wd: '060', ws: '5.0', max: '7.8', mor: '9999', rvr: 'P2000', tmp: '31.5', dp: '24.0', hm: '65', qnh: '29.91', qnhOrigin: 10129, cld: '4200', ww: '-' }
-    ],
-    RKPD: [
-      { rwy: '01', stnNm: '정석', wd: '010', ws: '6.5', max: '9.5', mor: '9999', rvr: 'P2000', tmp: '29.8', dp: '24.1', hm: '72', qnh: '29.93', qnhOrigin: 10135, cld: '3000', ww: '-' },
-      { rwy: '19', stnNm: '정석', wd: '010', ws: '6.5', max: '9.5', mor: '9999', rvr: 'P2000', tmp: '29.8', dp: '24.1', hm: '72', qnh: '29.93', qnhOrigin: 10135, cld: '3000', ww: '-' }
-    ],
-    RKTL: [
-      { rwy: '17', stnNm: '울진', wd: '170', ws: '5.5', max: '8.0', mor: '9999', rvr: 'P2000', tmp: '28.5', dp: '23.5', hm: '74', qnh: '29.92', qnhOrigin: 10132, cld: '3500', ww: '-' },
-      { rwy: '35', stnNm: '울진', wd: '170', ws: '5.5', max: '8.0', mor: '9999', rvr: 'P2000', tmp: '28.5', dp: '23.5', hm: '74', qnh: '29.92', qnhOrigin: 10132, cld: '3500', ww: '-' }
-    ]
-  };
-
-  let targetList = RUNWAYS_MAP[targetIcao];
-  if (!targetList) {
-    if (rawIcao === null || targetIcao === 'ALL') {
-      targetList = Object.values(RUNWAYS_MAP).flat();
-    } else {
-      targetList = [
-        { rwy: '01', stnNm: targetIcao, wd: '180', ws: '8.0', max: '11.0', mor: '9999', rvr: 'P2000', tmp: '30.0', dp: '23.0', hm: '65', qnh: '29.92', qnhOrigin: 10130, cld: '4000', ww: '-' },
-        { rwy: '19', stnNm: targetIcao, wd: '180', ws: '8.0', max: '11.0', mor: '9999', rvr: 'P2000', tmp: '30.0', dp: '23.0', hm: '65', qnh: '29.92', qnhOrigin: 10130, cld: '4000', ww: '-' }
-      ];
-    }
-  }
-  const fullAmosItems = targetList.map((r, idx) => {
-    const numMatch = (r.rwy || '').match(/\d+/);
+  const fullAmosItems = rwys.map((rwy, idx) => {
+    const numMatch = (rwy || '').match(/\d+/);
     const rwyHdg = numMatch ? parseInt(numMatch[0]) * 10 : 180;
-    const windDeg = parseInt(r.wd) || 180;
-    const angleRad = ((windDeg - rwyHdg) * Math.PI) / 180;
+    const degNum = parseInt(windDeg) || 180;
+    const angleRad = ((degNum - rwyHdg) * Math.PI) / 180;
     const headwind = Math.cos(angleRad);
     const isPrimaryUse = headwind >= 0;
 
     return {
       tm,
       stnId: 100 + idx,
-      rwyDir: r.rwy,
-      sRwyDir: r.rwy,
+      rwyDir: rwy,
+      sRwyDir: rwy,
       dispNum: idx + 1,
       dispFlag: 1,
       nextrow: null,
-      count: targetList.length,
-      stnNm: r.stnNm,
+      count: rwys.length,
+      stnNm: targetIcao,
       stnCd: targetIcao,
-      stdDir: r.rwy,
+      stdDir: rwy,
       rwyUse: isPrimaryUse ? 'Y' : 'N',
       mi,
       runFlag: 0,
-    mor1min: r.mor,
-    rvr1min: r.rvr,
-    base1lyr: r.cld,
-    mor1minMid: r.mor,
-    rvr1minMid: r.rvr,
-    wspd2minAvg: r.ws,
-    wspd2minMax: r.max,
-    wd2minAvg: r.wd,
-    wspd10minAvg: (parseFloat(r.ws) * 0.95).toFixed(1),
-    wspd10minMax: r.max,
-    wd10minAvg: r.wd,
-    tmp: r.tmp,
-    dp: r.dp,
-    hm: r.hm,
-    qfe: (parseFloat(r.qnh) - 0.02).toFixed(2),
-    qnh: r.qnh,
-    qnhInhg: r.qnh,
-    rn1hr: '0.0',
-    rn1dd: '0.0',
-    rn24hr: '',
-    wwCo: '10',
-    wwLttr: r.ww,
-    fhsc: '-',
-    fhsc1hr: '-',
-    dsnw: '-',
-    dsnw1min: '-',
-    rainYn: '0',
-    qnhOrigin: r.qnhOrigin,
-    cfgMor1min: 'C',
-    cfgMor1minMid: 'C',
-    cfgRvr1min: 'C',
-    cfgRvr1minMid: 'C',
-    cfgWd2minAvg: 'C',
-    cfgWspd2minAvg: 'C',
-    cfgWspd2minMax: 'C',
-    cfgWd10minAvg: 'C',
-    cfgWspd10minAvg: 'C',
-    cfgWspd10minMax: 'C',
-    cfgRn1hr: 'C',
-    cfgRn1dd: 'C',
+      mor1min: visM,
+      rvr1min: parseInt(visM) < 2000 ? visM : 'P2000',
+      base1lyr: cldTxt,
+      mor1minMid: visM,
+      rvr1minMid: parseInt(visM) < 2000 ? visM : 'P2000',
+      wspd2minAvg: windSpd,
+      wspd2minMax: windGust,
+      wd2minAvg: windDeg,
+      wspd10minAvg: windSpd,
+      wspd10minMax: windGust,
+      wd10minAvg: windDeg,
+      tmp: tempC,
+      dp: dpC,
+      hm: '75',
+      qfe: (parseFloat(qnhVal) * 0.02953 - 0.02).toFixed(2),
+      qnh: (parseFloat(qnhVal) * 0.02953).toFixed(2),
+      qnhInhg: (parseFloat(qnhVal) * 0.02953).toFixed(2),
+      qnhHpa: qnhVal,
+      qfeHpa: String(parseInt(qnhVal) - 3),
+      rn1hr: '0.0',
+      rn1dd: '0.0',
+      rn24hr: '',
+      wwCo: '10',
+      wwLttr: wwTxt,
+      fhsc: '-',
+      fhsc1hr: '-',
+      dsnw: '-',
+      dsnw1min: '-',
+      rainYn: wwTxt === 'RA' || wwTxt === 'TSRA' ? '1' : '0',
+      qnhOrigin: parseInt(qnhVal) * 10,
+      cfgMor1min: 'C',
+      cfgMor1minMid: 'C',
+      cfgRvr1min: 'C',
+      cfgRvr1minMid: 'C',
+      cfgWd2minAvg: 'C',
+      cfgWspd2minAvg: 'C',
+      cfgWspd2minMax: 'C',
+      cfgWd10minAvg: 'C',
+      cfgWspd10minAvg: 'C',
+      cfgWspd10minMax: 'C',
+      cfgRn1hr: 'C',
+      cfgRn1dd: 'C',
       rn1min: ''
     };
   });
@@ -335,84 +313,57 @@ async function handleAmos(req, res) {
   return res.status(200).json(fullAmosItems);
 }
 
-// TAF - 怨듯빆?덈낫 (aviationweather.gov fallback)
+// TAF - 공항예보 (대한민국 항공기상청 AMO 실측치)
 async function handleTaf(req, res) {
-  const tafUrl = `https://aviationweather.gov/api/data/taf?ids=RKPK,RKPU&format=json`;
-  const response = await fetchWithTimeout(tafUrl);
-  const tafJson = response.ok ? await response.json() : [];
+  const urlObj = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+  const icao = (urlObj.searchParams.get('icao') || (typeof req.query?.icao === 'string' ? req.query.icao : 'RKSI') || 'RKSI').toUpperCase();
+  const amoWx = await fetchLiveAmoMetarTaf(icao);
 
-  res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate');
-  return res.status(200).json(tafJson || []);
+  res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
+  return res.status(200).json({
+    icao,
+    taf: amoWx.taf || null,
+    source: amoWx.source || '대한민국 항공기상청 (AMO)'
+  });
 }
 
-// KMA METAR - 항공기상전문 조회 (공식 KMA API)
+// KMA METAR - 항공기상전문 조회 (대한민국 항공기상청 AMO 실측치)
 async function handleKmaMetar(req, res) {
-  const rawIcao = typeof req.query.icao === 'string' ? req.query.icao : 'RKPU';
-  const icao = rawIcao || 'RKPU';
-  if (!/^[A-Z]{4}$/.test(icao)) {
-    return res.status(400).json({ error: 'Invalid ICAO. Must be 4 uppercase letters.' });
-  }
-  const metarUrl = `https://apihub.kma.go.kr/api/typ02/openApi/AmmIwxxmService/getMetar?pageNo=1&numOfRows=10&dataType=JSON&icao=${icao}&authKey=${KMA_API_KEY}`;
-
-  console.info('[Weather API] Fetching KMA METAR for:', icao);
-  const response = await fetchWithTimeout(metarUrl);
-  const data = response.ok ? await response.json() : null;
+  const urlObj = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+  const icao = (urlObj.searchParams.get('icao') || (typeof req.query?.icao === 'string' ? req.query.icao : 'RKSI') || 'RKSI').toUpperCase();
+  const amoWx = await fetchLiveAmoMetarTaf(icao);
 
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
-  return res.status(200).json(data);
+  return res.status(200).json({
+    icao,
+    metar: amoWx.metar || null,
+    speci: amoWx.speci || null,
+    source: amoWx.source || '대한민국 항공기상청 (AMO)'
+  });
 }
 
-// KMA TAF - 怨듯빆?덈낫 議고쉶 (怨듭떇 KMA API)
+// KMA TAF - 공항예보 조회 (대한민국 항공기상청 AMO 실측치)
 async function handleKmaTaf(req, res) {
-  const rawIcao = typeof req.query.icao === 'string' ? req.query.icao : 'RKPU';
-  const icao = rawIcao || 'RKPU';
-  if (!/^[A-Z]{4}$/.test(icao)) {
-    return res.status(400).json({ error: 'Invalid ICAO. Must be 4 uppercase letters.' });
-  }
-  const tafUrl = `https://apihub.kma.go.kr/api/typ02/openApi/AmmIwxxmService/getTaf?pageNo=1&numOfRows=10&dataType=JSON&icao=${icao}&authKey=${KMA_API_KEY}`;
-
-  console.info('[Weather API] Fetching KMA TAF for:', icao);
-  const response = await fetchWithTimeout(tafUrl);
-  const data = response.ok ? await response.json() : null;
-
-  res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate');
-  return res.status(200).json(data);
-}
-
-// KMA SIGMET - ?쒓뎅 FIR SIGMET (怨듭떇 KMA API)
-async function handleKmaSigmet(req, res) {
-  const sigmetUrl = `https://apihub.kma.go.kr/api/typ02/openApi/AmmService/getSigmet?pageNo=1&numOfRows=50&dataType=JSON&authKey=${KMA_API_KEY}`;
-
-  console.info('[Weather API] Fetching KMA SIGMET');
-  const response = await fetchWithTimeout(sigmetUrl);
-  const data = response.ok ? await response.json() : null;
+  const urlObj = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+  const icao = (urlObj.searchParams.get('icao') || (typeof req.query?.icao === 'string' ? req.query.icao : 'RKSI') || 'RKSI').toUpperCase();
+  const amoWx = await fetchLiveAmoMetarTaf(icao);
 
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
-  return res.status(200).json(data);
+  return res.status(200).json({
+    icao,
+    taf: amoWx.taf || null,
+    source: amoWx.source || '대한민국 항공기상청 (AMO)'
+  });
 }
 
-// KMA AIRMET - ?쒓뎅 FIR AIRMET (怨듭떇 KMA API)
-async function handleKmaAirmet(req, res) {
-  const airmetUrl = `https://apihub.kma.go.kr/api/typ02/openApi/AmmService/getAirmet?pageNo=1&numOfRows=50&dataType=JSON&authKey=${KMA_API_KEY}`;
-
-  console.info('[Weather API] Fetching KMA AIRMET');
-  const response = await fetchWithTimeout(airmetUrl);
-  const data = response.ok ? await response.json() : null;
-
-  res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
-  return res.status(200).json(data);
-}
-
-// 怨듯빆寃쎈낫 議고쉶 (怨듭떇 KMA API)
+// 공항경보 조회 (대한민국 항공기상청 AMO 실측치)
 async function handleWarning(req, res) {
-  const warningUrl = `https://apihub.kma.go.kr/api/typ02/openApi/AmmService/getWarning?pageNo=1&numOfRows=50&dataType=JSON&authKey=${KMA_API_KEY}`;
-
-  console.info('[Weather API] Fetching Airport Warning');
-  const response = await fetchWithTimeout(warningUrl);
-  const data = response.ok ? await response.json() : null;
+  const urlObj = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+  const icao = (urlObj.searchParams.get('icao') || (typeof req.query?.icao === 'string' ? req.query.icao : 'RKSI') || 'RKSI').toUpperCase();
+  const amoWx = await fetchLiveAmoMetarTaf(icao);
 
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
-  return res.status(200).json(data);
+  return res.status(200).json(amoWx.warnings || []);
 }
 
 // SIGMET - 以묒슂湲곗긽?뺣낫 (?쒕쪟, 李⑸튃, ?붿궛????

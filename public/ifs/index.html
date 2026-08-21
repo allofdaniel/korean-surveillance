@@ -410,19 +410,21 @@
     /* Section 2: Raw MET Feed with Warnings & SIGMET */
     .raw-met-box {
       background: var(--bg-dim);
-      padding: 4px 8px;
-      font-size: 11.5px;
-      line-height: 1.35;
+      padding: 6px 10px;
+      font-size: 13px;
+      line-height: 1.45;
       color: var(--primary-dim);
       display: flex;
       flex-direction: column;
-      gap: 2.5px;
+      gap: 3.5px;
       flex-shrink: 0;
       border-bottom: 1px solid var(--outline);
-      min-height: 42px;
+      min-height: 48px;
       font-weight: 600;
+      font-family: 'Consolas', 'Courier New', monospace, var(--font-mono);
+      letter-spacing: 0.3px;
     }
-    .raw-met-line { display: flex; align-items: baseline; gap: 0; }
+    .raw-met-line { display: flex; align-items: baseline; gap: 0; word-break: break-all; }
     .raw-sigmet-text { color: var(--amber); font-weight: 800; }
     .raw-warning-text { color: var(--red); font-weight: 800; }
 

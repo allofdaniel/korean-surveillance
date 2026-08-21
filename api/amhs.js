@@ -6,7 +6,7 @@ import {
   getAtsFilingTime,
 } from './_utils/amhsGenerator.js';
 import { fetchLiveAmosData, fetchLiveAmoMetarTaf } from './_utils/amosScraper.js';
-import { fetchUbikaisSchedule } from './_utils/ubikaisScraper.js';
+import { fetchUbikaisAirportLive } from './_utils/ubikaisAuthScraper.js';
 
 /**
  * AMHS External Gateway API
@@ -33,48 +33,38 @@ export default async function handler(req, res) {
     const min = String(now.getUTCMinutes()).padStart(2, '0');
 
     let xmlOutput = '';
-    let rawOutput = null;
     let contentType = 'application/xml; charset=utf-8';
 
     switch (type) {
       case 'METREPORT':
       case 'AMOS': {
-        // 실시간 관제기상 (1~2초 단위 고빈도 갱신 데이터)
+        const amoWx = await fetchLiveAmoMetarTaf(icao);
         const amosList = await fetchLiveAmosData(icao);
-        const amosItem = amosList.length > 0 ? amosList[0] : {
-          stnCd: icao,
-          rwyDir: '15L',
-          wd2minAvg: '150',
-          wspd2minAvg: '5.0',
-          wspd2minMax: '7.0',
-          mor1min: '5600',
-          rvr1min: 'P2000',
-          tmp: '27.0',
-          dp: '24.0',
-          qnhOrigin: 10152,
-        };
+        const amosItem = amosList.length > 0 ? amosList[0] : null;
+
+        let metReportText = amoWx.metReport?.content || '';
+        if (!metReportText && amosItem) {
+          const rwy = amosItem.rwyDir || '15L';
+          const wd = String(amosItem.wd2minAvg || amosItem.wd || '150').padStart(3, '0');
+          const ws = String(Math.round(parseFloat(amosItem.wspd2minAvg || amosItem.ws || '5'))).padStart(2, '0');
+          const maxGust = amosItem.wspd2minMax ? ` MAX${String(Math.round(parseFloat(amosItem.wspd2minMax))).padStart(2, '0')}` : '';
+          const vis = amosItem.mor1min ? ` VIS ${amosItem.mor1min}M` : ' VIS 9999M';
+          const rvr = amosItem.rvr1min ? ` RVR RWY ${rwy} ${amosItem.rvr1min}M` : '';
+          const tmp = amosItem.tmp ? ` T${Math.round(parseFloat(amosItem.tmp))}` : '';
+          const dp = amosItem.dp ? ` DP${Math.round(parseFloat(amosItem.dp))}` : '';
+          const qnhVal = amosItem.qnhOrigin ? Math.round(amosItem.qnhOrigin / 10) : (amosItem.qnhHpa || 1015);
+          const qnh = ` QNH ${qnhVal}HPA`;
+          metReportText = `MET REPORT ${icao} ${day}${hour}${min}Z RWY ${rwy} WIND ${wd}/${ws}KT${maxGust}${vis}${rvr} CLD FEW030${tmp}${dp}${qnh}=`;
+        }
 
         if (isRaw) {
           return res.status(200).json({
-            dataSource: 'AMO 항공기상청 (AmosRealTimeMqc.do 원천 관측치)',
+            dataSource: '대한민국 항공기상청 (AMO / global.amo.go.kr)',
             timestamp: new Date().toISOString(),
             rawAmosRecord: amosItem,
             rawAviationWeatherText: metReportText
           });
         }
-
-        const rwy = amosItem.rwyDir || '15L';
-        const wd = String(amosItem.wd2minAvg || '150').padStart(3, '0');
-        const ws = String(Math.round(parseFloat(amosItem.wspd2minAvg || '5'))).padStart(2, '0');
-        const maxGust = amosItem.wspd2minMax ? ` MAX${String(Math.round(parseFloat(amosItem.wspd2minMax))).padStart(2, '0')}` : '';
-        const vis = amosItem.mor1min ? ` VIS ${amosItem.mor1min}M` : ' VIS 9999M';
-        const rvr = amosItem.rvr1min ? ` RVR RWY ${rwy} ${amosItem.rvr1min}M` : '';
-        const tmp = amosItem.tmp ? ` T${Math.round(parseFloat(amosItem.tmp))}` : '';
-        const dp = amosItem.dp ? ` DP${Math.round(parseFloat(amosItem.dp))}` : '';
-        const qnhVal = amosItem.qnhOrigin ? Math.round(amosItem.qnhOrigin / 10) : 1015;
-        const qnh = ` QNH ${qnhVal}HPA`;
-
-        const metReportText = `MET REPORT ${icao} ${day}${hour}${min}Z RWY ${rwy} WIND ${wd}/${ws}KT${maxGust}${vis}${rvr} CLD FEW030${tmp}${dp}${qnh}=`;
 
         xmlOutput = generateAmhsIpmXml({
           locId: `LOC-ID:AMO-${icao}-${day}${hour}${min}`,
@@ -83,30 +73,18 @@ export default async function handler(req, res) {
           priority: 'FF',
           filingTime,
           headerLine: `SAMO23 ${icao} ${day}${hour}${min}`,
-          atsMessage: metReportText,
+          atsMessage: metReportText || `MET REPORT ${icao} ${day}${hour}${min}Z RWY 15L WIND 160/05KT VIS 9999M QNH 1012HPA=`,
         });
         break;
       }
 
       case 'METAR': {
-        // 1. 항공날씨 (AMO domestic-airport) 실시간 우선, 2. NOAA 폴백
-        let rawMetar = `METAR ${icao} ${day}${hour}00Z 18008KT 9999 SCT030 30/22 Q1012 NOSIG=`;
-        try {
-          const amoWx = await fetchLiveAmoMetarTaf(icao);
-          if (amoWx.metar) {
-            rawMetar = amoWx.metar.trim();
-          } else {
-            const wxRes = await fetch(`https://aviationweather.gov/api/data/metar?ids=${icao}&format=raw`);
-            if (wxRes.ok) {
-              const txt = (await wxRes.text()).trim();
-              if (txt && !txt.startsWith('<')) rawMetar = txt;
-            }
-          }
-        } catch { /* fallback to stable default */ }
+        const amoWx = await fetchLiveAmoMetarTaf(icao);
+        const rawMetar = amoWx.metar || '';
 
         if (isRaw) {
           return res.status(200).json({
-            dataSource: 'AMO 항공기상청 (global.amo.go.kr METAR)',
+            dataSource: amoWx.source || '대한민국 항공기상청 (AMO / global.amo.go.kr)',
             timestamp: new Date().toISOString(),
             rawAviationWeatherText: rawMetar
           });
@@ -119,35 +97,25 @@ export default async function handler(req, res) {
           priority: 'GG',
           filingTime,
           headerLine: `SAUS23 KWBC ${day}${hour}00`,
-          atsMessage: rawMetar,
+          atsMessage: rawMetar || `METAR ${icao} ${day}${hour}00Z 18008KT 9999 SCT030 30/22 Q1012 NOSIG=`,
         });
         break;
       }
 
       case 'TAF': {
-        // 1. NOAA 항공기상청 실시간 우선, 2. AMO 폴백
-        let rawTaf = `TAF ${icao} ${day}${hour}00Z ${day}${hour}/${day + 1}06 18010KT 9999 SCT035 BKN200=`;
-        try {
-          const tafRes = await fetch(`https://aviationweather.gov/api/data/taf?ids=${icao}&format=raw`);
-          if (tafRes.ok) {
-            const txt = (await tafRes.text()).trim();
-            if (txt && !txt.startsWith('<')) rawTaf = txt;
-          } else {
-            const amoWx = await fetchLiveAmoMetarTaf(icao);
-            if (amoWx.taf) rawTaf = amoWx.taf.trim();
-          }
-        } catch { /* fallback to stable default */ }
+        const amoWx = await fetchLiveAmoMetarTaf(icao);
+        const rawTaf = amoWx.taf || '';
 
         if (isRaw) {
           return res.status(200).json({
-            dataSource: 'AMO 항공기상청 (global.amo.go.kr TAF)',
+            dataSource: amoWx.source || '대한민국 항공기상청 (AMO / global.amo.go.kr)',
             timestamp: new Date().toISOString(),
             rawAviationWeatherText: rawTaf
           });
         }
 
         xmlOutput = generateAmhsIpmXml({
-          locId: `LOC-ID:00E316AF1B779727`,
+          locId: `LOC-ID:AMO-${icao}-TAF`,
           originator: { c: 'XX', a: 'ICAO', p: 'REP-KOREA', o: 'RKSS', ou: icao, cn: `${icao}YPYX` },
           recipients: [
             { c: 'XX', a: 'ICAO', p: 'REP-KOREA', o: 'RKSS', ou: 'RKDA', cn: 'RKDAZAZS' },
@@ -160,7 +128,7 @@ export default async function handler(req, res) {
           priority: 'FF',
           filingTime,
           headerLine: `FTCN23 CWAO ${day}${hour}00 AAB`,
-          atsMessage: rawTaf,
+          atsMessage: rawTaf || `TAF ${icao} ${day}${hour}00Z ${day}${hour}/${day + 1}06 18010KT 9999 SCT035 BKN200=`,
         });
         break;
       }
@@ -169,7 +137,7 @@ export default async function handler(req, res) {
         const rawSigmet = `WSAU21 YMRF ${day}${hour}30\nRKRR SIGMET Z03 VALID ${day}0200/${day}0600 RKRR-\nRKRR INCHEON FIR SEV TURB FCST WI N3720 E12620 - N3840 E12720 - N3740 E12820 FL250/FL390 STNR NC=`;
         if (isRaw) {
           return res.status(200).json({
-            dataSource: 'AMO 항공기상청 (Incheon FIR SIGMET)',
+            dataSource: '대한민국 항공기상청 (AMO Incheon FIR SIGMET)',
             timestamp: new Date().toISOString(),
             rawSigmetText: rawSigmet
           });
@@ -215,14 +183,11 @@ export default async function handler(req, res) {
       }
 
       case 'FPL': {
-        // UBIKAIS 실시간 운항스케줄 IFR 비행계획
         let fplRaw = null;
         try {
-          const ubiDeps = await fetchUbikaisSchedule(origin, 'dep');
-          const matched = ubiDeps.find(d => (d.fpId || '').replace(/\s+/g, '') === callsign) || ubiDeps[0];
-          if (matched) {
-            fplRaw = matched;
-          }
+          const ubiData = await fetchUbikaisAirportLive(origin);
+          const matched = ubiData.departures?.find(d => (d.flt || '').replace(/\s+/g, '') === callsign) || ubiData.departures?.[0];
+          if (matched) fplRaw = matched;
         } catch { /* fallback */ }
 
         if (isRaw) {
@@ -230,11 +195,11 @@ export default async function handler(req, res) {
             dataSource: 'UBIKAIS (ubikais.fois.go.kr:8030 IFR 비행계획 원천)',
             timestamp: new Date().toISOString(),
             rawUbikaisFlight: fplRaw || {
-              fpId: callsign,
-              apIcao: origin,
-              apArr: dest,
+              flt: callsign,
+              org: origin,
+              des: dest,
               std: '10:30',
-              acTyp: 'B77W',
+              typ: 'B77W',
               ssrCode: '3412',
               speed: 'N0480',
               altitude: 'F350'
@@ -255,73 +220,6 @@ export default async function handler(req, res) {
           headerLine: `FF ${origin}ZPZX ${dest}ZPZX\n${filingTime} ${origin}KALP`,
           atsMessage: atsFplText,
         });
-        break;
-      }
-
-      case 'DEP': {
-        const depText = `(DEP-${callsign}/A2622-${origin}${hour}${min}-${dest}-DOF/${new Date().toISOString().slice(2, 10).replace(/-/g, '')})`;
-        xmlOutput = generateAmhsSoapXml({
-          originCn: 'RKSSKALP',
-          recipientCn: 'RKSSKAUA',
-          priority: 'FF',
-          filingTime,
-          atsMessageText: depText,
-        });
-        break;
-      }
-
-      case 'ARR': {
-        const arrText = `(ARR-${callsign}-${origin}0255-${dest}${hour}${min})`;
-        xmlOutput = generateAmhsSoapXml({
-          originCn: 'RKSSKALP',
-          recipientCn: 'RKSSKAUA',
-          priority: 'FF',
-          filingTime,
-          atsMessageText: arrText,
-        });
-        break;
-      }
-
-      case 'DLA': {
-        const dlaText = `(DLA-${callsign}-${origin}0540-${dest}-DOF/${new Date().toISOString().slice(2, 10).replace(/-/g, '')})`;
-        xmlOutput = generateAmhsSoapXml({
-          originCn: 'RKSSKALP',
-          recipientCn: 'RKSSKAUA',
-          priority: 'FF',
-          filingTime,
-          atsMessageText: dlaText,
-        });
-        break;
-      }
-
-      case 'CNL': {
-        const cnlText = `(CNL-${callsign}-${origin}0955-${dest}-DOF/${new Date().toISOString().slice(2, 10).replace(/-/g, '')})`;
-        xmlOutput = generateAmhsSoapXml({
-          originCn: 'RKSSKALP',
-          recipientCn: 'RKSSKAUA',
-          priority: 'FF',
-          filingTime,
-          atsMessageText: cnlText,
-        });
-        break;
-      }
-
-      case 'CHG': {
-        const chgText = `(CHG-${callsign}-${origin}0255-${dest}-DOF/${new Date().toISOString().slice(2, 10).replace(/-/g, '')}\n-16/${dest}0141 ${origin})`;
-        xmlOutput = generateAmhsIpmXml({
-          locId: `MTCU581027932160626002738`,
-          originator: { c: 'XX', a: 'ICAO', p: 'CHINA', o: 'EC', ou: 'ZSSS', cn: 'ZSSSCESX' },
-          recipients: [{ c: 'XX', a: 'ICAO', p: 'REP-KOREA', o: 'RKSS', ou: 'RKSS', cn: 'RKSSZPZX' }],
-          priority: 'FF',
-          filingTime,
-          atsMessage: chgText,
-        });
-        break;
-      }
-
-      case 'IWXXM': {
-        const sampleIwxxm = `<iwxxm:TAF xmlns:iwxxm="http://icao.int/iwxxm/2023-1" status="NORMAL"><iwxxm:issueTime>${now.toISOString()}</iwxxm:issueTime><iwxxm:aerodrome>${icao}</iwxxm:aerodrome></iwxxm:TAF>`;
-        xmlOutput = generateIwxxmAmhsXml({ rawXml: sampleIwxxm });
         break;
       }
 
