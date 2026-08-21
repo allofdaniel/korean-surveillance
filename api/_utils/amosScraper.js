@@ -6,7 +6,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
  * 대한민국 항공기상청 (AMO / global.amo.go.kr) 실시간 공식 기상 관제 게이트웨이
  * - 사용자 공식 계정(kal05 / pr12pr34!!) SHA256 암호화 인증 세션 수립
  * - 전국 공항 활주로별 실시간 AMOS 관제기상(순간풍, 2분/10분 평균풍, 기온, 이슬점, QNH, 강수량, 시정, RVR) 실측 수집
- * - METAR, TAF, SPECI, MET REPORT 100% 원문 직결
+ * - METAR, TAF, SPECI, MET REPORT 100% 원문 직결 (NOAA 배제, 오직 대한민국 항공기상청 단일 소스)
  */
 
 const AMO_USER_ID = 'kal05';
@@ -82,7 +82,7 @@ async function getAmoAuthenticatedCookies() {
 }
 
 /**
- * 항공기상청(AMO) 실시간 METAR, TAF, SPECI, WARNING 100% 원문 직결 수집
+ * 항공기상청(AMO) 실시간 METAR, TAF, SPECI, WARNING 100% 원문 직결 수집 (오직 항공기상청만 사용)
  */
 export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
   const now = Date.now();
@@ -106,36 +106,11 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
 
     if (res.ok) {
       const json = await res.json();
-      let metar = (json.metarData?.content || json.metar || '').trim();
+      let metar = (json.metarData?.content || json.metar || json.domesticMetar?.[0]?.content || json.metarDecode?.[0]?.metarSource || '').trim();
       let taf = (json.tafData?.content || json.taf || '').trim();
       const warnings = json.warningList || [];
       const speci = (json.speciList?.[0]?.content || '').trim();
       const metReport = json.metReportData || null;
-
-      // If AMO doesn't have METAR (e.g. training airfields or military), check NOAA secondary
-      if (!metar) {
-        try {
-          const noaaRes = await fetch(`https://aviationweather.gov/api/data/metar?ids=${icao}&format=raw`, {
-            signal: AbortSignal.timeout(4000)
-          });
-          if (noaaRes.ok) {
-            const noaaTxt = (await noaaRes.text()).trim();
-            if (noaaTxt && !noaaTxt.startsWith('<')) metar = noaaTxt;
-          }
-        } catch {}
-      }
-
-      if (!taf) {
-        try {
-          const noaaTafRes = await fetch(`https://aviationweather.gov/api/data/taf?ids=${icao}&format=raw`, {
-            signal: AbortSignal.timeout(4000)
-          });
-          if (noaaTafRes.ok) {
-            const noaaTafTxt = (await noaaTafRes.text()).trim();
-            if (noaaTafTxt && !noaaTafTxt.startsWith('<')) taf = noaaTafTxt;
-          }
-        } catch {}
-      }
 
       const result = {
         metar: metar || null,

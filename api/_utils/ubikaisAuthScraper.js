@@ -1,30 +1,60 @@
-import crypto from 'crypto';
+import fs from 'fs';
+import vm from 'vm';
 
-// Allow government GPKI / self-signed certificate on port 8030
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-// UBIKAIS User Credentials
-const UBI_USER_ID = 'allofdanie';
-const UBI_USER_PWD = 'pr12pr34!!';
+/**
+ * UBIKAIS 실시간 인증 크롤러 (RSA PKCS#1 v1.5 암호화 세션)
+ * - 사용자 계정(allofdanie / pr12pr34!!)을 이용해 정부 UBIKAIS에 로그인
+ * - IFR 비행계획(selectDep.fois, selectArr.fois) 및 VFR 비행계획(selectVfrFpl.fois) 100% 실시간 DB 원본 수집
+ */
 
 let cachedCookieHeader = null;
 let lastLoginTime = 0;
-const SESSION_TTL_MS = 8 * 60 * 1000; // 8 minutes session refresh
 
-// Airport cache (5 seconds)
 const airportCache = new Map();
 const cacheTimestamps = new Map();
 
-/**
- * Log in to UBIKAIS via RSA authentication and establish an active session
- */
 async function authenticateUbikais() {
   const now = Date.now();
-  if (cachedCookieHeader && (now - lastLoginTime) < SESSION_TTL_MS) {
+  if (cachedCookieHeader && (now - lastLoginTime) < 10 * 60 * 1000) {
     return cachedCookieHeader;
   }
 
+  const jsbnCode = fs.readFileSync('C:/Users/allof/.gemini/antigravity/scratch/jsbn.js', 'utf8');
+  const prng4Code = fs.readFileSync('C:/Users/allof/.gemini/antigravity/scratch/prng4.js', 'utf8');
+  const rngCode = fs.readFileSync('C:/Users/allof/.gemini/antigravity/scratch/rng.js', 'utf8');
+  const rsaCode = fs.readFileSync('C:/Users/allof/.gemini/antigravity/scratch/rsa.js', 'utf8');
+
+  const context = {
+    window: {},
+    navigator: { appName: 'Netscape' },
+    alert: () => {},
+    console: console,
+    Math: Math,
+    Date: Date,
+    Array: Array,
+    parseInt: parseInt
+  };
+  vm.createContext(context);
+
+  vm.runInContext(`
+    String.prototype.padRight = function(totalLength, paddingChar) {
+      paddingChar = paddingChar || " ";
+      var padCnt = Number(totalLength) - String(this).length;
+      var returnString = "";
+      for (var i=0; i<padCnt; i++) returnString += String(paddingChar);
+      return (this + returnString).substring(0, totalLength);
+    };
+  `, context);
+
+  vm.runInContext(jsbnCode, context);
+  vm.runInContext(prng4Code, context);
+  vm.runInContext(rngCode, context);
+  vm.runInContext(rsaCode, context);
+
   const cookieJar = new Map();
+
   function saveCookies(res) {
     let cookies = [];
     if (res.headers.getSetCookie) {
@@ -40,111 +70,101 @@ async function authenticateUbikais() {
     });
   }
 
-  function getCookieStr() {
+  function getCookieHeader() {
     return Array.from(cookieJar.entries()).map(([k, v]) => `${k}=${v}`).join('; ');
   }
 
-  // 1. Fetch Login Page for RSA Public Key Modulus & Exponent
-  const loginPageRes = await fetch('https://ubikais.fois.go.kr:8030/common/login?systemId=sysUbikais', {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
-    },
-    signal: AbortSignal.timeout(10000)
+  // 1. Fetch login page to retrieve RSA Public Key
+  const res1 = await fetch('https://ubikais.fois.go.kr:8030/common/login?systemId=sysUbikais', {
+    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+    signal: AbortSignal.timeout(8000)
   });
-  saveCookies(loginPageRes);
+  saveCookies(res1);
 
-  const html = await loginPageRes.text();
+  const html = await res1.text();
   const modMatch = html.match(/id="rsaPublicKeyModulus"\s+value="([^"]+)"/);
   const expMatch = html.match(/id="rsaPublicKeyExponent"\s+value="([^"]+)"/);
 
   if (!modMatch || !expMatch) {
-    throw new Error('Failed to retrieve RSA public key from UBIKAIS login portal');
+    throw new Error('Failed to extract RSA public key from UBIKAIS login page');
   }
 
-  const modulusHex = modMatch[1];
-  const exponentHex = expMatch[1];
+  context.modulus = modMatch[1];
+  context.exponent = expMatch[1];
+  context.rawId = 'allofdanie';
+  context.rawPwd = 'pr12pr34!!';
 
-  const pubKey = crypto.createPublicKey({
-    key: {
-      kty: 'RSA',
-      n: Buffer.from(modulusHex, 'hex').toString('base64url'),
-      e: Buffer.from(exponentHex, 'hex').toString('base64url')
-    },
-    format: 'jwk'
-  });
+  vm.runInContext(`
+    var rsa = new RSAKey();
+    rsa.setPublic(modulus, exponent);
+    var encId = rsa.encrypt(rawId);
+    var encPwd = rsa.encrypt(rawPwd);
+  `, context);
 
-  // UBIKAIS specific 16-character space right-padding
-  const rawId = UBI_USER_ID.padEnd(16, ' ');
-  const rawPwd = UBI_USER_PWD.padEnd(16, ' ');
-
-  const encId = crypto.publicEncrypt({
-    key: pubKey,
-    padding: crypto.constants.RSA_PKCS1_PADDING
-  }, Buffer.from(rawId, 'utf8')).toString('hex');
-
-  const encPwd = crypto.publicEncrypt({
-    key: pubKey,
-    padding: crypto.constants.RSA_PKCS1_PADDING
-  }, Buffer.from(rawPwd, 'utf8')).toString('hex');
-
-  // 2. POST /common/loginProc
-  const loginProcRes = await fetch('https://ubikais.fois.go.kr:8030/common/loginProc', {
+  // 2. Perform RSA Encrypted Login
+  const loginRes = await fetch('https://ubikais.fois.go.kr:8030/common/loginProc', {
     method: 'POST',
     headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-      'Cookie': getCookieStr(),
+      'Cookie': getCookieHeader(),
       'Referer': 'https://ubikais.fois.go.kr:8030/common/login?systemId=sysUbikais',
       'X-Requested-With': 'XMLHttpRequest'
     },
     body: new URLSearchParams({
       loginSystem: 'PIB',
       userGroup: 'PIB',
-      userId: encId,
-      userPass: encPwd
+      userId: context.encId,
+      userPass: context.encPwd
     }).toString(),
-    signal: AbortSignal.timeout(10000)
+    signal: AbortSignal.timeout(8000)
   });
-  saveCookies(loginProcRes);
+  saveCookies(loginRes);
 
-  const loginJson = await loginProcRes.json().catch(() => ({}));
-  if (loginJson.status !== '개인' && !loginJson.status?.includes('개인') && loginJson.status !== 'Level0') {
-    console.warn('[UBIKAIS Auth] Login status warning:', loginJson);
-  }
-
-  cachedCookieHeader = getCookieStr();
-  lastLoginTime = Date.now();
-  return cachedCookieHeader;
+  const cookieHeader = getCookieHeader();
+  cachedCookieHeader = cookieHeader;
+  lastLoginTime = now;
+  return cookieHeader;
 }
 
 /**
- * Fetch 100% Genuine Real-Time Flights for any airport from UBIKAIS IFR Flight Plan Database
+ * 특정 공항의 실시간 UBIKAIS 비행계획(IFR + VFR) 100% 원문 데이터베이스 조회
  */
-export async function fetchUbikaisAirportLive(airportIcao = 'RKSS') {
+export async function fetchUbikaisAirportLive(airportIcao = 'RKSI') {
   const now = Date.now();
   const lastTime = cacheTimestamps.get(airportIcao) || 0;
-  if (airportCache.has(airportIcao) && (now - lastTime) < 5000) {
+  if (airportCache.has(airportIcao) && (now - lastTime) < 15000) {
     return airportCache.get(airportIcao);
   }
 
-  let cookieHeader = null;
-  try {
-    cookieHeader = await authenticateUbikais();
-  } catch (e) {
-    console.error('[UBIKAIS Auth] Authentication failed:', e.message);
-    if (airportCache.has(airportIcao)) return airportCache.get(airportIcao);
-    throw e;
-  }
+  let cookieHeader = await authenticateUbikais();
 
-  // Format today's date
-  const kstDate = new Date(Date.now() + 9 * 3600 * 1000);
-  const today = kstDate.toISOString().slice(0, 10);
-  const todaysh = today.replace(/-/g, '');
+  const kst = new Date(now + 9 * 3600 * 1000);
+  const y = kst.getUTCFullYear();
+  const m = String(kst.getUTCMonth() + 1).padStart(2, '0');
+  const d = String(kst.getUTCDate()).padStart(2, '0');
+  const today = `${y}-${m}-${d}`;
+  const todaysh = `${y}${m}${d}`;
 
-  const depUrl = `https://ubikais.fois.go.kr:8030/sysUbikais/biz/fpl/selectDep.fois?downloadYn=1&srchDate=${today}&srchDatesh=${todaysh}&srchAl=&srchFln=&srchDep=${airportIcao}&srchArr=`;
-  const arrUrl = `https://ubikais.fois.go.kr:8030/sysUbikais/biz/fpl/selectArr.fois?downloadYn=1&srchDate=${today}&srchDatesh=${todaysh}&srchAl=&srchFln=&srchDep=&srchArr=${airportIcao}`;
+  const ap = airportIcao.toUpperCase();
+  const depUrl = `https://ubikais.fois.go.kr:8030/sysUbikais/biz/fpl/selectDep.fois?downloadYn=1&srchDate=${today}&srchDatesh=${todaysh}&srchAl=&srchFln=&srchDep=${ap}&srchArr=`;
+  const arrUrl = `https://ubikais.fois.go.kr:8030/sysUbikais/biz/fpl/selectArr.fois?downloadYn=1&srchDate=${today}&srchDatesh=${todaysh}&srchAl=&srchFln=&srchDep=&srchArr=${ap}`;
 
-  let [dRes, aRes] = await Promise.all([
+  const con01 = (ap === 'RKSI') ? "'RKSI','RKRE'" : `'${ap}'`;
+  const con02 = (ap === 'RKSI') ? " OR VIA LIKE '%RKRE%'" : "";
+  const vfrUrl = `https://ubikais.fois.go.kr:8030/sysUbikais/biz/fpl/selectVfrFpl.fois?${new URLSearchParams({
+    userGroup: 'PIB',
+    userId: 'allofdanie',
+    downloadYn: '1',
+    con01: con01,
+    con02: con02,
+    srchDate: today,
+    srchDatesh: todaysh,
+    airport: ap,
+    srchFp: ''
+  }).toString()}`;
+
+  let [dRes, aRes, vRes] = await Promise.all([
     fetch(depUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
@@ -164,17 +184,28 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSS') {
         'Accept': 'application/json, text/javascript, */*; q=0.01'
       },
       signal: AbortSignal.timeout(12000)
+    }),
+    fetch(vfrUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        'Cookie': cookieHeader,
+        'Referer': 'https://ubikais.fois.go.kr:8030/sysUbikais/biz/fpl/vfrFpl.fois',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json, text/javascript, */*; q=0.01'
+      },
+      signal: AbortSignal.timeout(12000)
     })
   ]);
 
   let dTxt = await dRes.text();
   let aTxt = await aRes.text();
+  let vTxt = await vRes.text();
 
   // If session expired on server side, force re-login once
   if (dTxt.includes('로그인 세션') || aTxt.includes('로그인 세션') || !dTxt.startsWith('{')) {
     cachedCookieHeader = null;
     cookieHeader = await authenticateUbikais();
-    [dRes, aRes] = await Promise.all([
+    [dRes, aRes, vRes] = await Promise.all([
       fetch(depUrl, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
@@ -194,19 +225,32 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSS') {
           'Accept': 'application/json, text/javascript, */*; q=0.01'
         },
         signal: AbortSignal.timeout(12000)
+      }),
+      fetch(vfrUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+          'Cookie': cookieHeader,
+          'Referer': 'https://ubikais.fois.go.kr:8030/sysUbikais/biz/fpl/vfrFpl.fois',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json, text/javascript, */*; q=0.01'
+        },
+        signal: AbortSignal.timeout(12000)
       })
     ]);
     dTxt = await dRes.text();
     aTxt = await aRes.text();
+    vTxt = await vRes.text();
   }
 
   const dJson = JSON.parse(dTxt);
   const aJson = JSON.parse(aTxt);
+  const vJson = vTxt.startsWith('{') ? JSON.parse(vTxt) : { records: [] };
 
   const rawDeps = dJson.records || [];
   const rawArrs = aJson.records || [];
+  const rawVfrs = vJson.records || [];
 
-  // Format DEPARTURES into 12-column standardized IFS schema
+  // 1. Format IFR DEPARTURES
   const departures = rawDeps.map(r => {
     let flt = r.fpId || 'UNKNOWN';
     if (flt.startsWith('IFR') && flt.length > 3) flt = flt.substring(3);
@@ -237,9 +281,9 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSS') {
       sts: (r.depStatus || 'SCH').toUpperCase(),
       flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR'
     };
-  }).sort((a, b) => parseInt((a.etd || '0').replace(':', '')) - parseInt((b.etd || '0').replace(':', '')));
+  });
 
-  // Format ARRIVALS into 13-column standardized IFS schema
+  // 2. Format IFR ARRIVALS
   const arrivals = rawArrs.map(r => {
     let flt = r.fpId || 'UNKNOWN';
     if (flt.startsWith('IFR') && flt.length > 3) flt = flt.substring(3);
@@ -270,7 +314,77 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSS') {
       cha: isChanged ? 'Y' : '-',
       flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR'
     };
-  }).sort((a, b) => parseInt((a.eta || '0').replace(':', '')) - parseInt((b.eta || '0').replace(':', '')));
+  });
+
+  // 3. Format & Merge VFR Flight Plans (selectVfrFpl.fois)
+  rawVfrs.forEach(r => {
+    const via = r.via || '';
+    const viaParts = via.split('/');
+    const org = viaParts[0] || ap;
+    const des = viaParts.length > 1 ? viaParts[viaParts.length - 1].split(' ')[0] : ap;
+
+    const flt = r.fpId || 'UNKNOWN';
+    const rules = r.classify9 || (flt.startsWith('HL') ? 'VFR' : 'IFR');
+    const isFplFiled = r.fplYn === 'Y' || r.fpl === 'Y';
+
+    const etd = (r.etd || '').replace(':', '') || '-';
+    const atd = (r.atd && r.atd !== '-' && r.atd !== '') ? r.atd.replace(':', '') : '-';
+    const eta = (r.eta || '').replace(':', '') || '-';
+    const ata = (r.ata && r.ata !== '-' && r.ata !== '') ? r.ata.replace(':', '') : '-';
+
+    // Check if Departure for this airport
+    const isDep = (org === ap) || (r.depYn === 'Y') || (etd !== '-' && !arrivals.some(a => a.flt === flt && a.eta === eta));
+    if (isDep) {
+      // Avoid duplicate if already in IFR departures
+      if (!departures.some(d => d.flt === flt && (d.etd === etd || d.atd === atd))) {
+        departures.push({
+          flt,
+          typ: r.acType || '-',
+          reg: flt.startsWith('HL') ? flt : '-',
+          nat: rules,
+          fpl: isFplFiled ? 'Y' : '-',
+          des: des || ap,
+          spt: '-',
+          ram: '-',
+          std: etd,
+          etd,
+          atd,
+          eta,
+          cha: '-',
+          sts: atd !== '-' ? 'DEP' : 'SCH',
+          flightRules: rules
+        });
+      }
+    }
+
+    // Check if Arrival for this airport
+    const isArr = (des === ap) || (r.arrYn === 'Y') || (eta !== '-' && !departures.some(d => d.flt === flt && d.etd === etd));
+    if (isArr) {
+      // Avoid duplicate if already in IFR arrivals
+      if (!arrivals.some(a => a.flt === flt && (a.eta === eta || a.ata === ata))) {
+        arrivals.push({
+          flt,
+          typ: r.acType || '-',
+          reg: flt.startsWith('HL') ? flt : '-',
+          sts: ata !== '-' ? 'ARR' : (atd !== '-' ? 'ENR' : 'SCH'),
+          org: org || ap,
+          nat: rules,
+          fpl: isFplFiled ? 'Y' : '-',
+          spt: '-',
+          ram: '-',
+          etd,
+          sta: eta,
+          eta,
+          ata,
+          cha: '-',
+          flightRules: rules
+        });
+      }
+    }
+  });
+
+  departures.sort((a, b) => parseInt((a.etd || '0').replace(/[^0-9]/g, '')) - parseInt((b.etd || '0').replace(/[^0-9]/g, '')));
+  arrivals.sort((a, b) => parseInt((a.eta || '0').replace(/[^0-9]/g, '')) - parseInt((b.eta || '0').replace(/[^0-9]/g, '')));
 
   const result = {
     airport: airportIcao,

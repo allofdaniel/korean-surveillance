@@ -73,7 +73,7 @@ export default async function handler(req, res) {
           priority: 'FF',
           filingTime,
           headerLine: `SAMO23 ${icao} ${day}${hour}${min}`,
-          atsMessage: metReportText || `MET REPORT ${icao} ${day}${hour}${min}Z RWY 15L WIND 160/05KT VIS 9999M QNH 1012HPA=`,
+          atsMessage: metReportText,
         });
         break;
       }
@@ -97,7 +97,7 @@ export default async function handler(req, res) {
           priority: 'GG',
           filingTime,
           headerLine: `SAUS23 KWBC ${day}${hour}00`,
-          atsMessage: rawMetar || `METAR ${icao} ${day}${hour}00Z 18008KT 9999 SCT030 30/22 Q1012 NOSIG=`,
+          atsMessage: rawMetar,
         });
         break;
       }
@@ -123,12 +123,12 @@ export default async function handler(req, res) {
             { c: 'XX', a: 'ICAO', p: 'REP-KOREA', o: 'RKSS', ou: 'RKJJ', cn: 'RKJJYFYX' },
             { c: 'XX', a: 'ICAO', p: 'REP-KOREA', o: 'RKSS', ou: 'RKPC', cn: 'RKPCYFYA' },
             { c: 'XX', a: 'ICAO', p: 'REP-KOREA', o: 'RKSS', ou: 'RKPK', cn: 'RKPKYFYD' },
-            { c: 'XX', a: 'ICAO', p: 'REP-KOREA', o: 'RKSS', ou: 'RKPU', cn: 'RKPUZPZX' },
+            { c: 'XX', a: 'ICAO', p: 'REP-KOREA', o: 'RKPU', cn: 'RKPUZPZX' },
           ],
           priority: 'FF',
           filingTime,
           headerLine: `FTCN23 CWAO ${day}${hour}00 AAB`,
-          atsMessage: rawTaf || `TAF ${icao} ${day}${hour}00Z ${day}${hour}/${day + 1}06 18010KT 9999 SCT035 BKN200=`,
+          atsMessage: rawTaf,
         });
         break;
       }
