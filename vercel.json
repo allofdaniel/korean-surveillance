@@ -2,7 +2,9 @@
   "functions": {
     "api/aircraft.js": { "maxDuration": 30 },
     "api/crawler.js": { "maxDuration": 60 },
-    "api/flight-schedule.js": { "maxDuration": 30 }
+    "api/flight-schedule.js": { "maxDuration": 30 },
+    "api/amhs.js": { "maxDuration": 30 },
+    "api/weather.js": { "maxDuration": 30 }
   },
   "crons": [
     {
