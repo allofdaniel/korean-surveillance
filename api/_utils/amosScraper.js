@@ -87,7 +87,7 @@ async function getAmoAuthenticatedCookies() {
 export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
   const now = Date.now();
   const lastTime = lastMetarTafFetch.get(icao) || 0;
-  if (cachedMetarTaf.has(icao) && (now - lastTime) < 30000 && cachedMetarTaf.get(icao)?.metar) {
+  if (cachedMetarTaf.has(icao) && (now - lastTime) < 60000 && cachedMetarTaf.get(icao)?.metar) {
     return cachedMetarTaf.get(icao);
   }
 
