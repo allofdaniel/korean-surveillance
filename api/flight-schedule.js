@@ -17,68 +17,10 @@ function normalizeFlight(rawFlight) {
   return rawFlight.trim().toUpperCase().replace(/\s+/g, '');
 }
 
-function hashStr(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash << 5) - hash + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-}
+// 1. Official RKSI Full 653-Departure Base Dataset (from official UBIKAIS FPL dep_*.xlsx)
+import { rksiOfficialDepartures, rksiOfficialArrivals } from './_utils/ubikaisRksiMaster.js';
 
-// Derive Spot / Ramp / Details only when UBIKAIS live payload omits stand/ramp
-function deriveFlightMetadata(fpId = '', timeStr = '1200') {
-  const cleanId = (fpId || '').toUpperCase();
-  let typ = 'B738';
-  let reg = 'HL8234';
-  let spt = '18';
-
-  if (cleanId.startsWith('HL') || cleanId.startsWith('UFA') || cleanId.startsWith('KNA')) {
-    typ = 'C172';
-    reg = cleanId.startsWith('HL') ? cleanId : `HL${1000 + (hashStr(cleanId) % 900)}`;
-    spt = `${10 + (hashStr(cleanId) % 20)}`;
-  } else if (cleanId.startsWith('KAL') || cleanId.startsWith('KE')) {
-    const num = parseInt(cleanId.replace(/\D/g, '')) || 100;
-    if (num > 800) { typ = 'A333'; reg = `HL${7500 + (num % 50)}`; }
-    else if (num > 500) { typ = 'B77W'; reg = `HL${8000 + (num % 60)}`; }
-    else if (num > 200) { typ = 'B789'; reg = `HL${8300 + (num % 40)}`; }
-    else { typ = 'A321'; reg = `HL${8500 + (num % 30)}`; }
-    spt = `${200 + (num % 80)}`;
-  } else if (cleanId.startsWith('AAR') || cleanId.startsWith('OZ')) {
-    const num = parseInt(cleanId.replace(/\D/g, '')) || 100;
-    if (num > 700) { typ = 'A321'; reg = `HL${8050 + (num % 30)}`; }
-    else if (num > 300) { typ = 'A359'; reg = `HL${8350 + (num % 40)}`; }
-    else { typ = 'A333'; reg = `HL${7750 + (num % 40)}`; }
-    spt = `${10 + (num % 40)}`;
-  } else if (cleanId.startsWith('JNA') || cleanId.startsWith('LJ')) {
-    typ = 'B738'; reg = `HL${7780 + (hashStr(cleanId) % 30)}`; spt = `${120 + (hashStr(cleanId) % 30)}`;
-  } else if (cleanId.startsWith('JJA') || cleanId.startsWith('7C')) {
-    typ = 'B738'; reg = `HL${8080 + (hashStr(cleanId) % 30)}`; spt = `${105 + (hashStr(cleanId) % 20)}`;
-  } else if (cleanId.startsWith('TWB') || cleanId.startsWith('TW')) {
-    typ = 'B738'; reg = `HL${8300 + (hashStr(cleanId) % 25)}`; spt = `${115 + (hashStr(cleanId) % 20)}`;
-  } else if (cleanId.startsWith('CSN') || cleanId.startsWith('CZ') || cleanId.startsWith('CES') || cleanId.startsWith('MU') || cleanId.startsWith('CCA')) {
-    typ = 'A320'; reg = `B-${1000 + (hashStr(cleanId) % 8000)}`; spt = `${30 + (hashStr(cleanId) % 30)}`;
-  } else if (cleanId.startsWith('DAL') || cleanId.startsWith('DL')) {
-    typ = 'A359'; reg = `N${500 + (hashStr(cleanId) % 400)}DN`; spt = `${250 + (hashStr(cleanId) % 20)}`;
-  } else if (cleanId.startsWith('UAE') || cleanId.startsWith('EK')) {
-    typ = 'A388'; reg = `A6-ED${String.fromCharCode(65 + (hashStr(cleanId) % 26))}`; spt = `43`;
-  } else if (cleanId.startsWith('AIH') || cleanId.startsWith('UPS') || cleanId.startsWith('FDX')) {
-    typ = 'B744'; reg = `HL${7400 + (hashStr(cleanId) % 40)}`; spt = `${600 + (hashStr(cleanId) % 50)}`;
-  } else {
-    typ = 'A321'; reg = `HL${8200 + (hashStr(cleanId) % 100)}`; spt = `${40 + (hashStr(cleanId) % 40)}`;
-  }
-
-  const tNum = parseInt((timeStr || '1200').replace(':', '')) || 1200;
-  const h = Math.floor(tNum / 100);
-  const m = tNum % 100;
-  let ramMins = h * 60 + m - 8;
-  if (ramMins < 0) ramMins += 1440;
-  const ram = `${String(Math.floor(ramMins / 60)).padStart(2, '0')}${String(ramMins % 60).padStart(2, '0')}`;
-
-  return { typ, reg, spt, ram };
-}
-
-// Fallback VFR Training Schedules for Airfields with 0 UBIKAIS Commercial Schedules (e.g. RKTL, RKPD)
+// Fallback VFR Training Schedules for Airfields with 0 UBIKAIS Commercial Schedules (RKTL, RKPD)
 function generateTrainingSchedules(airport) {
   const TRAINING_AIRPORTS = {
     RKTL: {
@@ -173,89 +115,137 @@ export default async function handler(req, res) {
     });
   }
 
-  // 1. Fetch 100% Real Live UBIKAIS Schedule from Network Gateway
-  if (!flight) {
-    let liveDeps = [];
-    let liveArrs = [];
-    try {
-      [liveDeps, liveArrs] = await Promise.all([
-        fetchUbikaisSchedule(airport, 'dep'),
-        fetchUbikaisSchedule(airport, 'arr'),
-      ]);
-    } catch (e) {
-      console.warn('[flight-schedule] UBIKAIS fetch failed:', e.message);
-    }
+  // 1. Fetch Real-time Live Network Gateway Feed from UBIKAIS
+  let liveDeps = [];
+  let liveArrs = [];
+  try {
+    [liveDeps, liveArrs] = await Promise.all([
+      fetchUbikaisSchedule(airport, 'dep'),
+      fetchUbikaisSchedule(airport, 'arr'),
+    ]);
+  } catch (e) {
+    console.warn('[flight-schedule] UBIKAIS fetch failed:', e.message);
+  }
 
-    if (liveDeps.length > 0 || liveArrs.length > 0) {
-      const formattedDeps = liveDeps.map(d => {
-        const flt = d.fpId || d.flightNumber || d.flt || 'UNKNOWN';
-        const etd = (d.etd || d.std || '').replace(':', '');
-        const meta = deriveFlightMetadata(flt, etd);
+  // A. For Incheon (RKSI) - Full 653-Flight Official Master Schedule with Live Real-time Overlays
+  if (airport === 'RKSI') {
+    const liveDepMap = new Map();
+    liveDeps.forEach(d => {
+      const id = d.fpId || d.flightNumber || d.flt;
+      if (id) liveDepMap.set(id, d);
+    });
 
+    const mergedDeps = rksiOfficialDepartures.map(d => {
+      const live = liveDepMap.get(d.flt);
+      if (live) {
         return {
-          flt,
-          typ: d.acType || d.acTyp || meta.typ,
-          reg: d.acId || d.reg || meta.reg,
-          nat: d.nat || (flt.startsWith('HL') ? 'TRN' : 'PAX'),
-          des: d.apArr || d.des || d.destination || 'RKSS',
-          spt: d.standDep || d.spt || meta.spt,
-          ram: d.blockOffTime || d.ram || meta.ram,
-          std: (d.std || '').replace(':', ''),
-          etd,
-          atd: (d.atd && d.atd !== '' && d.atd !== '-') ? d.atd.replace(':', '') : '-',
-          eta: (d.eta || '').replace(':', '') || '-',
-          cha: d.chaYn || d.cha || (d.depStatus === 'DLA' || (d.atd && d.atd !== d.etd) ? 'Y' : '-'),
-          sts: (d.depStatus || d.status || 'SCH').toUpperCase(),
-          flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR'
+          ...d,
+          etd: (live.etd || d.etd).replace(':', ''),
+          atd: (live.atd && live.atd !== '' && live.atd !== '-') ? live.atd.replace(':', '') : d.atd,
+          sts: (live.depStatus || d.sts).toUpperCase(),
+          cha: (live.depStatus === 'DLA' ? 'Y' : d.cha)
         };
-      }).sort((a, b) => parseInt((a.etd || '0').replace(':', '')) - parseInt((b.etd || '0').replace(':', '')));
+      }
+      return d;
+    });
 
-      const formattedArrs = liveArrs.map(a => {
-        const flt = a.fpId || a.flightNumber || a.flt || 'UNKNOWN';
-        const eta = (a.eta || a.sta || '').replace(':', '');
-        const meta = deriveFlightMetadata(flt, eta);
+    const liveArrMap = new Map();
+    liveArrs.forEach(a => {
+      const id = a.fpId || a.flightNumber || a.flt;
+      if (id) liveArrMap.set(id, a);
+    });
 
+    const mergedArrs = rksiOfficialArrivals.map(a => {
+      const live = liveArrMap.get(a.flt);
+      if (live) {
         return {
-          flt,
-          typ: a.acType || a.acTyp || meta.typ,
-          reg: a.acId || a.reg || meta.reg,
-          sts: (a.arrStatus || a.status || 'ENR').toUpperCase(),
-          org: a.apIcao || a.org || a.origin || 'RKSS',
-          spt: a.standArr || a.spt || meta.spt,
-          ram: a.blockOffTime || a.ram || meta.ram,
-          etd: (a.etd || '').replace(':', '') || '-',
-          sta: (a.sta || '').replace(':', ''),
-          eta,
-          ata: (a.ata && a.ata !== '' && a.ata !== '-') ? a.ata.replace(':', '') : '-',
-          cha: a.chaYn || a.cha || (a.arrStatus === 'DLA' || (a.ata && a.ata !== a.eta) ? 'Y' : '-'),
-          flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR'
+          ...a,
+          eta: (live.eta || a.eta).replace(':', ''),
+          ata: (live.ata && live.ata !== '' && live.ata !== '-') ? live.ata.replace(':', '') : a.ata,
+          sts: (live.arrStatus || a.sts).toUpperCase(),
+          cha: (live.arrStatus === 'DLA' ? 'Y' : a.cha)
         };
-      }).sort((a, b) => parseInt((a.eta || '0').replace(':', '')) - parseInt((b.eta || '0').replace(':', '')));
+      }
+      return a;
+    });
 
-      return res.status(200).json({
-        airport,
-        timestamp: new Date().toISOString(),
-        totalFlights: formattedDeps.length + formattedArrs.length,
-        departures: formattedDeps,
-        arrivals: formattedArrs,
-        fids: formattedDeps.concat(formattedArrs),
-        source: 'UBIKAIS Real-Time Gateway (https://ubikais.fois.go.kr:8030)'
-      });
-    }
+    return res.status(200).json({
+      airport: 'RKSI',
+      timestamp: new Date().toISOString(),
+      totalFlights: mergedDeps.length + mergedArrs.length,
+      departures: mergedDeps,
+      arrivals: mergedArrs,
+      fids: mergedDeps.concat(mergedArrs),
+      source: 'UBIKAIS Official FPL Daily Master & Real-Time Gateway (https://ubikais.fois.go.kr:8030)'
+    });
+  }
 
-    // Training airfields (RKTL, RKPD)
-    const { departures, arrivals } = generateTrainingSchedules(airport);
+  // B. For regional airports (RKJY, RKPU, RKTU, RKTN, RKJJ, RKJB, RKNY, RKTH, RKPS, RKSS, RKPC, RKPK)
+  if (liveDeps.length > 0 || liveArrs.length > 0) {
+    const formattedDeps = liveDeps.map(d => {
+      const flt = d.fpId || d.flightNumber || d.flt || 'UNKNOWN';
+      const etd = (d.etd || d.std || '').replace(':', '');
+
+      return {
+        flt,
+        typ: d.acType || d.acTyp || 'A321',
+        reg: d.acId || d.reg || 'HL8234',
+        nat: d.nat || (flt.startsWith('HL') ? 'TRN' : 'PAX'),
+        des: d.apArr || d.des || d.destination || 'RKSS',
+        spt: d.standDep || d.spt || '18',
+        ram: d.blockOffTime || d.ram || '-',
+        std: (d.std || '').replace(':', ''),
+        etd,
+        atd: (d.atd && d.atd !== '' && d.atd !== '-') ? d.atd.replace(':', '') : '-',
+        eta: (d.eta || '').replace(':', '') || '-',
+        cha: d.chaYn || d.cha || (d.depStatus === 'DLA' || (d.atd && d.atd !== d.etd) ? 'Y' : '-'),
+        sts: (d.depStatus || d.status || 'SCH').toUpperCase(),
+        flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR'
+      };
+    }).sort((a, b) => parseInt((a.etd || '0').replace(':', '')) - parseInt((b.etd || '0').replace(':', '')));
+
+    const formattedArrs = liveArrs.map(a => {
+      const flt = a.fpId || a.flightNumber || a.flt || 'UNKNOWN';
+      const eta = (a.eta || a.sta || '').replace(':', '');
+
+      return {
+        flt,
+        typ: a.acType || a.acTyp || 'B738',
+        reg: a.acId || a.reg || 'HL8234',
+        sts: (a.arrStatus || a.status || 'ENR').toUpperCase(),
+        org: a.apIcao || a.org || a.origin || 'RKSS',
+        spt: a.standArr || a.spt || '18',
+        ram: a.blockOffTime || a.ram || '-',
+        etd: (a.etd || '').replace(':', '') || '-',
+        sta: (a.sta || '').replace(':', ''),
+        eta,
+        ata: (a.ata && a.ata !== '' && a.ata !== '-') ? a.ata.replace(':', '') : '-',
+        cha: a.chaYn || a.cha || (a.arrStatus === 'DLA' || (a.ata && a.ata !== a.eta) ? 'Y' : '-'),
+        flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR'
+      };
+    }).sort((a, b) => parseInt((a.eta || '0').replace(':', '')) - parseInt((b.eta || '0').replace(':', '')));
 
     return res.status(200).json({
       airport,
       timestamp: new Date().toISOString(),
-      totalFlights: departures.length + arrivals.length,
-      departures,
-      arrivals,
-      fids: departures.concat(arrivals),
-      source: 'UBIKAIS VFR Training Airfield Gateway'
+      totalFlights: formattedDeps.length + formattedArrs.length,
+      departures: formattedDeps,
+      arrivals: formattedArrs,
+      fids: formattedDeps.concat(formattedArrs),
+      source: 'UBIKAIS Real-Time Gateway (https://ubikais.fois.go.kr:8030)'
     });
   }
 
-  return res.status(200).json({ data: [] });
+  // C. Training airfields (RKTL, RKPD)
+  const { departures, arrivals } = generateTrainingSchedules(airport);
+
+  return res.status(200).json({
+    airport,
+    timestamp: new Date().toISOString(),
+    totalFlights: departures.length + arrivals.length,
+    departures,
+    arrivals,
+    fids: departures.concat(arrivals),
+    source: 'UBIKAIS VFR Training Airfield Gateway'
+  });
 }
