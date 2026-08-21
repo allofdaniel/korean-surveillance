@@ -1,5 +1,7 @@
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 import { fetchUbikaisSchedule } from './_utils/ubikaisScraper.js';
+import fs from 'fs';
+import path from 'path';
 
 const API_TIMEOUT_MS = 8000;
 
@@ -17,8 +19,21 @@ function normalizeFlight(rawFlight) {
   return rawFlight.trim().toUpperCase().replace(/\s+/g, '');
 }
 
-// In-Memory Accumulator for 24-hour UBIKAIS schedule caching
-const airportSchedulePool = new Map();
+// Load static full 653-flight RKSI dataset parsed from official UBIKAIS excel
+let rksiFullDeps = [];
+let rksiFullArrs = [];
+try {
+  const depPath = path.join(process.cwd(), 'api', '_data', 'ubikais_rksi_dep_full.json');
+  const arrPath = path.join(process.cwd(), 'api', '_data', 'ubikais_rksi_arr_full.json');
+  if (fs.existsSync(depPath)) {
+    rksiFullDeps = JSON.parse(fs.readFileSync(depPath, 'utf8'));
+  }
+  if (fs.existsSync(arrPath)) {
+    rksiFullArrs = JSON.parse(fs.readFileSync(arrPath, 'utf8'));
+  }
+} catch (e) {
+  console.warn('[flight-schedule] Could not load static full RKSI data:', e.message);
+}
 
 function hashStr(str) {
   let hash = 0;
@@ -84,7 +99,7 @@ function deriveAircraftDetails(fpId = '', timeStr = '1200') {
   return { typ, reg, nat, spt, ram };
 }
 
-// Generate Full Day UBIKAIS Schedule Pool for Major Hubs (RKSI, RKSS, RKPC, RKPK)
+// Generate Full Day UBIKAIS Schedule Pool for Major Hubs (RKSS, RKPC, RKPK)
 function generateFullDayHubSchedule(airport, liveDeps = [], liveArrs = []) {
   const now = new Date();
   const kstNow = new Date(now.getTime() + 9 * 3600 * 1000);
@@ -93,29 +108,23 @@ function generateFullDayHubSchedule(airport, liveDeps = [], liveArrs = []) {
   const curTotalMins = curHour * 60 + curMin;
 
   const HUB_CONFIG = {
-    RKSI: {
-      airlines: ['KAL', 'AAR', 'JJA', 'TWB', 'JNA', 'CPA', 'CES', 'DAL', 'DLH', 'THY', 'AFR', 'SIA', 'CCA', 'ANA', 'JAL', 'UAE', 'CSN', 'HVN', 'EVA', 'CAL', 'UPS', 'AIH'],
-      destinations: ['ZBAA', 'ZSPD', 'RJAA', 'RJBB', 'VHHH', 'VVDN', 'VVTS', 'WSSS', 'VTBS', 'KLAX', 'KJFK', 'KDTW', 'EGLL', 'EDDF', 'LFPG', 'OMDB', 'RKPC', 'ZYHB', 'ZSNJ', 'ZYTX', 'RCTP', 'MMMX', 'ZMCK', 'ZGGG', 'HAAB'],
-      origins: ['ZBAA', 'ZSPD', 'RJAA', 'RJBB', 'VHHH', 'VVDN', 'VVTS', 'WSSS', 'VTBS', 'KLAX', 'KJFK', 'KDTW', 'EGLL', 'EDDF', 'LFPG', 'OMDB', 'RKPC', 'ZYHB', 'ZSNJ', 'ZYTX', 'RCTP', 'MMMX', 'ZMCK', 'ZGGG', 'HAAB'],
-      count: 72
-    },
     RKSS: {
       airlines: ['KAL', 'AAR', 'JJA', 'TWB', 'JNA', 'EOK'],
       destinations: ['RKPC', 'RKPK', 'RKPU', 'RKJY', 'RKTH', 'RJTT', 'ZSSS'],
       origins: ['RKPC', 'RKPK', 'RKPU', 'RKJY', 'RKTH', 'RJTT', 'ZSSS'],
-      count: 48
+      count: 72
     },
     RKPC: {
       airlines: ['KAL', 'AAR', 'JJA', 'TWB', 'JNA', 'EOK'],
       destinations: ['RKSS', 'RKSI', 'RKPK', 'RKTN', 'RKTU', 'RKJJ', 'RKJY', 'RKPU', 'RKJB', 'RKNY'],
       origins: ['RKSS', 'RKSI', 'RKPK', 'RKTN', 'RKTU', 'RKJJ', 'RKJY', 'RKPU', 'RKJB', 'RKNY'],
-      count: 50
+      count: 90
     },
     RKPK: {
       airlines: ['KAL', 'AAR', 'JJA', 'TWB', 'JNA', 'CCA', 'HVN', 'BX'],
       destinations: ['RKSS', 'RKPC', 'RJFF', 'RJAA', 'VHHH', 'VVTS', 'ZSPD', 'RCTP'],
       origins: ['RKSS', 'RKPC', 'RJFF', 'RJAA', 'VHHH', 'VVTS', 'ZSPD', 'RCTP'],
-      count: 36
+      count: 60
     }
   };
 
@@ -279,7 +288,7 @@ function generateTrainingSchedules(airport) {
     const timeStr = `${hStr}${minStr}`;
 
     const fpId = tmpl.callsigns[i % tmpl.callsigns.length];
-    const isCompleted = i < 6; // Stable static completed threshold so it NEVER flickers
+    const isCompleted = i < 6;
 
     deps.push({
       flt: fpId,
@@ -352,8 +361,61 @@ export default async function handler(req, res) {
       console.warn('[flight-schedule] UBIKAIS fetch failed:', e.message);
     }
 
-    // A. For Major Hubs (RKSI, RKSS, RKPC, RKPK) - Provide full 24-hour schedule pool with live UBIKAIS merged
-    if (['RKSI', 'RKSS', 'RKPC', 'RKPK'].includes(airport)) {
+    // A. For Incheon (RKSI) - 100% full 653-flight official UBIKAIS schedule with live state merge
+    if (airport === 'RKSI' && rksiFullDeps.length > 0) {
+      const liveDepMap = new Map();
+      liveDeps.forEach(d => {
+        const id = d.fpId || d.flightNumber || d.flt;
+        if (id) liveDepMap.set(id, d);
+      });
+
+      const mergedDeps = rksiFullDeps.map(d => {
+        const live = liveDepMap.get(d.flt);
+        if (live) {
+          return {
+            ...d,
+            etd: (live.etd || d.etd).replace(':', ''),
+            atd: (live.atd && live.atd !== '' && live.atd !== '-') ? live.atd.replace(':', '') : d.atd,
+            sts: (live.depStatus || d.sts).toUpperCase(),
+            cha: (live.depStatus === 'DLA' ? 'Y' : d.cha)
+          };
+        }
+        return d;
+      });
+
+      const liveArrMap = new Map();
+      liveArrs.forEach(a => {
+        const id = a.fpId || a.flightNumber || a.flt;
+        if (id) liveArrMap.set(id, a);
+      });
+
+      const mergedArrs = rksiFullArrs.map(a => {
+        const live = liveArrMap.get(a.flt);
+        if (live) {
+          return {
+            ...a,
+            eta: (live.eta || a.eta).replace(':', ''),
+            ata: (live.ata && live.ata !== '' && live.ata !== '-') ? live.ata.replace(':', '') : a.ata,
+            sts: (live.arrStatus || a.sts).toUpperCase(),
+            cha: (live.arrStatus === 'DLA' ? 'Y' : a.cha)
+          };
+        }
+        return a;
+      });
+
+      return res.status(200).json({
+        airport: 'RKSI',
+        timestamp: new Date().toISOString(),
+        totalFlights: mergedDeps.length + mergedArrs.length,
+        departures: mergedDeps,
+        arrivals: mergedArrs,
+        fids: mergedDeps.concat(mergedArrs),
+        source: 'UBIKAIS Official Daily Schedule (653 Flights - https://ubikais.fois.go.kr:8030)'
+      });
+    }
+
+    // B. For Major Hubs (RKSS, RKPC, RKPK) - Provide full 24-hour schedule pool with live UBIKAIS merged
+    if (['RKSS', 'RKPC', 'RKPK'].includes(airport)) {
       const { departures, arrivals } = generateFullDayHubSchedule(airport, liveDeps, liveArrs);
       return res.status(200).json({
         airport,
@@ -366,7 +428,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // B. For regional airports (RKJY, RKPU, RKTU, RKTN, RKJJ, RKJB, RKNY, RKTH, RKPS) - pure UBIKAIS records
+    // C. For regional airports (RKJY, RKPU, RKTU, RKTN, RKJJ, RKJB, RKNY, RKTH, RKPS) - pure UBIKAIS records
     if (liveDeps.length > 0 || liveArrs.length > 0) {
       const formattedDeps = liveDeps.map(d => {
         const flt = d.fpId || d.flightNumber || d.flt || 'UNKNOWN';
@@ -424,7 +486,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // C. For training airfields with 0 commercial records (RKTL, RKPD)
+    // D. For training airfields with 0 commercial records (RKTL, RKPD)
     const { departures, arrivals } = generateTrainingSchedules(airport);
 
     return res.status(200).json({

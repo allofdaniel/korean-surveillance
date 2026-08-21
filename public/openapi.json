@@ -2,8 +2,8 @@
   "openapi": "3.0.3",
   "info": {
     "title": "대한감시 (Korean Surveillance) - 23개 연계 인터페이스 API",
-    "description": "대한민국 전역 15개 공항 및 한반도 공역 종합 항공감시·관제·기상·스케줄 연계 게이트웨이 API 명세서입니다.\n\n### 주요 지원 규격\n- **항적 감시 (Surveillance)**: EUROCONTROL ASTERIX Cat.062 (융합), Cat.021 (ADS-B), Cat.048 (PSR/SSR), Cat.010 (지상), Cat.034 (센서상태)\n- **관제 기상 (Weather)**: AMO 항공기상청 42개 활주로 실시간 AMOS (55개 필드), METAR, TAF, SIGMET, IWXXM\n- **항공고시보 (NOTAM)**: AIM Korea 인천 FIR XNOTAM & AMHS AIDA-NG SOAP XML\n- **운항스케줄 (FIDS/AMHS)**: UBIKAIS 전국 15개 공항 실시간 스케줄 및 ICAO Doc 4444 FPL, CHG, CNL, DLA, DEP, ARR\n- **관제 음성 (LiveATC)**: 글로벌 관제탑 실시간 라이브 오디오 스트리밍\n- **백그라운드 동기화 (Crawler)**: Vercel Pro 무저장(Zero-Storage) 인메모리 Diff 엔진",
-    "version": "2.4.0",
+    "description": "대한민국 전역 15개 공항 및 한반도 공역 종합 항공감시·관제·기상·스케줄 연계 게이트웨이 API 명세서입니다.\n\n### 주요 지원 규격\n- **항적 감시 (Surveillance)**: EUROCONTROL ASTERIX Cat.062 (융합), Cat.021 (ADS-B), Cat.048 (PSR/SSR), Cat.010 (지상), Cat.034 (센서상태)\n- **관제 기상 (Weather)**: AMO 항공기상청 42개 활주로 실시간 AMOS (55개 필드: 1/10분 풍향풍속, QNH, 온/습도, 강수량, 운고, 시정 m & SM, RVR), METAR, TAF, SIGMET, WARNING, IWXXM\n- **항공고시보 (NOTAM)**: AIM Korea 인천 FIR XNOTAM & AMHS AIDA-NG SOAP XML\n- **운항스케줄 (FIDS/UBIKAIS)**: UBIKAIS 전국 15개 공항 24시간 전체 스케줄 (인천 653편 등) DB 필드 (FLT, TYP, REG, NAT, DES/ORG, SPT, RAM, ETD, ATD/ATA, ETA, CHA) 및 ICAO Doc 4444 전문\n- **관제단말 (IFS)**: 정보융합지원 관제단말 (/ifs) 실시간 연동\n- **관제 음성 (LiveATC)**: 글로벌 관제탑 실시간 라이브 오디오 스트리밍\n- **백그라운드 동기화 (Crawler)**: Vercel Pro 무저장(Zero-Storage) 인메모리 Diff 엔진",
+    "version": "2.5.0",
     "contact": {
       "name": "대한감시 시스템 운영팀",
       "url": "https://koreasurveillance.com"
@@ -21,8 +21,8 @@
   ],
   "tags": [
     { "name": "1. Airspace Surveillance (ASTERIX)", "description": "한반도 광역 항적 정보 (유로컨트롤 ASTERIX 표준 규격)" },
-    { "name": "2. Real-time Weather (AMOS & AMHS)", "description": "전국 15개 공항 42개 활주로 실시간 관제기상 및 예보" },
-    { "name": "3. Flight Schedules & FIDS", "description": "전국 15개 공항 실시간 출도착 운항스케줄 및 전자비행스트립" },
+    { "name": "2. Real-time Weather (AMOS & AMHS)", "description": "전국 15개 공항 42개 활주로 실시간 관제기상 및 예보/경보/SIGMET" },
+    { "name": "3. Flight Schedules & FIDS", "description": "전국 15개 공항 UBIKAIS 실시간/24시간 전체 출도착 운항스케줄 (인천 653편 1:1 일치)" },
     { "name": "4. Flight Plan & AMHS Messages", "description": "ICAO Doc 4444 비행계획 변동(FPL, CHG, CNL, DLA, DEP, ARR) AMHS 전문" },
     { "name": "5. NOTAM Aeronautical Information", "description": "인천 FIR 비행제한구역 및 시설 고시보" },
     { "name": "6. Live ATC Audio Stream", "description": "실시간 관제탑 오디오 라이브 스트림" },
@@ -86,45 +86,46 @@
     "/api/weather": {
       "get": {
         "tags": ["2. Real-time Weather (AMOS & AMHS)"],
-        "summary": "실시간 관제기상 (AMOS) 및 공항 기상 조회",
-        "description": "항공기상청(AMO)으로부터 전국 15개 공항 42개 활주로의 1~2초 초단위 순간풍/RVR/QNH/기온 등 55개 필드 실측치를 실시간 수집하여 반환합니다.",
+        "summary": "실시간 관제기상 (AMOS) 및 공항 기상/특보 조회",
+        "description": "항공기상청(AMO)으로부터 전국 15개 공항 42개 활주로의 1/10분 풍향풍속, RVR, QNH, 기온, 습도, 강수량(rn1hr), 시정(MOR m & Statute Mile SM 환산) 등 실측치를 실시간 수집하여 반환합니다.",
         "parameters": [
           {
             "name": "type",
             "in": "query",
             "required": false,
-            "description": "기상 타입 (amos: 실시간 관제기상 센서)",
-            "schema": { "type": "string", "default": "amos" }
+            "description": "기상 타입 (amos: 실시간 관제기상 센서, warning: 공항 기상경보/특보)",
+            "schema": { "type": "string", "enum": ["amos", "warning"], "default": "amos" }
           },
           {
             "name": "icao",
             "in": "query",
             "required": false,
-            "description": "공항 ICAO 코드 (ALL: 전국 42개 활주로 일괄, RKSI: 인천, RKSS: 김포, RKPC: 제주 등)",
-            "schema": { "type": "string", "default": "ALL" }
+            "description": "공항 ICAO 코드 (RKSI, RKSS, RKPC, RKPK, RKJY 등)",
+            "schema": { "type": "string", "default": "RKJY" }
           }
         ],
         "responses": {
           "200": {
-            "description": "활주로별 AMOS 실시간 관측치 배열 (55개 세부 필드)",
+            "description": "실시간 활주로별 기상 센서 배열",
             "content": {
               "application/json": {
                 "example": [
                   {
-                    "stnCd": "RKSI",
-                    "stnNm": "인천",
-                    "rwyDir": "15R",
-                    "wd": "290",
-                    "ws": "8.5",
-                    "max": "13.2",
-                    "mor1min": "9999",
+                    "rwyDir": "17",
+                    "rwyUse": "Y",
+                    "wd2minAvg": "160",
+                    "wspd2minAvg": "4.7",
+                    "wspd2minMax": "7.0",
+                    "min": "2.7",
+                    "tmp": "25.9",
+                    "dp": "25.4",
+                    "hm": "97",
+                    "base1lyr": "FEW 800FT",
+                    "qnhHpa": "1013",
                     "rvr1min": "P2000",
-                    "ta": "28.4",
-                    "td": "22.1",
-                    "hm": "68",
-                    "pa": "1008.2",
-                    "qnhOrigin": 10125,
-                    "base1lyr": "10000"
+                    "mor1min": "10000",
+                    "rn1hr": "0.0",
+                    "wwLttr": "-"
                   }
                 ]
               }
@@ -137,14 +138,14 @@
       "get": {
         "tags": ["4. Flight Plan & AMHS Messages", "2. Real-time Weather (AMOS & AMHS)"],
         "summary": "AMHS X.400 IPM / SOAP XML 항공통신 전문 조회",
-        "description": "METAR, TAF, SIGMET, IWXXM, NOTAM 및 ICAO Doc 4444 FPL, CHG, CNL, DLA, DEP, ARR 전문을 AMHS X.400 IPM 및 SOAP XML 표준 규격으로 패키징하여 반환합니다.",
+        "description": "MET REPORT, METAR, TAF, SIGMET, WARNING, IWXXM, NOTAM 및 ICAO Doc 4444 FPL, CHG, CNL, DLA, DEP, ARR 전문을 AMHS X.400 IPM 및 SOAP XML 표준 규격으로 패키징하여 반환합니다.",
         "parameters": [
           {
             "name": "type",
             "in": "query",
             "required": true,
-            "description": "전문 유형 (METAR, TAF, SIGMET, IWXXM, NOTAM, FPL, CHG, CNL, DLA, DEP, ARR)",
-            "schema": { "type": "string", "enum": ["METAR", "TAF", "SIGMET", "IWXXM", "NOTAM", "FPL", "CHG", "CNL", "DLA", "DEP", "ARR"], "default": "METAR" }
+            "description": "전문 유형 (METREPORT, METAR, TAF, SIGMET, IWXXM, NOTAM, FPL, CHG, CNL, DLA, DEP, ARR)",
+            "schema": { "type": "string", "enum": ["METREPORT", "METAR", "TAF", "SIGMET", "IWXXM", "NOTAM", "FPL", "CHG", "CNL", "DLA", "DEP", "ARR"], "default": "METAR" }
           },
           {
             "name": "icao",
@@ -154,18 +155,11 @@
             "schema": { "type": "string", "default": "RKSI" }
           },
           {
-            "name": "origin",
+            "name": "raw",
             "in": "query",
             "required": false,
-            "description": "출발 공항 ICAO 코드 (FPL, CHG, CNL, DLA, DEP 조회용)",
-            "schema": { "type": "string", "default": "RKSI" }
-          },
-          {
-            "name": "dest",
-            "in": "query",
-            "required": false,
-            "description": "도착 공항 ICAO 코드 (ARR 조회용)",
-            "schema": { "type": "string", "default": "RKSI" }
+            "description": "true 설정 시 원문 텍스트 전문(rawAviationWeatherText) 반환",
+            "schema": { "type": "boolean", "default": false }
           }
         ],
         "responses": {
@@ -173,7 +167,7 @@
             "description": "AMHS X.400 IPM / SOAP XML 전문",
             "content": {
               "application/xml": {
-                "example": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AMHS-IPM>\n  <Header>\n    <Priority>GG</Priority>\n    <FilingTime>200630</FilingTime>\n    <Originator>RKSNYZYX</Originator>\n  </Header>\n  <Body>\n    METAR RKSI 200630Z 28008KT 9999 FEW030 28/22 Q1012 NOSIG=\n  </Body>\n</AMHS-IPM>"
+                "example": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AMHS-IPM>\n  <Header>\n    <Priority>GG</Priority>\n    <FilingTime>210600</FilingTime>\n    <Originator>RKSNYZYX</Originator>\n  </Header>\n  <Body>\n    METAR RKSI 210600Z 18008KT 9999 FEW025 26/24 Q1012 NOSIG=\n  </Body>\n</AMHS-IPM>"
               }
             }
           }
@@ -183,21 +177,21 @@
     "/api/flight-schedule": {
       "get": {
         "tags": ["3. Flight Schedules & FIDS"],
-        "summary": "전국 공항 운항스케줄 (FIDS) 및 전자비행스트립 (EFS) 조회",
-        "description": "UBIKAIS(항공교통업무망)로부터 전국 15개 공항의 실시간 출도착 전광판 스케줄을 수집하거나 사용자 EFS 연계 대기 규격을 반환합니다.",
+        "summary": "UBIKAIS 전국 공항 운항스케줄 (24H FIDS) 및 전자비행스트립 (EFS) 조회",
+        "description": "UBIKAIS(항공교통업무망)로부터 전국 15개 공항의 실시간 출도착 전광판 스케줄 (인천 653편 등)을 UBIKAIS 표준 DB 필드(FLT, TYP, REG, NAT, DES/ORG, SPT, RAM, ETD, ATD/ATA, ETA, CHA)로 반환합니다.",
         "parameters": [
           {
             "name": "airport",
             "in": "query",
             "required": false,
-            "description": "공항 코드 (ALL: 전국 15개 공항 일괄 종합, RKSI, RKSS, RKPC, RKPK 등)",
-            "schema": { "type": "string", "default": "ALL" }
+            "description": "공항 코드 (RKSI: 인천 653편, RKSS, RKPC, RKPK, RKJY, RKTL, RKPD 등)",
+            "schema": { "type": "string", "default": "RKSI" }
           },
           {
             "name": "flight",
             "in": "query",
             "required": false,
-            "description": "특정 편명 조회 (예: KAL867, AAR101)",
+            "description": "특정 편명 조회 (예: CSN684, KAL867, AAR202)",
             "schema": { "type": "string" }
           },
           {
@@ -210,18 +204,48 @@
         ],
         "responses": {
           "200": {
-            "description": "실시간 FIDS 운항스케줄",
+            "description": "실시간 UBIKAIS FIDS 운항스케줄",
             "content": {
               "application/json": {
                 "example": {
-                  "airport": "ALL (전국 15개 공항 종합)",
-                  "totalAirports": 10,
-                  "totalNationwideFlights": 166,
-                  "airportBreakdown": [
-                    { "airport": "RKSI", "total": 20 },
-                    { "airport": "RKSS", "total": 20 },
-                    { "airport": "RKPC", "total": 20 }
-                  ]
+                  "airport": "RKSI",
+                  "totalFlights": 1306,
+                  "departures": [
+                    {
+                      "flt": "CSN684",
+                      "typ": "A321",
+                      "reg": "B-1088",
+                      "nat": "PAX",
+                      "des": "ZYHB",
+                      "spt": "18",
+                      "ram": "1235",
+                      "std": "1245",
+                      "etd": "1245",
+                      "atd": "1310",
+                      "eta": "1520",
+                      "cha": "-",
+                      "sts": "DEP",
+                      "flightRules": "IFR"
+                    }
+                  ],
+                  "arrivals": [
+                    {
+                      "flt": "CES5011",
+                      "typ": "A320",
+                      "reg": "B-7764",
+                      "sts": "LND",
+                      "org": "ZSPD",
+                      "spt": "44",
+                      "ram": "1445",
+                      "etd": "1230",
+                      "sta": "1510",
+                      "eta": "1453",
+                      "ata": "1445",
+                      "cha": "Y",
+                      "flightRules": "IFR"
+                    }
+                  ],
+                  "source": "UBIKAIS Official Daily Schedule (653 Flights - https://ubikais.fois.go.kr:8030)"
                 }
               }
             }
@@ -322,8 +346,8 @@
                   "crawler": "Vercel Pro Zero-Storage In-Memory Sync Engine",
                   "summary": {
                     "status": "SUCCESS",
-                    "airportsSynced": 10,
-                    "flightsTracked": 166,
+                    "airportsSynced": 15,
+                    "flightsTracked": 1306,
                     "weatherStationsSynced": 42,
                     "notamsSynced": 474,
                     "changesDetected": 0,
