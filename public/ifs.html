@@ -136,8 +136,26 @@
       height: 18px;
       flex-shrink: 0;
     }
+    .grid-header-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
     .b-r { border-right: 1px solid var(--outline); }
     .b-b { border-bottom: 1px solid var(--outline); }
+
+    /* Section Spinner */
+    .section-spinner {
+      width: 9px;
+      height: 9px;
+      border: 1.5px solid rgba(0, 255, 0, 0.2);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+    .section-spinner.active { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Ultra-Compact Top Nav Bar */
     header {
@@ -272,6 +290,7 @@
       background: var(--bg-dim);
       flex-shrink: 0;
       padding: 0;
+      min-height: 120px;
     }
     .weather-grid-container.dense {
       grid-template-columns: repeat(4, 1fr);
@@ -386,6 +405,7 @@
       gap: 1.5px;
       flex-shrink: 0;
       border-bottom: 1px solid var(--outline);
+      min-height: 38px;
     }
     .raw-met-line { display: flex; align-items: baseline; gap: 4px; }
     .raw-prompt { color: var(--text-muted); font-weight: 700; flex-shrink: 0; }
@@ -718,7 +738,10 @@
     <!-- 1. Real-time Weather Section with Wind Toggle & Decimal Switch -->
     <div class="grid-box">
       <div class="grid-header">
-        <span>WEATHER FEED</span>
+        <div class="grid-header-left">
+          <span>WEATHER FEED</span>
+          <div class="section-spinner" id="spin-wx"></div>
+        </div>
         <div class="wind-mode-group">
           <button id="btn-wind-2min" class="wind-mode-btn active" onclick="setWindMode('2min')">2분 자방위 (MAG)</button>
           <button id="btn-wind-10min" class="wind-mode-btn" onclick="setWindMode('10min')">10분 진방위 (TRUE)</button>
@@ -734,20 +757,23 @@
     <!-- 2. Raw MET Reports (Clean Independent Updates) -->
     <div class="grid-box">
       <div class="grid-header">
-        <span>RAW MET REPORTS</span>
+        <div class="grid-header-left">
+          <span>RAW MET REPORTS</span>
+          <div class="section-spinner" id="spin-met"></div>
+        </div>
       </div>
       <div class="raw-met-box">
-        <div class="raw-met-line">
+        <div class="raw-met-line" id="line-met-report">
           <span class="raw-prompt">&gt;</span>
-          <span id="raw-met-report">MET REPORT RKJY 210800Z 06004KT 360V060 9000 FEW030 SCT200 29/24 Q1012 NOSIG=</span>
+          <span id="raw-met-report"></span>
         </div>
-        <div class="raw-met-line">
+        <div class="raw-met-line" id="line-metar">
           <span class="raw-prompt">&gt;</span>
-          <span id="raw-metar">METAR RKJY 210800Z 06004KT 360V060 9000 FEW030 SCT200 29/24 Q1012 NOSIG=</span>
+          <span id="raw-metar"></span>
         </div>
-        <div class="raw-met-line">
+        <div class="raw-met-line" id="line-taf">
           <span class="raw-prompt">&gt;</span>
-          <span id="raw-taf" style="color: var(--amber);">TAF RKJY 202300Z 2023/2106 18010KT 9999 SCT035 BKN200=</span>
+          <span id="raw-taf" style="color: var(--amber);"></span>
         </div>
       </div>
     </div>
@@ -757,7 +783,10 @@
       <!-- DEPARTURES -->
       <div class="grid-box" style="flex: 1;">
         <div class="grid-header">
-          <span>DEPARTURES (DEP)</span>
+          <div class="grid-header-left">
+            <span>DEPARTURES (DEP)</span>
+            <div class="section-spinner" id="spin-dep"></div>
+          </div>
           <span id="dep-count" style="color: var(--amber);">[0/0]</span>
         </div>
         <div class="schedule-table-wrap" id="dep-table-wrap">
@@ -782,7 +811,10 @@
       <!-- ARRIVALS -->
       <div class="grid-box" style="flex: 1;">
         <div class="grid-header">
-          <span>ARRIVALS (ARR)</span>
+          <div class="grid-header-left">
+            <span>ARRIVALS (ARR)</span>
+            <div class="section-spinner" id="spin-arr"></div>
+          </div>
           <span id="arr-count" style="color: var(--amber);">[0/0]</span>
         </div>
         <div class="schedule-table-wrap" id="arr-table-wrap">
@@ -873,6 +905,9 @@
     let windMode = '2min'; // '2min' (자방위) or '10min' (진방위)
     let showWindDecimal = true; // Wind speed decimal on/off
     let hasAutoScrolledSchedule = false;
+
+    // In-Memory Airport Cache
+    const airportDataCache = new Map();
     
     // Persistent Status History for 5-time Blinking Detection
     const flightStatusHistory = new Map();
@@ -1046,8 +1081,13 @@
       `;
     }
 
-    // 6. Fetch AMOS & Weather Data via API
+    // 6. Fetch AMOS & Weather Data via API (With Cache & Section Spinners)
     async function syncWeatherData() {
+      const spin = document.getElementById('spin-wx');
+      const spinMet = document.getElementById('spin-met');
+      if (spin) spin.classList.add('active');
+      if (spinMet) spinMet.classList.add('active');
+
       try {
         const res = await fetch(`${API_BASE}/api/weather?type=amos&icao=${currentAirport}&_t=${Date.now()}`);
         if (res.ok) {
@@ -1074,8 +1114,9 @@
       }
 
       renderRunwaysGrid();
+      if (spin) spin.classList.remove('active');
 
-      // Fetch MET REPORT, METAR, and TAF cleanly and independently
+      // Fetch MET REPORT, METAR, and TAF cleanly without placeholder text
       try {
         const [metRepRes, metarRes, tafRes] = await Promise.all([
           fetch(`${API_BASE}/api/amhs?type=METREPORT&raw=true&icao=${currentAirport}&_t=${Date.now()}`),
@@ -1083,36 +1124,41 @@
           fetch(`${API_BASE}/api/amhs?type=TAF&raw=true&icao=${currentAirport}&_t=${Date.now()}`)
         ]);
 
+        const elMetReport = document.getElementById('raw-met-report');
+        const elMetar = document.getElementById('raw-metar');
+        const elTaf = document.getElementById('raw-taf');
+
         if (metRepRes.ok) {
           const rData = await metRepRes.json();
           const txt = rData.rawAviationWeatherText || '';
-          if (txt && !txt.includes('<')) {
-            const clean = txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
-            const elMetReport = document.getElementById('raw-met-report');
-            if (elMetReport && elMetReport.textContent !== clean) elMetReport.textContent = clean;
+          const clean = (txt && !txt.includes('<')) ? txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim() : '';
+          if (elMetReport) {
+            elMetReport.textContent = clean;
+            document.getElementById('line-met-report').style.display = clean ? 'flex' : 'none';
           }
         }
 
         if (metarRes.ok) {
           const mData = await metarRes.json();
           const txt = mData.rawAviationWeatherText || '';
-          if (txt && !txt.includes('<')) {
-            const clean = txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
-            const elMetar = document.getElementById('raw-metar');
-            if (elMetar && elMetar.textContent !== clean) elMetar.textContent = clean;
+          const clean = (txt && !txt.includes('<')) ? txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim() : '';
+          if (elMetar) {
+            elMetar.textContent = clean;
+            document.getElementById('line-metar').style.display = clean ? 'flex' : 'none';
           }
         }
 
         if (tafRes.ok) {
           const tData = await tafRes.json();
           const txt = tData.rawAviationWeatherText || '';
-          if (txt && !txt.includes('<')) {
-            const clean = txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
-            const elTaf = document.getElementById('raw-taf');
-            if (elTaf && elTaf.textContent !== clean) elTaf.textContent = clean;
+          const clean = (txt && !txt.includes('<')) ? txt.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim() : '';
+          if (elTaf) {
+            elTaf.textContent = clean;
+            document.getElementById('line-taf').style.display = clean ? 'flex' : 'none';
           }
         }
       } catch (e) {}
+      if (spinMet) spinMet.classList.remove('active');
     }
 
     function setWindMode(mode) {
@@ -1184,7 +1230,9 @@
         const mor = rwy.mor1min || rwy.mor || '2200';
 
         const vectors = calculateWindVectors(wd, rawWs, rwyHeading);
-        const isActive = (rwy.rwyUse === 'Y') || (idx === 0 && !rawRunwaysData.some(r => r.rwyUse === 'Y'));
+        
+        // Only one active runway direction
+        const isActive = (rwy.rwyUse === 'Y');
 
         const rwyEl = document.createElement('div');
         rwyEl.className = `rwy-card ${isActive ? 'active-use' : ''}`;
@@ -1267,8 +1315,13 @@
       });
     }
 
-    // 8. Fetch Flight Schedules (FIDS DEP & ARR) Full 24H with Contrast Distinction
+    // 8. Fetch Flight Schedules (FIDS DEP & ARR) with Cache & Section Spinners
     async function syncFlightSchedules() {
+      const spinDep = document.getElementById('spin-dep');
+      const spinArr = document.getElementById('spin-arr');
+      if (spinDep) spinDep.classList.add('active');
+      if (spinArr) spinArr.classList.add('active');
+
       try {
         const res = await fetch(`${API_BASE}/api/flight-schedule?airport=${currentAirport}&_t=${Date.now()}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1276,10 +1329,6 @@
 
         const deps = data.departures || [];
         const arrs = data.arrivals || [];
-
-        const now = new Date();
-        const kstNow = new Date(now.getTime() + 9 * 3600 * 1000);
-        const curTimeNum = parseInt(`${String(kstNow.getUTCHours()).padStart(2, '0')}${String(kstNow.getUTCMinutes()).padStart(2, '0')}`);
 
         // Exact completed departures vs total scheduled count
         const completedDepCount = deps.filter(d => (d.atd && d.atd !== '-' && d.atd !== '') || (d.depStatus||d.status||'').toUpperCase().includes('DEP')).length;
@@ -1355,7 +1404,7 @@
           arrTbody.appendChild(tr);
         });
 
-        // Perform auto-scroll to 5th row on first load or airport switch
+        // Auto-scroll to 5th row on airport load
         if (!hasAutoScrolledSchedule) {
           setTimeout(autoScrollScheduleToCurrentTime, 100);
           hasAutoScrolledSchedule = true;
@@ -1364,6 +1413,9 @@
       } catch (e) {
         console.warn('Schedule sync error:', e.message);
       }
+
+      if (spinDep) spinDep.classList.remove('active');
+      if (spinArr) spinArr.classList.remove('active');
     }
 
     // 9. System Notices LocalStorage Management
@@ -1398,20 +1450,18 @@
       }
     }
 
-    // Immediate & Seamless Airport Change
+    // High-Performance Smooth Airport Switching with In-Memory Caching & Spinners
     async function changeAirport(ap) {
       currentAirport = ap;
       rawRunwaysData = [];
       hasAutoScrolledSchedule = false;
       flightStatusHistory.clear();
       
-      // Reset views to clear previous airport residue
-      document.getElementById('weather-runways-container').innerHTML = '<div style="padding: 12px; font-size: 11px; color: var(--text-muted); text-align: center;">기상 정보 조회 중...</div>';
-      document.getElementById('raw-met-report').textContent = '기상청 전문 수신 대기 중...';
-      document.getElementById('raw-metar').textContent = 'METAR 수신 대기 중...';
-      document.getElementById('raw-taf').textContent = 'TAF 수신 대기 중...';
-      document.getElementById('dep-tbody').innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 8px;">스케줄 로딩 중...</td></tr>';
-      document.getElementById('arr-tbody').innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 8px;">스케줄 로딩 중...</td></tr>';
+      // Keep frame, activate spinners
+      ['spin-wx', 'spin-met', 'spin-dep', 'spin-arr'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('active');
+      });
 
       loadAirportNotices(ap);
       await Promise.all([

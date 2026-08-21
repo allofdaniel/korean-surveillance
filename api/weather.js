@@ -264,21 +264,29 @@ async function handleAmos(req, res) {
       ];
     }
   }
-  const fullAmosItems = targetList.map((r, idx) => ({
-    tm,
-    stnId: 100 + idx,
-    rwyDir: r.rwy,
-    sRwyDir: r.rwy,
-    dispNum: idx + 1,
-    dispFlag: 1,
-    nextrow: null,
-    count: targetList.length,
-    stnNm: r.stnNm,
-    stnCd: targetIcao,
-    stdDir: r.rwy,
-    rwyUse: 'Y',
-    mi,
-    runFlag: 0,
+  const fullAmosItems = targetList.map((r, idx) => {
+    const numMatch = (r.rwy || '').match(/\d+/);
+    const rwyHdg = numMatch ? parseInt(numMatch[0]) * 10 : 180;
+    const windDeg = parseInt(r.wd) || 180;
+    const angleRad = ((windDeg - rwyHdg) * Math.PI) / 180;
+    const headwind = Math.cos(angleRad);
+    const isPrimaryUse = headwind >= 0;
+
+    return {
+      tm,
+      stnId: 100 + idx,
+      rwyDir: r.rwy,
+      sRwyDir: r.rwy,
+      dispNum: idx + 1,
+      dispFlag: 1,
+      nextrow: null,
+      count: targetList.length,
+      stnNm: r.stnNm,
+      stnCd: targetIcao,
+      stdDir: r.rwy,
+      rwyUse: isPrimaryUse ? 'Y' : 'N',
+      mi,
+      runFlag: 0,
     mor1min: r.mor,
     rvr1min: r.rvr,
     base1lyr: r.cld,
