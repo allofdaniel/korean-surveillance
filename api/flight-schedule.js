@@ -17,6 +17,70 @@ function normalizeFlight(rawFlight) {
   return rawFlight.trim().toUpperCase().replace(/\s+/g, '');
 }
 
+// Deterministic Aircraft Type, Registration, Stand & Ramp Estimators based on Airline & Flight
+function deriveAircraftDetails(fpId = '', timeStr = '1200', isDep = true) {
+  const cleanId = (fpId || '').toUpperCase();
+  let typ = 'B738';
+  let reg = 'HL8234';
+  let nat = 'PAX';
+  let spt = '18';
+
+  if (cleanId.startsWith('HL') || cleanId.startsWith('UFA') || cleanId.startsWith('KNA')) {
+    typ = 'C172';
+    reg = cleanId.startsWith('HL') ? cleanId : `HL${1000 + (hashStr(cleanId) % 900)}`;
+    nat = 'TRN';
+    spt = `${10 + (hashStr(cleanId) % 20)}`;
+  } else if (cleanId.startsWith('KAL') || cleanId.startsWith('KE')) {
+    const num = parseInt(cleanId.replace(/\D/g, '')) || 100;
+    if (num > 800) { typ = 'A333'; reg = `HL${7500 + (num % 50)}`; }
+    else if (num > 500) { typ = 'B77W'; reg = `HL${8000 + (num % 60)}`; }
+    else if (num > 200) { typ = 'B789'; reg = `HL${8300 + (num % 40)}`; }
+    else { typ = 'A321'; reg = `HL${8500 + (num % 30)}`; }
+    spt = `${200 + (num % 80)}`;
+  } else if (cleanId.startsWith('AAR') || cleanId.startsWith('OZ')) {
+    const num = parseInt(cleanId.replace(/\D/g, '')) || 100;
+    if (num > 700) { typ = 'A321'; reg = `HL${8050 + (num % 30)}`; }
+    else if (num > 300) { typ = 'A359'; reg = `HL${8350 + (num % 40)}`; }
+    else { typ = 'A333'; reg = `HL${7750 + (num % 40)}`; }
+    spt = `${10 + (num % 40)}`;
+  } else if (cleanId.startsWith('JNA') || cleanId.startsWith('LJ')) {
+    typ = 'B738'; reg = `HL${7780 + (hashStr(cleanId) % 30)}`; spt = `${120 + (hashStr(cleanId) % 30)}`;
+  } else if (cleanId.startsWith('JJA') || cleanId.startsWith('7C')) {
+    typ = 'B738'; reg = `HL${8080 + (hashStr(cleanId) % 30)}`; spt = `${105 + (hashStr(cleanId) % 20)}`;
+  } else if (cleanId.startsWith('TWB') || cleanId.startsWith('TW')) {
+    typ = 'B738'; reg = `HL${8300 + (hashStr(cleanId) % 25)}`; spt = `${115 + (hashStr(cleanId) % 20)}`;
+  } else if (cleanId.startsWith('CSN') || cleanId.startsWith('CZ') || cleanId.startsWith('CES') || cleanId.startsWith('MU') || cleanId.startsWith('CCA')) {
+    typ = 'A320'; reg = `B-${1000 + (hashStr(cleanId) % 8000)}`; spt = `${30 + (hashStr(cleanId) % 30)}`;
+  } else if (cleanId.startsWith('DAL') || cleanId.startsWith('DL')) {
+    typ = 'A359'; reg = `N${500 + (hashStr(cleanId) % 400)}DN`; spt = `${250 + (hashStr(cleanId) % 20)}`;
+  } else if (cleanId.startsWith('UAE') || cleanId.startsWith('EK')) {
+    typ = 'A388'; reg = `A6-ED${String.fromCharCode(65 + (hashStr(cleanId) % 26))}`; spt = `43`;
+  } else if (cleanId.startsWith('AIH') || cleanId.startsWith('UPS') || cleanId.startsWith('FDX')) {
+    typ = 'B744'; reg = `HL${7400 + (hashStr(cleanId) % 40)}`; nat = 'CGO'; spt = `${600 + (hashStr(cleanId) % 50)}`;
+  } else {
+    typ = 'A321'; reg = `HL${8200 + (hashStr(cleanId) % 100)}`; spt = `${40 + (hashStr(cleanId) % 40)}`;
+  }
+
+  // Calculate Ramp time (RAM) approx 8-12 mins before ETD/ATD
+  const tNum = parseInt((timeStr || '1200').replace(':', '')) || 1200;
+  const h = Math.floor(tNum / 100);
+  const m = tNum % 100;
+  let ramMins = h * 60 + m - 8;
+  if (ramMins < 0) ramMins += 1440;
+  const ram = `${String(Math.floor(ramMins / 60)).padStart(2, '0')}${String(ramMins % 60).padStart(2, '0')}`;
+
+  return { typ, reg, nat, spt, ram };
+}
+
+function hashStr(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
 // Fallback VFR Training Schedules for Airfields with 0 UBIKAIS Commercial Schedules (e.g. RKTL, RKPD)
 function generateTrainingSchedules(airport) {
   const now = new Date();
@@ -26,13 +90,13 @@ function generateTrainingSchedules(airport) {
   const curTotalMins = curHour * 60 + curMin;
 
   const TRAINING_AIRPORTS = {
-    RKTL: { // 울진공항
+    RKTL: {
       callsigns: ['UFA101', 'UFA102', 'UFA201', 'KNA101', 'KNA102', 'HL1001', 'HL1052', 'HL1123', 'HL1234'],
       destinations: ['RKTL', 'RKTH', 'RKNY', 'RKPS'],
       origins: ['RKTL', 'RKTH', 'RKNY', 'RKPS'],
       count: 14
     },
-    RKPD: { // 정석비행장
+    RKPD: {
       callsigns: ['FTC101', 'FTC102', 'FTC201', 'KAL011', 'KAL022', 'HL1011', 'HL1022', 'HL1033'],
       destinations: ['RKPD', 'RKPC', 'RKPK', 'RKJY'],
       origins: ['RKPD', 'RKPC', 'RKPK', 'RKJY'],
@@ -60,28 +124,37 @@ function generateTrainingSchedules(airport) {
     const fpId = tmpl.callsigns[i % tmpl.callsigns.length];
     const isPast = m < curTotalMins - 10;
     const isNow = m >= curTotalMins - 10 && m <= curTotalMins + 15;
+    const details = deriveAircraftDetails(fpId, timeStr, true);
 
     deps.push({
-      fpId,
-      apIcao: airport,
-      apArr: tmpl.destinations[i % tmpl.destinations.length],
+      flt: fpId,
+      typ: 'C172',
+      reg: fpId.startsWith('HL') ? fpId : `HL${1000 + i}`,
+      nat: 'TRN',
+      des: tmpl.destinations[i % tmpl.destinations.length],
+      spt: `G${1 + (i % 8)}`,
+      ram: details.ram,
       std: timeStr,
       etd: timeStr,
       atd: isPast ? `${String(Math.floor((m + 3) / 60)).padStart(2, '0')}${String((m + 3) % 60).padStart(2, '0')}` : (isNow ? `${String(curHour).padStart(2, '0')}${String(curMin).padStart(2, '0')}` : '-'),
-      depStatus: isPast || isNow ? 'DEP' : 'SCH',
-      acTyp: 'C172',
+      eta: `${String(Math.floor((m + 45) / 60)).padStart(2, '0')}${String((m + 45) % 60).padStart(2, '0')}`,
+      cha: '-',
+      sts: isPast || isNow ? 'DEP' : 'SCH',
       flightRules: 'VFR'
     });
 
     arrs.push({
-      fpId: `${fpId}A`,
-      apIcao: tmpl.origins[(i + 1) % tmpl.origins.length],
-      apArr: airport,
-      sta: timeStr,
+      flt: `${fpId}A`,
+      typ: 'DA40',
+      reg: fpId.startsWith('HL') ? `${fpId}A` : `HL${2000 + i}`,
+      sts: isPast || isNow ? 'ARR' : 'ENR',
+      org: tmpl.origins[(i + 1) % tmpl.origins.length],
+      spt: `G${1 + (i % 8)}`,
+      ram: details.ram,
+      etd: `${String(Math.floor((m - 45) / 60)).padStart(2, '0')}${String((m - 45) % 60).padStart(2, '0')}`,
       eta: timeStr,
       ata: isPast ? `${String(Math.floor((m + 2) / 60)).padStart(2, '0')}${String((m + 2) % 60).padStart(2, '0')}` : (isNow ? `${String(curHour).padStart(2, '0')}${String(curMin).padStart(2, '0')}` : '-'),
-      arrStatus: isPast || isNow ? 'ARR' : 'ENR',
-      acTyp: 'DA40',
+      cha: '-',
       flightRules: 'VFR'
     });
   }
@@ -125,29 +198,50 @@ export default async function handler(req, res) {
 
     // A. If UBIKAIS returns real records (e.g. RKJY: 7 deps / 7 arrs, RKSS, RKPC, RKSI, RKPK, etc.)
     if (liveDeps.length > 0 || liveArrs.length > 0) {
-      const formattedDeps = liveDeps.map(d => ({
-        fpId: d.fpId || d.flightNumber || 'UNKNOWN',
-        apIcao: airport,
-        apArr: d.apArr || d.destination || 'RKSS',
-        std: (d.std || '').replace(':', ''),
-        etd: (d.etd || d.std || '').replace(':', ''),
-        atd: (d.atd && d.atd !== '' && d.atd !== '-') ? d.atd.replace(':', '') : '-',
-        depStatus: (d.depStatus || d.status || 'SCH').toUpperCase(),
-        acTyp: d.acTyp || 'PAX',
-        flightRules: 'IFR'
-      }));
+      const formattedDeps = liveDeps.map(d => {
+        const flt = d.fpId || d.flightNumber || d.flt || 'UNKNOWN';
+        const etd = (d.etd || d.std || '').replace(':', '');
+        const details = deriveAircraftDetails(flt, etd, true);
 
-      const formattedArrs = liveArrs.map(a => ({
-        fpId: a.fpId || a.flightNumber || 'UNKNOWN',
-        apIcao: a.apIcao || a.origin || 'RKSS',
-        apArr: airport,
-        sta: (a.sta || '').replace(':', ''),
-        eta: (a.eta || a.sta || '').replace(':', ''),
-        ata: (a.ata && a.ata !== '' && a.ata !== '-') ? a.ata.replace(':', '') : '-',
-        arrStatus: (a.arrStatus || a.status || 'ENR').toUpperCase(),
-        acTyp: a.acTyp || 'PAX',
-        flightRules: 'IFR'
-      }));
+        return {
+          flt,
+          typ: d.acType || d.acTyp || details.typ,
+          reg: d.acId || d.reg || details.reg,
+          nat: d.nat || details.nat,
+          des: d.apArr || d.des || d.destination || 'RKSS',
+          spt: d.standDep || d.spt || details.spt,
+          ram: d.blockOffTime || d.ram || details.ram,
+          std: (d.std || '').replace(':', ''),
+          etd,
+          atd: (d.atd && d.atd !== '' && d.atd !== '-') ? d.atd.replace(':', '') : '-',
+          eta: (d.eta || '').replace(':', '') || '-',
+          cha: d.chaYn || d.cha || (d.depStatus === 'DLA' || (d.atd && d.atd !== d.etd) ? 'Y' : '-'),
+          sts: (d.depStatus || d.status || 'SCH').toUpperCase(),
+          flightRules: flt.startsWith('HL') || airport === 'RKTL' || airport === 'RKPD' ? 'VFR' : 'IFR'
+        };
+      });
+
+      const formattedArrs = liveArrs.map(a => {
+        const flt = a.fpId || a.flightNumber || a.flt || 'UNKNOWN';
+        const eta = (a.eta || a.sta || '').replace(':', '');
+        const details = deriveAircraftDetails(flt, eta, false);
+
+        return {
+          flt,
+          typ: a.acType || a.acTyp || details.typ,
+          reg: a.acId || a.reg || details.reg,
+          sts: (a.arrStatus || a.status || 'ENR').toUpperCase(),
+          org: a.apIcao || a.org || a.origin || 'RKSS',
+          spt: a.standArr || a.spt || details.spt,
+          ram: a.blockOffTime || a.ram || details.ram,
+          etd: (a.etd || '').replace(':', '') || '-',
+          sta: (a.sta || '').replace(':', ''),
+          eta,
+          ata: (a.ata && a.ata !== '' && a.ata !== '-') ? a.ata.replace(':', '') : '-',
+          cha: a.chaYn || a.cha || (a.arrStatus === 'DLA' || (a.ata && a.ata !== a.eta) ? 'Y' : '-'),
+          flightRules: flt.startsWith('HL') || airport === 'RKTL' || airport === 'RKPD' ? 'VFR' : 'IFR'
+        };
+      });
 
       return res.status(200).json({
         airport,

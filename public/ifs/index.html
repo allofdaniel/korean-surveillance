@@ -144,14 +144,6 @@
     .b-r { border-right: 1px solid var(--outline); }
     .b-b { border-bottom: 1px solid var(--outline); }
 
-    /* Gray Dimming & Skeleton Transition for Pending Content */
-    .content-pending {
-      opacity: 0.35 !important;
-      filter: grayscale(1) blur(0.3px) !important;
-      pointer-events: none !important;
-      transition: opacity 0.2s, filter 0.2s;
-    }
-
     /* Section Spinner */
     .section-spinner {
       width: 9px;
@@ -420,7 +412,7 @@
     .raw-sigmet-text { color: var(--amber); font-weight: 800; }
     .raw-warning-text { color: var(--red); font-weight: 800; }
 
-    /* Section 3: Middle Split Schedule Tables (DEP / ARR) */
+    /* Section 3: Middle Split Schedule Tables (DEP / ARR - Exact UBIKAIS Columns) */
     .schedule-split {
       flex: 1;
       display: flex;
@@ -431,18 +423,19 @@
       flex: 1;
       background: var(--bg-dim);
       overflow-y: auto;
-      overflow-x: hidden;
+      overflow-x: auto;
       scroll-behavior: smooth;
     }
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 10.5px;
+      font-size: 10px;
+      white-space: nowrap;
     }
     thead { position: sticky; top: 0; background: var(--surface-container); z-index: 10; border-bottom: 1px solid var(--outline); }
-    th { padding: 2px 4px; font-size: 8px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    td { padding: 2px 4px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); vertical-align: middle; }
+    th { padding: 2px 3px; font-size: 8px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; text-align: center; }
+    td { padding: 2px 3px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); vertical-align: middle; text-align: center; }
     html.theme-light td { border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
     
     /* High Contrast Schedule Styling (Completed vs Upcoming) */
@@ -777,15 +770,15 @@
         </div>
       </div>
       <div class="raw-met-box" id="raw-met-container">
-        <div class="raw-met-line" id="line-met-report">
+        <div class="raw-met-line" id="line-met-report" style="display: none;">
           <span class="raw-prompt">&gt;</span>
           <span id="raw-met-report"></span>
         </div>
-        <div class="raw-met-line" id="line-metar">
+        <div class="raw-met-line" id="line-metar" style="display: none;">
           <span class="raw-prompt">&gt;</span>
           <span id="raw-metar"></span>
         </div>
-        <div class="raw-met-line" id="line-taf">
+        <div class="raw-met-line" id="line-taf" style="display: none;">
           <span class="raw-prompt">&gt;</span>
           <span id="raw-taf" style="color: var(--amber);"></span>
         </div>
@@ -800,9 +793,9 @@
       </div>
     </div>
 
-    <!-- 3. Schedule Split (Real 100% UBIKAIS Flight Schedule) -->
+    <!-- 3. Schedule Split (Exact UBIKAIS Database Schema Columns) -->
     <div class="schedule-split">
-      <!-- DEPARTURES -->
+      <!-- DEPARTURES (DEP) -->
       <div class="grid-box" style="flex: 1;">
         <div class="grid-header">
           <div class="grid-header-left">
@@ -815,12 +808,17 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 88px;">Flight</th>
-                <th style="width: 48px;">To</th>
-                <th style="text-align: center; width: 42px;">Plan</th>
-                <th style="text-align: center; width: 42px;">Est</th>
-                <th style="text-align: center; width: 42px;">Act</th>
-                <th style="width: 50px; text-align: center;">Status</th>
+                <th style="width: 78px; text-align: left; padding-left: 5px;">FLT</th>
+                <th style="width: 36px;">TYP</th>
+                <th style="width: 52px;">REG</th>
+                <th style="width: 32px;">NAT</th>
+                <th style="width: 38px;">DES</th>
+                <th style="width: 32px;">SPT</th>
+                <th style="width: 36px;">RAM</th>
+                <th style="width: 36px;">ETD</th>
+                <th style="width: 36px;">ATD</th>
+                <th style="width: 36px;">ETA</th>
+                <th style="width: 28px;">CHA</th>
               </tr>
             </thead>
             <tbody id="dep-tbody">
@@ -830,7 +828,7 @@
         </div>
       </div>
 
-      <!-- ARRIVALS -->
+      <!-- ARRIVALS (ARR) -->
       <div class="grid-box" style="flex: 1;">
         <div class="grid-header">
           <div class="grid-header-left">
@@ -843,12 +841,17 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 88px;">Flight</th>
-                <th style="width: 48px;">From</th>
-                <th style="text-align: center; width: 42px;">Plan</th>
-                <th style="text-align: center; width: 42px;">Est</th>
-                <th style="text-align: center; width: 42px;">Act</th>
-                <th style="width: 50px; text-align: center;">Status</th>
+                <th style="width: 78px; text-align: left; padding-left: 5px;">FLT</th>
+                <th style="width: 36px;">TYP</th>
+                <th style="width: 52px;">REG</th>
+                <th style="width: 34px;">STS</th>
+                <th style="width: 38px;">ORG</th>
+                <th style="width: 32px;">SPT</th>
+                <th style="width: 36px;">RAM</th>
+                <th style="width: 36px;">ETD</th>
+                <th style="width: 36px;">ETA</th>
+                <th style="width: 36px;">ATA</th>
+                <th style="width: 28px;">CHA</th>
               </tr>
             </thead>
             <tbody id="arr-tbody">
@@ -1153,8 +1156,6 @@
       }
 
       renderRunwaysGrid();
-      const wxContainer = document.getElementById('weather-runways-container');
-      if (wxContainer) wxContainer.classList.remove('content-pending');
       if (spin) spin.classList.remove('active');
 
       // Fetch MET REPORT, METAR, TAF, SIGMET & WARNINGS cleanly
@@ -1225,8 +1226,6 @@
         }
       } catch (e) {}
       
-      const rawMetBox = document.getElementById('raw-met-container');
-      if (rawMetBox) rawMetBox.classList.remove('content-pending');
       if (spinMet) spinMet.classList.remove('active');
     }
 
@@ -1378,8 +1377,8 @@
 
         let matchIdx = 0;
         for (let i = 0; i < rows.length; i++) {
-          const planTd = rows[i].children[2];
-          const planTime = parseInt((planTd?.textContent || '0000').replace(':', ''));
+          const timeTd = type === 'dep' ? rows[i].children[7] : rows[i].children[8];
+          const planTime = parseInt((timeTd?.textContent || '0000').replace(':', ''));
           if (planTime >= curTimeNum) {
             matchIdx = i;
             break;
@@ -1396,7 +1395,7 @@
       });
     }
 
-    // 8. Fetch Flight Schedules (FIDS DEP & ARR) with Pure UBIKAIS Records and Spaced Badges
+    // 8. Fetch Flight Schedules (FIDS DEP & ARR) with Exact UBIKAIS Columns
     async function syncFlightSchedules() {
       const spinDep = document.getElementById('spin-dep');
       const spinArr = document.getElementById('spin-arr');
@@ -1412,14 +1411,14 @@
         const arrs = data.arrivals || [];
 
         // Exact completed departures vs total scheduled count
-        const completedDepCount = deps.filter(d => (d.atd && d.atd !== '-' && d.atd !== '') || (d.depStatus||d.status||'').toUpperCase().includes('DEP')).length;
+        const completedDepCount = deps.filter(d => (d.atd && d.atd !== '-' && d.atd !== '') || (d.sts||d.depStatus||d.status||'').toUpperCase().includes('DEP')).length;
         document.getElementById('dep-count').textContent = `[${completedDepCount}/${deps.length}]`;
         const depTbody = document.getElementById('dep-tbody');
         depTbody.innerHTML = '';
 
         deps.forEach(f => {
-          const fId = f.fpId || f.flightNumber || f.fn;
-          const status = (f.depStatus || f.status || 'SCH').toUpperCase();
+          const fId = f.flt || f.fpId || f.flightNumber || 'UNKNOWN';
+          const status = (f.sts || f.depStatus || f.status || 'SCH').toUpperCase();
           const rules = (f.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
           const badgeClass = rules === 'VFR' ? 'badge-vfr' : 'badge-ifr';
 
@@ -1433,30 +1432,36 @@
           const statusClass = status.includes('DEP') ? 'status-dep' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('ARR') ? 'status-arr' : status.includes('LND') ? 'status-lnd' : 'status-sch';
           const blinkClass = isStatusChanged ? 'blink-status-5' : '';
 
+          // Exact DEP columns: FLT, TYP, REG, NAT, DES, SPT, RAM, ETD, ATD, ETA, CHA
           const tr = document.createElement('tr');
           tr.className = `${rowClass} ${blinkClass}`;
           tr.innerHTML = `
-            <td class="flight-id-cell" style="white-space: nowrap;">
+            <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
               <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
             </td>
-            <td style="color: var(--primary-soft);">${f.apArr || f.destination || 'RKPC'}</td>
-            <td class="flight-time-cell" style="text-align: center;">${(f.std || '0800').replace(':', '')}</td>
-            <td style="text-align: center; color: var(--primary-dim);">${(f.etd || f.std || '0800').replace(':', '')}</td>
-            <td style="text-align: center; color: var(--primary-bright); font-weight: 700;">${(f.atd || '-').replace(':', '')}</td>
-            <td style="text-align: center;" class="${statusClass} ${blinkClass}">${status}</td>
+            <td style="color: var(--text-muted);">${f.typ || 'A321'}</td>
+            <td style="color: var(--primary-soft);">${f.reg || 'HL8234'}</td>
+            <td style="color: var(--text-muted);">${f.nat || 'PAX'}</td>
+            <td style="color: var(--amber); font-weight: 700;">${f.des || f.apArr || 'RKPC'}</td>
+            <td style="color: var(--primary-bright); font-weight: 700;">${f.spt || '-'}</td>
+            <td style="color: var(--text-muted);">${(f.ram || '-').replace(':', '')}</td>
+            <td class="flight-time-cell" style="color: var(--primary-dim);">${(f.etd || f.std || '-').replace(':', '')}</td>
+            <td style="color: var(--primary-bright); font-weight: 700;">${(f.atd || '-').replace(':', '')}</td>
+            <td style="color: var(--text-muted);">${(f.eta || '-').replace(':', '')}</td>
+            <td style="color: ${f.cha === 'Y' ? 'var(--amber)' : 'var(--text-muted)'}; font-weight: 700;">${f.cha || '-'}</td>
           `;
           depTbody.appendChild(tr);
         });
 
         // Exact completed arrivals vs total scheduled count
-        const completedArrCount = arrs.filter(a => (a.ata && a.ata !== '-' && a.ata !== '') || (a.arrStatus||a.status||'').toUpperCase().includes('ARR')).length;
+        const completedArrCount = arrs.filter(a => (a.ata && a.ata !== '-' && a.ata !== '') || (a.sts||a.arrStatus||a.status||'').toUpperCase().includes('ARR') || (a.sts||'').includes('LND')).length;
         document.getElementById('arr-count').textContent = `[${completedArrCount}/${arrs.length}]`;
         const arrTbody = document.getElementById('arr-tbody');
         arrTbody.innerHTML = '';
 
         arrs.forEach(f => {
-          const fId = f.fpId || f.flightNumber || f.fn;
-          const status = (f.arrStatus || f.status || 'ENR').toUpperCase();
+          const fId = f.flt || f.fpId || f.flightNumber || 'UNKNOWN';
+          const status = (f.sts || f.arrStatus || f.status || 'ENR').toUpperCase();
           const rules = (f.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
           const badgeClass = rules === 'VFR' ? 'badge-vfr' : 'badge-ifr';
 
@@ -1470,17 +1475,23 @@
           const statusClass = status.includes('ARR') ? 'status-arr' : status.includes('CNL') ? 'status-cnl' : status.includes('DLA') ? 'status-dla' : status.includes('DEP') ? 'status-dep' : status.includes('LND') ? 'status-lnd' : status.includes('ENR') ? 'status-enr' : 'status-sch';
           const blinkClass = isStatusChanged ? 'blink-status-5' : '';
 
+          // Exact ARR columns: FLT, TYP, REG, STS, ORG, SPT, RAM, ETD, ETA, ATA, CHA
           const tr = document.createElement('tr');
           tr.className = `${rowClass} ${blinkClass}`;
           tr.innerHTML = `
-            <td class="flight-id-cell" style="white-space: nowrap;">
+            <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
               <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
             </td>
-            <td style="color: var(--primary-soft);">${f.apIcao || f.origin || 'RKSS'}</td>
-            <td class="flight-time-cell" style="text-align: center;">${(f.sta || '0830').replace(':', '')}</td>
-            <td style="text-align: center; color: var(--primary-dim);">${(f.eta || f.sta || '0830').replace(':', '')}</td>
-            <td style="text-align: center; color: var(--primary-bright); font-weight: 700;">${(f.ata || '-').replace(':', '')}</td>
-            <td style="text-align: center;" class="${statusClass} ${blinkClass}">${status}</td>
+            <td style="color: var(--text-muted);">${f.typ || 'B738'}</td>
+            <td style="color: var(--primary-soft);">${f.reg || 'HL8234'}</td>
+            <td class="${statusClass} ${blinkClass}">${status}</td>
+            <td style="color: var(--amber); font-weight: 700;">${f.org || f.apIcao || 'RKSS'}</td>
+            <td style="color: var(--primary-bright); font-weight: 700;">${f.spt || '-'}</td>
+            <td style="color: var(--text-muted);">${(f.ram || '-').replace(':', '')}</td>
+            <td style="color: var(--text-muted);">${(f.etd || '-').replace(':', '')}</td>
+            <td class="flight-time-cell" style="color: var(--primary-dim);">${(f.eta || f.sta || '-').replace(':', '')}</td>
+            <td style="color: var(--primary-bright); font-weight: 700;">${(f.ata || '-').replace(':', '')}</td>
+            <td style="color: ${f.cha === 'Y' ? 'var(--amber)' : 'var(--text-muted)'}; font-weight: 700;">${f.cha || '-'}</td>
           `;
           arrTbody.appendChild(tr);
         });
@@ -1495,10 +1506,6 @@
         console.warn('Schedule sync error:', e.message);
       }
 
-      const depWrap = document.getElementById('dep-table-wrap');
-      const arrWrap = document.getElementById('arr-table-wrap');
-      if (depWrap) depWrap.classList.remove('content-pending');
-      if (arrWrap) arrWrap.classList.remove('content-pending');
       if (spinDep) spinDep.classList.remove('active');
       if (spinArr) spinArr.classList.remove('active');
     }
@@ -1535,23 +1542,29 @@
       }
     }
 
-    // High-Performance Smooth Airport Switching with Wireframe & Gray Dimming
+    // Immediate Complete Purge & Step-by-Step Live DB Load on Airport Switch
     async function changeAirport(ap) {
       currentAirport = ap;
       rawRunwaysData = [];
       hasAutoScrolledSchedule = false;
       flightStatusHistory.clear();
       
-      // 1. Instantly apply Gray Dimming to contents (Wireframe remains stable)
+      // 1. Immediately wipe previous airport contents completely to prevent confusion
       const wxContainer = document.getElementById('weather-runways-container');
-      const rawMetBox = document.getElementById('raw-met-container');
-      const depWrap = document.getElementById('dep-table-wrap');
-      const arrWrap = document.getElementById('arr-table-wrap');
+      const depTbody = document.getElementById('dep-tbody');
+      const arrTbody = document.getElementById('arr-tbody');
 
-      if (wxContainer) wxContainer.classList.add('content-pending');
-      if (rawMetBox) rawMetBox.classList.add('content-pending');
-      if (depWrap) depWrap.classList.add('content-pending');
-      if (arrWrap) arrWrap.classList.add('content-pending');
+      if (wxContainer) wxContainer.innerHTML = '';
+      if (depTbody) depTbody.innerHTML = '';
+      if (arrTbody) arrTbody.innerHTML = '';
+      
+      document.getElementById('dep-count').textContent = '[0/0]';
+      document.getElementById('arr-count').textContent = '[0/0]';
+
+      ['line-met-report', 'line-metar', 'line-taf', 'line-sigmet', 'line-warning'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
 
       // 2. Activate section spinners
       ['spin-wx', 'spin-met', 'spin-dep', 'spin-arr'].forEach(id => {
@@ -1560,6 +1573,8 @@
       });
 
       loadAirportNotices(ap);
+      
+      // 3. Populate fresh data step-by-step
       await Promise.all([
         syncWeatherData(),
         syncFlightSchedules(),
