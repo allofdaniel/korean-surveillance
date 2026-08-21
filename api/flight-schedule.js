@@ -16,7 +16,10 @@ function withTimeout(timeoutMs = API_TIMEOUT_MS) {
 
 function normalizeFlight(rawFlight) {
   if (typeof rawFlight !== 'string') return '';
-  return rawFlight.trim().toUpperCase().replace(/\s+/g, '');
+  let f = rawFlight.trim().toUpperCase().replace(/\s+/g, '');
+  if (f.startsWith('IFR') && f.length > 3) f = f.substring(3);
+  if (f.startsWith('VFR') && f.length > 3) f = f.substring(3);
+  return f;
 }
 
 // Fallback VFR Training Schedules for Airfields with 0 Commercial Schedules (RKTL, RKPD)
@@ -114,7 +117,7 @@ export default async function handler(req, res) {
     });
   }
 
-  // 1. Primary Priority: Official Government DATA.GO.KR (KAC) Live REST API
+  // 1. Primary: Official Government DATA.GO.KR (KAC) Live REST API
   // For RKSS(GMP), RKPC(CJU), RKPK(PUS), RKTU(CJJ), RKTN(TAE), RKJJ(KWJ), RKJY(RSU), RKPU(USN), RKJB(MWX), RKNY(YNY), RKTH(KPO), RKPS(HIN)
   if (['RKSS', 'RKPC', 'RKPK', 'RKTU', 'RKTN', 'RKJJ', 'RKJY', 'RKPU', 'RKJB', 'RKNY', 'RKTH', 'RKPS'].includes(airport)) {
     const govData = await fetchKacLiveSchedules(airport);
@@ -123,7 +126,7 @@ export default async function handler(req, res) {
     }
   }
 
-  // 2. Incheon (RKSI) - Official UBIKAIS Master (653 Flights) with Live Real-time Network Overlays
+  // 2. Incheon (RKSI) - Official 650 DEP / 646 ARR UBIKAIS Master with Live Real-time Network Overlays
   if (airport === 'RKSI') {
     let liveDeps = [];
     let liveArrs = [];
@@ -136,15 +139,22 @@ export default async function handler(req, res) {
 
     const liveDepMap = new Map();
     liveDeps.forEach(d => {
-      const id = d.fpId || d.flightNumber || d.flt;
+      let id = (d.fpId || d.flightNumber || d.flt || '').trim().toUpperCase();
+      if (id.startsWith('IFR') && id.length > 3) id = id.substring(3);
+      if (id.startsWith('VFR') && id.length > 3) id = id.substring(3);
       if (id) liveDepMap.set(id, d);
     });
 
     const mergedDeps = rksiOfficialDepartures.map(d => {
-      const live = liveDepMap.get(d.flt);
+      let fltKey = d.flt.trim().toUpperCase();
+      if (fltKey.startsWith('IFR') && fltKey.length > 3) fltKey = fltKey.substring(3);
+      if (fltKey.startsWith('VFR') && fltKey.length > 3) fltKey = fltKey.substring(3);
+      const live = liveDepMap.get(fltKey);
       if (live) {
         return {
           ...d,
+          reg: live.acId || live.reg || d.reg,
+          spt: live.standDep || live.spt || d.spt,
           etd: (live.etd || d.etd).replace(':', ''),
           atd: (live.atd && live.atd !== '' && live.atd !== '-') ? live.atd.replace(':', '') : d.atd,
           sts: (live.depStatus || d.sts).toUpperCase(),
@@ -156,15 +166,22 @@ export default async function handler(req, res) {
 
     const liveArrMap = new Map();
     liveArrs.forEach(a => {
-      const id = a.fpId || a.flightNumber || a.flt;
+      let id = (a.fpId || a.flightNumber || a.flt || '').trim().toUpperCase();
+      if (id.startsWith('IFR') && id.length > 3) id = id.substring(3);
+      if (id.startsWith('VFR') && id.length > 3) id = id.substring(3);
       if (id) liveArrMap.set(id, a);
     });
 
     const mergedArrs = rksiOfficialArrivals.map(a => {
-      const live = liveArrMap.get(a.flt);
+      let fltKey = a.flt.trim().toUpperCase();
+      if (fltKey.startsWith('IFR') && fltKey.length > 3) fltKey = fltKey.substring(3);
+      if (fltKey.startsWith('VFR') && fltKey.length > 3) fltKey = fltKey.substring(3);
+      const live = liveArrMap.get(fltKey);
       if (live) {
         return {
           ...a,
+          reg: live.acId || live.reg || a.reg,
+          spt: live.standArr || live.spt || a.spt,
           eta: (live.eta || a.eta).replace(':', ''),
           ata: (live.ata && live.ata !== '' && live.ata !== '-') ? live.ata.replace(':', '') : a.ata,
           sts: (live.arrStatus || a.sts).toUpperCase(),
@@ -181,7 +198,7 @@ export default async function handler(req, res) {
       departures: mergedDeps,
       arrivals: mergedArrs,
       fids: mergedDeps.concat(mergedArrs),
-      source: 'UBIKAIS Official FPL Daily Master & Real-Time Gateway (https://ubikais.fois.go.kr:8030)'
+      source: 'UBIKAIS Official FPL Daily Master (650 DEP / 646 ARR) & Real-Time Gateway'
     });
   }
 
