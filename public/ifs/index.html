@@ -179,6 +179,16 @@
       font-weight: 800;
       color: var(--primary-bright);
       letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ke-logo {
+      height: 14px;
+      width: auto;
+      object-fit: contain;
+      vertical-align: middle;
+      display: inline-block;
     }
     .airport-select {
       background: var(--bg-dim);
@@ -726,7 +736,10 @@
   <!-- Header -->
   <header>
     <div class="brand-group">
-      <div class="brand-title">IFS</div>
+      <div class="brand-title">
+        <span>IFS</span>
+        <img id="ke-logo" class="ke-logo" src="/assets/logos/KE_primary-logo_white_online.svg" alt="Korean Air" />
+      </div>
       <select id="airport-select" class="airport-select" onchange="changeAirport(this.value)">
         <option value="RKJY" selected>RKJY - 여수공항 (17/35)</option>
         <option value="RKSI">RKSI - 인천국제공항 (4본 8개 엔드: 15/33/16/34)</option>
@@ -748,14 +761,14 @@
 
     <div class="status-group">
       <button class="btn-settings" onclick="openSettingsModal()">
-        <span>⚙️ 테마/설정</span>
+        <span>설정</span>
       </button>
       <div class="status-item">
-        <span>GATEWAY API</span>
+        <span>AMHS API</span>
         <div class="dot-live" id="dot-gateway"></div>
       </div>
       <div class="status-item">
-        <span>STRIP (EFS)</span>
+        <span>EFS API</span>
         <div class="dot-amber"></div>
       </div>
     </div>
@@ -910,7 +923,7 @@
   <div class="modal-overlay" id="settings-modal">
     <div class="modal-card">
       <div class="modal-header">
-        <span>⚙️ 관제단말 환경설정 (SETTINGS)</span>
+        <span>관제단말 환경설정 (SETTINGS)</span>
         <span style="cursor: pointer;" onclick="closeSettingsModal()">✕</span>
       </div>
       <div class="modal-body">
@@ -1004,6 +1017,15 @@
     function applyTheme(themeName) {
       document.documentElement.className = themeName;
       localStorage.setItem('ifs_theme', themeName);
+
+      const keLogo = document.getElementById('ke-logo');
+      if (keLogo) {
+        if (themeName === 'theme-light') {
+          keLogo.src = '/assets/logos/KE_primary-logo_dark-blue_online.svg';
+        } else {
+          keLogo.src = '/assets/logos/KE_primary-logo_white_online.svg';
+        }
+      }
     }
 
     function setScanlines(show) {
