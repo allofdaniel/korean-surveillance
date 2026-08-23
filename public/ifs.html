@@ -487,26 +487,70 @@
       text-overflow: ellipsis;
     }
 
-    /* Section 2: Raw MET Feed with Warnings & SIGMET */
+    /* Section 2: Raw MET Feed Structured Table (AMO Format) */
     .raw-met-box {
       background: var(--bg-dim);
-      padding: 6px 10px;
-      font-size: 13px;
-      line-height: 1.45;
-      color: var(--primary-dim);
-      display: flex;
-      flex-direction: column;
-      gap: 3.5px;
-      flex-shrink: 0;
-      border-bottom: 1px solid var(--outline);
+      overflow-y: auto;
+      max-height: 120px;
       min-height: 48px;
-      font-weight: 600;
-      font-family: 'Consolas', 'Courier New', monospace, var(--font-mono);
-      letter-spacing: 0.3px;
+      padding: 0;
+      border-bottom: 1px solid var(--outline);
+      flex-shrink: 0;
     }
-    .raw-met-line { display: flex; align-items: baseline; gap: 0; word-break: break-all; }
-    .raw-sigmet-text { color: var(--amber); font-weight: 800; }
-    .raw-warning-text { color: var(--red); font-weight: 800; }
+    .raw-met-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+    .raw-met-table thead {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--surface-container);
+    }
+    .raw-met-table th {
+      padding: 2.5px 6px;
+      font-size: 8.5px;
+      font-weight: 800;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--outline);
+      text-transform: uppercase;
+    }
+    .raw-met-table td {
+      padding: 3px 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      vertical-align: top;
+      font-size: 11.5px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .raw-type-badge {
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 2px;
+      font-size: 8.5px;
+      font-weight: 800;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .badge-metar { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); }
+    .badge-speci { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
+    .badge-metreport { background: rgba(0, 255, 0, 0.12); color: var(--primary-bright); border: 1px solid rgba(0, 255, 0, 0.3); }
+    .badge-taf { background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.35); }
+    .badge-sigmet { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.5); }
+    .badge-warning { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.5); }
+    .met-flight-cat {
+      font-weight: 800;
+      font-size: 9px;
+      text-align: center;
+      display: block;
+    }
+    .cat-vfr { color: var(--primary-bright); }
+    .cat-mvfr { color: #38bdf8; }
+    .cat-ifr { color: #fbbf24; }
+    .cat-lifr { color: #f87171; }
 
     /* Section 3: Middle Split Schedule Tables (DEP / ARR - Clickable Sort Columns) */
     .schedule-split {
@@ -1054,13 +1098,29 @@
       border-radius: 2px;
       font-weight: 600;
     }
+    .raw-telegram-box {
+      background: #040407;
+      border: 1px solid var(--outline-light);
+      padding: 6px 8px;
+      font-size: 10.5px;
+      color: var(--primary-bright);
+      max-height: 125px;
+      overflow-y: auto;
+      border-radius: 2px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      line-height: 1.35;
+      font-family: 'Consolas', 'Courier New', monospace, var(--font-mono);
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
     .raw-json-box {
       background: #07070a;
       border: 1px solid var(--outline);
       padding: 6px;
       font-size: 8.5px;
       color: var(--primary-soft);
-      max-height: 110px;
+      max-height: 95px;
       overflow-y: auto;
       border-radius: 2px;
       white-space: pre-wrap;
@@ -1135,30 +1195,27 @@
       </div>
     </div>
 
-    <!-- 2. Raw MET Reports (Clean Independent Updates with SIGMET & WARNING) -->
+    <!-- 2. Raw MET Reports (AMO-Style Structured Classification Table) -->
     <div class="grid-box">
       <div class="grid-header">
         <div class="grid-header-left">
-          <span>RAW MET REPORTS</span>
+          <span>RAW MET REPORTS (METAR · MET REPORT · TAF · SIGMET)</span>
           <div class="section-spinner" id="spin-met"></div>
         </div>
       </div>
       <div class="raw-met-box" id="raw-met-container">
-        <div class="raw-met-line" id="line-met-report" style="display: none;">
-          <span id="raw-met-report"></span>
-        </div>
-        <div class="raw-met-line" id="line-metar" style="display: none;">
-          <span id="raw-metar"></span>
-        </div>
-        <div class="raw-met-line" id="line-taf" style="display: none;">
-          <span id="raw-taf" style="color: var(--amber);"></span>
-        </div>
-        <div class="raw-met-line" id="line-sigmet" style="display: none;">
-          <span id="raw-sigmet" class="raw-sigmet-text"></span>
-        </div>
-        <div class="raw-met-line" id="line-warning" style="display: none;">
-          <span id="raw-warning" class="raw-warning-text"></span>
-        </div>
+        <table class="raw-met-table">
+          <thead>
+            <tr>
+              <th style="width: 100px; text-align: center;">구분 (KIND)</th>
+              <th style="text-align: left; padding-left: 6px;">전문 내용 (RAW REPORT MESSAGE)</th>
+              <th style="width: 70px; text-align: center;">비고 (CAT)</th>
+            </tr>
+          </thead>
+          <tbody id="raw-met-tbody">
+            <!-- Dynamically populated from AMO API -->
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -1312,6 +1369,15 @@
       <div class="flight-modal-body">
         <!-- Left: Full Electronic Flight Strip Details -->
         <div class="flight-info-col">
+          <!-- 0. ICAO AFS Original FPL Telegram Message (100% Genuine UBIKAIS) -->
+          <div class="strip-card">
+            <div class="strip-card-title">
+              <span>ICAO 비행계획서 전문 (AFS ORIGINAL MESSAGE)</span>
+              <button class="btn-modal-action" onclick="copyAfsTelegram()" style="font-size: 7.5px; padding: 1px 6px;">전문 복사</button>
+            </div>
+            <div class="raw-telegram-box" id="fm-fpl-telegram">비행계획서 전문 수신 대기 중...</div>
+          </div>
+
           <!-- 1. Origin & Destination Routing -->
           <div class="strip-card">
             <div class="strip-card-title">
@@ -1691,6 +1757,29 @@
       renderRunwaysGrid();
       if (spin) spin.classList.remove('active');
 
+      // Helper to calculate ICAO flight rule category (VFR / MVFR / IFR / LIFR)
+      function getFlightCategory(metarText) {
+        if (!metarText) return { text: 'VFR', cls: 'cat-vfr' };
+        let visM = 10000;
+        const visMatch = metarText.match(/\s(\d{4})\s/);
+        if (visMatch) {
+          visM = parseInt(visMatch[1]);
+        } else if (metarText.includes('9999')) {
+          visM = 10000;
+        }
+        
+        let ceilingFt = 10000;
+        const cldMatches = [...metarText.matchAll(/(BKN|OVC)(\d{3})/g)];
+        if (cldMatches.length > 0) {
+          ceilingFt = Math.min(...cldMatches.map(m => parseInt(m[2]) * 100));
+        }
+        
+        if (ceilingFt < 500 || visM < 1600) return { text: 'LIFR', cls: 'cat-lifr' };
+        if (ceilingFt < 1000 || visM < 5000) return { text: 'IFR', cls: 'cat-ifr' };
+        if (ceilingFt <= 3000 || visM <= 8000) return { text: 'MVFR', cls: 'cat-mvfr' };
+        return { text: 'VFR', cls: 'cat-vfr' };
+      }
+
       // Fetch MET REPORT, METAR, TAF, SIGMET & WARNINGS via SINGLE RAW_ALL endpoint
       try {
         const [rawAllRes, sigmetRes] = await Promise.all([
@@ -1698,60 +1787,94 @@
           fetch(`${API_BASE}/api/amhs?type=SIGMET&raw=true&icao=${currentAirport}&_t=${Date.now()}`).catch(() => null)
         ]);
 
-        const elMetReport = document.getElementById('raw-met-report');
-        const elMetar = document.getElementById('raw-metar');
-        const elTaf = document.getElementById('raw-taf');
-        const elSigmet = document.getElementById('raw-sigmet');
-        const elWarn = document.getElementById('raw-warning');
+        const tbody = document.getElementById('raw-met-tbody');
+        if (tbody) {
+          const rows = [];
 
-        if (rawAllRes && rawAllRes.ok) {
-          const data = await rawAllRes.json();
-          
-          // 1. MET REPORT
-          const repTxt = (data.metReport || '').replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
-          if (elMetReport) {
+          if (rawAllRes && rawAllRes.ok) {
+            const data = await rawAllRes.json();
+            
+            // 1. METAR / SPECI List (from domesticMetar or data.metar / data.speci)
+            const dMetarList = (data.domesticMetar && data.domesticMetar.length > 0) ? data.domesticMetar : [
+              data.speci ? { msg_type: 'SPECI', content: (data.speci || '').trim() } : null,
+              data.metar ? { msg_type: 'METAR', content: (data.metar || '').trim() } : null
+            ].filter(Boolean);
+
+            if (dMetarList.length > 0) {
+              dMetarList.forEach(m => {
+                const typeStr = (m.msg_type || 'METAR').toUpperCase();
+                const badgeCls = typeStr === 'SPECI' ? 'badge-speci' : 'badge-metar';
+                const cat = getFlightCategory(m.content || '');
+                rows.push(`
+                  <tr>
+                    <td style="text-align: center;"><span class="raw-type-badge ${badgeCls}">${typeStr}</span></td>
+                    <td style="color: var(--primary-soft); font-weight: 600;">${m.content || '-'}</td>
+                    <td style="text-align: center;"><span class="met-flight-cat ${cat.cls}">${cat.text}</span></td>
+                  </tr>
+                `);
+              });
+            }
+
+            // 2. MET REPORT
+            const repTxt = (data.metReport || '').replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
             if (repTxt && !repTxt.includes('<')) {
-              elMetReport.textContent = repTxt;
-              document.getElementById('line-met-report').style.display = 'flex';
+              rows.push(`
+                <tr>
+                  <td style="text-align: center;"><span class="raw-type-badge badge-metreport">MET REPORT</span></td>
+                  <td style="color: var(--primary-bright); font-weight: 700;">${repTxt}</td>
+                  <td style="text-align: center; color: var(--text-muted); font-size: 8.5px; font-weight: 700;">NOSIG</td>
+                </tr>
+              `);
             }
-          }
 
-          // 2. METAR / SPECI
-          const metarTxt = (data.speci || data.metar || '').replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
-          if (elMetar) {
-            if (metarTxt && !metarTxt.includes('<')) {
-              elMetar.textContent = metarTxt;
-              document.getElementById('line-metar').style.display = 'flex';
-            }
-          }
-
-          // 3. TAF
-          const tafTxt = (data.taf || '').replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
-          if (elTaf) {
+            // 3. TAF
+            const tafTxt = (data.taf || '').trim();
             if (tafTxt && !tafTxt.includes('<')) {
-              elTaf.textContent = tafTxt;
-              document.getElementById('line-taf').style.display = 'flex';
+              const formattedTaf = tafTxt.replace(/\s(BECMG|TEMPO|FM\d{6}|PROB\d{2})\s/g, '\n          $1 ').replace(/\\n/g, '\n');
+              rows.push(`
+                <tr>
+                  <td style="text-align: center;"><span class="raw-type-badge badge-taf">TAF</span></td>
+                  <td style="color: var(--amber); font-weight: 600; white-space: pre-wrap;">${formattedTaf}</td>
+                  <td style="text-align: center; color: var(--amber); font-size: 8.5px; font-weight: 700;">FCST</td>
+                </tr>
+              `);
+            }
+
+            // 4. WARNINGS
+            const warnList = data.warnings || [];
+            warnList.forEach(w => {
+              const wTxt = w.warningText || w.title || w.content || '';
+              if (wTxt) {
+                rows.push(`
+                  <tr>
+                    <td style="text-align: center;"><span class="raw-type-badge badge-warning">WARNING</span></td>
+                    <td style="color: var(--red); font-weight: 800;">${wTxt}</td>
+                    <td style="text-align: center; color: var(--red); font-size: 8.5px; font-weight: 800;">ALERT</td>
+                  </tr>
+                `);
+              }
+            });
+          }
+
+          // 5. SIGMET
+          if (sigmetRes && sigmetRes.ok) {
+            const sData = await sigmetRes.json();
+            const sTxt = (sData.rawSigmetText || sData.rawAviationWeatherText || '').replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
+            if (sTxt && !sTxt.includes('<')) {
+              rows.push(`
+                <tr>
+                  <td style="text-align: center;"><span class="raw-type-badge badge-sigmet">SIGMET</span></td>
+                  <td style="color: var(--amber); font-weight: 800;">SIGMET: ${sTxt}</td>
+                  <td style="text-align: center; color: var(--amber); font-size: 8.5px; font-weight: 800;">FIR SEV</td>
+                </tr>
+              `);
             }
           }
 
-          // 4. WARNINGS
-          const warnList = data.warnings || [];
-          if (elWarn) {
-            if (warnList.length > 0) {
-              const wTxt = warnList[0].warningText || warnList[0].title || '';
-              elWarn.textContent = `WARNING: ${wTxt}`;
-              document.getElementById('line-warning').style.display = 'flex';
-            }
-          }
-        }
-
-        // 5. SIGMET
-        if (sigmetRes && sigmetRes.ok) {
-          const sData = await sigmetRes.json();
-          const sTxt = (sData.rawSigmetText || sData.rawAviationWeatherText || '').replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
-          if (elSigmet && sTxt && !sTxt.includes('<')) {
-            elSigmet.textContent = `SIGMET: ${sTxt}`;
-            document.getElementById('line-sigmet').style.display = 'flex';
+          if (rows.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 15px; color: var(--text-muted);">수신된 항공기상 전문 없음</td></tr>';
+          } else {
+            tbody.innerHTML = rows.join('');
           }
         }
       } catch (e) {
@@ -2320,7 +2443,16 @@
       return `${kstFmt} / ${zuluFmt}`;
     }
 
-    function openFlightDetailModal(flight, tableType, seqHtml) {
+    let currentAfsTelegram = '';
+
+    function copyAfsTelegram() {
+      if (!currentAfsTelegram) return;
+      navigator.clipboard.writeText(currentAfsTelegram).then(() => {
+        alert('ICAO 비행계획서(FPL) 원문 전문이 클립보드에 복사되었습니다.');
+      });
+    }
+
+    async function openFlightDetailModal(flight, tableType, seqHtml) {
       if (!flight) return;
       const fId = flight.flt || flight.fpId || 'UNKNOWN';
       const rules = (flight.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
@@ -2343,6 +2475,13 @@
       statusBadge.textContent = status;
       statusBadge.style.background = status.includes('DEP') || status.includes('ARR') ? 'var(--primary)' : (status.includes('CNL') ? 'var(--red)' : 'var(--amber)');
       statusBadge.style.color = '#000';
+
+      // Reset telegram box
+      const telegramBox = document.getElementById('fm-fpl-telegram');
+      if (telegramBox) {
+        telegramBox.textContent = `[${fId}] UBIKAIS 정부 시스템으로부터 ICAO 비행계획서 원문 전문 수신 중...`;
+      }
+      currentAfsTelegram = '';
 
       // 1. Routing
       document.getElementById('fm-org').textContent = `${orgInfo.code} - ${orgInfo.name}`;
@@ -2396,6 +2535,41 @@
       setTimeout(() => {
         renderFlightRouteMap(orgInfo, desInfo, rules);
       }, 100);
+
+      // 6. Fetch 100% Genuine ICAO FPL Telegram from UBIKAIS Backend
+      try {
+        const queryParams = new URLSearchParams({
+          amsRecPk: flight.amsRecPk || '',
+          amsRecPkCha: flight.amsRecPkCha || '',
+          vfrPk: flight.vfrPk || '',
+          fpCls: rules,
+          flt: fId,
+          _t: Date.now()
+        });
+        const fplRes = await fetch(`${API_BASE}/api/fpl-detail?${queryParams.toString()}`);
+        if (fplRes.ok) {
+          const fplData = await fplRes.json();
+          if (fplData.rawTelegram) {
+            currentAfsTelegram = fplData.rawTelegram;
+            if (telegramBox) telegramBox.textContent = currentAfsTelegram;
+
+            // If raw telegram contains filed route (Item 15), update route box
+            const fplRouteMatch = currentAfsTelegram.match(/-([NK]\d{4}[FSACV]\d{3,4}[\s\S]*?)-([A-Z]{4}\d{4})/);
+            if (fplRouteMatch && fplRouteMatch[1]) {
+              const fullItem15 = fplRouteMatch[1].trim();
+              const routeOnly = fullItem15.replace(/^[NK]\d{4}[FSACV]\d{3,4}\s*/, '').replace(/\s+/g, ' ').trim();
+              if (routeOnly) {
+                document.getElementById('fm-route').textContent = routeOnly;
+              }
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('FPL detail fetch error:', e.message);
+        if (telegramBox && (!currentAfsTelegram || currentAfsTelegram.startsWith('['))) {
+          telegramBox.textContent = `(비행계획서 수신 대기: ${e.message})`;
+        }
+      }
     }
 
     function closeFlightDetailModal() {

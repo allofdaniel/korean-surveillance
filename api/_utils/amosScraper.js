@@ -108,6 +108,7 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
       const warnings = json.warningList || [];
       const speci = (json.speciList?.[0]?.content || '').trim();
       const metReport = json.metReportData || null;
+      const domesticMetar = json.domesticMetar || [];
 
       const result = {
         metar: metar || null,
@@ -115,6 +116,7 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
         speci: speci || null,
         warnings: warnings,
         metReport: metReport,
+        domesticMetar: domesticMetar,
         timestamp: new Date().toISOString(),
         source: metar ? '대한민국 항공기상청 (AMO / global.amo.go.kr)' : '미수신 (관측소 없음)'
       };
@@ -129,7 +131,7 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
     console.error(`[AMO Weather Scraper] Error for ${icao}:`, e.message);
   }
 
-  return cachedMetarTaf.get(icao) || { metar: null, taf: null, warnings: [], metReport: null, source: '미수신 (관측소 없음)' };
+  return cachedMetarTaf.get(icao) || { metar: null, taf: null, warnings: [], metReport: null, domesticMetar: [], source: '미수신 (관측소 없음)' };
 }
 
 /**

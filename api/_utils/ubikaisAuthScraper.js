@@ -119,6 +119,8 @@ async function authenticateUbikais() {
   return cookieHeader;
 }
 
+export { authenticateUbikais };
+
 /**
  * 특정 공항의 실시간 UBIKAIS 비행계획(IFR + VFR) 100% 원문 데이터베이스 조회
  */
@@ -271,7 +273,11 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSI') {
       eta,
       cha: isChanged ? 'Y' : '-',
       sts: (r.depStatus || 'SCH').toUpperCase(),
-      flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR'
+      flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR',
+      amsRecPk: r.amsRecPk || '',
+      amsRecPkCha: r.amsRecPkCha || '',
+      vfrPk: '',
+      via: r.via || ''
     };
   });
 
@@ -304,7 +310,11 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSI') {
       eta,
       ata,
       cha: isChanged ? 'Y' : '-',
-      flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR'
+      flightRules: flt.startsWith('HL') ? 'VFR' : 'IFR',
+      amsRecPk: r.amsRecPk || '',
+      amsRecPkCha: r.amsRecPkCha || '',
+      vfrPk: '',
+      via: r.via || ''
     };
   });
 
@@ -321,7 +331,7 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSI') {
 
   // 3. Format & Merge VFR Flight Plans (selectVfrFpl.fois - Converted from UTC to KST)
   rawVfrs.forEach(r => {
-    const via = r.via || '';
+    const via = r.via || r.routeText || '';
     const viaParts = via.split('/');
     const org = viaParts[0] || ap;
     const des = viaParts.length > 1 ? viaParts[viaParts.length - 1].split(' ')[0] : ap;
@@ -349,7 +359,7 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSI') {
         departures.push({
           flt,
           typ: r.acType || '-',
-          reg: flt.startsWith('HL') ? flt : '-',
+          reg: flt.startsWith('HL') ? flt : (r.acId || '-'),
           nat: rules,
           fpl: isFplFiled ? 'Y' : '-',
           des: des || ap,
@@ -361,7 +371,11 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSI') {
           eta,
           cha: '-',
           sts: atd !== '-' ? 'DEP' : 'SCH',
-          flightRules: rules
+          flightRules: rules,
+          amsRecPk: '',
+          amsRecPkCha: '',
+          vfrPk: r.vfrPk || '',
+          via
         });
       }
     }
@@ -374,7 +388,7 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSI') {
         arrivals.push({
           flt,
           typ: r.acType || '-',
-          reg: flt.startsWith('HL') ? flt : '-',
+          reg: flt.startsWith('HL') ? flt : (r.acId || '-'),
           sts: ata !== '-' ? 'ARR' : (atd !== '-' ? 'ENR' : 'SCH'),
           org: org || ap,
           nat: rules,
@@ -386,7 +400,11 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSI') {
           eta,
           ata,
           cha: '-',
-          flightRules: rules
+          flightRules: rules,
+          amsRecPk: '',
+          amsRecPkCha: '',
+          vfrPk: r.vfrPk || '',
+          via
         });
       }
     }
