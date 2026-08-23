@@ -624,20 +624,47 @@
       letter-spacing: 0.03em;
     }
 
-    /* 5-Time Blinking Animation on Real Status Change */
-    .blink-status-5 {
-      animation: statusFlash5 3.5s ease-in-out;
+    /* SEQ Sequence Number Badges */
+    .seq-cell {
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 2px 2px !important;
+      width: 28px;
     }
-    @keyframes statusFlash5 {
+    .seq-num {
+      color: var(--primary-soft);
+      font-weight: 800;
+    }
+    tr.flight-upcoming .seq-num {
+      color: var(--primary-bright);
+    }
+    .seq-cnl {
+      color: var(--red);
+      font-weight: 800;
+      font-size: 7.5px;
+    }
+    .seq-unfiled {
+      color: var(--text-muted);
+    }
+
+    /* 5-Time Gentle Border & Text Pulse on Status Change (No full background flash) */
+    .blink-status-5 {
+      animation: statusGentlePulse5 3.2s ease-in-out;
+      position: relative;
+    }
+    @keyframes statusGentlePulse5 {
       0%, 20%, 40%, 60%, 80%, 100% {
-        background-color: transparent;
-        color: var(--primary-bright);
+        outline: 1px solid transparent;
         box-shadow: none;
+        color: inherit;
       }
       10%, 30%, 50%, 70%, 90% {
-        background-color: rgba(0, 255, 0, 0.35);
+        outline: 1px solid var(--primary);
+        box-shadow: inset 0 0 6px rgba(0, 255, 0, 0.12), 0 0 8px rgba(0, 255, 0, 0.35);
         color: #fff;
-        box-shadow: 0 0 8px var(--primary);
       }
     }
 
@@ -933,6 +960,7 @@
           <table>
             <thead>
               <tr>
+                <th style="width: 28px;">SEQ</th>
                 <th id="th-dep-flt" onclick="sortTable('dep', 'flt')" style="width: 78px; text-align: left; padding-left: 5px;">FLT</th>
                 <th id="th-dep-typ" onclick="sortTable('dep', 'typ')" style="width: 36px;">TYP</th>
                 <th id="th-dep-reg" onclick="sortTable('dep', 'reg')" style="width: 52px;">REG</th>
@@ -967,6 +995,7 @@
           <table>
             <thead>
               <tr>
+                <th style="width: 28px;">SEQ</th>
                 <th id="th-arr-flt" onclick="sortTable('arr', 'flt')" style="width: 78px; text-align: left; padding-left: 5px;">FLT</th>
                 <th id="th-arr-typ" onclick="sortTable('arr', 'typ')" style="width: 36px;">TYP</th>
                 <th id="th-arr-reg" onclick="sortTable('arr', 'reg')" style="width: 52px;">REG</th>
@@ -1576,11 +1605,12 @@
         depTbody.innerHTML = '';
 
         if (!loadedDeps || loadedDeps.length === 0) {
-          depTbody.innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; font-weight: 600;">UBIKAIS 실시간 출발 비행계획(DEP FPL) 없음</td></tr>';
+          depTbody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; font-weight: 600;">UBIKAIS 실시간 출발 비행계획(DEP FPL) 없음</td></tr>';
           return;
         }
 
         const sorted = sortFlightList(loadedDeps, currentSort.dep.col, currentSort.dep.asc);
+        let depSeq = 0;
         sorted.forEach(f => {
           const fId = f.flt || f.fpId || 'UNKNOWN';
           const status = (f.sts || f.depStatus || 'SCH').toUpperCase();
@@ -1589,7 +1619,18 @@
           const isFplFiled = f.fpl === 'Y';
 
           const isCompleted = (f.atd && f.atd !== '-' && f.atd !== '') || status.includes('DEP');
+          const isCancelled = status.includes('CNL') || (f.cha || '').includes('CNL');
           const rowClass = !isFplFiled ? 'flight-unfiled' : (isCompleted ? 'flight-completed' : 'flight-upcoming');
+
+          let seqHtml = '';
+          if (isCancelled) {
+            seqHtml = '<span class="seq-cnl">CNL</span>';
+          } else if (!isFplFiled) {
+            seqHtml = '<span class="seq-unfiled">-</span>';
+          } else {
+            depSeq++;
+            seqHtml = `<span class="seq-num">#${depSeq}</span>`;
+          }
 
           // Detect real status changes without false polling flashes
           const prevStatus = flightStatusHistory.get(`DEP_${fId}`);
@@ -1603,6 +1644,7 @@
           const tr = document.createElement('tr');
           tr.className = `${rowClass} ${blinkClass}`;
           tr.innerHTML = `
+            <td class="seq-cell">${seqHtml}</td>
             <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
               <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
             </td>
@@ -1627,11 +1669,12 @@
         arrTbody.innerHTML = '';
 
         if (!loadedArrs || loadedArrs.length === 0) {
-          arrTbody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; font-weight: 600;">UBIKAIS 실시간 도착 비행계획(ARR FPL) 없음</td></tr>';
+          arrTbody.innerHTML = '<tr><td colspan="14" style="text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; font-weight: 600;">UBIKAIS 실시간 도착 비행계획(ARR FPL) 없음</td></tr>';
           return;
         }
 
         const sorted = sortFlightList(loadedArrs, currentSort.arr.col, currentSort.arr.asc);
+        let arrSeq = 0;
         sorted.forEach(f => {
           const fId = f.flt || f.fpId || 'UNKNOWN';
           const status = (f.sts || f.arrStatus || 'ENR').toUpperCase();
@@ -1640,7 +1683,18 @@
           const isFplFiled = f.fpl === 'Y';
 
           const isCompleted = (f.ata && f.ata !== '-' && f.ata !== '') || status.includes('ARR') || status.includes('LND');
+          const isCancelled = status.includes('CNL') || (f.cha || '').includes('CNL');
           const rowClass = !isFplFiled ? 'flight-unfiled' : (isCompleted ? 'flight-completed' : 'flight-upcoming');
+
+          let seqHtml = '';
+          if (isCancelled) {
+            seqHtml = '<span class="seq-cnl">CNL</span>';
+          } else if (!isFplFiled) {
+            seqHtml = '<span class="seq-unfiled">-</span>';
+          } else {
+            arrSeq++;
+            seqHtml = `<span class="seq-num">#${arrSeq}</span>`;
+          }
 
           const prevStatus = flightStatusHistory.get(`ARR_${fId}`);
           const isStatusChanged = prevStatus && prevStatus !== status && status !== 'ENR';
@@ -1653,6 +1707,7 @@
           const tr = document.createElement('tr');
           tr.className = `${rowClass} ${blinkClass}`;
           tr.innerHTML = `
+            <td class="seq-cell">${seqHtml}</td>
             <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
               <span class="badge-rule ${badgeClass}">${rules}</span><span class="flight-callsign">${fId}</span>
             </td>
@@ -1690,7 +1745,7 @@
 
         let matchIdx = 0;
         for (let i = 0; i < rows.length; i++) {
-          const timeTd = type === 'dep' ? rows[i].children[7] : rows[i].children[8];
+          const timeTd = type === 'dep' ? rows[i].children[9] : rows[i].children[11];
           const planTime = parseInt((timeTd?.textContent || '0000').replace(':', ''));
           if (planTime >= curTimeNum) {
             matchIdx = i;
