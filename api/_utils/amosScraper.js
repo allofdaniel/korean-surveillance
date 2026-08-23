@@ -137,7 +137,7 @@ export async function fetchLiveAmoMetarTaf(icao = 'RKSI') {
  */
 export async function fetchLiveAmosData(icao = null) {
   const now = Date.now();
-  if (cachedAmosData && (now - lastAmosFetchTime) < 30000 && cachedAmosData.length > 0) {
+  if (cachedAmosData && (now - lastAmosFetchTime) < 8000 && cachedAmosData.length > 0) {
     if (icao) {
       return cachedAmosData.filter(d => d.stnCd === icao);
     }
