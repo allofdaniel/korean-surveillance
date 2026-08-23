@@ -308,7 +308,18 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSI') {
     };
   });
 
-  // 3. Format & Merge VFR Flight Plans (selectVfrFpl.fois)
+  // Helper to convert VFR FPL raw UTC time (Zulu) to KST (UTC+9)
+  function utcToKstTime(timeStr) {
+    if (!timeStr || timeStr === '-' || timeStr === '') return '-';
+    const clean = timeStr.replace(/[^0-9]/g, '');
+    if (clean.length < 4) return timeStr;
+    const h = parseInt(clean.substring(0, 2), 10);
+    const m = clean.substring(2, 4);
+    const kstH = (h + 9) % 24;
+    return `${String(kstH).padStart(2, '0')}${m}`;
+  }
+
+  // 3. Format & Merge VFR Flight Plans (selectVfrFpl.fois - Converted from UTC to KST)
   rawVfrs.forEach(r => {
     const via = r.via || '';
     const viaParts = via.split('/');
@@ -319,10 +330,16 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSI') {
     const rules = r.classify9 || (flt.startsWith('HL') ? 'VFR' : 'IFR');
     const isFplFiled = r.fplYn === 'Y' || r.fpl === 'Y';
 
-    const etd = (r.etd || '').replace(':', '') || '-';
-    const atd = (r.atd && r.atd !== '-' && r.atd !== '') ? r.atd.replace(':', '') : '-';
-    const eta = (r.eta || '').replace(':', '') || '-';
-    const ata = (r.ata && r.ata !== '-' && r.ata !== '') ? r.ata.replace(':', '') : '-';
+    // Convert raw UTC times to KST for seamless integration with commercial IFR schedules
+    const rawEtd = (r.etd || '').replace(':', '') || '-';
+    const rawAtd = (r.atd && r.atd !== '-' && r.atd !== '') ? r.atd.replace(':', '') : '-';
+    const rawEta = (r.eta || '').replace(':', '') || '-';
+    const rawAta = (r.ata && r.ata !== '-' && r.ata !== '') ? r.ata.replace(':', '') : '-';
+
+    const etd = utcToKstTime(rawEtd);
+    const atd = utcToKstTime(rawAtd);
+    const eta = utcToKstTime(rawEta);
+    const ata = utcToKstTime(rawAta);
 
     // Check if Departure for this airport
     const isDep = (org === ap) || (r.depYn === 'Y') || (etd !== '-' && !arrivals.some(a => a.flt === flt && a.eta === eta));
