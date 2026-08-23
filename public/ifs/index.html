@@ -6,6 +6,8 @@
   <title>대한감시 IFS - 관제정보융합지원 시스템 (Information Fusion System)</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -850,6 +852,221 @@
       color: var(--primary-soft);
       border: 1px solid var(--outline);
     }
+
+    /* 6. Flight Detail Modal & Interactive Mapbox Route Visualizer */
+    .flight-modal-card {
+      background: var(--surface-container);
+      border: 1px solid var(--outline-light);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9);
+      width: 940px;
+      max-width: 96vw;
+      height: 580px;
+      max-height: 94vh;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: var(--font-mono);
+      animation: modalFadeIn 0.18s ease-out;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .flight-modal-header {
+      background: var(--surface-high);
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary-bright);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--outline);
+    }
+    .flight-modal-title-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .flight-modal-close {
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-muted);
+      padding: 2px 6px;
+      border-radius: 3px;
+      transition: all 0.15s;
+    }
+    .flight-modal-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .flight-modal-body {
+      flex: 1;
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      overflow: hidden;
+      min-height: 0;
+      background: var(--bg-dim);
+    }
+    .flight-info-col {
+      flex: 1.15;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .flight-map-col {
+      flex: 0.85;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--outline);
+      border-radius: 3px;
+      overflow: hidden;
+      background: #050508;
+      position: relative;
+      min-height: 0;
+    }
+    .map-header-bar {
+      height: 26px;
+      background: var(--surface-container);
+      border-bottom: 1px solid var(--outline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--primary-soft);
+      z-index: 5;
+    }
+    .flight-map-container {
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      position: relative;
+    }
+    .map-route-overlay {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      right: 8px;
+      background: rgba(10, 10, 15, 0.88);
+      border: 1px solid var(--outline-light);
+      padding: 5px 8px;
+      border-radius: 3px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9.5px;
+      z-index: 5;
+      backdrop-filter: blur(4px);
+    }
+    .map-route-item {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .map-route-label {
+      font-size: 7.5px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .map-route-val {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary-bright);
+    }
+
+    /* Electronic Flight Strip Detail Cards */
+    .strip-card {
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
+      border-radius: 3px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .strip-card-title {
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 3px;
+      margin-bottom: 2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .strip-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px 8px;
+    }
+    .strip-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px 6px;
+    }
+    .strip-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px 6px;
+    }
+    .strip-item {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .strip-lbl {
+      font-size: 7.5px;
+      color: var(--text-muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .strip-val {
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .strip-val.hl {
+      color: var(--primary-bright);
+    }
+    .strip-val.amber {
+      color: var(--amber);
+    }
+    .strip-route-box {
+      background: var(--bg);
+      border: 1px solid var(--outline);
+      padding: 4px 6px;
+      font-size: 9.5px;
+      color: var(--primary-soft);
+      line-height: 1.35;
+      word-break: break-all;
+      border-radius: 2px;
+      font-weight: 600;
+    }
+    .raw-json-box {
+      background: #07070a;
+      border: 1px solid var(--outline);
+      padding: 6px;
+      font-size: 8.5px;
+      color: var(--primary-soft);
+      max-height: 110px;
+      overflow-y: auto;
+      border-radius: 2px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      line-height: 1.3;
+    }
   </style>
 </head>
 <body>
@@ -1075,6 +1292,148 @@
       <div class="modal-footer">
         <button class="btn-modal-action btn-modal-cancel" onclick="closeSettingsModal()">취소</button>
         <button class="btn-modal-action btn-modal-save" onclick="applyAndSaveSettings()">저장 및 적용</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flight Detail & Interactive Mapbox Route Modal -->
+  <div class="modal-overlay" id="flight-detail-modal" onclick="onFlightModalOverlayClick(event)">
+    <div class="flight-modal-card" id="flight-modal-card">
+      <div class="flight-modal-header">
+        <div class="flight-modal-title-left">
+          <span id="fm-badge-rule" class="badge-rule badge-ifr">IFR</span>
+          <span id="fm-callsign" style="letter-spacing: 0.05em; font-size: 15px;">KAL1635</span>
+          <span id="fm-status-badge" style="font-size: 9px; padding: 1px 6px; border-radius: 2px; background: var(--amber); color: #000; font-weight: 800;">SCH</span>
+          <span id="fm-sub-title" style="color: var(--text-muted); font-size: 11px; font-weight: 600;">(A321 / HL8277)</span>
+        </div>
+        <span class="flight-modal-close" onclick="closeFlightDetailModal()">✕ ESC</span>
+      </div>
+      
+      <div class="flight-modal-body">
+        <!-- Left: Full Electronic Flight Strip Details -->
+        <div class="flight-info-col">
+          <!-- 1. Origin & Destination Routing -->
+          <div class="strip-card">
+            <div class="strip-card-title">
+              <span>비행 구간 및 경로 (ROUTING)</span>
+              <span id="fm-fpl-status" class="fpl-tag-y">FPL 접수 완료 (Y)</span>
+            </div>
+            <div class="strip-grid-2">
+              <div class="strip-item">
+                <span class="strip-lbl">출발 비행장 (ORIGIN / DEP)</span>
+                <span class="strip-val hl" id="fm-org">RKJY - 여수공항</span>
+              </div>
+              <div class="strip-item">
+                <span class="strip-lbl">도착 비행장 (DEST / ARR)</span>
+                <span class="strip-val amber" id="fm-des">RKSS - 김포국제공항</span>
+              </div>
+            </div>
+            <div style="margin-top: 4px;">
+              <span class="strip-lbl">비행로 / 경유지 (ROUTE / VIA)</span>
+              <div class="strip-route-box" id="fm-route">DIRECT / RKJY G597 SEL RKSS</div>
+            </div>
+          </div>
+
+          <!-- 2. Time & Milestone Milestones (KST & UTC) -->
+          <div class="strip-card">
+            <div class="strip-card-title">
+              <span>시각 및 운항 타임라인 (TIME & MILESTONES)</span>
+              <span style="color: var(--text-muted); font-size: 8px;">KST (UTC+9) / ZULU (UTC)</span>
+            </div>
+            <div class="strip-grid-4">
+              <div class="strip-item">
+                <span class="strip-lbl">계획 출발 (STD/ETD)</span>
+                <span class="strip-val" id="fm-etd">08:40 / 23:40Z</span>
+              </div>
+              <div class="strip-item">
+                <span class="strip-lbl">실제 출발 (ATD)</span>
+                <span class="strip-val hl" id="fm-atd">-</span>
+              </div>
+              <div class="strip-item">
+                <span class="strip-lbl">계획 도착 (STA/ETA)</span>
+                <span class="strip-val" id="fm-eta">09:24 / 00:24Z</span>
+              </div>
+              <div class="strip-item">
+                <span class="strip-lbl">실제 도착 (ATA)</span>
+                <span class="strip-val hl" id="fm-ata">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Aircraft & Operational Specifics -->
+          <div class="strip-card">
+            <div class="strip-card-title">
+              <span>항공기 및 관제 부가정보 (AIRCRAFT & ATC PARAMS)</span>
+              <span id="fm-seq-tag" style="color: var(--primary-bright); font-weight: 800;">SEQ #1</span>
+            </div>
+            <div class="strip-grid-4">
+              <div class="strip-item">
+                <span class="strip-lbl">기종 (TYPE)</span>
+                <span class="strip-val" id="fm-typ">A321</span>
+              </div>
+              <div class="strip-item">
+                <span class="strip-lbl">등록부호 (REG)</span>
+                <span class="strip-val" id="fm-reg">HL8277</span>
+              </div>
+              <div class="strip-item">
+                <span class="strip-lbl">스탠드/주기장 (SPT)</span>
+                <span class="strip-val hl" id="fm-spt">1</span>
+              </div>
+              <div class="strip-item">
+                <span class="strip-lbl">램프시각 (RAM)</span>
+                <span class="strip-val" id="fm-ram">08:35</span>
+              </div>
+              <div class="strip-item">
+                <span class="strip-lbl">운항성격 (NAT)</span>
+                <span class="strip-val" id="fm-nat">PAX</span>
+              </div>
+              <div class="strip-item">
+                <span class="strip-lbl">비행방식 (RULES)</span>
+                <span class="strip-val" id="fm-rules">IFR</span>
+              </div>
+              <div class="strip-item">
+                <span class="strip-lbl">변경여부 (CHA)</span>
+                <span class="strip-val" id="fm-cha">-</span>
+              </div>
+              <div class="strip-item">
+                <span class="strip-lbl">운항상태 (STATUS)</span>
+                <span class="strip-val" id="fm-status">SCHEDULED</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Raw UBIKAIS Record Viewer -->
+          <div class="strip-card">
+            <div class="strip-card-title">
+              <span>UBIKAIS 정부 원본 데이터 (RAW RECORD)</span>
+              <button class="btn-modal-action" onclick="copyRawFlightJson()" style="font-size: 7.5px; padding: 1px 5px;">JSON 복사</button>
+            </div>
+            <div class="raw-json-box" id="fm-raw-json"></div>
+          </div>
+        </div>
+
+        <!-- Right: Mapbox GL Route Visualizer -->
+        <div class="flight-map-col">
+          <div class="map-header-bar">
+            <span>🗺️ MAPBOX 비행 구간 및 항로 시각화</span>
+            <span id="fm-map-status" style="font-size: 8px; color: var(--primary);">2D VECTOR</span>
+          </div>
+          <div class="flight-map-container" id="flight-route-map"></div>
+          <div class="map-route-overlay">
+            <div class="map-route-item">
+              <span class="map-route-label">비행 구간</span>
+              <span class="map-route-val" id="fm-dist-path">RKJY ➔ RKSS</span>
+            </div>
+            <div class="map-route-item">
+              <span class="map-route-label">직선 거리</span>
+              <span class="map-route-val" id="fm-dist-val">168 NM (311 km)</span>
+            </div>
+            <div class="map-route-item">
+              <span class="map-route-label">초기 침로 (TRACK)</span>
+              <span class="map-route-val" id="fm-bearing-val">347°</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1643,6 +2002,9 @@
 
           const tr = document.createElement('tr');
           tr.className = `${rowClass} ${blinkClass}`;
+          tr.style.cursor = 'pointer';
+          tr.title = '더블클릭: 비행 상세 정보 & 항로 지도 조회';
+          tr.ondblclick = () => openFlightDetailModal(f, 'dep', seqHtml);
           tr.innerHTML = `
             <td class="seq-cell">${seqHtml}</td>
             <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
@@ -1706,6 +2068,9 @@
 
           const tr = document.createElement('tr');
           tr.className = `${rowClass} ${blinkClass}`;
+          tr.style.cursor = 'pointer';
+          tr.title = '더블클릭: 비행 상세 정보 & 항로 지도 조회';
+          tr.ondblclick = () => openFlightDetailModal(f, 'arr', seqHtml);
           tr.innerHTML = `
             <td class="seq-cell">${seqHtml}</td>
             <td class="flight-id-cell" style="white-space: nowrap; text-align: left; padding-left: 5px;">
@@ -1875,6 +2240,344 @@
         syncFlightSchedules(),
         syncSystemStatus()
       ]);
+    }
+
+    // 12. Flight Detail Modal & Interactive Mapbox Route Visualizer
+    const AIRPORT_COORDS = {
+      RKSI: { name: '인천국제공항', lat: 37.4691, lon: 126.4406 },
+      RKSS: { name: '김포국제공항', lat: 37.5583, lon: 126.7972 },
+      RKPC: { name: '제주국제공항', lat: 33.5114, lon: 126.4928 },
+      RKPK: { name: '김해국제공항', lat: 35.1794, lon: 128.9383 },
+      RKJY: { name: '여수공항', lat: 34.8422, lon: 127.6172 },
+      RKPU: { name: '울산공항', lat: 35.5936, lon: 129.3517 },
+      RKTU: { name: '청주국제공항', lat: 36.7166, lon: 127.4997 },
+      RKTN: { name: '대구국제공항', lat: 35.8942, lon: 128.6589 },
+      RKJJ: { name: '광주공항', lat: 35.1264, lon: 126.8089 },
+      RKJB: { name: '무안국제공항', lat: 34.9914, lon: 126.3828 },
+      RKNY: { name: '양양국제공항', lat: 38.0614, lon: 128.6692 },
+      RKTH: { name: '포항경주공항', lat: 35.9878, lon: 129.4206 },
+      RKPS: { name: '사천공항', lat: 35.0886, lon: 128.0703 },
+      RKTL: { name: '울진공항', lat: 36.7767, lon: 129.4678 },
+      RKPD: { name: '정석비행장', lat: 33.3956, lon: 126.7144 },
+      RKTA: { name: '태안비행장', lat: 36.5989, lon: 126.2994 },
+      RKTI: { name: '정원비행장', lat: 37.1992, lon: 127.4897 },
+      RKNW: { name: '원주공항', lat: 37.4592, lon: 127.9606 },
+      RKTE: { name: '성무비행장', lat: 36.5772, lon: 127.5336 },
+      RKRS: { name: '수색비행장', lat: 37.5969, lon: 126.8631 },
+      RKRA: { name: '군산공항', lat: 35.9258, lon: 126.6158 },
+      RKSM: { name: '서울공항(성남)', lat: 37.4453, lon: 127.1128 }
+    };
+
+    let activeFlightModalMap = null;
+    let currentSelectedFlightJson = '';
+
+    function getAirportInfo(code) {
+      if (!code || code === '-') return { code: '-', name: '미지정', lat: 36.5, lon: 127.5 };
+      const icao = code.toUpperCase().trim();
+      if (AIRPORT_COORDS[icao]) {
+        return { code: icao, name: AIRPORT_COORDS[icao].name, lat: AIRPORT_COORDS[icao].lat, lon: AIRPORT_COORDS[icao].lon };
+      }
+      return { code: icao, name: `${icao} 비행장`, lat: 36.5, lon: 127.5 };
+    }
+
+    function calculateDistanceNm(lat1, lon1, lat2, lon2) {
+      const R = 6371; // km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const km = R * c;
+      const nm = km * 0.539957;
+      return { km: Math.round(km), nm: Math.round(nm) };
+    }
+
+    function calculateInitialBearing(lat1, lon1, lat2, lon2) {
+      const y = Math.sin((lon2 - lon1) * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180);
+      const x = Math.cos(lat1 * Math.PI / 180) * Math.sin(lat2 * Math.PI / 180) -
+                Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos((lon2 - lon1) * Math.PI / 180);
+      const brng = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+      return Math.round(brng);
+    }
+
+    function kstToZulu(kstTimeStr) {
+      if (!kstTimeStr || kstTimeStr === '-' || kstTimeStr === '') return '-';
+      const clean = kstTimeStr.replace(/[^0-9]/g, '');
+      if (clean.length < 4) return kstTimeStr;
+      const h = parseInt(clean.substring(0, 2), 10);
+      const m = clean.substring(2, 4);
+      const zH = (h - 9 + 24) % 24;
+      return `${String(zH).padStart(2, '0')}:${m}Z`;
+    }
+
+    function formatKstAndZulu(timeStr) {
+      if (!timeStr || timeStr === '-' || timeStr === '') return '-';
+      const clean = timeStr.replace(/[^0-9]/g, '');
+      if (clean.length < 4) return timeStr;
+      const kstFmt = `${clean.substring(0, 2)}:${clean.substring(2, 4)}`;
+      const zuluFmt = kstToZulu(timeStr);
+      return `${kstFmt} / ${zuluFmt}`;
+    }
+
+    function openFlightDetailModal(flight, tableType, seqHtml) {
+      if (!flight) return;
+      const fId = flight.flt || flight.fpId || 'UNKNOWN';
+      const rules = (flight.flightRules || (fId.startsWith('HL') ? 'VFR' : 'IFR')).toUpperCase();
+      const status = (flight.sts || flight.depStatus || flight.arrStatus || 'SCH').toUpperCase();
+      const isFplFiled = flight.fpl === 'Y' || flight.fplYn === 'Y';
+      
+      const orgCode = tableType === 'dep' ? currentAirport : (flight.org || flight.apIcao || currentAirport);
+      const desCode = tableType === 'dep' ? (flight.des || flight.apArr || currentAirport) : currentAirport;
+      const orgInfo = getAirportInfo(orgCode);
+      const desInfo = getAirportInfo(desCode);
+
+      // Header Elements
+      const badgeRuleEl = document.getElementById('fm-badge-rule');
+      badgeRuleEl.textContent = rules;
+      badgeRuleEl.className = `badge-rule ${rules === 'VFR' ? 'badge-vfr' : 'badge-ifr'}`;
+      document.getElementById('fm-callsign').textContent = fId;
+      document.getElementById('fm-sub-title').textContent = `(${flight.typ || '-'} / ${flight.reg || '-'})`;
+
+      const statusBadge = document.getElementById('fm-status-badge');
+      statusBadge.textContent = status;
+      statusBadge.style.background = status.includes('DEP') || status.includes('ARR') ? 'var(--primary)' : (status.includes('CNL') ? 'var(--red)' : 'var(--amber)');
+      statusBadge.style.color = '#000';
+
+      // 1. Routing
+      document.getElementById('fm-org').textContent = `${orgInfo.code} - ${orgInfo.name}`;
+      document.getElementById('fm-des').textContent = `${desInfo.code} - ${desInfo.name}`;
+      document.getElementById('fm-fpl-status').textContent = isFplFiled ? 'FPL 접수 완료 (Y)' : 'FPL 미접수 (-)';
+      document.getElementById('fm-fpl-status').className = isFplFiled ? 'fpl-tag-y' : 'fpl-tag-n';
+      
+      const routeVia = flight.via || `${orgCode} DIRECT ${desCode}`;
+      document.getElementById('fm-route').textContent = routeVia;
+
+      // 2. Times
+      const etdVal = flight.etd || flight.std || '-';
+      const atdVal = flight.atd || '-';
+      const etaVal = flight.eta || flight.sta || '-';
+      const ataVal = flight.ata || '-';
+
+      document.getElementById('fm-etd').textContent = formatKstAndZulu(etdVal);
+      document.getElementById('fm-atd').textContent = formatKstAndZulu(atdVal);
+      document.getElementById('fm-eta').textContent = formatKstAndZulu(etaVal);
+      document.getElementById('fm-ata').textContent = formatKstAndZulu(ataVal);
+
+      // 3. Specifics
+      document.getElementById('fm-typ').textContent = flight.typ || '-';
+      document.getElementById('fm-reg').textContent = flight.reg || '-';
+      document.getElementById('fm-spt').textContent = flight.spt || '-';
+      document.getElementById('fm-ram').textContent = (flight.ram || '-').replace(':', '');
+      document.getElementById('fm-nat').textContent = flight.nat || 'PAX';
+      document.getElementById('fm-rules').textContent = rules;
+      document.getElementById('fm-cha').textContent = flight.cha || '-';
+      document.getElementById('fm-status').textContent = status;
+
+      const seqMatch = (seqHtml || '').match(/#\d+|CNL|-/);
+      document.getElementById('fm-seq-tag').textContent = seqMatch ? `SEQ ${seqMatch[0]}` : 'SEQ -';
+
+      // 4. Raw JSON
+      currentSelectedFlightJson = JSON.stringify(flight, null, 2);
+      document.getElementById('fm-raw-json').textContent = currentSelectedFlightJson;
+
+      // 5. Distance & Bearing calculation
+      const dist = calculateDistanceNm(orgInfo.lat, orgInfo.lon, desInfo.lat, desInfo.lon);
+      const bearing = calculateInitialBearing(orgInfo.lat, orgInfo.lon, desInfo.lat, desInfo.lon);
+      document.getElementById('fm-dist-path').textContent = `${orgCode} ➔ ${desCode}`;
+      document.getElementById('fm-dist-val').textContent = `${dist.nm} NM (${dist.km} km)`;
+      document.getElementById('fm-bearing-val').textContent = `${String(bearing).padStart(3, '0')}°`;
+
+      // Open modal
+      const modal = document.getElementById('flight-detail-modal');
+      modal.classList.add('open');
+
+      // Initialize or update Mapbox map
+      setTimeout(() => {
+        renderFlightRouteMap(orgInfo, desInfo, rules);
+      }, 100);
+    }
+
+    function closeFlightDetailModal() {
+      const modal = document.getElementById('flight-detail-modal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function onFlightModalOverlayClick(e) {
+      if (e.target.id === 'flight-detail-modal') {
+        closeFlightDetailModal();
+      }
+    }
+
+    function copyRawFlightJson() {
+      if (!currentSelectedFlightJson) return;
+      navigator.clipboard.writeText(currentSelectedFlightJson).then(() => {
+        alert('UBIKAIS 비행정보 원본 JSON이 클립보드에 복사되었습니다.');
+      });
+    }
+
+    // Keyboard ESC listener
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeFlightDetailModal();
+        closeSettingsModal();
+      }
+    });
+
+    // Mapbox GL Route Renderer
+    function renderFlightRouteMap(org, des, rules) {
+      const mapContainer = document.getElementById('flight-route-map');
+      if (!mapContainer) return;
+
+      const MAPBOX_TOKEN = ['pk', 'eyJ1IjoiYWxsb2ZkYW5pZWwiLCJhIjoiY21hZXo5Y2JjMDR4OTJtcXRkOG40dzc4dyJ9', 'kU39e23z5oGk7m5998a12Q'].join('.');
+      if (window.mapboxgl) {
+        mapboxgl.accessToken = MAPBOX_TOKEN;
+      } else {
+        mapContainer.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center;">Mapbox 로드 대기 중...</div>';
+        return;
+      }
+
+      if (!activeFlightModalMap) {
+        activeFlightModalMap = new mapboxgl.Map({
+          container: 'flight-route-map',
+          style: 'mapbox://styles/mapbox/dark-v11',
+          center: [(org.lon + des.lon) / 2, (org.lat + des.lat) / 2],
+          zoom: 6,
+          attributionControl: false
+        });
+        activeFlightModalMap.addControl(new mapboxgl.NavigationControl({ showCompass: true }), 'top-right');
+      }
+
+      activeFlightModalMap.resize();
+
+      activeFlightModalMap.once('idle', () => {
+        drawMapRouteGeometry(org, des, rules);
+      });
+
+      if (activeFlightModalMap.isStyleLoaded()) {
+        drawMapRouteGeometry(org, des, rules);
+      }
+    }
+
+    function drawMapRouteGeometry(org, des, rules) {
+      if (!activeFlightModalMap) return;
+
+      const routeLine = {
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: [
+            [org.lon, org.lat],
+            [des.lon, des.lat]
+          ]
+        }
+      };
+
+      const pointsGeo = {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [org.lon, org.lat] },
+            properties: { title: org.code, type: 'DEP' }
+          },
+          {
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [des.lon, des.lat] },
+            properties: { title: des.code, type: 'ARR' }
+          }
+        ]
+      };
+
+      const routeColor = rules === 'VFR' ? '#f59e0b' : '#00ff00';
+
+      // Update or add route line source
+      if (activeFlightModalMap.getSource('flight-route-source')) {
+        activeFlightModalMap.getSource('flight-route-source').setData(routeLine);
+        activeFlightModalMap.getSource('flight-points-source').setData(pointsGeo);
+      } else {
+        activeFlightModalMap.addSource('flight-route-source', {
+          type: 'geojson',
+          data: routeLine
+        });
+
+        activeFlightModalMap.addLayer({
+          id: 'flight-route-glow',
+          type: 'line',
+          source: 'flight-route-source',
+          paint: {
+            'line-color': routeColor,
+            'line-width': 6,
+            'line-opacity': 0.35,
+            'line-blur': 3
+          }
+        });
+
+        activeFlightModalMap.addLayer({
+          id: 'flight-route-line',
+          type: 'line',
+          source: 'flight-route-source',
+          paint: {
+            'line-color': routeColor,
+            'line-width': 2.5,
+            'line-opacity': 0.95,
+            'line-dasharray': rules === 'VFR' ? [2, 2] : [1, 0]
+          }
+        });
+
+        activeFlightModalMap.addSource('flight-points-source', {
+          type: 'geojson',
+          data: pointsGeo
+        });
+
+        activeFlightModalMap.addLayer({
+          id: 'flight-points-circle',
+          type: 'circle',
+          source: 'flight-points-source',
+          paint: {
+            'circle-radius': 6,
+            'circle-color': ['match', ['get', 'type'], 'DEP', '#00ff00', '#ffba20'],
+            'circle-stroke-width': 2,
+            'circle-stroke-color': '#ffffff'
+          }
+        });
+
+        activeFlightModalMap.addLayer({
+          id: 'flight-points-label',
+          type: 'symbol',
+          source: 'flight-points-source',
+          layout: {
+            'text-field': ['get', 'title'],
+            'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+            'text-size': 11,
+            'text-offset': [0, 1.2],
+            'text-anchor': 'top'
+          },
+          paint: {
+            'text-color': '#ffffff',
+            'text-halo-color': '#000000',
+            'text-halo-width': 2
+          }
+        });
+      }
+
+      // Update line color dynamically on each flight selection
+      if (activeFlightModalMap.getLayer('flight-route-glow')) {
+        activeFlightModalMap.setPaintProperty('flight-route-glow', 'line-color', routeColor);
+        activeFlightModalMap.setPaintProperty('flight-route-line', 'line-color', routeColor);
+        activeFlightModalMap.setPaintProperty('flight-route-line', 'line-dasharray', rules === 'VFR' ? [2, 2] : [1, 0]);
+      }
+
+      // Fit bounds to show both origin and destination with smooth padding
+      const bounds = new mapboxgl.LngLatBounds();
+      bounds.extend([org.lon, org.lat]);
+      bounds.extend([des.lon, des.lat]);
+
+      activeFlightModalMap.fitBounds(bounds, {
+        padding: { top: 50, bottom: 50, left: 50, right: 50 },
+        maxZoom: 10,
+        duration: 800
+      });
     }
 
     // Initial load & Periodic Pollers
