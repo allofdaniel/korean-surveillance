@@ -1453,11 +1453,10 @@
         const ww = rwy.wwLttr || rwy.ww || '-';
         const precipDisplay = `${rn}mm (${ww})`;
 
-        // Strict positive QNH calculation
-        const rawQnh = parseFloat(rwy.qnhHpa || (rwy.qnhOrigin ? (rwy.qnhOrigin / 10) : (parseFloat(rwy.qnh) > 500 ? rwy.qnh : 1013)));
-        const qnhVal = (!isNaN(rawQnh) && rawQnh > 800) ? Math.round(rawQnh) : 1013;
-        const qnhInhgVal = (qnhVal * 0.02953).toFixed(2);
-        const qnhDisplay = `${qnhVal}/${qnhInhgVal}`;
+        // Strict exact QNH calculation (exact hPa and exact inHg directly from AMO DB)
+        const qnhHpaVal = rwy.qnhOrigin ? (rwy.qnhOrigin / 10).toFixed(0) : (rwy.qnhHpa || '1014');
+        const qnhInhgVal = (rwy.qnh && parseFloat(rwy.qnh) < 40) ? parseFloat(rwy.qnh).toFixed(2) : (rwy.qnhInhg ? parseFloat(rwy.qnhInhg).toFixed(2) : (parseFloat(qnhHpaVal) * 0.02953).toFixed(2));
+        const qnhDisplay = `${qnhHpaVal}/${qnhInhgVal}`;
         
         // Visibility (시정 in m & Statute Miles SM) & RVR
         const morRaw = rwy.mor1min || rwy.mor || '10000';
