@@ -33,6 +33,7 @@ export default async function handler(req, res) {
   // 1. Fetch 100% Genuine Live Database from UBIKAIS Authenticated Crawler
   try {
     const liveData = await fetchUbikaisAirportLive(airport);
+    res.setHeader('Cache-Control', 's-maxage=2, stale-while-revalidate=5');
     return res.status(200).json(liveData);
   } catch (e) {
     console.error(`[flight-schedule] UBIKAIS live query failed for ${airport}:`, e.message);
