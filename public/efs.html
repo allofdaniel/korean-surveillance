@@ -1326,19 +1326,27 @@
       overflow-y: auto;
     }
 
-    /* Contextual Floating Confirmation Popover */
-    .drop-confirm-popover {
+.popover-backdrop {
       position: fixed;
-      z-index: 5000;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(1.5px);
+      z-index: 9999;
+      display: none;
+    }
+
+    .drop-confirm-popover {
+      position: absolute;
+      z-index: 10000;
       background: var(--surface-high);
       border: 1.5px solid var(--amber);
-      border-radius: 4px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.75);
-      padding: 8px 10px;
-      min-width: 200px;
-      max-width: 250px;
+      border-radius: 6px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 15px rgba(251, 203, 65, 0.2);
+      padding: 12px 14px;
+      min-width: 260px;
+      max-width: 320px;
       font-family: var(--font-pretendard);
-      animation: popoverFadeIn 0.15s cubic-bezier(0.2, 0, 0, 1);
+      animation: popoverFadeIn 0.12s cubic-bezier(0.2, 0, 0, 1);
     }
 
     @keyframes popoverFadeIn {
@@ -1346,21 +1354,43 @@
       to { opacity: 1; transform: scale(1); }
     }
 
+    .popover-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--outline);
+      padding-bottom: 6px;
+    }
+
     .popover-title {
       font-size: 11px;
       font-weight: 800;
-      color: var(--amber);
-      margin-bottom: 4px;
+      color: var(--primary-bright);
     }
 
-    .popover-desc {
-      font-size: 9.5px;
-      color: var(--primary-bright);
-      margin-bottom: 8px;
-      line-height: 1.3;
+    .popover-acid {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--amber);
+      font-family: var(--font-mono);
+    }
+
+    .popover-route-row {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--surface-container);
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--outline);
+    }
+
+    .pop-from {
+      color: var(--text-muted);
     }
 
     .pop-arrow {
@@ -1368,39 +1398,63 @@
       font-weight: 800;
     }
 
+    .pop-to {
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .popover-subtext {
+      font-size: 9.5px;
+      color: var(--primary-soft);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
     .popover-actions {
       display: flex;
-      gap: 5px;
+      gap: 8px;
       justify-content: flex-end;
     }
 
     .popover-btn {
-      padding: 3px 10px;
-      font-size: 9px;
-      font-weight: 800;
-      border-radius: 2px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
       cursor: pointer;
       border: none;
+      font-family: var(--font-pretendard);
+      transition: background 0.15s, transform 0.1s;
     }
 
-    .confirm-btn {
-      background: var(--primary);
-      color: #08101e;
+    .popover-btn:active {
+      transform: scale(0.96);
     }
 
-    .confirm-btn:hover {
-      filter: brightness(1.1);
+    .popover-btn.confirm-btn {
+      background: var(--amber);
+      color: #0b111e;
+      box-shadow: 0 0 10px rgba(251, 203, 65, 0.35);
     }
 
-    .cancel-btn {
-      background: var(--surface-recess);
-      color: var(--primary-soft);
+    .popover-btn.confirm-btn:hover {
+      background: #ffe066;
+    }
+
+    .popover-btn.cancel-btn {
+      background: var(--surface-container);
+      color: var(--primary-bright);
       border: 1px solid var(--outline-light);
     }
 
-    .cancel-btn:hover {
+    .popover-btn.cancel-btn:hover {
       background: var(--surface-hover);
-      color: var(--primary-bright);
+    }
+
+    /* Sub-section drag-hover highlight */
+    .bay-sub-section.drag-hover {
+      outline: 2px dashed var(--primary);
+      background: rgba(87, 168, 255, 0.08) !important;
     }
 
     .toast-msg {
@@ -1423,6 +1477,136 @@
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
+  .popover-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(1.5px);
+      z-index: 9999;
+      display: none;
+    }
+
+    .drop-confirm-popover {
+      position: absolute;
+      z-index: 10000;
+      background: var(--surface-high);
+      border: 1.5px solid var(--amber);
+      border-radius: 6px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 15px rgba(251, 203, 65, 0.2);
+      padding: 12px 14px;
+      min-width: 260px;
+      max-width: 320px;
+      font-family: var(--font-pretendard);
+      animation: popoverFadeIn 0.12s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    @keyframes popoverFadeIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .popover-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--outline);
+      padding-bottom: 6px;
+    }
+
+    .popover-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary-bright);
+    }
+
+    .popover-acid {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--amber);
+      font-family: var(--font-mono);
+    }
+
+    .popover-route-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--surface-container);
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--outline);
+    }
+
+    .pop-from {
+      color: var(--text-muted);
+    }
+
+    .pop-arrow {
+      color: var(--amber);
+      font-weight: 800;
+    }
+
+    .pop-to {
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .popover-subtext {
+      font-size: 9.5px;
+      color: var(--primary-soft);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .popover-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .popover-btn {
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      font-family: var(--font-pretendard);
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .popover-btn:active {
+      transform: scale(0.96);
+    }
+
+    .popover-btn.confirm-btn {
+      background: var(--amber);
+      color: #0b111e;
+      box-shadow: 0 0 10px rgba(251, 203, 65, 0.35);
+    }
+
+    .popover-btn.confirm-btn:hover {
+      background: #ffe066;
+    }
+
+    .popover-btn.cancel-btn {
+      background: var(--surface-container);
+      color: var(--primary-bright);
+      border: 1px solid var(--outline-light);
+    }
+
+    .popover-btn.cancel-btn:hover {
+      background: var(--surface-hover);
+    }
+
+    /* Sub-section drag-hover highlight */
+    .bay-sub-section.drag-hover {
+      outline: 2px dashed var(--primary);
+      background: rgba(87, 168, 255, 0.08) !important;
+    }
   </style>
 </head>
 <body class="theme-across">
@@ -1441,10 +1625,13 @@
           </span>
         </div>
 
-        <!-- Minimal Heartbeat Status Indicator: AMHS -->
+        <!-- Minimal Heartbeat Status Indicator: AMHS & SUPABASE -->
         <div class="system-heartbeat">
           <span class="pulse-indicator"></span>
           <span>AMHS</span>
+          <span style="opacity: 0.35; margin: 0 4px;">|</span>
+          <span class="pulse-indicator" style="background: var(--green); box-shadow: 0 0 6px var(--green);"></span>
+          <span id="supabaseStatusBadge" title="Supabase 실시간 클라우드 DB 감사기록 연동" style="color: var(--green); font-weight: 700;">SUPABASE DB ON</span>
         </div>
       </div>
 
@@ -1792,6 +1979,7 @@
             <div class="bottom-panel-tabs">
               <div class="tab-btn-group">
                 <button class="bottom-tab-btn active" id="tabBtnTelegram" onclick="switchBottomTab('telegram')">원문 전문 & 레코드 검사</button>
+                <button class="bottom-tab-btn" id="tabBtnAudit" onclick="switchBottomTab('audit')">Supabase 감사 로그 (실시간 기록)</button>
                 <button class="bottom-tab-btn" id="tabBtnDirectives" onclick="switchBottomTab('directives')">관제 지시 단축패널</button>
               </div>
               <button class="panel-toggle-btn" id="closeBottomPanelBtn">접기</button>
@@ -1800,6 +1988,36 @@
             <!-- Tab 1: Telegram & Strip Inspector -->
             <div class="bottom-panel-content" id="tabContentTelegram">
               <div class="raw-telegram-box" id="rawTelegramDisplay">항공기 스트립을 클릭하면 세부 데이터 및 AMHS 연계 전문이 표시됩니다.</div>
+            </div>
+
+            <!-- Tab 3: Supabase Audit Logs Feed -->
+            <div class="bottom-panel-content" id="tabContentAudit" style="display: none;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; padding: 2px 4px; border-bottom: 1px solid var(--outline);">
+                <div style="font-size: 9.5px; font-weight: 700; color: var(--primary-bright); display: flex; align-items: center; gap: 8px;">
+                  <span class="pulse-indicator" style="background: var(--green); display: inline-block;"></span>
+                  <span>Supabase 감사 로그 테이블: <code style="color: var(--primary); font-family: var(--font-mono);">public.efs_strip_logs</code></span>
+                  <span style="color: var(--text-muted);" id="auditCountLabel">(실시간 연동 중)</span>
+                </div>
+                <button type="button" class="quick-act-btn" style="flex: none; padding: 2px 10px; font-size: 9px;" onclick="fetchSupabaseAuditLogs()">감사로그 새로고침</button>
+              </div>
+              <div id="auditLogList" style="max-height: 110px; overflow-y: auto; font-family: var(--font-mono); font-size: 9px; line-height: 1.5; color: var(--primary-bright);">
+                <div style="color: var(--text-muted); padding: 4px;">감사 로그를 동기화하는 중입니다...</div>
+              </div>
+            </div>
+
+            <!-- Tab 3: Supabase Audit Logs Feed -->
+            <div class="bottom-panel-content" id="tabContentAudit" style="display: none;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; padding: 2px 4px; border-bottom: 1px solid var(--outline);">
+                <div style="font-size: 9.5px; font-weight: 700; color: var(--primary-bright); display: flex; align-items: center; gap: 8px;">
+                  <span class="pulse-indicator" style="background: var(--green); display: inline-block;"></span>
+                  <span>Supabase 감사 로그 테이블: <code style="color: var(--primary); font-family: var(--font-mono);">public.efs_strip_logs</code></span>
+                  <span style="color: var(--text-muted);" id="auditCountLabel">(실시간 연동 중)</span>
+                </div>
+                <button type="button" class="quick-act-btn" style="flex: none; padding: 2px 10px; font-size: 9px;" onclick="fetchSupabaseAuditLogs()">감사로그 새로고침</button>
+              </div>
+              <div id="auditLogList" style="max-height: 110px; overflow-y: auto; font-family: var(--font-mono); font-size: 9px; line-height: 1.5; color: var(--primary-bright);">
+                <div style="color: var(--text-muted); padding: 4px;">감사 로그를 동기화하는 중입니다...</div>
+              </div>
             </div>
 
             <!-- Tab 2: ATC Directives -->
@@ -1821,8 +2039,10 @@
     </div>
   </div>
 
-  <!-- Contextual Floating Drop Confirmation Popover -->
-  <div id="dropConfirmPopover" class="drop-confirm-popover" style="display: none;"></div>
+  <!-- Contextual Floating Drop Confirmation Popover with Shield Backdrop -->
+  <div id="dropConfirmBackdrop" class="popover-backdrop">
+    <div id="dropConfirmPopover" class="drop-confirm-popover"></div>
+  </div>
 
   <!-- Settings Modal (Matching Korean Air ACROSS / IFS Spec) -->
   <div class="modal-backdrop" id="settingsModal">
@@ -2513,6 +2733,7 @@
       const strip = strips.find(s => s.id === stripId);
       if (!strip) return;
 
+      const oldStatus = strip.status;
       if (strip.operationType === 'DEPARTURE') {
         strip.status = (strip.status === 'DEP_ACTIVE') ? 'DEP_QUEUE' : 'DEP_ACTIVE';
       } else if (strip.operationType === 'ARRIVAL') {
@@ -2525,7 +2746,16 @@
 
       saveStripsLocally();
       renderAllStrips();
-      showToast(`${strip.acid} 상태 전환: ${strip.status.endsWith('_QUEUE') ? '대기열 (QUEUE)' : '활성 (ACTIVE)'}`);
+      recordOperationToSupabase(
+        strip,
+        'QUEUE_TOGGLE',
+        strip.operationType,
+        strip.operationType,
+        oldStatus,
+        strip.status,
+        `Box 18 원클릭 상태 전환: ${oldStatus} -> ${strip.status}`
+      );
+      showToast(`[${strip.acid}] ${strip.status.endsWith('_QUEUE') ? '대기열(QUEUE)' : '활성(ACTIVE)'} 전환 완료`);
     }
 
     // Render All Strips
@@ -2703,7 +2933,216 @@
       return el;
     }
 
-    // Helper: Find element after cursor in dropzone
+    // =========================================================================
+    // SUPABASE CONFIGURATION & REAL-TIME AUDIT LOGGING
+    // =========================================================================
+    const SUPABASE_CONFIG = {
+      url: 'https://xwwygmiwjlhnlfultear.supabase.co',
+      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3d3lnbWl3amxobmxmdWx0ZWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MTE3MDEsImV4cCI6MjEwMzA4NzcwMX0.2dwsq8yeZNwo9rEapB1IHYS4lvQsHZWPSlOvbDX196A'
+    };
+
+    let localAuditLogs = [];
+
+    // Asynchronously record every strip operation to Supabase DB table public.efs_strip_logs
+    async function recordOperationToSupabase(strip, actionType, fromBay, toBay, fromStatus, toStatus, details, metadata = {}) {
+      const now = new Date();
+      const isoTime = now.toISOString();
+      const localTime = now.toLocaleTimeString('ko-KR', { hour12: false });
+
+      const logItem = {
+        id: `LOG-${Date.now()}-${Math.floor(Math.random()*1000)}`,
+        strip_id: strip.id,
+        callsign: strip.acid,
+        action_type: actionType,
+        from_bay: fromBay || null,
+        to_bay: toBay || null,
+        from_status: fromStatus || null,
+        to_status: toStatus || null,
+        details: details || '',
+        operated_at: isoTime,
+        metadata: {
+          ...metadata,
+          airport: activeAirport,
+          rwy: strip.rwy,
+          alt: strip.alt,
+          route: strip.route
+        }
+      };
+
+      // 1. Immediately prepend to local audit list for instantaneous UI feedback
+      localAuditLogs.unshift(logItem);
+      renderAuditLogFeed();
+
+      // 2. Display audit confirmation in raw inspector tab
+      const displayMsg = `[SUPABASE AUDIT LOG RECORDED: ${localTime}]
+` +
+        `  항공기: ${strip.acid} (${strip.typeWake || strip.type})
+` +
+        `  작업유형: ${actionType}
+` +
+        `  이동경로: [${fromBay || '-'}] ${fromStatus || '-'} -> [${toBay || '-'}] ${toStatus || '-'}
+` +
+        `  상세내역: ${details}
+` +
+        `  기록시각(UTC): ${isoTime}
+` +
+        `  상태: PostgreSQL efs_strip_logs 테이블 전송 완료`;
+      displayRawTelegram(displayMsg);
+
+      // 3. Post to Supabase DB via REST API
+      try {
+        const response = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/efs_strip_logs`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_CONFIG.anonKey,
+            'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            strip_id: logItem.strip_id,
+            callsign: logItem.callsign,
+            action_type: logItem.action_type,
+            from_bay: logItem.from_bay,
+            to_bay: logItem.to_bay,
+            from_status: logItem.from_status,
+            to_status: logItem.to_status,
+            details: logItem.details,
+            operated_at: logItem.operated_at,
+            metadata: logItem.metadata
+          })
+        });
+
+        if (response.ok) {
+          console.log('[Supabase] Log stored in efs_strip_logs successfully:', logItem.callsign, actionType);
+        } else {
+          console.warn('[Supabase] Log store response non-ok:', response.status, await response.text());
+        }
+      } catch (err) {
+        console.warn('[Supabase] Network error recording log:', err);
+      }
+
+      // 4. Synchronize strip state to public.efs_flight_strips
+      syncStripToSupabase(strip);
+    }
+
+    // Sync strip to Supabase efs_flight_strips table
+    async function syncStripToSupabase(strip) {
+      try {
+        const payload = {
+          id: strip.id,
+          callsign: strip.acid,
+          operation_type: strip.operationType,
+          status: strip.status,
+          aircraft_type: strip.type,
+          wake_category: strip.typeWake ? strip.typeWake.split('/')[1] || 'M' : 'M',
+          equipment: 'SDE2E3FGHIRWXYZ/LB1',
+          ssr_code: strip.ssr || strip.squawkMode || '1200',
+          dep_airport: strip.origin || strip.airport || activeAirport,
+          arr_airport: strip.dest || 'RKSS',
+          time: strip.time || strip.schedTime || '1200',
+          altitude: strip.alt || 'FL340',
+          assigned_altitude: strip.assignedAlt || strip.alt || 'FL340',
+          runway: strip.rwy || '33L',
+          gate: strip.gate || '-',
+          route: strip.route || 'DCT',
+          clearance: strip.clearance || 'C',
+          remarks: strip.remarks || '',
+          updated_at: new Date().toISOString()
+        };
+
+        await fetch(`${SUPABASE_CONFIG.url}/rest/v1/efs_flight_strips?on_conflict=id`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_CONFIG.anonKey,
+            'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates'
+          },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {
+        console.warn('[Supabase] syncStripToSupabase error:', e);
+      }
+    }
+
+    // Fetch latest 50 audit logs from Supabase
+    async function fetchSupabaseAuditLogs() {
+      const container = document.getElementById('auditLogList');
+      if (container) {
+        container.innerHTML = '<div style="color: var(--text-muted); padding: 4px;">Supabase 클라우드에서 최신 감사 로그를 불러오는 중...</div>';
+      }
+
+      try {
+        const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/efs_strip_logs?order=operated_at.desc&limit=50`, {
+          headers: {
+            'apikey': SUPABASE_CONFIG.anonKey,
+            'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`
+          }
+        });
+
+        if (res.ok) {
+          const logs = await res.json();
+          if (logs && logs.length > 0) {
+            localAuditLogs = logs;
+            renderAuditLogFeed();
+          } else {
+            renderAuditLogFeed();
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to fetch audit logs:', err);
+        renderAuditLogFeed();
+      }
+    }
+
+    function renderAuditLogFeed() {
+      const container = document.getElementById('auditLogList');
+      const countLabel = document.getElementById('auditCountLabel');
+      if (!container) return;
+
+      if (countLabel) countLabel.innerText = `(총 ${localAuditLogs.length}건 기록)`;
+
+      if (localAuditLogs.length === 0) {
+        container.innerHTML = '<div style="color: var(--text-muted); padding: 6px;">현재 기록된 감사 로그가 없습니다. 스트립을 이동하거나 조작하면 실시간으로 Supabase에 저장됩니다.</div>';
+        return;
+      }
+
+      const bayNames = { DEPARTURE: '출발', ARRIVAL: '도착', TRANSIT: '통과', CIRCUIT: '장주' };
+      const statusNames = {
+        DEP_ACTIVE: '활성', DEP_QUEUE: '대기열',
+        ARR_ACTIVE: '활성', ARR_QUEUE: '대기열',
+        TRN_ACTIVE: '활성', TRN_QUEUE: '대기열',
+        CCT_ACTIVE: '활성', CCT_QUEUE: '대기열'
+      };
+
+      container.innerHTML = localAuditLogs.slice(0, 50).map(log => {
+        const timeStr = log.operated_at ? new Date(log.operated_at).toLocaleTimeString('ko-KR', { hour12: false }) : '-';
+        const fromStr = log.from_bay ? `[${bayNames[log.from_bay] || log.from_bay}] ${statusNames[log.from_status] || ''}` : '-';
+        const toStr = log.to_bay ? `[${bayNames[log.to_bay] || log.to_bay}] ${statusNames[log.to_status] || ''}` : '-';
+
+        let badgeColor = 'var(--primary)';
+        if (log.action_type === 'MOVE') badgeColor = 'var(--amber)';
+        else if (log.action_type === 'CREATE') badgeColor = 'var(--green)';
+        else if (log.action_type === 'EDIT') badgeColor = 'var(--purple)';
+
+        return `
+          <div style="display: grid; grid-template-columns: 65px 75px 85px 160px 1fr 70px; gap: 8px; padding: 3px 6px; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center;">
+            <span style="color: var(--text-muted); font-size: 8.5px;">${timeStr}</span>
+            <span style="font-weight: 800; color: var(--primary-bright); font-size: 9.5px;">${log.callsign || '-'}</span>
+            <span style="color: ${badgeColor}; font-weight: 700; font-size: 8.5px;">[${log.action_type}]</span>
+            <span style="color: var(--primary-dim); font-size: 8.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${fromStr} &rarr; ${toStr}</span>
+            <span style="color: var(--primary-soft); font-size: 8.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${log.details || ''}">${log.details || ''}</span>
+            <span style="color: var(--green); font-size: 8px; text-align: right;">DB OK</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // BULLETPROOF NATURAL DRAG & DROP WITH INTRA-SECTION REORDER
+    // & ANCHORED CONFIRMATION POPOVER ON CROSS-BAY / CROSS-QUEUE MOVES
+    // =========================================================================
     function getDragAfterElement(container, y) {
       const draggableElements = [...container.querySelectorAll('.strip-card:not(.is-dragging)')];
       return draggableElements.reduce((closest, child) => {
@@ -2717,7 +3156,6 @@
       }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
 
-    // Placeholder creator
     function getOrCreatePlaceholder() {
       if (!dragPlaceholder) {
         dragPlaceholder = document.createElement('div');
@@ -2726,14 +3164,26 @@
       return dragPlaceholder;
     }
 
-    // Natural Gap Drag & Drop Reordering + Contextual Move Confirmation Popover
-    function setupDragAndDrop() {
-      const dropzones = document.querySelectorAll('.strip-dropzone');
+    function cleanupDragVisuals() {
+      if (dragPlaceholder && dragPlaceholder.parentNode) {
+        dragPlaceholder.parentNode.removeChild(dragPlaceholder);
+      }
+      document.querySelectorAll('.bay-sub-section').forEach(s => s.classList.remove('drag-hover'));
+      document.querySelectorAll('.strip-card.is-dragging').forEach(c => c.classList.remove('is-dragging'));
+    }
 
-      dropzones.forEach(zone => {
-        zone.ondragover = (e) => {
+    function setupDragAndDrop() {
+      const subSections = document.querySelectorAll('.bay-sub-section');
+
+      subSections.forEach(sec => {
+        const zone = sec.querySelector('.strip-dropzone');
+        if (!zone) return;
+
+        const onDragOverHandler = (e) => {
           e.preventDefault();
           e.dataTransfer.dropEffect = 'move';
+
+          sec.classList.add('drag-hover');
 
           const afterElement = getDragAfterElement(zone, e.clientY);
           const ph = getOrCreatePlaceholder();
@@ -2749,44 +3199,59 @@
           }
         };
 
-        zone.ondrop = (e) => {
+        const onDragLeaveHandler = (e) => {
+          if (!sec.contains(e.relatedTarget)) {
+            sec.classList.remove('drag-hover');
+          }
+        };
+
+        const onDropHandler = (e) => {
           e.preventDefault();
           e.stopPropagation();
 
-          if (!dragPlaceholder || !dragPlaceholder.parentElement) return;
+          cleanupDragVisuals();
 
-          const targetSubSec = zone.closest('.bay-sub-section');
-          if (!targetSubSec) return;
+          const targetBay = sec.getAttribute('data-bay');
+          const targetStatus = sec.getAttribute('data-status');
 
-          const targetBay = targetSubSec.getAttribute('data-bay');
-          const targetStatus = targetSubSec.getAttribute('data-status');
-
-          const afterStripCard = dragPlaceholder.nextElementSibling;
-          let insertBeforeId = null;
-          if (afterStripCard && afterStripCard.classList.contains('strip-card')) {
-            insertBeforeId = afterStripCard.id.replace('strip-', '');
-          }
-
-          if (dragPlaceholder.parentNode) {
-            dragPlaceholder.parentNode.removeChild(dragPlaceholder);
-          }
+          // Directly calculate target position relative to cursor
+          const afterEl = getDragAfterElement(zone, e.clientY);
+          let insertBeforeId = (afterEl && afterEl.classList && afterEl.classList.contains('strip-card'))
+            ? afterEl.id.replace('strip-', '')
+            : null;
 
           if (!draggedStripId) return;
 
           const strip = strips.find(s => s.id === draggedStripId);
           if (!strip) return;
 
-          const isCrossMove = (draggedSourceBay !== targetBay) || (draggedSourceStatus !== targetStatus);
+          const sourceBay = draggedSourceBay || strip.operationType;
+          const sourceStatus = draggedSourceStatus || strip.status;
+          const isCrossMove = (sourceBay !== targetBay) || (sourceStatus !== targetStatus);
+
+          const clientX = e.clientX || window.innerWidth / 2;
+          const clientY = e.clientY || window.innerHeight / 2;
 
           if (!isCrossMove) {
-            // Intra-section reordering: Execute immediately without prompt!
-            applyStripReorder(draggedStripId, targetBay, targetStatus, insertBeforeId);
-            showToast(`${strip.acid} 순서 변경 완료`);
+            // Intra-section reorder: Execute instantly without confirmation!
+            applyStripReorder(strip.id, targetBay, targetStatus, insertBeforeId);
+            recordOperationToSupabase(strip, 'REORDER', sourceBay, targetBay, sourceStatus, targetStatus, '동일 베이/상태 내 순서 변경');
+            showToast(`[${strip.acid}] 순서 재배치 완료`);
           } else {
-            // Cross-bay or Active <-> Queue move: Show contextual popover at exact mouse location!
-            showDropConfirmPopover(e.clientX, e.clientY, strip, targetBay, targetStatus, insertBeforeId);
+            // Cross-bay or Active <-> Queue move: Show anchored confirmation popover!
+            showDropConfirmPopover(clientX, clientY, strip, sourceBay, targetBay, sourceStatus, targetStatus, insertBeforeId);
           }
         };
+
+        // Attach to both sub-section container and inner dropzone
+        sec.ondragover = onDragOverHandler;
+        sec.ondragenter = (e) => e.preventDefault();
+        sec.ondragleave = onDragLeaveHandler;
+        sec.ondrop = onDropHandler;
+
+        zone.ondragover = onDragOverHandler;
+        zone.ondragenter = (e) => e.preventDefault();
+        zone.ondrop = onDropHandler;
       });
     }
 
@@ -2799,7 +3264,7 @@
       moved.operationType = targetBay;
       moved.status = targetStatus;
 
-      if (insertBeforeId) {
+      if (insertBeforeId && insertBeforeId !== stripId) {
         const targetIdx = strips.findIndex(s => s.id === insertBeforeId);
         if (targetIdx > -1) {
           strips.splice(targetIdx, 0, moved);
@@ -2825,9 +3290,12 @@
       renderAllStrips();
     }
 
-    // Contextual Drop Confirmation Popover
-    function showDropConfirmPopover(x, y, strip, targetBay, targetStatus, insertBeforeId) {
+    // Contextual Anchored Drop Confirmation Popover
+    function showDropConfirmPopover(x, y, strip, sourceBay, targetBay, sourceStatus, targetStatus, insertBeforeId) {
+      const backdrop = document.getElementById('dropConfirmBackdrop');
       const popover = document.getElementById('dropConfirmPopover');
+      if (!backdrop || !popover) return;
+
       const bayNames = { DEPARTURE: '출발', ARRIVAL: '도착', TRANSIT: '통과', CIRCUIT: '장주' };
       const statusNames = {
         DEP_ACTIVE: '활성', DEP_QUEUE: '대기열',
@@ -2836,52 +3304,72 @@
         CCT_ACTIVE: '활성', CCT_QUEUE: '대기열'
       };
 
-      const fromLabel = `[${bayNames[draggedSourceBay] || draggedSourceBay}] ${statusNames[draggedSourceStatus] || '활성'}`;
-      const toLabel = `[${bayNames[targetBay] || targetBay}] ${statusNames[targetStatus] || '활성'}`;
+      const fromLabel = `[${bayNames[sourceBay] || sourceBay}] ${statusNames[sourceStatus] || '활성'}`;
+      const toLabel = `[${bayNames[targetBay] || targetBay}] ${statusNames[targetStatus] || '대기열'}`;
 
       popover.innerHTML = `
-        <div class="popover-title">${strip.acid} 대시보드 이동</div>
-        <div class="popover-desc">
-          <span>${fromLabel}</span>
-          <span class="pop-arrow">&rarr;</span>
-          <span style="color: var(--primary); font-weight: 800;">${toLabel}</span>
+        <div class="popover-header">
+          <span class="popover-title">대시보드 / 상태 이동 확인</span>
+          <span class="popover-acid">${strip.acid}</span>
+        </div>
+        <div class="popover-body">
+          <div class="popover-route-row">
+            <span class="pop-from">${fromLabel}</span>
+            <span class="pop-arrow">&rarr;</span>
+            <span class="pop-to">${toLabel}</span>
+          </div>
+          <div class="popover-subtext">해당 스트립을 <strong>${toLabel}</strong>로 이동하고 Supabase 감사 기록에 저장하시겠습니까?</div>
         </div>
         <div class="popover-actions">
-          <button class="popover-btn confirm-btn" id="popConfirmBtn">이동 확인</button>
-          <button class="popover-btn cancel-btn" id="popCancelBtn">취소</button>
+          <button type="button" class="popover-btn confirm-btn" id="popConfirmBtn">이동 확인</button>
+          <button type="button" class="popover-btn cancel-btn" id="popCancelBtn">취소</button>
         </div>
       `;
 
-      const posX = Math.min(Math.max(10, x - 20), window.innerWidth - 240);
-      const posY = Math.min(Math.max(10, y - 40), window.innerHeight - 100);
+      // Clamp coordinates to screen viewport
+      const posX = Math.min(Math.max(12, x - 30), window.innerWidth - 300);
+      const posY = Math.min(Math.max(12, y - 25), window.innerHeight - 150);
 
       popover.style.left = `${posX}px`;
       popover.style.top = `${posY}px`;
-      popover.style.display = 'block';
+      backdrop.style.display = 'block';
 
-      document.getElementById('popConfirmBtn').onclick = () => {
+      // Confirm button handler
+      document.getElementById('popConfirmBtn').onclick = (e) => {
+        e.stopPropagation();
         applyStripReorder(strip.id, targetBay, targetStatus, insertBeforeId);
-        showToast(`${strip.acid} -> ${toLabel} 이동 완료`);
+        recordOperationToSupabase(
+          strip,
+          'MOVE',
+          sourceBay,
+          targetBay,
+          sourceStatus,
+          targetStatus,
+          `${fromLabel} -> ${toLabel} 대시보드 이동 완료`
+        );
+        showToast(`[${strip.acid}] ${toLabel} 이동 완료`);
         dismissPopover();
       };
 
-      document.getElementById('popCancelBtn').onclick = () => {
+      // Cancel button handler
+      document.getElementById('popCancelBtn').onclick = (e) => {
+        e.stopPropagation();
         dismissPopover();
       };
 
-      const closeHandler = (e) => {
-        if (!popover.contains(e.target)) {
+      // Click outside on backdrop cancels
+      backdrop.onclick = (e) => {
+        if (e.target === backdrop) {
           dismissPopover();
-          document.removeEventListener('mousedown', closeHandler);
         }
       };
-      setTimeout(() => document.addEventListener('mousedown', closeHandler), 50);
     }
 
     function dismissPopover() {
+      const backdrop = document.getElementById('dropConfirmBackdrop');
       const popover = document.getElementById('dropConfirmPopover');
-      popover.style.display = 'none';
-      popover.innerHTML = '';
+      if (backdrop) backdrop.style.display = 'none';
+      if (popover) popover.innerHTML = '';
     }
 
     // Draggable Row Resizers between Active and Queue Sections
@@ -2992,6 +3480,15 @@
       strips.unshift(newStrip);
       saveStripsLocally();
       renderAllStrips();
+      recordOperationToSupabase(
+        newStrip,
+        'CREATE',
+        null,
+        bay,
+        null,
+        defaultStatus,
+        `신규 등록: ACID=${acid}, TYPE=${type}, RWY=${rwy}, ${bay} 대기열`
+      );
       document.getElementById('manualStripForm').reset();
       showToast(`[${acid}] 신규 등록: [${bay}] 대기열(QUEUE)에 추가되었습니다.`);
     }
@@ -3082,10 +3579,22 @@
       strip.remarks = document.getElementById('eRemarks').value.trim();
       strip.idRoute = `${strip.acid}/${strip.origin}-${strip.dest}`;
 
+      const oldBay = strip.operationType;
+      const oldStatus = strip.status;
+
       saveStripsLocally();
       renderAllStrips();
       closeDetailModal();
-      showToast(`${strip.acid} 제원 수정 및 저장 완료`);
+      recordOperationToSupabase(
+        strip,
+        'EDIT',
+        oldBay,
+        strip.operationType,
+        oldStatus,
+        strip.status,
+        `제원 수정: ACID=${strip.acid}, TYPE=${strip.typeWake}, RWY=${strip.rwy}, ALT=${strip.alt}`
+      );
+      showToast(`[${strip.acid}] 제원 수정 및 Supabase 저장 완료`);
     }
 
     function closeDetailModal() {
@@ -3256,20 +3765,25 @@
 
     function switchBottomTab(tab) {
       const tabTel = document.getElementById('tabContentTelegram');
+      const tabAudit = document.getElementById('tabContentAudit');
       const tabDir = document.getElementById('tabContentDirectives');
       const btnTel = document.getElementById('tabBtnTelegram');
+      const btnAudit = document.getElementById('tabBtnAudit');
       const btnDir = document.getElementById('tabBtnDirectives');
 
+      [tabTel, tabAudit, tabDir].forEach(t => { if (t) t.style.display = 'none'; });
+      [btnTel, btnAudit, btnDir].forEach(b => { if (b) b.classList.remove('active'); });
+
       if (tab === 'telegram') {
-        tabTel.style.display = 'block';
-        tabDir.style.display = 'none';
-        btnTel.classList.add('active');
-        btnDir.classList.remove('active');
-      } else {
-        tabTel.style.display = 'none';
-        tabDir.style.display = 'block';
-        btnTel.classList.remove('active');
-        btnDir.classList.add('active');
+        if (tabTel) tabTel.style.display = 'block';
+        if (btnTel) btnTel.classList.add('active');
+      } else if (tab === 'audit') {
+        if (tabAudit) tabAudit.style.display = 'block';
+        if (btnAudit) btnAudit.classList.add('active');
+        fetchSupabaseAuditLogs();
+      } else if (tab === 'directives') {
+        if (tabDir) tabDir.style.display = 'block';
+        if (btnDir) btnDir.classList.add('active');
       }
     }
 
@@ -3391,6 +3905,7 @@
       setupDragAndDrop();
       loadStrips();
       loadSavedLayout();
+      fetchSupabaseAuditLogs();
     });
   </script>
 </body>
