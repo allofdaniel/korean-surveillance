@@ -24,16 +24,16 @@
 
     /* Korean Air ACROSS Dark Theme (Default) */
     :root, html.theme-across {
-      --bg: #101418;
-      --bg-dim: #15181f;
-      --surface-container: #1a1d24;
-      --surface-high: #232731;
-      --surface-hover: #2b303d;
+      --bg: #0c0f14;
+      --bg-dim: #131720;
+      --surface-container: #181d26;
+      --surface-high: #212734;
+      --surface-hover: #2a3243;
       --surface-active: #1f365d;
-      --surface-recess: #0b0e13;
-      --outline: #2a2f3d;
-      --outline-light: #3d4455;
-      --outline-strong: #525a70;
+      --surface-recess: #090c10;
+      --outline: #262d3d;
+      --outline-light: #374259;
+      --outline-strong: #4f5f80;
       --primary: #57a8ff;
       --primary-dim: #82baff;
       --primary-bright: #f1f3f8;
@@ -139,9 +139,7 @@
       overflow: hidden;
     }
 
-    /* =========================================================================
-       2-LINE HEADER (MATCHING KOREAN AIR ACROSS & IFS SPEC)
-       ========================================================================= */
+    /* 2-Line Header */
     .across-header-2line {
       display: flex;
       flex-direction: column;
@@ -205,7 +203,6 @@
       letter-spacing: 0.05em;
     }
 
-    /* Minimal Heartbeat Status in Top Right: AMHS */
     .system-heartbeat {
       display: flex;
       align-items: center;
@@ -325,17 +322,16 @@
       border-color: var(--primary);
     }
 
-    /* =========================================================================
-       BODY LAYOUT: LNB + WORKSPACE
-       ========================================================================= */
+    /* Body Layout */
     .body-layout {
       display: flex;
       flex: 1;
       min-height: 0;
       overflow: hidden;
+      position: relative;
     }
 
-    /* Left Navigation Bar (LNB) */
+    /* Left Vertical Rail (LNB) */
     .app-lnb {
       width: 42px;
       background: var(--surface-recess);
@@ -344,9 +340,9 @@
       flex-direction: column;
       align-items: center;
       padding: 6px 0;
-      gap: 6px;
+      gap: 5px;
       flex-shrink: 0;
-      z-index: 90;
+      z-index: 120;
     }
 
     .lnb-btn {
@@ -410,27 +406,32 @@
       position: relative;
     }
 
-    /* Left Slide-out Panel (Clean Filter & Scratchpad) */
+    /* Lag-free GPU Drawer Side Panel (Zero Layout Thrashing) */
     .efs-left-panel {
-      width: 260px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 280px;
       background: var(--surface-container);
       border-right: 1px solid var(--outline);
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.45);
       display: flex;
       flex-direction: column;
-      flex-shrink: 0;
-      transition: width 0.22s cubic-bezier(0.2, 0, 0, 1), margin-left 0.22s cubic-bezier(0.2, 0, 0, 1);
-      overflow: hidden;
-      z-index: 80;
+      z-index: 110;
+      transform: translateX(-100%);
+      transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+      pointer-events: none;
     }
 
-    .efs-left-panel.collapsed {
-      width: 0 !important;
-      margin-left: 0 !important;
-      border-right: none;
+    .efs-left-panel.open {
+      transform: translateX(0);
+      pointer-events: auto;
     }
 
     .panel-header {
-      padding: 5px 8px;
+      padding: 6px 10px;
       background: var(--surface-high);
       border-bottom: 1px solid var(--outline);
       display: flex;
@@ -440,7 +441,7 @@
     }
 
     .panel-title {
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 800;
       color: var(--primary);
       letter-spacing: 0.02em;
@@ -450,7 +451,7 @@
       background: transparent;
       border: 1px solid var(--outline-light);
       color: var(--primary-soft);
-      padding: 1px 6px;
+      padding: 2px 8px;
       border-radius: 2px;
       font-size: 9px;
       font-weight: 700;
@@ -466,7 +467,7 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 6px;
+      padding: 8px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -481,7 +482,7 @@
 
     .panel-section-title {
       background: var(--surface-high);
-      padding: 4px 6px;
+      padding: 4px 8px;
       font-size: 9.5px;
       font-weight: 700;
       color: var(--primary-soft);
@@ -571,11 +572,11 @@
       color: #0c0e12;
       border: none;
       border-radius: 2px;
-      padding: 4px 0;
+      padding: 5px 0;
       font-size: 9.5px;
       font-weight: 800;
       cursor: pointer;
-      margin-top: 3px;
+      margin-top: 4px;
     }
 
     .panel-quick-actions {
@@ -590,7 +591,7 @@
       color: var(--primary-bright);
       font-size: 9px;
       font-weight: 700;
-      padding: 3px 0;
+      padding: 4px 0;
       border-radius: 2px;
       cursor: pointer;
       text-align: center;
@@ -625,11 +626,11 @@
       overflow-x: auto;
       overflow-y: hidden;
       background: var(--bg);
+      transition: zoom 0.1s ease;
     }
 
-    /* Bay Column */
+    /* Bay Column with Soft Operational Background Tints */
     .bay-column {
-      background: var(--surface-container);
       border: 1px solid var(--outline);
       border-radius: 3px;
       display: flex;
@@ -638,6 +639,28 @@
       flex: 1 1 0px;
       min-width: 220px;
       height: 100%;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Distinct soft tint backgrounds */
+    .bay-column--departure {
+      background: linear-gradient(180deg, rgba(0, 228, 117, 0.05) 0%, rgba(12, 15, 20, 0.95) 100%), var(--surface-container);
+      border-color: rgba(0, 228, 117, 0.28);
+    }
+
+    .bay-column--arrival {
+      background: linear-gradient(180deg, rgba(251, 203, 65, 0.05) 0%, rgba(12, 15, 20, 0.95) 100%), var(--surface-container);
+      border-color: rgba(251, 203, 65, 0.28);
+    }
+
+    .bay-column--transit {
+      background: linear-gradient(180deg, rgba(87, 168, 255, 0.05) 0%, rgba(12, 15, 20, 0.95) 100%), var(--surface-container);
+      border-color: rgba(87, 168, 255, 0.28);
+    }
+
+    .bay-column--circuit {
+      background: linear-gradient(180deg, rgba(192, 132, 252, 0.05) 0%, rgba(12, 15, 20, 0.95) 100%), var(--surface-container);
+      border-color: rgba(192, 132, 252, 0.28);
     }
 
     .bay-column.hidden {
@@ -715,7 +738,7 @@
 
     .bay-sub-section.queue-section {
       flex: 1;
-      background: rgba(0, 0, 0, 0.18);
+      background: rgba(0, 0, 0, 0.22);
     }
 
     /* Draggable Horizontal Resizer between Active and Queue */
@@ -766,9 +789,7 @@
       gap: 2px;
     }
 
-    /* =========================================================================
-       DYNAMIC GAP EXPANSION & DRAG PLACEHOLDER
-       ========================================================================= */
+    /* DYNAMIC GAP EXPANSION & DRAG PLACEHOLDER */
     .strip-drag-placeholder {
       height: var(--strip-card-h);
       min-height: var(--strip-card-h);
@@ -786,14 +807,7 @@
       to { height: var(--strip-card-h); opacity: 1; transform: scaleY(1); }
     }
 
-    /* =========================================================================
-       EXACT 5-SECTION FLIGHT STRIP (MATCHING USER'S ARCHITECTURE DIAGRAM)
-       Sec 1: 1/4 division (4 rows: 1, 2+2A, 3, 4)
-       Sec 2: 1/3 division (3 rows: 5, 6, 7)
-       Sec 3: 1/3 division (3 rows: 8, 8A, 8B)
-       Sec 4: Center Wide (4 corners: 9, 9B, 9A, 9C + route)
-       Sec 5: 3x3 Grid (3 cols x 3 rows: 10,11,12 / 13,14,15 / 16,17,18)
-       ========================================================================= */
+    /* EXACT 5-SECTION FLIGHT STRIP */
     .strip-card {
       display: flex;
       flex-direction: row;
@@ -816,7 +830,7 @@
     }
 
     .strip-card.is-dragging {
-      opacity: 0.35;
+      opacity: 0.3;
       transform: scale(0.98);
       cursor: grabbing;
     }
@@ -925,7 +939,7 @@
       border-right: 1px solid rgba(0, 0, 0, 0.4);
     }
 
-    /* Section 4: Center Wide (4 corners: 9, 9B, 9A, 9C + route) */
+    /* Section 4: Center Wide */
     .sec-4 {
       flex: 3.2;
       min-width: 0;
@@ -976,7 +990,7 @@
       letter-spacing: -0.02em;
     }
 
-    /* Section 5: Right 3x3 Grid (3 columns x 3 rows) */
+    /* Section 5: Right 3x3 Grid */
     .sec-5 {
       flex: 2.7;
       min-width: 0;
@@ -1005,7 +1019,6 @@
       font-weight: 800;
     }
 
-    /* Interactive status button inside Box 18 */
     .status-toggle-pill {
       background: rgba(0, 0, 0, 0.12);
       border-radius: 2px;
@@ -1020,9 +1033,7 @@
       background: rgba(0, 0, 0, 0.28);
     }
 
-    /* =========================================================================
-       BOTTOM INSPECTOR & DIRECTIVES PANEL
-       ========================================================================= */
+    /* Bottom Panel */
     .bottom-horizontal-resizer {
       height: 5px;
       background: var(--outline);
@@ -1126,7 +1137,7 @@
       border-color: var(--primary);
     }
 
-    /* Modal Backdrop & Container (Settings & Detail) */
+    /* Modal Backdrop & Container (Settings & Detail Form) */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -1138,7 +1149,7 @@
       z-index: 1000;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.18s ease;
     }
 
     .modal-backdrop.open {
@@ -1148,11 +1159,11 @@
 
     .modal-dialog {
       width: 440px;
-      max-width: 90vw;
+      max-width: 92vw;
       background: var(--surface-container);
       border: 1px solid var(--primary);
       border-radius: 4px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -1192,8 +1203,85 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      max-height: 70vh;
+      max-height: 75vh;
       overflow-y: auto;
+    }
+
+    /* Floating Contextual Confirmation Popover (at exact Drop Location) */
+    .drop-confirm-popover {
+      position: fixed;
+      z-index: 5000;
+      background: var(--surface-high);
+      border: 1.5px solid var(--amber);
+      border-radius: 4px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.75);
+      padding: 8px 10px;
+      min-width: 200px;
+      max-width: 250px;
+      font-family: var(--font-pretendard);
+      animation: popoverFadeIn 0.15s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    @keyframes popoverFadeIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .popover-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--amber);
+      margin-bottom: 4px;
+    }
+
+    .popover-desc {
+      font-size: 9.5px;
+      color: var(--primary-bright);
+      margin-bottom: 8px;
+      line-height: 1.3;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pop-arrow {
+      color: var(--amber);
+      font-weight: 800;
+    }
+
+    .popover-actions {
+      display: flex;
+      gap: 5px;
+      justify-content: flex-end;
+    }
+
+    .popover-btn {
+      padding: 3px 10px;
+      font-size: 9px;
+      font-weight: 800;
+      border-radius: 2px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .confirm-btn {
+      background: var(--primary);
+      color: #08101e;
+    }
+
+    .confirm-btn:hover {
+      filter: brightness(1.1);
+    }
+
+    .cancel-btn {
+      background: var(--surface-recess);
+      color: var(--primary-soft);
+      border: 1px solid var(--outline-light);
+    }
+
+    .cancel-btn:hover {
+      background: var(--surface-hover);
+      color: var(--primary-bright);
     }
 
     .toast-msg {
@@ -1209,7 +1297,7 @@
       font-weight: 700;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       animation: fadeIn 0.2s ease;
-      z-index: 2000;
+      z-index: 6000;
     }
 
     @keyframes fadeIn {
@@ -1269,22 +1357,12 @@
 
     <!-- Body Layout with Left Rail (LNB) & Workspace -->
     <div class="body-layout">
-      <!-- Left Vertical Rail (LNB) -->
+      <!-- Left Vertical Rail (LNB: Cleaned per user request) -->
       <nav class="app-lnb">
-        <a href="/ifs/" class="lnb-btn" title="IFS 관제정보융합지원 대시보드">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"></rect><rect x="14" y="3" width="7" height="5" rx="1"></rect><rect x="14" y="12" width="7" height="9" rx="1"></rect><rect x="3" y="16" width="7" height="5" rx="1"></rect></svg>
-          <span class="lnb-btn-label">IFS</span>
-        </a>
-
-        <a href="/efs" class="lnb-btn active" title="EFS 전자비행스트립">
+        <button class="lnb-btn active" title="EFS 전자비행스트립">
           <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
           <span class="lnb-btn-label">EFS</span>
-        </a>
-
-        <a href="/" class="lnb-btn" title="종합 레이더 감시">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 3v9l6 6"></path><path d="M12 12A3 3 0 1 0 9 9"></path></svg>
-          <span class="lnb-btn-label">레이더</span>
-        </a>
+        </button>
 
         <button type="button" class="lnb-btn" onclick="toggleFullscreen()" title="전체화면 전환">
           <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
@@ -1293,7 +1371,7 @@
 
         <div class="lnb-divider"></div>
 
-        <!-- Slide Panel Toggle (Clean Side Panel) -->
+        <!-- Slide Panel Toggle (Clean Drawer Side Panel) -->
         <button class="lnb-btn" id="lnbToggleLeft" title="스트립 관리 및 필터 패널 토글">
           <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
           <span class="lnb-btn-label">패널</span>
@@ -1307,7 +1385,25 @@
 
         <div class="lnb-divider"></div>
 
-        <!-- Settings Gear Button in LNB (Matching IFS) -->
+        <!-- Zoom In/Out/Reset Controls in LNB -->
+        <button class="lnb-btn" onclick="changeZoom(0.1)" title="화면 확대 (Zoom In)">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          <span class="lnb-btn-label">확대</span>
+        </button>
+
+        <button class="lnb-btn" onclick="changeZoom(-0.1)" title="화면 축소 (Zoom Out)">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+          <span class="lnb-btn-label">축소</span>
+        </button>
+
+        <button class="lnb-btn" onclick="resetZoom()" title="화면 배율 100% 초기화">
+          <span id="lnbZoomLabel" style="font-size: 7.5px; font-weight: 800; font-family: var(--font-mono); letter-spacing: -0.05em; line-height: 1;">100%</span>
+          <span class="lnb-btn-label">초기화</span>
+        </button>
+
+        <div class="lnb-divider"></div>
+
+        <!-- Settings Gear Button in LNB -->
         <button class="lnb-btn" id="lnbSettingsBtn" title="관제단말 환경설정 (Settings)" onclick="openSettingsModal()">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
           <span class="lnb-btn-label">설정</span>
@@ -1316,8 +1412,8 @@
 
       <!-- Main Content Layout -->
       <div class="main-content-layout">
-        <!-- Left Panel: Clean Search, Filter, Scratchpad & Manual Creation -->
-        <aside class="efs-left-panel collapsed" id="efsLeftPanel">
+        <!-- Left Panel: Fast GPU Drawer (Zero Lag) -->
+        <aside class="efs-left-panel" id="efsLeftPanel">
           <div class="panel-header">
             <span class="panel-title">스트립 관리 & 필터</span>
             <button class="panel-toggle-btn" id="closeLeftPanelBtn">접기</button>
@@ -1351,10 +1447,10 @@
               <button class="quick-act-btn" onclick="openSettingsModal()">환경설정</button>
             </div>
 
-            <!-- Manual Strip Creation Form -->
+            <!-- Manual Strip Creation Form (Defaults to Queue per rule) -->
             <div class="panel-section">
               <div class="panel-section-title">
-                <span>수동 비행스트립 신규 등록</span>
+                <span>수동 비행스트립 신규 등록 (대기열 우선)</span>
               </div>
               <div class="panel-section-body">
                 <form id="manualStripForm" onsubmit="event.preventDefault(); handleManualCreate();">
@@ -1373,10 +1469,10 @@
                     <div class="create-form-field">
                       <span class="create-form-label">베이 (BAY)</span>
                       <select class="create-form-select" id="mBay">
-                        <option value="DEPARTURE">출발 (DEPARTURE)</option>
-                        <option value="ARRIVAL">도착 (ARRIVAL)</option>
-                        <option value="TRANSIT">통과 (TRANSIT)</option>
-                        <option value="CIRCUIT">장주 (CIRCUIT)</option>
+                        <option value="DEPARTURE">출발 (출발 대기열 자동 등록)</option>
+                        <option value="ARRIVAL">도착 (접근/도착 대기열 자동 등록)</option>
+                        <option value="TRANSIT">통과 (통과 대기열 자동 등록)</option>
+                        <option value="CIRCUIT">장주 (장주 대기열 수동 전환)</option>
                       </select>
                     </div>
                     <div class="create-form-field">
@@ -1425,7 +1521,7 @@
                     </div>
                   </div>
 
-                  <button type="submit" class="create-submit-btn">스트립 즉시 등록</button>
+                  <button type="submit" class="create-submit-btn">대기열에 스트립 즉시 등록</button>
                 </form>
               </div>
             </div>
@@ -1436,7 +1532,7 @@
         <div class="center-board-wrapper">
           <!-- 4 Multi-Bay Resizable Board Container -->
           <div class="efs-board-container" id="efsBoardContainer">
-            <!-- 1. DEPARTURE BAY -->
+            <!-- 1. DEPARTURE BAY (Soft Green Tint) -->
             <div class="bay-column bay-column--departure" id="bay-departure" data-bay="DEPARTURE">
               <div class="bay-column-header">
                 <div class="bay-column-title">
@@ -1461,7 +1557,7 @@
               <!-- Queue Section -->
               <div class="bay-sub-section queue-section" id="bay-sub-dep-que" data-bay="DEPARTURE" data-status="DEP_QUEUE">
                 <div class="sub-section-header">
-                  <span>대기열 스트립 (QUEUE)</span>
+                  <span>출발 대기열 (QUEUE)</span>
                 </div>
                 <div class="strip-dropzone" id="drop-dep-que"></div>
               </div>
@@ -1470,11 +1566,11 @@
             <!-- Inter-column Resizer 1 -->
             <div class="bay-col-resizer" id="resizer-1" data-left="bay-departure" data-right="bay-arrival"></div>
 
-            <!-- 2. ARRIVAL BAY -->
+            <!-- 2. ARRIVAL BAY (Soft Amber Tint) -->
             <div class="bay-column bay-column--arrival" id="bay-arrival" data-bay="ARRIVAL">
               <div class="bay-column-header">
                 <div class="bay-column-title">
-                  <span>도착 비행스트립</span>
+                  <span>도착/접근 비행스트립</span>
                   <span class="bay-count-badge" id="arrivalCount">0</span>
                 </div>
               </div>
@@ -1495,7 +1591,7 @@
               <!-- Queue Section -->
               <div class="bay-sub-section queue-section" id="bay-sub-arr-que" data-bay="ARRIVAL" data-status="ARR_QUEUE">
                 <div class="sub-section-header">
-                  <span>대기열 스트립 (QUEUE)</span>
+                  <span>접근/도착 대기열 (QUEUE)</span>
                 </div>
                 <div class="strip-dropzone" id="drop-arr-que"></div>
               </div>
@@ -1504,7 +1600,7 @@
             <!-- Inter-column Resizer 2 -->
             <div class="bay-col-resizer" id="resizer-2" data-left="bay-arrival" data-right="bay-transit"></div>
 
-            <!-- 3. TRANSIT BAY -->
+            <!-- 3. TRANSIT BAY (Soft Blue/White Tint) -->
             <div class="bay-column bay-column--transit" id="bay-transit" data-bay="TRANSIT">
               <div class="bay-column-header">
                 <div class="bay-column-title">
@@ -1529,7 +1625,7 @@
               <!-- Queue Section -->
               <div class="bay-sub-section queue-section" id="bay-sub-trn-que" data-bay="TRANSIT" data-status="TRN_QUEUE">
                 <div class="sub-section-header">
-                  <span>대기열 스트립 (QUEUE)</span>
+                  <span>통과 대기열 (QUEUE)</span>
                 </div>
                 <div class="strip-dropzone" id="drop-trn-que"></div>
               </div>
@@ -1538,7 +1634,7 @@
             <!-- Inter-column Resizer 3 -->
             <div class="bay-col-resizer" id="resizer-3" data-left="bay-transit" data-right="bay-circuit"></div>
 
-            <!-- 4. CIRCUIT BAY -->
+            <!-- 4. CIRCUIT BAY (Soft Purple Tint) -->
             <div class="bay-column bay-column--circuit" id="bay-circuit" data-bay="CIRCUIT">
               <div class="bay-column-header">
                 <div class="bay-column-title">
@@ -1563,7 +1659,7 @@
               <!-- Queue Section -->
               <div class="bay-sub-section queue-section" id="bay-sub-cct-que" data-bay="CIRCUIT" data-status="CCT_QUEUE">
                 <div class="sub-section-header">
-                  <span>대기열 스트립 (QUEUE)</span>
+                  <span>장주 대기열 (QUEUE)</span>
                 </div>
                 <div class="strip-dropzone" id="drop-circuit-que"></div>
               </div>
@@ -1607,6 +1703,9 @@
     </div>
   </div>
 
+  <!-- Contextual Floating Drop Confirmation Popover -->
+  <div id="dropConfirmPopover" class="drop-confirm-popover" style="display: none;"></div>
+
   <!-- Settings Modal (Matching Korean Air ACROSS / IFS Spec) -->
   <div class="modal-backdrop" id="settingsModal">
     <div class="modal-dialog">
@@ -1642,20 +1741,129 @@
     </div>
   </div>
 
-  <!-- Detail Modal -->
+  <!-- Editable Strip Detail Form Modal -->
   <div class="modal-backdrop" id="detailModal">
-    <div class="modal-dialog" style="width: 500px;">
+    <div class="modal-dialog" style="width: 520px;">
       <div class="modal-header">
-        <span class="modal-title" id="detailModalTitle">비행스트립 상세 정보</span>
+        <span class="modal-title" id="detailModalTitle">비행스트립 정밀 제원 편집</span>
         <button class="modal-close-btn" onclick="closeDetailModal()">&times;</button>
       </div>
-      <div class="modal-body" id="detailModalBody"></div>
+      <div class="modal-body" id="detailModalBody">
+        <form id="editStripForm" onsubmit="event.preventDefault(); saveEditedStrip();">
+          <input type="hidden" id="eStripId">
+          
+          <div class="create-form-row">
+            <div class="create-form-field">
+              <span class="create-form-label">호출부호 (ACID)</span>
+              <input type="text" class="create-form-input" id="eAcid" required>
+            </div>
+            <div class="create-form-field">
+              <span class="create-form-label">기종 / 후류등급</span>
+              <input type="text" class="create-form-input" id="eTypeWake" required>
+            </div>
+            <div class="create-form-field">
+              <span class="create-form-label">SSR 스쿼크</span>
+              <input type="text" class="create-form-input" id="eSsr" required>
+            </div>
+          </div>
+
+          <div class="create-form-row">
+            <div class="create-form-field">
+              <span class="create-form-label">운항 베이 (BAY)</span>
+              <select class="create-form-select" id="eBay" onchange="updateEditStatusOptions()">
+                <option value="DEPARTURE">출발 (DEPARTURE)</option>
+                <option value="ARRIVAL">도착 (ARRIVAL)</option>
+                <option value="TRANSIT">통과 (TRANSIT)</option>
+                <option value="CIRCUIT">장주 (CIRCUIT)</option>
+              </select>
+            </div>
+            <div class="create-form-field">
+              <span class="create-form-label">스트립 상태 (STATUS)</span>
+              <select class="create-form-select" id="eStatus">
+                <!-- Populated dynamically based on eBay -->
+              </select>
+            </div>
+            <div class="create-form-field">
+              <span class="create-form-label">배정 활주로 (RWY)</span>
+              <input type="text" class="create-form-input" id="eRwy">
+            </div>
+          </div>
+
+          <div class="create-form-row">
+            <div class="create-form-field">
+              <span class="create-form-label">출발공항 (DEP)</span>
+              <input type="text" class="create-form-input" id="eOrigin">
+            </div>
+            <div class="create-form-field">
+              <span class="create-form-label">도착공항 (DEST)</span>
+              <input type="text" class="create-form-input" id="eDest">
+            </div>
+            <div class="create-form-field">
+              <span class="create-form-label">게이트 (GATE)</span>
+              <input type="text" class="create-form-input" id="eGate">
+            </div>
+          </div>
+
+          <div class="create-form-row">
+            <div class="create-form-field">
+              <span class="create-form-label">계획 시간 (EOBT/STA)</span>
+              <input type="text" class="create-form-input" id="eSchedTime">
+            </div>
+            <div class="create-form-field">
+              <span class="create-form-label">통과/실제시각 (ACT)</span>
+              <input type="text" class="create-form-input" id="eActTime">
+            </div>
+            <div class="create-form-field">
+              <span class="create-form-label">순항고도 (FL/ALT)</span>
+              <input type="text" class="create-form-input" id="eAlt">
+            </div>
+            <div class="create-form-field">
+              <span class="create-form-label">배정고도 (CFL)</span>
+              <input type="text" class="create-form-input" id="eAssignedAlt">
+            </div>
+          </div>
+
+          <div class="create-form-row">
+            <div class="create-form-field">
+              <span class="create-form-label">절차 (SID/STAR)</span>
+              <input type="text" class="create-form-input" id="eSidStar">
+            </div>
+            <div class="create-form-field">
+              <span class="create-form-label">인가상태 (CLEARANCE)</span>
+              <input type="text" class="create-form-input" id="eClearance">
+            </div>
+            <div class="create-form-field">
+              <span class="create-form-label">속도 (SPEED)</span>
+              <input type="text" class="create-form-input" id="eSpeed">
+            </div>
+          </div>
+
+          <div class="create-form-row">
+            <div class="create-form-field" style="flex: 1;">
+              <span class="create-form-label">비행경로 (ROUTE)</span>
+              <input type="text" class="create-form-input" id="eRoute">
+            </div>
+          </div>
+
+          <div class="create-form-row">
+            <div class="create-form-field" style="flex: 1;">
+              <span class="create-form-label">비고란 (REMARKS / 9C)</span>
+              <input type="text" class="create-form-input" id="eRemarks">
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 6px; justify-content: flex-end; margin-top: 10px; border-top: 1px solid var(--outline); padding-top: 8px;">
+            <button type="button" class="quick-act-btn" style="flex: none; padding: 4px 12px;" onclick="closeDetailModal()">취소</button>
+            <button type="submit" class="create-submit-btn" style="flex: none; padding: 4px 16px; margin: 0;">저장 및 적용</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 
   <!-- Main JavaScript Logic -->
   <script>
-    // Initial Base Demo Data
+    // Initial Base Demo Data (Properly distributed: Queued flights start in Queue)
     const initialBaseStrips = [
       {
         id: 'FS-KAL1205-01',
@@ -1973,7 +2181,10 @@
     let activeAirport = 'RKSI';
     let searchQuery = '';
     let draggedStripId = null;
+    let draggedSourceBay = null;
+    let draggedSourceStatus = null;
     let dragPlaceholder = null;
+    let currentZoom = 1.0;
 
     // Toast notification
     function showToast(msg) {
@@ -1984,6 +2195,28 @@
       toast.innerText = msg;
       document.body.appendChild(toast);
       setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 2200);
+    }
+
+    // Zoom Controls
+    function changeZoom(delta) {
+      currentZoom = Math.min(1.4, Math.max(0.7, Math.round((currentZoom + delta) * 10) / 10));
+      applyZoom();
+    }
+
+    function resetZoom() {
+      currentZoom = 1.0;
+      applyZoom();
+    }
+
+    function applyZoom() {
+      const board = document.getElementById('efsBoardContainer');
+      if (board) {
+        board.style.zoom = currentZoom;
+      }
+      const lbl = document.getElementById('lnbZoomLabel');
+      if (lbl) lbl.innerText = `${Math.round(currentZoom * 100)}%`;
+      localStorage.setItem('efs_zoom_level', currentZoom);
+      showToast(`화면 배율: ${Math.round(currentZoom * 100)}%`);
     }
 
     // Local Storage Management
@@ -2064,7 +2297,6 @@
         const op = strip.operationType;
         if (counts[op] !== undefined) counts[op]++;
 
-        // Check search query filter
         if (searchQuery) {
           const match = (strip.acid && strip.acid.toUpperCase().includes(searchQuery)) ||
                         (strip.dest && strip.dest.toUpperCase().includes(searchQuery)) ||
@@ -2093,7 +2325,6 @@
       document.getElementById('arrivalCount').innerText = counts.ARRIVAL;
       document.getElementById('transitCount').innerText = counts.TRANSIT;
 
-      // Populate dropzones directly (no collapsed summary cards)
       const zoneMapping = [
         { zone: 'drop-dep-act' },
         { zone: 'drop-dep-que' },
@@ -2190,6 +2421,8 @@
       // Dragstart
       el.ondragstart = (e) => {
         draggedStripId = strip.id;
+        draggedSourceBay = strip.operationType;
+        draggedSourceStatus = strip.status;
         e.dataTransfer.setData('text/plain', strip.id);
         e.dataTransfer.effectAllowed = 'move';
         setTimeout(() => el.classList.add('is-dragging'), 0);
@@ -2197,14 +2430,13 @@
 
       // Dragend
       el.ondragend = () => {
-        draggedStripId = null;
         el.classList.remove('is-dragging');
         if (dragPlaceholder && dragPlaceholder.parentNode) {
           dragPlaceholder.parentNode.removeChild(dragPlaceholder);
         }
       };
 
-      // Click: Display raw telegram and record in inspector
+      // Click: Show detail text in inspector
       el.onclick = () => {
         displayRawTelegram(
           `[STRIP RECORD: ${strip.acid}]\n` +
@@ -2215,7 +2447,8 @@
         );
       };
 
-      el.ondblclick = () => openDetailModal(strip.id);
+      // Double-click: Open editable modal
+      el.ondblclick = () => openEditableDetailModal(strip.id);
 
       return el;
     }
@@ -2243,7 +2476,7 @@
       return dragPlaceholder;
     }
 
-    // Natural Gap Expansion & Drag Reordering across all Dropzones
+    // Natural Gap Drag & Drop Reordering + Contextual Move Confirmation Popover
     function setupDragAndDrop() {
       const dropzones = document.querySelectorAll('.strip-dropzone');
 
@@ -2291,41 +2524,117 @@
 
           if (!draggedStripId) return;
 
-          const stripIdx = strips.findIndex(s => s.id === draggedStripId);
-          if (stripIdx > -1) {
-            const [moved] = strips.splice(stripIdx, 1);
-            moved.operationType = targetBay;
-            moved.status = targetStatus;
+          const strip = strips.find(s => s.id === draggedStripId);
+          if (!strip) return;
 
-            if (insertBeforeId) {
-              const targetIdx = strips.findIndex(s => s.id === insertBeforeId);
-              if (targetIdx > -1) {
-                strips.splice(targetIdx, 0, moved);
-              } else {
-                strips.push(moved);
-              }
-            } else {
-              // Appending to the end of this bay & status list
-              let lastIdx = -1;
-              for (let i = strips.length - 1; i >= 0; i--) {
-                if (strips[i].operationType === targetBay && strips[i].status === targetStatus) {
-                  lastIdx = i;
-                  break;
-                }
-              }
-              if (lastIdx > -1) {
-                strips.splice(lastIdx + 1, 0, moved);
-              } else {
-                strips.push(moved);
-              }
-            }
+          const isCrossMove = (draggedSourceBay !== targetBay) || (draggedSourceStatus !== targetStatus);
 
-            saveStripsLocally();
-            renderAllStrips();
-            showToast(`${moved.acid} -> [${targetBay}] ${targetStatus} 순서 이동 완료`);
+          if (!isCrossMove) {
+            // Intra-section reordering: Execute immediately without prompt!
+            applyStripReorder(draggedStripId, targetBay, targetStatus, insertBeforeId);
+            showToast(`${strip.acid} 순서 변경 완료`);
+          } else {
+            // Cross-bay or Active <-> Queue move: Show contextual popover at exact mouse location!
+            showDropConfirmPopover(e.clientX, e.clientY, strip, targetBay, targetStatus, insertBeforeId);
           }
         };
       });
+    }
+
+    // Reorder/Move logic in data array
+    function applyStripReorder(stripId, targetBay, targetStatus, insertBeforeId) {
+      const stripIdx = strips.findIndex(s => s.id === stripId);
+      if (stripIdx === -1) return;
+
+      const [moved] = strips.splice(stripIdx, 1);
+      moved.operationType = targetBay;
+      moved.status = targetStatus;
+
+      if (insertBeforeId) {
+        const targetIdx = strips.findIndex(s => s.id === insertBeforeId);
+        if (targetIdx > -1) {
+          strips.splice(targetIdx, 0, moved);
+        } else {
+          strips.push(moved);
+        }
+      } else {
+        let lastIdx = -1;
+        for (let i = strips.length - 1; i >= 0; i--) {
+          if (strips[i].operationType === targetBay && strips[i].status === targetStatus) {
+            lastIdx = i;
+            break;
+          }
+        }
+        if (lastIdx > -1) {
+          strips.splice(lastIdx + 1, 0, moved);
+        } else {
+          strips.push(moved);
+        }
+      }
+
+      saveStripsLocally();
+      renderAllStrips();
+    }
+
+    // Contextual Drop Confirmation Popover
+    function showDropConfirmPopover(x, y, strip, targetBay, targetStatus, insertBeforeId) {
+      const popover = document.getElementById('dropConfirmPopover');
+      const bayNames = { DEPARTURE: '출발', ARRIVAL: '도착', TRANSIT: '통과', CIRCUIT: '장주' };
+      const statusNames = {
+        DEP_ACTIVE: '활성', DEP_QUEUE: '대기열',
+        ARR_ACTIVE: '활성', ARR_QUEUE: '대기열',
+        TRN_ACTIVE: '활성', TRN_QUEUE: '대기열',
+        CCT_ACTIVE: '활성', CCT_QUEUE: '대기열'
+      };
+
+      const fromLabel = `[${bayNames[draggedSourceBay] || draggedSourceBay}] ${statusNames[draggedSourceStatus] || '활성'}`;
+      const toLabel = `[${bayNames[targetBay] || targetBay}] ${statusNames[targetStatus] || '활성'}`;
+
+      popover.innerHTML = `
+        <div class="popover-title">${strip.acid} 대시보드 이동</div>
+        <div class="popover-desc">
+          <span>${fromLabel}</span>
+          <span class="pop-arrow">&rarr;</span>
+          <span style="color: var(--primary); font-weight: 800;">${toLabel}</span>
+        </div>
+        <div class="popover-actions">
+          <button class="popover-btn confirm-btn" id="popConfirmBtn">이동 확인</button>
+          <button class="popover-btn cancel-btn" id="popCancelBtn">취소</button>
+        </div>
+      `;
+
+      // Clamp position inside window
+      const posX = Math.min(Math.max(10, x - 20), window.innerWidth - 240);
+      const posY = Math.min(Math.max(10, y - 40), window.innerHeight - 100);
+
+      popover.style.left = `${posX}px`;
+      popover.style.top = `${posY}px`;
+      popover.style.display = 'block';
+
+      document.getElementById('popConfirmBtn').onclick = () => {
+        applyStripReorder(strip.id, targetBay, targetStatus, insertBeforeId);
+        showToast(`${strip.acid} -> ${toLabel} 이동 완료`);
+        dismissPopover();
+      };
+
+      document.getElementById('popCancelBtn').onclick = () => {
+        dismissPopover();
+      };
+
+      // Close on outside click
+      const closeHandler = (e) => {
+        if (!popover.contains(e.target)) {
+          dismissPopover();
+          document.removeEventListener('mousedown', closeHandler);
+        }
+      };
+      setTimeout(() => document.addEventListener('mousedown', closeHandler), 50);
+    }
+
+    function dismissPopover() {
+      const popover = document.getElementById('dropConfirmPopover');
+      popover.style.display = 'none';
+      popover.innerHTML = '';
     }
 
     // Draggable Row Resizers between Active and Queue Sections
@@ -2377,12 +2686,12 @@
           activeSec.style.height = 'auto';
           queueSec.style.flex = '1';
           queueSec.style.height = 'auto';
-          showToast('활성/대기열 높이가 기본 균등 비율로 복원되었습니다.');
+          showToast('활성/대기열 높이가 기본 비율로 복원되었습니다.');
         });
       });
     }
 
-    // Manual Strip Create
+    // Manual Strip Create (Starts in QUEUE by default per user specification)
     function handleManualCreate() {
       const acid = document.getElementById('mAcid').value.trim().toUpperCase();
       const type = document.getElementById('mType').value.trim().toUpperCase();
@@ -2396,10 +2705,11 @@
       const gate = document.getElementById('mGate').value.trim() || 'G101';
       const route = document.getElementById('mRoute').value.trim() || 'DCT';
 
-      let defaultStatus = 'DEP_ACTIVE';
-      if (bay === 'ARRIVAL') defaultStatus = 'ARR_ACTIVE';
-      if (bay === 'TRANSIT') defaultStatus = 'TRN_ACTIVE';
-      if (bay === 'CIRCUIT') defaultStatus = 'CCT_ACTIVE';
+      // Always starts in QUEUE per user specification
+      let defaultStatus = 'DEP_QUEUE';
+      if (bay === 'ARRIVAL') defaultStatus = 'ARR_QUEUE';
+      if (bay === 'TRANSIT') defaultStatus = 'TRN_QUEUE';
+      if (bay === 'CIRCUIT') defaultStatus = 'CCT_QUEUE';
 
       const newStrip = {
         id: `FS-${acid}-${Date.now().toString().slice(-4)}`,
@@ -2425,19 +2735,115 @@
         sector: 'TWR',
         squawkMode: ssr,
         speed: 'K0250',
-        fplStatus: 'MAN',
+        fplStatus: 'PND',
         cid: String(Math.floor(Math.random() * 900) + 100),
-        clearance: 'C',
+        clearance: 'P',
         gate: gate,
         category: bay.slice(0, 3),
-        remarks: 'RMK/ MANUAL CREATED'
+        remarks: 'RMK/ NEW QUEUED'
       };
 
       strips.unshift(newStrip);
       saveStripsLocally();
       renderAllStrips();
       document.getElementById('manualStripForm').reset();
-      showToast(`신규 스트립 등록 완료: ${acid} [${bay}]`);
+      showToast(`[${acid}] 신규 등록: [${bay}] 대기열(QUEUE)에 추가되었습니다.`);
+    }
+
+    // Editable Detail Modal
+    function openEditableDetailModal(stripId) {
+      const strip = strips.find(s => s.id === stripId);
+      if (!strip) return;
+
+      document.getElementById('detailModalTitle').innerText = `[${strip.acid}] 전자비행스트립 제원 수정`;
+      document.getElementById('eStripId').value = strip.id;
+      document.getElementById('eAcid').value = strip.acid || '';
+      document.getElementById('eTypeWake').value = strip.typeWake || '';
+      document.getElementById('eSsr').value = strip.ssr || '';
+      document.getElementById('eBay').value = strip.operationType || 'DEPARTURE';
+      
+      updateEditStatusOptions();
+      document.getElementById('eStatus').value = strip.status || '';
+
+      document.getElementById('eRwy').value = strip.rwy || '';
+      document.getElementById('eOrigin').value = strip.origin || '';
+      document.getElementById('eDest').value = strip.dest || '';
+      document.getElementById('eGate').value = strip.gate || '';
+      document.getElementById('eSchedTime').value = strip.schedTime || '';
+      document.getElementById('eActTime').value = strip.actTime || '';
+      document.getElementById('eAlt').value = strip.alt || '';
+      document.getElementById('eAssignedAlt').value = strip.assignedAlt || '';
+      document.getElementById('eSidStar').value = strip.sidStar || '';
+      document.getElementById('eClearance').value = strip.clearance || 'C';
+      document.getElementById('eSpeed').value = strip.speed || '';
+      document.getElementById('eRoute').value = strip.route || '';
+      document.getElementById('eRemarks').value = strip.remarks || '';
+
+      document.getElementById('detailModal').classList.add('open');
+    }
+
+    function updateEditStatusOptions() {
+      const bay = document.getElementById('eBay').value;
+      const statusSelect = document.getElementById('eStatus');
+      statusSelect.innerHTML = '';
+
+      if (bay === 'DEPARTURE') {
+        statusSelect.innerHTML = `
+          <option value="DEP_ACTIVE">활성 (DEP_ACTIVE)</option>
+          <option value="DEP_QUEUE">대기열 (DEP_QUEUE)</option>
+        `;
+      } else if (bay === 'ARRIVAL') {
+        statusSelect.innerHTML = `
+          <option value="ARR_ACTIVE">활성 (ARR_ACTIVE)</option>
+          <option value="ARR_QUEUE">대기열 (ARR_QUEUE)</option>
+        `;
+      } else if (bay === 'TRANSIT') {
+        statusSelect.innerHTML = `
+          <option value="TRN_ACTIVE">활성 (TRN_ACTIVE)</option>
+          <option value="TRN_QUEUE">대기열 (TRN_QUEUE)</option>
+        `;
+      } else if (bay === 'CIRCUIT') {
+        statusSelect.innerHTML = `
+          <option value="CCT_ACTIVE">활성 (CCT_ACTIVE)</option>
+          <option value="CCT_QUEUE">대기열 (CCT_QUEUE)</option>
+        `;
+      }
+    }
+
+    function saveEditedStrip() {
+      const stripId = document.getElementById('eStripId').value;
+      const strip = strips.find(s => s.id === stripId);
+      if (!strip) return;
+
+      strip.acid = document.getElementById('eAcid').value.trim().toUpperCase();
+      strip.typeWake = document.getElementById('eTypeWake').value.trim().toUpperCase();
+      strip.type = strip.typeWake.split('/')[0] || strip.type;
+      strip.ssr = document.getElementById('eSsr').value.trim();
+      strip.operationType = document.getElementById('eBay').value;
+      strip.status = document.getElementById('eStatus').value;
+      strip.rwy = document.getElementById('eRwy').value.trim().toUpperCase();
+      strip.origin = document.getElementById('eOrigin').value.trim().toUpperCase();
+      strip.dest = document.getElementById('eDest').value.trim().toUpperCase();
+      strip.gate = document.getElementById('eGate').value.trim().toUpperCase();
+      strip.schedTime = document.getElementById('eSchedTime').value.trim();
+      strip.actTime = document.getElementById('eActTime').value.trim();
+      strip.alt = document.getElementById('eAlt').value.trim().toUpperCase();
+      strip.assignedAlt = document.getElementById('eAssignedAlt').value.trim().toUpperCase();
+      strip.sidStar = document.getElementById('eSidStar').value.trim().toUpperCase();
+      strip.clearance = document.getElementById('eClearance').value.trim().toUpperCase();
+      strip.speed = document.getElementById('eSpeed').value.trim().toUpperCase();
+      strip.route = document.getElementById('eRoute').value.trim().toUpperCase();
+      strip.remarks = document.getElementById('eRemarks').value.trim();
+      strip.idRoute = `${strip.acid}/${strip.origin}-${strip.dest}`;
+
+      saveStripsLocally();
+      renderAllStrips();
+      closeDetailModal();
+      showToast(`${strip.acid} 제원 수정 및 저장 완료`);
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailModal').classList.remove('open');
     }
 
     // Multi-Bay Toggles
@@ -2629,44 +3035,18 @@
       document.getElementById('settingsModal').classList.remove('open');
     }
 
-    function openDetailModal(stripId) {
-      const strip = strips.find(s => s.id === stripId);
-      if (!strip) return;
-
-      document.getElementById('detailModalTitle').innerText = `[${strip.acid}] 전자비행스트립 정밀 제원`;
-      document.getElementById('detailModalBody').innerHTML = `
-        <table style="width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 10px;">
-          <tr style="border-bottom: 1px solid var(--outline);"><td style="color: var(--primary-soft); padding: 4px;">호출부호 (ACID)</td><td style="font-weight: 800; color: var(--primary);">${strip.acid}</td></tr>
-          <tr style="border-bottom: 1px solid var(--outline);"><td style="color: var(--primary-soft); padding: 4px;">기종 / 후류등급</td><td>${strip.typeWake} (${strip.type})</td></tr>
-          <tr style="border-bottom: 1px solid var(--outline);"><td style="color: var(--primary-soft); padding: 4px;">배정 활주로 / 게이트</td><td>RWY ${strip.rwy} / GATE ${strip.gate}</td></tr>
-          <tr style="border-bottom: 1px solid var(--outline);"><td style="color: var(--primary-soft); padding: 4px;">SSR 트랜스폰더</td><td>${strip.ssr} (Mode 3/A)</td></tr>
-          <tr style="border-bottom: 1px solid var(--outline);"><td style="color: var(--primary-soft); padding: 4px;">출발지 -> 목적지</td><td>${strip.origin} -> ${strip.dest}</td></tr>
-          <tr style="border-bottom: 1px solid var(--outline);"><td style="color: var(--primary-soft); padding: 4px;">비행절차 (SID/STAR)</td><td>${strip.sidStar}</td></tr>
-          <tr style="border-bottom: 1px solid var(--outline);"><td style="color: var(--primary-soft); padding: 4px;">순항 / 배정 고도</td><td>${strip.alt} (배정: ${strip.assignedAlt})</td></tr>
-          <tr style="border-bottom: 1px solid var(--outline);"><td style="color: var(--primary-soft); padding: 4px;">전체 비행경로</td><td style="word-break: break-all;">${strip.route}</td></tr>
-          <tr style="border-bottom: 1px solid var(--outline);"><td style="color: var(--primary-soft); padding: 4px;">현재 관제 섹터 / CID</td><td>${strip.sector} / CID ${strip.cid}</td></tr>
-          <tr><td style="color: var(--primary-soft); padding: 4px;">비고 (Remarks)</td><td style="color: var(--amber);">${strip.remarks}</td></tr>
-        </table>
-      `;
-      document.getElementById('detailModal').classList.add('open');
-    }
-
-    function closeDetailModal() {
-      document.getElementById('detailModal').classList.remove('open');
-    }
-
-    // Panel Toggles
+    // Lag-free Side Panel Toggles
     function toggleLeftPanel(force) {
       const panel = document.getElementById('efsLeftPanel');
       const btn = document.getElementById('lnbToggleLeft');
-      const isCollapsed = (force !== undefined) ? !force : !panel.classList.contains('collapsed');
+      const shouldOpen = (force !== undefined) ? force : !panel.classList.contains('open');
 
-      if (isCollapsed) {
-        panel.classList.add('collapsed');
-        if (btn) btn.classList.remove('active');
-      } else {
-        panel.classList.remove('collapsed');
+      if (shouldOpen) {
+        panel.classList.add('open');
         if (btn) btn.classList.add('active');
+      } else {
+        panel.classList.remove('open');
+        if (btn) btn.classList.remove('active');
       }
     }
 
@@ -2704,7 +3084,6 @@
       });
       localStorage.setItem('efs_theme', themeName);
 
-      // Korean Air Logo switching
       const keLogo = document.getElementById('ke-logo');
       if (keLogo) {
         if (themeName === 'theme-light') {
@@ -2718,6 +3097,12 @@
     function initThemeAndSettings() {
       const savedTheme = localStorage.getItem('efs_theme') || 'theme-across';
       applyTheme(savedTheme);
+
+      const savedZoom = localStorage.getItem('efs_zoom_level');
+      if (savedZoom) {
+        currentZoom = parseFloat(savedZoom) || 1.0;
+        applyZoom();
+      }
     }
 
     // Global Events
