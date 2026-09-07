@@ -1628,6 +1628,78 @@
       background: var(--surface-hover);
     }
 
+  
+    /* SortableJS Professional Card Separation & Fallback Clone */
+    .strip-drag-placeholder {
+      height: var(--strip-card-h) !important;
+      min-height: var(--strip-card-h) !important;
+      background: rgba(251, 203, 65, 0.18) !important;
+      border: 2px dashed #fbcb41 !important;
+      border-radius: 3px !important;
+      margin: 2px 0 !important;
+      box-sizing: border-box !important;
+      opacity: 0.85 !important;
+    }
+
+    .sortable-ghost {
+      opacity: 0.3 !important;
+      background: rgba(251, 203, 65, 0.15) !important;
+      border: 2px dashed #fbcb41 !important;
+    }
+
+    .strip-chosen {
+      border-color: #57a8ff !important;
+      box-shadow: 0 0 10px rgba(87, 168, 255, 0.5) !important;
+    }
+
+    .strip-fallback-clone {
+      opacity: 0.96 !important;
+      transform: scale(1.02) !important;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.85), 0 0 16px rgba(87, 168, 255, 0.45) !important;
+      pointer-events: none !important;
+      z-index: 999999 !important;
+      cursor: grabbing !important;
+    }
+
+    .strip-card {
+      cursor: grab !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-user-drag: none !important;
+    }
+
+    .strip-card:active {
+      cursor: grabbing !important;
+    }
+
+    .strip-dropzone {
+      min-height: 55px !important;
+    }
+
+    /* Anchored Confirmation Popover with Shield Backdrop */
+    .popover-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(2px);
+      z-index: 99999;
+      display: none;
+    }
+
+    .drop-confirm-popover {
+      position: absolute;
+      z-index: 100000;
+      background: #181d26;
+      border: 2px solid #fbcb41;
+      border-radius: 8px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95), 0 0 20px rgba(251, 203, 65, 0.35);
+      padding: 14px 16px;
+      min-width: 290px;
+      max-width: 340px;
+      font-family: var(--font-pretendard);
+      animation: popoverFadeIn 0.12s cubic-bezier(0.2, 0, 0, 1);
+    }
+
   </style>
 </head>
 <body class="theme-across">
@@ -2737,6 +2809,11 @@
       } else {
         strips = JSON.parse(JSON.stringify(initialBaseStrips));
       }
+      // Ensure all strips have valid operationType and status
+      strips.forEach(s => {
+        if (!s.operationType) s.operationType = 'DEPARTURE';
+        if (!s.status) s.status = s.operationType.slice(0, 3) + '_ACTIVE';
+      });
       window.strips = strips;
       renderAllStrips();
     }
@@ -2761,6 +2838,11 @@
     // Real-time Search
     function handleSearch(val) {
       searchQuery = (val || '').trim().toUpperCase();
+      // Ensure all strips have valid operationType and status
+      strips.forEach(s => {
+        if (!s.operationType) s.operationType = 'DEPARTURE';
+        if (!s.status) s.status = s.operationType.slice(0, 3) + '_ACTIVE';
+      });
       window.strips = strips;
       renderAllStrips();
     }
@@ -2877,7 +2959,7 @@
 
       el.className = `strip-card ${stripClass}`;
       el.id = `strip-${strip.id}`;
-      // Sortable handles dragging smoothly with touch and mouse
+      el.setAttribute('data-strip-id', strip.id);
 
       const isQueue = strip.status.endsWith('_QUEUE');
       const statusLabel = isQueue ? 'QUE' : 'ACT';
@@ -3168,13 +3250,14 @@
 
     
     // =========================================================================
-    // SORTABLE-POWERED FLAWLESS DRAG & DROP WITH NATURAL GAP ANIMATION,
-    // INSTANT INTRA-SECTION REORDER & ANCHORED CONFIRMATION POPOVER
+    // =========================================================================
+    // SORTABLE-POWERED ROBUST DRAG & DROP ENGINE (forceFallback Pointer Mode)
+    // WITH REAL-TIME CARD-ANCHORED CONFIRMATION POPOVER & SUPABASE AUDIT LOGGING
     // =========================================================================
     let sortableInstances = [];
 
     function setupDragAndDrop() {
-      // Destroy previous instances to avoid duplicate listeners on re-init
+      // Destroy previous instances to avoid duplicate listeners on re-render
       sortableInstances.forEach(s => {
         try { s.destroy(); } catch (err) {}
       });
@@ -3184,13 +3267,16 @@
       dropzones.forEach(zone => {
         const instance = new Sortable(zone, {
           group: 'efs-flight-strips',
-          animation: 160,
-          easing: 'cubic-bezier(0.2, 0, 0, 1)',
+          animation: 180,
+          easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
           ghostClass: 'strip-drag-placeholder',
           chosenClass: 'strip-chosen',
           dragClass: 'strip-is-dragging',
-          fallbackTolerance: 3,
-          touchStartThreshold: 3,
+          forceFallback: true,
+          fallbackClass: 'strip-fallback-clone',
+          fallbackOnBody: true,
+          fallbackTolerance: 2,
+          touchStartThreshold: 2,
 
           onStart: function(evt) {
             draggedStripId = evt.item.id.replace('strip-', '');
@@ -3225,7 +3311,7 @@
               : null;
 
             if (!isCrossMove) {
-              // 1. INTRA-SECTION REORDER: Instant reorder without confirmation dialog!
+              // 1. INTRA-SECTION REORDER: Instant reorder without confirmation modal!
               applyIntraSectionReorder(evt.to, targetBay, targetStatus);
               recordOperationToSupabase(
                 strip,
@@ -3238,10 +3324,8 @@
               );
               showToast(`[${strip.acid}] 순서 재배치 완료`);
             } else {
-              // 2. CROSS-SECTION MOVE (Active <-> Queue or Cross-Bay): Show anchored popup at cursor!
+              // 2. CROSS-SECTION / CROSS-BAY MOVE: Show anchored confirmation popup at target card!
               showDropConfirmPopover(
-                lastPointerX,
-                lastPointerY,
                 strip,
                 sourceBay,
                 targetBay,
@@ -3255,6 +3339,7 @@
         });
         sortableInstances.push(instance);
       });
+      window.sortableInstances = sortableInstances;
     }
 
     // Apply Intra-section reorder based on current DOM order in zone
@@ -3281,6 +3366,7 @@
       }
 
       saveStripsLocally();
+      window.strips = strips;
     }
 
     // Apply Cross-Section / Cross-Bay Move and Re-render
@@ -3297,6 +3383,7 @@
         if (targetIdx > -1) {
           strips.splice(targetIdx, 0, moved);
           saveStripsLocally();
+          window.strips = strips;
           renderAllStrips();
           return;
         }
@@ -3318,12 +3405,17 @@
       }
 
       saveStripsLocally();
+      // Ensure all strips have valid operationType and status
+      strips.forEach(s => {
+        if (!s.operationType) s.operationType = 'DEPARTURE';
+        if (!s.status) s.status = s.operationType.slice(0, 3) + '_ACTIVE';
+      });
       window.strips = strips;
       renderAllStrips();
     }
 
-    // Contextual Drop Confirmation Popover Anchored to Drop Location
-    function showDropConfirmPopover(x, y, strip, sourceBay, targetBay, sourceStatus, targetStatus, insertBeforeId, evt) {
+    // Contextual Drop Confirmation Popover Anchored DIRECTLY to the Dropped Strip Card
+    function showDropConfirmPopover(strip, sourceBay, targetBay, sourceStatus, targetStatus, insertBeforeId, evt) {
       const backdrop = document.getElementById('dropConfirmBackdrop');
       const popover = document.getElementById('dropConfirmPopover');
       if (!backdrop || !popover) return;
@@ -3358,9 +3450,25 @@
         </div>
       `;
 
+      // Anchor popover directly to the target dropped card!
+      let posX = window.innerWidth / 2 - 150;
+      let posY = window.innerHeight / 2 - 80;
+
+      if (evt && evt.item) {
+        const r = evt.item.getBoundingClientRect();
+        if (r.width > 0 && r.height > 0) {
+          posX = r.left + 16;
+          posY = r.bottom + 6;
+          // If close to bottom of screen, show above the card
+          if (posY + 160 > window.innerHeight) {
+            posY = Math.max(16, r.top - 145);
+          }
+        }
+      }
+
       // Clamp coordinates to screen boundaries
-      const posX = Math.min(Math.max(12, x - 30), window.innerWidth - 300);
-      const posY = Math.min(Math.max(12, y - 25), window.innerHeight - 160);
+      posX = Math.min(Math.max(16, posX), window.innerWidth - 320);
+      posY = Math.min(Math.max(16, posY), window.innerHeight - 170);
 
       popover.style.left = `${posX}px`;
       popover.style.top = `${posY}px`;
@@ -3416,7 +3524,8 @@
         }
       };
     }
-// Draggable Row Resizers between Active and Queue Sections
+
+    // Draggable Row Resizers between Active and Queue Sections
     function setupRowResizers() {
       const resizers = document.querySelectorAll('.bay-row-resizer');
       resizers.forEach(resizer => {
