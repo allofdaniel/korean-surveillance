@@ -95,7 +95,7 @@
       --purple: #c084fc;
       --text-muted: #1f6631;
 
-      /* Distinct Preserved Bay Colors (Green, Amber, Blue, Purple) */
+      /* Distinct Bay Colors (Green, Amber, Blue, Purple) */
       --bay-dep-bg: rgba(0, 228, 117, 0.14);
       --bay-dep-act-bg: rgba(0, 228, 117, 0.18);
       --bay-dep-que-bg: rgba(0, 228, 117, 0.08);
@@ -139,7 +139,7 @@
       --purple: #c084fc;
       --text-muted: #666666;
 
-      /* Distinct Preserved Bay Colors (Green, Amber, Blue, Purple) */
+      /* Distinct Bay Colors (Green, Amber, Blue, Purple) */
       --bay-dep-bg: rgba(0, 228, 117, 0.14);
       --bay-dep-act-bg: rgba(0, 228, 117, 0.18);
       --bay-dep-que-bg: rgba(0, 228, 117, 0.08);
@@ -914,20 +914,7 @@
     }
 
     /* DYNAMIC GAP EXPANSION & DRAG PLACEHOLDER */
-    .strip-drag-placeholder {
-      height: var(--strip-card-h);
-      min-height: var(--strip-card-h);
-      border: 2px dashed var(--primary);
-      background: rgba(87, 168, 255, 0.22);
-      border-radius: 2px;
-      margin: 1px 0;
-      box-sizing: border-box;
-      pointer-events: none;
-      animation: expandGap 0.12s cubic-bezier(0.2, 0, 0, 1) forwards;
-    }
-
-    @keyframes expandGap {
-      from { height: 0; opacity: 0; transform: scaleY(0); }
+    
       to { height: var(--strip-card-h); opacity: 1; transform: scaleY(1); }
     }
 
@@ -1480,7 +1467,46 @@
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
-  .popover-backdrop {
+
+    /* Natural Gap Drag Placeholder Animation (Smooth Gap Opening) */
+    .strip-drag-placeholder {
+      height: 46px;
+      min-height: 46px;
+      border: 2px dashed #fbcb41 !important;
+      background: rgba(251, 203, 65, 0.18) !important;
+      border-radius: 3px;
+      margin: 2px 0;
+      box-sizing: border-box;
+      pointer-events: none !important;
+      animation: expandGap 0.14s cubic-bezier(0.2, 0, 0, 1) forwards;
+    }
+
+    @keyframes expandGap {
+      from { height: 0; opacity: 0; transform: scaleY(0); }
+      to { height: 46px; opacity: 1; transform: scaleY(1); }
+    }
+
+    /* Prevent native text drag on card text */
+    .strip-card, .strip-card * {
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -moz-user-select: none !important;
+    }
+
+    .strip-card.is-dragging {
+      opacity: 0.35 !important;
+      transform: scale(0.98) !important;
+      cursor: grabbing !important;
+    }
+
+    /* Sub-section Drag Hover */
+    .bay-sub-section.drag-hover {
+      outline: 2px dashed #57a8ff !important;
+      background: rgba(87, 168, 255, 0.08) !important;
+    }
+
+    /* Anchored Confirmation Popover with Shield Backdrop */
+    .popover-backdrop {
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.45);
@@ -1493,9 +1519,9 @@
       position: absolute;
       z-index: 10000;
       background: var(--surface-high);
-      border: 1.5px solid var(--amber);
+      border: 1.5px solid #fbcb41;
       border-radius: 6px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 15px rgba(251, 203, 65, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 15px rgba(251, 203, 65, 0.25);
       padding: 12px 14px;
       min-width: 260px;
       max-width: 320px;
@@ -1526,7 +1552,7 @@
     .popover-acid {
       font-size: 13px;
       font-weight: 800;
-      color: var(--amber);
+      color: #fbcb41;
       font-family: var(--font-mono);
     }
 
@@ -1548,12 +1574,12 @@
     }
 
     .pop-arrow {
-      color: var(--amber);
+      color: #fbcb41;
       font-weight: 800;
     }
 
     .pop-to {
-      color: var(--primary);
+      color: #57a8ff;
       font-weight: 800;
     }
 
@@ -1586,7 +1612,7 @@
     }
 
     .popover-btn.confirm-btn {
-      background: var(--amber);
+      background: #fbcb41;
       color: #0b111e;
       box-shadow: 0 0 10px rgba(251, 203, 65, 0.35);
     }
@@ -1603,40 +1629,6 @@
 
     .popover-btn.cancel-btn:hover {
       background: var(--surface-hover);
-    }
-
-    /* Sub-section drag-hover highlight */
-    .bay-sub-section.drag-hover {
-      outline: 2px dashed var(--primary);
-      background: rgba(87, 168, 255, 0.08) !important;
-    }
-  
-    /* Drag & Drop Indicator Lines (No DOM Mutation / Zero Thrashing) */
-    .strip-card, .strip-card * {
-      user-select: none !important;
-      -webkit-user-select: none !important;
-      -moz-user-select: none !important;
-    }
-
-    .strip-card.is-dragging {
-      opacity: 0.3 !important;
-      transform: scale(0.98) !important;
-      cursor: grabbing !important;
-    }
-
-    .strip-card.drop-indicator-top {
-      border-top: 3px solid #fbcb41 !important;
-      box-shadow: 0 -4px 10px rgba(251, 203, 65, 0.4) !important;
-    }
-
-    .strip-card.drop-indicator-bottom {
-      border-bottom: 3px solid #fbcb41 !important;
-      box-shadow: 0 4px 10px rgba(251, 203, 65, 0.4) !important;
-    }
-
-    .strip-dropzone.drag-hover-zone {
-      outline: 2px dashed #57a8ff !important;
-      background: rgba(87, 168, 255, 0.08) !important;
     }
 
   </style>
@@ -2927,7 +2919,7 @@
         </div>
       `;
 
-      // 1. Dragstart
+      // 1. DRAGSTART
       el.ondragstart = (e) => {
         draggedStripId = strip.id;
         draggedSourceBay = strip.operationType;
@@ -2937,96 +2929,29 @@
         setTimeout(() => el.classList.add('is-dragging'), 0);
       };
 
-      // 2. Dragover on this card: calculate top vs bottom half
-      el.ondragover = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        e.dataTransfer.dropEffect = 'move';
-
-        if (draggedStripId === strip.id) return;
-
-        const rect = el.getBoundingClientRect();
-        const isTop = (e.clientY < rect.top + rect.height / 2);
-
-        document.querySelectorAll('.strip-card.drop-indicator-top, .strip-card.drop-indicator-bottom').forEach(c => {
-          if (c !== el) {
-            c.classList.remove('drop-indicator-top', 'drop-indicator-bottom');
-          }
-        });
-
-        if (isTop) {
-          el.classList.add('drop-indicator-top');
-          el.classList.remove('drop-indicator-bottom');
-        } else {
-          el.classList.add('drop-indicator-bottom');
-          el.classList.remove('drop-indicator-top');
-        }
-      };
-
-      // 3. Dragleave on this card
-      el.ondragleave = (e) => {
-        el.classList.remove('drop-indicator-top', 'drop-indicator-bottom');
-      };
-
-      // 4. Drop directly onto this card
-      el.ondrop = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const rect = el.getBoundingClientRect();
-        const isTop = (e.clientY < rect.top + rect.height / 2);
-
-        document.querySelectorAll('.strip-card').forEach(c => c.classList.remove('drop-indicator-top', 'drop-indicator-bottom', 'is-dragging'));
-        document.querySelectorAll('.strip-dropzone').forEach(z => z.classList.remove('drag-hover-zone'));
-
-        const targetSec = el.closest('.bay-sub-section');
-        if (!targetSec || !draggedStripId) return;
-
-        const targetBay = targetSec.getAttribute('data-bay');
-        const targetStatus = targetSec.getAttribute('data-status');
-
-        let insertBeforeId = null;
-        if (isTop) {
-          insertBeforeId = strip.id;
-        } else {
-          const next = el.nextElementSibling;
-          insertBeforeId = (next && next.classList.contains('strip-card')) ? next.id.replace('strip-', '') : null;
-        }
-
-        const sourceStrip = strips.find(s => s.id === draggedStripId);
-        if (!sourceStrip) return;
-
-        const sourceBay = draggedSourceBay || sourceStrip.operationType;
-        const sourceStatus = draggedSourceStatus || sourceStrip.status;
-        const isCrossMove = (sourceBay !== targetBay) || (sourceStatus !== targetStatus);
-
-        const clientX = e.clientX || window.innerWidth / 2;
-        const clientY = e.clientY || window.innerHeight / 2;
-
-        if (!isCrossMove) {
-          // Intra-section reorder: execute instantly
-          applyStripReorder(sourceStrip.id, targetBay, targetStatus, insertBeforeId);
-          recordOperationToSupabase(sourceStrip, 'REORDER', sourceBay, targetBay, sourceStatus, targetStatus, '동일 베이 내 순서 재배치');
-          showToast(`[${sourceStrip.acid}] 순서 재배치 완료`);
-        } else {
-          // Cross-section move: show confirmation popover anchored at cursor
-          showDropConfirmPopover(clientX, clientY, sourceStrip, sourceBay, targetBay, sourceStatus, targetStatus, insertBeforeId);
-        }
-      };
-
-      // Dragend cleanup
+      // 2. DRAGEND
       el.ondragend = () => {
-        document.querySelectorAll('.strip-card').forEach(c => c.classList.remove('drop-indicator-top', 'drop-indicator-bottom', 'is-dragging'));
-        document.querySelectorAll('.strip-dropzone').forEach(z => z.classList.remove('drag-hover-zone'));
+        el.classList.remove('is-dragging');
+        document.querySelectorAll('.bay-sub-section').forEach(s => s.classList.remove('drag-hover'));
+        removePlaceholder();
+        setTimeout(() => {
+          draggedStripId = null;
+          draggedSourceBay = null;
+          draggedSourceStatus = null;
+        }, 100);
       };
 
       // Click: Show detail text in inspector
       el.onclick = () => {
         displayRawTelegram(
-          `[STRIP RECORD: ${strip.acid}]\n` +
-          `CALLSIGN: ${strip.acid} | SSR: ${strip.ssr} | APT: ${strip.airport} | TIME: ${strip.time}\n` +
-          `TYPE/WAKE: ${strip.typeWake} | RWY: ${strip.rwy} | ALT: ${strip.alt} | ROUTE: ${strip.route}\n` +
-          `PROC: ${strip.sidStar} | ORIG: ${strip.origin} -> DEST: ${strip.dest}\n` +
+          `[STRIP RECORD: ${strip.acid}]
+` +
+          `CALLSIGN: ${strip.acid} | SSR: ${strip.ssr} | APT: ${strip.airport} | TIME: ${strip.time}
+` +
+          `TYPE/WAKE: ${strip.typeWake} | RWY: ${strip.rwy} | ALT: ${strip.alt} | ROUTE: ${strip.route}
+` +
+          `PROC: ${strip.sidStar} | ORIG: ${strip.origin} -> DEST: ${strip.dest}
+` +
           `STATUS: ${strip.status} (${strip.fplStatus}) | GATE: ${strip.gate} | CID: ${strip.cid} | ${strip.remarks}`
         );
       };
@@ -3247,6 +3172,9 @@
     // BULLETPROOF NATURAL DRAG & DROP WITH INTRA-SECTION REORDER
     // & ANCHORED CONFIRMATION POPOVER ON CROSS-BAY / CROSS-QUEUE MOVES
     // =========================================================================
+        // =========================================================================
+    // NATURAL GAP DRAG & DROP REORDERING + CONTEXTUAL POPUP CONFIRMATION
+    // =========================================================================
     function getDragAfterElement(container, y) {
       const draggableElements = [...container.querySelectorAll('.strip-card:not(.is-dragging)')];
       return draggableElements.reduce((closest, child) => {
@@ -3268,14 +3196,13 @@
       return dragPlaceholder;
     }
 
-    function cleanupDragVisuals() {
+    function removePlaceholder() {
       if (dragPlaceholder && dragPlaceholder.parentNode) {
         dragPlaceholder.parentNode.removeChild(dragPlaceholder);
       }
-      document.querySelectorAll('.bay-sub-section').forEach(s => s.classList.remove('drag-hover'));
-      document.querySelectorAll('.strip-card.is-dragging').forEach(c => c.classList.remove('is-dragging'));
     }
 
+    // Attach Drag & Drop Listeners to All Sub-sections and Dropzones
     function setupDragAndDrop() {
       const subSections = document.querySelectorAll('.bay-sub-section');
 
@@ -3283,30 +3210,77 @@
         const zone = sec.querySelector('.strip-dropzone');
         if (!zone) return;
 
-        const onZoneDragOver = (e) => {
+        // DRAGOVER: Show Natural Gap Expansion animation
+        const onDragOver = (e) => {
           e.preventDefault();
           e.dataTransfer.dropEffect = 'move';
-          zone.classList.add('drag-hover-zone');
-        };
 
-        const onZoneDragLeave = (e) => {
-          if (!sec.contains(e.relatedTarget)) {
-            zone.classList.remove('drag-hover-zone');
+          sec.classList.add('drag-hover');
+
+          const ph = getOrCreatePlaceholder();
+          const afterElement = getDragAfterElement(zone, e.clientY);
+
+          if (afterElement == null) {
+            if (ph.parentElement !== zone || ph.nextSibling !== null) {
+              zone.appendChild(ph);
+            }
+          } else {
+            if (ph.nextElementSibling !== afterElement) {
+              zone.insertBefore(ph, afterElement);
+            }
           }
         };
 
-        const onZoneDrop = (e) => {
+        // DRAGLEAVE
+        const onDragLeave = (e) => {
+          if (!sec.contains(e.relatedTarget)) {
+            sec.classList.remove('drag-hover');
+            // Do not remove placeholder immediately if still dragging in window,
+            // but if leaving this section, remove it so it doesn't linger
+            if (e.relatedTarget && !zone.contains(e.relatedTarget)) {
+              if (ph && ph.parentElement === zone) {
+                removePlaceholder();
+              }
+            }
+          }
+        };
+
+        // DROP: Perform reorder or show confirmation popup
+        const onDrop = (e) => {
           e.preventDefault();
           e.stopPropagation();
 
-          document.querySelectorAll('.strip-card').forEach(c => c.classList.remove('drop-indicator-top', 'drop-indicator-bottom', 'is-dragging'));
-          document.querySelectorAll('.strip-dropzone').forEach(z => z.classList.remove('drag-hover-zone'));
+          sec.classList.remove('drag-hover');
 
           const targetBay = sec.getAttribute('data-bay');
           const targetStatus = sec.getAttribute('data-status');
 
-          if (!draggedStripId) return;
-          const strip = strips.find(s => s.id === draggedStripId);
+          // 1. Determine insertBeforeId BEFORE removing placeholder
+          let insertBeforeId = null;
+          if (dragPlaceholder && dragPlaceholder.parentElement === zone) {
+            const nextNode = dragPlaceholder.nextElementSibling;
+            if (nextNode && nextNode.classList.contains('strip-card') && !nextNode.classList.contains('is-dragging')) {
+              insertBeforeId = nextNode.id.replace('strip-', '');
+            }
+          }
+
+          // Fallback if placeholder was detached
+          if (!insertBeforeId) {
+            const afterEl = getDragAfterElement(zone, e.clientY);
+            if (afterEl && afterEl.id && !afterEl.classList.contains('is-dragging')) {
+              insertBeforeId = afterEl.id.replace('strip-', '');
+            }
+          }
+
+          // 2. Remove placeholder and clear dragging styles
+          removePlaceholder();
+          document.querySelectorAll('.strip-card.is-dragging').forEach(c => c.classList.remove('is-dragging'));
+
+          // 3. Resolve the dragged strip
+          const stripId = draggedStripId || e.dataTransfer.getData('text/plain');
+          if (!stripId) return;
+
+          const strip = strips.find(s => s.id === stripId);
           if (!strip) return;
 
           const sourceBay = draggedSourceBay || strip.operationType;
@@ -3317,28 +3291,29 @@
           const clientY = e.clientY || window.innerHeight / 2;
 
           if (!isCrossMove) {
-            // Intra-section drop at the end
-            applyStripReorder(strip.id, targetBay, targetStatus, null);
-            recordOperationToSupabase(strip, 'REORDER', sourceBay, targetBay, sourceStatus, targetStatus, '동일 베이 내 순서 재배치 (맨 끝)');
+            // INTRA-SECTION REORDER: Execute instantly without prompt!
+            applyStripReorder(strip.id, targetBay, targetStatus, insertBeforeId);
+            recordOperationToSupabase(strip, 'REORDER', sourceBay, targetBay, sourceStatus, targetStatus, '동일 베이 내 순서 재배치');
             showToast(`[${strip.acid}] 순서 재배치 완료`);
           } else {
-            // Cross-section move to the end of target queue/active
-            showDropConfirmPopover(clientX, clientY, strip, sourceBay, targetBay, sourceStatus, targetStatus, null);
+            // CROSS-SECTION MOVE (Active <-> Queue or Cross-Bay): Show anchored popup at cursor!
+            showDropConfirmPopover(clientX, clientY, strip, sourceBay, targetBay, sourceStatus, targetStatus, insertBeforeId);
           }
         };
 
-        sec.ondragover = onZoneDragOver;
+        // Attach to section container, dropzone, and inner cards
+        sec.ondragover = onDragOver;
         sec.ondragenter = (e) => e.preventDefault();
-        sec.ondragleave = onZoneDragLeave;
-        sec.ondrop = onZoneDrop;
+        sec.ondragleave = onDragLeave;
+        sec.ondrop = onDrop;
 
-        zone.ondragover = onZoneDragOver;
+        zone.ondragover = onDragOver;
         zone.ondragenter = (e) => e.preventDefault();
-        zone.ondrop = onZoneDrop;
+        zone.ondrop = onDrop;
       });
     }
 
-    // Reorder/Move logic in data array
+    // Apply Strip Reorder to array, save locally, sync to Supabase, and re-render
     function applyStripReorder(stripId, targetBay, targetStatus, insertBeforeId) {
       const stripIdx = strips.findIndex(s => s.id === stripId);
       if (stripIdx === -1) return;
@@ -3351,29 +3326,32 @@
         const targetIdx = strips.findIndex(s => s.id === insertBeforeId);
         if (targetIdx > -1) {
           strips.splice(targetIdx, 0, moved);
-        } else {
-          strips.push(moved);
+          saveStripsLocally();
+          renderAllStrips();
+          return;
         }
+      }
+
+      // If no insertBeforeId or not found: append after the last strip of target bay & status
+      let lastIdx = -1;
+      for (let i = strips.length - 1; i >= 0; i--) {
+        if (strips[i].operationType === targetBay && strips[i].status === targetStatus) {
+          lastIdx = i;
+          break;
+        }
+      }
+
+      if (lastIdx > -1) {
+        strips.splice(lastIdx + 1, 0, moved);
       } else {
-        let lastIdx = -1;
-        for (let i = strips.length - 1; i >= 0; i--) {
-          if (strips[i].operationType === targetBay && strips[i].status === targetStatus) {
-            lastIdx = i;
-            break;
-          }
-        }
-        if (lastIdx > -1) {
-          strips.splice(lastIdx + 1, 0, moved);
-        } else {
-          strips.push(moved);
-        }
+        strips.push(moved);
       }
 
       saveStripsLocally();
       renderAllStrips();
     }
 
-    // Contextual Anchored Drop Confirmation Popover
+    // Contextual Drop Confirmation Popover (Stays Open Until User Explicitly Confirms or Cancels)
     function showDropConfirmPopover(x, y, strip, sourceBay, targetBay, sourceStatus, targetStatus, insertBeforeId) {
       const backdrop = document.getElementById('dropConfirmBackdrop');
       const popover = document.getElementById('dropConfirmPopover');
@@ -3401,7 +3379,7 @@
             <span class="pop-arrow">&rarr;</span>
             <span class="pop-to">${toLabel}</span>
           </div>
-          <div class="popover-subtext">해당 스트립을 <strong>${toLabel}</strong>로 이동하고 Supabase 감사 기록에 저장하시겠습니까?</div>
+          <div class="popover-subtext">해당 스트립을 <strong>${toLabel}</strong>로 이동하시겠습니까?</div>
         </div>
         <div class="popover-actions">
           <button type="button" class="popover-btn confirm-btn" id="popConfirmBtn">이동 확인</button>
@@ -3409,7 +3387,7 @@
         </div>
       `;
 
-      // Clamp coordinates to screen viewport
+      // Clamp coordinates to screen boundaries
       const posX = Math.min(Math.max(12, x - 30), window.innerWidth - 300);
       const posY = Math.min(Math.max(12, y - 25), window.innerHeight - 150);
 
@@ -3417,7 +3395,7 @@
       popover.style.top = `${posY}px`;
       backdrop.style.display = 'block';
 
-      // Confirm button handler
+      // Confirm button click
       document.getElementById('popConfirmBtn').onclick = (e) => {
         e.stopPropagation();
         applyStripReorder(strip.id, targetBay, targetStatus, insertBeforeId);
@@ -3428,19 +3406,19 @@
           targetBay,
           sourceStatus,
           targetStatus,
-          `${fromLabel} -> ${toLabel} 대시보드 이동 완료`
+          `${fromLabel} -> ${toLabel} 대시보드 이동`
         );
         showToast(`[${strip.acid}] ${toLabel} 이동 완료`);
         dismissPopover();
       };
 
-      // Cancel button handler
+      // Cancel button click
       document.getElementById('popCancelBtn').onclick = (e) => {
         e.stopPropagation();
         dismissPopover();
       };
 
-      // Click outside on backdrop cancels
+      // Backdrop click outside popover
       backdrop.onclick = (e) => {
         if (e.target === backdrop) {
           dismissPopover();
@@ -3453,6 +3431,8 @@
       const popover = document.getElementById('dropConfirmPopover');
       if (backdrop) backdrop.style.display = 'none';
       if (popover) popover.innerHTML = '';
+      removePlaceholder();
+      document.querySelectorAll('.strip-card.is-dragging').forEach(c => c.classList.remove('is-dragging'));
     }
 
     // Draggable Row Resizers between Active and Queue Sections
