@@ -50,6 +50,27 @@
 
       /* Permanent Ultra-Compact Strip Height */
       --strip-card-h: 46px;
+
+      /* Distinct Bay Colors (Dark) */
+      --bay-dep-bg: rgba(0, 228, 117, 0.12);
+      --bay-dep-act-bg: rgba(0, 228, 117, 0.15);
+      --bay-dep-que-bg: rgba(0, 228, 117, 0.07);
+      --bay-dep-border: rgba(0, 228, 117, 0.5);
+
+      --bay-arr-bg: rgba(251, 203, 65, 0.12);
+      --bay-arr-act-bg: rgba(251, 203, 65, 0.15);
+      --bay-arr-que-bg: rgba(251, 203, 65, 0.07);
+      --bay-arr-border: rgba(251, 203, 65, 0.5);
+
+      --bay-trn-bg: rgba(87, 168, 255, 0.12);
+      --bay-trn-act-bg: rgba(87, 168, 255, 0.15);
+      --bay-trn-que-bg: rgba(87, 168, 255, 0.07);
+      --bay-trn-border: rgba(87, 168, 255, 0.5);
+
+      --bay-cct-bg: rgba(192, 132, 252, 0.13);
+      --bay-cct-act-bg: rgba(192, 132, 252, 0.16);
+      --bay-cct-que-bg: rgba(192, 132, 252, 0.08);
+      --bay-cct-border: rgba(192, 132, 252, 0.5);
     }
 
     /* Tactical CRT Green Theme */
@@ -73,6 +94,26 @@
       --red: #f87171;
       --purple: #c084fc;
       --text-muted: #1f6631;
+
+      --bay-dep-bg: rgba(0, 255, 102, 0.14);
+      --bay-dep-act-bg: rgba(0, 255, 102, 0.18);
+      --bay-dep-que-bg: rgba(0, 255, 102, 0.08);
+      --bay-dep-border: rgba(0, 255, 102, 0.55);
+
+      --bay-arr-bg: rgba(250, 204, 21, 0.13);
+      --bay-arr-act-bg: rgba(250, 204, 21, 0.17);
+      --bay-arr-que-bg: rgba(250, 204, 21, 0.08);
+      --bay-arr-border: rgba(250, 204, 21, 0.55);
+
+      --bay-trn-bg: rgba(92, 255, 157, 0.12);
+      --bay-trn-act-bg: rgba(92, 255, 157, 0.16);
+      --bay-trn-que-bg: rgba(92, 255, 157, 0.07);
+      --bay-trn-border: rgba(92, 255, 157, 0.5);
+
+      --bay-cct-bg: rgba(192, 132, 252, 0.14);
+      --bay-cct-act-bg: rgba(192, 132, 252, 0.18);
+      --bay-cct-que-bg: rgba(192, 132, 252, 0.08);
+      --bay-cct-border: rgba(192, 132, 252, 0.55);
     }
 
     /* Dark Mono White Theme */
@@ -96,12 +137,32 @@
       --red: #f87171;
       --purple: #d8b4fe;
       --text-muted: #666666;
+
+      --bay-dep-bg: rgba(74, 222, 128, 0.12);
+      --bay-dep-act-bg: rgba(74, 222, 128, 0.16);
+      --bay-dep-que-bg: rgba(74, 222, 128, 0.07);
+      --bay-dep-border: rgba(74, 222, 128, 0.5);
+
+      --bay-arr-bg: rgba(252, 211, 77, 0.12);
+      --bay-arr-act-bg: rgba(252, 211, 77, 0.16);
+      --bay-arr-que-bg: rgba(252, 211, 77, 0.07);
+      --bay-arr-border: rgba(252, 211, 77, 0.5);
+
+      --bay-trn-bg: rgba(255, 255, 255, 0.10);
+      --bay-trn-act-bg: rgba(255, 255, 255, 0.14);
+      --bay-trn-que-bg: rgba(255, 255, 255, 0.06);
+      --bay-trn-border: rgba(255, 255, 255, 0.4);
+
+      --bay-cct-bg: rgba(216, 180, 254, 0.13);
+      --bay-cct-act-bg: rgba(216, 180, 254, 0.17);
+      --bay-cct-que-bg: rgba(216, 180, 254, 0.08);
+      --bay-cct-border: rgba(216, 180, 254, 0.5);
     }
 
-    /* High-Contrast Light Theme */
+    /* High-Contrast Light Theme (GPU Accelerated, Zero Lag) */
     html.theme-light {
-      --bg: #f1f4f9;
-      --bg-dim: #e4e8f0;
+      --bg: #edf2f7;
+      --bg-dim: #e2e8f0;
       --surface-container: #ffffff;
       --surface-high: #f8fafc;
       --surface-hover: #e2e8f0;
@@ -119,6 +180,26 @@
       --red: #dc2626;
       --purple: #7c3aed;
       --text-muted: #64748b;
+
+      --bay-dep-bg: #e8f9ee;
+      --bay-dep-act-bg: #dcfce7;
+      --bay-dep-que-bg: #f0fdf4;
+      --bay-dep-border: #86efac;
+
+      --bay-arr-bg: #fef9c3;
+      --bay-arr-act-bg: #fef08a;
+      --bay-arr-que-bg: #fefce8;
+      --bay-arr-border: #fde047;
+
+      --bay-trn-bg: #f0f9ff;
+      --bay-trn-act-bg: #e0f2fe;
+      --bay-trn-que-bg: #f8fafc;
+      --bay-trn-border: #bae6fd;
+
+      --bay-cct-bg: #faf5ff;
+      --bay-cct-act-bg: #f3e8ff;
+      --bay-cct-que-bg: #fdf4ff;
+      --bay-cct-border: #e9d5ff;
     }
 
     body {
@@ -322,6 +403,18 @@
       border-color: var(--primary);
     }
 
+    .btn-save-layout {
+      background: var(--primary);
+      color: #08101e;
+      border: 1px solid var(--primary);
+      font-weight: 800;
+    }
+
+    .btn-save-layout:hover {
+      filter: brightness(1.1);
+      color: #000;
+    }
+
     /* Body Layout */
     .body-layout {
       display: flex;
@@ -331,7 +424,7 @@
       position: relative;
     }
 
-    /* Left Vertical Rail (LNB) */
+    /* Left Vertical Rail (LNB: Cleaned without EFS/ㄷㄹㄴ button) */
     .app-lnb {
       width: 42px;
       background: var(--surface-recess);
@@ -420,7 +513,7 @@
       flex-direction: column;
       z-index: 110;
       transform: translateX(-100%);
-      transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: transform;
       pointer-events: none;
     }
@@ -629,9 +722,9 @@
       transition: zoom 0.1s ease;
     }
 
-    /* Bay Column with Soft Operational Background Tints */
+    /* Bay Column with PROMINENT VIVID TINTS across all themes */
     .bay-column {
-      border: 1px solid var(--outline);
+      border: 1.5px solid var(--outline);
       border-radius: 3px;
       display: flex;
       flex-direction: column;
@@ -639,28 +732,58 @@
       flex: 1 1 0px;
       min-width: 220px;
       height: 100%;
-      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.2);
     }
 
-    /* Distinct soft tint backgrounds */
     .bay-column--departure {
-      background: linear-gradient(180deg, rgba(0, 228, 117, 0.05) 0%, rgba(12, 15, 20, 0.95) 100%), var(--surface-container);
-      border-color: rgba(0, 228, 117, 0.28);
+      background: var(--bay-dep-bg);
+      border-color: var(--bay-dep-border);
+    }
+
+    .bay-column--departure .bay-sub-section.active-section {
+      background: var(--bay-dep-act-bg);
+    }
+
+    .bay-column--departure .bay-sub-section.queue-section {
+      background: var(--bay-dep-que-bg);
     }
 
     .bay-column--arrival {
-      background: linear-gradient(180deg, rgba(251, 203, 65, 0.05) 0%, rgba(12, 15, 20, 0.95) 100%), var(--surface-container);
-      border-color: rgba(251, 203, 65, 0.28);
+      background: var(--bay-arr-bg);
+      border-color: var(--bay-arr-border);
+    }
+
+    .bay-column--arrival .bay-sub-section.active-section {
+      background: var(--bay-arr-act-bg);
+    }
+
+    .bay-column--arrival .bay-sub-section.queue-section {
+      background: var(--bay-arr-que-bg);
     }
 
     .bay-column--transit {
-      background: linear-gradient(180deg, rgba(87, 168, 255, 0.05) 0%, rgba(12, 15, 20, 0.95) 100%), var(--surface-container);
-      border-color: rgba(87, 168, 255, 0.28);
+      background: var(--bay-trn-bg);
+      border-color: var(--bay-trn-border);
+    }
+
+    .bay-column--transit .bay-sub-section.active-section {
+      background: var(--bay-trn-act-bg);
+    }
+
+    .bay-column--transit .bay-sub-section.queue-section {
+      background: var(--bay-trn-que-bg);
     }
 
     .bay-column--circuit {
-      background: linear-gradient(180deg, rgba(192, 132, 252, 0.05) 0%, rgba(12, 15, 20, 0.95) 100%), var(--surface-container);
-      border-color: rgba(192, 132, 252, 0.28);
+      background: var(--bay-cct-bg);
+      border-color: var(--bay-cct-border);
+    }
+
+    .bay-column--circuit .bay-sub-section.active-section {
+      background: var(--bay-cct-act-bg);
+    }
+
+    .bay-column--circuit .bay-sub-section.queue-section {
+      background: var(--bay-cct-que-bg);
     }
 
     .bay-column.hidden {
@@ -690,7 +813,7 @@
     .bay-column-header {
       padding: 3px 6px;
       background: var(--surface-high);
-      border-bottom: 1px solid var(--outline);
+      border-bottom: 1.5px solid var(--outline);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -727,7 +850,6 @@
       display: flex;
       flex-direction: column;
       min-height: 45px;
-      transition: background 0.15s ease;
       position: relative;
       overflow: hidden;
     }
@@ -738,7 +860,6 @@
 
     .bay-sub-section.queue-section {
       flex: 1;
-      background: rgba(0, 0, 0, 0.22);
     }
 
     /* Draggable Horizontal Resizer between Active and Queue */
@@ -794,7 +915,7 @@
       height: var(--strip-card-h);
       min-height: var(--strip-card-h);
       border: 2px dashed var(--primary);
-      background: rgba(87, 168, 255, 0.16);
+      background: rgba(87, 168, 255, 0.22);
       border-radius: 2px;
       margin: 1px 0;
       box-sizing: border-box;
@@ -818,10 +939,9 @@
       border: 1px solid #334155;
       border-radius: 2px;
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
       cursor: grab;
       flex-shrink: 0;
-      transition: opacity 0.1s, filter 0.1s, transform 0.12s ease;
+      transition: opacity 0.1s, transform 0.1s ease;
     }
 
     .strip-card:hover {
@@ -1137,19 +1257,18 @@
       border-color: var(--primary);
     }
 
-    /* Modal Backdrop & Container (Settings & Detail Form) */
+    /* Modal Backdrop & Container */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(2px);
+      background: rgba(0, 0, 0, 0.65);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.18s ease;
+      transition: opacity 0.15s ease;
     }
 
     .modal-backdrop.open {
@@ -1207,7 +1326,7 @@
       overflow-y: auto;
     }
 
-    /* Floating Contextual Confirmation Popover (at exact Drop Location) */
+    /* Contextual Floating Confirmation Popover */
     .drop-confirm-popover {
       position: fixed;
       z-index: 5000;
@@ -1329,7 +1448,7 @@
         </div>
       </div>
 
-      <!-- Line 2: Airport Selector, Multi-Bay Toggles, Reset Equal Columns -->
+      <!-- Line 2: Airport Selector, Multi-Bay Toggles, Reset & Save Layout -->
       <div class="header-row-2">
         <div class="header-controls-left">
           <select class="airport-select" id="airportSelect">
@@ -1351,19 +1470,18 @@
 
           <!-- Reset Column Widths Button -->
           <button class="zoom-btn" id="btnResetColWidths" title="모든 베이 너비를 균등하게 분할">균등 분할</button>
+
+          <!-- Save Layout Button (Stores column widths, row heights, and bay visibility to localStorage) -->
+          <button class="zoom-btn btn-save-layout" id="btnSaveLayout" title="현재 조절된 대시보드 열 너비 및 높이 레이아웃을 로컬에 영구 저장">레이아웃 저장</button>
+          <button class="zoom-btn" id="btnResetLayout" title="저장된 레이아웃 설정을 기본값으로 초기화">레이아웃 초기화</button>
         </div>
       </div>
     </header>
 
     <!-- Body Layout with Left Rail (LNB) & Workspace -->
     <div class="body-layout">
-      <!-- Left Vertical Rail (LNB: Cleaned per user request) -->
+      <!-- Left Vertical Rail (LNB: Cleaned per request - No ㄷㄹㄴ / EFS button) -->
       <nav class="app-lnb">
-        <button class="lnb-btn active" title="EFS 전자비행스트립">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-          <span class="lnb-btn-label">EFS</span>
-        </button>
-
         <button type="button" class="lnb-btn" onclick="toggleFullscreen()" title="전체화면 전환">
           <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
           <span class="lnb-btn-label">전체화면</span>
@@ -1532,7 +1650,7 @@
         <div class="center-board-wrapper">
           <!-- 4 Multi-Bay Resizable Board Container -->
           <div class="efs-board-container" id="efsBoardContainer">
-            <!-- 1. DEPARTURE BAY (Soft Green Tint) -->
+            <!-- 1. DEPARTURE BAY (Distinct Vivid Green Tint) -->
             <div class="bay-column bay-column--departure" id="bay-departure" data-bay="DEPARTURE">
               <div class="bay-column-header">
                 <div class="bay-column-title">
@@ -1566,7 +1684,7 @@
             <!-- Inter-column Resizer 1 -->
             <div class="bay-col-resizer" id="resizer-1" data-left="bay-departure" data-right="bay-arrival"></div>
 
-            <!-- 2. ARRIVAL BAY (Soft Amber Tint) -->
+            <!-- 2. ARRIVAL BAY (Distinct Vivid Amber Tint) -->
             <div class="bay-column bay-column--arrival" id="bay-arrival" data-bay="ARRIVAL">
               <div class="bay-column-header">
                 <div class="bay-column-title">
@@ -1600,7 +1718,7 @@
             <!-- Inter-column Resizer 2 -->
             <div class="bay-col-resizer" id="resizer-2" data-left="bay-arrival" data-right="bay-transit"></div>
 
-            <!-- 3. TRANSIT BAY (Soft Blue/White Tint) -->
+            <!-- 3. TRANSIT BAY (Distinct Vivid Blue Tint) -->
             <div class="bay-column bay-column--transit" id="bay-transit" data-bay="TRANSIT">
               <div class="bay-column-header">
                 <div class="bay-column-title">
@@ -1634,7 +1752,7 @@
             <!-- Inter-column Resizer 3 -->
             <div class="bay-col-resizer" id="resizer-3" data-left="bay-transit" data-right="bay-circuit"></div>
 
-            <!-- 4. CIRCUIT BAY (Soft Purple Tint) -->
+            <!-- 4. CIRCUIT BAY (Distinct Vivid Purple Tint) -->
             <div class="bay-column bay-column--circuit" id="bay-circuit" data-bay="CIRCUIT">
               <div class="bay-column-header">
                 <div class="bay-column-title">
@@ -1863,7 +1981,7 @@
 
   <!-- Main JavaScript Logic -->
   <script>
-    // Initial Base Demo Data (Properly distributed: Queued flights start in Queue)
+    // Initial Base Demo Data
     const initialBaseStrips = [
       {
         id: 'FS-KAL1205-01',
@@ -2219,7 +2337,139 @@
       showToast(`화면 배율: ${Math.round(currentZoom * 100)}%`);
     }
 
-    // Local Storage Management
+    // =========================================================================
+    // LAYOUT PERSISTENCE (COLUMN WIDTHS, ROW HEIGHTS, BAY TOGGLES)
+    // =========================================================================
+    function saveCurrentLayout() {
+      const layout = {
+        zoom: currentZoom,
+        cols: {},
+        rows: {},
+        bays: {}
+      };
+
+      // 1. Column Widths
+      document.querySelectorAll('.bay-column').forEach(col => {
+        const bay = col.getAttribute('data-bay');
+        layout.cols[bay] = col.style.flex || '';
+        layout.bays[bay] = !col.classList.contains('hidden');
+      });
+
+      // 2. Active vs Queue Sub-section Heights
+      document.querySelectorAll('.bay-column').forEach(col => {
+        const bay = col.getAttribute('data-bay');
+        const actSec = col.querySelector('.bay-sub-section.active-section');
+        if (actSec) {
+          layout.rows[bay] = {
+            flex: actSec.style.flex || '',
+            height: actSec.style.height || ''
+          };
+        }
+      });
+
+      localStorage.setItem('efs_saved_layout', JSON.stringify(layout));
+      showToast('현재 화면 레이아웃이 로컬에 저장되었습니다.');
+    }
+
+    function loadSavedLayout() {
+      const raw = localStorage.getItem('efs_saved_layout');
+      if (!raw) return;
+
+      try {
+        const layout = JSON.parse(raw);
+
+        // Zoom
+        if (layout.zoom) {
+          currentZoom = layout.zoom;
+          applyZoom();
+        }
+
+        // Columns & Bays
+        if (layout.cols) {
+          Object.keys(layout.cols).forEach(bay => {
+            const col = document.querySelector(`.bay-column[data-bay="${bay}"]`);
+            if (col && layout.cols[bay]) {
+              col.style.flex = layout.cols[bay];
+            }
+          });
+        }
+
+        if (layout.bays) {
+          Object.keys(layout.bays).forEach(bay => {
+            const isVisible = layout.bays[bay];
+            const col = document.querySelector(`.bay-column[data-bay="${bay}"]`);
+            const btn = document.getElementById(`toggleBay${bay}`);
+            if (col && btn) {
+              if (isVisible) {
+                col.classList.remove('hidden');
+                btn.classList.add('active');
+              } else {
+                col.classList.add('hidden');
+                btn.classList.remove('active');
+              }
+            }
+          });
+          updateResizersVisibility();
+        }
+
+        // Sub-section Rows
+        if (layout.rows) {
+          Object.keys(layout.rows).forEach(bay => {
+            const col = document.querySelector(`.bay-column[data-bay="${bay}"]`);
+            if (col) {
+              const actSec = col.querySelector('.bay-sub-section.active-section');
+              const queSec = col.querySelector('.bay-sub-section.queue-section');
+              if (actSec && queSec && layout.rows[bay]) {
+                if (layout.rows[bay].height) {
+                  actSec.style.flex = 'none';
+                  actSec.style.height = layout.rows[bay].height;
+                  queSec.style.flex = '1';
+                  queSec.style.height = 'auto';
+                } else if (layout.rows[bay].flex) {
+                  actSec.style.flex = layout.rows[bay].flex;
+                  actSec.style.height = 'auto';
+                }
+              }
+            }
+          });
+        }
+      } catch (e) {
+        console.error('Failed to parse efs_saved_layout', e);
+      }
+    }
+
+    function resetSavedLayout() {
+      localStorage.removeItem('efs_saved_layout');
+      resetEqualColumns();
+      resetZoom();
+
+      // Reset all row heights to 1.2 : 1
+      document.querySelectorAll('.bay-column').forEach(col => {
+        const act = col.querySelector('.bay-sub-section.active-section');
+        const que = col.querySelector('.bay-sub-section.queue-section');
+        if (act && que) {
+          act.style.flex = '1.2';
+          act.style.height = 'auto';
+          que.style.flex = '1';
+          que.style.height = 'auto';
+        }
+      });
+
+      // Turn on all 4 bays
+      ['DEPARTURE', 'ARRIVAL', 'TRANSIT', 'CIRCUIT'].forEach(bay => {
+        const col = document.querySelector(`.bay-column[data-bay="${bay}"]`);
+        const btn = document.getElementById(`toggleBay${bay}`);
+        if (col && btn) {
+          col.classList.remove('hidden');
+          btn.classList.add('active');
+        }
+      });
+      updateResizersVisibility();
+
+      showToast('레이아웃 설정이 초기 기본값으로 복원되었습니다.');
+    }
+
+    // Local Storage Strips Management
     function loadStrips() {
       const saved = localStorage.getItem('efs_strips_data');
       if (saved) {
@@ -2346,7 +2596,7 @@
       });
     }
 
-    // Create Structured 5-Section Strip Element matching user's architecture diagram
+    // Create Structured 5-Section Strip Element
     function createStructuredStripElement(strip) {
       const el = document.createElement('div');
       let stripClass = 'departure-strip';
@@ -2517,7 +2767,6 @@
             insertBeforeId = afterStripCard.id.replace('strip-', '');
           }
 
-          // Remove placeholder from DOM
           if (dragPlaceholder.parentNode) {
             dragPlaceholder.parentNode.removeChild(dragPlaceholder);
           }
@@ -2603,7 +2852,6 @@
         </div>
       `;
 
-      // Clamp position inside window
       const posX = Math.min(Math.max(10, x - 20), window.innerWidth - 240);
       const posY = Math.min(Math.max(10, y - 40), window.innerHeight - 100);
 
@@ -2621,7 +2869,6 @@
         dismissPopover();
       };
 
-      // Close on outside click
       const closeHandler = (e) => {
         if (!popover.contains(e.target)) {
           dismissPopover();
@@ -2705,7 +2952,6 @@
       const gate = document.getElementById('mGate').value.trim() || 'G101';
       const route = document.getElementById('mRoute').value.trim() || 'DCT';
 
-      // Always starts in QUEUE per user specification
       let defaultStatus = 'DEP_QUEUE';
       if (bay === 'ARRIVAL') defaultStatus = 'ARR_QUEUE';
       if (bay === 'TRANSIT') defaultStatus = 'TRN_QUEUE';
@@ -2873,6 +3119,8 @@
       });
 
       document.getElementById('btnResetColWidths').onclick = resetEqualColumns;
+      document.getElementById('btnSaveLayout').onclick = saveCurrentLayout;
+      document.getElementById('btnResetLayout').onclick = resetSavedLayout;
     }
 
     function resetEqualColumns() {
@@ -3142,6 +3390,7 @@
       setupRowResizers();
       setupDragAndDrop();
       loadStrips();
+      loadSavedLayout();
     });
   </script>
 </body>
