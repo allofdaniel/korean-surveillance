@@ -87,6 +87,12 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
     <div className="view-controls flex items-center space-x-2" role="toolbar" aria-label="상단 패널">
       <a
         href="/api-dashboard"
+        onClick={(e) => {
+          if (onOpenApiDashboard) {
+            e.preventDefault();
+            onOpenApiDashboard();
+          }
+        }}
         className="view-btn notam-button"
         style={{
           display: 'inline-flex',

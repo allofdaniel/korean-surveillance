@@ -66,7 +66,7 @@ describe('aircraft-trace handler', () => {
     await handler(req, res);
     const { statusCode } = res._get();
     expect(statusCode).toBe(200);
-    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('hex/7c7c7c'));
+    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('hex/7c7c7c'), expect.anything());
   });
 
   it('정상 hex (대문자도 허용) → 소문자로 정규화', async () => {
@@ -78,7 +78,7 @@ describe('aircraft-trace handler', () => {
     const { default: handler } = await import('../aircraft-trace.js');
     const { req, res } = makeReqRes({ query: { hex: 'ABCDEF' } });
     await handler(req, res);
-    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('hex/abcdef'));
+    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('hex/abcdef'), expect.anything());
   });
 
   it('production 환경에서 error details leak 안됨', async () => {

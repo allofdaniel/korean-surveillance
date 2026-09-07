@@ -22,6 +22,8 @@ export interface AircraftData {
 export interface AircraftPhoto {
   image?: string;
   photographer?: string;
+  link?: string;
+  source?: string;
 }
 
 export interface AircraftDetails {

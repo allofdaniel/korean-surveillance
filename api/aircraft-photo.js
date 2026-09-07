@@ -87,7 +87,31 @@ export default async function handler(req, res) {
 
   res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800');
 
-  // Task 1: Airport-Data by Hex
+  // Task 1: Planespotters API
+  const planespotterTarget = normalizedHex ? `hex/${normalizedHex}` : `reg/${normalizedReg}`;
+  try {
+    const psRes = await fetch(`https://api.planespotters.net/pub/photos/${planespotterTarget}`, {
+      headers: { 'User-Agent': 'KoreanSurveillance/1.0 (+https://www.koreasurveillance.com)' },
+      signal: AbortSignal.timeout(1800)
+    });
+    if (psRes.ok) {
+      const psData = await psRes.json();
+      if (psData.photos && psData.photos.length > 0) {
+        const photo = psData.photos[0];
+        const imgUrl = photo.large?.src || photo.thumbnail_large?.src || photo.thumbnail?.src;
+        if (imgUrl) {
+          return res.status(200).json({
+            source: 'planespotters',
+            image: imgUrl,
+            photographer: photo.photographer || 'Planespotters.net',
+            link: photo.link || `https://www.planespotters.net/photo/${photo.id}`
+          });
+        }
+      }
+    }
+  } catch (e) {}
+
+  // Task 2: Airport-Data by Hex
   if (normalizedHex) {
     try {
       const adRes = await fetch(`https://airport-data.com/api/ac_thumb.json?m=${encodeURIComponent(normalizedHex)}&n=1`, {
@@ -108,7 +132,7 @@ export default async function handler(req, res) {
     } catch (e) {}
   }
 
-  // Task 2: Airport-Data by Reg
+  // Task 3: Airport-Data by Reg
   if (normalizedReg) {
     const regCandidates = [normalizedReg];
     if (normalizedReg.includes('-')) regCandidates.push(normalizedReg.replace(/-/g, ''));
@@ -133,7 +157,7 @@ export default async function handler(req, res) {
     }
   }
 
-  // Task 3: ADSBDB (using valid thumbnail URL only)
+  // Task 4: ADSBDB (using valid thumbnail URL only)
   if (normalizedHex) {
     try {
       const adsbdbRes = await fetch(`https://api.adsbdb.com/v0/aircraft/${normalizedHex}`, {
@@ -159,12 +183,21 @@ export default async function handler(req, res) {
     } catch (e) {}
   }
 
-  // Fallback: 100% Reliable Model Photo
-  const modelFallback = getModelFallback(discoveredType);
+  // Fallback: Model Photo if type specified, else null
+  if (discoveredType) {
+    const modelFallback = getModelFallback(discoveredType);
+    return res.status(200).json({
+      source: 'model-reference',
+      image: modelFallback.image,
+      photographer: `${modelFallback.model} (Airport-Data)`,
+      link: `https://airport-data.com/aircraft/search.html?q=${encodeURIComponent(normalizedReg || normalizedHex || discoveredType || '')}`
+    });
+  }
+
   return res.status(200).json({
-    source: 'model-reference',
-    image: modelFallback.image,
-    photographer: `${modelFallback.model} (Airport-Data)`,
-    link: `https://airport-data.com/aircraft/search.html?q=${encodeURIComponent(normalizedReg || normalizedHex || discoveredType || '')}`
+    source: null,
+    image: null,
+    photographer: null,
+    link: null
   });
 }

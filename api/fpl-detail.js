@@ -1,5 +1,6 @@
-﻿import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
+import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 import { authenticateUbikais } from './_utils/ubikaisAuthScraper.js';
+import { getFlightPlanFromSupabase, saveFlightPlanToSupabase } from './_utils/supabase.js';
 
 export default async function handler(req, res) {
   if (setCorsHeaders(req, res)) return;
@@ -12,6 +13,29 @@ export default async function handler(req, res) {
   const fpCls = (parsedUrl.searchParams.get('fpCls') || req.query?.fpCls || 'IFR').toUpperCase();
   const flt = (parsedUrl.searchParams.get('flt') || req.query?.flt || '').toUpperCase();
 
+  const targetPk = vfrPk || amsRecPkCha || amsRecPk;
+
+  // 1. Check Supabase DB cache first for instant retrieval
+  if (targetPk) {
+    const cached = await getFlightPlanFromSupabase(targetPk);
+    if (cached && cached.raw_telegram) {
+      res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=120');
+      return res.status(200).json({
+        status: 'success',
+        source: 'supabase_db',
+        flt: cached.flight_id || flt,
+        fpCls: cached.flight_rules || fpCls,
+        amsRecPk,
+        amsRecPkCha,
+        vfrPk,
+        rawTelegram: cached.raw_telegram,
+        record: cached.parsed_route || {},
+        timestamp: cached.updated_at || new Date().toISOString()
+      });
+    }
+  }
+
+  // 2. Fetch from UBIKAIS live and persist to Supabase DB
   try {
     const cookieHeader = await authenticateUbikais();
 
@@ -41,7 +65,6 @@ export default async function handler(req, res) {
         }
       }
     } else {
-      const targetPk = amsRecPkCha || amsRecPk;
       if (targetPk) {
         const url = `https://ubikais.fois.go.kr:8030/sysUbikais/biz/fpl/selectViewFpl.fois?amsRecPk=${encodeURIComponent(targetPk)}`;
         const response = await fetch(url, {
@@ -64,9 +87,25 @@ export default async function handler(req, res) {
       }
     }
 
+    // 3. Asynchronously save/upsert to Supabase DB
+    if (targetPk && rawTelegram) {
+      saveFlightPlanToSupabase({
+        ams_rec_pk: targetPk,
+        flight_id: flt || recordObj?.flt || '',
+        dep_airport: recordObj?.apDep || recordObj?.org || '',
+        arr_airport: recordObj?.apArr || recordObj?.des || '',
+        flight_rules: fpCls,
+        aircraft_type: recordObj?.typ || '',
+        registration: recordObj?.reg || '',
+        raw_telegram: rawTelegram,
+        parsed_route: recordObj
+      }).catch(err => console.warn('[supabase-bg] Save failed:', err.message));
+    }
+
     res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate=30');
     return res.status(200).json({
       status: 'success',
+      source: 'ubikais_live',
       flt,
       fpCls,
       amsRecPk,

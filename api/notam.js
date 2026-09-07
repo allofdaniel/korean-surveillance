@@ -15,8 +15,8 @@ let aimLiveCache = { data: null, fetchedAt: 0, ttlMs: 5 * 60 * 1000 };
 // ============================================================
 // Supabase 설정
 // ============================================================
-const SUPABASE_URL = (process.env.SUPABASE_URL || '').trim();
-const SUPABASE_SERVICE_KEY = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
+const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://xwwygmiwjlhnlfultear.supabase.co').trim();
+const SUPABASE_SERVICE_KEY = (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3d3lnbWl3amxobmxmdWx0ZWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MTE3MDEsImV4cCI6MjEwMzA4NzcwMX0.2dwsq8yeZNwo9rEapB1IHYS4lvQsHZWPSlOvbDX196A').trim();
 const SUPABASE_PUBLIC = SUPABASE_URL ? `${SUPABASE_URL}/storage/v1/object/public/notam-data` : '';
 const HAS_SUPABASE_BACKEND = Boolean(SUPABASE_URL && SUPABASE_SERVICE_KEY);
 
@@ -97,15 +97,18 @@ function isValidInPeriod(notam, period) {
 // ============================================================
 
 async function fetchFromDatabase(params) {
-  const { limit, period, bounds } = params;
+  const { limit, period, bounds, location } = params;
 
   const queryParams = new URLSearchParams();
   queryParams.set('select', 'notam_number,location,full_text,e_text,qcode,qcode_mean,effective_start,effective_end,series,fir,q_lat,q_lon,q_radius_nm,crawled_at');
   queryParams.set('order', 'crawled_at.desc,notam_number.desc');
   queryParams.set('limit', String(limit > 0 ? limit : 2000));
 
-  // 영역 필터 (좌표 있는 것 + 없는 것 모두 포함)
-  if (bounds) {
+  if (location) {
+    const locClean = location.trim().toUpperCase();
+    queryParams.set('or', `(location.eq.${locClean},full_text.ilike.*${locClean}*)`);
+  } else if (bounds) {
+    // 영역 필터 (좌표 있는 것 + 없는 것 모두 포함)
     queryParams.set(
       'or',
       `(and(q_lat.gte.${bounds.south - 1},q_lat.lte.${bounds.north + 1},q_lon.gte.${bounds.west - 1},q_lon.lte.${bounds.east + 1}),q_lat.is.null)`
@@ -146,7 +149,16 @@ async function fetchFromDatabase(params) {
     q_lat: row.q_lat,
     q_lon: row.q_lon,
     q_radius: row.q_radius_nm,
+    crawled_at: row.crawled_at,
   }));
+
+  // Background refresh trigger if DB data is older than 20 minutes
+  if (notamData.length > 0 && notamData[0].crawled_at) {
+    const ageMs = Date.now() - new Date(notamData[0].crawled_at).getTime();
+    if (ageMs > 20 * 60 * 1000) {
+      fetchAimKoreaLive().catch(() => {});
+    }
+  }
 
   // 기간 필터
   const beforePeriod = notamData.length;
@@ -204,10 +216,51 @@ function flattenAimData(aimData) {
 }
 
 /**
+ * AIM Korea 실시간 수집 레코드 Supabase DB 일괄 동기화
+ */
+async function syncAimToDatabase(transformedRecords) {
+  if (!transformedRecords || transformedRecords.length === 0 || !HAS_SUPABASE_BACKEND) return;
+  try {
+    const rows = transformedRecords.map(item => ({
+      notam_number: item.notam_number,
+      location: item.location || '',
+      full_text: item.full_text || '',
+      e_text: item.e_text || '',
+      qcode: item.qcode || '',
+      qcode_mean: item.qcode_mean || '',
+      effective_start: item.effective_start || '',
+      effective_end: item.effective_end || '',
+      series: item.series || '',
+      fir: item.fir || 'RKRR',
+      q_lat: item.q_lat || null,
+      q_lon: item.q_lon || null,
+      q_radius_nm: item.q_radius || null,
+      crawled_at: new Date().toISOString()
+    }));
+
+    for (let i = 0; i < rows.length; i += 50) {
+      const chunk = rows.slice(i, i + 50);
+      fetch(`${SUPABASE_URL}/rest/v1/notams?on_conflict=notam_number`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_SERVICE_KEY,
+          'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify(chunk)
+      }).catch(() => {});
+    }
+  } catch (err) {
+    console.warn('[NOTAM/SYNC] DB upsert error:', err.message);
+  }
+}
+
+/**
  * AIM Korea (aim.koca.go.kr) 무인증 라이브 NOTAM 패치
  * 1. /pib/pibMain.do 로 세션 쿠키 획득
  * 2. /pib/aisSearch.do POST 로 NOTAM 검색
- * 3. 응답을 프로젝트 표준 포맷으로 변환
+ * 3. 응답을 프로젝트 표준 포맷으로 변환 및 Supabase DB 백그라운드 동기화
  */
 async function fetchAimKoreaLive() {
   // Cache hit
@@ -266,8 +319,10 @@ async function fetchAimKoreaLive() {
     // Step 3: transform to project format
     const transformed = records.map((r) => transformAimRecord(r)).filter(Boolean);
 
-    // Update cache
+    // Update memory cache and asynchronously sync to Supabase DB
     aimLiveCache = { data: transformed, fetchedAt: now, ttlMs: aimLiveCache.ttlMs };
+    syncAimToDatabase(transformed).catch(() => {});
+
     return { data: transformed, cached: false, raw_count: records.length };
   } catch (e) {
     console.warn('[NOTAM/AIM] fetch failed:', e.message);
@@ -500,6 +555,11 @@ async function fetchFromStorage(params) {
   }
   const totalCount = notamData.length;
 
+  if (location) {
+    const locClean = location.trim().toUpperCase();
+    notamData = notamData.filter(n => n.location === locClean || (n.full_text && n.full_text.includes(locClean)));
+  }
+
   if (period && period !== 'all') {
     notamData = notamData.filter(n => isValidInPeriod(n, period));
   }
@@ -578,7 +638,10 @@ export default async function handler(req, res) {
       bounds = clamped;
     }
 
-    const params = { limit, period, bounds };
+    const locationParam = url.searchParams.get('location') || url.searchParams.get('icao') || '';
+    const location = locationParam ? locationParam.trim().toUpperCase() : null;
+
+    const params = { limit, period, bounds, location };
     let result;
 
     // DB 우선 → Storage 폴백 → Static 폴백
@@ -598,6 +661,11 @@ export default async function handler(req, res) {
     }
 
     let { data: notamData, ...meta } = result;
+
+    if (location) {
+      const locClean = location.trim().toUpperCase();
+      notamData = notamData.filter(n => (n.location || '').toUpperCase() === locClean || (n.full_text && n.full_text.toUpperCase().includes(locClean)));
+    }
 
     const filteredCount = notamData.length;
     if (limit > 0 && notamData.length > limit) {

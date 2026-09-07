@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-across">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EFS - 전자비행스트립시스템 (Electronic Flight Strip)</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scrollbar-width: thin;
+      scrollbar-color: var(--outline-light) var(--bg-dim);
+    }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dim); }
+    ::-webkit-scrollbar-thumb { background: var(--outline-light); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary-soft); }
+
+    /* 0. Base Default Theme: Korean Air ACROSS / UAO Dark (회색/다크 차콜 규격) */
+    :root, html.theme-across {
+      --bg: #111317;
+      --bg-dim: #16181f;
+      --surface-container: #15171e;
+      --surface-high: #1c1f28;
+      --surface-hover: #262a36;
+      --surface-active: #233458;
+      --surface-recess: #0c0e12;
+      --outline: #262a36;
+      --outline-light: #3e4454;
+      --primary: #57a8ff;
+      --primary-dim: #82baff;
+      --primary-bright: #f1f3f8;
+      --primary-soft: #8a91a3;
+      --amber: #fbcb41;
+      --amber-dim: #5c4214;
+      --red: #ff3b56;
+      --red-bg: #4a131b;
+      --green: #00ba96;
+      --green-bg: #004235;
+      --green-pulse: #00ba96;
+      --text-muted: #5a6072;
+      --font-pretendard: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace, var(--font-pretendard);
+    }
+
+    /* 1. Tactical CRT Green */
+    html.theme-crt {
+      --bg: #111111;
+      --bg-dim: #0a0a0a;
+      --surface-container: #181818;
+      --surface-high: #242424;
+      --surface-hover: #263323;
+      --surface-active: #004d1a;
+      --surface-recess: #080f07;
+      --outline: #2d3d28;
+      --outline-light: #44593c;
+      --primary: #00ff00;
+      --primary-dim: #02e600;
+      --primary-bright: #77ff61;
+      --primary-soft: #a8be9e;
+      --amber: #ffba20;
+      --amber-dim: #443200;
+      --red: #ff2a2a;
+      --red-bg: #3a0000;
+      --green: #00ff00;
+      --green-bg: #002e00;
+      --green-pulse: #00ff00;
+      --text-muted: #507049;
+    }
+
+    /* 2. Slate Grey Theme */
+    html.theme-slate {
+      --bg: #1a1d24;
+      --bg-dim: #15181e;
+      --surface-container: #20242d;
+      --surface-high: #282d38;
+      --surface-hover: #323846;
+      --surface-active: #3a4252;
+      --surface-recess: #121419;
+      --outline: #363c4a;
+      --outline-light: #4c5567;
+      --primary: #60a5fa;
+      --primary-dim: #93c5fd;
+      --primary-bright: #ffffff;
+      --primary-soft: #94a3b8;
+      --amber: #fbbf24;
+      --amber-dim: #451a03;
+      --red: #f87171;
+      --red-bg: #450a0a;
+      --green: #34d399;
+      --green-bg: #064e3b;
+      --green-pulse: #34d399;
+      --text-muted: #64748b;
+    }
+
+    body {
+      font-family: var(--font-pretendard);
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--primary-bright);
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* Top GNB (Global Navigation Bar) */
+    .efs-header {
+      background: var(--bg-dim);
+      border-bottom: 1px solid var(--outline);
+      height: 52px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      gap: 12px;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      background: #141724;
+      border: 1px solid var(--outline);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-badge .sub-tag {
+      background: var(--primary);
+      color: #0b111e;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+
+    .gnb-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .gnb-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--primary-soft);
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .gnb-btn:hover {
+      background: var(--surface-hover);
+      color: var(--primary-bright);
+    }
+
+    .gnb-btn.active {
+      background: var(--surface-active);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #141724;
+      border: 1px solid var(--outline);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--primary-soft);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(0, 186, 150, 0.7); }
+      70% { box-shadow: 0 0 0 6px rgba(0, 186, 150, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 186, 150, 0); }
+    }
+
+    .clock-display {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary-bright);
+      background: #0d0f14;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--outline);
+      letter-spacing: 0.5px;
+    }
+
+    .airport-select, .theme-select {
+      background: var(--surface-high);
+      border: 1px solid var(--outline);
+      color: var(--primary-bright);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .action-btn {
+      background: var(--surface-high);
+      border: 1px solid var(--outline-light);
+      color: var(--primary-bright);
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .action-btn.primary {
+      background: #183359;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .action-btn.primary:hover {
+      background: #23467a;
+    }
+
+    /* Main Container (4-Bay Layout) */
+    .efs-main-board {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 8px;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .bay-column {
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .bay-header {
+      background: var(--surface-high);
+      border-bottom: 1px solid var(--outline);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .bay-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bay-title.circuit { color: #38bdf8; }
+    .bay-title.departure { color: #4ade80; }
+    .bay-title.arrival { color: #f59e0b; }
+    .bay-title.transit { color: #c084fc; }
+
+    .bay-count-badge {
+      background: #0d0f14;
+      border: 1px solid var(--outline);
+      color: var(--primary-soft);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    .status-sections-scroll {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 8px;
+    }
+
+    .status-group {
+      background: #101217;
+      border: 1px solid var(--outline);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100px;
+    }
+
+    .status-group-header {
+      background: #141720;
+      border-bottom: 1px solid var(--outline);
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .strips-dropzone {
+      flex: 1;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 70px;
+      transition: background 0.2s;
+    }
+
+    .strips-dropzone.drag-over {
+      background: rgba(87, 168, 255, 0.1);
+      border: 1px dashed var(--primary);
+    }
+
+    /* Electronic Flight Strip Card */
+    .efs-strip-card {
+      background: #1c202a;
+      border: 1px solid var(--outline-light);
+      border-left: 5px solid #57a8ff;
+      border-radius: 4px;
+      padding: 6px 8px;
+      cursor: grab;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .efs-strip-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .efs-strip-card:active {
+      cursor: grabbing;
+    }
+
+    .efs-strip-card.DEPARTURE { border-left-color: #4ade80; }
+    .efs-strip-card.ARRIVAL { border-left-color: #f59e0b; }
+    .efs-strip-card.CIRCUIT { border-left-color: #38bdf8; }
+    .efs-strip-card.TRANSIT { border-left-color: #c084fc; }
+
+    .efs-strip-card.urgent {
+      border: 1px solid var(--red);
+      border-left: 5px solid var(--red);
+      animation: urgent-pulse 1.5s infinite alternate;
+    }
+
+    @keyframes urgent-pulse {
+      0% { box-shadow: 0 0 4px rgba(255, 59, 86, 0.4); }
+      100% { box-shadow: 0 0 12px rgba(255, 59, 86, 0.8); }
+    }
+
+    .strip-row-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .strip-callsign {
+      color: var(--primary-bright);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .strip-badges {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-code {
+      background: #0d0f14;
+      border: 1px solid var(--outline);
+      color: var(--amber);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .badge-type {
+      background: #232a3b;
+      color: var(--primary-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .strip-grid-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 3px;
+      background: #13151c;
+      padding: 4px;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+
+    .strip-cell {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cell-label {
+      font-size: 9px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .cell-value {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--primary-bright);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .strip-route {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--primary-soft);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background: #11131a;
+      padding: 2px 4px;
+      border-radius: 2px;
+    }
+
+    .strip-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .clearance-pills {
+      display: flex;
+      gap: 2px;
+    }
+
+    .cl-btn {
+      background: #141720;
+      border: 1px solid var(--outline);
+      color: var(--text-muted);
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 4px;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    .cl-btn.checked {
+      background: var(--green-bg);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .strip-rmk {
+      font-size: 10px;
+      color: var(--amber);
+      font-weight: 600;
+      max-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Modal Styling */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(2px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-dialog {
+      background: var(--surface-container);
+      border: 1px solid var(--outline-light);
+      border-radius: 8px;
+      width: 780px;
+      max-width: 95vw;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background: var(--surface-high);
+      border-bottom: 1px solid var(--outline);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--primary-bright);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--primary-soft);
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-close:hover {
+      color: var(--red);
+    }
+
+    .modal-body {
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sample-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px;
+    }
+
+    .sample-card {
+      background: #101217;
+      border: 1px solid var(--outline);
+      border-radius: 6px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sample-card:hover {
+      border-color: var(--primary);
+      background: var(--surface-hover);
+    }
+
+    .sample-card.active {
+      border-color: var(--primary);
+      background: #182842;
+    }
+
+    .sample-type {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .sample-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary-bright);
+    }
+
+    .sample-desc {
+      font-size: 10px;
+      color: var(--primary-soft);
+    }
+
+    .xml-preview-box {
+      background: #0a0b0e;
+      border: 1px solid var(--outline);
+      border-radius: 4px;
+      padding: 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #7dd3fc;
+      height: 220px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .modal-footer {
+      background: var(--surface-high);
+      border-top: 1px solid var(--outline);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 2000;
+    }
+
+    .toast-item {
+      background: #182232;
+      border: 1px solid var(--primary);
+      color: var(--primary-bright);
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .toast-item.error {
+      background: #3a1219;
+      border-color: var(--red);
+      color: #ff99aa;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Header GNB -->
+  <header class="efs-header">
+    <div class="brand-section">
+      <div class="brand-badge">
+        <span>ACROSS UAO</span>
+        <span class="sub-tag">EFS</span>
+        <span>전자비행스트립</span>
+      </div>
+      <nav class="gnb-nav-links">
+        <a href="/" class="gnb-btn">관제 메인</a>
+        <a href="/ifs" class="gnb-btn">IFS 정보융합</a>
+        <a href="/efs" class="gnb-btn active">EFS 전자비행스트립</a>
+        <a href="/api-dashboard" class="gnb-btn">API 대시보드</a>
+        <a href="/docs" class="gnb-btn">API 명세서</a>
+      </nav>
+    </div>
+
+    <div class="header-controls">
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        <span>AMHS/SIS GATEWAY</span>
+      </div>
+
+      <div class="clock-display" id="utcClock">00:00:00 UTC</div>
+
+      <select class="airport-select" id="airportSelect" onchange="changeAirport(this.value)">
+        <option value="RKSI" selected>인천공항 (RKSI)</option>
+        <option value="RKSS">김포공항 (RKSS)</option>
+        <option value="RKPC">제주공항 (RKPC)</option>
+        <option value="RKPK">김해공항 (RKPK)</option>
+        <option value="RKTU">청주공항 (RKTU)</option>
+        <option value="RKNY">양양공항 (RKNY)</option>
+        <option value="RKNW">원주공항 (RKNW)</option>
+        <option value="RKJJ">광주공항 (RKJJ)</option>
+        <option value="RKJB">무안공항 (RKJB)</option>
+        <option value="RKJY">여수공항 (RKJY)</option>
+        <option value="RKPS">사천공항 (RKPS)</option>
+        <option value="RKPU">울산공항 (RKPU)</option>
+        <option value="RKTH">포항경주 (RKTH)</option>
+        <option value="RKTL">울진공항 (RKTL)</option>
+        <option value="RKPD">정석비행장 (RKPD)</option>
+      </select>
+
+      <select class="theme-select" id="themeSelect" onchange="changeTheme(this.value)">
+        <option value="theme-across" selected>Korean Air ACROSS Dark</option>
+        <option value="theme-crt">Tactical CRT Green</option>
+        <option value="theme-slate">Slate Navy</option>
+      </select>
+
+      <button class="action-btn primary" onclick="openAmhsModal()">
+        <span>📡 AMHS 전문 시뮬레이터 (7종)</span>
+      </button>
+
+      <button class="action-btn" onclick="resetDemoData()">
+        <span>🔄 초기화</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. Main EFS Board: 4-Bay Column Layout -->
+  <main class="efs-main-board" id="efsBoard">
+    
+    <!-- BAY 1: CIRCUIT / TRAFFIC PATTERN -->
+    <div class="bay-column" data-bay="CIRCUIT">
+      <div class="bay-header">
+        <div class="bay-title circuit">
+          <span>🔄</span>
+          <span>TRAFFIC PATTERN (CIRCUIT)</span>
+        </div>
+        <span class="bay-count-badge" id="count-CIRCUIT">0</span>
+      </div>
+      <div class="status-sections-scroll">
+        <div class="status-group" data-status="CLEARANCE">
+          <div class="status-group-header">
+            <span>CLEARANCE / REVISED</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="CIRCUIT" data-status="CLEARANCE"></div>
+        </div>
+        <div class="status-group" data-status="DELAYED">
+          <div class="status-group-header">
+            <span>DLA / HOLDING</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="CIRCUIT" data-status="DELAYED"></div>
+        </div>
+        <div class="status-group" data-status="CANCELLED">
+          <div class="status-group-header">
+            <span>CNL / CANCELLATION</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="CIRCUIT" data-status="CANCELLED"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAY 2: DEPARTURE -->
+    <div class="bay-column" data-bay="DEPARTURE">
+      <div class="bay-header">
+        <div class="bay-title departure">
+          <span>🛫</span>
+          <span>DEPARTURE</span>
+        </div>
+        <span class="bay-count-badge" id="count-DEPARTURE">0</span>
+      </div>
+      <div class="status-sections-scroll">
+        <div class="status-group" data-status="SCHEDULED">
+          <div class="status-group-header">
+            <span>DEP QUEUE (FPL)</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="DEPARTURE" data-status="SCHEDULED"></div>
+        </div>
+        <div class="status-group" data-status="PUSHBACK">
+          <div class="status-group-header">
+            <span>PUSHBACK / START (CHG)</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="DEPARTURE" data-status="PUSHBACK"></div>
+        </div>
+        <div class="status-group" data-status="TAXIOUT">
+          <div class="status-group-header">
+            <span>TAXI-OUT</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="DEPARTURE" data-status="TAXIOUT"></div>
+        </div>
+        <div class="status-group" data-status="LINEUP">
+          <div class="status-group-header">
+            <span>LINE-UP & WAIT</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="DEPARTURE" data-status="LINEUP"></div>
+        </div>
+        <div class="status-group" data-status="AIRBORNE">
+          <div class="status-group-header">
+            <span>AIRBORNE (DEP)</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="DEPARTURE" data-status="AIRBORNE"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAY 3: ARRIVAL -->
+    <div class="bay-column" data-bay="ARRIVAL">
+      <div class="bay-header">
+        <div class="bay-title arrival">
+          <span>🛬</span>
+          <span>ARRIVAL</span>
+        </div>
+        <span class="bay-count-badge" id="count-ARRIVAL">0</span>
+      </div>
+      <div class="status-sections-scroll">
+        <div class="status-group" data-status="APPROACH">
+          <div class="status-group-header">
+            <span>ARR QUEUE / APPROACH</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="ARRIVAL" data-status="APPROACH"></div>
+        </div>
+        <div class="status-group" data-status="FINAL">
+          <div class="status-group-header">
+            <span>FINAL / LANDING</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="ARRIVAL" data-status="FINAL"></div>
+        </div>
+        <div class="status-group" data-status="TAXIIN">
+          <div class="status-group-header">
+            <span>TAXI-IN</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="ARRIVAL" data-status="TAXIIN"></div>
+        </div>
+        <div class="status-group" data-status="ONBLOCK">
+          <div class="status-group-header">
+            <span>ON-BLOCK / ARRIVED (ARR)</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="ARRIVAL" data-status="ONBLOCK"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAY 4: TRANSIT -->
+    <div class="bay-column" data-bay="TRANSIT">
+      <div class="bay-header">
+        <div class="bay-title transit">
+          <span>🌐</span>
+          <span>TRANSIT / OVERFLIGHT</span>
+        </div>
+        <span class="bay-count-badge" id="count-TRANSIT">0</span>
+      </div>
+      <div class="status-sections-scroll">
+        <div class="status-group" data-status="ENTRY">
+          <div class="status-group-header">
+            <span>FIR ENTRY</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="TRANSIT" data-status="ENTRY"></div>
+        </div>
+        <div class="status-group" data-status="ENROUTE">
+          <div class="status-group-header">
+            <span>ENROUTE / PASSING</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="TRANSIT" data-status="ENROUTE"></div>
+        </div>
+        <div class="status-group" data-status="EXIT">
+          <div class="status-group-header">
+            <span>FIR EXIT</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="TRANSIT" data-status="EXIT"></div>
+        </div>
+        <div class="status-group" data-status="ERROR">
+          <div class="status-group-header">
+            <span>SYSTEM REPORT (NDR/DR)</span>
+            <span class="sub-count"></span>
+          </div>
+          <div class="strips-dropzone" data-bay="TRANSIT" data-status="ERROR"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 3. AMHS Sample Simulator Modal -->
+  <div class="modal-backdrop" id="amhsModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>📡</span>
+          <span>AMHS / ATS 7종 표준 연계 전문 전송 시뮬레이터</span>
+        </div>
+        <button class="modal-close" onclick="closeAmhsModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="sample-grid" id="sampleGrid">
+          <!-- Dynamically populated sample cards -->
+        </div>
+
+        <div>
+          <div style="font-size: 11px; font-weight: 700; color: var(--primary-soft); margin-bottom: 4px;">
+            선택된 AMHS XML / SOAP 원문 전문 미리보기:
+          </div>
+          <div class="xml-preview-box" id="xmlPreview">선택된 전문이 없습니다.</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="action-btn" onclick="closeAmhsModal()">닫기</button>
+        <button class="action-btn primary" onclick="sendSelectedAmhsSample()">
+          <span>🚀 EFS 전자비행스트립으로 수신 전송 (Ingest)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Application Logic -->
+  <script>
+    let currentAirport = 'RKSI';
+    let currentSamples = [];
+    let selectedSample = null;
+    let flightStrips = [];
+    let audioCtx = null;
+
+    // Beep alert synthesizer
+    function playBeep(type = 'normal') {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'urgent') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(440, audioCtx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.4);
+        } else {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(660, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.2);
+        }
+      } catch (e) {
+        console.warn('Audio play error:', e);
+      }
+    }
+
+    function showToast(msg, isError = false) {
+      const c = document.getElementById('toastContainer');
+      const item = document.createElement('div');
+      item.className = 'toast-item' + (isError ? ' error' : '');
+      item.innerHTML = `<span>${isError ? '⚠️' : '✅'}</span><span>${msg}</span>`;
+      c.appendChild(item);
+      setTimeout(() => item.remove(), 3500);
+    }
+
+    // UTC Clock
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getUTCHours()).padStart(2, '0');
+      const m = String(now.getUTCMinutes()).padStart(2, '0');
+      const s = String(now.getUTCSeconds()).padStart(2, '0');
+      document.getElementById('utcClock').innerText = `${h}:${m}:${s} UTC`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function changeTheme(theme) {
+      document.documentElement.className = theme;
+      localStorage.setItem('efs_theme', theme);
+    }
+
+    function changeAirport(code) {
+      currentAirport = code;
+      loadFlightStrips();
+    }
+
+    // Load Strips from API / Supabase
+    async function loadFlightStrips() {
+      try {
+        const res = await fetch(`/api/efs?airport=${currentAirport}`);
+        const data = await res.json();
+        if (data.strips) {
+          flightStrips = data.strips;
+          renderStrips();
+        }
+      } catch (err) {
+        console.error('Failed to load flight strips:', err);
+      }
+    }
+
+    function renderStrips() {
+      // Clear all dropzones
+      document.querySelectorAll('.strips-dropzone').forEach(dz => {
+        dz.innerHTML = '';
+      });
+
+      const counts = { CIRCUIT: 0, DEPARTURE: 0, ARRIVAL: 0, TRANSIT: 0 };
+
+      flightStrips.forEach(strip => {
+        const bay = strip.bay_type || 'DEPARTURE';
+        if (counts[bay] !== undefined) counts[bay]++;
+
+        const status = strip.status || (bay === 'DEPARTURE' ? 'SCHEDULED' : bay === 'ARRIVAL' ? 'APPROACH' : 'ENTRY');
+        
+        let targetZone = document.querySelector(`.strips-dropzone[data-bay="${bay}"][data-status="${status}"]`);
+        if (!targetZone) {
+          targetZone = document.querySelector(`.strips-dropzone[data-bay="${bay}"]`);
+        }
+
+        if (targetZone) {
+          const card = createStripCard(strip);
+          targetZone.appendChild(card);
+        }
+      });
+
+      // Update counters
+      Object.keys(counts).forEach(k => {
+        const el = document.getElementById(`count-${k}`);
+        if (el) el.innerText = counts[k];
+      });
+    }
+
+    function createStripCard(s) {
+      const card = document.createElement('div');
+      card.className = `efs-strip-card ${s.bay_type || 'DEPARTURE'} ${s.is_urgent ? 'urgent' : ''}`;
+      card.draggable = true;
+      card.id = `strip-${s.id}`;
+
+      card.ondragstart = (e) => {
+        e.dataTransfer.setData('text/plain', s.id);
+        card.style.opacity = '0.5';
+      };
+
+      card.ondragend = () => {
+        card.style.opacity = '1';
+      };
+
+      const ssr = s.ssr_code || s.beacon_code || '1200';
+      const acType = s.aircraft_type || 'B738';
+      const wake = s.wake_category ? `/${s.wake_category}` : '';
+      const alt = s.assigned_altitude || s.altitude || 'FL330';
+      const rwy = s.assigned_runway || s.runway || '33L';
+      const dep = s.dep_airport || s.departure_airport || 'RKSI';
+      const arr = s.arr_airport || s.arrival_airport || 'RKPC';
+      const eobt = s.eobt || s.time || '1200';
+      const gate = s.assigned_gate || s.gate || '101';
+      const route = s.route || 'DCT DIRECT';
+      const rmk = s.remarks || s.status || '';
+
+      card.innerHTML = `
+        <div class="strip-row-top">
+          <span class="strip-callsign">${s.callsign}</span>
+          <div class="strip-badges">
+            <span class="badge-code">${ssr}</span>
+            <span class="badge-type">${acType}${wake}</span>
+          </div>
+        </div>
+        <div class="strip-grid-body">
+          <div class="strip-cell">
+            <span class="cell-label">DEP/ARR</span>
+            <span class="cell-value">${dep}&rarr;${arr}</span>
+          </div>
+          <div class="strip-cell">
+            <span class="cell-label">ALT</span>
+            <span class="cell-value">${alt}</span>
+          </div>
+          <div class="strip-cell">
+            <span class="cell-label">RWY/GATE</span>
+            <span class="cell-value">${rwy}/${gate}</span>
+          </div>
+          <div class="strip-cell">
+            <span class="cell-label">EOBT</span>
+            <span class="cell-value">${eobt}</span>
+          </div>
+        </div>
+        <div class="strip-route" title="${route}">${route}</div>
+        <div class="strip-actions">
+          <div class="clearance-pills">
+            <button class="cl-btn ${s.clearance_delivery ? 'checked' : ''}" onclick="toggleClearance('${s.id}', 'clearance_delivery', event)">DEL</button>
+            <button class="cl-btn ${s.clearance_ground ? 'checked' : ''}" onclick="toggleClearance('${s.id}', 'clearance_ground', event)">GND</button>
+            <button class="cl-btn ${s.clearance_tower ? 'checked' : ''}" onclick="toggleClearance('${s.id}', 'clearance_tower', event)">TWR</button>
+            <button class="cl-btn ${s.clearance_departure ? 'checked' : ''}" onclick="toggleClearance('${s.id}', 'clearance_departure', event)">DEP</button>
+          </div>
+          <span class="strip-rmk" title="${rmk}">${rmk}</span>
+        </div>
+      `;
+
+      return card;
+    }
+
+    // Toggle Clearance Status
+    async function toggleClearance(stripId, clType, e) {
+      e.stopPropagation();
+      const strip = flightStrips.find(s => s.id === stripId);
+      if (!strip) return;
+
+      const nextVal = !strip[clType];
+      strip[clType] = nextVal;
+      playBeep('normal');
+
+      // Optimistic render
+      renderStrips();
+
+      try {
+        await fetch('/api/efs', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: stripId, [clType]: nextVal })
+        });
+      } catch (err) {
+        console.error('Failed to update clearance:', err);
+      }
+    }
+
+    // Drag and Drop Handlers
+    function setupDragAndDrop() {
+      document.querySelectorAll('.strips-dropzone').forEach(zone => {
+        zone.ondragover = (e) => {
+          e.preventDefault();
+          zone.classList.add('drag-over');
+        };
+
+        zone.ondragleave = () => {
+          zone.classList.remove('drag-over');
+        };
+
+        zone.ondrop = async (e) => {
+          e.preventDefault();
+          zone.classList.remove('drag-over');
+          const stripId = e.dataTransfer.getData('text/plain');
+          const targetBay = zone.dataset.bay;
+          const targetStatus = zone.dataset.status;
+
+          const strip = flightStrips.find(s => s.id === stripId);
+          if (strip) {
+            strip.bay_type = targetBay;
+            strip.status = targetStatus;
+            playBeep('normal');
+            renderStrips();
+            showToast(`${strip.callsign} &rarr; [${targetBay}] ${targetStatus} 이동 완료`);
+
+            try {
+              await fetch('/api/efs', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  id: stripId,
+                  bay_type: targetBay,
+                  status: targetStatus
+                })
+              });
+            } catch (err) {
+              console.error('Failed to update moved strip:', err);
+            }
+          }
+        };
+      });
+    }
+
+    // AMHS Simulator Modal
+    async function openAmhsModal() {
+      document.getElementById('amhsModal').classList.add('open');
+      if (currentSamples.length === 0) {
+        try {
+          const res = await fetch('/api/efs?action=samples');
+          const data = await res.json();
+          if (data.data) {
+            currentSamples = data.data;
+            renderSamples();
+          }
+        } catch (err) {
+          console.error('Failed to fetch samples:', err);
+        }
+      }
+    }
+
+    function closeAmhsModal() {
+      document.getElementById('amhsModal').classList.remove('open');
+    }
+
+    function renderSamples() {
+      const grid = document.getElementById('sampleGrid');
+      grid.innerHTML = '';
+      currentSamples.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = `sample-card ${idx === 0 ? 'active' : ''}`;
+        card.onclick = () => selectSample(item, card);
+        card.innerHTML = `
+          <div class="sample-type">[${item.type}] ${item.format}</div>
+          <div class="sample-name">${item.name}</div>
+          <div class="sample-desc">${item.protocol} | CALLSIGN: ${item.callsign}</div>
+        `;
+        grid.appendChild(card);
+      });
+
+      if (currentSamples.length > 0) {
+        selectSample(currentSamples[0], grid.children[0]);
+      }
+    }
+
+    function selectSample(item, cardEl) {
+      selectedSample = item;
+      document.querySelectorAll('.sample-card').forEach(c => c.classList.remove('active'));
+      if (cardEl) cardEl.classList.add('active');
+      document.getElementById('xmlPreview').innerText = item.content;
+    }
+
+    async function sendSelectedAmhsSample() {
+      if (!selectedSample) return;
+
+      try {
+        const res = await fetch('/api/efs?action=ingest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            rawMessage: selectedSample.content,
+            protocol: selectedSample.protocol
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          closeAmhsModal();
+          playBeep(data.strip?.is_urgent ? 'urgent' : 'normal');
+          showToast(`AMHS ${selectedSample.type} 전문 수신 처리 완료 (${data.strip?.callsign || ''})`);
+          loadFlightStrips();
+        } else {
+          showToast('전문 수신 처리 실패', true);
+        }
+      } catch (err) {
+        console.error('Ingest error:', err);
+        showToast('전송 에러 발생: ' + err.message, true);
+      }
+    }
+
+    async function resetDemoData() {
+      if (!confirm('EFS 전자비행스트립 데이터를 초기 상태로 리셋하시겠습니까?')) return;
+      try {
+        const res = await fetch('/api/efs?action=reset-demo', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          flightStrips = data.data;
+          renderStrips();
+          playBeep('normal');
+          showToast('EFS 데모 스트립이 초기화되었습니다.');
+        }
+      } catch (err) {
+        console.error('Reset error:', err);
+      }
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('efs_theme');
+      if (savedTheme) {
+        document.documentElement.className = savedTheme;
+        document.getElementById('themeSelect').value = savedTheme;
+      }
+      setupDragAndDrop();
+      loadFlightStrips();
+
+      // Auto poll every 10 seconds
+      setInterval(loadFlightStrips, 10000);
+    });
+  </script>
+</body>
+</html>

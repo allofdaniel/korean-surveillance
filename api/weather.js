@@ -1,21 +1,22 @@
 // Vercel Serverless Function - Aviation Weather Data for Korea
 // KMA API Hub (apihub.kma.go.kr) + International Sources
-// DO-278A ?붽뎄?ы빆 異붿쟻: SRS-SEC-001
+// DO-278A 요구사항 추적: SRS-SEC-001
 
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 import { fetchLiveAmosData, fetchLiveAmoMetarTaf } from './_utils/amosScraper.js';
+import { logWeatherError, getRecentWeatherErrors, getWeatherSnapshot } from './_utils/supabase.js';
 
 /**
- * ?섍꼍蹂?섏뿉??KMA API ??濡쒕뱶
- * Vercel ?섍꼍蹂???먮뒗 .env ?뚯씪?먯꽌 KMA_API_KEY ?ㅼ젙 ?꾩슂
+ * 환경변수에서 KMA API 로드
+ * Vercel 환경변수 또는 .env 파일에서 KMA_API_KEY 설정 필요
  */
 const KMA_API_KEY = process.env.KMA_API_KEY;
-const ULSAN_STN = '151'; // ?몄궛怨듯빆 吏?먮쾲??
+const ULSAN_STN = '151'; // 울산공항 지역번호
 if (!KMA_API_KEY) {
   console.error(
-    '[TBAS Weather API] KMA_API_KEY ?섍꼍蹂?섍? ?ㅼ젙?섏? ?딆븯?듬땲??\n' +
-    'Vercel Dashboard > Settings > Environment Variables?먯꽌 ?ㅼ젙?섍굅??n' +
-    '.env ?뚯씪??KMA_API_KEY=your_key_here ?뺥깭濡?異붽??섏꽭??'
+    '[TBAS Weather API] KMA_API_KEY 환경변수가 설정되지 않았습니다.\n' +
+    'Vercel Dashboard > Settings > Environment Variables에서 설정하거나\n' +
+    '.env 파일에 KMA_API_KEY=your_key_here 형태로 추가하세요.'
   );
 }
 
@@ -59,6 +60,8 @@ const ALLOWED_WEATHER_TYPES = new Set([
   'radar',
   'satellite',
   'lightning',
+  'error_logs',
+  'snapshot'
 ]);
 
 export default async function handler(req, res) {
@@ -72,10 +75,21 @@ export default async function handler(req, res) {
     return; // Rate limit exceeded
   }
 
-  const parsedUrl = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
-  req.query = req.query || Object.fromEntries(parsedUrl.searchParams.entries());
+  let rawType = '';
+  if (req.query && req.query.type !== undefined) {
+    rawType = typeof req.query.type === 'string' ? req.query.type : '';
+  } else if (req.url) {
+    try {
+      const parsedUrl = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+      rawType = parsedUrl.searchParams.get('type') || '';
+    } catch {}
+  }
 
-  const type = (parsedUrl.searchParams.get('type') || (typeof req.query.type === 'string' ? req.query.type : '') || 'metar').toLowerCase().trim();
+  if (rawType === '' && (!req.query || req.query.type === undefined)) {
+    rawType = 'metar';
+  }
+
+  const type = rawType.toLowerCase().trim();
   if (!ALLOWED_WEATHER_TYPES.has(type)) {
     return res.status(400).json({ error: 'Invalid type' });
   }
@@ -131,11 +145,26 @@ export default async function handler(req, res) {
         return await handleSatellite(req, res);
       case 'lightning':
         return await handleLightning(req, res);
+      case 'error_logs': {
+        const urlObj = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+        const limit = parseInt(urlObj.searchParams.get('limit') || '50', 10);
+        const logs = await getRecentWeatherErrors(limit);
+        res.setHeader('Cache-Control', 'no-cache');
+        return res.status(200).json({ success: true, count: logs.length, logs });
+      }
+      case 'snapshot': {
+        const urlObj = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+        const icao = (urlObj.searchParams.get('icao') || 'RKSI').toUpperCase();
+        const snap = await getWeatherSnapshot(icao);
+        res.setHeader('Cache-Control', 'no-cache');
+        return res.status(200).json({ success: true, icao, snapshot: snap });
+      }
       default:
         return res.status(400).json({ error: 'Invalid type' });
     }
   } catch (error) {
     console.error('Weather API error:', error.message);
+    logWeatherError('WEATHER_API', 'TOP_LEVEL_EXCEPTION', error.message, { type, stack: error.stack });
     // DO-278A SRS-SEC-006: 프로덕션에서 에러 상세 숨김
     // Vercel preview 도 NODE_ENV !== production 이라 leak 가능 — VERCEL_ENV 까지 체크
     const isLocalDev = process.env.NODE_ENV === 'development' && !process.env.VERCEL_ENV;
@@ -357,6 +386,9 @@ async function handleAmos(req, res) {
   }
 
   // 3. 기상청 관측소가 전혀 없는 비행장 (e.g. RKPD)의 경우 빈 배열 반환
+  if (targetIcao !== 'RKPD') {
+    logWeatherError('WEATHER_API', 'ALL_SOURCES_FAILED', `Both live AMOS and MET REPORT/METAR fallback failed for ${targetIcao}`, { icao: targetIcao }, targetIcao);
+  }
   res.setHeader('Cache-Control', 's-maxage=2, stale-while-revalidate=5');
   return res.status(200).json([]);
 }

@@ -1,5 +1,6 @@
 import vm from 'vm';
 import { rsaBundleCode } from './rsaBundle.js';
+import { batchSaveFlightSchedulesAndPlans } from './supabase.js';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -425,5 +426,9 @@ export async function fetchUbikaisAirportLive(airportIcao = 'RKSI') {
 
   airportCache.set(airportIcao, result);
   cacheTimestamps.set(airportIcao, Date.now());
+
+  // 15-second real-time sync into Supabase DB (flight_schedules_3days & flight_plan_details)
+  batchSaveFlightSchedulesAndPlans(airportIcao, departures, arrivals).catch(() => {});
+
   return result;
 }

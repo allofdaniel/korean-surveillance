@@ -14,10 +14,22 @@ export default async function handler(req, res) {
   if (await checkRateLimit(req, res)) return;
 
   const parsedUrl = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
-  const flight = normalizeFlight(parsedUrl.searchParams.get('flight') || req.query?.flight);
-  const airport = (parsedUrl.searchParams.get('airport') || req.query?.airport || 'RKSI').toUpperCase();
-
+  const rawFlightParam = req.query?.flight ?? parsedUrl.searchParams.get('flight');
+  const rawAirportParam = req.query?.airport ?? parsedUrl.searchParams.get('airport');
   const isEfs = parsedUrl.searchParams.get('efs') === 'true' || req.query?.efs === 'true';
+
+  if (rawFlightParam !== undefined && rawFlightParam !== null) {
+    if (typeof rawFlightParam !== 'string' || !/^[A-Za-z0-9]{2,8}$/.test(rawFlightParam.trim())) {
+      return res.status(400).json({ error: 'Invalid flight format: must be 2-8 alphanumeric characters' });
+    }
+  }
+
+  if (!rawFlightParam && !rawAirportParam && !isEfs) {
+    return res.status(400).json({ error: 'flight or airport parameter is required' });
+  }
+
+  const flight = normalizeFlight(rawFlightParam || '');
+  const airport = (rawAirportParam || 'RKSI').toUpperCase();
 
   if (isEfs) {
     return res.status(200).json({
@@ -28,6 +40,17 @@ export default async function handler(req, res) {
       message: '사용자 측 관제 시스템으로부터 전자비행스트립(EFS) 데이터 연계 대기 중입니다.',
       timestamp: new Date().toISOString()
     });
+  }
+
+  if (flight && process.env.AVIATIONSTACK_API_KEY) {
+    try {
+      const avUrl = `https://api.aviationstack.com/v1/flights?access_key=${process.env.AVIATIONSTACK_API_KEY}&flight_iata=${flight}`;
+      const avRes = await fetch(avUrl);
+      if (avRes.ok) {
+        const avData = await avRes.json();
+        return res.status(200).json(avData);
+      }
+    } catch {}
   }
 
   // 1. Fetch 100% Genuine Live Database from UBIKAIS Authenticated Crawler

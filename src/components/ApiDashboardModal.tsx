@@ -12,8 +12,6 @@ import {
   RefreshCw,
   Search,
   X,
-  Play,
-  Pause,
   Layers,
   Database
 } from 'lucide-react';
@@ -431,17 +429,16 @@ export const ApiDashboardModal: React.FC<ApiDashboardModalProps> = ({ isOpen, on
   const [items, setItems] = useState<InterfaceItem[]>(INITIAL_ITEMS);
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeItem, setActiveItem] = useState<InterfaceItem | null>(INITIAL_ITEMS[0]);
+  const [activeItem, setActiveItem] = useState<InterfaceItem | null>(INITIAL_ITEMS[0] || null);
   const [liveSample, setLiveSample] = useState<string>('');
   const [loadingSample, setLoadingSample] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
-  const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
   const [audioStreamUrl, setAudioStreamUrl] = useState<string>('');
 
   useEffect(() => {
     if (isOpen) {
       fetchCatalog();
-      if (!activeItem) {
+      if (!activeItem && INITIAL_ITEMS[0]) {
         handleInspectSample(INITIAL_ITEMS[0]);
       }
     }
@@ -465,7 +462,6 @@ export const ApiDashboardModal: React.FC<ApiDashboardModalProps> = ({ isOpen, on
     setActiveItem(item);
     setLoadingSample(true);
     setLiveSample('');
-    setIsPlayingAudio(false);
 
     if (item.format.includes('AUDIO')) {
       setAudioStreamUrl('https://s1-fmt2.liveatc.net/rksi_twr');

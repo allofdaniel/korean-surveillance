@@ -54,26 +54,28 @@ export const AIRCRAFT_COLORS: Record<string, string> = {
   'C': '#ef5350',
 };
 
+export const DEFAULT_AIRCRAFT_IMAGE = 'https://airport-data.com/images/aircraft/thumbnails/001/842/001842948.jpg';
+
 /**
  * 기종 코드로 대표 항공기 사진 가져오기
  */
 export const getAircraftImage = (typeCode?: string): string => {
-  if (!typeCode) return AIRCRAFT_MODEL_IMAGES['B738'];
+  if (!typeCode) return AIRCRAFT_MODEL_IMAGES['B738'] || DEFAULT_AIRCRAFT_IMAGE;
   const code = typeCode.trim().toUpperCase();
-  if (AIRCRAFT_MODEL_IMAGES[code]) return AIRCRAFT_MODEL_IMAGES[code];
+  if (AIRCRAFT_MODEL_IMAGES[code]) return AIRCRAFT_MODEL_IMAGES[code] || DEFAULT_AIRCRAFT_IMAGE;
   for (const [key, url] of Object.entries(AIRCRAFT_MODEL_IMAGES)) {
     if (code.startsWith(key) || key.startsWith(code)) {
-      return url;
+      return url || DEFAULT_AIRCRAFT_IMAGE;
     }
   }
-  if (code.startsWith('A32') || code.startsWith('A20') || code.startsWith('A21')) return AIRCRAFT_MODEL_IMAGES['A320'];
-  if (code.startsWith('B73') || code.startsWith('B38') || code.startsWith('B39')) return AIRCRAFT_MODEL_IMAGES['B738'];
-  if (code.startsWith('B77')) return AIRCRAFT_MODEL_IMAGES['B77W'];
-  if (code.startsWith('B78')) return AIRCRAFT_MODEL_IMAGES['B789'];
-  if (code.startsWith('A33')) return AIRCRAFT_MODEL_IMAGES['A333'];
-  if (code.startsWith('A35')) return AIRCRAFT_MODEL_IMAGES['A359'];
-  if (code.startsWith('B74')) return AIRCRAFT_MODEL_IMAGES['B744'];
-  return AIRCRAFT_MODEL_IMAGES['B738'];
+  if (code.startsWith('A32') || code.startsWith('A20') || code.startsWith('A21')) return AIRCRAFT_MODEL_IMAGES['A320'] || DEFAULT_AIRCRAFT_IMAGE;
+  if (code.startsWith('B73') || code.startsWith('B38') || code.startsWith('B39')) return AIRCRAFT_MODEL_IMAGES['B738'] || DEFAULT_AIRCRAFT_IMAGE;
+  if (code.startsWith('B77')) return AIRCRAFT_MODEL_IMAGES['B77W'] || DEFAULT_AIRCRAFT_IMAGE;
+  if (code.startsWith('B78')) return AIRCRAFT_MODEL_IMAGES['B789'] || DEFAULT_AIRCRAFT_IMAGE;
+  if (code.startsWith('A33')) return AIRCRAFT_MODEL_IMAGES['A333'] || DEFAULT_AIRCRAFT_IMAGE;
+  if (code.startsWith('A35')) return AIRCRAFT_MODEL_IMAGES['A359'] || DEFAULT_AIRCRAFT_IMAGE;
+  if (code.startsWith('B74')) return AIRCRAFT_MODEL_IMAGES['B744'] || DEFAULT_AIRCRAFT_IMAGE;
+  return AIRCRAFT_MODEL_IMAGES['B738'] || DEFAULT_AIRCRAFT_IMAGE;
 };
 
 /**

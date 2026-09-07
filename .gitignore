@@ -41,3 +41,4 @@ coverage/
 # 외부 레포 (로컬에만 존재)
 OSINTMappingSite/
 SpaceTracking/
+.env*.local

@@ -1,0 +1,980 @@
+:root {
+  --color_border_hide: rgba(255, 255, 255, 0);
+  --color_border: #384366;
+  --color_defaut_text: #ffffff;
+  --color_yellow_bg: #684916;
+  --color_yellow_text: #fbcb41;
+  --color_blue_bg: #005aba;
+  --color_blue_text: #75b8ff;
+  --color_green_bg: #004d3e;
+  --color_green_text: #00dbb1;
+  --color_primary_bg: #273d70;
+  --color_primary_text: #79b9ff;
+  --color_red_text: #ff5871;
+  --color_red_bg: #59101b;
+  --color_picker_bg: #2a304a;
+  --color_shadow: rgba(0, 0, 0, 0.5);
+  --color_tap_bg: #2a304a;
+  --color_btn_hover: #20253a;
+  /* body */
+  --color_body_bg: #282b36;
+  --color_body_text: #ffffff;
+  --color_body_text_moredark: #d2d5dd;
+  --color_onoff_btn_bg: #303957;
+  /* block */
+  --color_block_bg: #141724;
+  --color_block_bg_moredark: #06070b;
+  --color_block_bg_morelight: #20253a;
+  --color_block_btn_bg: #384366;
+  /* tableblock */
+  --color_tableblock_bg: #20253a;
+  --color_tableblock_text: #a5aaba;
+  --color_tableblock_bg_more: #384366;
+  --color_tableblock_bg_more_btn_bg: #606985;
+  --color_tableblock_border: #7e859c;
+  --color_tableblok_click_bg: #384366;
+  /* etc */
+  --color_red: #ff2e4d;
+  --color_blue: #3396ff;
+  --color_green: #00ba96;
+  --color_yellow: #fbcb41;
+  --color_primary: #57a8ff;
+  /* images ../images/dark/logo.svg */
+  --logo_header: url(../images/dark/logo.svg) no-repeat;
+  --icon_cpu: url(../images/dark/icon/cpu.svg) no-repeat;
+  --icon_memory: url(../images/dark/icon/memory.svg) no-repeat;
+  --icon_moon: url(../images/dark/icon/moon.svg) no-repeat;
+  --icon_account: url(../images/dark/icon/account.svg) no-repeat;
+  --icon_account_arrow: url(../images/dark/icon/account_arrow.svg) no-repeat;
+  --icon_logout: url(../images/dark/icon/logout.svg) no-repeat;
+  --icon_select_arrow: url(../images/dark/icon/select_arrow.svg) no-repeat;
+  --icon_map_filter: url(../images/dark/icon/map_filter.svg) no-repeat;
+  --icon_weather_map: url(../images/dark/icon/weather_map.svg) no-repeat;
+  --icon_notam: url(../images/dark/icon/notam.svg) no-repeat;
+  --icon_weather_info: url(../images/dark/icon/weather_info.svg) no-repeat;
+  --icon_filter: url(../images/dark/icon/filter.svg) no-repeat;
+  --icon_message: url(../images/dark/icon/message.svg) no-repeat;
+  --icon_log_viewer: url(../images/dark/icon/log_viewer.svg) no-repeat;
+  --icon_setting: url(../images/dark/icon/setting.svg) no-repeat;
+  --icon_minus: url(../images/dark/icon/minus.svg) no-repeat;
+  --icon_plus: url(../images/dark/icon/plus.svg) no-repeat;
+  --icon_compass: url(../images/dark/icon/compass.svg) no-repeat;
+  --icon_frame: url(../images/dark/icon/frame.svg) no-repeat;
+  --icon_default_arrow: url(../images/dark/icon/default_arrow.svg) no-repeat;
+  --icon_warning: url(../images/dark/icon/warning_bk.svg) no-repeat;
+  --icon_flight_plan: url(../images/dark/icon/flight_plan.svg) no-repeat;
+  --icon_flight: url(../images/dark/icon/flight.svg) no-repeat;
+  --icon_vertiport: url(../images/dark/icon/vertiport.svg) no-repeat;
+  --icon_dman_panel: url(../images/dark/icon/dman_panel.svg) no-repeat;
+  --icon_estrip_panel: url(../images/dark/icon/estrip_panel.svg) no-repeat;
+  --icon_double_arrow: url(../images/dark/icon/double_arrow.svg) no-repeat;
+  --icon_time: url(../images/dark/icon/time.svg) no-repeat;
+  --icon_calendar: url(../images/dark/icon/calendar.svg) no-repeat;
+  --icon_search: url(../images/dark/icon/search.svg) no-repeat;
+  --icon_information: url(../images/dark/icon/information.svg) no-repeat;
+  --icon_close: url(../images/dark/icon/close.svg) no-repeat;
+  --icon_layout_control: url(../images/dark/icon/layout_control.svg) no-repeat;
+  --icon_metar: url(../images/dark/icon/metar.svg) no-repeat;
+  --icon_calendar: url(../images/dark/icon/calendar.svg) no-repeat;
+  --icon_track: url(../images/dark/icon/track.svg) no-repeat;
+  --icon_vtg: url(../images/dark/icon/vtg.svg) no-repeat;
+  --icon_dashboard: url(../images/dark/icon/dashboard.svg) no-repeat;
+  --icon_support_info_check: url(../images/dark/icon/support_info_check.svg)
+    no-repeat;
+  --icon_flight_map: url(../images/dark/icon/flight_map.svg) no-repeat;
+}
+
+.lightmode {
+  --color_border_hide: #e4e4eb;
+  --color_border: #e4e4eb;
+  --color_defaut_text: #303957;
+  --color_yellow_bg: #fef8e6;
+  --color_yellow_text: #dea336;
+  --color_blue_bg: #dcedff;
+  --color_blue_text: #007bff;
+  --color_green_bg: #dcfaf4;
+  --color_green_text: #00a081;
+  --color_primary_bg: #e8f3ff;
+  --color_primary_text: #4a81d9;
+  --color_red_text: #d92741;
+  --color_red_bg: #ffe9ec;
+  --color_picker_bg: #ffffff;
+  --color_shadow: rgba(178, 178, 185, 0.5);
+  --color_tap_bg: #f1f1f5;
+  --color_btn_hover: #f9f9fc;
+  /* body */
+  --color_body_bg: #ececf1;
+  --color_body_text: #7e859c;
+  --color_body_text_moredark: #303957;
+  --color_onoff_btn_bg: #e4e4eb;
+  /* block */
+  --color_block_bg: #ffffff;
+  --color_block_bg_moredark: #f9f9fc;
+  --color_block_bg_morelight: #f9f9fc;
+  --color_block_btn_bg: #ffffff;
+  /* tableblock */
+  --color_tableblock_bg: #ffffff;
+  --color_tableblock_text: #a5aaba;
+  --color_tableblock_bg_more: #f9f9fc;
+  --color_tableblock_bg_more_btn_bg: #ffffff;
+  --color_tableblock_border: #d0d0d7;
+  --color_tableblok_click_bg: #ececf1;
+  /* etc */
+  --color_red: #ff2e4d;
+  --color_blue: #3396ff;
+  --color_green: #00ba96;
+  --color_yellow: #fbcb41;
+  --color_primary: #57a8ff;
+  /* images */
+  --logo_header: url(../images/light/logo.svg) no-repeat;
+  --icon_cpu: url(../images/light/icon/cpu.svg) no-repeat;
+  --icon_memory: url(../images/light/icon/memory.svg) no-repeat;
+  --icon_moon: url(../images/light/icon/moon.svg) no-repeat;
+  --icon_account: url(../images/light/icon/account.svg) no-repeat;
+  --icon_account_arrow: url(../images/light/icon/account_arrow.svg) no-repeat;
+  --icon_logout: url(../images/light/icon/logout.svg) no-repeat;
+  --icon_select_arrow: url(../images/light/icon/select_arrow.svg) no-repeat;
+  --icon_map_filter: url(../images/light/icon/map_filter.svg) no-repeat;
+  --icon_weather_map: url(../images/light/icon/weather_map.svg) no-repeat;
+  --icon_filter: url(../images/light/icon/filter.svg) no-repeat;
+  --icon_notam: url(../images/light/icon/notam.svg) no-repeat;
+  --icon_weather_info: url(../images/light/icon/weather_info.svg) no-repeat;
+  --icon_message: url(../images/light/icon/message.svg) no-repeat;
+  --icon_log_viewer: url(../images/light/icon/log_viewer.svg) no-repeat;
+  --icon_setting: url(../images/light/icon/setting.svg) no-repeat;
+  --icon_minus: url(../images/light/icon/minus.svg) no-repeat;
+  --icon_plus: url(../images/light/icon/plus.svg) no-repeat;
+  --icon_compass: url(../images/light/icon/compass.svg) no-repeat;
+  --icon_frame: url(../images/light/icon/frame.svg) no-repeat center;
+  --icon_default_arrow: url(../images/light/icon/default_arrow.svg) no-repeat;
+  --icon_warning: url(../images/light/icon/warning_wt.svg) no-repeat;
+  --icon_flight_plan: url(../images/light/icon/flight_plan.svg) no-repeat;
+  --icon_flight: url(../images/light/icon/flight.svg) no-repeat;
+  --icon_vertiport: url(../images/light/icon/vertiport.svg) no-repeat;
+  --icon_dman_panel: url(../images/light/icon/dman_panel.svg) no-repeat;
+  --icon_estrip_panel: url(../images/light/icon/estrip_panel.svg) no-repeat;
+  --icon_double_arrow: url(../images/light/icon/double_arrow.svg) no-repeat;
+  --icon_time: url(../images/light/icon/time.svg) no-repeat;
+  --icon_calendar: url(../images/light/icon/calendar.svg) no-repeat;
+  --icon_search: url(../images/light/icon/search.svg) no-repeat;
+  --icon_information: url(../images/light/icon/information.svg) no-repeat;
+  --icon_close: url(../images/light/icon/close.svg) no-repeat;
+  --icon_layout_control: url(../images/light/icon/layout_control.svg) no-repeat;
+  --icon_metar: url(../images/light/icon/metar.svg) no-repeat;
+  --icon_calendar: url(../images/light/icon/calendar.svg) no-repeat;
+  --icon_track: url(../images/light/icon/track.svg) no-repeat;
+  --icon_vtg: url(../images/light/icon/vtg.svg) no-repeat;
+  --icon_dashboard: url(../images/light/icon/dashboard.svg) no-repeat;
+  --icon_support_info_check: url(../images/light/icon/support_info_check.svg)
+    no-repeat;
+  --icon_flight_map: url(../images/light/icon/flight_map.svg) no-repeat;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  font-family: "Pretendard";
+  background: var(--color_body_bg);
+  font-weight: 400;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body ::-webkit-scrollbar {
+  width: 4px;
+}
+
+body ::-webkit-scrollbar-thumb {
+  border-radius: 15px;
+  background: var(--color_border);
+}
+
+body ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+button {
+  font-family: "Pretendard", sans-serif;
+}
+
+.hide {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+}
+
+/* input */
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color_body_text);
+  border-radius: 4px;
+  border: 1px solid var(--color_border);
+  background: var(--color_tableblock_bg);
+  transition: all 0.25s;
+}
+
+.search-wrap input[type="text"] {
+  padding: 0 36px 0 12px;
+  background: var(--icon_search) right 12px center/24px
+    var(--color_tableblock_bg);
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+  color: blue;
+}
+
+input[type="text"]:hover,
+input[type="password"]:hover {
+  border: 1px solid var(--text-secondary-color);
+  transition: all 0.25s;
+}
+
+/* custom select */
+.select-box {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+}
+
+.select-box .select-item {
+  position: relative;
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  color: #7e859c;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: left;
+  border-radius: 4px;
+  border: 1px solid var(--color_border);
+  background: var(--color_tableblock_bg);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  z-index: 1;
+}
+
+.select-box .select-item::after {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  content: "";
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%) rotate(180deg);
+  background: var(--icon_default_arrow) center/20px;
+  transition: all 0.25s;
+}
+
+.select-box .select-item.on::after {
+  top: 50%;
+  transform: translateY(-50%) rotate(360deg);
+}
+
+.select-box .option-list {
+  width: 100%;
+  height: 180px;
+  position: absolute;
+  top: 42px;
+  left: 0;
+  border-radius: 4px;
+  border: 1px solid var(--color_border);
+  background: var(--color_block_bg);
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: none;
+  box-shadow: 0px 2px 4px 0px var(--color_shadow);
+  z-index: 2;
+}
+
+.select-box .option-list > li {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 12px;
+  height: 36px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  transition: all 0.25s;
+}
+
+.select-box .option-list > li:hover {
+  background: var(--color_primary_bg);
+}
+
+.select-box .option-list > li.on a {
+  color: var(--color_primary_text);
+}
+
+.select-box .option-list > li a {
+  color: var(--color_defaut_text);
+}
+
+/* input range */
+.range-wrap {
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.range-wrap .icon-wrap {
+  background: url(../images/common/icon/wind.svg) no-repeat center/contain;
+}
+
+.range-wrap .icon-wrap.w-24 {
+  width: 24px;
+  height: 24px;
+}
+
+.range-wrap .icon-wrap.w-16 {
+  width: 16px;
+  height: 16px;
+}
+
+.range-wrap .max-min {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--color_tableblock_text);
+}
+
+.range {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100px;
+  height: 8px;
+  cursor: pointer;
+  outline: none;
+  border-radius: 20px;
+  background: var(--color_border);
+  transform: rotate(270deg);
+}
+
+/* Thumb: webkit */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 6px;
+  height: 16px;
+  border: none;
+  border-radius: 1px;
+  background: var(--color_defaut_text);
+  transition: 0.2s ease-in-out;
+}
+
+/* Thumb: Firefox */
+input[type="range"]::-moz-range-thumb {
+  height: 6px;
+  width: 16px;
+  border: none;
+  border-radius: 1px;
+  background: var(--color_defaut_text);
+  transition: 0.2s ease-in-out;
+}
+
+/* custom timepicker */
+.timepicker {
+  position: relative;
+}
+
+.timepicker-input {
+  width: 178px;
+  height: 36px;
+  padding: 0 12px;
+  font-family: "Pretendard";
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color_defaut_text);
+  border-radius: 4px;
+  border: 1px solid var(--color_border);
+  background: var(--icon_time) right 12px center/20px var(--color_tableblock_bg);
+  transition: all 0.25s;
+}
+
+.timepicker-input.on,
+.timepicker-input:hover {
+  border: 1px solid var(--color_primary);
+  transition: all 0.25s;
+}
+
+.timepicker-modal {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  padding: 16px;
+  border-radius: 4px;
+  background: var(--color_picker_bg);
+  box-shadow: 0px 2px 4px 0px var(--color_shadow);
+  z-index: 999;
+}
+
+.timepicker-modal .inner > .tit {
+  padding-bottom: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  color: var(--color_tableblock_text);
+}
+
+.timepicker-modal .inner .container {
+  position: relative;
+  display: flex;
+  gap: 44px;
+}
+
+.timepicker.single .timepicker-modal .inner .container {
+  padding: 0 17px;
+}
+
+.timepicker-modal .inner .container::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 2px;
+  background: #7e859c;
+}
+
+.timepicker.single .timepicker-modal .inner .container::before {
+  content: none;
+}
+
+.timepicker-modal .inner .input-wrap {
+  display: flex;
+  gap: 18px;
+}
+
+.timepicker.single .timepicker-modal .inner .input-wrap {
+  gap: 20px;
+}
+
+.timepicker-modal .inner .time-input {
+  position: relative;
+  width: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timepicker-modal .inner .time-input:first-child::before {
+  content: ":";
+  position: absolute;
+  top: 50%;
+  right: -12px;
+  transform: translateY(-50%);
+  color: #7e859c;
+  font-size: 23px;
+}
+
+.timepicker-modal .inner .time-input > input,
+button {
+  width: 100%;
+}
+
+.timepicker-modal .inner .time-input > input {
+  position: relative;
+  height: 36px;
+  font-family: "Pretendard";
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color_defaut_text);
+  border-radius: 4px;
+  border: 1px solid var(--color_border);
+  background: var(--color_block_bg);
+  transition: all 0.25s;
+}
+
+.timepicker-modal .inner .time-input > input:hover {
+  border: 1px solid var(--color_primary);
+  transition: all 0.25s;
+}
+
+.timepicker-modal .inner .time-input > input:focus {
+  border: 1px solid var(--color_primary);
+  transition: all 0.25s;
+}
+
+.timepicker-modal .inner .time-input > button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16px;
+  border: none;
+  border-radius: 2px;
+  background: var(--color_border);
+  cursor: pointer;
+}
+
+.timepicker-modal .inner .time-input > button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+}
+
+.timepicker-modal .inner .time-input > button.increment::before {
+  background: var(--icon_default_arrow) center/16px;
+}
+
+.timepicker-modal .inner .time-input > button.decrement::before {
+  background: var(--icon_default_arrow) center/16px;
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.timepicker-modal .inner .btn-wrap {
+  width: 100%;
+  padding-top: 37px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.timepicker-modal .inner .btn-wrap > button {
+  width: calc(50% - 4px);
+  height: 28px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+}
+
+.timepicker-modal .inner .btn-wrap > button.cancel-button {
+  color: var(--color_defaut_text);
+  background: var(--color_border);
+}
+
+.timepicker-modal .inner .btn-wrap > button.confirm-button {
+  color: #141724;
+  background: var(--color_primary);
+}
+
+/* daterange */
+.daterange-wrap {
+  height: 36px;
+}
+
+.daterange-wrap .daterange {
+  width: 248px;
+  height: 36px;
+  padding: 0 12px;
+  font-family: "Pretendard";
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color_defaut_text);
+  border-radius: 4px;
+  border: 1px solid var(--color_border);
+  background: var(--icon_calendar) right 12px center / 20px
+    var(--color_tableblock_bg);
+}
+
+.daterange-wrap .daterange.single {
+  width: 178px;
+}
+
+.daterange-wrap .daterange.on,
+.daterange-wrap .daterange:hover {
+  border: 1px solid var(--color_primary);
+  transition: all 0.25s;
+}
+
+.daterangepicker {
+  width: auto;
+  padding: 6px 0 0 0;
+  border: none;
+  background: var(--color_picker_bg);
+  box-shadow: 0px 2px 4px 0px var(--color_shadow);
+}
+
+.daterangepicker.single {
+  width: 264px;
+}
+
+.daterangepicker:before {
+  display: none;
+}
+
+.daterangepicker:after {
+  display: none;
+}
+
+.daterangepicker.single .ranges,
+.daterangepicker.single .drp-calendar {
+  float: none;
+}
+
+.daterangepicker .calendar-table {
+  border: none;
+  background: transparent;
+}
+
+.daterangepicker .calendar-table .next span,
+.daterangepicker .calendar-table .prev span {
+  position: relative;
+  display: block;
+  padding: 0;
+  transform: rotate(0);
+  width: 28px;
+  height: 28px;
+  margin-bottom: 4px;
+  border-radius: 6px;
+  border: 1px solid var(--color_border_hide);
+  background: var(--color_block_btn_bg);
+}
+
+.daterangepicker .calendar-table .prev span::before,
+.daterangepicker .calendar-table .next span::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: var(--icon_default_arrow) center/20px;
+}
+
+.daterangepicker .calendar-table .prev span::before {
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.daterangepicker .calendar-table .next span::before {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.daterangepicker th.month {
+  position: relative;
+  height: 36px;
+}
+
+.daterangepicker select.monthselect,
+.daterangepicker select.yearselect {
+  padding: 6px 0 6px 6px;
+  margin: 0 0 4px 0;
+  font-family: "Pretendard";
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color_defaut_text);
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.daterangepicker select.monthselect:hover,
+.daterangepicker select.yearselect:hover {
+  border: 1px solid var(--color_border);
+  transition: all 0.25s;
+}
+
+.daterangepicker select.yearselect {
+  float: left;
+  width: 79px;
+  height: 36px;
+  margin-left: 7px;
+}
+
+.daterangepicker select.yearselect::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.daterangepicker select.monthselect {
+  width: 56px;
+  height: 36px;
+}
+
+.daterangepicker select.monthselect option,
+.daterangepicker select.yearselect option {
+  font-family: "Pretendard";
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color_defaut_text);
+  background: var(--color_picker_bg);
+  box-shadow: 0px 2px 4px 0px var(--color_shadow);
+}
+
+.daterangepicker .calendar-table thead tr:first-child {
+  height: 36px;
+}
+
+.daterangepicker .calendar-table th,
+.daterangepicker .calendar-table td {
+  width: 32px;
+  height: 32px;
+  font-family: "Pretendard";
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color_defaut_text);
+}
+
+.daterangepicker td.off,
+.daterangepicker td.off.in-range,
+.daterangepicker td.off.start-date,
+.daterangepicker td.off.end-date {
+  font-family: "Pretendard";
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color_tableblock_text);
+}
+
+.daterangepicker td.available:hover,
+.daterangepicker th.available:hover {
+  background: var(--color_btn_hover);
+  border-color: transparent;
+  color: var(--color_defaut_text);
+  transition: all 0.25s;
+}
+
+.daterangepicker th.available:hover {
+  background: transparent;
+}
+
+.daterangepicker td.active,
+.daterangepicker td.active:hover {
+  font-weight: 700;
+  color: var(--color_primary_text);
+  background: var(--color_primary_bg);
+  border-color: transparent;
+  transition: all 0.25s;
+}
+
+.daterangepicker .calendar-table th {
+  font-family: "Pretendard";
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+  color: var(--color_tableblock_text);
+}
+
+.daterangepicker.show-calendar .drp-buttons {
+  position: relative;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.daterangepicker.single.show-calendar .drp-buttons {
+  justify-content: space-between;
+}
+
+.daterangepicker .drp-buttons {
+  border: none;
+}
+
+.daterangepicker .drp-buttons .btn {
+  margin: 0;
+  width: 106px;
+  height: 28px;
+  font-family: "Pretendard";
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.daterangepicker.single .drp-buttons .btn {
+  width: 112px;
+}
+
+.daterangepicker .drp-buttons .btn.today-btn {
+  color: var(--color_primary_text);
+  border: 1px solid var(--color_border);
+  background: transparent;
+}
+
+.daterangepicker .drp-buttons .btn.applyBtn {
+  color: #141724;
+  border: none;
+  background: var(--color_primary);
+}
+
+.daterangepicker .drp-selected {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: "Pretendard";
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color_defaut_text);
+}
+
+.daterangepicker .drp-calendar.left .calendar-table {
+  padding: 0;
+}
+
+.daterangepicker .drp-calendar.left {
+  padding: 0 20px;
+}
+
+.daterangepicker .drp-calendar.right {
+  padding: 0 20px;
+}
+
+.daterangepicker .calendar-table table tbody tr:not(:last-child) {
+  margin-bottom: 4px;
+}
+
+.daterangepicker.show-calendar .ranges {
+  margin: 0;
+}
+
+.daterangepicker td.in-range {
+  background: var(--color_primary_bg);
+}
+
+.daterangepicker td.off,
+.daterangepicker td.off.in-range,
+.daterangepicker td.off.start-date,
+.daterangepicker td.off.end-date {
+  background: transparent;
+}
+
+.daterangepicker ::-webkit-scrollbar-track {
+  background: var(--color_picker_bg);
+}
+
+.daterangepicker ::-webkit-scrollbar-thumb {
+  background: var(--color_border);
+}
+
+/* 다크모드 스위치(토글버튼) */
+.mode-switch-wrap {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  padding: 0 6px;
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+.mode-switch-wrap .switch {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mode-switch-wrap .switch span {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color_defaut_text);
+}
+
+.mode-switch-wrap .switch span::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 2px;
+  background: var(--icon_moon) center/contain;
+}
+
+.mode-switch-wrap .switch #modeSwitch {
+  appearance: none;
+  position: relative;
+  margin: 0;
+  width: 26px;
+  height: 16px;
+  border: 1px solid #e4e4eb;
+  border-radius: 30px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.mode-switch-wrap .switch #modeSwitch::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  transform: translateY(-50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #57a8ff;
+  transition: all 0.25s linear;
+  z-index: 1;
+}
+
+.mode-switch-wrap .switch #modeSwitch:checked {
+  background: #384366;
+  border-color: #384366;
+}
+
+.mode-switch-wrap .switch #modeSwitch:checked::before {
+  background-color: #57a8ff;
+  left: calc(100% - 13px);
+}
+
+.mode-switch-wrap .switch #modeSwitch:disabled {
+  border-color: lightgray;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.mode-switch-wrap .switch #modeSwitch:disabled::before {
+  background-color: lightgray;
+}
+
+.mode-switch-wrap .switch #modeSwitch:disabled + span {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mode-switch-wrap .switch #modeSwitch:focus-visible {
+  outline-offset: max(2px, 0.1em);
+  outline: 2px solid tomato;
+}
+
+.mode-switch-wrap .switch #modeSwitch:enabled:hover {
+  border: 1px solid var(--color_primary);
+}

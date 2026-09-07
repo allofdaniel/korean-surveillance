@@ -42,7 +42,7 @@ export default async function handler(req, res) {
         const amosList = await fetchLiveAmosData(icao);
         const amosItem = amosList.length > 0 ? amosList[0] : null;
 
-        let metReportText = amoWx.metReport?.content || '';
+        let metReportText = amoWx.metReport?.content || (typeof amoWx.metReport === 'string' ? amoWx.metReport : '');
         if (!metReportText && amosItem) {
           const rwy = amosItem.rwyDir || '15L';
           const wd = String(amosItem.wd2minAvg || amosItem.wd || '150').padStart(3, '0');
@@ -65,6 +65,7 @@ export default async function handler(req, res) {
           metar: amoWx.metar || '',
           taf: amoWx.taf || '',
           speci: amoWx.speci || '',
+          domesticMetar: amoWx.domesticMetar || [],
           warnings: amoWx.warnings || []
         });
       }

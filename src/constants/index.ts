@@ -48,7 +48,6 @@ export type {
 // Aircraft constants
 export {
   ICAO_TO_IATA as AIRCRAFT_ICAO_TO_IATA,
-  AIRCRAFT_SILHOUETTE,
   AIRCRAFT_COLORS as AIRCRAFT_TYPE_COLORS,
   getAircraftImage,
   getAircraftColor as getAircraftTypeColor,

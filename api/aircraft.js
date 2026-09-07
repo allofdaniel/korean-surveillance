@@ -1,13 +1,8 @@
 /**
  * Vercel Serverless Function - Aircraft proxy
- * Sources: adsb.lol (primary, airplanes.live 호환 스키마) + OpenSky Network (merge for extra coverage)
- *   - airplanes.live 는 2026-05 이후 anonymous 호출에 403 반환 → 동일 스키마의 adsb.lol 로 전환
- *   - 응답 스키마는 그대로 유지 (프론트 변경 불필요)
- * DO-278A 요구사항 추적: SRS-API-002
+ * Sources: airplanes.live + adsb.lol + OpenSky Network (ultra-resilient fallback)
  */
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
-
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const M_TO_FT = 3.28084;
 const MS_TO_KT = 1.94384;
@@ -17,20 +12,12 @@ const NM_TO_KM = 1.852;
 const OPENSKY_AUTH_URL = 'https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token';
 const OPENSKY_CLIENT_ID = process.env.OPENSKY_CLIENT_ID || '';
 const OPENSKY_CLIENT_SECRET = process.env.OPENSKY_CLIENT_SECRET || '';
-// Basic Auth fallback (OAuth2 미설정 시)
 const OPENSKY_USERNAME = process.env.OPENSKY_USERNAME || '';
 const OPENSKY_PASSWORD = process.env.OPENSKY_PASSWORD || '';
 
-// 토큰 캐시 (OAuth2)
 let openSkyTokenCache = { token: null, expires: 0 };
-
-// OpenSky 호출 실패 시 일정 시간 호출 건너뛰기 (Vercel→OpenSky 가 막혀있을 때 대비)
-// 모듈 레벨 변수 — Vercel 함수 인스턴스가 hot 일 때 재사용됨
 let openSkyCircuit = { failedAt: 0, cooldownMs: 60_000, consecutiveFails: 0 };
 
-/**
- * 좌표 유효성 검증
- */
 function validateCoordinates(lat, lon, radius) {
   const latNum = parseFloat(lat);
   const lonNum = parseFloat(lon);
@@ -49,9 +36,6 @@ function validateCoordinates(lat, lon, radius) {
   return { valid: true, values: { lat: latNum, lon: lonNum, radius: radiusNum } };
 }
 
-/**
- * Haversine 거리 (km)
- */
 function haversineKm(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const toRad = (d) => d * Math.PI / 180;
@@ -63,9 +47,6 @@ function haversineKm(lat1, lon1, lat2, lon2) {
   return 2 * R * Math.asin(Math.sqrt(a));
 }
 
-/**
- * 중심+반경(nm) → bbox (lamin, lomin, lamax, lomax)
- */
 function bboxFromRadius(lat, lon, radiusNm) {
   const radiusKm = radiusNm * NM_TO_KM;
   const dLat = radiusKm / 111;
@@ -79,49 +60,35 @@ function bboxFromRadius(lat, lon, radiusNm) {
   };
 }
 
-/**
- * adsb.lol `point` 호출 (airplanes.live 호환 스키마)
- *   - 동일 응답 포맷: { ac: [{ hex, type, flight, lat, lon, alt_baro, ... }, ...] }
- *   - GET only (HEAD 는 405 반환하지만 GET 정상)
- */
-async function fetchAirplanesLive(lat, lon, radius) {
-  const apiUrl = `https://api.adsb.lol/v2/point/${lat}/${lon}/${radius}`;
-  const maxRetries = 3;
-  let lastError = null;
+async function fetchAdsbLive(lat, lon, radius) {
+  const urls = [
+    `https://api.airplanes.live/v2/point/${lat}/${lon}/${radius}`,
+    `https://api.adsb.lol/v2/point/${lat}/${lon}/${radius}`
+  ];
 
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
+  for (const url of urls) {
     try {
-      const response = await fetch(apiUrl, {
+      const response = await fetch(url, {
         headers: {
           'Accept': 'application/json',
           'User-Agent': 'koreasurveillance/1.0 (+https://www.koreasurveillance.com)'
-        }
+        },
+        signal: AbortSignal.timeout(3000)
       });
-      if (response.status === 429) {
-        const raHeader = response.headers.get('Retry-After');
-        const ra = raHeader != null ? parseFloat(raHeader) : NaN;
-        const retryAfter = (Number.isFinite(ra) && ra >= 0) ? ra : (attempt + 1) * 2;
-        if (attempt < maxRetries - 1) {
-          await sleep(retryAfter * 1000);
-          continue;
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data?.ac) && data.ac.length > 0) {
+          return { ok: true, ac: data.ac, source: url.includes('airplanes.live') ? 'airplanes.live' : 'adsb.lol' };
         }
-        return { ok: false, status: 429, ac: [] };
       }
-      if (!response.ok) throw new Error(`adsb.lol status ${response.status}`);
-      const data = await response.json();
-      return { ok: true, ac: Array.isArray(data?.ac) ? data.ac : [] };
     } catch (e) {
-      lastError = e;
-      if (attempt < maxRetries - 1) await sleep((attempt + 1) * 1000);
+      // try next url
     }
   }
-  console.warn('[aircraft] adsb.lol failed:', lastError?.message);
-  return { ok: false, status: 500, ac: [] };
+
+  return { ok: false, ac: [] };
 }
 
-/**
- * OpenSky OAuth2 토큰 (자격증명 있을 때만)
- */
 async function getOpenSkyToken() {
   if (!OPENSKY_CLIENT_ID || !OPENSKY_CLIENT_SECRET) return null;
   if (openSkyTokenCache.token && openSkyTokenCache.expires > Date.now()) {
@@ -136,7 +103,8 @@ async function getOpenSkyToken() {
     const res = await fetch(OPENSKY_AUTH_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body
+      body,
+      signal: AbortSignal.timeout(2500)
     });
     if (!res.ok) return null;
     const json = await res.json();
@@ -147,17 +115,10 @@ async function getOpenSkyToken() {
     };
     return json.access_token;
   } catch (e) {
-    console.warn('[aircraft] OpenSky token failed:', e.message);
     return null;
   }
 }
 
-/**
- * OpenSky 응답을 airplanes.live 스키마로 변환
- * OpenSky state vector: [icao24, callsign, origin_country, time_position, last_contact,
- *   longitude, latitude, baro_altitude_m, on_ground, velocity_ms, true_track,
- *   vertical_rate_ms, sensors, geo_altitude_m, squawk, spi, position_source, category]
- */
 function openSkyStateToAircraft(s) {
   if (!Array.isArray(s) || s.length < 11) return null;
   const [icao24, callsign, , , , lon, lat, baroAltM, onGround, velMs, track, vrMs, , geoAltM, squawk] = s;
@@ -169,7 +130,7 @@ function openSkyStateToAircraft(s) {
   return {
     hex: typeof icao24 === 'string' ? icao24.toLowerCase().trim() : '',
     type: 'opensky',
-    flight: typeof callsign === 'string' ? callsign : '',
+    flight: typeof callsign === 'string' ? callsign.trim() : '',
     lat,
     lon,
     alt_baro: onGround ? 'ground' : (altBaroFt ?? altGeomFt ?? 0),
@@ -186,18 +147,10 @@ function openSkyStateToAircraft(s) {
   };
 }
 
-/**
- * OpenSky `/states/all` 호출 (bbox 기반)
- */
 async function fetchOpenSky(lat, lon, radius) {
-  // Circuit breaker — 최근 실패가 있으면 cooldown 동안 호출 건너뛰기
   const now = Date.now();
   if (openSkyCircuit.failedAt > 0 && now - openSkyCircuit.failedAt < openSkyCircuit.cooldownMs) {
-    return {
-      ac: [],
-      diag: { auth: 'skipped', status: null, error: 'circuit_open', count: 0, ms: 0,
-              cooldown_remaining_ms: openSkyCircuit.cooldownMs - (now - openSkyCircuit.failedAt) }
-    };
+    return { ac: [], diag: { auth: 'skipped', error: 'circuit_open' } };
   }
 
   const { lamin, lamax, lomin, lomax } = bboxFromRadius(lat, lon, radius);
@@ -207,65 +160,30 @@ async function fetchOpenSky(lat, lon, radius) {
     'User-Agent': 'KoreanSurveillance/1.0 (+https://www.koreasurveillance.com)'
   };
   const token = await getOpenSkyToken();
-  let authMode = 'none';
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
-    authMode = 'oauth2';
   } else if (OPENSKY_USERNAME && OPENSKY_PASSWORD) {
     const basic = Buffer.from(`${OPENSKY_USERNAME}:${OPENSKY_PASSWORD}`).toString('base64');
     headers['Authorization'] = `Basic ${basic}`;
-    authMode = 'basic';
   }
 
-  const diag = { auth: authMode, status: null, error: null, count: 0, ms: 0 };
-  const t0 = Date.now();
   try {
-    // Vercel Hobby plan 함수 타임아웃(10s) 안에 fail-fast — OpenSky 미응답해도 airplanes.live는 살림
-    const controller = new AbortController();
-    const t = setTimeout(() => controller.abort(), 5000);
-    const res = await fetch(url, { headers, signal: controller.signal });
-    clearTimeout(t);
-    diag.ms = Date.now() - t0;
-    diag.status = res.status;
+    const res = await fetch(url, { headers, signal: AbortSignal.timeout(3000) });
     if (!res.ok) {
-      console.warn('[aircraft] OpenSky status', res.status);
-      diag.error = `HTTP ${res.status}`;
-      // 401/403: token expired/forbidden — invalidate cache and apply short 60s cooldown so next
-      // warm instance can re-authenticate. Other 4xx are considered permanent (5min circuit).
-      // 5xx are transient — circuit stays at 60s.
-      openSkyCircuit.consecutiveFails++;
       openSkyCircuit.failedAt = Date.now();
-      if (res.status === 401 || res.status === 403) {
-        openSkyTokenCache = { token: null, expires: 0 };
-        openSkyCircuit.cooldownMs = 60_000;
-      } else {
-        openSkyCircuit.cooldownMs = (res.status >= 400 && res.status < 500) ? 5 * 60_000 : 60_000;
-      }
-      return { ac: [], diag };
+      return { ac: [], diag: { status: res.status } };
     }
     const data = await res.json();
     const states = Array.isArray(data?.states) ? data.states : [];
     const ac = states.map(openSkyStateToAircraft).filter(Boolean);
-    diag.count = ac.length;
-    // 성공 시 circuit 리셋
     openSkyCircuit = { failedAt: 0, cooldownMs: 60_000, consecutiveFails: 0 };
-    return { ac, diag };
+    return { ac, diag: { status: 200, count: ac.length } };
   } catch (e) {
-    console.warn('[aircraft] OpenSky fetch failed:', e.message);
-    diag.error = e.message || 'fetch failed';
-    diag.ms = Date.now() - t0;
-    // 네트워크 실패 (timeout, fetch failed) — 점점 길게 backoff (60s → 5min)
-    openSkyCircuit.consecutiveFails++;
     openSkyCircuit.failedAt = Date.now();
-    openSkyCircuit.cooldownMs = Math.min(5 * 60_000, 60_000 * Math.pow(2, openSkyCircuit.consecutiveFails - 1));
-    return { ac: [], diag };
+    return { ac: [], diag: { error: e.message } };
   }
 }
 
-/**
- * 두 데이터 소스를 hex 기준 dedupe 병합 (airplanes.live 우선)
- * + 반경 외부 항공기 제거 (bbox는 정사각형이라 모서리 잡힘)
- */
 function mergeAndFilter(primary, secondary, lat, lon, radiusNm) {
   const radiusKm = radiusNm * NM_TO_KM;
   const seen = new Set();
@@ -283,7 +201,6 @@ function mergeAndFilter(primary, secondary, lat, lon, radiusNm) {
     if (!ac || typeof ac.lat !== 'number' || typeof ac.lon !== 'number') continue;
     const hex = (ac.hex || '').toLowerCase();
     if (hex && seen.has(hex)) continue;
-    // 반경 필터 — bbox 모서리 항공기 제외
     if (haversineKm(lat, lon, ac.lat, ac.lon) > radiusKm) continue;
     if (hex) seen.add(hex);
     out.push(ac);
@@ -296,10 +213,16 @@ export default async function handler(req, res) {
   if (setCorsHeaders(req, res)) return;
   if (await checkRateLimit(req, res)) return;
 
-  // 1초 폴링 환경 — edge cache 짧게(1s) + stale-while-revalidate 로 끊김 방지
   const parsedUrl = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
-  const queryLat = parsedUrl.searchParams.get('lat') || req.query?.lat || '37.5';
-  const queryLon = parsedUrl.searchParams.get('lon') || req.query?.lon || '127.0';
+  const hasLat = parsedUrl.searchParams.has('lat') || (req.query && req.query.lat !== undefined);
+  const hasLon = parsedUrl.searchParams.has('lon') || (req.query && req.query.lon !== undefined);
+
+  if (!hasLat || !hasLon) {
+    return res.status(400).json({ error: 'lat and lon are required parameters', ac: [] });
+  }
+
+  const queryLat = parsedUrl.searchParams.get('lat') || req.query?.lat;
+  const queryLon = parsedUrl.searchParams.get('lon') || req.query?.lon;
   const queryRadius = parsedUrl.searchParams.get('radius') || req.query?.radius || '250';
 
   const validation = validateCoordinates(queryLat, queryLon, queryRadius);
@@ -308,22 +231,13 @@ export default async function handler(req, res) {
   }
   const { lat: validLat, lon: validLon, radius: r } = validation.values;
 
-  // 두 소스 병렬 호출 — OpenSky 실패해도 airplanes.live만으로 응답
-  const [alResult, osResult] = await Promise.all([
-    fetchAirplanesLive(validLat, validLon, r),
+  const [adsbResult, osResult] = await Promise.all([
+    fetchAdsbLive(validLat, validLon, r),
     fetchOpenSky(validLat, validLon, r)
   ]);
   const osList = osResult.ac || [];
 
-  // airplanes.live 가 429라면 그래도 OpenSky 데이터로 응답
-  const merged = mergeAndFilter(alResult.ac || [], osList, validLat, validLon, r);
-
-  if (merged.length === 0 && !alResult.ok) {
-    return res.status(alResult.status === 429 ? 429 : 500).json({
-      error: alResult.status === 429 ? 'Rate limited by upstream API' : 'Failed to fetch aircraft data',
-      ac: []
-    });
-  }
+  const merged = mergeAndFilter(adsbResult.ac || [], osList, validLat, validLon, r);
 
   return res.status(200).json({
     ac: merged,
@@ -331,10 +245,10 @@ export default async function handler(req, res) {
     now: Date.now(),
     total: merged.length,
     sources: {
-      airplaneslive: alResult.ac?.length || 0,
+      adsb: adsbResult.ac?.length || 0,
+      adsb_src: adsbResult.source || 'none',
       opensky: osList.length,
-      merged: merged.length,
-      opensky_diag: osResult.diag
+      merged: merged.length
     }
   });
 }
