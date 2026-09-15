@@ -2233,48 +2233,140 @@
       transform: scale(1.25);
     }
 
-    /* Upward Stacking Direction Indicators */
+    /* Upward Arrow Background Watermark (Faint Shading pointing bottom to top) */
     .strip-dropzone {
       min-height: 55px !important;
-      position: relative;
+      position: relative !important;
+      background-repeat: no-repeat !important;
+      background-position: center center !important;
+      background-size: 48px 80% !important;
     }
 
-    .strip-dropzone::after {
-      content: '▲ 적재 순서 (아래에서 위로 적재) ▲';
-      position: absolute;
-      bottom: 4px;
-      right: 8px;
-      font-family: var(--font-mono);
-      font-size: 7.5px;
-      font-weight: 800;
-      color: var(--primary-soft);
-      opacity: 0.16;
-      pointer-events: none;
-      letter-spacing: 0.06em;
-      user-select: none;
+    #drop-dep-act, #drop-dep-que {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='300' viewBox='0 0 60 300' fill='none'%3E%3Cpath d='M30 280 L30 25 M14 45 L30 20 L46 45' stroke='%2300e475' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round' opacity='0.20'/%3E%3C/svg%3E") !important;
     }
 
-    .stack-dir-tag {
-      font-family: var(--font-mono);
-      font-size: 7.5px;
-      font-weight: 700;
-      color: var(--primary-soft);
-      opacity: 0.65;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      letter-spacing: -0.02em;
+    #drop-arr-act, #drop-arr-que {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='300' viewBox='0 0 60 300' fill='none'%3E%3Cpath d='M30 280 L30 25 M14 45 L30 20 L46 45' stroke='%23fbcb41' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round' opacity='0.20'/%3E%3C/svg%3E") !important;
     }
 
-    .stack-dir-arrow {
-      font-size: 8px;
-      color: #fbcb41;
-      display: inline-block;
-      animation: floatArrow 1.5s ease-in-out infinite alternate;
+    #drop-trn-act, #drop-trn-que {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='300' viewBox='0 0 60 300' fill='none'%3E%3Cpath d='M30 280 L30 25 M14 45 L30 20 L46 45' stroke='%2357a8ff' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round' opacity='0.20'/%3E%3C/svg%3E") !important;
     }
 
-    @keyframes floatArrow {
-      from { transform: translateY(0); }
+    #drop-circuit-l-ptn, #drop-circuit-upw, #drop-circuit-r-ptn, #drop-circuit-que {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='300' viewBox='0 0 60 300' fill='none'%3E%3Cpath d='M30 280 L30 25 M14 45 L30 20 L46 45' stroke='%23c084fc' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round' opacity='0.20'/%3E%3C/svg%3E") !important;
+    }
+
+    /* Card-Anchored 1-Click Move Confirmation Pill (Replaces heavy modal) */
+    .strip-drop-confirm-pill {
+      position: absolute !important;
+      top: 50% !important;
+      right: 6px !important;
+      transform: translateY(-50%) !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      background: rgba(12, 16, 23, 0.96) !important;
+      border: 1.5px solid #fbcb41 !important;
+      border-radius: 4px !important;
+      padding: 2px 8px !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7) !important;
+      z-index: 150 !important;
+      animation: pillPopIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    @keyframes pillPopIn {
+      0% { opacity: 0; transform: translateY(-50%) scale(0.85); }
+      100% { opacity: 1; transform: translateY(-50%) scale(1); }
+    }
+
+    .confirm-pill-label {
+      font-family: var(--font-mono) !important;
+      font-size: 8.5px !important;
+      font-weight: 800 !important;
+      color: #fbcb41 !important;
+      white-space: nowrap !important;
+    }
+
+    .pill-btn {
+      height: 18px !important;
+      padding: 0 8px !important;
+      font-family: var(--font-mono) !important;
+      font-size: 8px !important;
+      font-weight: 900 !important;
+      border-radius: 2px !important;
+      border: none !important;
+      cursor: pointer !important;
+      transition: filter 0.1s ease, transform 0.1s ease !important;
+      line-height: 1 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .pill-btn:hover {
+      filter: brightness(1.15) !important;
+      transform: translateY(-0.5px) !important;
+    }
+
+    .pill-btn.confirm {
+      background: #10b981 !important;
+      color: #ffffff !important;
+    }
+
+    .pill-btn.cancel {
+      background: #ef4444 !important;
+      color: #ffffff !important;
+    }
+
+    /* Stylus Pen Size Selector */
+    .pen-size-group {
+      display: flex !important;
+      align-items: center !important;
+      gap: 3px !important;
+      padding: 0 4px !important;
+      border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+
+    .pen-size-label {
+      font-family: var(--font-mono) !important;
+      font-size: 7.5px !important;
+      font-weight: 700 !important;
+      color: var(--text-muted) !important;
+      margin-right: 1px !important;
+    }
+
+    .pen-size-btn {
+      height: 16px !important;
+      width: 16px !important;
+      padding: 0 !important;
+      font-family: var(--font-mono) !important;
+      font-size: 8px !important;
+      font-weight: 800 !important;
+      border-radius: 2px !important;
+      border: 1px solid var(--outline-light) !important;
+      background: var(--surface-high) !important;
+      color: var(--primary-bright) !important;
+      cursor: pointer !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 0.1s ease !important;
+    }
+
+    .pen-size-btn:hover {
+      background: var(--surface-hover) !important;
+      border-color: var(--primary) !important;
+    }
+
+    .pen-size-btn.active {
+      background: var(--primary) !important;
+      color: #0c0f14 !important;
+      border-color: var(--primary-bright) !important;
+      font-weight: 900 !important;
+    }
       to { transform: translateY(-2px); }
     }
 </style>
@@ -2331,15 +2423,21 @@
           <!-- Wacom Stylus & Handwritten Memo Toolbar -->
           <div class="header-pen-toolbar" id="headerPenToolbar">
             <button type="button" class="pen-tool-btn active" id="btnPenModeAuto" title="와콤 스타일러스 펜 감지 시 자동 필기, 손가락은 터치/조작 (Palm Rejection)">
-              <span class="pen-icon">&#x270F;&#xFE0F;</span> <span id="penModeLabel">펜: AUTO</span>
+              <span id="penModeLabel">펜: AUTO</span>
             </button>
             <div class="pen-color-group">
               <button type="button" class="pen-color-dot active" data-color="#ef4444" title="관제 적색 펜" style="background:#ef4444;"></button>
               <button type="button" class="pen-color-dot" data-color="#38bdf8" title="청색 펜" style="background:#38bdf8;"></button>
               <button type="button" class="pen-color-dot" data-color="rgba(250, 204, 21, 0.55)" title="형광펜" style="background:#facc15;"></button>
-              <button type="button" class="pen-tool-btn" id="btnPenEraser" title="지우개 (펜 사이드키/우클릭 시에도 토글)">
-                <span>&#x1F9F9;</span> 지우개
-              </button>
+            </div>
+            <button type="button" class="pen-tool-btn" id="btnPenEraser" title="지우개 (펜 사이드키/우클릭 시에도 토글)">
+              지우개
+            </button>
+            <div class="pen-size-group">
+              <span class="pen-size-label">굵기</span>
+              <button type="button" class="pen-size-btn" data-size="1" title="얇게 (1px)">1</button>
+              <button type="button" class="pen-size-btn active" data-size="2" title="보통 (2px)">2</button>
+              <button type="button" class="pen-size-btn" data-size="4" title="굵게 (4px)">4</button>
             </div>
             <button type="button" class="pen-tool-btn" id="btnClearAllInk" title="화면의 모든 스트립 수기 필기 초기화">전체 펜지움</button>
           </div>
@@ -2528,7 +2626,6 @@
               <div class="bay-sub-section active-section" id="bay-sub-dep-act" data-bay="DEPARTURE" data-status="DEP_ACTIVE">
                 <div class="sub-section-header">
                   <span>활성 스트립 (ACTIVE)</span>
-                  <span class="stack-dir-tag"><span class="stack-dir-arrow">▲</span> 하&rarr;상 적재</span>
                 </div>
                 <div class="strip-dropzone" id="drop-dep-act"></div>
               </div>
@@ -2542,7 +2639,6 @@
               <div class="bay-sub-section queue-section" id="bay-sub-dep-que" data-bay="DEPARTURE" data-status="DEP_QUEUE">
                 <div class="sub-section-header">
                   <span>출발 대기열 (QUEUE)</span>
-                  <span class="stack-dir-tag"><span class="stack-dir-arrow">▲</span> 하&rarr;상 적재</span>
                 </div>
                 <div class="strip-dropzone" id="drop-dep-que"></div>
               </div>
@@ -2564,7 +2660,6 @@
               <div class="bay-sub-section active-section" id="bay-sub-arr-act" data-bay="ARRIVAL" data-status="ARR_ACTIVE">
                 <div class="sub-section-header">
                   <span>활성 스트립 (ACTIVE)</span>
-                  <span class="stack-dir-tag"><span class="stack-dir-arrow">▲</span> 하&rarr;상 적재</span>
                 </div>
                 <div class="strip-dropzone" id="drop-arr-act"></div>
               </div>
@@ -2578,7 +2673,6 @@
               <div class="bay-sub-section queue-section" id="bay-sub-arr-que" data-bay="ARRIVAL" data-status="ARR_QUEUE">
                 <div class="sub-section-header">
                   <span>접근/도착 대기열 (QUEUE)</span>
-                  <span class="stack-dir-tag"><span class="stack-dir-arrow">▲</span> 하&rarr;상 적재</span>
                 </div>
                 <div class="strip-dropzone" id="drop-arr-que"></div>
               </div>
@@ -2600,7 +2694,6 @@
               <div class="bay-sub-section active-section" id="bay-sub-trn-act" data-bay="TRANSIT" data-status="TRN_ACTIVE">
                 <div class="sub-section-header">
                   <span>활성 스트립 (ACTIVE)</span>
-                  <span class="stack-dir-tag"><span class="stack-dir-arrow">▲</span> 하&rarr;상 적재</span>
                 </div>
                 <div class="strip-dropzone" id="drop-trn-act"></div>
               </div>
@@ -2614,7 +2707,6 @@
               <div class="bay-sub-section queue-section" id="bay-sub-trn-que" data-bay="TRANSIT" data-status="TRN_QUEUE">
                 <div class="sub-section-header">
                   <span>통과 대기열 (QUEUE)</span>
-                  <span class="stack-dir-tag"><span class="stack-dir-arrow">▲</span> 하&rarr;상 적재</span>
                 </div>
                 <div class="strip-dropzone" id="drop-trn-que"></div>
               </div>
@@ -2636,7 +2728,6 @@
               <div class="bay-sub-section circuit-sub-section" id="bay-sub-cct-l-ptn" data-bay="CIRCUIT" data-status="CCT_L_PTN">
                 <div class="sub-section-header">
                   <span style="color: #c084fc; font-weight: 800;">L/PTN (Left Downwind)</span>
-                  <span class="stack-dir-tag"><span class="stack-dir-arrow">▲</span> 하&rarr;상 적재</span>
                   <span class="bay-count-badge" id="cctLPtnCount">0</span>
                 </div>
                 <div class="strip-dropzone" id="drop-circuit-l-ptn"></div>
@@ -2651,7 +2742,6 @@
               <div class="bay-sub-section circuit-sub-section" id="bay-sub-cct-upw" data-bay="CIRCUIT" data-status="CCT_UPW">
                 <div class="sub-section-header">
                   <span style="color: #a855f7; font-weight: 800;">UPW (Upwind / Leg)</span>
-                  <span class="stack-dir-tag"><span class="stack-dir-arrow">▲</span> 하&rarr;상 적재</span>
                   <span class="bay-count-badge" id="cctUpwCount">0</span>
                 </div>
                 <div class="strip-dropzone" id="drop-circuit-upw"></div>
@@ -2666,7 +2756,6 @@
               <div class="bay-sub-section circuit-sub-section" id="bay-sub-cct-r-ptn" data-bay="CIRCUIT" data-status="CCT_R_PTN">
                 <div class="sub-section-header">
                   <span style="color: #c084fc; font-weight: 800;">R/PTN (Right Downwind)</span>
-                  <span class="stack-dir-tag"><span class="stack-dir-arrow">▲</span> 하&rarr;상 적재</span>
                   <span class="bay-count-badge" id="cctRPtnCount">0</span>
                 </div>
                 <div class="strip-dropzone" id="drop-circuit-r-ptn"></div>
@@ -2681,7 +2770,6 @@
               <div class="bay-sub-section queue-section circuit-queue-section" id="bay-sub-cct-que" data-bay="CIRCUIT" data-status="CCT_QUEUE">
                 <div class="sub-section-header">
                   <span style="color: #e9d5ff; font-weight: 800;">장주 대기열 (QUEUE)</span>
-                  <span class="stack-dir-tag"><span class="stack-dir-arrow">▲</span> 하&rarr;상 적재</span>
                   <span class="bay-count-badge" id="cctQueCount">0</span>
                 </div>
                 <div class="strip-dropzone" id="drop-circuit-que"></div>
@@ -2693,9 +2781,7 @@
     </div>
   </div>
 
-  <!-- Contextual Floating Drop Confirmation Popover with Shield Backdrop -->
-  <div id="dropConfirmBackdrop" class="popover-backdrop">
-    <div id="dropConfirmPopover" class="drop-confirm-popover"></div>
+  
   </div>
 
   <!-- Settings Modal (Matching Korean Air ACROSS / IFS Spec) -->
@@ -3725,11 +3811,12 @@
     }
 
     // Create Structured Flight Strip Card with Bottom Action Bar & Sequence Badge
-            // Global Stylus Pen Config & Hardware Palm Rejection State
+                // Global Stylus Pen Config & Hardware Palm Rejection State
     window.efsPenConfig = {
       mode: 'auto', // 'auto' (hardware stylus only), 'always' (touch/mouse too), 'off'
       color: '#ef4444',
       width: 2.2,
+      eraserWidth: 14,
       isEraser: false
     };
 
@@ -3801,11 +3888,11 @@
         const useEraser = window.efsPenConfig.isEraser || isRightBtn;
         if (useEraser) {
           ctx.globalCompositeOperation = 'destination-out';
-          ctx.lineWidth = 14;
+          ctx.lineWidth = window.efsPenConfig.eraserWidth || 14;
         } else {
           ctx.globalCompositeOperation = 'source-over';
           ctx.strokeStyle = window.efsPenConfig.color;
-          ctx.lineWidth = window.efsPenConfig.width;
+          ctx.lineWidth = window.efsPenConfig.width || 2.2;
         }
 
         ctx.moveTo(lastX, lastY);
@@ -4095,11 +4182,11 @@
           <div class="strip-card-bottom-bar">
             <div class="inline-edit-banner">
               <span class="pulse-dot"></span>
-              <span>수정 중: 필드 입력 후 [Enter] 또는 [잠금] 클릭</span>
+              <span>수정 중</span>
             </div>
             <div class="strip-bottom-actions">
-              <button type="button" class="strip-bottom-btn act-lock-save" onclick="saveInlineEdit('${strip.id}', event)">🔒 저장 및 잠금</button>
-              <button type="button" class="strip-bottom-btn act-lock-cancel" onclick="cancelInlineEdit('${strip.id}', event)">✕ 취소</button>
+              <button type="button" class="strip-bottom-btn act-lock-save" onclick="saveInlineEdit('${strip.id}', event)">저장</button>
+              <button type="button" class="strip-bottom-btn act-lock-cancel" onclick="cancelInlineEdit('${strip.id}', event)">취소</button>
             </div>
           </div>
         `;
@@ -4264,7 +4351,7 @@
               ${milestonePillsHtml}
             </div>
             <div class="strip-bottom-actions">
-              <button type="button" class="strip-bottom-btn act-ink-clear" onclick="clearStripInk('${strip.id}', event)" title="이 스트립의 수기 필기만 지우기">✕ 펜지움</button>
+              <button type="button" class="strip-bottom-btn act-ink-clear" onclick="clearStripInk('${strip.id}', event)" title="이 스트립의 수기 필기만 지우기">펜지움</button>
               ${actionButtonsHtml}
             </div>
           </div>
@@ -4555,86 +4642,59 @@
       renderAllStrips();
     }
 
+        // 1-Click Card-Anchored Drop Confirmation (Lightweight, No Modal Window)
+    let activeDropRevertFn = null;
+
     function showDropConfirmPopover(strip, sourceBay, targetBay, sourceStatus, targetStatus, insertBeforeId, evt) {
-      const backdrop = document.getElementById('dropConfirmBackdrop');
-      const popover = document.getElementById('dropConfirmPopover');
-      if (!backdrop || !popover) return;
+      // Clean up any existing confirm pill
+      if (activeDropRevertFn) {
+        activeDropRevertFn();
+        activeDropRevertFn = null;
+      }
+      document.querySelectorAll('.strip-drop-confirm-pill').forEach(el => el.remove());
 
-      const bayNames = { DEPARTURE: '출발', ARRIVAL: '도착', TRANSIT: '통과', CIRCUIT: '장주' };
-      const statusNames = {
-        DEP_ACTIVE: '활성 (ACTIVE)', DEP_QUEUE: '대기열 (QUEUE)',
-        ARR_ACTIVE: '활성 (ACTIVE)', ARR_QUEUE: '대기열 (QUEUE)',
-        TRN_ACTIVE: '활성 (ACTIVE)', TRN_QUEUE: '대기열 (QUEUE)',
-        CCT_L_PTN: 'L/PTN (Left Downwind)',
-        CCT_UPW: 'UPW (Upwind / Leg)',
-        CCT_R_PTN: 'R/PTN (Right Downwind)',
-        CCT_QUEUE: '장주 대기열 (QUEUE)'
-      };
-
-      const fromLabel = `[${bayNames[sourceBay] || sourceBay}] ${statusNames[sourceStatus] || sourceStatus}`;
-      const toLabel = `[${bayNames[targetBay] || targetBay}] ${statusNames[targetStatus] || targetStatus}`;
-
-      popover.innerHTML = `
-        <div class="popover-header">
-          <span class="popover-title">대시보드 / 상태 이동 확인</span>
-          <span class="popover-acid">${strip.acid}</span>
-        </div>
-        <div class="popover-body">
-          <div class="popover-route-row">
-            <span class="pop-from">${fromLabel}</span>
-            <span class="pop-arrow">&rarr;</span>
-            <span class="pop-to">${toLabel}</span>
-          </div>
-          <div class="popover-subtext">해당 스트립을 <strong>${toLabel}</strong>로 이동하시겠습니까?</div>
-        </div>
-        <div class="popover-actions">
-          <button type="button" class="popover-btn confirm-btn" id="popConfirmBtn">이동 확인</button>
-          <button type="button" class="popover-btn cancel-btn" id="popCancelBtn">취소</button>
-        </div>
-      `;
-
-      let posX = window.innerWidth / 2 - 150;
-      let posY = window.innerHeight / 2 - 80;
-
-      if (evt && evt.item) {
-        const r = evt.item.getBoundingClientRect();
-        if (r.width > 0 && r.height > 0) {
-          posX = r.left + 16;
-          posY = r.bottom + 6;
-          if (posY + 160 > window.innerHeight) {
-            posY = Math.max(16, r.top - 145);
-          }
-        }
+      const droppedCard = evt && evt.item ? evt.item : document.getElementById(`strip-${strip.id}`);
+      if (!droppedCard) {
+        applyStripReorder(strip.id, targetBay, targetStatus, insertBeforeId);
+        return;
       }
 
-      posX = Math.min(Math.max(16, posX), window.innerWidth - 320);
-      posY = Math.min(Math.max(16, posY), window.innerHeight - 170);
+      const bayNames = { DEPARTURE: '출발', ARRIVAL: '도착', TRANSIT: '통과', CIRCUIT: '장주' };
+      const toLabel = `${bayNames[targetBay] || targetBay}`;
 
-      popover.style.left = `${posX}px`;
-      popover.style.top = `${posY}px`;
-      backdrop.style.display = 'block';
+      // Create compact floating confirmation pill right on the dropped card
+      const pill = document.createElement('div');
+      pill.className = 'strip-drop-confirm-pill';
+      pill.id = 'activeDropConfirmPill';
+      pill.innerHTML = `
+        <span class="confirm-pill-label">${toLabel} 이동:</span>
+        <button type="button" class="pill-btn confirm" id="btnDropQuickConfirm">확인</button>
+        <button type="button" class="pill-btn cancel" id="btnDropQuickCancel">취소</button>
+      `;
+
+      droppedCard.appendChild(pill);
 
       let handled = false;
-
-      const dismiss = () => {
-        backdrop.style.display = 'none';
-        popover.innerHTML = '';
-      };
 
       const revert = () => {
         if (handled) return;
         handled = true;
+        pill.remove();
         if (evt && evt.from && evt.item) {
           const originalNext = evt.from.children[evt.oldIndex];
           evt.from.insertBefore(evt.item, originalNext || null);
         }
-        dismiss();
+        activeDropRevertFn = null;
       };
 
-      document.getElementById('popConfirmBtn').onclick = (e) => {
+      activeDropRevertFn = revert;
+
+      document.getElementById('btnDropQuickConfirm').onclick = (e) => {
         if (handled) return;
         handled = true;
         e.stopPropagation();
+        pill.remove();
+        activeDropRevertFn = null;
         applyStripReorder(strip.id, targetBay, targetStatus, insertBeforeId);
         recordOperationToSupabase(
           strip,
@@ -4643,23 +4703,27 @@
           targetBay,
           sourceStatus,
           targetStatus,
-          `[${strip.acid}] ${fromLabel} -> ${toLabel} 이동 확인 (순번 #${strip.bayEntryOrder})`
+          `[${strip.acid}] ${sourceBay} -> ${targetBay} 이동 확인 (순서 #${strip.bayEntryOrder})`
         );
-        showToast(`[${strip.acid}] ${toLabel} 이동 완료 (순번 #${strip.bayEntryOrder})`);
-        dismiss();
+        showToast(`[${strip.acid}] ${toLabel} 이동 완료 (순서 #${strip.bayEntryOrder})`);
       };
 
-      document.getElementById('popCancelBtn').onclick = (e) => {
+      document.getElementById('btnDropQuickCancel').onclick = (e) => {
         e.stopPropagation();
         revert();
         showToast(`[${strip.acid}] 이동이 취소되었습니다.`);
       };
 
-      backdrop.onclick = (e) => {
-        if (e.target === backdrop) {
-          revert();
+      // Auto revert on outside pointerdown
+      const outsideHandler = (outEvt) => {
+        if (!pill.contains(outEvt.target)) {
+          window.removeEventListener('pointerdown', outsideHandler, true);
+          if (!handled) revert();
         }
       };
+      setTimeout(() => {
+        window.addEventListener('pointerdown', outsideHandler, true);
+      }, 50);
     }
 
     // Column Width Resizers
@@ -5107,20 +5171,20 @@
 
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        const backdrop = document.getElementById('dropConfirmBackdrop');
-        if (backdrop && backdrop.style.display === 'block') {
-          backdrop.click();
+        if (activeDropRevertFn) {
+          activeDropRevertFn();
         }
       }
     });
 
     
-    function initPenToolbar() {
+        function initPenToolbar() {
       const btnAuto = document.getElementById('btnPenModeAuto');
       const lblMode = document.getElementById('penModeLabel');
       const btnEraser = document.getElementById('btnPenEraser');
       const btnClearAll = document.getElementById('btnClearAllInk');
       const colorDots = document.querySelectorAll('.pen-color-dot');
+      const sizeBtns = document.querySelectorAll('.pen-size-btn');
 
       if (btnAuto) {
         btnAuto.onclick = () => {
@@ -5128,17 +5192,17 @@
             window.efsPenConfig.mode = 'always';
             if (lblMode) lblMode.innerText = '펜: ALWAYS';
             btnAuto.classList.add('active');
-            showToast('펜 모드: 항상 켬 (마우스/터치/펜 모두 필기 가능)');
+            showToast('펜 모드: 항상 켬 (마우스/터치/펜 필기 가능)');
           } else if (window.efsPenConfig.mode === 'always') {
             window.efsPenConfig.mode = 'off';
             if (lblMode) lblMode.innerText = '펜: OFF';
             btnAuto.classList.remove('active');
-            showToast('펜 모드: 끔 (일반 터치/클릭 모드)');
+            showToast('펜 모드: 끔 (일반 조작 모드)');
           } else {
             window.efsPenConfig.mode = 'auto';
             if (lblMode) lblMode.innerText = '펜: AUTO';
             btnAuto.classList.add('active');
-            showToast('펜 모드: AUTO (와콤 스타일러스 펜 자동 감지 / 팜 리젝션)');
+            showToast('펜 모드: AUTO (와콤 펜 자동 필기 / 손가락 조작)');
           }
         };
       }
@@ -5150,7 +5214,7 @@
           colorDots.forEach(d => d.classList.remove('active'));
           dot.classList.add('active');
           if (btnEraser) btnEraser.classList.remove('active');
-          showToast(`펜 색상 선택: ${window.efsPenConfig.color}`);
+          showToast(`펜 색상 변경`);
         };
       });
 
@@ -5160,7 +5224,7 @@
           if (window.efsPenConfig.isEraser) {
             btnEraser.classList.add('active');
             colorDots.forEach(d => d.classList.remove('active'));
-            showToast('지우개 모드 활성화 (선택 영역 지우기)');
+            showToast('지우개 모드 활성화');
           } else {
             btnEraser.classList.remove('active');
             const firstDot = colorDots[0];
@@ -5168,6 +5232,25 @@
           }
         };
       }
+
+      sizeBtns.forEach(btn => {
+        btn.onclick = () => {
+          const sz = parseInt(btn.getAttribute('data-size')) || 2;
+          sizeBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          if (sz === 1) {
+            window.efsPenConfig.width = 1.2;
+            window.efsPenConfig.eraserWidth = 8;
+          } else if (sz === 4) {
+            window.efsPenConfig.width = 4.0;
+            window.efsPenConfig.eraserWidth = 26;
+          } else {
+            window.efsPenConfig.width = 2.2;
+            window.efsPenConfig.eraserWidth = 14;
+          }
+          showToast(`펜/지우개 굵기: ${sz}`);
+        };
+      });
 
       if (btnClearAll) {
         btnClearAll.onclick = () => clearAllInk();
