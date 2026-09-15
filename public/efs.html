@@ -1618,6 +1618,104 @@
       border-color: var(--primary);
     }
 
+    /* Settings Tab System */
+    .settings-tabs {
+      display: flex;
+      gap: 2px;
+      border-bottom: 1px solid var(--outline);
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+    .settings-tab-btn {
+      padding: 6px 12px;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--primary-soft);
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: color 0.1s, border-color 0.1s;
+      white-space: nowrap;
+    }
+    .settings-tab-btn:hover { color: var(--primary-bright); }
+    .settings-tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    .settings-tab-panel { display: none; }
+    .settings-tab-panel.active { display: block; }
+
+    /* Strip Config panel */
+    .strip-config-bay-tabs {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 8px;
+    }
+    .strip-config-bay-btn {
+      padding: 4px 10px;
+      font-size: 9.5px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
+      color: var(--primary-soft);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+    }
+    .strip-config-bay-btn:hover { background: var(--surface-hover); color: var(--primary-bright); }
+    .strip-config-bay-btn.active {
+      background: var(--surface-active);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .strip-config-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 8px;
+    }
+    .strip-config-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 6px;
+      border-radius: 3px;
+      border: 1px solid var(--outline);
+      background: var(--surface-container);
+      cursor: pointer;
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .strip-config-item:hover { background: var(--surface-hover); border-color: var(--outline-light); }
+    .strip-config-item label {
+      font-size: 9.5px;
+      font-weight: 600;
+      color: var(--primary-soft);
+      cursor: pointer;
+      flex: 1;
+      line-height: 1.3;
+    }
+    .strip-config-item input[type="checkbox"] {
+      accent-color: var(--primary);
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .strip-config-item input[type="checkbox"]:checked + label { color: var(--primary-bright); }
+    .strip-config-section-title {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      padding: 4px 0 2px;
+      grid-column: 1 / -1;
+      border-bottom: 1px solid var(--outline);
+    }
+
     /* Modal Backdrop & Container */
     .modal-backdrop {
       position: fixed;
@@ -3330,58 +3428,93 @@
   <!-- Settings Modal (Matching Korean Air ACROSS / IFS Spec) -->
   <!-- Settings Modal (Full Korean Air ACROSS / IFS Specification) -->
   <div class="modal-backdrop" id="settingsModal">
-    <div class="modal-dialog" style="width: 460px;">
+    <div class="modal-dialog" style="width: 520px; max-height: 85vh; display: flex; flex-direction: column;">
       <div class="modal-header">
         <span class="modal-title" id="lbl-settings-title">관제단말 환경설정 (SETTINGS)</span>
         <button class="modal-close-btn" onclick="closeSettingsModal()">&times;</button>
       </div>
-      <div class="modal-body">
-        <!-- 1. Theme Mode -->
-        <div class="modal-row">
-          <span style="font-weight: 700; color: var(--primary-soft); display: block; margin-bottom: 6px;" id="lbl-theme-title">테마 모드 (Color Theme)</span>
-          <div class="theme-select-grid">
-            <button type="button" class="theme-btn active" id="tbtn-across" onclick="selectModalTheme('theme-across')">Korean Air ACROSS (기본)</button>
-            <button type="button" class="theme-btn" id="tbtn-crt" onclick="selectModalTheme('theme-crt')">Tactical CRT Green</button>
-            <button type="button" class="theme-btn" id="tbtn-mono" onclick="selectModalTheme('theme-mono')">Dark Mono White</button>
-            <button type="button" class="theme-btn" id="tbtn-navy" onclick="selectModalTheme('theme-navy')">Deep Navy Blue</button>
-            <button type="button" class="theme-btn" id="tbtn-light" onclick="selectModalTheme('theme-light')">Daylight Radar</button>
-          </div>
-        </div>
 
-        <!-- 2. Language Selection -->
-        <div class="modal-row" style="border-top: 1px solid var(--outline); padding-top: 8px; margin-top: 8px;">
-          <span style="font-weight: 700; color: var(--primary-soft); display: block; margin-bottom: 6px;" id="lbl-lang-title">언어 표기 설정 (Language / i18n)</span>
-          <div class="lang-select-grid">
-            <button type="button" class="lang-btn active" id="lbtn-bilingual" onclick="selectModalLanguage('bilingual')">한/영 혼재 (기본)</button>
-            <button type="button" class="lang-btn" id="lbtn-ko" onclick="selectModalLanguage('ko')">한글 전용 (KO)</button>
-            <button type="button" class="lang-btn" id="lbtn-en" onclick="selectModalLanguage('en')">English (EN)</button>
-          </div>
-        </div>
-
-        <!-- 3. CRT Scanlines Effect -->
-        <div class="modal-row-switch" style="border-top: 1px solid var(--outline); padding-top: 8px; margin-top: 8px;">
-          <div class="modal-label-switch">
-            <span id="lbl-scanlines-title" style="font-size: 10px; font-weight: 700; color: var(--primary-soft); display: block;">CRT 스캔라인 이펙트</span>
-            <span class="modal-desc-sub" id="lbl-scanlines-sub" style="font-size: 8.5px; color: var(--text-muted);">CRT 모니터 아날로그 주사선 효과</span>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="switch-scanlines" onchange="toggleModalScanlinesSwitch(this.checked)">
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <!-- 4. Typography Selection -->
-        <div class="modal-row" style="border-top: 1px solid var(--outline); padding-top: 8px; margin-top: 8px;">
-          <span style="font-weight: 700; color: var(--primary-soft); display: block; margin-bottom: 6px;" id="lbl-font-title">글씨체 설정 (Typography)</span>
-          <select id="setting-font" class="airport-select" style="width: 100%; height: 26px; font-size: 10px; background: var(--surface-container); color: var(--primary-bright); border: 1px solid var(--outline); border-radius: 3px; padding: 0 6px;">
-            <option value="pretendard">Pretendard</option>
-            <option value="jetbrains">JetBrains Mono</option>
-            <option value="noto">Noto Sans KR</option>
-            <option value="system">System UI</option>
-          </select>
-        </div>
+      <!-- Settings Tabs -->
+      <div class="settings-tabs" style="padding: 0 12px; background: var(--surface-high);">
+        <button class="settings-tab-btn active" id="stab-display" onclick="switchSettingsTab('display')">표시 설정</button>
+        <button class="settings-tab-btn" id="stab-stripconfig" onclick="switchSettingsTab('stripconfig')">스트립 구성</button>
       </div>
-      <div class="modal-footer">
+
+      <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 12px;">
+
+        <!-- TAB: Display Settings -->
+        <div class="settings-tab-panel active" id="spanel-display">
+          <!-- 1. Theme Mode -->
+          <div class="modal-row">
+            <span style="font-weight: 700; color: var(--primary-soft); display: block; margin-bottom: 6px;" id="lbl-theme-title">테마 모드 (Color Theme)</span>
+            <div class="theme-select-grid">
+              <button type="button" class="theme-btn active" id="tbtn-across" onclick="selectModalTheme('theme-across')">Korean Air ACROSS (기본)</button>
+              <button type="button" class="theme-btn" id="tbtn-crt" onclick="selectModalTheme('theme-crt')">Tactical CRT Green</button>
+              <button type="button" class="theme-btn" id="tbtn-mono" onclick="selectModalTheme('theme-mono')">Dark Mono White</button>
+              <button type="button" class="theme-btn" id="tbtn-navy" onclick="selectModalTheme('theme-navy')">Deep Navy Blue</button>
+              <button type="button" class="theme-btn" id="tbtn-light" onclick="selectModalTheme('theme-light')">Daylight Radar</button>
+            </div>
+          </div>
+
+          <!-- 2. Language Selection -->
+          <div class="modal-row" style="border-top: 1px solid var(--outline); padding-top: 8px; margin-top: 8px;">
+            <span style="font-weight: 700; color: var(--primary-soft); display: block; margin-bottom: 6px;" id="lbl-lang-title">언어 표기 설정 (Language / i18n)</span>
+            <div class="lang-select-grid">
+              <button type="button" class="lang-btn active" id="lbtn-bilingual" onclick="selectModalLanguage('bilingual')">한/영 혼재 (기본)</button>
+              <button type="button" class="lang-btn" id="lbtn-ko" onclick="selectModalLanguage('ko')">한글 전용 (KO)</button>
+              <button type="button" class="lang-btn" id="lbtn-en" onclick="selectModalLanguage('en')">English (EN)</button>
+            </div>
+          </div>
+
+          <!-- 3. CRT Scanlines Effect -->
+          <div class="modal-row-switch" style="border-top: 1px solid var(--outline); padding-top: 8px; margin-top: 8px;">
+            <div class="modal-label-switch">
+              <span id="lbl-scanlines-title" style="font-size: 10px; font-weight: 700; color: var(--primary-soft); display: block;">CRT 스캔라인 이펙트</span>
+              <span class="modal-desc-sub" id="lbl-scanlines-sub" style="font-size: 8.5px; color: var(--text-muted);">CRT 모니터 아날로그 주사선 효과</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="switch-scanlines" onchange="toggleModalScanlinesSwitch(this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 4. Typography Selection -->
+          <div class="modal-row" style="border-top: 1px solid var(--outline); padding-top: 8px; margin-top: 8px;">
+            <span style="font-weight: 700; color: var(--primary-soft); display: block; margin-bottom: 6px;" id="lbl-font-title">글씨체 설정 (Typography)</span>
+            <select id="setting-font" class="airport-select" style="width: 100%; height: 26px; font-size: 10px; background: var(--surface-container); color: var(--primary-bright); border: 1px solid var(--outline); border-radius: 3px; padding: 0 6px;">
+              <option value="pretendard">Pretendard</option>
+              <option value="jetbrains">JetBrains Mono</option>
+              <option value="noto">Noto Sans KR</option>
+              <option value="system">System UI</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- TAB: Strip Field Configuration -->
+        <div class="settings-tab-panel" id="spanel-stripconfig">
+          <div style="font-size: 9.5px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.5;">
+            스트립 유형별로 표시할 정보 칸을 ON/OFF 설정합니다. 체크 해제된 항목은 스트립 카드에서 숨겨집니다.
+          </div>
+
+          <!-- Bay Type Tabs -->
+          <div class="strip-config-bay-tabs">
+            <button class="strip-config-bay-btn active" id="scbay-DEP" onclick="switchStripConfigBay('DEP')">출발 (DEP)</button>
+            <button class="strip-config-bay-btn" id="scbay-ARR" onclick="switchStripConfigBay('ARR')">도착 (ARR)</button>
+            <button class="strip-config-bay-btn" id="scbay-TRN" onclick="switchStripConfigBay('TRN')">통과 (TRN)</button>
+            <button class="strip-config-bay-btn" id="scbay-CCT" onclick="switchStripConfigBay('CCT')">장주 (CCT)</button>
+          </div>
+
+          <!-- Field Config Grid (rendered dynamically by JS) -->
+          <div id="strip-config-field-panel"></div>
+
+          <div style="border-top: 1px solid var(--outline); margin-top: 10px; padding-top: 8px; display: flex; justify-content: flex-end; gap: 6px;">
+            <button type="button" class="excel-act-btn" onclick="resetStripConfig()" style="font-size: 9px;">기본값 복원</button>
+          </div>
+        </div>
+
+      </div><!-- end modal-body -->
+
+      <div class="modal-footer" style="flex-shrink: 0;">
         <button type="button" class="btn-modal-action btn-modal-cancel" id="btn-settings-cancel" onclick="closeSettingsModal()">취소</button>
         <button type="button" class="btn-modal-action btn-modal-save" id="btn-settings-save" onclick="applyAndSaveSettings()">저장 및 적용</button>
       </div>
@@ -4960,6 +5093,8 @@
           }
         }
 
+        const _fv = (fieldId) => isStripFieldVisible(fieldId, strip.operationType);
+
         el.innerHTML = `
           <!-- Transparent Overlay Canvas for Stylus Pen Handwriting -->
           <canvas class="strip-ink-canvas" id="canvas-${strip.id}"></canvas>
@@ -4973,56 +5108,56 @@
 
             <!-- Section 1 (Left: 1/4 division, 4 vertical rows) -->
             <div class="sec-1">
-              <div class="sec1-row row-1 box-1 strip-acid">${strip.acid || ''}</div>
+              <div class="sec1-row row-1 box-1 strip-acid">${_fv('acid') ? (strip.acid || '') : ''}</div>
               <div class="sec1-row row-2">
-                <div class="sec1-sub box-2">${strip.typeWake || (strip.type ? `${strip.type}/M` : '')}</div>
-                <div class="sec1-sub box-2a">${strip.rwy || ''}</div>
+                <div class="sec1-sub box-2">${_fv('typeWake') ? (strip.typeWake || (strip.type ? `${strip.type}/M` : '')) : ''}</div>
+                <div class="sec1-sub box-2a">${_fv('rwy') ? (strip.rwy || '') : ''}</div>
               </div>
-              <div class="sec1-row row-3 box-3">${strip.idRoute || ((strip.origin && strip.dest) ? `${strip.acid || ''}/${strip.origin}-${strip.dest}` : (strip.acid || ''))}</div>
-              <div class="sec1-row row-4 box-4">${strip.cid || ''}</div>
+              <div class="sec1-row row-3 box-3">${_fv('idRoute') ? (strip.idRoute || ((strip.origin && strip.dest) ? `${strip.acid || ''}/${strip.origin}-${strip.dest}` : (strip.acid || ''))) : ''}</div>
+              <div class="sec1-row row-4 box-4">${_fv('cid') ? (strip.cid || '') : ''}</div>
             </div>
 
             <!-- Section 2 (1/3 division, 3 vertical rows) -->
             <div class="sec-2">
-              <div class="sec-row3 box-5">${strip.ssr || strip.squawkMode || ''}</div>
-              <div class="sec-row3 box-6">${strip.schedTime || strip.time || ''}</div>
-              <div class="sec-row3 box-7">${strip.clearance || ''}</div>
+              <div class="sec-row3 box-5">${_fv('ssr') ? (strip.ssr || strip.squawkMode || '') : ''}</div>
+              <div class="sec-row3 box-6">${_fv('schedTime') ? (strip.schedTime || strip.time || '') : ''}</div>
+              <div class="sec-row3 box-7">${_fv('clearance') ? (strip.clearance || '') : ''}</div>
             </div>
 
             <!-- Section 3 (1/3 division, 3 vertical rows) -->
             <div class="sec-3">
-              <div class="sec-row3 box-8">${strip.origin || strip.airport || ''}</div>
-              <div class="sec-row3 box-8a">${strip.sidStar || ''}</div>
-              <div class="sec-row3 box-8b">${strip.gate || ''}</div>
+              <div class="sec-row3 box-8">${_fv('origin') ? (strip.origin || strip.airport || '') : ''}</div>
+              <div class="sec-row3 box-8a">${_fv('sidStar') ? (strip.sidStar || '') : ''}</div>
+              <div class="sec-row3 box-8b">${_fv('gate') ? (strip.gate || '') : ''}</div>
             </div>
 
             <!-- Section 4 (Center Wide) -->
             <div class="sec-4">
               <div class="sec4-top">
-                <span class="sec4-corner box-9">${displayTime}</span>
-                <span class="sec4-corner box-9b">${strip.type || ''}</span>
+                <span class="sec4-corner box-9">${_fv('displayTime') ? displayTime : ''}</span>
+                <span class="sec4-corner box-9b">${_fv('type') ? (strip.type || '') : ''}</span>
               </div>
-              <div class="sec4-center box-route">${strip.route || ''}</div>
+              <div class="sec4-center box-route">${_fv('route') ? (strip.route || '') : ''}</div>
               <div class="sec4-bottom">
-                <span class="sec4-corner box-9a">${strip.category || strip.operationType?.slice(0,3) || ''}</span>
-                <span class="sec4-corner box-9c">${strip.remarks || ''}</span>
+                <span class="sec4-corner box-9a">${_fv('category') ? (strip.category || strip.operationType?.slice(0,3) || '') : ''}</span>
+                <span class="sec4-corner box-9c">${_fv('remarks') ? (strip.remarks || '') : ''}</span>
               </div>
             </div>
 
             <!-- Section 5 (Right: 3x3 Grid) -->
             <div class="sec-5">
-              <div class="sec5-cell box-10">${strip.alt || ''}</div>
-              <div class="sec5-cell box-11">${(strip.route || '').split(' ')[0] || ''}</div>
-              <div class="sec5-cell box-12" title="실제 시각">${strip.actTime || strip.atot || strip.aldt || strip.asat || ''}</div>
+              <div class="sec5-cell box-10">${_fv('alt') ? (strip.alt || '') : ''}</div>
+              <div class="sec5-cell box-11">${_fv('routeFirst') ? ((strip.route || '').split(' ')[0] || '') : ''}</div>
+              <div class="sec5-cell box-12" title="실제 시각">${_fv('actTime') ? (strip.actTime || strip.atot || strip.aldt || strip.asat || '') : ''}</div>
 
-              <div class="sec5-cell box-13">${strip.origin || ''}</div>
-              <div class="sec5-cell box-14">${strip.dest || ''}</div>
-              <div class="sec5-cell box-15">${strip.assignedAlt || ''}</div>
+              <div class="sec5-cell box-13">${_fv('originRight') ? (strip.origin || '') : ''}</div>
+              <div class="sec5-cell box-14">${_fv('dest') ? (strip.dest || '') : ''}</div>
+              <div class="sec5-cell box-15">${_fv('assignedAlt') ? (strip.assignedAlt || '') : ''}</div>
 
-              <div class="sec5-cell box-16">${strip.ssr || strip.squawkMode || ''}</div>
-              <div class="sec5-cell box-17">${strip.speed || ''}</div>
+              <div class="sec5-cell box-16">${_fv('ssrRight') ? (strip.ssr || strip.squawkMode || '') : ''}</div>
+              <div class="sec5-cell box-17">${_fv('speed') ? (strip.speed || '') : ''}</div>
               <div class="sec5-cell box-18" title="상태 구분">
-                ${statusLabel ? `<span class="status-toggle-pill" style="cursor: default;">${statusLabel}</span>` : ''}
+                ${(_fv('statusLabel') && statusLabel) ? `<span class="status-toggle-pill" style="cursor: default;">${statusLabel}</span>` : ''}
               </div>
             </div>
           </div>
@@ -6087,8 +6222,8 @@
             <th style="width: 65px;">기종 (TYPE)</th>
             <th style="width: 50px;">RWY</th>
             <th style="width: 55px;">주기장</th>
-            <th style="width: 110px;">출발 (DEP)</th>
-            <th style="width: 110px;">도착 (ARR)</th>
+            <th style="width: 65px;">출발 (DEP)</th>
+            <th style="width: 65px;">도착 (ARR)</th>
             <th style="width: 55px;">시각</th>
             <th style="width: 65px;">순항고도</th>
             <th style="width: 65px;">배정고도</th>
@@ -6106,7 +6241,7 @@
             <td colspan="16" class="excel-add-row-td" onclick="addExcelRow()">
               <div class="excel-add-row-bar">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-                <span>+ 행 추가 (클릭하여 새 행 추가)</span>
+                <span>행 추가</span>
               </div>
             </td>
           </tr>
@@ -6261,6 +6396,168 @@
       selectedModalScanlines = checked;
     }
 
+    // ── STRIP FIELD CONFIGURATION SYSTEM ─────────────────────────────────────
+
+    // All configurable strip fields with display label, storage key, and section metadata
+    const STRIP_FIELD_DEFINITIONS = [
+      // Sec 1
+      { id: 'acid',        label: '호출부호 (ACID)',         section: 'left',   box: 'sec-1 box-1' },
+      { id: 'typeWake',    label: '기종/후류 (TYPE/WAKE)',   section: 'left',   box: 'sec-1 box-2' },
+      { id: 'rwy',         label: '활주로 (RWY)',            section: 'left',   box: 'sec-1 box-2a' },
+      { id: 'idRoute',     label: '항공로 ID',               section: 'left',   box: 'sec-1 box-3' },
+      { id: 'cid',         label: 'CID',                     section: 'left',   box: 'sec-1 box-4' },
+      // Sec 2
+      { id: 'ssr',         label: 'SSR 트랜스폰더',          section: 'sec2',   box: 'sec-2 box-5' },
+      { id: 'schedTime',   label: '예정 시각 (EOBT/STA)',    section: 'sec2',   box: 'sec-2 box-6' },
+      { id: 'clearance',   label: '허가 상태 (CLR)',          section: 'sec2',   box: 'sec-2 box-7' },
+      // Sec 3
+      { id: 'origin',      label: '출발 공항 (DEP)',          section: 'sec3',   box: 'sec-3 box-8' },
+      { id: 'sidStar',     label: 'SID/STAR 절차',           section: 'sec3',   box: 'sec-3 box-8a' },
+      { id: 'gate',        label: '게이트/주기장',            section: 'sec3',   box: 'sec-3 box-8b' },
+      // Sec 4
+      { id: 'displayTime', label: '실제 시각 (ACT)',          section: 'center', box: 'sec-4 box-9' },
+      { id: 'type',        label: '기종 (TYPE, center)',      section: 'center', box: 'sec-4 box-9b' },
+      { id: 'route',       label: '항로 (ROUTE)',             section: 'center', box: 'sec-4 box-route' },
+      { id: 'category',    label: '카테고리 (CAT)',           section: 'center', box: 'sec-4 box-9a' },
+      { id: 'remarks',     label: '비고 (RMK)',               section: 'center', box: 'sec-4 box-9c' },
+      // Sec 5
+      { id: 'alt',         label: '순항고도 (FL/ALT)',        section: 'right',  box: 'sec-5 box-10' },
+      { id: 'routeFirst',  label: '항로 첫 웨이포인트',        section: 'right',  box: 'sec-5 box-11' },
+      { id: 'actTime',     label: '실제 통과 시각',           section: 'right',  box: 'sec-5 box-12' },
+      { id: 'originRight', label: '출발공항 (우측)',           section: 'right',  box: 'sec-5 box-13' },
+      { id: 'dest',        label: '도착 공항 (DEST)',         section: 'right',  box: 'sec-5 box-14' },
+      { id: 'assignedAlt', label: '배정고도 (CFL)',           section: 'right',  box: 'sec-5 box-15' },
+      { id: 'ssrRight',    label: 'SSR (우측)',               section: 'right',  box: 'sec-5 box-16' },
+      { id: 'speed',       label: '속도 (SPEED)',             section: 'right',  box: 'sec-5 box-17' },
+      { id: 'statusLabel', label: '상태 라벨 (CCT legs)',     section: 'right',  box: 'sec-5 box-18' },
+    ];
+
+    const STRIP_CONFIG_BAYS = ['DEP', 'ARR', 'TRN', 'CCT'];
+
+    // Default: all fields ON for all bay types
+    function getDefaultStripConfig() {
+      const cfg = {};
+      STRIP_CONFIG_BAYS.forEach(bay => {
+        cfg[bay] = {};
+        STRIP_FIELD_DEFINITIONS.forEach(f => { cfg[bay][f.id] = true; });
+      });
+      return cfg;
+    }
+
+    // Load config from localStorage or default
+    function loadStripConfig() {
+      try {
+        const raw = localStorage.getItem('efs_strip_field_config');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          // Fill missing keys from defaults
+          const def = getDefaultStripConfig();
+          STRIP_CONFIG_BAYS.forEach(bay => {
+            parsed[bay] = Object.assign({}, def[bay], parsed[bay] || {});
+          });
+          return parsed;
+        }
+      } catch(e) {}
+      return getDefaultStripConfig();
+    }
+
+    // Save config to localStorage
+    function saveStripConfig(cfg) {
+      localStorage.setItem('efs_strip_field_config', JSON.stringify(cfg));
+    }
+
+    // In-memory config (will be persisted on Save)
+    let _pendingStripConfig = null;
+    let _currentConfigBay = 'DEP';
+
+    // Section header labels for the grid
+    const SECTION_LABELS = {
+      left:   '좌측 패널 (Sec 1)',
+      sec2:   '중앙 좌 (Sec 2)',
+      sec3:   '중앙 중 (Sec 3)',
+      center: '중앙 메인 (Sec 4)',
+      right:  '우측 패널 (Sec 5)',
+    };
+
+    function renderStripConfigPanel(bay) {
+      const panel = document.getElementById('strip-config-field-panel');
+      if (!panel || !_pendingStripConfig) return;
+
+      const cfg = _pendingStripConfig[bay] || {};
+      let html = '<div class="strip-config-grid">';
+
+      let lastSection = null;
+      STRIP_FIELD_DEFINITIONS.forEach(f => {
+        if (f.section !== lastSection) {
+          html += `<div class="strip-config-section-title">${SECTION_LABELS[f.section] || f.section}</div>`;
+          lastSection = f.section;
+        }
+        const checked = (cfg[f.id] !== false) ? 'checked' : '';
+        html += `
+          <div class="strip-config-item" onclick="toggleStripConfigField('${f.id}', this)">
+            <input type="checkbox" id="scf-${f.id}" ${checked} onclick="event.stopPropagation(); handleStripConfigCheck('${f.id}', this.checked)">
+            <label for="scf-${f.id}">${f.label}</label>
+          </div>`;
+      });
+      html += '</div>';
+      panel.innerHTML = html;
+    }
+
+    function toggleStripConfigField(fieldId, itemEl) {
+      const cb = itemEl.querySelector('input[type="checkbox"]');
+      if (!cb) return;
+      cb.checked = !cb.checked;
+      handleStripConfigCheck(fieldId, cb.checked);
+    }
+
+    function handleStripConfigCheck(fieldId, checked) {
+      if (!_pendingStripConfig) return;
+      if (!_pendingStripConfig[_currentConfigBay]) _pendingStripConfig[_currentConfigBay] = {};
+      _pendingStripConfig[_currentConfigBay][fieldId] = checked;
+    }
+
+    function switchStripConfigBay(bay) {
+      _currentConfigBay = bay;
+      STRIP_CONFIG_BAYS.forEach(b => {
+        const btn = document.getElementById(`scbay-${b}`);
+        if (btn) btn.classList.toggle('active', b === bay);
+      });
+      renderStripConfigPanel(bay);
+    }
+
+    function resetStripConfig() {
+      _pendingStripConfig = getDefaultStripConfig();
+      renderStripConfigPanel(_currentConfigBay);
+    }
+
+    // Settings tab switch
+    function switchSettingsTab(tab) {
+      ['display', 'stripconfig'].forEach(t => {
+        const btn = document.getElementById(`stab-${t}`);
+        const panel = document.getElementById(`spanel-${t}`);
+        if (btn) btn.classList.toggle('active', t === tab);
+        if (panel) panel.classList.toggle('active', t === tab);
+      });
+    }
+
+    // ── Apply strip config to strip rendering ─────────────────────────────────
+    // Returns true if the field should be shown for the given operationType
+    function isStripFieldVisible(fieldId, operationType) {
+      try {
+        const cfgRaw = localStorage.getItem('efs_strip_field_config');
+        if (!cfgRaw) return true; // default: show all
+        const cfg = JSON.parse(cfgRaw);
+        const bayKey = operationType === 'DEPARTURE' ? 'DEP'
+                     : operationType === 'ARRIVAL'   ? 'ARR'
+                     : operationType === 'TRANSIT'   ? 'TRN'
+                     : operationType === 'CIRCUIT'   ? 'CCT'
+                     : 'DEP';
+        const bayConfig = cfg[bayKey];
+        if (!bayConfig) return true;
+        return bayConfig[fieldId] !== false;
+      } catch(e) { return true; }
+    }
+
     function openSettingsModal() {
       const savedTheme = localStorage.getItem('efs_theme') || 'theme-across';
       selectModalTheme(savedTheme);
@@ -6277,6 +6574,14 @@
       const fSel = document.getElementById('setting-font');
       if (fSel) fSel.value = savedFont;
 
+      // Load strip config into pending state
+      _pendingStripConfig = loadStripConfig();
+      _currentConfigBay = 'DEP';
+      // Reset to display tab
+      switchSettingsTab('display');
+      // Pre-render strip config panel for first bay
+      switchStripConfigBay('DEP');
+
       document.getElementById('settingsModal').classList.add('open');
     }
 
@@ -6290,6 +6595,12 @@
       setScanlines(selectedModalScanlines);
       const fontVal = document.getElementById('setting-font').value;
       applyFont(fontVal);
+      // Save strip config
+      if (_pendingStripConfig) {
+        saveStripConfig(_pendingStripConfig);
+        // Re-render all strips to reflect new field visibility
+        renderAllStrips();
+      }
       showToast('환경설정이 저장 및 적용되었습니다.');
       closeSettingsModal();
     }
@@ -6400,16 +6711,8 @@
         <td><input class="excel-cell-input row-type" placeholder="B738" value="${type}" style="text-transform: uppercase;" /></td>
         <td><input class="excel-cell-input row-rwy" placeholder="33L" value="${rwy}" style="text-transform: uppercase;" /></td>
         <td><input class="excel-cell-input row-gate" placeholder="102" value="${gate}" style="text-transform: uppercase;" /></td>
-        <td>
-          <select class="excel-cell-select row-origin">
-            ${getAirportOptionsHtml(origin || (bay==='ARRIVAL'?'RKPC':'RKSI'))}
-          </select>
-        </td>
-        <td>
-          <select class="excel-cell-select row-dest">
-            ${getAirportOptionsHtml(dest || (bay==='ARRIVAL'?'RKSI':'RKPC'))}
-          </select>
-        </td>
+        <td><input class="excel-cell-input row-origin" placeholder="ICAO (예: RKSI)" value="${origin}" style="text-transform: uppercase; width: 100%; max-width: 80px;" maxlength="4" /></td>
+        <td><input class="excel-cell-input row-dest" placeholder="ICAO (예: RKSS)" value="${dest}" style="text-transform: uppercase; width: 100%; max-width: 80px;" maxlength="4" /></td>
         <td><input class="excel-cell-input row-time" placeholder="1340" value="${schedTime || getUtcHHMM()}" /></td>
         <td><input class="excel-cell-input row-alt" placeholder="FL280" value="${alt}" style="text-transform: uppercase;" /></td>
         <td><input class="excel-cell-input row-assigned-alt" placeholder="FL140" value="${assignedAlt}" style="text-transform: uppercase;" /></td>
