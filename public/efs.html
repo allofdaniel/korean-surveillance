@@ -2066,12 +2066,56 @@
     .strip-bottom-btn.act-la  { background: #06b6d4 !important; color: #ffffff !important; border-color: #0891b2 !important; }
     .strip-bottom-btn.act-arr { background: #fbbf24 !important; color: #78350f !important; border-color: #d97706 !important; }
 
+    .strip-card.strip-stage-runway {
+      border-color: #00e475 !important;
+      box-shadow: 0 0 6px rgba(0, 228, 117, 0.45), inset 0 0 0 1px rgba(0, 228, 117, 0.35) !important;
+    }
+
+    .flight-stage-pill {
+      font-family: var(--font-mono) !important;
+      font-size: 7.5px !important;
+      font-weight: 900 !important;
+      padding: 1px 4px !important;
+      border-radius: 2px !important;
+      letter-spacing: 0.5px !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+      display: inline-flex !important;
+      align-items: center !important;
+    }
+    .flight-stage-pill.stage-taxi {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border: 1px solid #38bdf8 !important;
+    }
+    .flight-stage-pill.stage-app {
+      background: #d97706 !important;
+      color: #ffffff !important;
+      border: 1px solid #f59e0b !important;
+    }
+    .flight-stage-pill.stage-rwy {
+      background: #16a34a !important;
+      color: #ffffff !important;
+      border: 1px solid #4ade80 !important;
+      box-shadow: 0 0 4px rgba(74, 222, 128, 0.6) !important;
+    }
+
     .strip-bottom-btn.act-ink-clear {
       background: rgba(255, 255, 255, 0.12) !important;
       color: var(--primary-soft) !important;
       border-color: rgba(255, 255, 255, 0.2) !important;
-      font-size: 7.5px !important;
-      padding: 0 4px !important;
+      min-width: 18px !important;
+      width: 18px !important;
+      height: 16px !important;
+      padding: 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    .strip-bottom-btn.act-ink-clear svg {
+      width: 11px !important;
+      height: 11px !important;
+      pointer-events: none !important;
     }
     .strip-bottom-btn.act-ink-clear:hover {
       background: #ef4444 !important;
@@ -3066,7 +3110,9 @@
         speed: 'K0160',
         fplStatus: 'FPL',
         cid: '112',
-        clearance: 'L',
+        clearance: 'CLR',
+        stage: 'RUNWAY',
+        alct: '1235',
         gate: 'G234',
         category: 'ARR',
         bayEntryOrder: 1,
@@ -3517,7 +3563,7 @@
         strips = JSON.parse(JSON.stringify(initialBaseStrips));
       }
 
-      const seqCounters = {};
+      const rackStripsMap = {};
       strips.forEach(s => {
         if (!s.operationType) s.operationType = 'DEPARTURE';
         if (s.operationType === 'CIRCUIT') {
@@ -3526,10 +3572,22 @@
         if (!s.status) s.status = s.operationType.slice(0, 3) + '_ACTIVE';
 
         const key = `${s.operationType}_${s.status}`;
-        seqCounters[key] = (seqCounters[key] || 0) + 1;
-        if (!s.bayEntryOrder) {
-          s.bayEntryOrder = seqCounters[key];
-          s.bayEntryTime = s.time || '1200';
+        if (!rackStripsMap[key]) rackStripsMap[key] = [];
+        rackStripsMap[key].push(s);
+      });
+
+      // If any rack only has a single strip left after all prior strips were cleared, normalize its seq to 1
+      Object.keys(rackStripsMap).forEach(k => {
+        const list = rackStripsMap[k];
+        if (list.length === 1 && (list[0].bayEntryOrder || 0) > 1) {
+          list[0].bayEntryOrder = 1;
+        } else {
+          list.forEach((s, idx) => {
+            if (!s.bayEntryOrder) {
+              s.bayEntryOrder = idx + 1;
+              s.bayEntryTime = s.time || '1200';
+            }
+          });
         }
       });
 
@@ -3561,11 +3619,15 @@
       renderAllStrips();
     }
 
-    // Assign Next Bay Entry Sequence Number
+    // Assign Next Bay Entry Sequence Number: Resets to 1 if bay is empty; preserves stack sequence while strips exist
     function assignNextEntrySeq(strip, targetBay, targetStatus) {
-      const targetStrips = strips.filter(s => s.operationType === targetBay && s.status === targetStatus && s.id !== strip.id);
-      const maxSeq = targetStrips.reduce((max, s) => Math.max(max, s.bayEntryOrder || 0), 0);
-      strip.bayEntryOrder = maxSeq + 1;
+      const existingInBay = strips.filter(s => s.operationType === targetBay && s.status === targetStatus && s.id !== strip.id);
+      if (existingInBay.length === 0) {
+        strip.bayEntryOrder = 1;
+      } else {
+        const maxSeq = existingInBay.reduce((max, s) => Math.max(max, s.bayEntryOrder || 0), 0);
+        strip.bayEntryOrder = maxSeq + 1;
+      }
       strip.bayEntryTime = getUtcHHMM();
     }
 
@@ -3587,19 +3649,21 @@
         // --- 1. 출발 (DEP) Actions ---
         case 'CLR':
           strip.asrt = curTime;
-          strip.clearance = 'C';
-          showToast(`[${strip.acid}] 출발 허가 (CLR) -> ASRT ${curTime}Z 기록`);
-          recordOperationToSupabase(strip, 'CLR_CLEARANCE', prevBay, 'DEPARTURE', prevStatus, strip.status, `출발 허가 발부 및 ASRT ${curTime}Z 기록`);
+          strip.clearance = 'CLR';
+          strip.stage = 'RUNWAY';
+          showToast(`[${strip.acid}] 활주로 출발 허가 발부 (CLR) -> ASRT ${curTime}Z 기록 (활주로 단계)`);
+          recordOperationToSupabase(strip, 'CLR_CLEARANCE', prevBay, 'DEPARTURE', prevStatus, strip.status, `활주로 진입 및 출발 허가 발부 (ASRT: ${curTime}Z, Stage: RUNWAY)`);
           break;
 
         case 'PB':
           strip.asat = curTime;
           strip.aobt = curTime;
           strip.clearance = 'PB';
+          strip.stage = 'TAXI';
           strip.status = 'DEP_ACTIVE';
           assignNextEntrySeq(strip, 'DEPARTURE', 'DEP_ACTIVE');
-          showToast(`[${strip.acid}] 푸시백 승인 (P/B) -> ASAT/AOBT ${curTime}Z 기록 (활성열 이동 / 순서 #${strip.bayEntryOrder})`);
-          recordOperationToSupabase(strip, 'PUSHBACK_APPROVED', prevBay, 'DEPARTURE', prevStatus, 'DEP_ACTIVE', `푸시백/시동 승인 (ASAT: ${curTime}Z, AOBT: ${curTime}Z)`);
+          showToast(`[${strip.acid}] 푸시백/지상활주 승인 (P/B) -> ASAT/AOBT ${curTime}Z 기록 (활성 이동 / 순서 #${strip.bayEntryOrder})`);
+          recordOperationToSupabase(strip, 'PUSHBACK_APPROVED', prevBay, 'DEPARTURE', prevStatus, 'DEP_ACTIVE', `푸시백/지상활주 승인 (ASAT: ${curTime}Z, Stage: TAXI)`);
           break;
 
         case 'DEP':
@@ -3621,10 +3685,19 @@
         // --- 2. 도착 (ARR) Actions ---
         case 'APP':
           strip.status = 'ARR_ACTIVE';
-          strip.clearance = 'A';
+          strip.clearance = 'APP';
+          strip.stage = 'APPROACH';
           assignNextEntrySeq(strip, 'ARRIVAL', 'ARR_ACTIVE');
           showToast(`[${strip.acid}] 접근 인가 (APP) -> 도착 활성열 이동 (순서 #${strip.bayEntryOrder})`);
-          recordOperationToSupabase(strip, 'APP_CONTACT', prevBay, 'ARRIVAL', prevStatus, 'ARR_ACTIVE', `타워 접근 인가 및 활주로 정렬`);
+          recordOperationToSupabase(strip, 'APP_CONTACT', prevBay, 'ARRIVAL', prevStatus, 'ARR_ACTIVE', `타워 접근 인가 및 활주로 정렬 (Stage: APPROACH)`);
+          break;
+
+        case 'ARR_CLR':
+          strip.alct = curTime;
+          strip.clearance = 'CLR';
+          strip.stage = 'RUNWAY';
+          showToast(`[${strip.acid}] 착륙 허가 발부 (CLR) -> ALCT ${curTime}Z 기록 (활주로 착륙 인가)`);
+          recordOperationToSupabase(strip, 'LANDING_CLEARANCE_ISSUED', 'ARRIVAL', 'ARRIVAL', prevStatus, strip.status, `활주로 착륙 허가 발부 (ALCT: ${curTime}Z, Stage: RUNWAY)`);
           break;
 
         case 'LND':
@@ -4035,8 +4108,10 @@
 
       const flashClass = (strip.id === justMovedStripId) ? 'strip-just-moved' : '';
       const editClass = strip.isInlineEditing ? 'inline-editing' : '';
+      const isRunwayStage = (strip.stage === 'RUNWAY') || (strip.clearance === 'CLR') || (strip.operationType === 'DEPARTURE' && strip.asrt) || (strip.operationType === 'ARRIVAL' && strip.alct);
+      const stageClass = isRunwayStage ? 'strip-stage-runway' : '';
 
-      el.className = `strip-card ${stripClass} ${flashClass} ${editClass}`;
+      el.className = `strip-card ${stripClass} ${flashClass} ${editClass} ${stageClass}`;
       el.id = `strip-${strip.id}`;
       el.setAttribute('data-strip-id', strip.id);
 
@@ -4057,6 +4132,7 @@
         if (strip.asat) milestonePillsHtml += `<span class="milestone-pill pb">PB ${strip.asat}Z</span>`;
         if (strip.atot) milestonePillsHtml += `<span class="milestone-pill dep">DEP ${strip.atot}Z</span>`;
       } else if (strip.operationType === 'ARRIVAL') {
+        if (strip.alct) milestonePillsHtml += `<span class="milestone-pill clr">CLR ${strip.alct}Z</span>`;
         if (strip.aldt) milestonePillsHtml += `<span class="milestone-pill lnd">LND ${strip.aldt}Z</span>`;
         if (strip.aibt) milestonePillsHtml += `<span class="milestone-pill aibt">AIBT ${strip.aibt}Z</span>`;
       } else if (strip.operationType === 'CIRCUIT') {
@@ -4068,8 +4144,25 @@
       else if (strip.aldt) displayTime = strip.aldt;
       else if (strip.asrt) displayTime = strip.asrt;
 
+      // Flight Phase Stage Badge (TAXI, APP, RWY)
+      let stagePillHtml = '';
+      if (strip.status === 'DEP_ACTIVE') {
+        if (strip.stage === 'RUNWAY' || strip.clearance === 'CLR' || strip.asrt) {
+          stagePillHtml = `<span class="flight-stage-pill stage-rwy" title="활주로 진입/이륙허가 단계">RWY</span>`;
+        } else {
+          stagePillHtml = `<span class="flight-stage-pill stage-taxi" title="지상활주/푸시백 단계">TAXI</span>`;
+        }
+      } else if (strip.status === 'ARR_ACTIVE') {
+        if (strip.stage === 'RUNWAY' || strip.clearance === 'CLR' || strip.alct) {
+          stagePillHtml = `<span class="flight-stage-pill stage-rwy" title="활주로 착륙허가 단계">RWY</span>`;
+        } else {
+          stagePillHtml = `<span class="flight-stage-pill stage-app" title="접근 단계">APP</span>`;
+        }
+      }
+
       // Check if Card is in Direct Inline Edit Mode
       if (strip.isInlineEditing) {
+
         el.innerHTML = `
           <!-- Transparent Overlay Canvas for Stylus Pen Handwriting -->
           <canvas class="strip-ink-canvas" id="canvas-${strip.id}"></canvas>
@@ -4226,9 +4319,11 @@
               <button type="button" class="strip-bottom-btn act-app" onclick="handleStripAction('${strip.id}', 'APP', event)" title="접근 인가 (활성열 자동 이동)">APP</button>
             `;
           } else {
+            const clrActive = (strip.alct || strip.clearance === 'CLR') ? 'active-stamped' : '';
             const lndActive = strip.aldt ? 'active-stamped' : '';
             actionButtonsHtml = `
-              <button type="button" class="strip-bottom-btn act-lnd ${lndActive}" onclick="handleStripAction('${strip.id}', 'LND', event)" title="착륙 확인 (ALDT 기록, AIBT 자동 계산)">LND</button>
+              <button type="button" class="strip-bottom-btn act-clr ${clrActive}" onclick="handleStripAction('${strip.id}', 'ARR_CLR', event)" title="착륙 허가 발부 (ALCT CDM 기록 및 활주로 단계 전환)">CLR</button>
+              <button type="button" class="strip-bottom-btn act-lnd ${lndActive}" onclick="handleStripAction('${strip.id}', 'LND', event)" title="착륙 확인 (ALDT 접지 기록, AIBT 자동 계산)">LND</button>
               <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="지상관제 이양 및 스트립 완료">OUT</button>
               <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
             `;
@@ -4338,10 +4433,13 @@
           <!-- Bottom 1-Click Operational Action Buttons Bar (Guaranteed 21px) -->
           <div class="strip-card-bottom-bar">
             <div class="strip-status-indicator">
+              ${stagePillHtml}
               ${milestonePillsHtml}
             </div>
             <div class="strip-bottom-actions">
-              <button type="button" class="strip-bottom-btn act-ink-clear" onclick="clearStripInk('${strip.id}', event)" title="이 스트립의 수기 필기만 지우기">펜지움</button>
+              <button type="button" class="strip-bottom-btn act-ink-clear" onclick="clearStripInk('${strip.id}', event)" title="필기 지우기">
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide-brush-cleaning"><path d="m16 22-1-4"/><path d="M19 14a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2h-3a1 1 0 0 1-1-1V4a2 2 0 0 0-4 0v5a1 1 0 0 1-1 1H6a2 2 0 0 0-2 2v1a1 1 0 0 0 1 1"/><path d="M19 14H5l-1.973 6.767A1 1 0 0 0 4 22h16a1 1 0 0 0 .973-1.233z"/><path d="m8 22 1-4"/></svg>
+              </button>
               ${actionButtonsHtml}
             </div>
           </div>
