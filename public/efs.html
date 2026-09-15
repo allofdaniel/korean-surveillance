@@ -1870,6 +1870,7 @@
       border: 1px dashed var(--outline);
       cursor: pointer;
       user-select: none;
+      touch-action: none;
       transition: all 0.12s ease;
       min-height: 0;
       min-width: 0;
@@ -2040,6 +2041,7 @@
       color: var(--primary-bright);
       cursor: grab;
       user-select: none;
+      touch-action: none;
       transition: all 0.12s ease;
       box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
@@ -2071,6 +2073,44 @@
       height: 5px;
       border-radius: 50%;
       flex-shrink: 0;
+    }
+
+    /* Universal Pointer Drag Ghost Badge */
+    .wf-drag-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999999;
+      transform: translate(-50%, -50%);
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      background: rgba(18, 22, 32, 0.96);
+      border: 1.5px solid var(--amber);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 16px rgba(251, 203, 65, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      cursor: grabbing;
+      user-select: none;
+    }
+    .wf-drag-ghost .wf-drag-ghost-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Slot Drop Flash animation */
+    @keyframes wfSlotFlash {
+      0% { box-shadow: inset 0 0 18px #00e475, 0 0 14px #00e475; border-color: #00e475 !important; }
+      100% { box-shadow: none; }
+    }
+    .wf-slot.flash-assign {
+      animation: wfSlotFlash 0.4s ease-out;
     }
 
     /* Modal Backdrop & Container */
@@ -6973,6 +7013,140 @@
     let _currentConfigBay = 'DEP';
     let _selectedPaletteField = null;
 
+    // ==========================================
+    // Universal Pointer Drag & Drop Engine (Mouse, Touch, Stylus/Wacom)
+    // ==========================================
+    let _wfPointerActive = false;
+    let _wfPointerGhost = null;
+    let _suppressNextClick = false;
+
+    // Suppress trailing click event after a pointer drag operation
+    window.addEventListener('click', function(e) {
+      if (_suppressNextClick) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        _suppressNextClick = false;
+      }
+    }, true);
+
+    function createWfDragGhost(fieldId, x, y) {
+      removeWfDragGhost();
+      const f = AVAILABLE_STRIP_FIELDS_MAP[fieldId];
+      if (!f) return;
+      const ghost = document.createElement('div');
+      ghost.className = 'wf-drag-ghost';
+      ghost.id = 'wf-drag-ghost-active';
+      ghost.innerHTML = `
+        <span class="wf-drag-ghost-dot" style="background: ${f.color || '#fff'};"></span>
+        <span>${f.name}</span>
+      `;
+      ghost.style.left = `${x}px`;
+      ghost.style.top = `${y}px`;
+      document.body.appendChild(ghost);
+      _wfPointerGhost = ghost;
+    }
+
+    function removeWfDragGhost() {
+      if (_wfPointerGhost) {
+        try { _wfPointerGhost.remove(); } catch(e) {}
+        _wfPointerGhost = null;
+      }
+      const leftovers = document.querySelectorAll('.wf-drag-ghost');
+      leftovers.forEach(el => { try { el.remove(); } catch(e) {} });
+    }
+
+    function initWfPointerSource(element, fieldId, sourceSlotId = null) {
+      if (!element) return;
+      element.onpointerdown = function(e) {
+        // Only primary button (mouse left-button, touch contact, or pen tip)
+        if (e.button !== undefined && e.button !== 0) return;
+
+        // If clicked on remove button, do nothing (let clearSlot handle it)
+        if (e.target && e.target.closest('.wf-slot-remove-btn')) return;
+
+        const startX = e.clientX;
+        const startY = e.clientY;
+        let isDragging = false;
+        let currentHoverSlot = null;
+
+        const onPointerMove = function(moveEvt) {
+          const dx = moveEvt.clientX - startX;
+          const dy = moveEvt.clientY - startY;
+          const dist = Math.hypot(dx, dy);
+
+          if (!isDragging && dist > 4) {
+            isDragging = true;
+            _wfPointerActive = true;
+            createWfDragGhost(fieldId, moveEvt.clientX, moveEvt.clientY);
+            try {
+              document.body.style.userSelect = 'none';
+            } catch(err) {}
+          }
+
+          if (isDragging && _wfPointerGhost) {
+            if (moveEvt.cancelable) moveEvt.preventDefault();
+            _wfPointerGhost.style.left = `${moveEvt.clientX}px`;
+            _wfPointerGhost.style.top = `${moveEvt.clientY}px`;
+
+            // Find slot element under pointer
+            const elUnder = document.elementFromPoint(moveEvt.clientX, moveEvt.clientY);
+            const slotEl = elUnder ? elUnder.closest('.wf-slot') : null;
+
+            if (slotEl !== currentHoverSlot) {
+              if (currentHoverSlot) currentHoverSlot.classList.remove('drag-over');
+              currentHoverSlot = slotEl;
+              if (currentHoverSlot) currentHoverSlot.classList.add('drag-over');
+            }
+          }
+        };
+
+        const onPointerUp = function(upEvt) {
+          window.removeEventListener('pointermove', onPointerMove, { passive: false });
+          window.removeEventListener('pointerup', onPointerUp, { passive: false });
+          window.removeEventListener('pointercancel', onPointerUp, { passive: false });
+          try {
+            document.body.style.userSelect = '';
+          } catch(err) {}
+
+          if (isDragging) {
+            removeWfDragGhost();
+            _wfPointerActive = false;
+
+            // Suppress trailing click event
+            _suppressNextClick = true;
+            setTimeout(() => { _suppressNextClick = false; }, 100);
+
+            let targetSlot = currentHoverSlot;
+            if (!targetSlot) {
+              const elUnder = document.elementFromPoint(upEvt.clientX, upEvt.clientY);
+              targetSlot = elUnder ? elUnder.closest('.wf-slot') : null;
+            }
+
+            if (targetSlot) {
+              const targetSlotId = targetSlot.getAttribute('data-slot-id');
+              if (targetSlotId && fieldId) {
+                assignFieldToSlot(targetSlotId, fieldId);
+                // Flash animation feedback
+                const freshSlotEl = document.getElementById(`wfslot-${targetSlotId}`);
+                if (freshSlotEl) {
+                  freshSlotEl.classList.add('flash-assign');
+                  setTimeout(() => { freshSlotEl.classList.remove('flash-assign'); }, 400);
+                }
+              }
+              targetSlot.classList.remove('drag-over');
+            }
+            // Ensure no leftover drag-over classes
+            document.querySelectorAll('.wf-slot.drag-over').forEach(s => s.classList.remove('drag-over'));
+          }
+        };
+
+        window.addEventListener('pointermove', onPointerMove, { passive: false });
+        window.addEventListener('pointerup', onPointerUp, { passive: false });
+        window.addEventListener('pointercancel', onPointerUp, { passive: false });
+      };
+    }
+
     // Extract value for strip render
     function getSlotFieldValue(strip, slotId, statusLabel, displayTime) {
       const bay = strip.operationType || 'DEPARTURE';
@@ -7047,11 +7221,11 @@
           el.removeAttribute('ondragstart');
           el.setAttribute('title', `[${slot.name}] 빈 칸 (칩을 드래그하거나 칩 선택 후 클릭하여 배치)`);
           el.innerHTML = `<span class="wf-slot-empty-label">+ 빈 칸</span>`;
+          el.onpointerdown = null;
         } else {
           el.className = 'wf-slot';
-          // Make slot draggable so user can drag an assigned field to another slot!
-          el.setAttribute('draggable', 'true');
-          el.setAttribute('ondragstart', `handleSlotDragStart(event, '${slot.id}')`);
+          el.removeAttribute('draggable');
+          el.removeAttribute('ondragstart');
           el.setAttribute('title', `[${slot.name}] ${fieldDef.name} (다른 곳으로 드래그/복사하거나 우측 ✕로 삭제)`);
           el.innerHTML = `
             <div class="wf-slot-badge" style="border-color: ${fieldDef.color}77; background: ${fieldDef.color}22;">
@@ -7059,6 +7233,8 @@
               <button type="button" class="wf-slot-remove-btn" onclick="clearSlot('${slot.id}', event)" title="비우기">&times;</button>
             </div>
           `;
+          // Attach universal pointer drag so assigned fields can be dragged to other slots
+          initWfPointerSource(el, fieldId, slot.id);
         }
       });
 
@@ -7078,8 +7254,8 @@
         const emptyClass = (f.id === 'none') ? 'chip-empty' : '';
         html += `
           <div class="wf-chip ${selectedClass} ${emptyClass}" 
-               draggable="true" 
-               ondragstart="handleChipDragStart(event, '${f.id}')" 
+               id="wfchip-${f.id}"
+               data-field-id="${f.id}"
                onclick="selectPaletteChip('${f.id}')"
                title="${f.id === 'none' ? '슬롯을 비우는 빈 칸 칩입니다' : f.name}">
             <span class="wf-chip-dot" style="background: ${f.color};"></span>
@@ -7089,6 +7265,14 @@
       });
       grid.innerHTML = html;
 
+      // Attach universal pointer drag to all chips
+      AVAILABLE_STRIP_FIELDS.forEach(f => {
+        const chipEl = document.getElementById(`wfchip-${f.id}`);
+        if (chipEl) {
+          initWfPointerSource(chipEl, f.id, null);
+        }
+      });
+
       // Update hint text
       const hint = document.getElementById('lbl-palette-selected-hint');
       if (hint) {
@@ -7096,7 +7280,7 @@
           const selField = AVAILABLE_STRIP_FIELDS_MAP[_selectedPaletteField];
           hint.innerHTML = `<strong style="color: #fff;">[${selField?.name}]</strong> 선택됨 - 원하는 슬롯을 클릭하거나 드래그하여 배치하세요`;
         } else {
-          hint.textContent = '팁: 칩을 클릭 후 위 슬롯을 클릭하거나 바로 드래그하세요 (중복 배치 가능)';
+          hint.textContent = '팁: 칩을 원하는 슬롯으로 직접 드래그&드롭하거나, 칩 클릭 후 슬롯을 클릭하세요 (중복 배치 가능)';
         }
       }
     }
