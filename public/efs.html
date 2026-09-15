@@ -210,7 +210,7 @@
       background-color: #0b111e;
     }
 
-    /* Excel-Style Slide-Up Batch Registry Drawer */
+    /* Excel-Style Slide-Up Batch Registry Drawer (Theme-Adaptive) */
     .excel-batch-drawer {
       position: fixed;
       bottom: 0;
@@ -218,9 +218,10 @@
       right: 0;
       height: 380px;
       max-height: 50vh;
-      background: #0f141c;
+      background: var(--surface-container);
+      color: var(--primary-soft);
       border-top: 2px solid var(--primary);
-      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.6);
       display: flex;
       flex-direction: column;
       z-index: 105;
@@ -233,9 +234,9 @@
     }
 
     .excel-drawer-header {
-      height: 34px;
-      padding: 0 12px;
-      background: #141b26;
+      height: 36px;
+      padding: 0 14px;
+      background: var(--surface-high);
       border-bottom: 1px solid var(--outline);
       display: flex;
       align-items: center;
@@ -246,19 +247,10 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 800;
-      color: var(--primary-bright);
-      letter-spacing: 0.02em;
-    }
-    .excel-badge-info {
-      font-size: 9px;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 2px;
-      background: var(--surface-active);
       color: var(--primary);
-      font-family: var(--font-mono);
+      letter-spacing: 0.02em;
     }
     .excel-drawer-actions {
       display: flex;
@@ -266,8 +258,8 @@
       gap: 6px;
     }
     .excel-act-btn {
-      height: 22px;
-      padding: 0 8px;
+      height: 24px;
+      padding: 0 10px;
       font-size: 9.5px;
       font-weight: 700;
       font-family: var(--font-mono);
@@ -295,7 +287,7 @@
     .excel-table-scroll {
       flex: 1;
       overflow: auto;
-      background: #090c12;
+      background: var(--bg);
     }
     .excel-grid-table {
       width: 100%;
@@ -306,51 +298,75 @@
     .excel-grid-table th {
       position: sticky;
       top: 0;
-      background: #182232;
-      color: var(--primary-soft);
+      background: var(--surface-high);
+      color: var(--primary-bright);
       font-weight: 800;
-      border: 1px solid #222e42;
-      padding: 4px 6px;
+      border: 1px solid var(--outline);
+      padding: 5px 6px;
       text-align: left;
       z-index: 2;
       white-space: nowrap;
     }
     .excel-grid-table td {
-      border: 1px solid #1c2638;
+      border: 1px solid var(--outline);
       padding: 2px 4px;
-      background: #0d121a;
+      background: var(--surface-container);
+      color: var(--primary-soft);
+      transition: background 0.12s, border-color 0.12s;
     }
     .excel-grid-table tr:hover td {
-      background: #131c2a;
+      background: var(--surface-hover);
     }
+
+    /* Tab Focus & Active Cell Visual Highlight */
     .excel-cell-input, .excel-cell-select {
       width: 100%;
       height: 22px;
       background: transparent;
       border: 1px solid transparent;
-      color: #ffffff;
+      color: var(--primary-bright);
       font-family: var(--font-mono);
       font-size: 10px;
       padding: 0 4px;
       border-radius: 2px;
       box-sizing: border-box;
+      transition: all 0.12s ease;
+    }
+    .excel-cell-select {
+      cursor: pointer;
+    }
+    .excel-cell-select option {
+      background: var(--surface-container);
+      color: var(--primary-bright);
     }
     .excel-cell-input:focus, .excel-cell-select:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: #1c273a;
+      outline: none !important;
+      border-color: var(--primary) !important;
+      background: var(--surface-active) !important;
+      color: var(--primary-bright) !important;
+      box-shadow: inset 0 0 0 1.5px var(--primary), 0 0 8px rgba(56, 189, 248, 0.4) !important;
     }
+    .excel-grid-table td.active-cell,
+    .excel-grid-table td:has(:focus) {
+      background: var(--surface-active) !important;
+      border-color: var(--primary) !important;
+      box-shadow: inset 0 0 0 1.5px var(--primary) !important;
+    }
+
     .excel-row-del-btn {
       width: 20px;
       height: 20px;
       background: transparent;
       border: none;
-      color: #94a3b8;
+      color: var(--text-muted);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       border-radius: 2px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all 0.12s;
     }
     .excel-row-del-btn:hover {
       background: #ef4444;
@@ -358,37 +374,40 @@
     }
 
     .excel-drawer-footer {
-      height: 36px;
-      padding: 0 12px;
-      background: #141b26;
+      height: 38px;
+      padding: 0 14px;
+      background: var(--surface-high);
       border-top: 1px solid var(--outline);
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
+      gap: 8px;
       flex-shrink: 0;
-    }
-    .excel-footer-note {
-      font-size: 9px;
-      color: var(--text-muted);
     }
     .excel-footer-buttons {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
     .excel-footer-btn {
-      height: 24px;
-      padding: 0 12px;
+      height: 26px;
+      padding: 0 14px;
       font-size: 10px;
       font-weight: 800;
       border-radius: 3px;
       cursor: pointer;
       border: 1px solid transparent;
+      font-family: var(--font-mono);
+      transition: all 0.15s;
     }
     .excel-footer-btn.cancel {
       background: var(--surface-container);
       color: var(--primary-soft);
       border-color: var(--outline);
+    }
+    .excel-footer-btn.cancel:hover {
+      background: var(--surface-hover);
+      color: var(--primary-bright);
     }
     .excel-footer-btn.submit {
       background: var(--green);
@@ -397,7 +416,7 @@
     }
     .excel-footer-btn.submit:hover {
       filter: brightness(1.15);
-      box-shadow: 0 0 8px rgba(0, 228, 117, 0.4);
+      box-shadow: 0 0 8px rgba(0, 228, 117, 0.45);
     }
 
     /* Dark Mono White Theme */
@@ -2376,6 +2395,19 @@
       color: #ffffff !important;
       border: 1px solid #f59e0b !important;
     }
+    
+    .flight-stage-pill.stage-rwy-roll {
+      background: #e11d48 !important;
+      color: #ffffff !important;
+      border: 1px solid #fb7185 !important;
+      box-shadow: 0 0 6px rgba(244, 63, 94, 0.8) !important;
+      animation: pulse-rwy-roll 1.2s infinite alternate ease-in-out;
+    }
+    @keyframes pulse-rwy-roll {
+      0% { box-shadow: 0 0 3px rgba(244, 63, 94, 0.5); }
+      100% { box-shadow: 0 0 9px rgba(244, 63, 94, 1); }
+    }
+
     .flight-stage-pill.stage-rwy {
       background: #16a34a !important;
       color: #ffffff !important;
@@ -2886,20 +2918,11 @@
     <div class="body-layout">
       <!-- Left Vertical Rail (LNB: Cleaned per request - No ㄷㄹㄴ / EFS button) -->
       <nav class="app-lnb">
+        <!-- Top: Fullscreen toggle -->
         <button type="button" class="lnb-btn" onclick="toggleFullscreen()" title="전체화면 전환">
           <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
           <span class="lnb-btn-label" id="lbl-lnb-fs">전체화면</span>
         </button>
-
-        <div class="lnb-divider"></div>
-
-        <!-- New Strip Batch Creator Button (Excel Grid) -->
-        <button class="lnb-btn" id="lnbNewStripBtn" onclick="openExcelBatchPanel()" title="비행스트립 신규 일괄 등록 (Excel Grid)">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-          <span class="lnb-btn-label" id="lbl-lnb-new">신규생성</span>
-        </button>
-
-        
 
         <div class="lnb-divider"></div>
 
@@ -2919,10 +2942,21 @@
           <span class="lnb-btn-label">초기화</span>
         </button>
 
+        <!-- Spacer pushing remaining buttons to bottom of rail -->
+        <div style="flex: 1;"></div>
+
+        <div class="lnb-divider"></div>
+
+        <!-- New Strip Batch Creator Button (Positioned at bottom of left panel) -->
+        <button class="lnb-btn" id="lnbNewStripBtn" onclick="openExcelBatchPanel()" title="비행스트립 신규 일괄 등록 (Excel Grid)">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <span class="lnb-btn-label" id="lbl-lnb-new">신규생성</span>
+        </button>
+
         <div class="lnb-divider"></div>
 
         <!-- Settings Gear Button in LNB -->
-        <button class="lnb-btn" id="lnbSettingsBtn" title="관제단말 환경설정 (Settings)" onclick="openSettingsModal()">
+        <button class="lnb-btn" id="lnbSettingsBtn" title="단말 환경설정 (Settings)" onclick="openSettingsModal()">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
           <span class="lnb-btn-label" id="lbl-lnb-settings">설정</span>
         </button>
@@ -4094,6 +4128,7 @@
           break;
 
         case 'DEP':
+          strip.stage = 'RWY-Roll';
           strip.atot = curTime;
           strip.actTime = curTime;
           strip.clearance = 'D';
@@ -4128,6 +4163,7 @@
           break;
 
         case 'LND':
+          strip.stage = 'RWY-Roll';
           strip.aldt = curTime;
           strip.aibt = addMinutesToHHMM(curTime, 5);
           strip.actTime = curTime;
@@ -4571,19 +4607,23 @@
       else if (strip.aldt) displayTime = strip.aldt;
       else if (strip.asrt) displayTime = strip.asrt;
 
-      // Flight Phase Stage Badge (TAXI, APP, RWY)
+      // Flight Phase Stage Badge (TAXI, APP, RWY, RWY-Roll)
       let stagePillHtml = '';
       if (strip.status === 'DEP_ACTIVE') {
-        if (strip.stage === 'RUNWAY' || strip.clearance === 'CLR' || strip.asrt) {
-          stagePillHtml = `<span class="flight-stage-pill stage-rwy" title="활주로 진입/이륙허가 단계">RWY</span>`;
+        if (strip.stage === 'RWY-Roll') {
+          stagePillHtml = `<span class="flight-stage-pill stage-rwy-roll" title="활주로 이륙 활주 (RWY-Roll)">RWY-Roll</span>`;
+        } else if (strip.stage === 'RUNWAY' || strip.clearance === 'CLR' || strip.asrt) {
+          stagePillHtml = `<span class="flight-stage-pill stage-rwy" title="활주로 진입/정렬 (RWY)">RWY</span>`;
         } else {
-          stagePillHtml = `<span class="flight-stage-pill stage-taxi" title="지상활주/푸시백 단계">TAXI</span>`;
+          stagePillHtml = `<span class="flight-stage-pill stage-taxi" title="지상활주/푸시백 (TAXI)">TAXI</span>`;
         }
       } else if (strip.status === 'ARR_ACTIVE') {
-        if (strip.stage === 'RUNWAY' || strip.clearance === 'CLR' || strip.alct) {
-          stagePillHtml = `<span class="flight-stage-pill stage-rwy" title="활주로 착륙허가 단계">RWY</span>`;
+        if (strip.stage === 'RWY-Roll') {
+          stagePillHtml = `<span class="flight-stage-pill stage-rwy-roll" title="활주로 착륙 활주/감속 (RWY-Roll)">RWY-Roll</span>`;
+        } else if (strip.stage === 'RUNWAY' || strip.clearance === 'CLR' || strip.alct) {
+          stagePillHtml = `<span class="flight-stage-pill stage-rwy" title="착륙 허가 (RWY)">RWY</span>`;
         } else {
-          stagePillHtml = `<span class="flight-stage-pill stage-app" title="접근 단계">APP</span>`;
+          stagePillHtml = `<span class="flight-stage-pill stage-app" title="접근/진입 (APP)">APP</span>`;
         }
       }
 
@@ -5792,12 +5832,9 @@
     <div class="excel-drawer-header">
       <div class="excel-drawer-title">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
-        <span>비행스트립 신규 일괄 등록 (Excel Grid)</span>
-        <span class="excel-badge-info" id="excelRowCounterBadge">총 3행 대기</span>
+        <span id="lbl-excel-drawer-title">비행스트립 신규 일괄 등록 (Excel Grid)</span>
       </div>
       <div class="excel-drawer-actions">
-        <button type="button" class="excel-act-btn" onclick="addExcelRow()" title="새로운 빈 행 추가">+ 행 추가</button>
-        <button type="button" class="excel-act-btn" onclick="openClipboardPasteModal()" title="엑셀 또는 스프레드시트에서 복사한 텍스트 붙여넣기">엑셀 붙여넣기</button>
         <button type="button" class="excel-act-btn" onclick="clearAllExcelRows()" title="입력된 모든 행 초기화">초기화</button>
         <button type="button" class="excel-act-btn close-btn" onclick="closeExcelBatchPanel()" title="패널 닫기">✕ 닫기</button>
       </div>
@@ -5824,36 +5861,22 @@
         </thead>
         <tbody id="excelGridTbody">
         </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="12" style="text-align: center; padding: 6px; background: var(--surface-high); border: 1px dashed var(--outline);">
+              <button type="button" class="excel-act-btn" onclick="addExcelRow()" style="height: 24px; padding: 0 16px; font-weight: 800; font-size: 10px; background: var(--surface-active); color: var(--primary-bright); border: 1px solid var(--outline-strong); cursor: pointer;" title="새로운 행 추가">
+                + 행 추가
+              </button>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
 
     <div class="excel-drawer-footer">
-      <div class="excel-footer-note">
-        <span>안내: 편명을 입력한 행만 해당 대기열(QUEUE)로 일괄 등록됩니다. (Tab으로 셀 이동 가능)</span>
-      </div>
       <div class="excel-footer-buttons">
         <button type="button" class="excel-footer-btn cancel" onclick="closeExcelBatchPanel()">취소</button>
         <button type="button" class="excel-footer-btn submit" onclick="submitExcelBatchStrips()">해당 대기열로 일괄 등록</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Excel Clipboard Paste Modal -->
-  <div class="modal-backdrop" id="clipboardPasteModal">
-    <div class="modal-dialog" style="width: 520px;">
-      <div class="modal-header">
-        <span class="modal-title">엑셀 데이터 붙여넣기 (TSV / CSV)</span>
-        <button class="modal-close-btn" onclick="closeClipboardPasteModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <span style="font-size: 9.5px; color: var(--primary-soft); display: block; margin-bottom: 6px;">
-          엑셀 또는 구글 스프레드시트에서 표를 복사(Ctrl+C)한 후 아래에 붙여넣기(Ctrl+V)하세요.
-        </span>
-        <textarea id="clipboardPasteArea" style="width: 100%; height: 160px; background: #0b111a; border: 1px solid var(--outline); color: #ffffff; font-family: var(--font-mono); font-size: 10px; padding: 6px; box-sizing: border-box; resize: none;" placeholder="구분	편명	기종	RWY	출발	도착	시각	고도	SSR	비고..."></textarea>
-        <div style="margin-top: 8px; display: flex; justify-content: flex-end; gap: 8px;">
-          <button type="button" class="quick-act-btn" onclick="closeClipboardPasteModal()">취소</button>
-          <button type="button" class="quick-act-btn" style="background: var(--primary); color: #0b111e; font-weight: 800;" onclick="parseClipboardTextAndPopulate()">표로 변환하여 삽입</button>
-        </div>
       </div>
     </div>
   </div>
@@ -6060,19 +6083,16 @@
         addExcelRow('ARRIVAL', '', 'A321', '33R', 'RKSS', 'RKSI', '', '5000FT', '3401');
         addExcelRow('CIRCUIT', '', 'C172', '33L', 'RKSI', 'RKSI', '', '1500FT', '1200');
       }
-      updateExcelCounter();
+      // Focus first input
+      setTimeout(() => {
+        const firstInp = drawer.querySelector('.row-acid');
+        if (firstInp) firstInp.focus();
+      }, 100);
     }
 
     function closeExcelBatchPanel() {
       const drawer = document.getElementById('excelBatchDrawer');
       if (drawer) drawer.classList.remove('open');
-    }
-
-    function updateExcelCounter() {
-      const tbody = document.getElementById('excelGridTbody');
-      const count = tbody ? tbody.children.length : 0;
-      const badge = document.getElementById('excelRowCounterBadge');
-      if (badge) badge.innerText = `총 ${count}행 대기`;
     }
 
     function addExcelRow(bay='DEPARTURE', acid='', type='B738', rwy='33L', origin='RKSI', dest='RKSS', schedTime='', alt='FL240', ssr='', rmk='') {
@@ -6082,7 +6102,7 @@
       const tr = document.createElement('tr');
       tr.className = 'excel-grid-row';
       tr.innerHTML = `
-        <td style="text-align: center; color: var(--primary-soft); font-weight: 700;">${rowIdx}</td>
+        <td style="text-align: center; color: var(--primary); font-weight: 700;">${rowIdx}</td>
         <td>
           <select class="excel-cell-select row-bay">
             <option value="DEPARTURE" ${bay==='DEPARTURE'?'selected':''}>출발 (DEP)</option>
@@ -6091,7 +6111,7 @@
             <option value="CIRCUIT" ${bay==='CIRCUIT'?'selected':''}>장주 (CCT)</option>
           </select>
         </td>
-        <td><input class="excel-cell-input row-acid" placeholder="KAL1205" value="${acid}" style="text-transform: uppercase; font-weight: 800; color: #38bdf8;" /></td>
+        <td><input class="excel-cell-input row-acid" placeholder="KAL1205" value="${acid}" style="text-transform: uppercase; font-weight: 800; color: var(--primary);" /></td>
         <td><input class="excel-cell-input row-type" placeholder="B738" value="${type}" style="text-transform: uppercase;" /></td>
         <td><input class="excel-cell-input row-rwy" placeholder="33L" value="${rwy}" style="text-transform: uppercase;" /></td>
         <td><input class="excel-cell-input row-origin" placeholder="RKSI" value="${origin}" style="text-transform: uppercase;" /></td>
@@ -6105,7 +6125,6 @@
         </td>
       `;
       tbody.appendChild(tr);
-      updateExcelCounter();
     }
 
     function deleteExcelRow(btn) {
@@ -6117,36 +6136,30 @@
         Array.from(tbody.children).forEach((r, idx) => {
           r.children[0].innerText = idx + 1;
         });
-        updateExcelCounter();
       }
     }
 
     function clearAllExcelRows() {
       const tbody = document.getElementById('excelGridTbody');
       if (tbody) tbody.innerHTML = '';
-      updateExcelCounter();
+      addExcelRow('DEPARTURE');
     }
 
-    function openClipboardPasteModal() {
-      document.getElementById('clipboardPasteModal').classList.add('open');
-      const area = document.getElementById('clipboardPasteArea');
-      if (area) {
-        area.value = '';
-        area.focus();
+    // Direct Instant Ctrl+V Clipboard Parser
+    function parseAndPopulateExcelData(text) {
+      if (!text || !text.trim()) return;
+      const lines = text.trim().split(/\r?\n/);
+      const tbody = document.getElementById('excelGridTbody');
+      if (!tbody) return;
+
+      // If existing rows are blank, clear them first
+      const existingInps = Array.from(tbody.querySelectorAll('.row-acid'));
+      const allBlank = existingInps.length > 0 && existingInps.every(inp => !inp.value.trim());
+      if (allBlank) {
+        tbody.innerHTML = '';
       }
-    }
 
-    function closeClipboardPasteModal() {
-      document.getElementById('clipboardPasteModal').classList.remove('open');
-    }
-
-    function parseClipboardTextAndPopulate() {
-      const text = (document.getElementById('clipboardPasteArea').value || '').trim();
-      if (!text) {
-        closeClipboardPasteModal();
-        return;
-      }
-      const lines = text.split(/\r?\n/);
+      let parsedCount = 0;
       lines.forEach(line => {
         const trimmed = line.trim();
         if (!trimmed) return;
@@ -6156,7 +6169,7 @@
         cols = cols.map(c => c.trim());
 
         // Check if header row
-        const firstColUpper = cols[0].toUpperCase();
+        const firstColUpper = (cols[0] || '').toUpperCase();
         if (firstColUpper === 'NO' || firstColUpper === '구분' || firstColUpper === '편명' || firstColUpper === 'ACID') {
           return;
         }
@@ -6191,12 +6204,49 @@
 
         if (acid) {
           addExcelRow(bay, acid, type, rwy, origin, dest, time, alt, ssr, rmk);
+          parsedCount++;
         }
       });
 
-      closeClipboardPasteModal();
-      showToast('엑셀 데이터가 표로 변환되어 삽입되었습니다.');
+      if (parsedCount > 0) {
+        showToast(`엑셀 데이터가 형식에 맞게 붙여넣어졌습니다. (${parsedCount}건)`);
+      }
     }
+
+    function setupExcelDrawerEvents() {
+      const drawer = document.getElementById('excelBatchDrawer');
+      if (!drawer) return;
+
+      // 1. Direct Ctrl+V (Paste) event listener
+      drawer.addEventListener('paste', (e) => {
+        const clipboardData = e.clipboardData || window.clipboardData;
+        if (!clipboardData) return;
+        const text = clipboardData.getData('text');
+        if (!text) return;
+
+        if (text.includes('\t') || text.includes('\n') || text.includes(',')) {
+          const lines = text.trim().split(/\r?\n/);
+          if (lines.length > 1 || text.includes('\t')) {
+            e.preventDefault();
+            parseAndPopulateExcelData(text);
+          }
+        }
+      });
+
+      // 2. Active cell outline / highlight on tab or click
+      const table = document.getElementById('excelGridTable');
+      if (table) {
+        table.addEventListener('focusin', (e) => {
+          const td = e.target.closest('td');
+          if (td) td.classList.add('active-cell');
+        });
+        table.addEventListener('focusout', (e) => {
+          const td = e.target.closest('td');
+          if (td) td.classList.remove('active-cell');
+        });
+      }
+    }
+    setTimeout(setupExcelDrawerEvents, 50);
 
     function submitExcelBatchStrips() {
       const tbody = document.getElementById('excelGridTbody');
@@ -6205,7 +6255,9 @@
       let registeredCount = 0;
 
       rows.forEach(row => {
-        const acid = row.querySelector('.row-acid').value.trim().toUpperCase();
+        const acidInp = row.querySelector('.row-acid');
+        if (!acidInp) return;
+        const acid = acidInp.value.trim().toUpperCase();
         if (!acid) return;
 
         const bay = row.querySelector('.row-bay').value;
