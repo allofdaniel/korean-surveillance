@@ -337,38 +337,46 @@
       box-shadow: 0 0 10px var(--primary) !important;
     }
 
-    /* Entire Row Clickable '+ 행 추가' Row */
+    /* Full-Row Clickable '+ 행 추가' Bar (No inner button border) */
     .excel-add-row-tr {
-      cursor: pointer;
-      background: var(--surface-high);
-      transition: background 0.15s ease;
+      cursor: pointer !important;
+      background: var(--surface-high) !important;
+      transition: background 0.15s ease, color 0.15s ease !important;
+      width: 100% !important;
     }
     .excel-add-row-tr:hover {
-      background: var(--surface-active) !important;
+      background: var(--surface-hover) !important;
     }
     .excel-add-row-td {
-      text-align: center;
-      padding: 7px 12px;
-      border: 1px dashed var(--outline) !important;
+      text-align: center !important;
+      padding: 9px 0 !important;
+      border: none !important;
+      border-top: 1px solid var(--outline) !important;
+      border-bottom: 1.5px solid var(--outline) !important;
       color: var(--primary) !important;
-      font-weight: 800;
-      font-size: 11px;
-      user-select: none;
-      cursor: pointer;
+      font-weight: 700 !important;
+      font-size: 11px !important;
+      user-select: none !important;
+      cursor: pointer !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      transition: all 0.15s ease !important;
     }
     .excel-add-row-tr:hover .excel-add-row-td {
       color: var(--primary-bright) !important;
-      border-color: var(--primary) !important;
       background: var(--surface-hover) !important;
+      border-color: var(--primary) !important;
     }
-    .excel-add-row-label {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-family: var(--font-mono);
-      letter-spacing: 0.05em;
-      pointer-events: none;
+    .excel-add-row-label, .excel-add-row-bar {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      font-family: var(--font-mono) !important;
+      letter-spacing: 0.05em !important;
+      pointer-events: none !important;
+      border: none !important;
+      background: transparent !important;
     }
 
     .excel-grid-table td {
@@ -4081,6 +4089,28 @@
       if (saved) {
         try {
           strips = JSON.parse(saved);
+          // Cleanse legacy mock remarks and generator artifacts from prior sessions
+          let modified = false;
+          strips.forEach(s => {
+            if (s.remarks && (s.remarks.includes('EXCEL BATCH ENTRY') || s.remarks.includes('MANUAL CREATED IN'))) {
+              s.remarks = '';
+              modified = true;
+            }
+            // If strip has mock generated CID (like random 3-digit) from older batch creations
+            if (s.id && s.id.startsWith('FS-') && s.remarks === '' && s.cid && /^\d{3}$/.test(s.cid) && s.route === 'DCT' && s.sidStar === 'DCT') {
+              s.cid = '';
+              s.route = '';
+              s.sidStar = '';
+              s.speed = '';
+              if (s.gate && /^G\d{2}$/.test(s.gate)) {
+                s.gate = '';
+              }
+              modified = true;
+            }
+          });
+          if (modified) {
+            localStorage.setItem('efs_strips_data', JSON.stringify(strips));
+          }
         } catch (e) {
           strips = JSON.parse(JSON.stringify(initialBaseStrips));
         }
@@ -4110,7 +4140,7 @@
           list.forEach((s, idx) => {
             if (!s.bayEntryOrder) {
               s.bayEntryOrder = idx + 1;
-              s.bayEntryTime = s.time || '1200';
+              s.bayEntryTime = s.time || '';
             }
           });
         }
@@ -4581,28 +4611,64 @@
 
       const card = document.getElementById(`strip-${stripId}`);
       if (card) {
-        const getVal = (f) => card.querySelector(`[data-field="${f}"]`)?.value.trim();
+        const getFieldVal = (f) => {
+          const inp = card.querySelector(`[data-field="${f}"]`);
+          return inp ? inp.value.trim() : null;
+        };
 
-        if (getVal('acid')) strip.acid = getVal('acid');
-        if (getVal('typeWake')) strip.typeWake = getVal('typeWake');
-        if (getVal('rwy')) strip.rwy = getVal('rwy');
-        if (getVal('idRoute')) strip.idRoute = getVal('idRoute');
-        if (getVal('cid')) strip.cid = getVal('cid');
-        if (getVal('ssr')) {
-          strip.ssr = getVal('ssr');
-          strip.squawkMode = getVal('ssr');
+        const acidVal = getFieldVal('acid');
+        if (acidVal !== null && acidVal) strip.acid = acidVal.toUpperCase();
+
+        const typeWakeVal = getFieldVal('typeWake');
+        if (typeWakeVal !== null) strip.typeWake = typeWakeVal;
+
+        const rwyVal = getFieldVal('rwy');
+        if (rwyVal !== null) strip.rwy = rwyVal;
+
+        const idRouteVal = getFieldVal('idRoute');
+        if (idRouteVal !== null) strip.idRoute = idRouteVal;
+
+        const cidVal = getFieldVal('cid');
+        if (cidVal !== null) strip.cid = cidVal;
+
+        const ssrVal = getFieldVal('ssr');
+        if (ssrVal !== null) {
+          strip.ssr = ssrVal;
+          strip.squawkMode = ssrVal;
         }
-        if (getVal('schedTime')) strip.schedTime = getVal('schedTime');
-        if (getVal('clearance')) strip.clearance = getVal('clearance');
-        if (getVal('origin')) strip.origin = getVal('origin');
-        if (getVal('sidStar')) strip.sidStar = getVal('sidStar');
-        if (getVal('gate')) strip.gate = getVal('gate');
-        if (getVal('route')) strip.route = getVal('route');
-        if (getVal('remarks')) strip.remarks = getVal('remarks');
-        if (getVal('alt')) strip.alt = getVal('alt');
-        if (getVal('dest')) strip.dest = getVal('dest');
-        if (getVal('assignedAlt')) strip.assignedAlt = getVal('assignedAlt');
-        if (getVal('speed')) strip.speed = getVal('speed');
+
+        const schedTimeVal = getFieldVal('schedTime');
+        if (schedTimeVal !== null) strip.schedTime = schedTimeVal;
+
+        const clearanceVal = getFieldVal('clearance');
+        if (clearanceVal !== null) strip.clearance = clearanceVal;
+
+        const originVal = getFieldVal('origin');
+        if (originVal !== null) strip.origin = originVal;
+
+        const sidStarVal = getFieldVal('sidStar');
+        if (sidStarVal !== null) strip.sidStar = sidStarVal;
+
+        const gateVal = getFieldVal('gate');
+        if (gateVal !== null) strip.gate = gateVal;
+
+        const routeVal = getFieldVal('route');
+        if (routeVal !== null) strip.route = routeVal;
+
+        const remarksVal = getFieldVal('remarks');
+        if (remarksVal !== null) strip.remarks = remarksVal;
+
+        const altVal = getFieldVal('alt');
+        if (altVal !== null) strip.alt = altVal;
+
+        const destVal = getFieldVal('dest');
+        if (destVal !== null) strip.dest = destVal;
+
+        const assignedAltVal = getFieldVal('assignedAlt');
+        if (assignedAltVal !== null) strip.assignedAlt = assignedAltVal;
+
+        const speedVal = getFieldVal('speed');
+        if (speedVal !== null) strip.speed = speedVal;
       }
 
       strip.isInlineEditing = false;
@@ -4666,7 +4732,7 @@
         if (strip.patCount) milestonePillsHtml += `<span class="milestone-pill pat">PAT #${strip.patCount}</span>`;
       }
 
-      let displayTime = strip.time || '0000';
+      let displayTime = strip.time || '';
       if (strip.atot) displayTime = strip.atot;
       else if (strip.aldt) displayTime = strip.aldt;
       else if (strip.asrt) displayTime = strip.asrt;
@@ -4712,14 +4778,14 @@
               </div>
               <div class="sec1-row row-2">
                 <div class="sec1-sub box-2">
-                  <input class="inline-edit-input" data-field="typeWake" value="${strip.typeWake || (strip.type + '/M')}" placeholder="기종" />
+                  <input class="inline-edit-input" data-field="typeWake" value="${strip.typeWake || (strip.type ? `${strip.type}/M` : '')}" placeholder="기종" />
                 </div>
                 <div class="sec1-sub box-2a">
                   <input class="inline-edit-input" data-field="rwy" value="${strip.rwy || ''}" placeholder="RWY" />
                 </div>
               </div>
               <div class="sec1-row row-3 box-3">
-                <input class="inline-edit-input" data-field="idRoute" value="${strip.idRoute || (strip.acid + '/' + (strip.origin||'RKSI') + '-' + (strip.dest||'KJFK'))}" placeholder="식별항로" />
+                <input class="inline-edit-input" data-field="idRoute" value="${strip.idRoute || ((strip.origin && strip.dest) ? `${strip.acid || ''}/${strip.origin}-${strip.dest}` : (strip.acid || ''))}" placeholder="식별항로" />
               </div>
               <div class="sec1-row row-4 box-4">
                 <input class="inline-edit-input" data-field="cid" value="${strip.cid || ''}" placeholder="CID" />
@@ -4735,14 +4801,14 @@
                 <input class="inline-edit-input" data-field="schedTime" value="${strip.schedTime || strip.time || ''}" placeholder="시각" />
               </div>
               <div class="sec-row3 box-7">
-                <input class="inline-edit-input" data-field="clearance" value="${strip.clearance || 'C'}" placeholder="CLR" />
+                <input class="inline-edit-input" data-field="clearance" value="${strip.clearance || ''}" placeholder="CLR" />
               </div>
             </div>
 
             <!-- Section 3 (Origin, SID/STAR, Gate) -->
             <div class="sec-3">
               <div class="sec-row3 box-8">
-                <input class="inline-edit-input" data-field="origin" value="${strip.origin || strip.airport || 'RKSI'}" placeholder="출발" />
+                <input class="inline-edit-input" data-field="origin" value="${strip.origin || strip.airport || ''}" placeholder="출발" />
               </div>
               <div class="sec-row3 box-8a">
                 <input class="inline-edit-input" data-field="sidStar" value="${strip.sidStar || ''}" placeholder="절차" />
@@ -4756,13 +4822,13 @@
             <div class="sec-4">
               <div class="sec4-top">
                 <span class="sec4-corner box-9">${displayTime}</span>
-                <span class="sec4-corner box-9b">${strip.type || 'B738'}</span>
+                <span class="sec4-corner box-9b">${strip.type || ''}</span>
               </div>
               <div class="sec4-center box-route">
                 <input class="inline-edit-input" data-field="route" value="${strip.route || ''}" placeholder="항로 (Route)" />
               </div>
               <div class="sec4-bottom">
-                <span class="sec4-corner box-9a">${strip.category || strip.operationType?.slice(0,3)}</span>
+                <span class="sec4-corner box-9a">${strip.category || strip.operationType?.slice(0,3) || ''}</span>
                 <div class="sec4-corner box-9c" style="flex: 1;">
                   <input class="inline-edit-input" data-field="remarks" value="${strip.remarks || ''}" placeholder="비고 (Remarks)" />
                 </div>
@@ -4774,10 +4840,10 @@
               <div class="sec5-cell box-10">
                 <input class="inline-edit-input" data-field="alt" value="${strip.alt || ''}" placeholder="고도" />
               </div>
-              <div class="sec5-cell box-11">${(strip.route || '').split(' ')[0] || 'DCT'}</div>
-              <div class="sec5-cell box-12">${strip.actTime || strip.atot || strip.aldt || strip.asat || '-'}</div>
+              <div class="sec5-cell box-11">${(strip.route || '').split(' ')[0] || ''}</div>
+              <div class="sec5-cell box-12">${strip.actTime || strip.atot || strip.aldt || strip.asat || ''}</div>
 
-              <div class="sec5-cell box-13">${strip.origin || 'RKSI'}</div>
+              <div class="sec5-cell box-13">${strip.origin || ''}</div>
               <div class="sec5-cell box-14">
                 <input class="inline-edit-input" data-field="dest" value="${strip.dest || ''}" placeholder="도착" />
               </div>
@@ -4785,7 +4851,7 @@
                 <input class="inline-edit-input" data-field="assignedAlt" value="${strip.assignedAlt || ''}" placeholder="배정고도" />
               </div>
 
-              <div class="sec5-cell box-16">${strip.squawkMode || strip.ssr || '1200'}</div>
+              <div class="sec5-cell box-16">${strip.ssr || strip.squawkMode || ''}</div>
               <div class="sec5-cell box-17">
                 <input class="inline-edit-input" data-field="speed" value="${strip.speed || ''}" placeholder="속도" />
               </div>
@@ -4907,54 +4973,54 @@
 
             <!-- Section 1 (Left: 1/4 division, 4 vertical rows) -->
             <div class="sec-1">
-              <div class="sec1-row row-1 box-1 strip-acid">${strip.acid || 'KAL000'}</div>
+              <div class="sec1-row row-1 box-1 strip-acid">${strip.acid || ''}</div>
               <div class="sec1-row row-2">
-                <div class="sec1-sub box-2">${strip.typeWake || `${strip.type || 'B738'}/M`}</div>
-                <div class="sec1-sub box-2a">${strip.rwy || '33L'}</div>
+                <div class="sec1-sub box-2">${strip.typeWake || (strip.type ? `${strip.type}/M` : '')}</div>
+                <div class="sec1-sub box-2a">${strip.rwy || ''}</div>
               </div>
-              <div class="sec1-row row-3 box-3">${strip.idRoute || `${strip.acid}/${strip.origin}-${strip.dest}`}</div>
-              <div class="sec1-row row-4 box-4">${strip.cid || '001'}</div>
+              <div class="sec1-row row-3 box-3">${strip.idRoute || ((strip.origin && strip.dest) ? `${strip.acid || ''}/${strip.origin}-${strip.dest}` : (strip.acid || ''))}</div>
+              <div class="sec1-row row-4 box-4">${strip.cid || ''}</div>
             </div>
 
             <!-- Section 2 (1/3 division, 3 vertical rows) -->
             <div class="sec-2">
-              <div class="sec-row3 box-5">${strip.ssr || ''}</div>
-              <div class="sec-row3 box-6">${strip.schedTime || '-'}</div>
-              <div class="sec-row3 box-7">${strip.clearance || 'C'}</div>
+              <div class="sec-row3 box-5">${strip.ssr || strip.squawkMode || ''}</div>
+              <div class="sec-row3 box-6">${strip.schedTime || strip.time || ''}</div>
+              <div class="sec-row3 box-7">${strip.clearance || ''}</div>
             </div>
 
             <!-- Section 3 (1/3 division, 3 vertical rows) -->
             <div class="sec-3">
-              <div class="sec-row3 box-8">${strip.origin || strip.airport || 'RKSI'}</div>
-              <div class="sec-row3 box-8a">${strip.sidStar || '-'}</div>
-              <div class="sec-row3 box-8b">${strip.gate || '-'}</div>
+              <div class="sec-row3 box-8">${strip.origin || strip.airport || ''}</div>
+              <div class="sec-row3 box-8a">${strip.sidStar || ''}</div>
+              <div class="sec-row3 box-8b">${strip.gate || ''}</div>
             </div>
 
             <!-- Section 4 (Center Wide) -->
             <div class="sec-4">
               <div class="sec4-top">
                 <span class="sec4-corner box-9">${displayTime}</span>
-                <span class="sec4-corner box-9b">${strip.type || 'B738'}</span>
+                <span class="sec4-corner box-9b">${strip.type || ''}</span>
               </div>
-              <div class="sec4-center box-route">${strip.route || 'DCT'}</div>
+              <div class="sec4-center box-route">${strip.route || ''}</div>
               <div class="sec4-bottom">
-                <span class="sec4-corner box-9a">${strip.category || strip.operationType?.slice(0,3)}</span>
+                <span class="sec4-corner box-9a">${strip.category || strip.operationType?.slice(0,3) || ''}</span>
                 <span class="sec4-corner box-9c">${strip.remarks || ''}</span>
               </div>
             </div>
 
             <!-- Section 5 (Right: 3x3 Grid) -->
             <div class="sec-5">
-              <div class="sec5-cell box-10">${strip.alt || 'FL340'}</div>
-              <div class="sec5-cell box-11">${(strip.route || '').split(' ')[0] || 'DCT'}</div>
-              <div class="sec5-cell box-12" title="실제 시각">${strip.actTime || strip.atot || strip.aldt || strip.asat || '-'}</div>
+              <div class="sec5-cell box-10">${strip.alt || ''}</div>
+              <div class="sec5-cell box-11">${(strip.route || '').split(' ')[0] || ''}</div>
+              <div class="sec5-cell box-12" title="실제 시각">${strip.actTime || strip.atot || strip.aldt || strip.asat || ''}</div>
 
-              <div class="sec5-cell box-13">${strip.origin || 'RKSI'}</div>
-              <div class="sec5-cell box-14">${strip.dest || 'RKSS'}</div>
-              <div class="sec5-cell box-15">${strip.assignedAlt || '-'}</div>
+              <div class="sec5-cell box-13">${strip.origin || ''}</div>
+              <div class="sec5-cell box-14">${strip.dest || ''}</div>
+              <div class="sec5-cell box-15">${strip.assignedAlt || ''}</div>
 
-              <div class="sec5-cell box-16">${strip.squawkMode || strip.ssr || '1200'}</div>
-              <div class="sec5-cell box-17">${strip.speed || '-'}</div>
+              <div class="sec5-cell box-16">${strip.ssr || strip.squawkMode || ''}</div>
+              <div class="sec5-cell box-17">${strip.speed || ''}</div>
               <div class="sec5-cell box-18" title="상태 구분">
                 ${statusLabel ? `<span class="status-toggle-pill" style="cursor: default;">${statusLabel}</span>` : ''}
               </div>
@@ -5063,19 +5129,19 @@
           callsign: strip.acid,
           operation_type: strip.operationType,
           status: strip.status,
-          aircraft_type: strip.type,
-          wake_category: strip.typeWake ? strip.typeWake.split('/')[1] || 'M' : 'M',
+          aircraft_type: strip.type || '',
+          wake_category: strip.typeWake ? (strip.typeWake.split('/')[1] || '') : '',
           equipment: 'SDE2E3FGHIRWXYZ/LB1',
-          ssr_code: strip.ssr || strip.squawkMode || '1200',
+          ssr_code: strip.ssr || strip.squawkMode || '',
           dep_airport: strip.origin || strip.airport || activeAirport,
-          arr_airport: strip.dest || 'RKSS',
-          time: strip.time || strip.schedTime || '1200',
-          altitude: strip.alt || 'FL340',
-          assigned_altitude: strip.assignedAlt || strip.alt || 'FL340',
-          runway: strip.rwy || '33L',
-          gate: strip.gate || '-',
-          route: strip.route || 'DCT',
-          clearance: strip.clearance || 'C',
+          arr_airport: strip.dest || '',
+          time: strip.time || strip.schedTime || '',
+          altitude: strip.alt || '',
+          assigned_altitude: strip.assignedAlt || strip.alt || '',
+          runway: strip.rwy || '',
+          gate: strip.gate || '',
+          route: strip.route || '',
+          clearance: strip.clearance || '',
           remarks: strip.remarks || '',
           updated_at: new Date().toISOString()
         };
@@ -5612,14 +5678,15 @@
       const acid = document.getElementById('mAcid').value.trim().toUpperCase();
       const type = document.getElementById('mType').value.trim().toUpperCase();
       const bay = document.getElementById('mBay').value;
-      const ssr = document.getElementById('mSsr').value.trim() || '1200';
-      const dep = document.getElementById('mDep').value.trim().toUpperCase() || activeAirport;
-      const arr = document.getElementById('mArr').value.trim().toUpperCase() || 'RKSS';
-      const time = document.getElementById('mTime').value.trim() || '1200';
-      const alt = document.getElementById('mAlt').value.trim().toUpperCase() || 'FL340';
-      const rwy = document.getElementById('mRwy').value.trim().toUpperCase() || '33L';
-      const gate = document.getElementById('mGate').value.trim().toUpperCase() || '-';
-      const route = document.getElementById('mRoute').value.trim().toUpperCase() || 'DCT';
+      const ssr = document.getElementById('mSsr') ? document.getElementById('mSsr').value.trim() : '';
+      const dep = (document.getElementById('mDep') ? document.getElementById('mDep').value.trim().toUpperCase() : '') || activeAirport;
+      const arr = (document.getElementById('mArr') ? document.getElementById('mArr').value.trim().toUpperCase() : '') || 'RKSS';
+      const time = (document.getElementById('mTime') ? document.getElementById('mTime').value.trim() : '') || getUtcHHMM();
+      const alt = (document.getElementById('mAlt') ? document.getElementById('mAlt').value.trim().toUpperCase() : '');
+      const rwy = (document.getElementById('mRwy') ? document.getElementById('mRwy').value.trim().toUpperCase() : '');
+      const gate = (document.getElementById('mGate') ? document.getElementById('mGate').value.trim().toUpperCase() : '');
+      const route = (document.getElementById('mRoute') ? document.getElementById('mRoute').value.trim().toUpperCase() : '');
+      const rmk = (document.getElementById('mRmk') ? document.getElementById('mRmk').value.trim() : '');
 
       let defaultStatus = `${bay.slice(0, 3)}_QUEUE`;
       if (bay === 'CIRCUIT') defaultStatus = 'CCT_QUEUE';
@@ -5642,7 +5709,7 @@
         typeWake: `${type}/M`,
         rwy: rwy,
         schedTime: time,
-        sidStar: 'DCT',
+        sidStar: '',
         rules: (bay === 'CIRCUIT') ? 'V' : 'I',
         origin: dep,
         dest: arr,
@@ -5650,15 +5717,15 @@
         idRoute: `${acid}/${dep}-${arr}`,
         sector: 'TWR',
         squawkMode: ssr,
-        speed: 'K0180',
+        speed: '',
         fplStatus: 'PND',
-        cid: String(Math.floor(100 + Math.random()*899)),
+        cid: '',
         clearance: 'P',
         gate: gate,
         category: bay.slice(0, 3),
         bayEntryOrder: maxSeq + 1,
         bayEntryTime: getUtcHHMM(),
-        remarks: `RMK/ MANUAL CREATED IN ${bay} QUEUE`
+        remarks: rmk
       };
 
       strips.push(newStrip);
@@ -5703,7 +5770,7 @@
       document.getElementById('eAlt').value = strip.alt || '';
       document.getElementById('eAssignedAlt').value = strip.assignedAlt || '';
       document.getElementById('eSidStar').value = strip.sidStar || '';
-      document.getElementById('eClearance').value = strip.clearance || 'C';
+      document.getElementById('eClearance').value = strip.clearance || '';
       document.getElementById('eSpeed').value = strip.speed || '';
       document.getElementById('eRoute').value = strip.route || '';
       document.getElementById('eRemarks').value = strip.remarks || '';
@@ -6014,26 +6081,33 @@
       <table class="excel-grid-table" id="excelGridTable">
         <thead>
           <tr>
-            <th style="width: 32px; text-align: center;">No</th>
-            <th style="width: 100px;">구분 (대기열)</th>
-            <th style="width: 85px;">편명 (ACID)</th>
-            <th style="width: 75px;">기종 (TYPE)</th>
-            <th style="width: 55px;">RWY</th>
-            <th style="width: 60px;">출발 (DEP)</th>
-            <th style="width: 60px;">도착 (ARR)</th>
-            <th style="width: 65px;">시각 (TIME)</th>
-            <th style="width: 70px;">배정고도</th>
-            <th style="width: 60px;">SSR</th>
-            <th style="min-width: 140px;">항로 / 비고 (Route / Remarks)</th>
-            <th style="width: 36px; text-align: center;">삭제</th>
+            <th style="width: 28px; text-align: center;">No</th>
+            <th style="width: 85px;">구분</th>
+            <th style="width: 80px;">편명 (ACID)</th>
+            <th style="width: 65px;">기종 (TYPE)</th>
+            <th style="width: 50px;">RWY</th>
+            <th style="width: 55px;">주기장</th>
+            <th style="width: 110px;">출발 (DEP)</th>
+            <th style="width: 110px;">도착 (ARR)</th>
+            <th style="width: 55px;">시각</th>
+            <th style="width: 65px;">순항고도</th>
+            <th style="width: 65px;">배정고도</th>
+            <th style="width: 55px;">SSR</th>
+            <th style="width: 80px;">절차 (SID/STAR)</th>
+            <th style="width: 85px;">항로 (ROUTE)</th>
+            <th style="min-width: 120px;">비고 (REMARKS)</th>
+            <th style="width: 32px; text-align: center;">삭제</th>
           </tr>
         </thead>
         <tbody id="excelGridTbody">
         </tbody>
         <tfoot>
-          <tr class="excel-add-row-tr" onclick="addExcelRow()" title="클릭하여 새로운 행 추가 (+ 행 추가)">
-            <td colspan="12" class="excel-add-row-td">
-              <span class="excel-add-row-label">+ 행 추가</span>
+          <tr class="excel-add-row-tr" onclick="addExcelRow()" title="새 행 추가 (전체 행 클릭 또는 마지막 행에서 Enter/방향키 아래)">
+            <td colspan="16" class="excel-add-row-td" onclick="addExcelRow()">
+              <div class="excel-add-row-bar">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                <span>+ 행 추가 (클릭하여 새 행 추가)</span>
+              </div>
             </td>
           </tr>
         </tfoot>
@@ -6239,18 +6313,62 @@
     // =========================================================================
     // Excel-Style Batch Strip Registry Drawer System
     // =========================================================================
+    // =========================================================================
+    // Airport Master List for Dropdown Select
+    // =========================================================================
+    const AIRPORT_OPTIONS = [
+      { code: 'RKSI', name: 'RKSI (인천)' },
+      { code: 'RKSS', name: 'RKSS (김포)' },
+      { code: 'RKPC', name: 'RKPC (제주)' },
+      { code: 'RKPK', name: 'RKPK (김해/부산)' },
+      { code: 'RKTU', name: 'RKTU (청주)' },
+      { code: 'RKTN', name: 'RKTN (대구)' },
+      { code: 'RKNY', name: 'RKNY (양양)' },
+      { code: 'RKJB', name: 'RKJB (무안)' },
+      { code: 'RKJJ', name: 'RKJJ (광주)' },
+      { code: 'RKPU', name: 'RKPU (울산)' },
+      { code: 'RKPS', name: 'RKPS (사천)' },
+      { code: 'RKTH', name: 'RKTH (포항)' },
+      { code: 'RKTL', name: 'RKTL (울진)' },
+      { code: 'RKJY', name: 'RKJY (여수)' },
+      { code: 'RJAA', name: 'RJAA (도쿄 나리타)' },
+      { code: 'RJTT', name: 'RJTT (도쿄 하네다)' },
+      { code: 'RJBB', name: 'RJBB (오사카 간사이)' },
+      { code: 'ZBAA', name: 'ZBAA (베이징)' },
+      { code: 'ZSPD', name: 'ZSPD (상하이 푸동)' },
+      { code: 'VHHH', name: 'VHHH (홍콩)' },
+      { code: 'RCTP', name: 'RCTP (타이베이)' },
+      { code: 'KJFK', name: 'KJFK (뉴욕 JFK)' },
+      { code: 'KLAX', name: 'KLAX (로스앤젤레스)' },
+      { code: 'PANC', name: 'PANC (앵커리지)' }
+    ];
+
+    function getAirportOptionsHtml(selectedCode) {
+      const codeUpper = (selectedCode || '').toUpperCase();
+      let html = '';
+      if (codeUpper && !AIRPORT_OPTIONS.some(a => a.code === codeUpper)) {
+        html += `<option value="${codeUpper}" selected>${codeUpper}</option>`;
+      }
+      AIRPORT_OPTIONS.forEach(a => {
+        html += `<option value="${a.code}" ${codeUpper === a.code ? 'selected' : ''}>${a.name}</option>`;
+      });
+      return html;
+    }
+
+    // =========================================================================
+    // Excel-Style Batch Strip Registry Drawer System
+    // =========================================================================
     function openExcelBatchPanel() {
       const drawer = document.getElementById('excelBatchDrawer');
       if (!drawer) return;
       drawer.classList.add('open');
       const tbody = document.getElementById('excelGridTbody');
       if (tbody && tbody.children.length === 0) {
-        // Pre-populate with 3 ready-to-type rows
-        addExcelRow('DEPARTURE', '', '', '', '', '', '', '', '', '');
-        addExcelRow('ARRIVAL', '', '', '', '', '', '', '', '', '');
-        addExcelRow('CIRCUIT', '', '', '', '', '', '', '', '', '');
+        // Pre-populate with 3 clean ready-to-type rows without fake data
+        addExcelRow('DEPARTURE', '', '', '', '', 'RKSI', 'RKPC', '', '', '', '', '', '', '');
+        addExcelRow('ARRIVAL', '', '', '', '', 'RKPC', 'RKSI', '', '', '', '', '', '', '');
+        addExcelRow('CIRCUIT', '', '', '', '', 'RKSI', 'RKSI', '', '', '', '', '', '', '');
       }
-      // Focus first input
       setTimeout(() => {
         const firstInp = drawer.querySelector('.row-acid');
         if (firstInp) firstInp.focus();
@@ -6262,7 +6380,7 @@
       if (drawer) drawer.classList.remove('open');
     }
 
-    function addExcelRow(bay='DEPARTURE', acid='', type='', rwy='', origin='', dest='', schedTime='', alt='', ssr='', rmk='') {
+    function addExcelRow(bay='DEPARTURE', acid='', type='', rwy='', gate='', origin='', dest='', schedTime='', alt='', assignedAlt='', ssr='', sidStar='', route='', rmk='') {
       const tbody = document.getElementById('excelGridTbody');
       if (!tbody) return;
       const rowIdx = tbody.children.length + 1;
@@ -6281,12 +6399,24 @@
         <td><input class="excel-cell-input row-acid" placeholder="KAL1205" value="${acid}" style="text-transform: uppercase; font-weight: 800; color: var(--primary);" /></td>
         <td><input class="excel-cell-input row-type" placeholder="B738" value="${type}" style="text-transform: uppercase;" /></td>
         <td><input class="excel-cell-input row-rwy" placeholder="33L" value="${rwy}" style="text-transform: uppercase;" /></td>
-        <td><input class="excel-cell-input row-origin" placeholder="RKSI" value="${origin}" style="text-transform: uppercase;" /></td>
-        <td><input class="excel-cell-input row-dest" placeholder="RKPC" value="${dest}" style="text-transform: uppercase;" /></td>
+        <td><input class="excel-cell-input row-gate" placeholder="102" value="${gate}" style="text-transform: uppercase;" /></td>
+        <td>
+          <select class="excel-cell-select row-origin">
+            ${getAirportOptionsHtml(origin || (bay==='ARRIVAL'?'RKPC':'RKSI'))}
+          </select>
+        </td>
+        <td>
+          <select class="excel-cell-select row-dest">
+            ${getAirportOptionsHtml(dest || (bay==='ARRIVAL'?'RKSI':'RKPC'))}
+          </select>
+        </td>
         <td><input class="excel-cell-input row-time" placeholder="1340" value="${schedTime || getUtcHHMM()}" /></td>
         <td><input class="excel-cell-input row-alt" placeholder="FL280" value="${alt}" style="text-transform: uppercase;" /></td>
+        <td><input class="excel-cell-input row-assigned-alt" placeholder="FL140" value="${assignedAlt}" style="text-transform: uppercase;" /></td>
         <td><input class="excel-cell-input row-ssr" placeholder="7123" value="${ssr}" /></td>
-        <td><input class="excel-cell-input row-rmk" placeholder="비고 및 항로" value="${rmk}" /></td>
+        <td><input class="excel-cell-input row-sidstar" placeholder="BOPTA1D" value="${sidStar}" style="text-transform: uppercase;" /></td>
+        <td><input class="excel-cell-input row-route" placeholder="Y711 DCT" value="${route}" style="text-transform: uppercase;" /></td>
+        <td><input class="excel-cell-input row-rmk" placeholder="비고 및 특이사항" value="${rmk}" /></td>
         <td style="text-align: center;">
           <button type="button" class="excel-row-del-btn" onclick="deleteExcelRow(this)" title="행 삭제">&times;</button>
         </td>
@@ -6331,20 +6461,15 @@
         const trimmed = line.trim();
         if (!trimmed) return;
 
-        // Support Tab separated (TSV) or Comma separated (CSV)
         let cols = trimmed.includes('\t') ? trimmed.split('\t') : trimmed.split(',');
         cols = cols.map(c => c.trim());
 
-        // Check if header row
         const firstColUpper = (cols[0] || '').toUpperCase();
         if (firstColUpper === 'NO' || firstColUpper === '구분' || firstColUpper === '편명' || firstColUpper === 'ACID') {
           return;
         }
 
         let bay = 'DEPARTURE';
-        let acid = '', type = 'B738', rwy = '33L', origin = 'RKSI', dest = 'RKSS';
-        let time = '', alt = 'FL240', ssr = '', rmk = '';
-
         if (cols[0] && (cols[0].includes('출발') || cols[0].toUpperCase().includes('DEP'))) {
           bay = 'DEPARTURE';
           cols.shift();
@@ -6359,18 +6484,39 @@
           cols.shift();
         }
 
-        if (cols[0]) acid = cols[0].trim().toUpperCase();
-        if (cols[1]) type = cols[1].trim().toUpperCase();
-        if (cols[2]) rwy = cols[2].trim().toUpperCase();
-        if (cols[3]) origin = cols[3].trim().toUpperCase();
-        if (cols[4]) dest = cols[4].trim().toUpperCase();
-        if (cols[5]) time = cols[5].trim();
-        if (cols[6]) alt = cols[6].trim().toUpperCase();
-        if (cols[7]) ssr = cols[7].trim();
-        if (cols[8]) rmk = cols.slice(8).join(' ').trim();
+        let acid = '', type = '', rwy = '', gate = '', origin = 'RKSI', dest = 'RKSS';
+        let time = '', alt = '', assignedAlt = '', ssr = '', sidStar = '', route = '', rmk = '';
+
+        if (cols.length >= 12) {
+          // Comprehensive format
+          acid = (cols[0] || '').toUpperCase();
+          type = (cols[1] || '').toUpperCase();
+          rwy = (cols[2] || '').toUpperCase();
+          gate = (cols[3] || '').toUpperCase();
+          origin = (cols[4] || 'RKSI').toUpperCase();
+          dest = (cols[5] || 'RKSS').toUpperCase();
+          time = cols[6] || '';
+          alt = (cols[7] || '').toUpperCase();
+          assignedAlt = (cols[8] || '').toUpperCase();
+          ssr = cols[9] || '';
+          sidStar = (cols[10] || '').toUpperCase();
+          route = (cols[11] || '').toUpperCase();
+          rmk = cols.slice(12).join(' ').trim();
+        } else {
+          // Standard / Compact format
+          if (cols[0]) acid = cols[0].trim().toUpperCase();
+          if (cols[1]) type = cols[1].trim().toUpperCase();
+          if (cols[2]) rwy = cols[2].trim().toUpperCase();
+          if (cols[3]) origin = cols[3].trim().toUpperCase();
+          if (cols[4]) dest = cols[4].trim().toUpperCase();
+          if (cols[5]) time = cols[5].trim();
+          if (cols[6]) alt = cols[6].trim().toUpperCase();
+          if (cols[7]) ssr = cols[7].trim();
+          if (cols[8]) rmk = cols.slice(8).join(' ').trim();
+        }
 
         if (acid) {
-          addExcelRow(bay, acid, type, rwy, origin, dest, time, alt, ssr, rmk);
+          addExcelRow(bay, acid, type, rwy, gate, origin, dest, time, alt, assignedAlt, ssr, sidStar, route, rmk);
           parsedCount++;
         }
       });
@@ -6380,7 +6526,6 @@
       }
     }
 
-    
     // Keyboard Arrow Navigation across Excel Grid Cells
     function setupExcelKeyboardNavigation() {
       const table = document.getElementById('excelGridTable');
@@ -6403,6 +6548,9 @@
         const rowIdx = rows.indexOf(tr);
 
         if (e.key === 'ArrowDown' || e.key === 'Enter') {
+          if (target.tagName === 'SELECT' && e.key === 'ArrowDown') {
+            return; // Allow select dropdown to cycle options with ArrowDown
+          }
           e.preventDefault();
           if (rowIdx < rows.length - 1) {
             const nextRowCells = Array.from(rows[rowIdx + 1].querySelectorAll('.excel-cell-input, .excel-cell-select'));
@@ -6426,6 +6574,9 @@
             }
           }
         } else if (e.key === 'ArrowUp') {
+          if (target.tagName === 'SELECT') {
+            return; // Allow select dropdown to cycle options with ArrowUp
+          }
           if (rowIdx > 0) {
             e.preventDefault();
             const prevRowCells = Array.from(rows[rowIdx - 1].querySelectorAll('.excel-cell-input, .excel-cell-select'));
@@ -6523,14 +6674,18 @@
         if (!acid) return;
 
         const bay = row.querySelector('.row-bay').value;
-        const type = row.querySelector('.row-type').value.trim().toUpperCase() || 'B738';
-        const rwy = row.querySelector('.row-rwy').value.trim().toUpperCase() || '33L';
-        const origin = row.querySelector('.row-origin').value.trim().toUpperCase() || 'RKSI';
-        const dest = row.querySelector('.row-dest').value.trim().toUpperCase() || 'RKSS';
-        const time = row.querySelector('.row-time').value.trim() || getUtcHHMM();
-        const alt = row.querySelector('.row-alt').value.trim().toUpperCase() || 'FL240';
-        const ssr = row.querySelector('.row-ssr').value.trim();
-        const rmk = row.querySelector('.row-rmk').value.trim();
+        const type = (row.querySelector('.row-type')?.value.trim().toUpperCase()) || '';
+        const rwy = (row.querySelector('.row-rwy')?.value.trim().toUpperCase()) || '';
+        const gate = (row.querySelector('.row-gate')?.value.trim().toUpperCase()) || '';
+        const origin = (row.querySelector('.row-origin')?.value.trim().toUpperCase()) || 'RKSI';
+        const dest = (row.querySelector('.row-dest')?.value.trim().toUpperCase()) || 'RKSS';
+        const time = row.querySelector('.row-time')?.value.trim() || getUtcHHMM();
+        const alt = (row.querySelector('.row-alt')?.value.trim().toUpperCase()) || '';
+        const assignedAlt = (row.querySelector('.row-assigned-alt')?.value.trim().toUpperCase()) || '';
+        const ssr = row.querySelector('.row-ssr')?.value.trim() || '';
+        const sidStar = (row.querySelector('.row-sidstar')?.value.trim().toUpperCase()) || '';
+        const route = (row.querySelector('.row-route')?.value.trim().toUpperCase()) || '';
+        const rmk = row.querySelector('.row-rmk')?.value.trim() || '';
 
         let targetStatus = 'DEP_QUEUE';
         if (bay === 'ARRIVAL') targetStatus = 'ARR_QUEUE';
@@ -6539,36 +6694,42 @@
 
         const newId = `FS-${acid}-${Date.now().toString().slice(-4)}`;
 
+        let wake = 'M';
+        if (['B744', 'B748', 'B77W', 'B772', 'B789', 'B788', 'A388', 'A359', 'A333', 'A332'].includes(type)) {
+          wake = 'H';
+        } else if (['C172', 'C152', 'PA28', 'DA40', 'DA42', 'SR22'].includes(type)) {
+          wake = 'L';
+        }
+
         const newStrip = {
           id: newId,
           operationType: bay,
           status: targetStatus,
           acid: acid,
-          ssr: ssr,
-          airport: origin,
-          time: time,
           type: type,
-          alt: alt,
-          route: 'DCT',
-          actTime: '-',
-          typeWake: `${type}/M`,
+          typeWake: type ? (wake ? `${type}/${wake}` : `${type}/M`) : '',
           rwy: rwy,
-          schedTime: time,
-          sidStar: 'DCT',
-          rules: 'I',
+          gate: gate,
           origin: origin,
           dest: dest,
-          assignedAlt: alt,
+          time: time,
+          schedTime: time,
+          alt: alt,
+          assignedAlt: assignedAlt,
+          ssr: ssr,
+          squawkMode: ssr,
+          sidStar: sidStar,
+          route: route,
+          remarks: rmk, // strictly user input or empty!
+          speed: '',
+          actTime: '-',
           idRoute: `${acid}/${origin}-${dest}`,
           sector: 'TWR',
-          squawkMode: ssr,
-          speed: 'K0250',
+          rules: (bay === 'CIRCUIT') ? 'V' : 'I',
           fplStatus: 'FPL',
-          cid: String(Math.floor(100 + Math.random() * 899)),
-          clearance: 'P',
-          gate: 'G' + Math.floor(10 + Math.random() * 89),
-          category: bay.slice(0, 3),
-          remarks: rmk
+          cid: '',
+          clearance: '',
+          category: bay.slice(0, 3)
         };
 
         assignNextEntrySeq(newStrip, bay, targetStatus);
@@ -6582,7 +6743,7 @@
           bay,
           null,
           targetStatus,
-          `[Excel 일괄등록] ACID=${acid}, TYPE=${type}, ${bay} 대기열 등록 (순번 #${newStrip.bayEntryOrder})`
+          `[Excel 일괄등록] ACID=${acid}, TYPE=${type}, ${origin}->${dest}, ${bay} 대기열 등록 (순번 #${newStrip.bayEntryOrder})`
         );
       });
 
