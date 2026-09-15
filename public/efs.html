@@ -49,7 +49,7 @@
       --app-font: var(--font-pretendard);
 
       /* Permanent Ultra-Compact Strip Height */
-      --strip-card-h: 46px;
+      --strip-card-h: 68px !important;
 
       /* Distinct Bay Colors (Dark) */
       --bay-dep-bg: rgba(0, 228, 117, 0.12);
@@ -1840,15 +1840,16 @@
 
   
     /* =========================================================================
-       STRIP CARD REDESIGN: BOTTOM ACTION BAR & ENTRY SEQUENCE BADGE & BORDER FLASH
+       STRIP CARD REDESIGN: BOTTOM ACTION BAR & COMPACT SEQ & WACOM PEN & INLINE EDIT
        ========================================================================= */
-    :root {
-      --strip-card-h: 66px;
+    :root, html, html.theme-across, html.theme-crt, html.theme-high-contrast, html.theme-light {
+      --strip-card-h: 68px !important;
     }
 
     .strip-drag-placeholder {
-      height: var(--strip-card-h) !important;
-      min-height: var(--strip-card-h) !important;
+      height: 68px !important;
+      min-height: 68px !important;
+      max-height: 68px !important;
       background: rgba(251, 203, 65, 0.18) !important;
       border: 2px dashed #fbcb41 !important;
       border-radius: 3px !important;
@@ -1861,19 +1862,23 @@
       display: flex !important;
       flex-direction: column !important;
       width: 100% !important;
-      height: var(--strip-card-h) !important;
-      min-height: var(--strip-card-h) !important;
+      height: 68px !important;
+      min-height: 68px !important;
+      max-height: 68px !important;
       background: var(--strip-bg) !important;
       color: var(--strip-text) !important;
       border: 1px solid #334155 !important;
       border-radius: 3px !important;
       overflow: hidden !important;
+      position: relative !important;
       cursor: grab !important;
       flex-shrink: 0 !important;
       transition: opacity 0.1s, transform 0.1s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
       box-sizing: border-box !important;
       user-select: none !important;
       -webkit-user-select: none !important;
+      touch-action: pan-y;
+      margin-bottom: 2px !important;
     }
 
     /* 2-Time Border Flash Animation on newly entered or moved strips */
@@ -1905,155 +1910,148 @@
       z-index: 100 !important;
     }
 
-    /* Top Strip Data (Un-cramped Full Width 5 Sections) */
+    /* Top Strip Data (Un-cramped Full Width 5 Sections: Exactly 45px) */
     .strip-card-main {
-      display: flex;
-      flex-direction: row;
-      flex: 1;
-      min-height: 44px;
-      width: 100%;
-      overflow: hidden;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+      display: flex !important;
+      flex-direction: row !important;
+      height: 45px !important;
+      min-height: 45px !important;
+      max-height: 45px !important;
+      flex: none !important;
+      width: 100% !important;
+      overflow: hidden !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.38) !important;
+      box-sizing: border-box !important;
+      position: relative !important;
+      z-index: 2 !important;
     }
 
-    /* Sequence Badge Column on Left */
+    /* Sequence Badge Column on Left: Compact Single Number (Width: 14px) */
     .strip-seq-col {
-      width: 25px;
-      min-width: 25px;
-      max-width: 25px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.24);
-      border-right: 1px solid rgba(0, 0, 0, 0.4);
-      font-family: var(--font-mono);
-      box-sizing: border-box;
-      padding: 1px 0;
-      user-select: none;
-      flex-shrink: 0;
-    }
-
-    .strip-seq-label {
-      font-size: 6.5px;
-      font-weight: 800;
-      opacity: 0.7;
-      line-height: 1;
-      letter-spacing: -0.05em;
-      color: var(--strip-text);
+      width: 14px !important;
+      min-width: 14px !important;
+      max-width: 14px !important;
+      height: 100% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: rgba(0, 0, 0, 0.3) !important;
+      border-right: 1px solid rgba(0, 0, 0, 0.45) !important;
+      font-family: var(--font-mono) !important;
+      box-sizing: border-box !important;
+      padding: 0 !important;
+      user-select: none !important;
+      flex-shrink: 0 !important;
     }
 
     .strip-seq-num {
-      font-size: 10.5px;
-      font-weight: 900;
-      line-height: 1.1;
-      color: var(--strip-text);
+      font-size: 11px !important;
+      font-weight: 900 !important;
+      line-height: 1 !important;
+      color: #cbd5e1 !important;
+      text-align: center !important;
+      opacity: 0.9 !important;
     }
 
-    .strip-seq-arrow {
-      font-size: 7px;
-      opacity: 0.65;
-      line-height: 1;
-      color: #fbcb41;
-    }
-
-    /* Bottom 1-Click Action Bar */
+    /* Bottom 1-Click Action Bar (Guaranteed Exactly 21px) */
     .strip-card-bottom-bar {
-      height: 21px;
-      min-height: 21px;
-      max-height: 21px;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 4px;
-      background: rgba(0, 0, 0, 0.18);
-      box-sizing: border-box;
-      gap: 4px;
+      height: 21px !important;
+      min-height: 21px !important;
+      max-height: 21px !important;
+      flex: none !important;
+      width: 100% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 0 4px !important;
+      background: rgba(0, 0, 0, 0.22) !important;
+      box-sizing: border-box !important;
+      gap: 4px !important;
+      position: relative !important;
+      z-index: 6 !important;
     }
 
     .strip-status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      flex: 1;
-      min-width: 0;
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      text-overflow: ellipsis !important;
+      flex: 1 !important;
+      min-width: 0 !important;
     }
 
     .status-indicator-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--primary);
-      flex-shrink: 0;
+      width: 5px !important;
+      height: 5px !important;
+      border-radius: 50% !important;
+      background: var(--primary) !important;
+      flex-shrink: 0 !important;
     }
 
     .status-indicator-text {
-      font-family: var(--font-mono);
-      font-size: 8px;
-      font-weight: 800;
-      color: var(--strip-text);
-      opacity: 0.85;
-      white-space: nowrap;
+      font-family: var(--font-mono) !important;
+      font-size: 8px !important;
+      font-weight: 800 !important;
+      color: var(--strip-text) !important;
+      opacity: 0.85 !important;
+      white-space: nowrap !important;
     }
 
     .milestone-pill {
-      font-family: var(--font-mono);
-      font-size: 7.5px;
-      font-weight: 800;
-      padding: 1px 4px;
-      border-radius: 2px;
-      background: rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(0, 0, 0, 0.25);
-      white-space: nowrap;
+      font-family: var(--font-mono) !important;
+      font-size: 7.5px !important;
+      font-weight: 800 !important;
+      padding: 1px 4px !important;
+      border-radius: 2px !important;
+      background: rgba(0, 0, 0, 0.2) !important;
+      border: 1px solid rgba(0, 0, 0, 0.25) !important;
+      white-space: nowrap !important;
     }
-    .milestone-pill.clr { background: #dcfce7; color: #166534; border-color: #86efac; }
-    .milestone-pill.pb  { background: #e0f2fe; color: #0369a1; border-color: #7dd3fc; }
-    .milestone-pill.dep { background: #bbf7d0; color: #14532d; border-color: #4ade80; }
-    .milestone-pill.lnd { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
-    .milestone-pill.aibt{ background: #fed7aa; color: #9a3412; border-color: #fdba74; }
-    .milestone-pill.pat { background: #f3e8ff; color: #6b21a8; border-color: #d8b4fe; }
+    .milestone-pill.clr { background: #dcfce7 !important; color: #166534 !important; border-color: #86efac !important; }
+    .milestone-pill.pb  { background: #e0f2fe !important; color: #0369a1 !important; border-color: #7dd3fc !important; }
+    .milestone-pill.dep { background: #bbf7d0 !important; color: #14532d !important; border-color: #4ade80 !important; }
+    .milestone-pill.lnd { background: #fef3c7 !important; color: #92400e !important; border-color: #fcd34d !important; }
+    .milestone-pill.aibt{ background: #fed7aa !important; color: #9a3412 !important; border-color: #fdba74 !important; }
+    .milestone-pill.pat { background: #f3e8ff !important; color: #6b21a8 !important; border-color: #d8b4fe !important; }
 
     .strip-bottom-actions {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      flex-shrink: 0;
+      display: flex !important;
+      align-items: center !important;
+      gap: 3px !important;
+      flex-shrink: 0 !important;
     }
 
     .strip-bottom-btn {
-      height: 16px;
-      min-width: 32px;
-      padding: 0 6px;
-      font-family: var(--font-mono);
-      font-size: 8px;
-      font-weight: 800;
-      border-radius: 2px;
-      border: 1px solid rgba(0, 0, 0, 0.35);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      user-select: none;
-      -webkit-user-select: none;
-      background: #ffffff;
-      color: #0f172a;
-      transition: all 0.1s ease;
-      line-height: 1;
+      height: 16px !important;
+      min-width: 28px !important;
+      padding: 0 5px !important;
+      font-family: var(--font-mono) !important;
+      font-size: 8px !important;
+      font-weight: 800 !important;
+      border-radius: 2px !important;
+      border: 1px solid rgba(0, 0, 0, 0.35) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      transition: all 0.1s ease !important;
+      line-height: 1 !important;
     }
 
     .strip-bottom-btn:hover {
-      filter: brightness(1.18);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-      transform: translateY(-0.5px);
+      filter: brightness(1.18) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+      transform: translateY(-0.5px) !important;
     }
 
     .strip-bottom-btn:active {
-      transform: scale(0.95);
+      transform: scale(0.95) !important;
     }
 
     .strip-bottom-btn.act-clr { background: #10b981 !important; color: #ffffff !important; border-color: #059669 !important; }
@@ -2067,10 +2065,172 @@
     .strip-bottom-btn.act-tg  { background: #3b82f6 !important; color: #ffffff !important; border-color: #1d4ed8 !important; }
     .strip-bottom-btn.act-arr { background: #fbbf24 !important; color: #78350f !important; border-color: #d97706 !important; }
 
-    .strip-bottom-btn.btn-stamped {
-      box-shadow: inset 0 0 0 1.5px #15803d;
-      filter: brightness(0.92);
-      font-style: italic;
+    .strip-bottom-btn.act-ink-clear {
+      background: rgba(255, 255, 255, 0.12) !important;
+      color: var(--primary-soft) !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      font-size: 7.5px !important;
+      padding: 0 4px !important;
+    }
+    .strip-bottom-btn.act-ink-clear:hover {
+      background: #ef4444 !important;
+      color: #ffffff !important;
+      border-color: #dc2626 !important;
+    }
+
+    /* Transparent Canvas Overlay for Tablet / Stylus Pen Handwriting */
+    .strip-ink-canvas {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      pointer-events: none !important;
+      z-index: 5 !important;
+    }
+
+    .strip-card.pen-drawing-active .strip-ink-canvas {
+      pointer-events: auto !important;
+      cursor: crosshair !important;
+    }
+
+    /* Direct Inline Editing Mode (Unlocked on Double Click) */
+    .strip-card.inline-editing {
+      border: 1.5px solid #fbcb41 !important;
+      box-shadow: 0 0 12px rgba(251, 203, 65, 0.5) !important;
+      z-index: 50 !important;
+      cursor: default !important;
+    }
+
+    .inline-edit-input {
+      width: 100% !important;
+      height: 100% !important;
+      background: #090d14 !important;
+      color: #38bdf8 !important;
+      border: 1px solid #38bdf8 !important;
+      border-radius: 2px !important;
+      font-family: var(--font-mono) !important;
+      font-size: inherit !important;
+      font-weight: 800 !important;
+      padding: 0 2px !important;
+      box-sizing: border-box !important;
+      outline: none !important;
+      text-transform: uppercase !important;
+    }
+
+    .inline-edit-input:focus {
+      background: #1e293b !important;
+      color: #fbcb41 !important;
+      border-color: #fbcb41 !important;
+      box-shadow: 0 0 4px rgba(251, 203, 65, 0.6) !important;
+    }
+
+    .inline-edit-banner {
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      font-family: var(--font-mono) !important;
+      font-size: 8px !important;
+      font-weight: 800 !important;
+      color: #fbcb41 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+    }
+
+    .inline-edit-banner .pulse-dot {
+      width: 5px !important;
+      height: 5px !important;
+      border-radius: 50% !important;
+      background: #fbcb41 !important;
+      flex-shrink: 0 !important;
+      animation: pulseAlert 1s infinite alternate !important;
+    }
+
+    .strip-bottom-btn.act-lock-save {
+      background: #10b981 !important;
+      color: #ffffff !important;
+      font-weight: 900 !important;
+      border-color: #059669 !important;
+    }
+
+    .strip-bottom-btn.act-lock-cancel {
+      background: #475569 !important;
+      color: #ffffff !important;
+      border-color: #334155 !important;
+    }
+
+    /* Header Stylus Pen Toolbar */
+    .header-pen-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: auto;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--outline);
+      border-radius: 4px;
+      padding: 1px 6px;
+      height: 22px;
+      box-sizing: border-box;
+    }
+
+    .pen-tool-btn {
+      height: 18px;
+      padding: 0 5px;
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 800;
+      border-radius: 2px;
+      border: 1px solid var(--outline-light);
+      background: var(--surface-high);
+      color: var(--primary-bright);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      user-select: none;
+      transition: all 0.15s ease;
+      line-height: 1;
+    }
+
+    .pen-tool-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--primary);
+    }
+
+    .pen-tool-btn.active {
+      background: var(--primary) !important;
+      color: #0c0f14 !important;
+      border-color: var(--primary-bright) !important;
+      font-weight: 900 !important;
+    }
+
+    .pen-color-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 4px;
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+      border-right: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .pen-color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      cursor: pointer;
+      box-sizing: border-box;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .pen-color-dot:hover {
+      transform: scale(1.2);
+    }
+
+    .pen-color-dot.active {
+      border-color: #ffffff !important;
+      box-shadow: 0 0 5px #ffffff;
+      transform: scale(1.25);
     }
 
     /* Upward Stacking Direction Indicators */
@@ -2117,8 +2277,7 @@
       from { transform: translateY(0); }
       to { transform: translateY(-2px); }
     }
-
-  </style>
+</style>
 </head>
 <body class="theme-across">
   <div class="app-root">
@@ -2169,6 +2328,21 @@
           <!-- Save Layout Button (Stores column widths, row heights, and bay visibility to localStorage) -->
           <button class="zoom-btn btn-save-layout" id="btnSaveLayout" title="현재 조절된 대시보드 열 너비 및 높이 레이아웃을 로컬에 영구 저장">레이아웃 저장</button>
           <button class="zoom-btn" id="btnResetLayout" title="저장된 레이아웃 설정을 기본값으로 초기화">레이아웃 초기화</button>
+          <!-- Wacom Stylus & Handwritten Memo Toolbar -->
+          <div class="header-pen-toolbar" id="headerPenToolbar">
+            <button type="button" class="pen-tool-btn active" id="btnPenModeAuto" title="와콤 스타일러스 펜 감지 시 자동 필기, 손가락은 터치/조작 (Palm Rejection)">
+              <span class="pen-icon">&#x270F;&#xFE0F;</span> <span id="penModeLabel">펜: AUTO</span>
+            </button>
+            <div class="pen-color-group">
+              <button type="button" class="pen-color-dot active" data-color="#ef4444" title="관제 적색 펜" style="background:#ef4444;"></button>
+              <button type="button" class="pen-color-dot" data-color="#38bdf8" title="청색 펜" style="background:#38bdf8;"></button>
+              <button type="button" class="pen-color-dot" data-color="rgba(250, 204, 21, 0.55)" title="형광펜" style="background:#facc15;"></button>
+              <button type="button" class="pen-tool-btn" id="btnPenEraser" title="지우개 (펜 사이드키/우클릭 시에도 토글)">
+                <span>&#x1F9F9;</span> 지우개
+              </button>
+            </div>
+            <button type="button" class="pen-tool-btn" id="btnClearAllInk" title="화면의 모든 스트립 수기 필기 초기화">전체 펜지움</button>
+          </div>
         </div>
       </div>
     </header>
@@ -3551,7 +3725,221 @@
     }
 
     // Create Structured Flight Strip Card with Bottom Action Bar & Sequence Badge
-        function createStructuredStripElement(strip) {
+            // Global Stylus Pen Config & Hardware Palm Rejection State
+    window.efsPenConfig = {
+      mode: 'auto', // 'auto' (hardware stylus only), 'always' (touch/mouse too), 'off'
+      color: '#ef4444',
+      width: 2.2,
+      isEraser: false
+    };
+
+    function initStripInkCanvas(strip, cardEl) {
+      const canvas = cardEl.querySelector('.strip-ink-canvas');
+      if (!canvas) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const rect = cardEl.getBoundingClientRect();
+      const w = rect.width || 380;
+      const h = 68;
+
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      // Restore existing ink if present
+      if (strip.inkDataUrl) {
+        const img = new Image();
+        img.onload = () => {
+          ctx.clearRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+        };
+        img.src = strip.inkDataUrl;
+      }
+
+      let isDrawing = false;
+      let lastX = 0;
+      let lastY = 0;
+
+      const getCanvasCoords = (e) => {
+        const cRect = canvas.getBoundingClientRect();
+        return {
+          x: e.clientX - cRect.left,
+          y: e.clientY - cRect.top
+        };
+      };
+
+      cardEl.addEventListener('pointerdown', (e) => {
+        if (strip.isInlineEditing) return;
+        if (e.target.closest('.strip-bottom-btn') || e.target.closest('.inline-edit-input')) return;
+
+        // Hardware Wacom pen detection (pointerType === 'pen')
+        // Or Forced pen mode ('always')
+        // Or Pen side button / Right click (button === 2 || buttons === 2)
+        const isPenType = (e.pointerType === 'pen');
+        const isRightBtn = (e.button === 2 || e.buttons === 2);
+        const shouldDraw = (window.efsPenConfig.mode === 'always') ||
+                           (window.efsPenConfig.mode === 'auto' && isPenType) ||
+                           isRightBtn;
+
+        if (!shouldDraw) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        isDrawing = true;
+        cardEl.classList.add('pen-drawing-active');
+
+        const pos = getCanvasCoords(e);
+        lastX = pos.x;
+        lastY = pos.y;
+
+        ctx.beginPath();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        const useEraser = window.efsPenConfig.isEraser || isRightBtn;
+        if (useEraser) {
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.lineWidth = 14;
+        } else {
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.strokeStyle = window.efsPenConfig.color;
+          ctx.lineWidth = window.efsPenConfig.width;
+        }
+
+        ctx.moveTo(lastX, lastY);
+      });
+
+      window.addEventListener('pointermove', (e) => {
+        if (!isDrawing) return;
+        const pos = getCanvasCoords(e);
+        const midX = (lastX + pos.x) / 2;
+        const midY = (lastY + pos.y) / 2;
+
+        ctx.quadraticCurveTo(lastX, lastY, midX, midY);
+        ctx.stroke();
+
+        lastX = pos.x;
+        lastY = pos.y;
+      });
+
+      const stopDrawing = () => {
+        if (!isDrawing) return;
+        isDrawing = false;
+        cardEl.classList.remove('pen-drawing-active');
+        ctx.closePath();
+
+        // Save ink to strip object and local storage
+        strip.inkDataUrl = canvas.toDataURL();
+        saveStripsLocally();
+      };
+
+      window.addEventListener('pointerup', stopDrawing);
+      window.addEventListener('pointercancel', stopDrawing);
+
+      // Prevent right-click context menu to allow smooth stylus side-button eraser/draw
+      cardEl.addEventListener('contextmenu', (e) => e.preventDefault());
+    }
+
+    function clearStripInk(stripId, event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      const strip = strips.find(s => s.id === stripId);
+      if (!strip) return;
+
+      delete strip.inkDataUrl;
+      const canvas = document.getElementById(`canvas-${stripId}`);
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      saveStripsLocally();
+      showToast(`[${strip.acid}] 수기 펜 메모가 초기화되었습니다.`);
+    }
+
+    function clearAllInk() {
+      strips.forEach(s => delete s.inkDataUrl);
+      document.querySelectorAll('.strip-ink-canvas').forEach(canvas => {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+      saveStripsLocally();
+      showToast('전체 스트립의 수기 필기가 초기화되었습니다.');
+    }
+
+    // Direct In-Place Inline Editing (Double-Click Unlock / Lock)
+    function startInlineEdit(stripId, event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      const strip = strips.find(s => s.id === stripId);
+      if (!strip) return;
+
+      strips.forEach(s => s.isInlineEditing = (s.id === stripId));
+      renderAllStrips();
+      showToast(`[${strip.acid}] 제원 수정 잠금 해제 (Unlock) - 수정 후 Enter 또는 잠금 클릭`);
+    }
+
+    function saveInlineEdit(stripId, event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      const strip = strips.find(s => s.id === stripId);
+      if (!strip) return;
+
+      const card = document.getElementById(`strip-${stripId}`);
+      if (card) {
+        const getVal = (f) => card.querySelector(`[data-field="${f}"]`)?.value.trim();
+
+        if (getVal('acid')) strip.acid = getVal('acid');
+        if (getVal('typeWake')) strip.typeWake = getVal('typeWake');
+        if (getVal('rwy')) strip.rwy = getVal('rwy');
+        if (getVal('idRoute')) strip.idRoute = getVal('idRoute');
+        if (getVal('cid')) strip.cid = getVal('cid');
+        if (getVal('ssr')) {
+          strip.ssr = getVal('ssr');
+          strip.squawkMode = getVal('ssr');
+        }
+        if (getVal('schedTime')) strip.schedTime = getVal('schedTime');
+        if (getVal('clearance')) strip.clearance = getVal('clearance');
+        if (getVal('origin')) strip.origin = getVal('origin');
+        if (getVal('sidStar')) strip.sidStar = getVal('sidStar');
+        if (getVal('gate')) strip.gate = getVal('gate');
+        if (getVal('route')) strip.route = getVal('route');
+        if (getVal('remarks')) strip.remarks = getVal('remarks');
+        if (getVal('alt')) strip.alt = getVal('alt');
+        if (getVal('dest')) strip.dest = getVal('dest');
+        if (getVal('assignedAlt')) strip.assignedAlt = getVal('assignedAlt');
+        if (getVal('speed')) strip.speed = getVal('speed');
+      }
+
+      strip.isInlineEditing = false;
+      saveStripsLocally();
+      recordOperationToSupabase(strip, 'INLINE_EDIT', strip.operationType, strip.operationType, strip.status, strip.status, '스트립 제원 현장 수정 완료 (잠금)');
+      showToast(`[${strip.acid}] 제원 수정 완료 및 잠금 (Locked)`);
+      renderAllStrips();
+    }
+
+    function cancelInlineEdit(stripId, event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      const strip = strips.find(s => s.id === stripId);
+      if (strip) {
+        strip.isInlineEditing = false;
+        renderAllStrips();
+        showToast(`[${strip.acid}] 수정이 취소되었습니다.`);
+      }
+    }
+
+    // Create Structured Flight Strip Card
+    function createStructuredStripElement(strip) {
       const el = document.createElement('div');
       let stripClass = 'departure-strip';
       if (strip.operationType === 'ARRIVAL') stripClass = 'arrival-strip';
@@ -3559,8 +3947,9 @@
       if (strip.operationType === 'CIRCUIT') stripClass = 'circuit-strip';
 
       const flashClass = (strip.id === justMovedStripId) ? 'strip-just-moved' : '';
+      const editClass = strip.isInlineEditing ? 'inline-editing' : '';
 
-      el.className = `strip-card ${stripClass} ${flashClass}`;
+      el.className = `strip-card ${stripClass} ${flashClass} ${editClass}`;
       el.id = `strip-${strip.id}`;
       el.setAttribute('data-strip-id', strip.id);
 
@@ -3599,156 +3988,295 @@
       else if (strip.aldt) displayTime = strip.aldt;
       else if (strip.asrt) displayTime = strip.asrt;
 
-      // Bottom Horizontal 1-Click Action Buttons
-      let actionButtonsHtml = '';
-      if (strip.operationType === 'DEPARTURE') {
-        if (strip.status === 'DEP_QUEUE') {
-          const clrActive = strip.asrt ? 'active-stamped' : '';
-          const pbActive = strip.asat ? 'active-stamped' : '';
-          actionButtonsHtml = `
-            <button type="button" class="strip-bottom-btn act-clr ${clrActive}" onclick="handleStripAction('${strip.id}', 'CLR', event)" title="출발 허가 발부 (ASRT 자동 기록)">CLR 허가</button>
-            <button type="button" class="strip-bottom-btn act-pb ${pbActive}" onclick="handleStripAction('${strip.id}', 'PB', event)" title="푸시백 승인 (ASAT 자동 기록 및 활성열 이동)">P/B 승인</button>
-            <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
-          `;
-        } else {
-          // DEP_ACTIVE
-          const depActive = strip.atot ? 'active-stamped' : '';
-          actionButtonsHtml = `
-            <button type="button" class="strip-bottom-btn act-dep ${depActive}" onclick="handleStripAction('${strip.id}', 'DEP', event)" title="이륙 허가 발부 (ATOT 자동 기록)">DEP 이륙</button>
-            <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="관제 이양 및 스트립 아카이브">OUT 이양</button>
-            <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
-          `;
+      // Check if Card is in Direct Inline Edit Mode
+      if (strip.isInlineEditing) {
+        el.innerHTML = `
+          <!-- Transparent Overlay Canvas for Stylus Pen Handwriting -->
+          <canvas class="strip-ink-canvas" id="canvas-${strip.id}"></canvas>
+
+          <!-- Main Flight Data: Direct Inline Edit Form -->
+          <div class="strip-card-main">
+            <!-- Left Entry Sequence Order Badge: Compact single number (Width 14px) -->
+            <div class="strip-seq-col" title="진입 순서: ${strip.bayEntryOrder || 1}">
+              <span class="strip-seq-num">${strip.bayEntryOrder || 1}</span>
+            </div>
+
+            <!-- Section 1 (Callsign, Type/Wake, RWY, CID) -->
+            <div class="sec-1">
+              <div class="sec1-row row-1 box-1">
+                <input class="inline-edit-input" data-field="acid" value="${strip.acid || ''}" placeholder="편명" />
+              </div>
+              <div class="sec1-row row-2">
+                <div class="sec1-sub box-2">
+                  <input class="inline-edit-input" data-field="typeWake" value="${strip.typeWake || (strip.type + '/M')}" placeholder="기종" />
+                </div>
+                <div class="sec1-sub box-2a">
+                  <input class="inline-edit-input" data-field="rwy" value="${strip.rwy || ''}" placeholder="RWY" />
+                </div>
+              </div>
+              <div class="sec1-row row-3 box-3">
+                <input class="inline-edit-input" data-field="idRoute" value="${strip.idRoute || (strip.acid + '/' + (strip.origin||'RKSI') + '-' + (strip.dest||'KJFK'))}" placeholder="식별항로" />
+              </div>
+              <div class="sec1-row row-4 box-4">
+                <input class="inline-edit-input" data-field="cid" value="${strip.cid || ''}" placeholder="CID" />
+              </div>
+            </div>
+
+            <!-- Section 2 (SSR, SchedTime, Clearance) -->
+            <div class="sec-2">
+              <div class="sec-row3 box-5">
+                <input class="inline-edit-input" data-field="ssr" value="${strip.ssr || strip.squawkMode || ''}" placeholder="SSR" />
+              </div>
+              <div class="sec-row3 box-6">
+                <input class="inline-edit-input" data-field="schedTime" value="${strip.schedTime || strip.time || ''}" placeholder="시각" />
+              </div>
+              <div class="sec-row3 box-7">
+                <input class="inline-edit-input" data-field="clearance" value="${strip.clearance || 'C'}" placeholder="CLR" />
+              </div>
+            </div>
+
+            <!-- Section 3 (Origin, SID/STAR, Gate) -->
+            <div class="sec-3">
+              <div class="sec-row3 box-8">
+                <input class="inline-edit-input" data-field="origin" value="${strip.origin || strip.airport || 'RKSI'}" placeholder="출발" />
+              </div>
+              <div class="sec-row3 box-8a">
+                <input class="inline-edit-input" data-field="sidStar" value="${strip.sidStar || ''}" placeholder="절차" />
+              </div>
+              <div class="sec-row3 box-8b">
+                <input class="inline-edit-input" data-field="gate" value="${strip.gate || ''}" placeholder="GATE" />
+              </div>
+            </div>
+
+            <!-- Section 4 (Center Wide: Route & Remarks) -->
+            <div class="sec-4">
+              <div class="sec4-top">
+                <span class="sec4-corner box-9">${displayTime}</span>
+                <span class="sec4-corner box-9b">${strip.type || 'B738'}</span>
+              </div>
+              <div class="sec4-center box-route">
+                <input class="inline-edit-input" data-field="route" value="${strip.route || ''}" placeholder="항로 (Route)" />
+              </div>
+              <div class="sec4-bottom">
+                <span class="sec4-corner box-9a">${strip.category || strip.operationType?.slice(0,3)}</span>
+                <div class="sec4-corner box-9c" style="flex: 1;">
+                  <input class="inline-edit-input" data-field="remarks" value="${strip.remarks || ''}" placeholder="비고 (Remarks)" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 5 (Right: Alt, Dest, AssignedAlt, Speed, Status) -->
+            <div class="sec-5">
+              <div class="sec5-cell box-10">
+                <input class="inline-edit-input" data-field="alt" value="${strip.alt || ''}" placeholder="고도" />
+              </div>
+              <div class="sec5-cell box-11">${(strip.route || '').split(' ')[0] || 'DCT'}</div>
+              <div class="sec5-cell box-12">${strip.actTime || strip.atot || strip.aldt || strip.asat || '-'}</div>
+
+              <div class="sec5-cell box-13">${strip.origin || 'RKSI'}</div>
+              <div class="sec5-cell box-14">
+                <input class="inline-edit-input" data-field="dest" value="${strip.dest || ''}" placeholder="도착" />
+              </div>
+              <div class="sec5-cell box-15">
+                <input class="inline-edit-input" data-field="assignedAlt" value="${strip.assignedAlt || ''}" placeholder="배정고도" />
+              </div>
+
+              <div class="sec5-cell box-16">${strip.squawkMode || strip.ssr || '1200'}</div>
+              <div class="sec5-cell box-17">
+                <input class="inline-edit-input" data-field="speed" value="${strip.speed || ''}" placeholder="속도" />
+              </div>
+              <div class="sec5-cell box-18">
+                <span class="status-toggle-pill" style="cursor: default;">${statusLabel}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Bar: Save and Lock Controls -->
+          <div class="strip-card-bottom-bar">
+            <div class="inline-edit-banner">
+              <span class="pulse-dot"></span>
+              <span>수정 중: 필드 입력 후 [Enter] 또는 [잠금] 클릭</span>
+            </div>
+            <div class="strip-bottom-actions">
+              <button type="button" class="strip-bottom-btn act-lock-save" onclick="saveInlineEdit('${strip.id}', event)">🔒 저장 및 잠금</button>
+              <button type="button" class="strip-bottom-btn act-lock-cancel" onclick="cancelInlineEdit('${strip.id}', event)">✕ 취소</button>
+            </div>
+          </div>
+        `;
+
+        // Automatically bind Enter and Escape keys on inputs
+        setTimeout(() => {
+          const inputs = el.querySelectorAll('.inline-edit-input');
+          inputs.forEach(inp => {
+            inp.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                saveInlineEdit(strip.id, e);
+              } else if (e.key === 'Escape') {
+                e.preventDefault();
+                cancelInlineEdit(strip.id, e);
+              }
+            });
+          });
+          if (inputs[0]) inputs[0].focus();
+        }, 10);
+
+      } else {
+        // Normal View Mode: Operational Action Buttons
+        let actionButtonsHtml = '';
+        if (strip.operationType === 'DEPARTURE') {
+          if (strip.status === 'DEP_QUEUE') {
+            const clrActive = strip.asrt ? 'active-stamped' : '';
+            const pbActive = strip.asat ? 'active-stamped' : '';
+            actionButtonsHtml = `
+              <button type="button" class="strip-bottom-btn act-clr ${clrActive}" onclick="handleStripAction('${strip.id}', 'CLR', event)" title="출발 허가 발부 (ASRT 자동 기록)">CLR 허가</button>
+              <button type="button" class="strip-bottom-btn act-pb ${pbActive}" onclick="handleStripAction('${strip.id}', 'PB', event)" title="푸시백 승인 (ASAT 자동 기록 및 활성열 이동)">P/B 승인</button>
+              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
+            `;
+          } else {
+            const depActive = strip.atot ? 'active-stamped' : '';
+            actionButtonsHtml = `
+              <button type="button" class="strip-bottom-btn act-dep ${depActive}" onclick="handleStripAction('${strip.id}', 'DEP', event)" title="이륙 허가 발부 (ATOT 자동 기록)">DEP 이륙</button>
+              <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="관제 이양 및 스트립 아카이브">OUT 이양</button>
+              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
+            `;
+          }
+        } else if (strip.operationType === 'ARRIVAL') {
+          if (strip.status === 'ARR_QUEUE') {
+            actionButtonsHtml = `
+              <button type="button" class="strip-bottom-btn act-app" onclick="handleStripAction('${strip.id}', 'APP', event)" title="접근 인가 (활성열 자동 이동)">APP 인가</button>
+              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
+            `;
+          } else {
+            const lndActive = strip.aldt ? 'active-stamped' : '';
+            actionButtonsHtml = `
+              <button type="button" class="strip-bottom-btn act-lnd ${lndActive}" onclick="handleStripAction('${strip.id}', 'LND', event)" title="착륙 확인 (ALDT 기록, AIBT 자동 계산)">LND 착륙</button>
+              <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="지상관제 이양 및 스트립 완료">OUT 이양</button>
+              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
+            `;
+          }
+        } else if (strip.operationType === 'TRANSIT') {
+          if (strip.status === 'TRN_QUEUE') {
+            actionButtonsHtml = `
+              <button type="button" class="strip-bottom-btn act-ctr" onclick="handleStripAction('${strip.id}', 'CTR', event)" title="관제 진입 인가 (활성열 이동)">CTR 인가</button>
+              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
+            `;
+          } else {
+            actionButtonsHtml = `
+              <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="섹터 통과 및 핸드오프 완료">OUT 이양</button>
+              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
+            `;
+          }
+        } else if (strip.operationType === 'CIRCUIT') {
+          if (strip.status === 'CCT_QUEUE') {
+            actionButtonsHtml = `
+              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'CCT_L_IN', event)" title="Left Downwind 진입 인가 (L/PTN 이동)">L/IN</button>
+              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'CCT_R_IN', event)" title="Right Downwind 진입 인가 (R/PTN 이동)">R/IN</button>
+            `;
+          } else if (strip.status === 'CCT_UPW') {
+            actionButtonsHtml = `
+              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'CCT_L_DW', event)" title="Left Downwind 선회 (L/PTN 이동)">L/DW</button>
+              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'CCT_R_DW', event)" title="Right Downwind 선회 (R/PTN 이동)">R/DW</button>
+              <button type="button" class="strip-bottom-btn act-arr" onclick="handleStripAction('${strip.id}', 'CCT_ARR', event)" title="최종 착륙 (도착 활성열로 이관)">ARR</button>
+              <button type="button" class="strip-bottom-btn act-dep" onclick="handleStripAction('${strip.id}', 'CCT_DEP', event)" title="타 공항 출발 (출발 활성열로 이관)">DEP</button>
+            `;
+          } else {
+            actionButtonsHtml = `
+              <button type="button" class="strip-bottom-btn act-tg" onclick="handleStripAction('${strip.id}', 'CCT_TG', event)" title="터치앤고/복행 인가 (UPW 자동 이동 & 패턴 카운트 +1)">T&G 복행</button>
+              <button type="button" class="strip-bottom-btn act-arr" onclick="handleStripAction('${strip.id}', 'CCT_ARR', event)" title="최종 착륙 (도착 활성열로 이관)">ARR 착륙</button>
+              <button type="button" class="strip-bottom-btn act-dep" onclick="handleStripAction('${strip.id}', 'CCT_DEP', event)" title="타 공항 출발 (출발 활성열로 이관)">DEP 출발</button>
+            `;
+          }
         }
-      } else if (strip.operationType === 'ARRIVAL') {
-        if (strip.status === 'ARR_QUEUE') {
-          actionButtonsHtml = `
-            <button type="button" class="strip-bottom-btn act-app" onclick="handleStripAction('${strip.id}', 'APP', event)" title="접근 인가 (활성열 자동 이동)">APP 인가</button>
-            <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
-          `;
-        } else {
-          // ARR_ACTIVE
-          const lndActive = strip.aldt ? 'active-stamped' : '';
-          actionButtonsHtml = `
-            <button type="button" class="strip-bottom-btn act-lnd ${lndActive}" onclick="handleStripAction('${strip.id}', 'LND', event)" title="착륙 확인 (ALDT 기록, AIBT 자동 계산)">LND 착륙</button>
-            <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="지상관제 이양 및 스트립 완료">OUT 이양</button>
-            <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
-          `;
-        }
-      } else if (strip.operationType === 'TRANSIT') {
-        if (strip.status === 'TRN_QUEUE') {
-          actionButtonsHtml = `
-            <button type="button" class="strip-bottom-btn act-ctr" onclick="handleStripAction('${strip.id}', 'CTR', event)" title="관제 진입 인가 (활성열 이동)">CTR 인가</button>
-            <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
-          `;
-        } else {
-          actionButtonsHtml = `
-            <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="섹터 통과 및 핸드오프 완료">OUT 이양</button>
-            <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
-          `;
-        }
-      } else if (strip.operationType === 'CIRCUIT') {
-        if (strip.status === 'CCT_QUEUE') {
-          actionButtonsHtml = `
-            <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'CCT_L_IN', event)" title="Left Downwind 진입 인가 (L/PTN 이동)">L/IN</button>
-            <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'CCT_R_IN', event)" title="Right Downwind 진입 인가 (R/PTN 이동)">R/IN</button>
-          `;
-        } else if (strip.status === 'CCT_UPW') {
-          actionButtonsHtml = `
-            <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'CCT_L_DW', event)" title="Left Downwind 선회 (L/PTN 이동)">L/DW</button>
-            <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'CCT_R_DW', event)" title="Right Downwind 선회 (R/PTN 이동)">R/DW</button>
-            <button type="button" class="strip-bottom-btn act-arr" onclick="handleStripAction('${strip.id}', 'CCT_ARR', event)" title="최종 착륙 (도착 활성열로 이관)">ARR</button>
-            <button type="button" class="strip-bottom-btn act-dep" onclick="handleStripAction('${strip.id}', 'CCT_DEP', event)" title="타 공항 출발 (출발 활성열로 이관)">DEP</button>
-          `;
-        } else {
-          // L/PTN or R/PTN
-          actionButtonsHtml = `
-            <button type="button" class="strip-bottom-btn act-tg" onclick="handleStripAction('${strip.id}', 'CCT_TG', event)" title="터치앤고/복행 인가 (UPW 자동 이동 & 패턴 카운트 +1)">T&G 복행</button>
-            <button type="button" class="strip-bottom-btn act-arr" onclick="handleStripAction('${strip.id}', 'CCT_ARR', event)" title="최종 착륙 (도착 활성열로 이관)">ARR 착륙</button>
-            <button type="button" class="strip-bottom-btn act-dep" onclick="handleStripAction('${strip.id}', 'CCT_DEP', event)" title="타 공항 출발 (출발 활성열로 이관)">DEP 출발</button>
-          `;
-        }
+
+        el.innerHTML = `
+          <!-- Transparent Overlay Canvas for Stylus Pen Handwriting -->
+          <canvas class="strip-ink-canvas" id="canvas-${strip.id}"></canvas>
+
+          <!-- Main Flight Data: Full Width 5-Section Layout (Exactly 45px) -->
+          <div class="strip-card-main">
+            <!-- Left Entry Sequence Order Badge: Compact single number (Width: 14px) -->
+            <div class="strip-seq-col" title="진입 순서: ${strip.bayEntryOrder || 1}">
+              <span class="strip-seq-num">${strip.bayEntryOrder || 1}</span>
+            </div>
+
+            <!-- Section 1 (Left: 1/4 division, 4 vertical rows) -->
+            <div class="sec-1">
+              <div class="sec1-row row-1 box-1 strip-acid">${strip.acid || 'KAL000'}</div>
+              <div class="sec1-row row-2">
+                <div class="sec1-sub box-2">${strip.typeWake || `${strip.type || 'B738'}/M`}</div>
+                <div class="sec1-sub box-2a">${strip.rwy || '33L'}</div>
+              </div>
+              <div class="sec1-row row-3 box-3">${strip.idRoute || `${strip.acid}/${strip.origin}-${strip.dest}`}</div>
+              <div class="sec1-row row-4 box-4">${strip.cid || '001'}</div>
+            </div>
+
+            <!-- Section 2 (1/3 division, 3 vertical rows) -->
+            <div class="sec-2">
+              <div class="sec-row3 box-5">${strip.ssr || '1200'}</div>
+              <div class="sec-row3 box-6">${strip.schedTime || '-'}</div>
+              <div class="sec-row3 box-7">${strip.clearance || 'C'}</div>
+            </div>
+
+            <!-- Section 3 (1/3 division, 3 vertical rows) -->
+            <div class="sec-3">
+              <div class="sec-row3 box-8">${strip.origin || strip.airport || 'RKSI'}</div>
+              <div class="sec-row3 box-8a">${strip.sidStar || '-'}</div>
+              <div class="sec-row3 box-8b">${strip.gate || '-'}</div>
+            </div>
+
+            <!-- Section 4 (Center Wide) -->
+            <div class="sec-4">
+              <div class="sec4-top">
+                <span class="sec4-corner box-9">${displayTime}</span>
+                <span class="sec4-corner box-9b">${strip.type || 'B738'}</span>
+              </div>
+              <div class="sec4-center box-route">${strip.route || 'DCT'}</div>
+              <div class="sec4-bottom">
+                <span class="sec4-corner box-9a">${strip.category || strip.operationType?.slice(0,3)}</span>
+                <span class="sec4-corner box-9c">${strip.remarks || 'RMK/ TCAS'}</span>
+              </div>
+            </div>
+
+            <!-- Section 5 (Right: 3x3 Grid) -->
+            <div class="sec-5">
+              <div class="sec5-cell box-10">${strip.alt || 'FL340'}</div>
+              <div class="sec5-cell box-11">${(strip.route || '').split(' ')[0] || 'DCT'}</div>
+              <div class="sec5-cell box-12" title="실제 시각">${strip.actTime || strip.atot || strip.aldt || strip.asat || '-'}</div>
+
+              <div class="sec5-cell box-13">${strip.origin || 'RKSI'}</div>
+              <div class="sec5-cell box-14">${strip.dest || 'RKSS'}</div>
+              <div class="sec5-cell box-15">${strip.assignedAlt || '-'}</div>
+
+              <div class="sec5-cell box-16">${strip.squawkMode || strip.ssr || '1200'}</div>
+              <div class="sec5-cell box-17">${strip.speed || '-'}</div>
+              <div class="sec5-cell box-18" title="상태 구분">
+                <span class="status-toggle-pill" style="cursor: default;">${statusLabel}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom 1-Click Operational Action Buttons Bar (Guaranteed 21px) -->
+          <div class="strip-card-bottom-bar">
+            <div class="strip-status-indicator">
+              <span class="status-indicator-dot"></span>
+              <span class="status-indicator-text">${statusFullName}</span>
+              ${milestonePillsHtml}
+            </div>
+            <div class="strip-bottom-actions">
+              <button type="button" class="strip-bottom-btn act-ink-clear" onclick="clearStripInk('${strip.id}', event)" title="이 스트립의 수기 필기만 지우기">✕ 펜지움</button>
+              ${actionButtonsHtml}
+            </div>
+          </div>
+        `;
+
+        // Double-click triggers direct inline editing unlock
+        el.ondblclick = (e) => startInlineEdit(strip.id, e);
       }
 
-      el.innerHTML = `
-        <!-- Main Flight Data: Full Width 5-Section Layout (No cramping!) -->
-        <div class="strip-card-main">
-          <!-- Left Entry Sequence Order Badge -->
-          <div class="strip-seq-col" title="베이 진입 순서: #${strip.bayEntryOrder || 1} (진입시간: ${strip.bayEntryTime || strip.time}Z)">
-            <span class="strip-seq-label">SEQ</span>
-            <span class="strip-seq-num">#${strip.bayEntryOrder || 1}</span>
-            <span class="strip-seq-arrow">&#x25B2;</span>
-          </div>
+      // Initialize Stylus Pen Canvas
+      setTimeout(() => initStripInkCanvas(strip, el), 0);
 
-          <!-- Section 1 (Left: 1/4 division, 4 vertical rows) -->
-          <div class="sec-1">
-            <div class="sec1-row row-1 box-1 strip-acid">${strip.acid || 'KAL000'}</div>
-            <div class="sec1-row row-2">
-              <div class="sec1-sub box-2">${strip.typeWake || `${strip.type || 'B738'}/M`}</div>
-              <div class="sec1-sub box-2a">${strip.rwy || '33L'}</div>
-            </div>
-            <div class="sec1-row row-3 box-3">${strip.idRoute || `${strip.acid}/${strip.origin}-${strip.dest}`}</div>
-            <div class="sec1-row row-4 box-4">${strip.cid || '001'}</div>
-          </div>
-
-          <!-- Section 2 (1/3 division, 3 vertical rows) -->
-          <div class="sec-2">
-            <div class="sec-row3 box-5">${strip.ssr || '1200'}</div>
-            <div class="sec-row3 box-6">${strip.schedTime || '-'}</div>
-            <div class="sec-row3 box-7">${strip.clearance || 'C'}</div>
-          </div>
-
-          <!-- Section 3 (1/3 division, 3 vertical rows) -->
-          <div class="sec-3">
-            <div class="sec-row3 box-8">${strip.origin || strip.airport || 'RKSI'}</div>
-            <div class="sec-row3 box-8a">${strip.sidStar || '-'}</div>
-            <div class="sec-row3 box-8b">${strip.gate || '-'}</div>
-          </div>
-
-          <!-- Section 4 (Center Wide) -->
-          <div class="sec-4">
-            <div class="sec4-top">
-              <span class="sec4-corner box-9">${displayTime}</span>
-              <span class="sec4-corner box-9b">${strip.type || 'B738'}</span>
-            </div>
-            <div class="sec4-center box-route">${strip.route || 'DCT'}</div>
-            <div class="sec4-bottom">
-              <span class="sec4-corner box-9a">${strip.category || strip.operationType?.slice(0,3)}</span>
-              <span class="sec4-corner box-9c">${strip.remarks || 'RMK/ TCAS'}</span>
-            </div>
-          </div>
-
-          <!-- Section 5 (Right: 3x3 Grid) -->
-          <div class="sec-5">
-            <div class="sec5-cell box-10">${strip.alt || 'FL340'}</div>
-            <div class="sec5-cell box-11">${(strip.route || '').split(' ')[0] || 'DCT'}</div>
-            <div class="sec5-cell box-12" title="실제 시각">${strip.actTime || strip.atot || strip.aldt || strip.asat || '-'}</div>
-
-            <div class="sec5-cell box-13">${strip.origin || 'RKSI'}</div>
-            <div class="sec5-cell box-14">${strip.dest || 'RKSS'}</div>
-            <div class="sec5-cell box-15">${strip.assignedAlt || '-'}</div>
-
-            <div class="sec5-cell box-16">${strip.squawkMode || strip.ssr || '1200'}</div>
-            <div class="sec5-cell box-17">${strip.speed || '-'}</div>
-            <div class="sec5-cell box-18" title="상태 구분">
-              <span class="status-toggle-pill" style="cursor: default;">${statusLabel}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bottom 1-Click Operational Action Buttons Bar -->
-        <div class="strip-card-bottom-bar">
-          <div class="strip-status-indicator">
-            <span class="status-indicator-dot"></span>
-            <span class="status-indicator-text">${statusFullName}</span>
-            ${milestonePillsHtml}
-          </div>
-          <div class="strip-bottom-actions">
-            ${actionButtonsHtml}
-          </div>
-        </div>
-      `;
-
-      el.ondblclick = () => openEditableDetailModal(strip.id);
       return el;
     }
 
@@ -3885,7 +4413,7 @@
           fallbackOnBody: true,
           fallbackTolerance: 2,
           touchStartThreshold: 2,
-          filter: '.strip-bottom-btn, .strip-action-btn, button',
+          filter: '.strip-bottom-btn, .strip-action-btn, button, input, .inline-edit-input, .inline-editing', preventOnFilter: false,
           preventOnFilter: false,
 
           onStart: function(evt) {
@@ -4586,7 +5114,81 @@
       }
     });
 
+    
+    function initPenToolbar() {
+      const btnAuto = document.getElementById('btnPenModeAuto');
+      const lblMode = document.getElementById('penModeLabel');
+      const btnEraser = document.getElementById('btnPenEraser');
+      const btnClearAll = document.getElementById('btnClearAllInk');
+      const colorDots = document.querySelectorAll('.pen-color-dot');
+
+      if (btnAuto) {
+        btnAuto.onclick = () => {
+          if (window.efsPenConfig.mode === 'auto') {
+            window.efsPenConfig.mode = 'always';
+            if (lblMode) lblMode.innerText = '펜: ALWAYS';
+            btnAuto.classList.add('active');
+            showToast('펜 모드: 항상 켬 (마우스/터치/펜 모두 필기 가능)');
+          } else if (window.efsPenConfig.mode === 'always') {
+            window.efsPenConfig.mode = 'off';
+            if (lblMode) lblMode.innerText = '펜: OFF';
+            btnAuto.classList.remove('active');
+            showToast('펜 모드: 끔 (일반 터치/클릭 모드)');
+          } else {
+            window.efsPenConfig.mode = 'auto';
+            if (lblMode) lblMode.innerText = '펜: AUTO';
+            btnAuto.classList.add('active');
+            showToast('펜 모드: AUTO (와콤 스타일러스 펜 자동 감지 / 팜 리젝션)');
+          }
+        };
+      }
+
+      colorDots.forEach(dot => {
+        dot.onclick = () => {
+          window.efsPenConfig.isEraser = false;
+          window.efsPenConfig.color = dot.getAttribute('data-color');
+          colorDots.forEach(d => d.classList.remove('active'));
+          dot.classList.add('active');
+          if (btnEraser) btnEraser.classList.remove('active');
+          showToast(`펜 색상 선택: ${window.efsPenConfig.color}`);
+        };
+      });
+
+      if (btnEraser) {
+        btnEraser.onclick = () => {
+          window.efsPenConfig.isEraser = !window.efsPenConfig.isEraser;
+          if (window.efsPenConfig.isEraser) {
+            btnEraser.classList.add('active');
+            colorDots.forEach(d => d.classList.remove('active'));
+            showToast('지우개 모드 활성화 (선택 영역 지우기)');
+          } else {
+            btnEraser.classList.remove('active');
+            const firstDot = colorDots[0];
+            if (firstDot) firstDot.click();
+          }
+        };
+      }
+
+      if (btnClearAll) {
+        btnClearAll.onclick = () => clearAllInk();
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+    // Initialize Wacom Stylus Pen Toolbar
+    initPenToolbar();
+
+    // Global Click Listener to Save and Lock Inline Editing when clicking outside
+    document.addEventListener('pointerdown', (e) => {
+      const editingCard = document.querySelector('.strip-card.inline-editing');
+      if (!editingCard) return;
+      if (editingCard.contains(e.target)) return;
+      if (e.target.closest('#headerPenToolbar')) return;
+
+      const stripId = editingCard.getAttribute('data-strip-id');
+      if (stripId) saveInlineEdit(stripId);
+    });
+
       initThemeAndSettings();
       initScratchpad();
       setupBayToggles();
