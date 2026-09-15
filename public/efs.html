@@ -117,6 +117,289 @@
       --bay-cct-border: rgba(192, 132, 252, 0.6);
     }
 
+    /* 4. Theme: Deep Navy Blue */
+    html.theme-navy {
+      --bg: #0b1329;
+      --bg-dim: #060b18;
+      --surface-container: #132247;
+      --surface-high: #1c3266;
+      --surface-hover: #223e7c;
+      --surface-active: #1a2d59;
+      --surface-recess: #060b18;
+      --outline: #223e7c;
+      --outline-light: #3056a8;
+      --outline-strong: #4770ce;
+      --primary: #38bdf8;
+      --primary-dim: #0ea5e9;
+      --primary-bright: #7dd3fc;
+      --primary-soft: #bae6fd;
+      --green: #00e475;
+      --amber: #fbbf24;
+      --red: #f87171;
+      --purple: #c084fc;
+      --text-muted: #64748b;
+      --strip-card-h: 68px !important;
+
+      --bay-dep-bg: rgba(0, 228, 117, 0.14);
+      --bay-dep-act-bg: rgba(0, 228, 117, 0.18);
+      --bay-dep-que-bg: rgba(0, 228, 117, 0.08);
+      --bay-dep-border: rgba(0, 228, 117, 0.6);
+
+      --bay-arr-bg: rgba(251, 203, 65, 0.13);
+      --bay-arr-act-bg: rgba(251, 203, 65, 0.17);
+      --bay-arr-que-bg: rgba(251, 203, 65, 0.08);
+      --bay-arr-border: rgba(251, 203, 65, 0.6);
+
+      --bay-trn-bg: rgba(87, 168, 255, 0.13);
+      --bay-trn-act-bg: rgba(87, 168, 255, 0.17);
+      --bay-trn-que-bg: rgba(87, 168, 255, 0.08);
+      --bay-trn-border: rgba(87, 168, 255, 0.6);
+
+      --bay-cct-bg: rgba(192, 132, 252, 0.14);
+      --bay-cct-act-bg: rgba(192, 132, 252, 0.18);
+      --bay-cct-que-bg: rgba(192, 132, 252, 0.08);
+      --bay-cct-border: rgba(192, 132, 252, 0.6);
+    }
+
+    /* CRT Scanlines Overlay */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(0, 255, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.02));
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+    .scanlines.hidden { display: none !important; }
+
+    /* Toggle Switch */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 32px;
+      height: 16px;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-switch .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: var(--surface-hover);
+      border: 1px solid var(--outline);
+      transition: .2s;
+      border-radius: 16px;
+    }
+    .toggle-switch .slider:before {
+      position: absolute;
+      content: "";
+      height: 10px;
+      width: 10px;
+      left: 2px;
+      bottom: 2px;
+      background-color: var(--primary-soft);
+      transition: .2s;
+      border-radius: 50%;
+    }
+    .toggle-switch input:checked + .slider {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+    .toggle-switch input:checked + .slider:before {
+      transform: translateX(16px);
+      background-color: #0b111e;
+    }
+
+    /* Excel-Style Slide-Up Batch Registry Drawer */
+    .excel-batch-drawer {
+      position: fixed;
+      bottom: 0;
+      left: 40px;
+      right: 0;
+      height: 380px;
+      max-height: 50vh;
+      background: #0f141c;
+      border-top: 2px solid var(--primary);
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      z-index: 105;
+      transform: translateY(105%);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: text;
+    }
+    .excel-batch-drawer.open {
+      transform: translateY(0);
+    }
+
+    .excel-drawer-header {
+      height: 34px;
+      padding: 0 12px;
+      background: #141b26;
+      border-bottom: 1px solid var(--outline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .excel-drawer-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary-bright);
+      letter-spacing: 0.02em;
+    }
+    .excel-badge-info {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 2px;
+      background: var(--surface-active);
+      color: var(--primary);
+      font-family: var(--font-mono);
+    }
+    .excel-drawer-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .excel-act-btn {
+      height: 22px;
+      padding: 0 8px;
+      font-size: 9.5px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      background: var(--surface-container);
+      color: var(--primary-bright);
+      border: 1px solid var(--outline);
+      border-radius: 3px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .excel-act-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--primary-soft);
+      color: var(--primary);
+    }
+    .excel-act-btn.close-btn:hover {
+      background: #ef4444;
+      border-color: #dc2626;
+      color: #ffffff;
+    }
+
+    .excel-table-scroll {
+      flex: 1;
+      overflow: auto;
+      background: #090c12;
+    }
+    .excel-grid-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+    .excel-grid-table th {
+      position: sticky;
+      top: 0;
+      background: #182232;
+      color: var(--primary-soft);
+      font-weight: 800;
+      border: 1px solid #222e42;
+      padding: 4px 6px;
+      text-align: left;
+      z-index: 2;
+      white-space: nowrap;
+    }
+    .excel-grid-table td {
+      border: 1px solid #1c2638;
+      padding: 2px 4px;
+      background: #0d121a;
+    }
+    .excel-grid-table tr:hover td {
+      background: #131c2a;
+    }
+    .excel-cell-input, .excel-cell-select {
+      width: 100%;
+      height: 22px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 0 4px;
+      border-radius: 2px;
+      box-sizing: border-box;
+    }
+    .excel-cell-input:focus, .excel-cell-select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #1c273a;
+    }
+    .excel-row-del-btn {
+      width: 20px;
+      height: 20px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+    }
+    .excel-row-del-btn:hover {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
+    .excel-drawer-footer {
+      height: 36px;
+      padding: 0 12px;
+      background: #141b26;
+      border-top: 1px solid var(--outline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .excel-footer-note {
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+    .excel-footer-buttons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .excel-footer-btn {
+      height: 24px;
+      padding: 0 12px;
+      font-size: 10px;
+      font-weight: 800;
+      border-radius: 3px;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .excel-footer-btn.cancel {
+      background: var(--surface-container);
+      color: var(--primary-soft);
+      border-color: var(--outline);
+    }
+    .excel-footer-btn.submit {
+      background: var(--green);
+      color: #052e16;
+      font-weight: 900;
+    }
+    .excel-footer-btn.submit:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 8px rgba(0, 228, 117, 0.4);
+    }
+
     /* Dark Mono White Theme */
     html.theme-mono {
       --bg: #0d0d0d;
@@ -2414,9 +2697,118 @@
     }
       to { transform: translateY(-2px); }
     }
+
+    /* IFS Settings Modal Grid & Buttons */
+    .theme-select-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5px;
+    }
+    .theme-btn {
+      padding: 6px 5px;
+      font-size: 9.5px;
+      font-weight: 700;
+      border: 1px solid var(--outline);
+      background: var(--surface-high);
+      color: var(--primary-soft);
+      border-radius: 3px;
+      cursor: pointer;
+      text-align: center;
+      font-family: var(--font-mono);
+      transition: all 0.15s;
+    }
+    .theme-btn:hover { border-color: var(--primary); color: var(--primary-bright); }
+    .theme-btn.active {
+      border-color: var(--primary);
+      background: var(--surface-active);
+      color: var(--primary);
+      box-shadow: 0 0 6px rgba(56, 189, 248, 0.3);
+    }
+
+    .lang-select-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+    }
+    .lang-btn {
+      padding: 6px 4px;
+      font-size: 9.5px;
+      font-weight: 800;
+      border: 1px solid var(--outline);
+      background: var(--surface-high);
+      color: var(--primary-soft);
+      border-radius: 3px;
+      cursor: pointer;
+      text-align: center;
+      font-family: var(--font-mono);
+      transition: all 0.15s;
+    }
+    .lang-btn:hover { border-color: var(--primary); color: var(--primary-bright); }
+    .lang-btn.active {
+      border-color: var(--primary);
+      background: var(--surface-active);
+      color: var(--primary);
+      box-shadow: 0 0 6px rgba(56, 189, 248, 0.3);
+    }
+
+    .modal-row-switch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 2px;
+    }
+    .modal-label-switch {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .modal-desc-sub {
+      font-size: 8.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .modal-footer {
+      padding: 8px 12px;
+      background: var(--surface-high);
+      border-top: 1px solid var(--outline);
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+    .btn-modal-action {
+      padding: 4px 12px;
+      font-size: 9.5px;
+      font-weight: 700;
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      transition: all 0.15s;
+    }
+    .btn-modal-save {
+      background: var(--primary);
+      color: #06070b;
+      border: 1px solid var(--primary);
+      font-weight: 800;
+    }
+    .btn-modal-save:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+    }
+    .btn-modal-cancel {
+      background: var(--surface-container);
+      color: var(--primary-soft);
+      border: 1px solid var(--outline);
+    }
+    .btn-modal-cancel:hover {
+      background: var(--surface-hover);
+      color: var(--primary-bright);
+    }
+
 </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body class="theme-across">
+  <div class="scanlines hidden" id="scanlines-overlay"></div>
   <div class="app-root">
     <!-- Streamlined 2-Line Header (Korean Air ACROSS & IFS Spec) -->
     <header class="across-header-2line">
@@ -2427,7 +2819,7 @@
           <img id="ke-logo" class="ke-logo" src="/assets/logos/KE_primary-logo_white_online.svg" alt="Korean Air" />
           <span class="across-pipe">|</span>
           <span class="brand-title">
-            <span>전자비행스트립</span>
+            <span id="app-header-title">전자비행스트립</span>
             <span class="brand-badge-tag">EFS</span>
           </span>
         </div>
@@ -2496,15 +2888,15 @@
       <nav class="app-lnb">
         <button type="button" class="lnb-btn" onclick="toggleFullscreen()" title="전체화면 전환">
           <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
-          <span class="lnb-btn-label">전체화면</span>
+          <span class="lnb-btn-label" id="lbl-lnb-fs">전체화면</span>
         </button>
 
         <div class="lnb-divider"></div>
 
-        <!-- Slide Panel Toggle (Clean Drawer Side Panel) -->
-        <button class="lnb-btn" id="lnbToggleLeft" title="스트립 관리 및 필터 패널 토글">
-          <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
-          <span class="lnb-btn-label">패널</span>
+        <!-- New Strip Batch Creator Button (Excel Grid) -->
+        <button class="lnb-btn" id="lnbNewStripBtn" onclick="openExcelBatchPanel()" title="비행스트립 신규 일괄 등록 (Excel Grid)">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <span class="lnb-btn-label" id="lbl-lnb-new">신규생성</span>
         </button>
 
         
@@ -2532,14 +2924,14 @@
         <!-- Settings Gear Button in LNB -->
         <button class="lnb-btn" id="lnbSettingsBtn" title="관제단말 환경설정 (Settings)" onclick="openSettingsModal()">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-          <span class="lnb-btn-label">설정</span>
+          <span class="lnb-btn-label" id="lbl-lnb-settings">설정</span>
         </button>
       </nav>
 
       <!-- Main Content Layout -->
       <div class="main-content-layout">
-        <!-- Left Panel: Fast GPU Drawer (Zero Lag) -->
-        <aside class="efs-left-panel" id="efsLeftPanel">
+        <!-- Left Panel Hidden (Replaced by bottom Excel Registry Drawer) -->
+        <aside class="efs-left-panel" id="efsLeftPanel" style="display: none !important;">
           <div class="panel-header">
             <span class="panel-title">스트립 관리 & 필터</span>
             <button class="panel-toggle-btn" id="closeLeftPanelBtn">접기</button>
@@ -2662,7 +3054,7 @@
             <div class="bay-column bay-column--departure" id="bay-departure" data-bay="DEPARTURE">
               <div class="bay-column-header">
                 <div class="bay-column-title">
-                  <span>출발 비행스트립</span>
+                  <span id="title-bay-dep">출발 비행스트립</span>
                   <span class="bay-count-badge" id="departureCount">0</span>
                 </div>
               </div>
@@ -2696,7 +3088,7 @@
             <div class="bay-column bay-column--arrival" id="bay-arrival" data-bay="ARRIVAL">
               <div class="bay-column-header">
                 <div class="bay-column-title">
-                  <span>도착/접근 비행스트립</span>
+                  <span id="title-bay-arr">도착/접근 비행스트립</span>
                   <span class="bay-count-badge" id="arrivalCount">0</span>
                 </div>
               </div>
@@ -2730,7 +3122,7 @@
             <div class="bay-column bay-column--transit" id="bay-transit" data-bay="TRANSIT">
               <div class="bay-column-header">
                 <div class="bay-column-title">
-                  <span>통과 비행스트립</span>
+                  <span id="title-bay-trn">통과 비행스트립</span>
                   <span class="bay-count-badge" id="transitCount">0</span>
                 </div>
               </div>
@@ -2764,7 +3156,7 @@
             <div class="bay-column bay-column--circuit" id="bay-circuit" data-bay="CIRCUIT">
               <div class="bay-column-header">
                 <div class="bay-column-title">
-                  <span>장주 비행스트립</span>
+                  <span id="title-bay-cct">장주 비행스트립</span>
                   <span class="bay-count-badge" id="circuitCount">0</span>
                 </div>
               </div>
@@ -2830,27 +3222,62 @@
   </div>
 
   <!-- Settings Modal (Matching Korean Air ACROSS / IFS Spec) -->
+  <!-- Settings Modal (Full Korean Air ACROSS / IFS Specification) -->
   <div class="modal-backdrop" id="settingsModal">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="width: 460px;">
       <div class="modal-header">
-        <span class="modal-title">관제단말 환경설정 (Settings)</span>
+        <span class="modal-title" id="lbl-settings-title">관제단말 환경설정 (SETTINGS)</span>
         <button class="modal-close-btn" onclick="closeSettingsModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <div>
-          <span style="font-weight: 700; color: var(--primary-soft); display: block; margin-bottom: 6px;">관제 테마 스킨 선택</span>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-            <button type="button" class="quick-act-btn theme-choice-btn active" id="tbtn-across" onclick="applyTheme('theme-across')">Korean Air ACROSS (기본)</button>
-            <button type="button" class="quick-act-btn theme-choice-btn" id="tbtn-crt" onclick="applyTheme('theme-crt')">전술 관제 CRT Green</button>
-            <button type="button" class="quick-act-btn theme-choice-btn" id="tbtn-mono" onclick="applyTheme('theme-mono')">Dark Monochrome White</button>
-            <button type="button" class="quick-act-btn theme-choice-btn" id="tbtn-light" onclick="applyTheme('theme-light')">고대비 주간 Light</button>
+        <!-- 1. Theme Mode -->
+        <div class="modal-row">
+          <span style="font-weight: 700; color: var(--primary-soft); display: block; margin-bottom: 6px;" id="lbl-theme-title">테마 모드 (Color Theme)</span>
+          <div class="theme-select-grid">
+            <button type="button" class="theme-btn active" id="tbtn-across" onclick="selectModalTheme('theme-across')">Korean Air ACROSS (기본)</button>
+            <button type="button" class="theme-btn" id="tbtn-crt" onclick="selectModalTheme('theme-crt')">Tactical CRT Green</button>
+            <button type="button" class="theme-btn" id="tbtn-mono" onclick="selectModalTheme('theme-mono')">Dark Mono White</button>
+            <button type="button" class="theme-btn" id="tbtn-navy" onclick="selectModalTheme('theme-navy')">Deep Navy Blue</button>
+            <button type="button" class="theme-btn" id="tbtn-light" onclick="selectModalTheme('theme-light')">Daylight Radar</button>
           </div>
         </div>
 
-
-        <div style="border-top: 1px solid var(--outline); padding-top: 8px; display: flex; justify-content: flex-end;">
-          <button type="button" class="quick-act-btn" style="flex: none; padding: 4px 16px; background: var(--primary); color: #0b111e; font-weight: 800;" onclick="closeSettingsModal()">완료</button>
+        <!-- 2. Language Selection -->
+        <div class="modal-row" style="border-top: 1px solid var(--outline); padding-top: 8px; margin-top: 8px;">
+          <span style="font-weight: 700; color: var(--primary-soft); display: block; margin-bottom: 6px;" id="lbl-lang-title">언어 표기 설정 (Language / i18n)</span>
+          <div class="lang-select-grid">
+            <button type="button" class="lang-btn active" id="lbtn-bilingual" onclick="selectModalLanguage('bilingual')">한/영 혼재 (기본)</button>
+            <button type="button" class="lang-btn" id="lbtn-ko" onclick="selectModalLanguage('ko')">한글 전용 (KO)</button>
+            <button type="button" class="lang-btn" id="lbtn-en" onclick="selectModalLanguage('en')">English (EN)</button>
+          </div>
         </div>
+
+        <!-- 3. CRT Scanlines Effect -->
+        <div class="modal-row-switch" style="border-top: 1px solid var(--outline); padding-top: 8px; margin-top: 8px;">
+          <div class="modal-label-switch">
+            <span id="lbl-scanlines-title" style="font-size: 10px; font-weight: 700; color: var(--primary-soft); display: block;">CRT 스캔라인 이펙트</span>
+            <span class="modal-desc-sub" id="lbl-scanlines-sub" style="font-size: 8.5px; color: var(--text-muted);">CRT 모니터 아날로그 주사선 효과</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="switch-scanlines" onchange="toggleModalScanlinesSwitch(this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- 4. Typography Selection -->
+        <div class="modal-row" style="border-top: 1px solid var(--outline); padding-top: 8px; margin-top: 8px;">
+          <span style="font-weight: 700; color: var(--primary-soft); display: block; margin-bottom: 6px;" id="lbl-font-title">글씨체 설정 (Typography)</span>
+          <select id="setting-font" class="airport-select" style="width: 100%; height: 26px; font-size: 10px; background: var(--surface-container); color: var(--primary-bright); border: 1px solid var(--outline); border-radius: 3px; padding: 0 6px;">
+            <option value="pretendard">Pretendard</option>
+            <option value="jetbrains">JetBrains Mono</option>
+            <option value="noto">Noto Sans KR</option>
+            <option value="system">System UI</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-modal-action btn-modal-cancel" id="btn-settings-cancel" onclick="closeSettingsModal()">취소</button>
+        <button type="button" class="btn-modal-action btn-modal-save" id="btn-settings-save" onclick="applyAndSaveSettings()">저장 및 적용</button>
       </div>
     </div>
   </div>
@@ -4434,7 +4861,6 @@
           <div class="strip-card-bottom-bar">
             <div class="strip-status-indicator">
               ${stagePillHtml}
-              ${milestonePillsHtml}
             </div>
             <div class="strip-bottom-actions">
               <button type="button" class="strip-bottom-btn act-ink-clear" onclick="clearStripInk('${strip.id}', event)" title="필기 지우기">
@@ -4941,16 +5367,7 @@
       if (el) el.innerText = text;
     }
 
-    // Modals
-    function openSettingsModal() {
-      document.getElementById('settingsModal').classList.add('open');
-      const apt = document.getElementById('settingAirportDisplay');
-      if (apt) apt.innerText = activeAirport;
-    }
-
-    function closeSettingsModal() {
-      document.getElementById('settingsModal').classList.remove('open');
-    }
+    // Modals handled by comprehensive IFS Settings Engine below
 
     // Side Panel Toggle
     function toggleLeftPanel(force) {
@@ -5370,5 +5787,501 @@
       loadSavedLayout();
     });
   </script>
+  <!-- Excel-Style Slide-Up Batch Creation Panel -->
+  <div id="excelBatchDrawer" class="excel-batch-drawer">
+    <div class="excel-drawer-header">
+      <div class="excel-drawer-title">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+        <span>비행스트립 신규 일괄 등록 (Excel Grid)</span>
+        <span class="excel-badge-info" id="excelRowCounterBadge">총 3행 대기</span>
+      </div>
+      <div class="excel-drawer-actions">
+        <button type="button" class="excel-act-btn" onclick="addExcelRow()" title="새로운 빈 행 추가">+ 행 추가</button>
+        <button type="button" class="excel-act-btn" onclick="openClipboardPasteModal()" title="엑셀 또는 스프레드시트에서 복사한 텍스트 붙여넣기">엑셀 붙여넣기</button>
+        <button type="button" class="excel-act-btn" onclick="clearAllExcelRows()" title="입력된 모든 행 초기화">초기화</button>
+        <button type="button" class="excel-act-btn close-btn" onclick="closeExcelBatchPanel()" title="패널 닫기">✕ 닫기</button>
+      </div>
+    </div>
+
+    <!-- Excel Table Container -->
+    <div class="excel-table-scroll">
+      <table class="excel-grid-table" id="excelGridTable">
+        <thead>
+          <tr>
+            <th style="width: 32px; text-align: center;">No</th>
+            <th style="width: 100px;">구분 (대기열)</th>
+            <th style="width: 85px;">편명 (ACID)</th>
+            <th style="width: 75px;">기종 (TYPE)</th>
+            <th style="width: 55px;">RWY</th>
+            <th style="width: 60px;">출발 (DEP)</th>
+            <th style="width: 60px;">도착 (ARR)</th>
+            <th style="width: 65px;">시각 (TIME)</th>
+            <th style="width: 70px;">배정고도</th>
+            <th style="width: 60px;">SSR</th>
+            <th style="min-width: 140px;">항로 / 비고 (Route / Remarks)</th>
+            <th style="width: 36px; text-align: center;">삭제</th>
+          </tr>
+        </thead>
+        <tbody id="excelGridTbody">
+        </tbody>
+      </table>
+    </div>
+
+    <div class="excel-drawer-footer">
+      <div class="excel-footer-note">
+        <span>안내: 편명을 입력한 행만 해당 대기열(QUEUE)로 일괄 등록됩니다. (Tab으로 셀 이동 가능)</span>
+      </div>
+      <div class="excel-footer-buttons">
+        <button type="button" class="excel-footer-btn cancel" onclick="closeExcelBatchPanel()">취소</button>
+        <button type="button" class="excel-footer-btn submit" onclick="submitExcelBatchStrips()">해당 대기열로 일괄 등록</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Excel Clipboard Paste Modal -->
+  <div class="modal-backdrop" id="clipboardPasteModal">
+    <div class="modal-dialog" style="width: 520px;">
+      <div class="modal-header">
+        <span class="modal-title">엑셀 데이터 붙여넣기 (TSV / CSV)</span>
+        <button class="modal-close-btn" onclick="closeClipboardPasteModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <span style="font-size: 9.5px; color: var(--primary-soft); display: block; margin-bottom: 6px;">
+          엑셀 또는 구글 스프레드시트에서 표를 복사(Ctrl+C)한 후 아래에 붙여넣기(Ctrl+V)하세요.
+        </span>
+        <textarea id="clipboardPasteArea" style="width: 100%; height: 160px; background: #0b111a; border: 1px solid var(--outline); color: #ffffff; font-family: var(--font-mono); font-size: 10px; padding: 6px; box-sizing: border-box; resize: none;" placeholder="구분	편명	기종	RWY	출발	도착	시각	고도	SSR	비고..."></textarea>
+        <div style="margin-top: 8px; display: flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" class="quick-act-btn" onclick="closeClipboardPasteModal()">취소</button>
+          <button type="button" class="quick-act-btn" style="background: var(--primary); color: #0b111e; font-weight: 800;" onclick="parseClipboardTextAndPopulate()">표로 변환하여 삽입</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+    // =========================================================================
+    // IFS Settings & i18n & Scanlines & Typography System
+    // =========================================================================
+    const FONT_MAP = {
+      pretendard: '"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Noto Sans KR", sans-serif',
+      jetbrains: '"JetBrains Mono", Consolas, Monaco, monospace',
+      noto: '"Noto Sans KR", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif',
+      system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    };
+
+    const EFS_I18N = {
+      bilingual: {
+        appTitle: '전자비행스트립 (EFS)',
+        bayDep: '출발 비행스트립 (DEPARTURE)',
+        bayArr: '도착 / 접근 비행스트립 (ARRIVAL)',
+        bayTrn: '통과 비행스트립 (TRANSIT)',
+        bayCct: '장주 비행스트립 (CIRCUIT)',
+        lnbNew: '신규생성',
+        lnbFs: '전체화면',
+        lnbSettings: '환경설정',
+        settingsTitle: '관제단말 환경설정 (SETTINGS)',
+        themeTitle: '테마 모드 (Color Theme)',
+        langTitle: '언어 표기 설정 (Language / i18n)',
+        scanlinesTitle: 'CRT 스캔라인 이펙트',
+        scanlinesSub: 'CRT 모니터 아날로그 주사선 효과',
+        fontTitle: '글씨체 설정 (Typography)',
+        cancel: '취소',
+        save: '저장 및 적용'
+      },
+      ko: {
+        appTitle: '전자비행스트립',
+        bayDep: '출발 비행스트립',
+        bayArr: '도착 / 접근 비행스트립',
+        bayTrn: '통과 비행스트립',
+        bayCct: '장주 비행스트립',
+        lnbNew: '신규생성',
+        lnbFs: '전체화면',
+        lnbSettings: '환경설정',
+        settingsTitle: '관제단말 환경설정',
+        themeTitle: '테마 모드',
+        langTitle: '언어 표기 설정',
+        scanlinesTitle: 'CRT 스캔라인 이펙트',
+        scanlinesSub: 'CRT 모니터 아날로그 주사선 효과',
+        fontTitle: '글씨체 설정',
+        cancel: '취소',
+        save: '저장 및 적용'
+      },
+      en: {
+        appTitle: 'Electronic Flight Strip (EFS)',
+        bayDep: 'DEPARTURE FLIGHT STRIPS',
+        bayArr: 'ARRIVAL / APPROACH STRIPS',
+        bayTrn: 'TRANSIT FLIGHT STRIPS',
+        bayCct: 'CIRCUIT PATTERN STRIPS',
+        lnbNew: 'NEW STRIP',
+        lnbFs: 'FULLSCREEN',
+        lnbSettings: 'SETTINGS',
+        settingsTitle: 'TERMINAL SETTINGS',
+        themeTitle: 'Color Theme',
+        langTitle: 'Language (i18n)',
+        scanlinesTitle: 'CRT Scanlines Effect',
+        scanlinesSub: 'Analog CRT Monitor Scanlines',
+        fontTitle: 'Typography',
+        cancel: 'Cancel',
+        save: 'Save & Apply'
+      }
+    };
+
+    let selectedModalThemeName = 'theme-across';
+    let selectedModalLanguageName = 'bilingual';
+    let selectedModalScanlines = false;
+
+    function applyFont(fontKey) {
+      const fontVal = FONT_MAP[fontKey] || FONT_MAP.pretendard;
+      document.documentElement.style.setProperty('--app-font', fontVal);
+      document.documentElement.style.setProperty('--font-pretendard', fontVal);
+      localStorage.setItem('efs_font', fontKey);
+    }
+
+    function setScanlines(show) {
+      const overlay = document.getElementById('scanlines-overlay');
+      if (overlay) overlay.classList.toggle('hidden', !show);
+      localStorage.setItem('efs_scanlines', show ? 'true' : 'false');
+    }
+
+    function selectModalTheme(themeName) {
+      selectedModalThemeName = themeName;
+      ['across', 'crt', 'mono', 'navy', 'light'].forEach(t => {
+        const btn = document.getElementById(`tbtn-${t}`);
+        if (btn) btn.classList.toggle('active', `theme-${t}` === themeName);
+      });
+    }
+
+    function applyLanguage(langKey) {
+      if (!EFS_I18N[langKey]) langKey = 'bilingual';
+      selectedModalLanguageName = langKey;
+      localStorage.setItem('efs_language', langKey);
+
+      ['bilingual', 'ko', 'en'].forEach(k => {
+        const btn = document.getElementById(`lbtn-${k}`);
+        if (btn) btn.classList.toggle('active', k === langKey);
+      });
+
+      const d = EFS_I18N[langKey];
+      const setT = (id, txt) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = txt;
+      };
+
+      setT('app-header-title', d.appTitle);
+      setT('title-bay-dep', d.bayDep);
+      setT('title-bay-arr', d.bayArr);
+      setT('title-bay-trn', d.bayTrn);
+      setT('title-bay-cct', d.bayCct);
+      setT('lbl-lnb-new', d.lnbNew);
+      setT('lbl-lnb-fs', d.lnbFs);
+      setT('lbl-lnb-settings', d.lnbSettings);
+      setT('lbl-settings-title', d.settingsTitle);
+      setT('lbl-theme-title', d.themeTitle);
+      setT('lbl-lang-title', d.langTitle);
+      setT('lbl-scanlines-title', d.scanlinesTitle);
+      setT('lbl-scanlines-sub', d.scanlinesSub);
+      setT('lbl-font-title', d.fontTitle);
+      setT('btn-settings-cancel', d.cancel);
+      setT('btn-settings-save', d.save);
+    }
+
+    function selectModalLanguage(langKey) {
+      selectedModalLanguageName = langKey;
+      ['bilingual', 'ko', 'en'].forEach(k => {
+        const btn = document.getElementById(`lbtn-${k}`);
+        if (btn) btn.classList.toggle('active', k === langKey);
+      });
+    }
+
+    function toggleModalScanlinesSwitch(checked) {
+      selectedModalScanlines = checked;
+    }
+
+    function openSettingsModal() {
+      const savedTheme = localStorage.getItem('efs_theme') || 'theme-across';
+      selectModalTheme(savedTheme);
+
+      const savedLang = localStorage.getItem('efs_language') || 'bilingual';
+      selectModalLanguage(savedLang);
+
+      const savedScan = localStorage.getItem('efs_scanlines') === 'true';
+      selectedModalScanlines = savedScan;
+      const swScan = document.getElementById('switch-scanlines');
+      if (swScan) swScan.checked = savedScan;
+
+      const savedFont = localStorage.getItem('efs_font') || 'pretendard';
+      const fSel = document.getElementById('setting-font');
+      if (fSel) fSel.value = savedFont;
+
+      document.getElementById('settingsModal').classList.add('open');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').classList.remove('open');
+    }
+
+    function applyAndSaveSettings() {
+      applyTheme(selectedModalThemeName);
+      applyLanguage(selectedModalLanguageName);
+      setScanlines(selectedModalScanlines);
+      const fontVal = document.getElementById('setting-font').value;
+      applyFont(fontVal);
+      showToast('환경설정이 저장 및 적용되었습니다.');
+      closeSettingsModal();
+    }
+
+    // Initialize Settings on startup
+    function initAppPreferences() {
+      const savedTheme = localStorage.getItem('efs_theme') || 'theme-across';
+      applyTheme(savedTheme);
+
+      const savedLang = localStorage.getItem('efs_language') || 'bilingual';
+      applyLanguage(savedLang);
+
+      const savedScan = localStorage.getItem('efs_scanlines') === 'true';
+      setScanlines(savedScan);
+
+      const savedFont = localStorage.getItem('efs_font') || 'pretendard';
+      applyFont(savedFont);
+    }
+    setTimeout(initAppPreferences, 0);
+
+    // =========================================================================
+    // Excel-Style Batch Strip Registry Drawer System
+    // =========================================================================
+    function openExcelBatchPanel() {
+      const drawer = document.getElementById('excelBatchDrawer');
+      if (!drawer) return;
+      drawer.classList.add('open');
+      const tbody = document.getElementById('excelGridTbody');
+      if (tbody && tbody.children.length === 0) {
+        // Pre-populate with 3 ready-to-type rows
+        addExcelRow('DEPARTURE', '', 'B738', '33L', 'RKSI', 'RKPC', '', 'FL240', '7101');
+        addExcelRow('ARRIVAL', '', 'A321', '33R', 'RKSS', 'RKSI', '', '5000FT', '3401');
+        addExcelRow('CIRCUIT', '', 'C172', '33L', 'RKSI', 'RKSI', '', '1500FT', '1200');
+      }
+      updateExcelCounter();
+    }
+
+    function closeExcelBatchPanel() {
+      const drawer = document.getElementById('excelBatchDrawer');
+      if (drawer) drawer.classList.remove('open');
+    }
+
+    function updateExcelCounter() {
+      const tbody = document.getElementById('excelGridTbody');
+      const count = tbody ? tbody.children.length : 0;
+      const badge = document.getElementById('excelRowCounterBadge');
+      if (badge) badge.innerText = `총 ${count}행 대기`;
+    }
+
+    function addExcelRow(bay='DEPARTURE', acid='', type='B738', rwy='33L', origin='RKSI', dest='RKSS', schedTime='', alt='FL240', ssr='', rmk='') {
+      const tbody = document.getElementById('excelGridTbody');
+      if (!tbody) return;
+      const rowIdx = tbody.children.length + 1;
+      const tr = document.createElement('tr');
+      tr.className = 'excel-grid-row';
+      tr.innerHTML = `
+        <td style="text-align: center; color: var(--primary-soft); font-weight: 700;">${rowIdx}</td>
+        <td>
+          <select class="excel-cell-select row-bay">
+            <option value="DEPARTURE" ${bay==='DEPARTURE'?'selected':''}>출발 (DEP)</option>
+            <option value="ARRIVAL" ${bay==='ARRIVAL'?'selected':''}>도착 (ARR)</option>
+            <option value="TRANSIT" ${bay==='TRANSIT'?'selected':''}>통과 (TRN)</option>
+            <option value="CIRCUIT" ${bay==='CIRCUIT'?'selected':''}>장주 (CCT)</option>
+          </select>
+        </td>
+        <td><input class="excel-cell-input row-acid" placeholder="KAL1205" value="${acid}" style="text-transform: uppercase; font-weight: 800; color: #38bdf8;" /></td>
+        <td><input class="excel-cell-input row-type" placeholder="B738" value="${type}" style="text-transform: uppercase;" /></td>
+        <td><input class="excel-cell-input row-rwy" placeholder="33L" value="${rwy}" style="text-transform: uppercase;" /></td>
+        <td><input class="excel-cell-input row-origin" placeholder="RKSI" value="${origin}" style="text-transform: uppercase;" /></td>
+        <td><input class="excel-cell-input row-dest" placeholder="RKPC" value="${dest}" style="text-transform: uppercase;" /></td>
+        <td><input class="excel-cell-input row-time" placeholder="1340" value="${schedTime || getUtcHHMM()}" /></td>
+        <td><input class="excel-cell-input row-alt" placeholder="FL280" value="${alt}" style="text-transform: uppercase;" /></td>
+        <td><input class="excel-cell-input row-ssr" placeholder="7123" value="${ssr}" /></td>
+        <td><input class="excel-cell-input row-rmk" placeholder="비고 및 항로" value="${rmk}" /></td>
+        <td style="text-align: center;">
+          <button type="button" class="excel-row-del-btn" onclick="deleteExcelRow(this)" title="행 삭제">&times;</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+      updateExcelCounter();
+    }
+
+    function deleteExcelRow(btn) {
+      const row = btn.closest('tr');
+      if (row) {
+        row.remove();
+        // Renumber table rows
+        const tbody = document.getElementById('excelGridTbody');
+        Array.from(tbody.children).forEach((r, idx) => {
+          r.children[0].innerText = idx + 1;
+        });
+        updateExcelCounter();
+      }
+    }
+
+    function clearAllExcelRows() {
+      const tbody = document.getElementById('excelGridTbody');
+      if (tbody) tbody.innerHTML = '';
+      updateExcelCounter();
+    }
+
+    function openClipboardPasteModal() {
+      document.getElementById('clipboardPasteModal').classList.add('open');
+      const area = document.getElementById('clipboardPasteArea');
+      if (area) {
+        area.value = '';
+        area.focus();
+      }
+    }
+
+    function closeClipboardPasteModal() {
+      document.getElementById('clipboardPasteModal').classList.remove('open');
+    }
+
+    function parseClipboardTextAndPopulate() {
+      const text = (document.getElementById('clipboardPasteArea').value || '').trim();
+      if (!text) {
+        closeClipboardPasteModal();
+        return;
+      }
+      const lines = text.split(/\r?\n/);
+      lines.forEach(line => {
+        const trimmed = line.trim();
+        if (!trimmed) return;
+
+        // Support Tab separated (TSV) or Comma separated (CSV)
+        let cols = trimmed.includes('\t') ? trimmed.split('\t') : trimmed.split(',');
+        cols = cols.map(c => c.trim());
+
+        // Check if header row
+        const firstColUpper = cols[0].toUpperCase();
+        if (firstColUpper === 'NO' || firstColUpper === '구분' || firstColUpper === '편명' || firstColUpper === 'ACID') {
+          return;
+        }
+
+        let bay = 'DEPARTURE';
+        let acid = '', type = 'B738', rwy = '33L', origin = 'RKSI', dest = 'RKSS';
+        let time = '', alt = 'FL240', ssr = '', rmk = '';
+
+        if (cols[0] && (cols[0].includes('출발') || cols[0].toUpperCase().includes('DEP'))) {
+          bay = 'DEPARTURE';
+          cols.shift();
+        } else if (cols[0] && (cols[0].includes('도착') || cols[0].toUpperCase().includes('ARR'))) {
+          bay = 'ARRIVAL';
+          cols.shift();
+        } else if (cols[0] && (cols[0].includes('통과') || cols[0].toUpperCase().includes('TRN'))) {
+          bay = 'TRANSIT';
+          cols.shift();
+        } else if (cols[0] && (cols[0].includes('장주') || cols[0].toUpperCase().includes('CCT'))) {
+          bay = 'CIRCUIT';
+          cols.shift();
+        }
+
+        if (cols[0]) acid = cols[0].trim().toUpperCase();
+        if (cols[1]) type = cols[1].trim().toUpperCase();
+        if (cols[2]) rwy = cols[2].trim().toUpperCase();
+        if (cols[3]) origin = cols[3].trim().toUpperCase();
+        if (cols[4]) dest = cols[4].trim().toUpperCase();
+        if (cols[5]) time = cols[5].trim();
+        if (cols[6]) alt = cols[6].trim().toUpperCase();
+        if (cols[7]) ssr = cols[7].trim();
+        if (cols[8]) rmk = cols.slice(8).join(' ').trim();
+
+        if (acid) {
+          addExcelRow(bay, acid, type, rwy, origin, dest, time, alt, ssr, rmk);
+        }
+      });
+
+      closeClipboardPasteModal();
+      showToast('엑셀 데이터가 표로 변환되어 삽입되었습니다.');
+    }
+
+    function submitExcelBatchStrips() {
+      const tbody = document.getElementById('excelGridTbody');
+      if (!tbody) return;
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      let registeredCount = 0;
+
+      rows.forEach(row => {
+        const acid = row.querySelector('.row-acid').value.trim().toUpperCase();
+        if (!acid) return;
+
+        const bay = row.querySelector('.row-bay').value;
+        const type = row.querySelector('.row-type').value.trim().toUpperCase() || 'B738';
+        const rwy = row.querySelector('.row-rwy').value.trim().toUpperCase() || '33L';
+        const origin = row.querySelector('.row-origin').value.trim().toUpperCase() || 'RKSI';
+        const dest = row.querySelector('.row-dest').value.trim().toUpperCase() || 'RKSS';
+        const time = row.querySelector('.row-time').value.trim() || getUtcHHMM();
+        const alt = row.querySelector('.row-alt').value.trim().toUpperCase() || 'FL240';
+        const ssr = row.querySelector('.row-ssr').value.trim() || String(Math.floor(1000 + Math.random() * 6000));
+        const rmk = row.querySelector('.row-rmk').value.trim() || 'RMK/ EXCEL BATCH ENTRY';
+
+        let targetStatus = 'DEP_QUEUE';
+        if (bay === 'ARRIVAL') targetStatus = 'ARR_QUEUE';
+        else if (bay === 'TRANSIT') targetStatus = 'TRN_QUEUE';
+        else if (bay === 'CIRCUIT') targetStatus = 'CCT_QUEUE';
+
+        const newId = `FS-${acid}-${Date.now().toString().slice(-4)}`;
+
+        const newStrip = {
+          id: newId,
+          operationType: bay,
+          status: targetStatus,
+          acid: acid,
+          ssr: ssr,
+          airport: origin,
+          time: time,
+          type: type,
+          alt: alt,
+          route: 'DCT',
+          actTime: '-',
+          typeWake: `${type}/M`,
+          rwy: rwy,
+          schedTime: time,
+          sidStar: 'DCT',
+          rules: 'I',
+          origin: origin,
+          dest: dest,
+          assignedAlt: alt,
+          idRoute: `${acid}/${origin}-${dest}`,
+          sector: 'TWR',
+          squawkMode: ssr,
+          speed: 'K0250',
+          fplStatus: 'FPL',
+          cid: String(Math.floor(100 + Math.random() * 899)),
+          clearance: 'P',
+          gate: 'G' + Math.floor(10 + Math.random() * 89),
+          category: bay.slice(0, 3),
+          remarks: rmk
+        };
+
+        assignNextEntrySeq(newStrip, bay, targetStatus);
+        strips.push(newStrip);
+        registeredCount++;
+
+        recordOperationToSupabase(
+          newStrip,
+          'BATCH_CREATE',
+          null,
+          bay,
+          null,
+          targetStatus,
+          `[Excel 일괄등록] ACID=${acid}, TYPE=${type}, ${bay} 대기열 등록 (순번 #${newStrip.bayEntryOrder})`
+        );
+      });
+
+      if (registeredCount > 0) {
+        saveStripsLocally();
+        renderAllStrips();
+        clearAllExcelRows();
+        closeExcelBatchPanel();
+        showToast(`[일괄 등록 완료] 총 ${registeredCount}건의 비행스트립이 각 대기열(QUEUE)에 등록되었습니다.`);
+      } else {
+        showToast('등록할 호출부호(ACID)가 입력되지 않았습니다.');
+      }
+    }
+    </script>
 </body>
 </html>
