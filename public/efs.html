@@ -225,12 +225,14 @@
       display: flex;
       flex-direction: column;
       z-index: 105;
-      transform: translateY(105%);
-      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translate3d(0, 105%, 0);
+      transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+      backface-visibility: hidden;
       user-select: text;
     }
     .excel-batch-drawer.open {
-      transform: translateY(0);
+      transform: translate3d(0, 0, 0);
     }
 
     .excel-drawer-header {
@@ -307,6 +309,68 @@
       z-index: 2;
       white-space: nowrap;
     }
+    
+    /* Resizer Hit Area & Touch Compatibility */
+    .bay-col-resizer {
+      width: 8px !important;
+      background: transparent !important;
+      cursor: col-resize !important;
+      flex-shrink: 0 !important;
+      z-index: 25 !important;
+      position: relative !important;
+      margin: 0 -2px !important;
+      touch-action: none !important;
+      user-select: none !important;
+    }
+    .bay-col-resizer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -8px;
+      right: -8px;
+      cursor: col-resize;
+      z-index: 26;
+    }
+    .bay-col-resizer:hover, .bay-col-resizer.active {
+      background: var(--primary) !important;
+      box-shadow: 0 0 10px var(--primary) !important;
+    }
+
+    /* Entire Row Clickable '+ 행 추가' Row */
+    .excel-add-row-tr {
+      cursor: pointer;
+      background: var(--surface-high);
+      transition: background 0.15s ease;
+    }
+    .excel-add-row-tr:hover {
+      background: var(--surface-active) !important;
+    }
+    .excel-add-row-td {
+      text-align: center;
+      padding: 7px 12px;
+      border: 1px dashed var(--outline) !important;
+      color: var(--primary) !important;
+      font-weight: 800;
+      font-size: 11px;
+      user-select: none;
+      cursor: pointer;
+    }
+    .excel-add-row-tr:hover .excel-add-row-td {
+      color: var(--primary-bright) !important;
+      border-color: var(--primary) !important;
+      background: var(--surface-hover) !important;
+    }
+    .excel-add-row-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+      pointer-events: none;
+    }
+
     .excel-grid-table td {
       border: 1px solid var(--outline);
       padding: 2px 4px;
@@ -1035,7 +1099,7 @@
       flex-direction: column;
       overflow: hidden;
       flex: 1 1 0px;
-      min-width: 220px;
+      min-width: 130px;
       height: 100%;
     }
 
@@ -4854,7 +4918,7 @@
 
             <!-- Section 2 (1/3 division, 3 vertical rows) -->
             <div class="sec-2">
-              <div class="sec-row3 box-5">${strip.ssr || '1200'}</div>
+              <div class="sec-row3 box-5">${strip.ssr || ''}</div>
               <div class="sec-row3 box-6">${strip.schedTime || '-'}</div>
               <div class="sec-row3 box-7">${strip.clearance || 'C'}</div>
             </div>
@@ -4875,7 +4939,7 @@
               <div class="sec4-center box-route">${strip.route || 'DCT'}</div>
               <div class="sec4-bottom">
                 <span class="sec4-corner box-9a">${strip.category || strip.operationType?.slice(0,3)}</span>
-                <span class="sec4-corner box-9c">${strip.remarks || 'RMK/ TCAS'}</span>
+                <span class="sec4-corner box-9c">${strip.remarks || ''}</span>
               </div>
             </div>
 
@@ -5282,7 +5346,27 @@
 
     // Column Width Resizers
     function setupColumnResizers() {
+      window.__setupResizersRan = true;
+      const container = document.getElementById('efsBoardContainer');
       const resizers = document.querySelectorAll('.bay-col-resizer');
+      window.__resizersCount = resizers.length;
+      if (!container || resizers.length === 0) return;
+
+      // Restore saved column widths from localStorage
+      const savedWidths = localStorage.getItem('efs_bay_col_widths');
+      if (savedWidths) {
+        try {
+          const widths = JSON.parse(savedWidths);
+          Object.entries(widths).forEach(([id, w]) => {
+            const col = document.getElementById(id);
+            if (col && w >= 130) {
+              col.style.flex = `0 0 ${w}px`;
+              col.style.width = `${w}px`;
+            }
+          });
+        } catch (e) {}
+      }
+
       resizers.forEach(resizer => {
         const leftId = resizer.getAttribute('data-left');
         const rightId = resizer.getAttribute('data-right');
@@ -5295,42 +5379,103 @@
         let startLeftW = 0;
         let startRightW = 0;
 
-        resizer.addEventListener('mousedown', (e) => {
+        const onDragStart = (e) => {
+          if (isDragging) return;
+          e.preventDefault();
+          e.stopPropagation();
           isDragging = true;
-          startX = e.clientX;
+          startX = (e.clientX !== undefined) ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
           startLeftW = leftCol.getBoundingClientRect().width;
           startRightW = rightCol.getBoundingClientRect().width;
+
           resizer.classList.add('active');
           document.body.style.cursor = 'col-resize';
           document.body.style.userSelect = 'none';
 
-          const onMouseMove = (moveEvt) => {
-            if (!isDragging) return;
-            const delta = moveEvt.clientX - startX;
-            const newLeftW = Math.max(160, startLeftW + delta);
-            const newRightW = Math.max(160, startRightW - delta);
-            leftCol.style.flex = `none`;
-            leftCol.style.width = `${newLeftW}px`;
-            rightCol.style.flex = `none`;
-            rightCol.style.width = `${newRightW}px`;
-          };
+          if (resizer.setPointerCapture && e.pointerId !== undefined) {
+            try { resizer.setPointerCapture(e.pointerId); } catch(err) {}
+          }
 
-          const onMouseUp = () => {
-            isDragging = false;
-            resizer.classList.remove('active');
-            document.body.style.cursor = '';
-            document.body.style.userSelect = '';
-            window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('mouseup', onMouseUp);
-          };
+          resizer.addEventListener('pointermove', onDragMove, { passive: false });
+          resizer.addEventListener('pointerup', onDragEnd);
+          resizer.addEventListener('pointercancel', onDragEnd);
 
-          window.addEventListener('mousemove', onMouseMove);
-          window.addEventListener('mouseup', onMouseUp);
-        });
+          window.addEventListener('pointermove', onDragMove, { passive: false });
+          window.addEventListener('mousemove', onDragMove);
+          window.addEventListener('touchmove', onDragMove, { passive: false });
 
+          window.addEventListener('pointerup', onDragEnd);
+          window.addEventListener('mouseup', onDragEnd);
+          window.addEventListener('touchend', onDragEnd);
+          window.addEventListener('pointercancel', onDragEnd);
+        };
+
+        const onDragMove = (e) => {
+          if (!isDragging) return;
+          e.preventDefault();
+          const currentX = (e.clientX !== undefined) ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : startX);
+          const delta = currentX - startX;
+          const minW = 130;
+          const newLeftW = Math.max(minW, Math.round(startLeftW + delta));
+          const newRightW = Math.max(minW, Math.round(startRightW - delta));
+
+          leftCol.style.flex = `0 0 ${newLeftW}px`;
+          leftCol.style.width = `${newLeftW}px`;
+          rightCol.style.flex = `0 0 ${newRightW}px`;
+          rightCol.style.width = `${newRightW}px`;
+        };
+
+        const onDragEnd = (e) => {
+          if (!isDragging) return;
+          isDragging = false;
+          resizer.classList.remove('active');
+          document.body.style.cursor = '';
+          document.body.style.userSelect = '';
+
+          if (resizer.releasePointerCapture && e && e.pointerId !== undefined) {
+            try { resizer.releasePointerCapture(e.pointerId); } catch(err) {}
+          }
+
+          resizer.removeEventListener('pointermove', onDragMove);
+          resizer.removeEventListener('pointerup', onDragEnd);
+          resizer.removeEventListener('pointercancel', onDragEnd);
+
+          window.removeEventListener('pointermove', onDragMove);
+          window.removeEventListener('mousemove', onDragMove);
+          window.removeEventListener('touchmove', onDragMove);
+
+          window.removeEventListener('pointerup', onDragEnd);
+          window.removeEventListener('mouseup', onDragEnd);
+          window.removeEventListener('touchend', onDragEnd);
+          window.removeEventListener('pointercancel', onDragEnd);
+
+          // Persist column widths
+          const widthsToSave = {};
+          ['bay-departure', 'bay-arrival', 'bay-transit', 'bay-circuit'].forEach(id => {
+            const col = document.getElementById(id);
+            if (col && !col.classList.contains('hidden')) {
+              widthsToSave[id] = Math.round(col.getBoundingClientRect().width);
+            }
+          });
+          localStorage.setItem('efs_bay_col_widths', JSON.stringify(widthsToSave));
+        };
+
+        // Bind all pointer, mouse, and touch events
+        resizer.addEventListener('pointerdown', onDragStart);
+        resizer.addEventListener('mousedown', onDragStart);
+        resizer.addEventListener('touchstart', onDragStart, { passive: false });
+
+        // Double-click resets all columns to equal flex ratio
         resizer.addEventListener('dblclick', () => {
-          resetEqualColumns();
-          showToast('모든 베이 너비가 균등하게 재배치되었습니다.');
+          ['bay-departure', 'bay-arrival', 'bay-transit', 'bay-circuit'].forEach(id => {
+            const col = document.getElementById(id);
+            if (col) {
+              col.style.flex = '1 1 0px';
+              col.style.width = '';
+            }
+          });
+          localStorage.removeItem('efs_bay_col_widths');
+          showToast('베이 열 너비가 균등하게 복원되었습니다.');
         });
       });
     }
@@ -5682,21 +5827,29 @@
     }
 
     // Global Events
-    document.getElementById('lnbToggleLeft').onclick = () => toggleLeftPanel();
-    document.getElementById('closeLeftPanelBtn').onclick = () => toggleLeftPanel(false);
+    const lnbToggleLeft = document.getElementById('lnbToggleLeft');
+    if (lnbToggleLeft) lnbToggleLeft.onclick = () => toggleLeftPanel();
+    const closeLeftPanelBtn = document.getElementById('closeLeftPanelBtn');
+    if (closeLeftPanelBtn) closeLeftPanelBtn.onclick = () => toggleLeftPanel(false);
 
-    document.getElementById('btnSideReset').onclick = () => {
-      strips = JSON.parse(JSON.stringify(initialBaseStrips));
-      saveStripsLocally();
-      renderAllStrips();
-      showToast('기본 데모 스트립으로 복원되었습니다.');
-    };
+    const btnSideReset = document.getElementById('btnSideReset');
+    if (btnSideReset) {
+      btnSideReset.onclick = () => {
+        strips = JSON.parse(JSON.stringify(initialBaseStrips));
+        saveStripsLocally();
+        renderAllStrips();
+        showToast('기본 데모 스트립으로 복원되었습니다.');
+      };
+    }
 
-    document.getElementById('airportSelect').onchange = (e) => {
-      activeAirport = e.target.value;
-      loadStrips();
-      showToast(`공항 변경: ${activeAirport}`);
-    };
+    const airportSelect = document.getElementById('airportSelect');
+    if (airportSelect) {
+      airportSelect.onchange = (e) => {
+        activeAirport = e.target.value;
+        loadStrips();
+        showToast(`공항 변경: ${activeAirport}`);
+      };
+    }
 
     if (document.getElementById('btnSaveLayout')) {
       document.getElementById('btnSaveLayout').onclick = () => saveCurrentLayout();
@@ -5802,30 +5955,46 @@
       }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-    // Initialize Wacom Stylus Pen Toolbar
-    initPenToolbar();
+    function initEfsApp() {
+      window.__initEfsAppRan = true;
+      window.__initStatus = {};
+      const steps = [
+        ['initPenToolbar', initPenToolbar],
+        ['initThemeAndSettings', initThemeAndSettings],
+        ['initScratchpad', initScratchpad],
+        ['setupBayToggles', setupBayToggles],
+        ['setupColumnResizers', setupColumnResizers],
+        ['setupRowResizers', setupRowResizers],
+        ['setupDragAndDrop', setupDragAndDrop],
+        ['loadStrips', loadStrips],
+        ['loadSavedLayout', loadSavedLayout]
+      ];
+      steps.forEach(([name, fn]) => {
+        try {
+          fn();
+          window.__initStatus[name] = 'ok';
+        } catch(e) {
+          window.__initStatus[name] = 'error: ' + e.message;
+        }
+      });
 
-    // Global Click Listener to Save and Lock Inline Editing when clicking outside
-    document.addEventListener('pointerdown', (e) => {
-      const editingCard = document.querySelector('.strip-card.inline-editing');
-      if (!editingCard) return;
-      if (editingCard.contains(e.target)) return;
-      if (e.target.closest('#headerPenToolbar')) return;
+      // Global Click Listener to Save and Lock Inline Editing when clicking outside
+      document.addEventListener('pointerdown', (e) => {
+        const editingCard = document.querySelector('.strip-card.inline-editing');
+        if (!editingCard) return;
+        if (editingCard.contains(e.target)) return;
+        if (e.target.closest('#headerPenToolbar')) return;
 
-      const stripId = editingCard.getAttribute('data-strip-id');
-      if (stripId) saveInlineEdit(stripId);
-    });
+        const stripId = editingCard.getAttribute('data-strip-id');
+        if (stripId) saveInlineEdit(stripId);
+      });
+    }
 
-      initThemeAndSettings();
-      initScratchpad();
-      setupBayToggles();
-      setupColumnResizers();
-      setupRowResizers();
-      setupDragAndDrop();
-      loadStrips();
-      loadSavedLayout();
-    });
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initEfsApp);
+    } else {
+      initEfsApp();
+    }
   </script>
   <!-- Excel-Style Slide-Up Batch Creation Panel -->
   <div id="excelBatchDrawer" class="excel-batch-drawer">
@@ -5862,11 +6031,9 @@
         <tbody id="excelGridTbody">
         </tbody>
         <tfoot>
-          <tr>
-            <td colspan="12" style="text-align: center; padding: 6px; background: var(--surface-high); border: 1px dashed var(--outline);">
-              <button type="button" class="excel-act-btn" onclick="addExcelRow()" style="height: 24px; padding: 0 16px; font-weight: 800; font-size: 10px; background: var(--surface-active); color: var(--primary-bright); border: 1px solid var(--outline-strong); cursor: pointer;" title="새로운 행 추가">
-                + 행 추가
-              </button>
+          <tr class="excel-add-row-tr" onclick="addExcelRow()" title="클릭하여 새로운 행 추가 (+ 행 추가)">
+            <td colspan="12" class="excel-add-row-td">
+              <span class="excel-add-row-label">+ 행 추가</span>
             </td>
           </tr>
         </tfoot>
@@ -5876,7 +6043,7 @@
     <div class="excel-drawer-footer">
       <div class="excel-footer-buttons">
         <button type="button" class="excel-footer-btn cancel" onclick="closeExcelBatchPanel()">취소</button>
-        <button type="button" class="excel-footer-btn submit" onclick="submitExcelBatchStrips()">해당 대기열로 일괄 등록</button>
+        <button type="button" class="excel-footer-btn submit" onclick="submitExcelBatchStrips()">일괄 등록</button>
       </div>
     </div>
   </div>
@@ -6079,9 +6246,9 @@
       const tbody = document.getElementById('excelGridTbody');
       if (tbody && tbody.children.length === 0) {
         // Pre-populate with 3 ready-to-type rows
-        addExcelRow('DEPARTURE', '', 'B738', '33L', 'RKSI', 'RKPC', '', 'FL240', '7101');
-        addExcelRow('ARRIVAL', '', 'A321', '33R', 'RKSS', 'RKSI', '', '5000FT', '3401');
-        addExcelRow('CIRCUIT', '', 'C172', '33L', 'RKSI', 'RKSI', '', '1500FT', '1200');
+        addExcelRow('DEPARTURE', '', '', '', '', '', '', '', '', '');
+        addExcelRow('ARRIVAL', '', '', '', '', '', '', '', '', '');
+        addExcelRow('CIRCUIT', '', '', '', '', '', '', '', '', '');
       }
       // Focus first input
       setTimeout(() => {
@@ -6095,7 +6262,7 @@
       if (drawer) drawer.classList.remove('open');
     }
 
-    function addExcelRow(bay='DEPARTURE', acid='', type='B738', rwy='33L', origin='RKSI', dest='RKSS', schedTime='', alt='FL240', ssr='', rmk='') {
+    function addExcelRow(bay='DEPARTURE', acid='', type='', rwy='', origin='', dest='', schedTime='', alt='', ssr='', rmk='') {
       const tbody = document.getElementById('excelGridTbody');
       if (!tbody) return;
       const rowIdx = tbody.children.length + 1;
@@ -6213,7 +6380,102 @@
       }
     }
 
+    
+    // Keyboard Arrow Navigation across Excel Grid Cells
+    function setupExcelKeyboardNavigation() {
+      const table = document.getElementById('excelGridTable');
+      if (!table) return;
+
+      table.addEventListener('keydown', (e) => {
+        const target = e.target;
+        if (!target || (!target.classList.contains('excel-cell-input') && !target.classList.contains('excel-cell-select'))) {
+          return;
+        }
+
+        const td = target.closest('td');
+        const tr = td.closest('tr');
+        if (!tr || !td) return;
+
+        const rowCells = Array.from(tr.querySelectorAll('.excel-cell-input, .excel-cell-select'));
+        const colIdx = rowCells.indexOf(target);
+        const tbody = document.getElementById('excelGridTbody');
+        const rows = Array.from(tbody.querySelectorAll('tr.excel-grid-row'));
+        const rowIdx = rows.indexOf(tr);
+
+        if (e.key === 'ArrowDown' || e.key === 'Enter') {
+          e.preventDefault();
+          if (rowIdx < rows.length - 1) {
+            const nextRowCells = Array.from(rows[rowIdx + 1].querySelectorAll('.excel-cell-input, .excel-cell-select'));
+            const nextTarget = nextRowCells[colIdx] || nextRowCells[0];
+            if (nextTarget) {
+              nextTarget.focus();
+              if (nextTarget.select) nextTarget.select();
+            }
+          } else {
+            // Auto add new row on ArrowDown or Enter at last row
+            addExcelRow();
+            const updatedRows = Array.from(tbody.querySelectorAll('tr.excel-grid-row'));
+            const newRow = updatedRows[updatedRows.length - 1];
+            if (newRow) {
+              const newRowCells = Array.from(newRow.querySelectorAll('.excel-cell-input, .excel-cell-select'));
+              const newTarget = newRowCells[colIdx] || newRowCells[0];
+              if (newTarget) {
+                newTarget.focus();
+                if (newTarget.select) newTarget.select();
+              }
+            }
+          }
+        } else if (e.key === 'ArrowUp') {
+          if (rowIdx > 0) {
+            e.preventDefault();
+            const prevRowCells = Array.from(rows[rowIdx - 1].querySelectorAll('.excel-cell-input, .excel-cell-select'));
+            const prevTarget = prevRowCells[colIdx] || prevRowCells[0];
+            if (prevTarget) {
+              prevTarget.focus();
+              if (prevTarget.select) prevTarget.select();
+            }
+          }
+        } else if (e.key === 'ArrowRight') {
+          const isInput = target.tagName === 'INPUT';
+          if (!isInput || target.selectionEnd === target.value.length) {
+            if (colIdx < rowCells.length - 1) {
+              e.preventDefault();
+              const nextTarget = rowCells[colIdx + 1];
+              nextTarget.focus();
+              if (nextTarget.select) nextTarget.select();
+            } else if (rowIdx < rows.length - 1) {
+              e.preventDefault();
+              const nextRowCells = Array.from(rows[rowIdx + 1].querySelectorAll('.excel-cell-input, .excel-cell-select'));
+              if (nextRowCells[0]) {
+                nextRowCells[0].focus();
+                if (nextRowCells[0].select) nextRowCells[0].select();
+              }
+            }
+          }
+        } else if (e.key === 'ArrowLeft') {
+          const isInput = target.tagName === 'INPUT';
+          if (!isInput || target.selectionStart === 0) {
+            if (colIdx > 0) {
+              e.preventDefault();
+              const prevTarget = rowCells[colIdx - 1];
+              prevTarget.focus();
+              if (prevTarget.select) prevTarget.select();
+            } else if (rowIdx > 0) {
+              e.preventDefault();
+              const prevRowCells = Array.from(rows[rowIdx - 1].querySelectorAll('.excel-cell-input, .excel-cell-select'));
+              const lastCell = prevRowCells[prevRowCells.length - 1];
+              if (lastCell) {
+                lastCell.focus();
+                if (lastCell.select) lastCell.select();
+              }
+            }
+          }
+        }
+      });
+    }
+
     function setupExcelDrawerEvents() {
+      setupExcelKeyboardNavigation();
       const drawer = document.getElementById('excelBatchDrawer');
       if (!drawer) return;
 
@@ -6267,8 +6529,8 @@
         const dest = row.querySelector('.row-dest').value.trim().toUpperCase() || 'RKSS';
         const time = row.querySelector('.row-time').value.trim() || getUtcHHMM();
         const alt = row.querySelector('.row-alt').value.trim().toUpperCase() || 'FL240';
-        const ssr = row.querySelector('.row-ssr').value.trim() || String(Math.floor(1000 + Math.random() * 6000));
-        const rmk = row.querySelector('.row-rmk').value.trim() || 'RMK/ EXCEL BATCH ENTRY';
+        const ssr = row.querySelector('.row-ssr').value.trim();
+        const rmk = row.querySelector('.row-rmk').value.trim();
 
         let targetStatus = 'DEP_QUEUE';
         if (bay === 'ARRIVAL') targetStatus = 'ARR_QUEUE';
