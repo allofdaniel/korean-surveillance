@@ -2063,6 +2063,7 @@
     .strip-bottom-btn.act-lnd { background: #f59e0b !important; color: #ffffff !important; border-color: #d97706 !important; }
     .strip-bottom-btn.act-ctr { background: #38bdf8 !important; color: #0f172a !important; border-color: #0284c7 !important; }
     .strip-bottom-btn.act-tg  { background: #3b82f6 !important; color: #ffffff !important; border-color: #1d4ed8 !important; }
+    .strip-bottom-btn.act-la  { background: #06b6d4 !important; color: #ffffff !important; border-color: #0891b2 !important; }
     .strip-bottom-btn.act-arr { background: #fbbf24 !important; color: #78350f !important; border-color: #d97706 !important; }
 
     .strip-bottom-btn.act-ink-clear {
@@ -2802,15 +2803,6 @@
           </div>
         </div>
 
-        <div style="border-top: 1px solid var(--outline); padding-top: 8px;">
-          <span style="font-weight: 700; color: var(--primary-soft); display: block; margin-bottom: 6px;">데이터 연동 상태</span>
-          <div style="font-size: 9.5px; line-height: 1.6; color: var(--primary-bright);">
-            <div>AMHS / SIS 브로커: <span style="color: var(--green); font-weight: 700;">CONNECTED</span></div>
-            <div>비행계획서(FPL) 소스: <span style="color: var(--green); font-weight: 700;">AMHS IPM / Pub/Sub OK</span></div>
-            <div>기본 관제 비행장: <span style="color: var(--primary); font-weight: 700;" id="settingAirportDisplay">RKSI</span></div>
-            <div>표시 밀도: <span style="color: var(--primary); font-weight: 700;">초밀집 모드 (ULTRA-COMPACT 고정)</span></div>
-          </div>
-        </div>
 
         <div style="border-top: 1px solid var(--outline); padding-top: 8px; display: flex; justify-content: flex-end;">
           <button type="button" class="quick-act-btn" style="flex: none; padding: 4px 16px; background: var(--primary); color: #0b111e; font-weight: 800;" onclick="closeSettingsModal()">완료</button>
@@ -3681,8 +3673,16 @@
           strip.status = 'CCT_UPW';
           strip.patCount = (strip.patCount || 0) + 1;
           assignNextEntrySeq(strip, 'CIRCUIT', 'CCT_UPW');
-          showToast(`[${strip.acid}] 터치앤고/복행 (T&G) -> UPW 랙 이동 (패턴 횟수: #${strip.patCount})`);
-          recordOperationToSupabase(strip, 'CIRCUIT_TOUCH_AND_GO', 'CIRCUIT', 'CIRCUIT', prevStatus, 'CCT_UPW', `터치앤고/복행 인가 및 Upwind 진입 (패턴: ${strip.patCount}회)`);
+          showToast(`[${strip.acid}] Touch & Go (T/G) -> UPW 랙 이동 (패턴 #${strip.patCount})`);
+          recordOperationToSupabase(strip, 'CIRCUIT_TOUCH_AND_GO', 'CIRCUIT', 'CIRCUIT', prevStatus, 'CCT_UPW', `Touch & Go 인가 및 Upwind 진입 (패턴: ${strip.patCount}회)`);
+          break;
+
+        case 'CCT_LA':
+          strip.status = 'CCT_UPW';
+          strip.patCount = (strip.patCount || 0) + 1;
+          assignNextEntrySeq(strip, 'CIRCUIT', 'CCT_UPW');
+          showToast(`[${strip.acid}] Low Approach (L/A) -> UPW 랙 이동 (패턴 #${strip.patCount})`);
+          recordOperationToSupabase(strip, 'CIRCUIT_LOW_APPROACH', 'CIRCUIT', 'CIRCUIT', prevStatus, 'CCT_UPW', `Low Approach/복행 인가 및 Upwind 진입 (패턴: ${strip.patCount}회)`);
           break;
 
         case 'CCT_L_DW':
@@ -4040,21 +4040,14 @@
       el.id = `strip-${strip.id}`;
       el.setAttribute('data-strip-id', strip.id);
 
-      // Status labels
-      let statusLabel = 'ACT';
-      let statusFullName = '활성 (ACTIVE)';
-      if (strip.status.endsWith('_QUEUE')) {
-        statusLabel = 'QUE';
-        statusFullName = '대기열 (QUEUE)';
-      } else if (strip.status === 'CCT_L_PTN') {
+      // Status labels (Circuit pattern leg or blank for standard bays)
+      let statusLabel = '';
+      if (strip.status === 'CCT_L_PTN') {
         statusLabel = 'L/PTN';
-        statusFullName = 'Left Downwind';
       } else if (strip.status === 'CCT_UPW') {
         statusLabel = 'UPW';
-        statusFullName = 'Upwind / Leg';
       } else if (strip.status === 'CCT_R_PTN') {
         statusLabel = 'R/PTN';
-        statusFullName = 'Right Downwind';
       }
 
       // Milestone Pills for Bottom Bar
@@ -4173,7 +4166,7 @@
                 <input class="inline-edit-input" data-field="speed" value="${strip.speed || ''}" placeholder="속도" />
               </div>
               <div class="sec5-cell box-18">
-                <span class="status-toggle-pill" style="cursor: default;">${statusLabel}</span>
+                ${statusLabel ? `<span class="status-toggle-pill" style="cursor: default;">${statusLabel}</span>` : ''}
               </div>
             </div>
           </div>
@@ -4213,44 +4206,42 @@
         let actionButtonsHtml = '';
         if (strip.operationType === 'DEPARTURE') {
           if (strip.status === 'DEP_QUEUE') {
-            const clrActive = strip.asrt ? 'active-stamped' : '';
             const pbActive = strip.asat ? 'active-stamped' : '';
             actionButtonsHtml = `
-              <button type="button" class="strip-bottom-btn act-clr ${clrActive}" onclick="handleStripAction('${strip.id}', 'CLR', event)" title="출발 허가 발부 (ASRT 자동 기록)">CLR 허가</button>
-              <button type="button" class="strip-bottom-btn act-pb ${pbActive}" onclick="handleStripAction('${strip.id}', 'PB', event)" title="푸시백 승인 (ASAT 자동 기록 및 활성열 이동)">P/B 승인</button>
-              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
+              <button type="button" class="strip-bottom-btn act-pb ${pbActive}" onclick="handleStripAction('${strip.id}', 'PB', event)" title="푸시백 승인 (ASAT 자동 기록 및 활성열 이동)">P/B</button>
             `;
           } else {
+            const clrActive = strip.asrt ? 'active-stamped' : '';
             const depActive = strip.atot ? 'active-stamped' : '';
             actionButtonsHtml = `
-              <button type="button" class="strip-bottom-btn act-dep ${depActive}" onclick="handleStripAction('${strip.id}', 'DEP', event)" title="이륙 허가 발부 (ATOT 자동 기록)">DEP 이륙</button>
-              <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="관제 이양 및 스트립 아카이브">OUT 이양</button>
+              <button type="button" class="strip-bottom-btn act-clr ${clrActive}" onclick="handleStripAction('${strip.id}', 'CLR', event)" title="출발 허가 발부 (ASRT 자동 기록)">CLR</button>
+              <button type="button" class="strip-bottom-btn act-dep ${depActive}" onclick="handleStripAction('${strip.id}', 'DEP', event)" title="이륙 허가 발부 (ATOT 자동 기록)">DEP</button>
+              <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="관제 이양 및 스트립 아카이브">OUT</button>
               <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
             `;
           }
         } else if (strip.operationType === 'ARRIVAL') {
           if (strip.status === 'ARR_QUEUE') {
             actionButtonsHtml = `
-              <button type="button" class="strip-bottom-btn act-app" onclick="handleStripAction('${strip.id}', 'APP', event)" title="접근 인가 (활성열 자동 이동)">APP 인가</button>
-              <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
+              <button type="button" class="strip-bottom-btn act-app" onclick="handleStripAction('${strip.id}', 'APP', event)" title="접근 인가 (활성열 자동 이동)">APP</button>
             `;
           } else {
             const lndActive = strip.aldt ? 'active-stamped' : '';
             actionButtonsHtml = `
-              <button type="button" class="strip-bottom-btn act-lnd ${lndActive}" onclick="handleStripAction('${strip.id}', 'LND', event)" title="착륙 확인 (ALDT 기록, AIBT 자동 계산)">LND 착륙</button>
-              <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="지상관제 이양 및 스트립 완료">OUT 이양</button>
+              <button type="button" class="strip-bottom-btn act-lnd ${lndActive}" onclick="handleStripAction('${strip.id}', 'LND', event)" title="착륙 확인 (ALDT 기록, AIBT 자동 계산)">LND</button>
+              <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="지상관제 이양 및 스트립 완료">OUT</button>
               <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
             `;
           }
         } else if (strip.operationType === 'TRANSIT') {
           if (strip.status === 'TRN_QUEUE') {
             actionButtonsHtml = `
-              <button type="button" class="strip-bottom-btn act-ctr" onclick="handleStripAction('${strip.id}', 'CTR', event)" title="관제 진입 인가 (활성열 이동)">CTR 인가</button>
+              <button type="button" class="strip-bottom-btn act-ctr" onclick="handleStripAction('${strip.id}', 'CTR', event)" title="관제 진입 인가 (활성열 이동)">CTR</button>
               <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
             `;
           } else {
             actionButtonsHtml = `
-              <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="섹터 통과 및 핸드오프 완료">OUT 이양</button>
+              <button type="button" class="strip-bottom-btn act-out" onclick="handleStripAction('${strip.id}', 'OUT', event)" title="섹터 통과 및 핸드오프 완료">OUT</button>
               <button type="button" class="strip-bottom-btn act-ptn" onclick="handleStripAction('${strip.id}', 'PTN', event)" title="장주 대기열로 이관">PTN</button>
             `;
           }
@@ -4269,9 +4260,10 @@
             `;
           } else {
             actionButtonsHtml = `
-              <button type="button" class="strip-bottom-btn act-tg" onclick="handleStripAction('${strip.id}', 'CCT_TG', event)" title="터치앤고/복행 인가 (UPW 자동 이동 & 패턴 카운트 +1)">T&G 복행</button>
-              <button type="button" class="strip-bottom-btn act-arr" onclick="handleStripAction('${strip.id}', 'CCT_ARR', event)" title="최종 착륙 (도착 활성열로 이관)">ARR 착륙</button>
-              <button type="button" class="strip-bottom-btn act-dep" onclick="handleStripAction('${strip.id}', 'CCT_DEP', event)" title="타 공항 출발 (출발 활성열로 이관)">DEP 출발</button>
+              <button type="button" class="strip-bottom-btn act-tg" onclick="handleStripAction('${strip.id}', 'CCT_TG', event)" title="Touch & Go 인가 (UPW 자동 이동 & 패턴 카운트 +1)">T/G</button>
+              <button type="button" class="strip-bottom-btn act-la" onclick="handleStripAction('${strip.id}', 'CCT_LA', event)" title="Low Approach 인가 (UPW 자동 이동 & 패턴 카운트 +1)">L/A</button>
+              <button type="button" class="strip-bottom-btn act-arr" onclick="handleStripAction('${strip.id}', 'CCT_ARR', event)" title="최종 착륙 (도착 활성열로 이관)">ARR</button>
+              <button type="button" class="strip-bottom-btn act-dep" onclick="handleStripAction('${strip.id}', 'CCT_DEP', event)" title="타 공항 출발 (출발 활성열로 이관)">DEP</button>
             `;
           }
         }
@@ -4338,7 +4330,7 @@
               <div class="sec5-cell box-16">${strip.squawkMode || strip.ssr || '1200'}</div>
               <div class="sec5-cell box-17">${strip.speed || '-'}</div>
               <div class="sec5-cell box-18" title="상태 구분">
-                <span class="status-toggle-pill" style="cursor: default;">${statusLabel}</span>
+                ${statusLabel ? `<span class="status-toggle-pill" style="cursor: default;">${statusLabel}</span>` : ''}
               </div>
             </div>
           </div>
@@ -4346,8 +4338,6 @@
           <!-- Bottom 1-Click Operational Action Buttons Bar (Guaranteed 21px) -->
           <div class="strip-card-bottom-bar">
             <div class="strip-status-indicator">
-              <span class="status-indicator-dot"></span>
-              <span class="status-indicator-text">${statusFullName}</span>
               ${milestonePillsHtml}
             </div>
             <div class="strip-bottom-actions">
