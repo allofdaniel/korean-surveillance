@@ -197,13 +197,15 @@ export default async function handler(req, res) {
 </head>
 <body>
   <header>
-    <div class="brand-title">
-      대한감시 연계 게이트웨이
-      <span class="brand-badge">API SWAGGER EXPLORER</span>
-    </div>
+    <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 10px; cursor: pointer;" title="홈으로 이동">
+      <img src="/assets/logos/KE_primary-logo_white_online.svg" alt="Korean Air" style="height: 20px; width: auto;" />
+      <div class="brand-title">
+        대한감시 연계 게이트웨이
+        <span class="brand-badge">API SWAGGER EXPLORER</span>
+      </div>
+    </a>
     <div class="header-links">
       <a href="/api-dashboard" class="btn-link btn-cyan">실시간 대시보드</a>
-      <a href="/" class="btn-link">관제 맵 이동</a>
     </div>
   </header>
 

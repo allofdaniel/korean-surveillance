@@ -637,21 +637,54 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
         notamLocationsOnMap={notamLocationsOnMap}
         setNotamLocationsOnMap={setNotamLocationsOnMap}
         fetchNotamData={fetchNotamData}
-        onOpenApiDashboard={() => setIsApiDashboardOpen(true)}
-        onNavigateToLanding={onNavigateToLanding}
       />
 
-      {/* Hamburger Menu Toggle Button */}
+      {/* Hamburger Menu Toggle Button & Korean Air Home Brand Link */}
       {!isPanelOpen && (
-        <button
-          className="mobile-menu-toggle"
-          onClick={() => setIsPanelOpen(true)}
-          aria-label="메뉴 열기"
-          aria-expanded={isPanelOpen}
-          aria-controls="main-control-panel"
-        >
-          ☰
-        </button>
+        <>
+          <button
+            className="mobile-menu-toggle"
+            onClick={() => setIsPanelOpen(true)}
+            aria-label="메뉴 열기"
+            aria-expanded={isPanelOpen}
+            aria-controls="main-control-panel"
+          >
+            ☰
+          </button>
+          <button
+            type="button"
+            onClick={onNavigateToLanding || (() => { window.location.href = '/'; })}
+            className="radar-brand-btn"
+            style={{
+              position: 'absolute',
+              top: '10px',
+              left: '60px',
+              zIndex: 1100,
+              height: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '0 12px',
+              background: 'rgba(30, 35, 42, 0.95)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              backdropFilter: 'blur(10px)',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.3)',
+              transition: 'all 0.2s ease',
+            }}
+            title="홈으로 이동"
+          >
+            <img
+              src="/assets/logos/KE_primary-logo_white_online.svg"
+              alt="Korean Air"
+              style={{ height: '17px', width: 'auto' }}
+            />
+            <span style={{ color: '#ffffff', fontSize: '12.5px', fontWeight: 600, letterSpacing: '0.3px' }}>
+              대한감시
+            </span>
+          </button>
+        </>
       )}
 
       {/* 모바일 백드롭 (패널 열려있을 때) */}
@@ -663,6 +696,7 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
       <ControlPanel
         isPanelOpen={isPanelOpen}
         setIsPanelOpen={setIsPanelOpen}
+        onNavigateToLanding={onNavigateToLanding}
         layersExpanded={layersExpanded}
         setLayersExpanded={setLayersExpanded}
         aircraftExpanded={aircraftExpanded}

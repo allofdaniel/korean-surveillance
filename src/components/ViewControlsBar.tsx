@@ -82,99 +82,9 @@ const ViewControlsBar: React.FC<ViewControlsBarProps> = React.memo(({
   notamLocationsOnMap,
   setNotamLocationsOnMap,
   fetchNotamData,
-  onOpenApiDashboard,
-  onNavigateToLanding,
 }) => {
   return (
     <div className="view-controls flex items-center space-x-2" role="toolbar" aria-label="상단 패널">
-      <button
-        type="button"
-        onClick={onNavigateToLanding || (() => { window.location.href = '/'; })}
-        className="view-btn notam-button"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '5px',
-          background: 'rgba(15, 23, 42, 0.95)',
-          borderColor: 'rgba(255, 255, 255, 0.25)',
-          color: '#f8fafc',
-          cursor: 'pointer'
-        }}
-        title="ACROSS 통합 포털 홈으로 이동"
-      >
-        <span>🏠 홈</span>
-      </button>
-      <a
-        href="/ifs"
-        className="view-btn notam-button"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '5px',
-          background: 'rgba(15, 23, 42, 0.95)',
-          borderColor: 'rgba(34, 197, 94, 0.4)',
-          color: '#4ade80',
-          textDecoration: 'none',
-          cursor: 'pointer'
-        }}
-        title="정보융합지원 관제단말 (Information Fusion System)"
-      >
-        <span style={{ display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%', background: '#22c55e' }}></span>
-        <span>🖥️ IFS</span>
-      </a>
-      <a
-        href="/efs"
-        className="view-btn notam-button"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '5px',
-          background: 'rgba(15, 23, 42, 0.95)',
-          borderColor: 'rgba(251, 203, 65, 0.4)',
-          color: '#facc15',
-          textDecoration: 'none',
-          cursor: 'pointer'
-        }}
-        title="전자비행스트립 관제단말 (Electronic Flight Strip)"
-      >
-        <span style={{ display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%', background: '#facc15' }}></span>
-        <span>📋 EFS</span>
-      </a>
-      <a
-        href="/api-dashboard"
-        className="view-btn notam-button"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '5px',
-          background: 'rgba(15, 23, 42, 0.95)',
-          borderColor: 'rgba(6, 182, 212, 0.4)',
-          color: '#38bdf8',
-          textDecoration: 'none',
-          cursor: 'pointer'
-        }}
-        title="23개 항공/기상/관제 인터페이스 및 연계 데이터 대시보드"
-      >
-        <span style={{ display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%', background: '#10b981' }}></span>
-        <span>📡 API 대시보드</span>
-      </a>
-      <a
-        href="/docs"
-        className="view-btn notam-button"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '5px',
-          background: 'rgba(15, 23, 42, 0.95)',
-          borderColor: 'rgba(168, 85, 247, 0.4)',
-          color: '#c084fc',
-          textDecoration: 'none',
-          cursor: 'pointer'
-        }}
-        title="23개 연계 인터페이스 API 명세서 & Swagger"
-      >
-        <span>📖 API 명세</span>
-      </a>
       <NotamPanel
         showNotamPanel={showNotamPanel}
         setShowNotamPanel={setShowNotamPanel}

@@ -49,6 +49,7 @@ export interface ControlPanelProps {
   // Panel open/close
   isPanelOpen: boolean;
   setIsPanelOpen: (open: boolean) => void;
+  onNavigateToLanding?: () => void;
 
   // Accordion states (UI store)
   layersExpanded: boolean;
@@ -195,6 +196,7 @@ const CAT_PURPLE = '#b690ff';  // 표시 설정
 const ControlPanel: React.FC<ControlPanelProps> = React.memo(({
   isPanelOpen,
   setIsPanelOpen,
+  onNavigateToLanding,
   layersExpanded,
   setLayersExpanded,
   aircraftExpanded,
@@ -369,7 +371,27 @@ const ControlPanel: React.FC<ControlPanelProps> = React.memo(({
       {...(!isPanelOpen ? { inert: '' as unknown as boolean } : {})}
     >
       <div className="panel-header">
-        <span className="panel-title">대한감시</span>
+        <button
+          type="button"
+          onClick={onNavigateToLanding || (() => { window.location.href = '/'; })}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+          }}
+          title="ACROSS 통합 홈으로 이동"
+        >
+          <img
+            src="/assets/logos/KE_primary-logo_white_online.svg"
+            alt="Korean Air"
+            style={{ height: '17px', width: 'auto' }}
+          />
+          <span className="panel-title" style={{ margin: 0 }}>대한감시</span>
+        </button>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <button
             onClick={() => {
