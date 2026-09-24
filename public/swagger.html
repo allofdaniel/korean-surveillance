@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>대한감시 - 23개 연계 인터페이스 API Swagger 명세서</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css" />
   <style>
     body {
       margin: 0;
@@ -15,13 +15,16 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     .custom-topbar {
-      height: 48px;
-      background: #121215;
+      height: 50px;
+      background: #111114;
       border-bottom: 1px solid #27272a;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
+      padding: 0 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     .brand-title {
       font-size: 13.5px;
@@ -41,26 +44,45 @@
       font-family: monospace;
       font-weight: 700;
     }
-    .top-links { display: flex; gap: 8px; }
-    .top-link {
-      padding: 4px 10px;
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      padding: 5px 11px;
       border-radius: 5px;
       background: #18181b;
       border: 1px solid #3f3f46;
       color: #e4e4e7;
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
-    .top-link:hover { background: #27272a; color: #fff; border-color: #52525b; }
+    .nav-btn:hover {
+      background: #27272a;
+      color: #fff;
+      border-color: #52525b;
+    }
+    .nav-btn.active {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: #0284c7;
+      color: #38bdf8;
+    }
     
     /* Dark Theme Swagger UI Overrides */
     .swagger-ui .topbar { display: none; }
     .swagger-ui {
       background: #09090b;
       color: #e4e4e7;
-      padding-bottom: 40px;
+      padding-bottom: 50px;
+      max-width: 1400px;
+      margin: 0 auto;
     }
     .swagger-ui .info .title { color: #ffffff; }
     .swagger-ui .info p, .swagger-ui .info li, .swagger-ui .info td { color: #d4d4d8; }
@@ -81,36 +103,87 @@
     .swagger-ui .btn { border-color: #3f3f46; color: #e4e4e7; background: #18181b; }
     .swagger-ui .btn.execute { background: #0284c7; color: #fff; border-color: #0284c7; }
     .swagger-ui input[type=text], .swagger-ui textarea { background: #18181b; color: #fafafa; border: 1px solid #3f3f46; }
+    
+    #loading-notice {
+      text-align: center;
+      padding: 60px 20px;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+    .spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(56, 189, 248, 0.2);
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-  <div class="custom-topbar">
+  <header class="custom-topbar">
     <div class="brand-title">
       대한감시 연계 게이트웨이
       <span class="brand-badge">OPENAPI 3.0 SWAGGER</span>
     </div>
-    <div class="top-links">
-      <a href="/api-dashboard" class="top-link">실시간 대시보드</a>
-      <a href="/" class="top-link">관제 맵 이동</a>
-    </div>
+    <nav class="top-nav">
+      <a href="/" class="nav-btn">🏠 홈</a>
+      <a href="/map" class="nav-btn">🛰️ 관제 맵</a>
+      <a href="/ifs" class="nav-btn">🖥️ IFS 단말</a>
+      <a href="/efs" class="nav-btn">📋 EFS 스트립</a>
+      <a href="/api-dashboard" class="nav-btn">📡 API 대시보드</a>
+      <a href="/docs" class="nav-btn">📖 API 문서</a>
+      <a href="/swagger" class="nav-btn active">⚡ Swagger UI</a>
+    </nav>
+  </header>
+
+  <div id="loading-notice">
+    <div class="spinner"></div>
+    <div>Swagger OpenAPI 명세서를 로드하는 중입니다...</div>
   </div>
 
   <div id="swagger-ui"></div>
 
-  <script src="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui-bundle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js"></script>
   <script>
-    window.onload = function() {
-      SwaggerUIBundle({
-        url: '/openapi.json',
-        dom_id: '#swagger-ui',
-        deepLinking: true,
-        presets: [
-          SwaggerUIBundle.presets.apis,
-          SwaggerUIBundle.SwaggerUIStandalonePreset
-        ],
-        layout: "BaseLayout"
-      });
-    };
+    window.addEventListener('DOMContentLoaded', function() {
+      try {
+        const ui = SwaggerUIBundle({
+          url: '/openapi.json',
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
+          ],
+          plugins: [
+            SwaggerUIBundle.plugins.DownloadUrl
+          ],
+          layout: "BaseLayout",
+          onComplete: function() {
+            const notice = document.getElementById('loading-notice');
+            if (notice) notice.style.display = 'none';
+          },
+          onFailure: function(err) {
+            console.error('Swagger UI load failure:', err);
+            const notice = document.getElementById('loading-notice');
+            if (notice) {
+              notice.innerHTML = '<div style="color:#ef4444; font-weight:700;">Swagger 로드 중 오류가 발생했습니다.</div><div style="margin-top:8px;"><a href="/openapi.json" target="_blank" style="color:#38bdf8;">/openapi.json 원본 보기</a> | <a href="/docs" style="color:#38bdf8;">상세 API 문서로 이동</a></div>';
+            }
+          }
+        });
+      } catch (e) {
+        console.error('Swagger initialization error:', e);
+        const notice = document.getElementById('loading-notice');
+        if (notice) {
+          notice.innerHTML = '<div style="color:#ef4444; font-weight:700;">Swagger UI 초기화 실패: ' + e.message + '</div><div style="margin-top:8px;"><a href="/docs" style="color:#38bdf8;">API 문서(Docs) 화면으로 이동</a></div>';
+        }
+      }
+    });
   </script>
 </body>
 </html>

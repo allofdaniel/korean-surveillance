@@ -450,10 +450,13 @@
         </select>
       </div>
 
-      <button class="btn" onclick="openGuideModal()">개발 현황 & 진단 (요약)</button>
-      <a href="/ifs" class="btn" style="background: rgba(0, 255, 0, 0.1); border-color: rgba(0, 255, 0, 0.4); color: #4ade80; font-weight: 700;">IFS 단말</a>
-      <a href="/efs" class="btn" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8; font-weight: 700;">EFS 전자비행스트립</a>
-      <a href="/" class="btn">관제 맵 이동</a>
+      <button class="btn" onclick="openGuideModal()">개발 현황 & 진단</button>
+      <a href="/ifs" class="btn" style="background: rgba(0, 255, 0, 0.1); border-color: rgba(0, 255, 0, 0.4); color: #4ade80; font-weight: 700;">🖥️ IFS 단말</a>
+      <a href="/efs" class="btn" style="background: rgba(250, 204, 21, 0.1); border-color: rgba(250, 204, 21, 0.4); color: #facc15; font-weight: 700;">📋 EFS 스트립</a>
+      <a href="/docs" class="btn" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.4); color: #c084fc; font-weight: 700;">📖 API 명세</a>
+      <a href="/swagger" class="btn" style="background: rgba(2, 132, 199, 0.15); border-color: rgba(2, 132, 199, 0.4); color: #38bdf8; font-weight: 700;">⚡ Swagger</a>
+      <a href="/" class="btn" style="background: rgba(255, 255, 255, 0.08); font-weight: 600;">🏠 홈</a>
+      <a href="/map" class="btn">🛰️ 관제 맵</a>
       <button class="btn btn-cyan" id="ping-btn" onclick="runLiveHealthCheckAll()">전체 실시간 핑</button>
     </div>
   </header>
@@ -577,11 +580,9 @@
         <div class="guide-item"><span class="guide-num">19</span><span class="guide-name">출발보 (DEP)</span><span class="guide-desc">ADS-B 이륙 또는 ATD 감지 시 ICAO DEP SOAP XML 생성 (향후 24시간 감지 워커 구축 대상)</span><span class="guide-tag-worker">[워커대상]</span></div>
         <div class="guide-item"><span class="guide-num">20</span><span class="guide-name">도착보 (ARR)</span><span class="guide-desc">ADS-B 착륙 또는 ATA 감지 시 ICAO ARR SOAP XML 생성 (향후 24시간 감지 워커 구축 대상)</span><span class="guide-tag-worker">[워커대상]</span></div>
 
-        <div class="modal-section-title">4. 관제음성, 모니터링 및 로깅 (4개 인터페이스)</div>
+        <div class="modal-section-title">4. 관제음성 및 비행스트립 (2개 인터페이스 - 외부 연계)</div>
         <div class="guide-item"><span class="guide-num">21</span><span class="guide-name">관제음성 (LiveATC)</span><span class="guide-desc">KJFK, RJTT, KLAX 관제탑 실시간 라이브 스트리밍 연동 (국내 공역은 항공보안법상 비공개)</span><span class="guide-tag-ok">[완료]</span></div>
         <div class="guide-item"><span class="guide-num">22</span><span class="guide-name">전자스트립 (EFS)</span><span class="guide-desc">사용자 자체 관제 시스템에서 실시간 스트립 데이터 전송 시 연계되는 대기 규격</span><span class="guide-tag-standby">[연계대기]</span></div>
-        <div class="guide-item"><span class="guide-num">23</span><span class="guide-name">무저장 크롤러</span><span class="guide-desc">Vercel Cron 5분 주기 In-Memory AMO/기상청 동기화 헬스체크 엔진</span><span class="guide-tag-ok">[완료]</span></div>
-        <div class="guide-item"><span class="guide-num">24</span><span class="guide-name">기상/연계 에러 로그</span><span class="guide-desc">기상청(AMO) 인증 실패, 서버 단절, 스크래핑 오류 실시간 Supabase 원격 로깅</span><span class="guide-tag-ok">[완료]</span></div>
 
       </div>
     </div>
@@ -640,7 +641,6 @@
         { group: '공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 21, name: '관제음성 (LiveATC)', format: 'AUDIO/MPEG', interval: '실시간', source: 'LiveATC.net', endpoint: '/api/voice?channel=KJFK', doc: 'Live ATC Stream Engine' },
         { group: '공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 22, name: '전자비행스트립 (EFS)', format: 'EFS JSON', interval: '사용자 송출', source: '사용자 시스템 (대기)', endpoint: `/api/flight-schedule?airport=${isAll ? 'RKSI' : ap}&efs=true`, doc: 'EFS Strip Gateway' },
         { group: '공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 23, name: '무저장 동기화 크롤러', format: 'Vercel Cron', interval: '5분 주기', source: 'Vercel Pro Engine', endpoint: '/api/crawler?status=true', doc: 'Vercel Pro Zero-Storage In-Memory Sync Engine' },
-        { group: '공항별 관제·기상·스케줄 (Airport Operations & Weather)', no: 24, name: '기상/연계 에러 로그', format: 'Supabase JSON', interval: '실시간 로깅', source: 'Supabase DB', endpoint: '/api/weather?type=error_logs', doc: 'AMO/AMHS/CRAWLER Live Outage & Disconnect Logs' },
       ];
     }
 

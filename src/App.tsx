@@ -88,7 +88,11 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 // Boot stage marker — App chunk 가 evaluated 됐다는 증거 (lazy import 해소 OK).
 (window as unknown as { __setBootStage__?: (s: string) => void }).__setBootStage__?.('app-module-evaluated');
 
-function App(): React.ReactElement | null {
+interface AppProps {
+  onNavigateToLanding?: () => void;
+}
+
+function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null {
   // Boot stage marker — App component 가 첫 render 시작.
   // 이 stage 만 도달하고 'app-mounted' 가 안 도달하면 useEffect 도달 전에 hang.
   (window as unknown as { __setBootStage__?: (s: string) => void }).__setBootStage__?.('app-render-start');
@@ -634,6 +638,7 @@ function App(): React.ReactElement | null {
         setNotamLocationsOnMap={setNotamLocationsOnMap}
         fetchNotamData={fetchNotamData}
         onOpenApiDashboard={() => setIsApiDashboardOpen(true)}
+        onNavigateToLanding={onNavigateToLanding}
       />
 
       {/* Hamburger Menu Toggle Button */}
