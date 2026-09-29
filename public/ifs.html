@@ -2564,11 +2564,6 @@
             <span class="status-lbl">AMHS</span>
             <div class="status-dot active" id="dot-amhs" title="AMHS 메시지 게이트웨이 정상"></div>
           </div>
-          <span class="status-sep">|</span>
-          <div class="status-item">
-            <span class="status-lbl">EFS</span>
-            <div class="status-dot active" id="dot-efs" title="전자비행스트립 연계 정상"></div>
-          </div>
         </div>
       </div>
 
@@ -3096,7 +3091,7 @@
     // Default Airport Directives Dictionary
     const DEFAULT_AIRPORT_NOTICES = {
       RKJY: "1. [RKJY] 여수공항 활주로 17/35 표준 운항 절차 유지 중.\n2. [NOTAM] 유효 비행고시보 및 시정 10,000m 정상 운영.",
-      RKSI: "1. [RKSI] 인천국제공항 4본 활주로 (15/33, 16/34) 실시간 기상 연계 중.\n2. [EFS] 전자비행스트립 연계 대기 상태 유지.",
+      RKSI: "1. [RKSI] 인천국제공항 4본 활주로 (15/33, 16/34) 실시간 기상 연계 중.\n2. [NOTAM] 유효 비행고시보 및 표준 활주로 운영 절차 유지.",
       RKSS: "1. [RKSS] 김포국제공항 14/32 평행 활주로 정상 운용.\n2. [NOTAM] 소음 저감 절차 및 표준 출발/도착 경로 준수.",
       RKPC: "1. [RKPC] 제주국제공항 07/25 주 활주로 및 13/31 횡선 활주로 감시 중.",
       RKPK: "1. [RKPK] 김해국제공항 18/36 활주로 CIRCLING 접근 절차 주의.",
@@ -5679,7 +5674,6 @@
     // 11. Sync System Heartbeat & Real-time Live API Status
     async function syncSystemStatus() {
       const dotAmhs = document.getElementById('dot-amhs');
-      const dotEfs = document.getElementById('dot-efs');
 
       // 1. Check AMHS Weather API Real-time Health
       try {
@@ -5691,12 +5685,6 @@
         }
       } catch (e) {
         if (dotAmhs) { dotAmhs.className = 'status-dot error'; dotAmhs.title = 'AMHS API: 연결 실패'; }
-      }
-
-      // 2. EFS (Electronic Flight Strip / 전자비행스트립) 연동 대기 (STANDBY)
-      if (dotEfs) {
-        dotEfs.className = 'status-dot warning';
-        dotEfs.title = 'EFS API: 전자비행스트립 (연동 대기 / STANDBY)';
       }
     }
 
