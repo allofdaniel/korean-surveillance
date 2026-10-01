@@ -431,6 +431,7 @@
       display: flex;
       flex-direction: row;
       min-height: 0;
+      height: calc(100vh - 38px);
       overflow: hidden;
       width: 100%;
       background: var(--bg);
@@ -497,12 +498,12 @@
       flex-direction: column;
       height: 100%;
       min-width: 0;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 4px 8px 8px 6px;
+      min-height: 0;
+      overflow: hidden;
+      padding: 4px 8px 6px 6px;
       background: var(--bg);
       box-sizing: border-box;
-      gap: 5px;
+      gap: 4px;
     }
 
     /* ATC High-Visibility Right Scrollbars */
@@ -928,11 +929,14 @@
     main {
       display: flex;
       flex-direction: column;
-      flex: 1 0 auto;
-      min-height: min-content;
-      gap: 5px;
+      flex: 1;
+      height: 100%;
+      min-height: 0;
+      min-width: 0;
+      gap: 4px;
       width: 100%;
       box-sizing: border-box;
+      overflow: hidden;
     }
 
     /* Weather Mode Selector Buttons */
@@ -1603,25 +1607,27 @@
 
     /* Section 3: Middle Split Schedule Tables (DEP / ARR - Clickable Sort Columns) */
     .schedule-split {
-      flex: 1 0 auto;
+      flex: 1 1 0;
+      min-height: 120px;
       display: flex;
       gap: 3px;
-      min-height: 220px;
+      overflow: hidden;
     }
     .schedule-split > .grid-box {
       flex: 1;
       min-width: 0;
-      min-height: 220px;
+      min-height: 0;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
     .schedule-table-wrap {
       flex: 1;
+      min-height: 0;
       background: var(--surface-container);
       overflow-y: auto;
       overflow-x: auto;
       scroll-behavior: smooth;
-      min-height: 175px;
     }
     table {
       width: 100%;
@@ -2021,7 +2027,8 @@
 
     /* Section 4: Bottom Clocks & Editable Airport Notices */
     .bottom-bar {
-      min-height: 78px;
+      min-height: 75px;
+      height: 96px;
       display: flex;
       gap: 3px;
       flex-shrink: 0;
@@ -5477,10 +5484,12 @@
 
         wrap.addEventListener('wheel', (e) => {
           // Normalize scroll delta to a comfortable 5-row step per wheel notch
-          e.preventDefault();
-          const direction = Math.sign(e.deltaY);
-          const scrollStep = direction * 90; // Exactly 5 rows per wheel notch
-          wrap.scrollTop += scrollStep;
+          if (wrap.scrollHeight > wrap.clientHeight) {
+            e.preventDefault();
+            const direction = Math.sign(e.deltaY);
+            const scrollStep = direction * 90; // Exactly 5 rows per wheel notch
+            wrap.scrollTop += scrollStep;
+          }
         }, { passive: false });
       });
     }
@@ -5847,9 +5856,12 @@
         const saved = localStorage.getItem('ifs_section_heights');
         if (!saved) return;
         const h = JSON.parse(saved);
-        if (h.bot) {
-          const botEl = document.querySelector('.bottom-bar');
-          if (botEl) { botEl.style.height = h.bot; botEl.style.minHeight = h.bot; }
+        if (h && h.bot) {
+          const parsed = parseInt(h.bot);
+          if (!isNaN(parsed) && parsed >= 60 && parsed <= 320) {
+            const botEl = document.querySelector('.bottom-bar');
+            if (botEl) { botEl.style.height = `${parsed}px`; botEl.style.minHeight = `${parsed}px`; }
+          }
         }
       } catch (e) {}
     }
