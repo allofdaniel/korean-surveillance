@@ -218,16 +218,23 @@
       gap: 6px;
     }
 
-    /* User Profile Rounded Rectangle Badge (koreansurveillance.com Style) */
-    .user-profile-badge {
+    /* User Profile Rounded Square Button (Initial Only) */
+    .user-profile-btn {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      box-sizing: border-box;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      height: 24px;
-      padding: 0 8px 0 4px;
-      background: rgba(255, 255, 255, 0.07);
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 6px;
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
       cursor: pointer;
       user-select: none;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -235,52 +242,23 @@
       flex-shrink: 0;
       backdrop-filter: blur(8px);
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      padding: 0;
     }
-    .user-profile-badge:hover {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: rgba(56, 189, 248, 0.45);
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
-    }
-    .user-avatar-rect {
-      width: 18px;
-      height: 18px;
-      border-radius: 4px;
-      background: linear-gradient(135deg, #0284c7, #38bdf8);
+    .user-profile-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
       color: #ffffff;
-      font-weight: 800;
-      font-size: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+      transform: translateY(-1px);
     }
-    .user-info-text {
-      display: flex;
-      align-items: baseline;
-      gap: 4px;
+    .user-profile-btn:active {
+      transform: translateY(0);
+    }
+    .user-avatar-initial {
       line-height: 1;
-    }
-    .user-role-label {
-      font-size: 8.5px;
+      text-transform: uppercase;
+      font-size: 11px;
       font-weight: 700;
-      color: #38bdf8;
-      letter-spacing: -0.02em;
-    }
-    .user-name-text {
-      font-size: 10.5px;
-      font-weight: 700;
-      color: #f1f5f9;
-      letter-spacing: -0.01em;
-      font-family: var(--font-sans);
-    }
-    .user-dropdown-arrow {
-      color: #94a3b8;
-      transition: transform 0.2s ease;
-      flex-shrink: 0;
-    }
-    .user-profile-badge:hover .user-dropdown-arrow {
-      color: #38bdf8;
     }
     .user-dropdown-menu {
       display: none;
@@ -372,13 +350,17 @@
       background: rgba(239, 68, 68, 0.15);
       color: #fca5a5;
     }
-    html.theme-light .user-profile-badge {
+    html.theme-light .user-profile-btn {
       background: #ffffff;
       border-color: #cbd5e1;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      color: #0284c7;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
-    html.theme-light .user-name-text {
-      color: #0f172a;
+    html.theme-light .user-profile-btn:hover {
+      background: #f0f9ff;
+      border-color: #0284c7;
+      color: #0369a1;
+      box-shadow: 0 0 8px rgba(2, 132, 199, 0.25);
     }
     html.theme-light .user-dropdown-menu {
       background: #ffffff;
@@ -2780,16 +2762,9 @@
           </div>
         </div>
 
-        <!-- 4. User Profile Badge (koreansurveillance.com Style Rounded Rectangle) -->
-        <div class="user-profile-badge" id="user-profile-btn" onclick="toggleUserDropdown(event)" title="User Profile">
-          <div class="user-avatar-rect">
-            <span class="avatar-initial" id="user-avatar-initial">A</span>
-          </div>
-          <div class="user-info-text">
-            <span class="user-role-label">관제사</span>
-            <span class="user-name-text" id="user-display-name">admin</span>
-          </div>
-          <svg class="user-dropdown-arrow" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <!-- 4. User Profile Rounded Square Button (Initial Only) -->
+        <div class="user-profile-btn" id="user-profile-btn" onclick="toggleUserDropdown(event)" role="button" tabindex="0" title="User Profile">
+          <span class="user-avatar-initial" id="user-avatar-initial">A</span>
 
           <!-- Dropdown Menu -->
           <div class="user-dropdown-menu" id="user-dropdown-menu">
@@ -7117,14 +7092,15 @@
     // User Profile & Authentication State
     function initUserProfile() {
       const loggedUser = localStorage.getItem('ks_user') || 'admin';
-      const nameEl = document.getElementById('user-display-name');
       const initialEl = document.getElementById('user-avatar-initial');
       const dropAvatarEl = document.getElementById('dropdown-user-avatar');
       const handleEl = document.getElementById('dropdown-user-handle');
-      if (nameEl) nameEl.textContent = loggedUser;
-      if (initialEl) initialEl.textContent = loggedUser.charAt(0).toUpperCase();
-      if (dropAvatarEl) dropAvatarEl.textContent = loggedUser.charAt(0).toUpperCase();
+      const profileBtn = document.getElementById('user-profile-btn');
+      const initial = (loggedUser.trim().charAt(0) || 'A').toUpperCase();
+      if (initialEl) initialEl.textContent = initial;
+      if (dropAvatarEl) dropAvatarEl.textContent = initial;
       if (handleEl) handleEl.textContent = '@' + loggedUser;
+      if (profileBtn) profileBtn.title = 'User Profile (' + loggedUser + ')';
     }
     function toggleUserDropdown(e) {
       if (e) e.stopPropagation();
