@@ -1,0 +1,5 @@
+# downloaded AIP chart PDFs (large, licensed source material — keep local only)
+charts/
+# throwaway helper scripts
+_*.ps1
+*_bounds.json

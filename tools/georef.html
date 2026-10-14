@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIP Chart Georeferencer</title>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js"></script>
+<style>
+/* layout: twin working panes (chart | satellite map) over a GCP ledger + output rail
+   palette: cockpit night — slate ground, phosphor-green primary, amber warn, red fault */
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel2:#1c232d; --line:#2a333f;
+  --fg:#e6edf3; --muted:#8b98a5; --dim:#5c6773;
+  --accent:#36d399; --accent-dim:#1f6f52; --amber:#f5c451; --red:#f87171; --blue:#58a6ff;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.5 var(--sans);display:flex;flex-direction:column;overflow:hidden}
+h1,h2,h3{margin:0;font-weight:600;text-wrap:balance}
+button,input,select{font:inherit;color:inherit}
+.mono{font-family:var(--mono)}
+.tnum{font-variant-numeric:tabular-nums}
+
+header{display:flex;align-items:center;gap:14px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);flex:none}
+header .brand{display:flex;flex-direction:column;line-height:1.15}
+header .brand b{font-size:15px;letter-spacing:.2px}
+header .brand span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px}
+.airac{font-family:var(--mono);font-size:11px;color:var(--accent);border:1px solid var(--accent-dim);border-radius:4px;padding:2px 7px}
+header .sp{flex:1}
+.tok{display:flex;align-items:center;gap:6px}
+.tok input{width:220px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:6px 9px;font-family:var(--mono);font-size:12px}
+.tok input:focus{outline:none;border-color:var(--accent-dim)}
+.tok .ok{color:var(--accent)}.tok .no{color:var(--amber)}
+
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:9px 16px;background:var(--panel2);border-bottom:1px solid var(--line);flex:none}
+.btn{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.btn:hover{border-color:var(--dim)}
+.btn.primary{background:var(--accent);color:#06130d;border-color:var(--accent);font-weight:600}
+.btn.primary:disabled{background:var(--accent-dim);border-color:var(--accent-dim);color:#0d1117;opacity:.6;cursor:not-allowed}
+.btn.warn{color:var(--amber)}
+.toolbar label{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.toolbar select{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+.toolbar .range{width:120px}
+.sep{width:1px;align-self:stretch;background:var(--line);margin:0 2px}
+
+main{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr;min-height:0}
+.pane{position:relative;min-width:0;min-height:0;display:flex;flex-direction:column;border-right:1px solid var(--line)}
+.pane .cap{position:absolute;top:8px;left:8px;z-index:5;font-family:var(--mono);font-size:11px;color:var(--muted);background:rgba(13,17,23,.78);border:1px solid var(--line);border-radius:5px;padding:3px 8px;pointer-events:none}
+.pane .hint{position:absolute;top:8px;right:8px;z-index:5;font-size:11px;background:rgba(13,17,23,.78);border:1px solid var(--accent-dim);color:var(--accent);border-radius:5px;padding:3px 8px;pointer-events:none}
+
+#chartWrap{flex:1;overflow:auto;background:
+  linear-gradient(45deg,#11161d 25%,transparent 25%),linear-gradient(-45deg,#11161d 25%,transparent 25%),
+  linear-gradient(45deg,transparent 75%,#11161d 75%),linear-gradient(-45deg,transparent 75%,#11161d 75%);
+  background-size:22px 22px;background-position:0 0,0 11px,11px -11px,-11px 0;position:relative}
+#chartStage{position:relative;transform-origin:0 0}
+#chartCanvas{display:block}
+.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--dim);text-align:center;padding:30px}
+.empty b{color:var(--muted);font-size:15px}
+.cpt{position:absolute;width:0;height:0}
+.cpt i{position:absolute;left:-9px;top:-9px;width:18px;height:18px;border:2px solid var(--accent);border-radius:50%;background:rgba(54,211,153,.18);box-shadow:0 0 0 1px #06130d}
+.cpt b{position:absolute;left:11px;top:-9px;font-family:var(--mono);font-size:11px;font-weight:700;color:#06130d;background:var(--accent);border-radius:3px;padding:0 4px}
+.cpt.pending i{border-color:var(--amber);background:rgba(245,196,81,.18)}
+.cpt.pending b{background:var(--amber)}
+
+#map{flex:1}
+.mgl-cpt{font-family:var(--mono);font-size:11px;font-weight:700;color:#06130d;background:var(--accent);border:1px solid #06130d;border-radius:3px;padding:0 4px;transform:translate(-50%,-50%)}
+.mgl-cpt.pending{background:var(--amber)}
+.mgl-ref{width:9px;height:9px;border-radius:50%;background:rgba(88,166,255,.35);border:1px solid var(--blue);cursor:pointer;transform:translate(-50%,-50%)}
+.mgl-ref:hover{background:var(--blue)}
+
+.rail{position:absolute;right:0;top:0;bottom:0;width:340px;max-width:82vw;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;z-index:10;box-shadow:-10px 0 24px rgba(0,0,0,.35)}
+.rail h3{padding:11px 14px;border-bottom:1px solid var(--line);font-size:12px;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
+.rail h3 .x{margin-left:auto;cursor:pointer;color:var(--dim);font-size:16px;line-height:1}
+.rail .scroll{flex:1;overflow:auto}
+.gcp{border-bottom:1px solid var(--line);padding:9px 14px;display:grid;grid-template-columns:auto 1fr auto;gap:3px 9px;align-items:center}
+.gcp .id{grid-row:1/3;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#06130d;font-family:var(--mono);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+.gcp .px{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.gcp .geo{font-family:var(--mono);font-size:12px}
+.gcp .geo input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:4px 6px;font-family:var(--mono);font-size:11.5px}
+.gcp .res{font-family:var(--mono);font-size:11px;text-align:right}
+.gcp .del{grid-row:1/3;cursor:pointer;color:var(--dim);border:none;background:none;font-size:15px}
+.gcp .del:hover{color:var(--red)}
+.gcp.bad{background:rgba(248,113,113,.06)}
+.ledger-empty{padding:22px 14px;color:var(--dim);font-size:12.5px;line-height:1.6}
+.out{border-top:1px solid var(--line);padding:12px 14px;display:flex;flex-direction:column;gap:9px}
+.stat{display:flex;gap:16px}
+.stat div{display:flex;flex-direction:column}
+.stat span{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.stat b{font-family:var(--mono);font-size:19px}
+.stat b.good{color:var(--accent)}.stat b.warn{color:var(--amber)}.stat b.fault{color:var(--red)}
+textarea{width:100%;height:116px;background:#0a0e13;border:1px solid var(--line);border-radius:6px;padding:9px;font-family:var(--mono);font-size:11px;color:var(--accent);resize:vertical}
+.outbtns{display:flex;gap:8px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--accent);color:#06130d;font-weight:600;padding:9px 18px;border-radius:7px;z-index:100;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.show{opacity:1}
+@media (max-width:820px){ main{grid-template-columns:1fr;grid-template-rows:1fr 1fr} .pane:first-child{border-right:none;border-bottom:1px solid var(--line)} }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><b>AIP Chart Georeferencer</b><span>GCP · Affine · 대한감시</span></div>
+  <span class="airac mono" id="airacBadge">AIRAC —</span>
+  <div class="sp"></div>
+  <div class="tok">
+    <span id="tokState" class="no">● token</span>
+    <input id="tokInput" type="password" placeholder="Mapbox pk.* token" spellcheck="false" autocomplete="off">
+  </div>
+</header>
+
+<div class="toolbar">
+  <button class="btn" id="loadBtn">📄 차트 열기 (PDF/PNG)</button>
+  <input type="file" id="fileInput" accept="application/pdf,image/*" hidden>
+  <label>공항 <select id="apSelect"></select></label>
+  <label>차트 <select id="chartSelect"><option>— 공항 선택 —</option></select></label>
+  <div class="sep"></div>
+  <button class="btn primary" id="addGcp">＋ GCP 추가</button>
+  <button class="btn" id="fitChart" title="차트 전체 보기">⤢ fit</button>
+  <div class="sep"></div>
+  <label>투명도 <input class="range" id="opacity" type="range" min="0" max="100" value="62"></label>
+  <label><input type="checkbox" id="refToggle" checked> 기준점 표시</label>
+  <div class="sep"></div>
+  <button class="btn" id="railBtn">☰ GCP 원장</button>
+</div>
+
+<main>
+  <section class="pane">
+    <div class="cap mono" id="chartCap">차트 없음</div>
+    <div class="hint" id="chartHint" hidden>차트에서 점을 클릭</div>
+    <div id="chartWrap">
+      <div id="chartStage"><canvas id="chartCanvas" width="0" height="0"></canvas></div>
+      <div class="empty" id="chartEmpty">
+        <b>차트를 불러오세요</b>
+        <div>AIP AD 차트 PDF(또는 PNG)를 열면 여기에 표시됩니다.<br>
+        공항을 고르면 아래 차트 목록에서 바로 받을 수 있는 링크가 뜹니다.</div>
+      </div>
+    </div>
+  </section>
+  <section class="pane">
+    <div class="cap mono">위성 · 프로덕션과 동일한 image 소스 미리보기</div>
+    <div class="hint" id="mapHint" hidden>지도에서 같은 지점 클릭</div>
+    <div id="map"></div>
+  </section>
+</main>
+
+<aside class="rail" id="rail" hidden>
+  <h3>GCP 원장 <span class="x" id="railClose">✕</span></h3>
+  <div class="scroll" id="ledger"><div class="ledger-empty">아직 기준점이 없습니다.<br><br><b>GCP 추가</b> → 차트에서 지상 지점(활주로 끝, VOR, 교차점) 클릭 → 위성 지도에서 같은 지점 클릭. 3개 이상이면 affine 변환이 계산됩니다.</div></div>
+  <div class="out">
+    <div class="stat">
+      <div><span>GCP</span><b id="statN" class="tnum">0</b></div>
+      <div><span>RMS 오차</span><b id="statRms" class="tnum">—</b></div>
+      <div><span>상태</span><b id="statState">—</b></div>
+    </div>
+    <textarea id="outJson" readonly placeholder="3개 이상의 GCP를 찍으면 bounds JSON이 여기 생성됩니다."></textarea>
+    <div class="outbtns">
+      <button class="btn primary" id="copyBtn" disabled>bounds 복사</button>
+      <button class="btn" id="dlBtn" disabled>JSON 저장</button>
+    </div>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.min.mjs";
+pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.worker.min.mjs";
+
+// ---- embedded AIP reference index (seeded from crawl_ad_charts.py output) ----
+const INDEX = {
+  airac:"2026-10-28",
+  airports:{
+    RKPU:{name:"Ulsan",arp:{lat:35.593333,lon:129.352222},
+      ref:[[35.593333,129.352222],[35.599528,129.3525],[35.587361,129.353583],[35.587139,129.351417],[35.599722,129.350361],[35.603722,129.350889],[35.586444,129.353417],[35.634361,129.343972],[35.573639,129.348944],[35.668056,129.360028],[35.661583,129.362389],[35.636389,129.325361],[35.658611,129.321167],[35.644361,129.311444]],
+      charts:[["(2-1) AD CHART","ADC","http://aim.koca.go.kr/eaipPub/Package/2026-09-02-AIRAC/pdf/AD/RKPU/(2-1) AD CHART.pdf"],["(2-6) SID","SID","http://aim.koca.go.kr/eaipPub/Package/2026-06-10-AIRAC/pdf/AD/RKPU/(2-6) SID.pdf"],["(2-10) STAR","STAR","http://aim.koca.go.kr/eaipPub/Package/2026-06-10-AIRAC/pdf/AD/RKPU/(2-10) STAR.pdf"],["(2-12) INSTR APCH CHART","IAC","http://aim.koca.go.kr/eaipPub/Package/2026-06-10-AIRAC/pdf/AD/RKPU/(2-12) INSTR APCH CHART.pdf"],["(2-19) VISUAL APCH CHART","VAC","http://aim.koca.go.kr/eaipPub/Package/2026-06-10-AIRAC/pdf/AD/RKPU/(2-19) VISUAL APCH CHART.pdf"]]},
+    RKSI:{name:"Incheon",arp:{lat:37.4625,lon:126.439167},ref:[[37.4625,126.439167],[37.534417,126.382167],[37.533806,126.395972],[37.533417,126.404722],[37.415639,126.562694]],charts:[]},
+    RKPC:{name:"Jeju",arp:{lat:33.511111,lon:126.492778},ref:[[33.511111,126.492778]],charts:[]},
+    RKPK:{name:"Gimhae",arp:{lat:35.179528,lon:128.938222},ref:[[35.179528,128.938222]],charts:[]}
+  }
+};
+
+const $=s=>document.querySelector(s);
+const toastEl=$("#toast");
+function toast(m){toastEl.textContent=m;toastEl.classList.add("show");setTimeout(()=>toastEl.classList.remove("show"),1600);}
+
+// ---- state ----
+let map=null, chartImg=null, chartW=0, chartH=0, scale=1;
+let gcps=[]; // {id, px, py, lat, lon, mk(mapbox marker)}
+let mode=null; // 'px' | 'map'
+let pendingPx=null; // {px,py}
+let nextId=1;
+let affine=null; // {alng:[a,b,c], alat:[d,e,f]}
+
+// ---- token ----
+const tokInput=$("#tokInput"), tokState=$("#tokState");
+let TOKEN=localStorage.getItem("mbtok")||"";
+tokInput.value=TOKEN;
+function applyToken(){
+  TOKEN=tokInput.value.trim();
+  try{localStorage.setItem("mbtok",TOKEN);}catch(e){}
+  if(TOKEN.startsWith("pk.")){tokState.textContent="● token";tokState.className="ok";initMap();}
+  else{tokState.textContent="● token";tokState.className="no";}
+}
+tokInput.addEventListener("change",applyToken);
+tokInput.addEventListener("keydown",e=>{if(e.key==="Enter")applyToken();});
+
+// ---- map ----
+let refMarkers=[];
+function initMap(){
+  if(map||!TOKEN.startsWith("pk."))return;
+  mapboxgl.accessToken=TOKEN;
+  const ap=INDEX.airports[$("#apSelect").value];
+  map=new mapboxgl.Map({container:"map",style:"mapbox://styles/mapbox/satellite-streets-v12",
+    center:[ap.arp.lon,ap.arp.lat],zoom:12});
+  map.addControl(new mapboxgl.NavigationControl(),"bottom-right");
+  map.on("load",()=>{
+    map.addSource("chart",{type:"image",url:"data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      coordinates:[[ap.arp.lon-0.05,ap.arp.lat+0.05],[ap.arp.lon+0.05,ap.arp.lat+0.05],[ap.arp.lon+0.05,ap.arp.lat-0.05],[ap.arp.lon-0.05,ap.arp.lat-0.05]]});
+    map.addLayer({id:"chart",type:"raster",source:"chart",paint:{"raster-opacity":0,"raster-fade-duration":0}});
+    drawRef();
+  });
+  map.on("click",onMapClick);
+}
+function drawRef(){
+  refMarkers.forEach(m=>m.remove());refMarkers=[];
+  if(!map||!$("#refToggle").checked)return;
+  const ap=INDEX.airports[$("#apSelect").value];
+  ap.ref.forEach(([lat,lon])=>{
+    const el=document.createElement("div");el.className="mgl-ref";
+    el.title=lat.toFixed(5)+", "+lon.toFixed(5);
+    el.addEventListener("click",ev=>{ev.stopPropagation();if(mode==="map")setGeo(lat,lon);});
+    refMarkers.push(new mapboxgl.Marker({element:el}).setLngLat([lon,lat]).addTo(map));
+  });
+}
+
+// ---- chart load ----
+$("#loadBtn").addEventListener("click",()=>$("#fileInput").click());
+$("#fileInput").addEventListener("change",async e=>{
+  const f=e.target.files[0];if(!f)return;
+  if(f.type==="application/pdf"){await renderPdf(await f.arrayBuffer());}
+  else{await renderImage(URL.createObjectURL(f));}
+  $("#chartCap").textContent=f.name;
+});
+async function renderPdf(buf){
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+  const page=await pdf.getPage(1);
+  const base=page.getViewport({scale:1}); // cap raster width ~2600px for precise but safe picking
+  const s=Math.min(3.5, Math.max(1.5, 2600/base.width));
+  const vp=page.getViewport({scale:s});
+  const cv=document.createElement("canvas");cv.width=vp.width;cv.height=vp.height;
+  await page.render({canvasContext:cv.getContext("2d"),viewport:vp}).promise;
+  setChart(cv);
+}
+function renderImage(url){
+  return new Promise(res=>{const im=new Image();im.onload=()=>{const cv=document.createElement("canvas");cv.width=im.naturalWidth;cv.height=im.naturalHeight;cv.getContext("2d").drawImage(im,0,0);setChart(cv);res();};im.src=url;});
+}
+function setChart(cv){
+  chartW=cv.width;chartH=cv.height;
+  chartImg=cv.toDataURL("image/png");
+  const canvas=$("#chartCanvas");canvas.width=chartW;canvas.height=chartH;
+  canvas.getContext("2d").drawImage(cv,0,0);
+  $("#chartEmpty").hidden=true;
+  fitChart();
+  // reset gcps for new chart
+  gcps.forEach(g=>g.mk&&g.mk.remove());gcps=[];nextId=1;pendingPx=null;mode=null;affine=null;
+  renderPins();renderLedger();renderOverlay();
+  updateMapImage();
+}
+function updateMapImage(){
+  if(!map||!chartImg)return;
+  const src=map.getSource("chart");if(!src)return;
+  const c=currentCoords();
+  src.updateImage({url:chartImg,coordinates:c});
+}
+
+// ---- zoom/fit chart ----
+function fitChart(){
+  const wrap=$("#chartWrap");
+  if(!chartW)return;
+  scale=Math.min((wrap.clientWidth-20)/chartW,(wrap.clientHeight-20)/chartH,1);
+  applyScale();
+}
+function applyScale(){
+  const st=$("#chartStage");
+  st.style.transform="scale("+scale+")";
+  st.style.width=chartW+"px";st.style.height=chartH+"px";
+  renderPins();
+}
+$("#fitChart").addEventListener("click",fitChart);
+$("#chartWrap").addEventListener("wheel",e=>{
+  if(!e.ctrlKey)return;e.preventDefault();
+  scale=Math.max(0.1,Math.min(6,scale*(e.deltaY<0?1.12:0.89)));applyScale();
+},{passive:false});
+
+// ---- GCP picking ----
+$("#addGcp").addEventListener("click",()=>{
+  if(!chartImg){toast("먼저 차트를 여세요");return;}
+  mode="px";pendingPx=null;
+  $("#chartHint").hidden=false;$("#mapHint").hidden=true;
+  toast("차트에서 지상 기준점을 클릭하세요");
+});
+$("#chartCanvas").addEventListener("click",e=>{
+  if(mode!=="px")return;
+  const r=e.currentTarget.getBoundingClientRect();
+  const px=(e.clientX-r.left)/scale, py=(e.clientY-r.top)/scale;
+  pendingPx={px,py};mode="map";
+  $("#chartHint").hidden=true;$("#mapHint").hidden=false;
+  renderPins();toast("위성 지도에서 같은 지점을 클릭");
+});
+function onMapClick(e){
+  if(mode!=="map"||!pendingPx)return;
+  setGeo(e.lngLat.lat,e.lngLat.lng);
+}
+function setGeo(lat,lon){
+  gcps.push({id:nextId++,px:pendingPx.px,py:pendingPx.py,lat,lon,mk:null});
+  pendingPx=null;mode=null;
+  $("#mapHint").hidden=true;
+  recompute();
+}
+
+// ---- affine least squares: [px py 1] -> lng , -> lat ----
+function solve3(A,b){ // 3x3 Gaussian elimination
+  const M=A.map((r,i)=>r.concat(b[i]));
+  for(let c=0;c<3;c++){
+    let p=c;for(let r=c+1;r<3;r++)if(Math.abs(M[r][c])>Math.abs(M[p][c]))p=r;
+    [M[c],M[p]]=[M[p],M[c]];
+    if(Math.abs(M[c][c])<1e-12)return null;
+    for(let r=0;r<3;r++){if(r===c)continue;const f=M[r][c]/M[c][c];for(let k=c;k<4;k++)M[r][k]-=f*M[c][k];}
+  }
+  return [M[0][3]/M[0][0],M[1][3]/M[1][1],M[2][3]/M[2][2]];
+}
+function fitAffine(){
+  if(gcps.length<3)return null;
+  const N=[[0,0,0],[0,0,0],[0,0,0]];const bl=[0,0,0],bt=[0,0,0];
+  for(const g of gcps){
+    const v=[g.px,g.py,1];
+    for(let i=0;i<3;i++){for(let j=0;j<3;j++)N[i][j]+=v[i]*v[j];bl[i]+=v[i]*g.lon;bt[i]+=v[i]*g.lat;}
+  }
+  const alng=solve3(N.map(r=>r.slice()),bl.slice());
+  const alat=solve3(N.map(r=>r.slice()),bt.slice());
+  if(!alng||!alat)return null;
+  return {alng,alat};
+}
+function px2geo(a,px,py){return [a.alng[0]*px+a.alng[1]*py+a.alng[2], a.alat[0]*px+a.alat[1]*py+a.alat[2]];}
+function haversine(la1,lo1,la2,lo2){
+  const R=6371000,t=Math.PI/180;
+  const dLa=(la2-la1)*t,dLo=(lo2-lo1)*t;
+  const h=Math.sin(dLa/2)**2+Math.cos(la1*t)*Math.cos(la2*t)*Math.sin(dLo/2)**2;
+  return 2*R*Math.asin(Math.sqrt(h));
+}
+function currentCoords(){
+  const ap=INDEX.airports[$("#apSelect").value];
+  if(!affine){
+    return [[ap.arp.lon-0.05,ap.arp.lat+0.05],[ap.arp.lon+0.05,ap.arp.lat+0.05],[ap.arp.lon+0.05,ap.arp.lat-0.05],[ap.arp.lon-0.05,ap.arp.lat-0.05]];
+  }
+  const TL=px2geo(affine,0,0),TR=px2geo(affine,chartW,0),BR=px2geo(affine,chartW,chartH),BL=px2geo(affine,0,chartH);
+  return [[TL[0],TL[1]],[TR[0],TR[1]],[BR[0],BR[1]],[BL[0],BL[1]]];
+}
+function recompute(){
+  affine=fitAffine();
+  let sum=0;
+  for(const g of gcps){
+    if(affine){const [lo,la]=px2geo(affine,g.px,g.py);g.res=haversine(g.lat,g.lon,la,lo);sum+=g.res*g.res;}
+    else g.res=null;
+  }
+  const rms=affine?Math.sqrt(sum/gcps.length):null;
+  renderPins();renderLedger();renderOverlay();
+  updateStats(rms);
+  updateMapImage();
+}
+function renderOverlay(){
+  if(!map)return;const src=map.getSource("chart");if(!src)return;
+  src.setCoordinates(currentCoords());
+  map.setPaintProperty("chart","raster-opacity",chartImg?(+$("#opacity").value/100):0);
+}
+
+// ---- pins ----
+function renderPins(){
+  const st=$("#chartStage");
+  [...st.querySelectorAll(".cpt")].forEach(n=>n.remove());
+  const mk=(px,py,label,pending)=>{
+    const d=document.createElement("div");d.className="cpt"+(pending?" pending":"");
+    d.style.left=(px*scale)+"px";d.style.top=(py*scale)+"px";
+    d.innerHTML='<i></i><b>'+label+'</b>';st.appendChild(d);
+  };
+  gcps.forEach(g=>mk(g.px,g.py,g.id,false));
+  if(pendingPx)mk(pendingPx.px,pendingPx.py,"?",true);
+  gcps.forEach(g=>{
+    if(g.mk)return;
+    const el=document.createElement("div");el.className="mgl-cpt";el.textContent=g.id;
+    g.mk=new mapboxgl.Marker({element:el}).setLngLat([g.lon,g.lat]).addTo(map);
+  });
+}
+
+// ---- ledger ----
+function renderLedger(){
+  const L=$("#ledger");
+  if(!gcps.length){L.innerHTML='<div class="ledger-empty">아직 기준점이 없습니다.<br><br><b>GCP 추가</b> → 차트에서 지상 지점(활주로 끝, VOR, 교차점) 클릭 → 위성 지도에서 같은 지점 클릭. 3개 이상이면 affine 변환이 계산됩니다.</div>';return;}
+  L.innerHTML="";
+  gcps.forEach(g=>{
+    const row=document.createElement("div");
+    const bad=g.res!=null&&g.res>120;
+    row.className="gcp"+(bad?" bad":"");
+    const rc=g.res==null?"":(g.res>120?"fault":(g.res>40?"warn":"good"));
+    row.innerHTML=
+      '<div class="id">'+g.id+'</div>'+
+      '<div class="px">px '+g.px.toFixed(0)+', '+g.py.toFixed(0)+'</div>'+
+      '<div class="res '+rc+'" style="color:var(--'+(rc||"muted")+')">'+(g.res==null?"—":g.res.toFixed(0)+" m")+'</div>'+
+      '<div class="geo" style="grid-column:2/4"><input value="'+g.lat.toFixed(6)+', '+g.lon.toFixed(6)+'" data-id="'+g.id+'"></div>'+
+      '<button class="del" data-id="'+g.id+'" title="삭제">✕</button>';
+    L.appendChild(row);
+  });
+  L.querySelectorAll(".del").forEach(b=>b.addEventListener("click",()=>{
+    const id=+b.dataset.id;const g=gcps.find(x=>x.id===id);if(g&&g.mk)g.mk.remove();
+    gcps=gcps.filter(x=>x.id!==id);recompute();
+  }));
+  L.querySelectorAll(".geo input").forEach(inp=>inp.addEventListener("change",()=>{
+    const id=+inp.dataset.id,g=gcps.find(x=>x.id===id);if(!g)return;
+    const p=parseCoord(inp.value);if(p){g.lat=p.lat;g.lon=p.lon;if(g.mk)g.mk.setLngLat([g.lon,g.lat]);recompute();}
+    else toast("좌표 형식 인식 실패");
+  }));
+}
+// decimal "35.59, 129.35" or DMS "353536N 1292108E" / 35°35'36"N
+function parseCoord(s){
+  s=s.trim();
+  let m=s.match(/^(-?\d+(?:\.\d+)?)[ ,]+(-?\d+(?:\.\d+)?)$/);
+  if(m)return {lat:+m[1],lon:+m[2]};
+  const dms=/(\d{2,3})(\d{2})(\d{2}(?:\.\d+)?)\s*([NSEW])/gi;let r,pts=[];
+  while((r=dms.exec(s))){let v=+r[1]+ +r[2]/60+ +r[3]/3600;const h=r[4].toUpperCase();if(h==="S"||h==="W")v=-v;pts.push({v,h});}
+  if(pts.length===2){const lat=pts.find(p=>"NS".includes(p.h)),lon=pts.find(p=>"EW".includes(p.h));if(lat&&lon)return {lat:lat.v,lon:lon.v};}
+  return null;
+}
+
+// ---- stats + output ----
+function updateStats(rms){
+  $("#statN").textContent=gcps.length;
+  const rEl=$("#statRms"),sEl=$("#statState");
+  if(rms==null){rEl.textContent="—";rEl.className="tnum";sEl.textContent=gcps.length+"/3";sEl.className="";}
+  else{
+    rEl.textContent=rms.toFixed(0)+" m";
+    const cls=rms>120?"fault":(rms>40?"warn":"good");
+    rEl.className="tnum "+cls;
+    sEl.textContent=rms>120?"재확인":(rms>40?"양호":"정밀");sEl.className=cls;
+  }
+  const ok=!!affine;
+  $("#copyBtn").disabled=!ok;$("#dlBtn").disabled=!ok;
+  $("#outJson").value=ok?buildJson():"";
+}
+function buildJson(){
+  const c=currentCoords();const icao=$("#apSelect").value;const chart=$("#chartSelect").value;
+  const round=a=>a.map(p=>[+p[0].toFixed(7),+p[1].toFixed(7)]);
+  return JSON.stringify({
+    id:icao+"/"+(chart&&chart.startsWith("—")?"CHART":chart),
+    icao, chart, airac:INDEX.airac, model:"affine",
+    gcpCount:gcps.length,
+    coordinates:round(c)
+  },null,2);
+}
+$("#copyBtn").addEventListener("click",async()=>{
+  const c=currentCoords().map(p=>[+p[0].toFixed(7),+p[1].toFixed(7)]);
+  const txt=JSON.stringify(c);
+  try{await navigator.clipboard.writeText(txt);toast("bounds 복사됨");}
+  catch(e){$("#outJson").select();document.execCommand("copy");toast("복사됨");}
+});
+$("#dlBtn").addEventListener("click",()=>{
+  const blob=new Blob([$("#outJson").value],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download=$("#apSelect").value+"_bounds.json";a.click();
+});
+
+// ---- opacity / ref toggle ----
+$("#opacity").addEventListener("input",renderOverlay);
+$("#refToggle").addEventListener("change",drawRef);
+
+// ---- rail ----
+$("#railBtn").addEventListener("click",()=>$("#rail").hidden=false);
+$("#railClose").addEventListener("click",()=>$("#rail").hidden=true);
+
+// ---- airport / chart selectors ----
+const apSel=$("#apSelect");
+Object.entries(INDEX.airports).forEach(([icao,a])=>{
+  const o=document.createElement("option");o.value=icao;o.textContent=icao+" · "+a.name;apSel.appendChild(o);
+});
+apSel.value="RKPU";
+$("#airacBadge").textContent="AIRAC "+INDEX.airac;
+function fillCharts(){
+  const sel=$("#chartSelect");sel.innerHTML="";
+  const a=INDEX.airports[apSel.value];
+  const o0=document.createElement("option");o0.textContent="— 차트 선택 —";sel.appendChild(o0);
+  a.charts.forEach(([name,type,pdf])=>{const o=document.createElement("option");o.value=name;o.textContent=type+" · "+name;o.dataset.pdf=pdf;sel.appendChild(o);});
+}
+apSel.addEventListener("change",()=>{
+  fillCharts();
+  if(map){const a=INDEX.airports[apSel.value];map.flyTo({center:[a.arp.lon,a.arp.lat],zoom:12});drawRef();}
+});
+$("#chartSelect").addEventListener("change",e=>{
+  const pdf=e.target.selectedOptions[0]?.dataset.pdf;
+  if(pdf){$("#chartCap").textContent="PDF URL 복사됨 — 브라우저에서 받아 '차트 열기'로 로드";navigator.clipboard?.writeText(pdf).catch(()=>{});toast("PDF 주소 복사됨");}
+});
+fillCharts();
+if(TOKEN.startsWith("pk.")){tokState.textContent="● token";tokState.className="ok";initMap();}
+window.addEventListener("resize",()=>{if(chartW)fitChart();});
+</script>
+</body>
+</html>
