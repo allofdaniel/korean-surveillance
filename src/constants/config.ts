@@ -52,7 +52,9 @@ export const getAircraftApiUrl = (lat: number, lon: number, radius: number = 100
  */
 export const getAircraftTraceUrl = (hex: string): string => {
   // 프로덕션: Vercel API 프록시, 로컬: Vite 프록시
-  return `/api/aircraft-trace?hex=${hex}`;
+  // TR-1: adsb.lol /v2/hex 는 trace 배열이 없어 항적 시딩이 항상 실패했음.
+  // 자체 Supabase 항적 이력 API 로 교체 (docs/OVERHAUL_PLAN_v1.md §11.5).
+  return `/api/aircraft-history?hex=${hex}`;
 };
 
 /**

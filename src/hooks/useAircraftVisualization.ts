@@ -357,6 +357,24 @@ export default function useAircraftVisualization(
       }
     });
 
+    // ── 2D 항적: LineString (2D 뷰에서 표시) ──
+    // 기존엔 3D fill-extrusion 리본만 채워 2D 뷰/낮은 pitch 에서 항적이 안 보였음(TR-3).
+    const trail2dFeatures: GeoJSONFeature[] = [];
+    Object.entries(aircraftTrails).forEach(([hex, trail]) => {
+      if (trail.length < 1) return;
+      const ac = currentAircraft.find(a => a.hex === hex);
+      if (!ac || ac.on_ground) return;
+      const coords: number[][] = trail.map(p => [p.lon, p.lat]);
+      const lastP = trail[trail.length - 1];
+      if (lastP && (lastP.lat !== ac.lat || lastP.lon !== ac.lon)) coords.push([ac.lon, ac.lat]);
+      if (coords.length < 2) return;
+      trail2dFeatures.push({
+        type: 'Feature',
+        geometry: { type: 'LineString', coordinates: coords },
+        properties: { hex }
+      });
+    });
+
     setOrCreateSource(map, 'aircraft-trails-3d',
       { type: 'FeatureCollection', features: trail3dFeatures },
       () => {
@@ -373,17 +391,38 @@ export default function useAircraftVisualization(
       }
     );
 
+    // 2D 항적 라인 레이어 (실데이터)
+    setOrCreateSource(map, 'aircraft-trails-2d',
+      { type: 'FeatureCollection', features: trail2dFeatures },
+      () => {
+        map.current?.addSource('aircraft-trails-2d', { type: 'geojson', data: { type: 'FeatureCollection', features: trail2dFeatures } as GeoJSON.FeatureCollection });
+        map.current?.addLayer({
+          id: 'aircraft-trails-2d', type: 'line', source: 'aircraft-trails-2d',
+          layout: { 'line-cap': 'round', 'line-join': 'round' },
+          paint: {
+            'line-color': '#00ff88',
+            'line-width': ['interpolate', ['linear'], ['zoom'], 5, 1.5, 10, 2.5, 14, 3.5],
+            'line-opacity': 0.85
+          }
+        });
+      }
+    );
+
     // 미사용 레이어 source 보장 (initial create 시 빈 상태)
-    setOrCreateSource(map, 'aircraft-trails-2d', EMPTY_FC, () => {
-      map.current?.addSource('aircraft-trails-2d', { type: 'geojson', data: EMPTY_FC as GeoJSON.FeatureCollection });
-    });
     setOrCreateSource(map, 'aircraft-trails-arrows', EMPTY_FC, () => {
       map.current?.addSource('aircraft-trails-arrows', { type: 'geojson', data: EMPTY_FC as GeoJSON.FeatureCollection });
     });
-  }, [aircraftTrails, showAircraft, showAircraftTrails, trailDuration, mapLoaded, map]);
 
-  // is3DView / show3DAltitude 는 layer paint expression 에 직접 영향이 없으므로
-  // 의도적으로 deps 제외 — 필요시 useMapStyle 쪽에서 layer 갱신
-  void is3DView;
+    // 뷰 모드에 따라 2D/3D 항적 레이어 가시성 전환
+    if (map.current?.getLayer('aircraft-trails-3d')) {
+      map.current.setLayoutProperty('aircraft-trails-3d', 'visibility', is3DView ? 'visible' : 'none');
+    }
+    if (map.current?.getLayer('aircraft-trails-2d')) {
+      map.current.setLayoutProperty('aircraft-trails-2d', 'visibility', is3DView ? 'none' : 'visible');
+    }
+  }, [aircraftTrails, showAircraft, showAircraftTrails, trailDuration, is3DView, mapLoaded, map]);
+
+  // is3DView 는 Effect B 에서 2D/3D 항적 가시성 전환에 사용됨.
+  // show3DAltitude 는 layer paint expression 에 직접 영향이 없어 deps 제외.
   void show3DAltitude;
 }
