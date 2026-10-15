@@ -80,7 +80,7 @@ export interface UseAircraftDataReturn {
  */
 export default function useAircraftData(
   _data: DataWithAirport | null,
-  mapLoaded: boolean,
+  _mapLoaded: boolean,
   showAircraft: boolean,
   trailDuration: number
 ): UseAircraftDataReturn {
@@ -348,8 +348,10 @@ export default function useAircraftData(
     }
   }, [trailDuration, loadAircraftTrace]);
 
+  // Fetching doesn't need the map — start polling on mount so traffic is ready the moment the
+  // map finishes loading (it used to wait for the map, delaying the first aircraft by seconds).
   useEffect(() => {
-    if (!showAircraft || !mapLoaded) return;
+    if (!showAircraft) return;
 
     fetchAircraftData();
     aircraftIntervalRef.current = setInterval(fetchAircraftData, AIRCRAFT_UPDATE_INTERVAL);
@@ -362,7 +364,7 @@ export default function useAircraftData(
         abortControllerRef.current = null;
       }
     };
-  }, [showAircraft, mapLoaded, fetchAircraftData]);
+  }, [showAircraft, fetchAircraftData]);
 
   return {
     aircraft,
