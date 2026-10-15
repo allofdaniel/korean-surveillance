@@ -3606,7 +3606,16 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 
         <!-- Right: AMHS Heartbeat & User Profile Badge -->
         <div class="header-row-1-right" style="display: flex; align-items: center; gap: 8px;">
-          <!-- Minimal Heartbeat Status Indicator: AMHS -->
+          <nav class="efs-top-nav" style="display: flex; gap: 6px; align-items: center; margin: 0 16px;">
+          <a href="/" class="nav-link-btn" style="padding: 3px 9px; font-size: 11px; font-weight: 700; color: #f1f5f9; text-decoration: none; border: 1px solid var(--outline); border-radius: 4px; background: rgba(255,255,255,0.08);">🏠 홈</a>
+          <a href="/map" class="nav-link-btn" style="padding: 3px 9px; font-size: 11px; font-weight: 700; color: #94a3b8; text-decoration: none; border: 1px solid var(--outline); border-radius: 4px; background: var(--surface-high);">🛰️ 관제 맵</a>
+          <a href="/ifs" class="nav-link-btn" style="padding: 3px 9px; font-size: 11px; font-weight: 700; color: #4ade80; text-decoration: none; border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 4px; background: rgba(34, 197, 94, 0.1);">🖥️ IFS 단말</a>
+          <a href="/api-dashboard" class="nav-link-btn" style="padding: 3px 9px; font-size: 11px; font-weight: 700; color: #38bdf8; text-decoration: none; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 4px; background: rgba(56, 189, 248, 0.1);">📡 API 대시보드</a>
+          <a href="/docs" class="nav-link-btn" style="padding: 3px 9px; font-size: 11px; font-weight: 700; color: #c084fc; text-decoration: none; border: 1px solid rgba(192, 132, 252, 0.4); border-radius: 4px; background: rgba(192, 132, 252, 0.1);">📖 API 명세</a>
+          <a href="/swagger" class="nav-link-btn" style="padding: 3px 9px; font-size: 11px; font-weight: 700; color: #38bdf8; text-decoration: none; border: 1px solid rgba(2, 132, 199, 0.4); border-radius: 4px; background: rgba(2, 132, 199, 0.15);">⚡ Swagger</a>
+        </nav>
+
+        <!-- Minimal Heartbeat Status Indicator: AMHS -->
           <div class="system-heartbeat">
             <span class="pulse-indicator"></span>
             <span>AMHS</span>
@@ -5897,9 +5906,111 @@ if (assignedAltVal !== null) strip.assignedAlt = assignedAltVal;
       anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3d3lnbWl3amxobmxmdWx0ZWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MTE3MDEsImV4cCI6MjEwMzA4NzcwMX0.2dwsq8yeZNwo9rEapB1IHYS4lvQsHZWPSlOvbDX196A'
     };
 
+    // ---- MRTO-DATCS-EFS-IDD v1.1 interface helpers ------------------------------------------
+    const EFS_CLIENT_ID = 'FS-' + Math.random().toString(36).slice(2, 10);
+    const efsPhaseCache = {};
+    // SDD D-EFS-FS-SFR-0004 flight phase (efs_flight_strips.status) derived from the board state
+    function sddPhase(s) {
+      const st = s.status || '';
+      const op = s.operationType || '';
+      if (op === 'DEPARTURE') {
+        if (st === 'ARCHIVED' || s.atot) return 'AIRBORNE';
+        if (s.asrt) return 'LINEUP';
+        if (s.asat) return 'TAXIOUT';
+        return st === 'DEP_ACTIVE' ? 'PUSHBACK' : 'STANDBY';
+      }
+      if (op === 'ARRIVAL') {
+        if (st === 'ARCHIVED') return 'ONBLOCK';
+        if (s.aldt) return 'LANDED';
+        return (st === 'ARR_ACTIVE' || st === 'ARR_CLR') ? 'APPROACH' : 'STANDBY';
+      }
+      if (op === 'TRANSIT') {
+        if (st === 'ARCHIVED') return 'EXIT';
+        return st === 'TRN_ACTIVE' ? 'PASSING' : 'STANDBY';
+      }
+      if (op === 'CIRCUIT') {
+        if (st === 'CCT_UPW' || st === 'CCT_TG') return 'UPWIND';
+        if (/^CCT_[LR]_(PTN|DW|IN)$/.test(st)) return 'DOWNWIND';
+        if (st === 'CCT_LA') return 'BASE';
+        if (st === 'CCT_ACTIVE') return 'CROSSWIND';
+        if (st === 'CCT_ARR') return 'APPROACH';
+        if (st === 'CCT_DEP') return 'AIRBORNE';
+        return 'STANDBY';
+      }
+      return 'STANDBY';
+    }
+    function efsBayOf(v) {
+      const m = { DEP: 'DEPARTURE', ARR: 'ARRIVAL', TRN: 'TRANSIT', CCT: 'CIRCUIT' };
+      if (!v) return null;
+      const u = String(v).toUpperCase();
+      return ['DEPARTURE', 'ARRIVAL', 'TRANSIT', 'CIRCUIT'].includes(u) ? u : (m[u] || null);
+    }
+    function efsOperatorId() {
+      const h = document.getElementById('dropdown-user-handle');
+      return h ? h.textContent.replace('@', '').trim() || 'ctl' : 'ctl';
+    }
+    async function efsApi(method, path, body) {
+      try {
+        const r = await fetch(path, { method, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+        let data = null; try { data = await r.json(); } catch (e) {}
+        return { ok: r.ok, status: r.status, data };
+      } catch (e) { return { ok: false, status: 0, data: null }; }
+    }
+    const efsSeenAlerts = new Set();
+    function handleRwyAlert(a) {
+      if (!a || efsSeenAlerts.has(a.alertId)) return;
+      efsSeenAlerts.add(a.alertId);
+      showToast(`⚠ 활주로 점유 경보 · ${a.message}`);
+      (a.stripIds || []).forEach(id => triggerStripFlash(id));
+    }
+    // I-EFS-INT-0040/0050: Supabase Realtime broadcast channel "efs" (STRIP_UPDATED, RWY_OCCUPANCY_ALERT)
+    function initEfsRealtime() {
+      if (!window.WebSocket) return;
+      const wsUrl = SUPABASE_CONFIG.url.replace('https://', 'wss://') + '/realtime/v1/websocket?apikey=' + SUPABASE_CONFIG.anonKey + '&vsn=1.0.0';
+      let ref = 0, hb = null;
+      const connect = () => {
+        const ws = new WebSocket(wsUrl);
+        ws.onopen = () => {
+          ws.send(JSON.stringify({ topic: 'realtime:efs', event: 'phx_join', ref: String(++ref), join_ref: String(ref),
+            payload: { config: { broadcast: { self: false, ack: false }, presence: { key: '' }, private: false } } }));
+          hb = setInterval(() => ws.send(JSON.stringify({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: String(++ref) })), 25000);
+        };
+        ws.onmessage = (ev) => {
+          let m; try { m = JSON.parse(ev.data); } catch (e) { return; }
+          if (m.event !== 'broadcast' || !m.payload) return;
+          const msg = m.payload.payload || {};
+          if (m.payload.event === 'RWY_OCCUPANCY_ALERT') handleRwyAlert(msg);
+          if (m.payload.event === 'STRIP_UPDATED' && msg.originId !== EFS_CLIENT_ID && msg.strip) {
+            const local = strips.find(x => x.id === msg.strip.id);
+            if (local) { triggerStripFlash(local.id); showToast(`타 관제석 갱신 · ${msg.strip.callsign} → ${msg.strip.status}`); }
+          }
+        };
+        ws.onclose = () => { if (hb) clearInterval(hb); setTimeout(connect, 5000); };
+        ws.onerror = () => { try { ws.close(); } catch (e) {} };
+      };
+      connect();
+    }
+    // I-EFS-INT-0090: LINK_HEARTBEAT (5 s)
+    function initEfsHeartbeat() {
+      const box = document.querySelector('.system-heartbeat');
+      const dot = box && box.querySelector('.pulse-indicator');
+      const color = { UP: '#22c55e', DEGRADED: '#f59e0b', DOWN: '#ef4444' };
+      const tick = async () => {
+        const r = await efsApi('GET', '/api/efs/heartbeat');
+        if (!box) return;
+        if (!r.ok || !r.data || !r.data.links) { if (dot) dot.style.background = color.DOWN; box.title = 'LINK_HEARTBEAT 수신 실패'; return; }
+        const amhs = r.data.links.find(l => l.name === 'AMHS') || {};
+        const worst = r.data.links.some(l => l.state === 'DOWN') ? 'DOWN' : (r.data.links.some(l => l.state === 'DEGRADED') ? 'DEGRADED' : 'UP');
+        if (dot) dot.style.background = color[amhs.state === 'DOWN' ? 'DOWN' : worst] || color.UP;
+        box.title = r.data.links.map(l => `${l.name} ${l.state} (${l.latencyMs} ms)`).join('\n') + (r.data.ntpOffsetMs != null ? `\nNTP offset ${r.data.ntpOffsetMs} ms` : '');
+      };
+      tick(); setInterval(tick, 5000);
+    }
+
+
     let localAuditLogs = [];
 
-    async function recordOperationToSupabase(strip, actionType, fromBay, toBay, fromStatus, toStatus, details, metadata = {}) {
+    async function recordOperationToSupabase_(strip, actionType, fromBay, toBay, fromStatus, toStatus, details, metadata = {}) {
       const now = new Date();
       const isoTime = now.toISOString();
 
@@ -5933,6 +6044,26 @@ if (assignedAltVal !== null) strip.assignedAlt = assignedAltVal;
 
       localAuditLogs.unshift(logItem);
 
+      // MRTO-DATCS-EFS-IDD I-EFS-INT-0020/0030: status (SDD phase) and bay changes go through the FSDM REST API,
+      // which validates the transition, writes the audit log and broadcasts STRIP_UPDATED / RWY_OCCUPANCY_ALERT.
+      let viaApi = false;
+      const phaseNow = sddPhase(strip);
+      const phasePrev = efsPhaseCache[strip.id];
+      if (phasePrev) {
+        const base = { operatorId: efsOperatorId(), operatedAt: isoTime, originId: EFS_CLIENT_ID, details: details || '' };
+        if (phasePrev !== phaseNow) {
+          const r = await efsApi('PATCH', `/api/strips/${encodeURIComponent(strip.id)}/status`, { ...base, fromStatus: phasePrev, toStatus: phaseNow });
+          if (r.ok) { viaApi = true; efsPhaseCache[strip.id] = phaseNow; if (r.data && r.data.alert) handleRwyAlert(r.data.alert); }
+          else if (r.status === 409) showToast(`⚠ ${strip.acid}: 다른 관제석에서 상태가 변경되어 최신 상태로 덮어씁니다`);
+        }
+        const fb = efsBayOf(fromBay), tb = efsBayOf(toBay);
+        if (fb && tb && fb !== tb) {
+          const r = await efsApi('PATCH', `/api/strips/${encodeURIComponent(strip.id)}/bay`, { ...base, fromBay: fb, toBay: tb, baySequence: Math.max(0, (strip.bayEntryOrder || 1) - 1) });
+          if (r.ok) viaApi = true;
+        }
+      }
+      if (viaApi) { await syncStripToSupabase(strip); return; }
+
       try {
         await fetch(`${SUPABASE_CONFIG.url}/rest/v1/efs_strip_logs`, {
           method: 'POST',
@@ -5959,7 +6090,14 @@ if (assignedAltVal !== null) strip.assignedAlt = assignedAltVal;
         console.warn('[Supabase] Log network error:', err);
       }
 
-      syncStripToSupabase(strip);
+      await syncStripToSupabase(strip);
+    }
+
+    // serialize per page so status/bay/upsert requests reach FSDM in operation order
+    let efsOpQueue = Promise.resolve();
+    function recordOperationToSupabase(...args) {
+      efsOpQueue = efsOpQueue.then(() => recordOperationToSupabase_(...args)).catch(e => console.warn('[EFS] op error', e));
+      return efsOpQueue;
     }
 
     async function syncStripToSupabase(strip) {
@@ -5968,7 +6106,10 @@ if (assignedAltVal !== null) strip.assignedAlt = assignedAltVal;
           id: strip.id,
           callsign: strip.acid,
           operation_type: strip.operationType,
-          status: strip.status,
+          status: sddPhase(strip),
+          bay_type: efsBayOf(strip.operationType) || 'DEPARTURE',
+          bay_sequence: Math.max(0, (strip.bayEntryOrder || 1) - 1),
+          metadata: { uiStatus: strip.status, asat: strip.asat || null, asrt: strip.asrt || null, atot: strip.atot || null, aldt: strip.aldt || null },
           aircraft_type: strip.type || '',
           wake_category: strip.typeWake ? (strip.typeWake.split('/')[1] || '') : '',
           equipment: 'SDE2E3FGHIRWXYZ/LB1',
@@ -5986,6 +6127,7 @@ if (assignedAltVal !== null) strip.assignedAlt = assignedAltVal;
           updated_at: new Date().toISOString()
         };
 
+        efsPhaseCache[strip.id] = payload.status;
         await fetch(`${SUPABASE_CONFIG.url}/rest/v1/efs_flight_strips?on_conflict=id`, {
           method: 'POST',
 
@@ -6912,7 +7054,9 @@ document.getElementById('btnSaveLayout').onclick = () => saveCurrentLayout();
         ['setupRowResizers', setupRowResizers],
         ['setupDragAndDrop', setupDragAndDrop],
         ['loadStrips', loadStrips],
-        ['loadSavedLayout', loadSavedLayout]
+        ['loadSavedLayout', loadSavedLayout],
+        ['initEfsRealtime', initEfsRealtime],
+        ['initEfsHeartbeat', initEfsHeartbeat]
       ];
 
 steps.forEach(([name, fn]) => {

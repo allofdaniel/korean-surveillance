@@ -584,6 +584,27 @@ const channel = supabase
   .subscribe();
 ```
 
+
+### 5.9 IDD 기준 내부 인터페이스 (MRTO-DATCS-EFS-IDD v1.1 3.2.6)
+아래 경로는 `vercel.json` rewrite로 `/api/efs?route=...`에 연결됩니다. 상태값은 SDD D-EFS-FS-SFR-0004 비행 단계 코드(`STANDBY, PUSHBACK, TAXIOUT, LINEUP, AIRBORNE, APPROACH, LANDED, TAXIIN, ONBLOCK, ENTRY, PASSING, EXIT, BASE, DOWNWIND, CROSSWIND, UPWIND`)이며, 화면의 베이 상태(`DEP_ACTIVE` 등)는 `metadata.uiStatus`에 함께 저장합니다.
+
+| IDD 식별자 | 경로 | 요청 | 응답 |
+|---|---|---|---|
+| I-EFS-INT-0020 | `PATCH /api/strips/{id}/status` | `fromStatus, toStatus, operatorId, operatedAt` | 200 `{id, status, updatedAt, alert}` / 400 상태 코드 오류 / 404 스트립 없음 / 409 `fromStatus` 불일치 |
+| I-EFS-INT-0030 | `PATCH /api/strips/{id}/bay` | `fromBay, toBay, baySequence, operatorId, operatedAt` | 200 `{id, bayType, baySequence}` / 409 베이 배정 불가·`fromBay` 불일치 |
+| I-EFS-INT-0060 | `POST /api/runway-config` (`GET`으로 최신 설정 조회) | `airport, activeRunways[], mode(MANUAL/AUTO), operatorId, appliedAt` | 200 `{result:"OK", appliedAt}` / 400 활주로 지정자 오류 |
+| I-EFS-INT-0090 | `GET /api/efs/heartbeat` (화면에서 5초 주기 호출) | - | `{type:"LINK_HEARTBEAT", sentAt, links[{name, interfaceIds, state, lastReceivedAt, latencyMs}], ntpOffsetMs}` |
+
+상태·베이 변경은 서버가 `efs_strip_logs`에 `STATUS_CHANGE`/`BAY_CHANGE`로 기록하고, 사용 활주로 설정은 `ASSIGN_RWY`(strip_id `RWY-CONFIG-{ICAO}`)로 기록합니다.
+
+### 5.10 Realtime Broadcast 이벤트 (채널 `efs`)
+서버는 Supabase Realtime Broadcast(`/realtime/v1/api/broadcast`, topic `efs`)로 아래 이벤트를 발행하고, 화면은 같은 채널을 구독합니다.
+
+| IDD 식별자 | event | payload |
+|---|---|---|
+| I-EFS-INT-0040 | `STRIP_UPDATED` | `{type, action, sentAt, strip{...camelCase 컬럼}, originId}` |
+| I-EFS-INT-0050 | `RWY_OCCUPANCY_ALERT` | `{type, alertId, state, severity, runway, stripIds[], callsigns[], occupiedSec, message, raisedAt}` — 같은 활주로에 최근 3분 내 `LINEUP`/`LANDED` 스트립이 있을 때 발행 |
+
 ---
 
 ## 6. 클라이언트 로컬 스토리지 데이터 사전 (Client LocalStorage Dictionary & Schemas)

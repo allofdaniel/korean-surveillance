@@ -219,6 +219,213 @@ export function parseAmhsContent(raw) {
   return result;
 }
 
+
+// ---------------------------------------------------------------------------
+// MRTO-DATCS-EFS-IDD v1.1 internal interfaces (I-EFS-INT-0020/0030/0040/0050/0060/0090)
+//   PATCH /api/strips/{id}/status  -> route=status   (관제 상태 변경 요청)
+//   PATCH /api/strips/{id}/bay     -> route=bay      (베이 재배치/순서 변경 요청)
+//   POST|GET /api/runway-config    -> route=runway-config (사용 활주로 수동 배정 설정)
+//   GET /api/efs/heartbeat         -> route=heartbeat (LINK_HEARTBEAT, 5 s polling)
+//   Supabase Realtime broadcast topic "efs": STRIP_UPDATED, RWY_OCCUPANCY_ALERT, LINK_HEARTBEAT
+// ---------------------------------------------------------------------------
+export const EFS_PHASES = ['STANDBY', 'PUSHBACK', 'TAXIOUT', 'LINEUP', 'AIRBORNE', 'APPROACH', 'LANDED', 'TAXIIN',
+  'ONBLOCK', 'ENTRY', 'PASSING', 'EXIT', 'BASE', 'DOWNWIND', 'CROSSWIND', 'UPWIND'];
+export const EFS_BAYS = ['DEPARTURE', 'ARRIVAL', 'TRANSIT', 'CIRCUIT'];
+const RWY_RE = /^(0[1-9]|[12][0-9]|3[0-6])[LRC]?$/;
+const RWY_OCCUPY = ['LINEUP', 'LANDED'];
+
+const RO_HEADERS = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY };
+
+async function sbGetStrip(id) {
+  const r = await fetch(SUPABASE_URL + '/rest/v1/efs_flight_strips?id=eq.' + encodeURIComponent(id) + '&limit=1', { headers: RO_HEADERS });
+  if (!r.ok) throw new Error('strip lookup failed: ' + r.status);
+  const rows = await r.json();
+  return rows[0] || null;
+}
+
+async function sbPatchStrip(id, data) {
+  const r = await fetch(SUPABASE_URL + '/rest/v1/efs_flight_strips?id=eq.' + encodeURIComponent(id), {
+    method: 'PATCH', headers: HEADERS, body: JSON.stringify(data)
+  });
+  if (!r.ok) throw new Error('strip update failed: ' + r.status);
+  const rows = await r.json();
+  return rows[0] || null;
+}
+
+async function sbLog(entry) {
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/efs_strip_logs', {
+      method: 'POST',
+      headers: { ...RO_HEADERS, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify(entry)
+    });
+  } catch (e) { console.warn('[EFS API] log failed', e.message); }
+}
+
+export async function broadcast(event, payload) {
+  try {
+    await fetch(SUPABASE_URL + '/realtime/v1/api/broadcast', {
+      method: 'POST',
+      headers: { ...RO_HEADERS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: [{ topic: 'efs', event, payload }] })
+    });
+  } catch (e) { console.warn('[EFS API] broadcast failed', e.message); }
+}
+
+const camel = s => s.replace(/_([a-z])/g, (_, c) => c.toUpperCase());
+export function toStripMessage(row) {
+  const keys = ['id', 'callsign', 'operation_type', 'status', 'aircraft_type', 'wake_category', 'beacon_code',
+    'departure_airport', 'arrival_airport', 'route', 'altitude', 'assigned_altitude', 'assigned_speed',
+    'assigned_heading', 'runway', 'gate', 'assigned_sid_star', 'eobt', 'eta', 'bay_type', 'bay_sequence',
+    'flight_rules', 'clearance_delivery', 'clearance_ground', 'clearance_tower', 'remarks', 'is_urgent',
+    'is_highlighted', 'updated_at'];
+  const out = {};
+  for (const k of keys) out[camel(k)] = row?.[k] ?? null;
+  if (!out.beaconCode && row?.ssr_code) out.beaconCode = row.ssr_code;
+  if (!out.departureAirport && row?.dep_airport) out.departureAirport = row.dep_airport;
+  if (!out.arrivalAirport && row?.arr_airport) out.arrivalAirport = row.arr_airport;
+  return out;
+}
+
+function bodyOf(req) {
+  if (!req.body) return {};
+  if (typeof req.body === 'string') { try { return JSON.parse(req.body); } catch { return {}; } }
+  return req.body;
+}
+
+async function checkRunwayOccupancy(row, originId) {
+  const rwy = row.runway || row.assigned_runway;
+  if (!rwy || !RWY_OCCUPY.includes(row.status)) return null;
+  const q = SUPABASE_URL + '/rest/v1/efs_flight_strips?select=id,callsign,status,updated_at&runway=eq.' +
+    encodeURIComponent(rwy) + '&status=in.(' + RWY_OCCUPY.join(',') + ')&id=neq.' + encodeURIComponent(row.id) +
+    '&updated_at=gt.' + encodeURIComponent(new Date(Date.now() - 180000).toISOString());
+  const r = await fetch(q, { headers: RO_HEADERS });
+  if (!r.ok) return null;
+  const others = await r.json();
+  if (!others.length) return null;
+  const first = others.sort((a, b) => Date.parse(a.updated_at) - Date.parse(b.updated_at))[0];
+  const now = new Date();
+  const alert = {
+    type: 'RWY_OCCUPANCY_ALERT',
+    alertId: 'ALT-' + now.toISOString().slice(0, 10).replace(/-/g, '') + '-' + String(now.getTime()).slice(-4),
+    state: 'RAISED',
+    severity: 'WARNING',
+    runway: rwy,
+    stripIds: [first.id, row.id],
+    callsigns: [first.callsign, row.callsign],
+    occupiedSec: Math.max(0, Math.round((now - Date.parse(first.updated_at)) / 1000)),
+    message: 'RWY ' + rwy + ' 점유 중 ' + row.status + ' 지시 (' + first.callsign + ')',
+    raisedAt: now.toISOString(),
+    originId: originId || null
+  };
+  await broadcast('RWY_OCCUPANCY_ALERT', alert);
+  return alert;
+}
+
+async function handleStatus(req, res, id) {
+  const b = bodyOf(req);
+  if (!id) return res.status(400).json({ error: 'Missing strip id' });
+  if (!EFS_PHASES.includes(b.toStatus)) return res.status(400).json({ error: 'Invalid toStatus', allowed: EFS_PHASES });
+  const cur = await sbGetStrip(id);
+  if (!cur) return res.status(404).json({ error: 'Strip not found', id });
+  if (b.fromStatus && cur.status && b.fromStatus !== cur.status) {
+    return res.status(409).json({ error: 'fromStatus mismatch', id, status: cur.status, updatedAt: cur.updated_at });
+  }
+  const operatedAt = b.operatedAt || new Date().toISOString();
+  const row = await sbPatchStrip(id, { status: b.toStatus, updated_at: new Date().toISOString() });
+  await sbLog({ strip_id: id, callsign: cur.callsign, action_type: 'STATUS_CHANGE', from_bay: cur.bay_type, to_bay: cur.bay_type,
+    from_status: cur.status, to_status: b.toStatus, details: b.details || '', operated_at: operatedAt,
+    metadata: { operatorId: b.operatorId || null, interfaceId: 'I-EFS-INT-0020' } });
+  const sentAt = new Date().toISOString();
+  await broadcast('STRIP_UPDATED', { type: 'STRIP_UPDATED', action: 'UPDATED', sentAt, strip: toStripMessage(row), originId: b.originId || null });
+  const alert = await checkRunwayOccupancy(row || { ...cur, status: b.toStatus }, b.originId);
+  return res.status(200).json({ id, status: row?.status || b.toStatus, updatedAt: row?.updated_at || sentAt, alert });
+}
+
+async function handleBay(req, res, id) {
+  const b = bodyOf(req);
+  if (!id) return res.status(400).json({ error: 'Missing strip id' });
+  if (!EFS_BAYS.includes(b.toBay)) return res.status(409).json({ error: 'Bay assignment not allowed', allowed: EFS_BAYS });
+  const seq = Number.isInteger(b.baySequence) && b.baySequence >= 0 ? b.baySequence : 0;
+  const cur = await sbGetStrip(id);
+  if (!cur) return res.status(404).json({ error: 'Strip not found', id });
+  if (b.fromBay && cur.bay_type && b.fromBay !== cur.bay_type) {
+    return res.status(409).json({ error: 'fromBay mismatch', id, bayType: cur.bay_type });
+  }
+  const row = await sbPatchStrip(id, { bay_type: b.toBay, bay_sequence: seq, updated_at: new Date().toISOString() });
+  await sbLog({ strip_id: id, callsign: cur.callsign, action_type: 'BAY_CHANGE', from_bay: cur.bay_type, to_bay: b.toBay,
+    from_status: cur.status, to_status: cur.status, details: b.details || ('bay_sequence=' + seq),
+    operated_at: b.operatedAt || new Date().toISOString(), metadata: { operatorId: b.operatorId || null, interfaceId: 'I-EFS-INT-0030' } });
+  await broadcast('STRIP_UPDATED', { type: 'STRIP_UPDATED', action: 'UPDATED', sentAt: new Date().toISOString(), strip: toStripMessage(row), originId: b.originId || null });
+  return res.status(200).json({ id, bayType: row?.bay_type || b.toBay, baySequence: row?.bay_sequence ?? seq });
+}
+
+async function handleRunwayConfig(req, res, airport) {
+  if (req.method === 'GET') {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/efs_strip_logs?select=metadata,operated_at&action_type=eq.ASSIGN_RWY&strip_id=eq.' +
+      encodeURIComponent('RWY-CONFIG-' + airport) + '&order=operated_at.desc&limit=1', { headers: RO_HEADERS });
+    const rows = r.ok ? await r.json() : [];
+    const m = rows[0]?.metadata || {};
+    return res.status(200).json({ airport, activeRunways: m.activeRunways || [], mode: m.mode || 'AUTO', appliedAt: rows[0]?.operated_at || null });
+  }
+  const b = bodyOf(req);
+  const ap = String(b.airport || airport).toUpperCase();
+  const rwys = Array.isArray(b.activeRunways) ? b.activeRunways.map(x => String(x).toUpperCase()) : [];
+  const mode = b.mode === 'AUTO' ? 'AUTO' : 'MANUAL';
+  if (!/^[A-Z]{4}$/.test(ap) || (mode === 'MANUAL' && (!rwys.length || !rwys.every(x => RWY_RE.test(x))))) {
+    return res.status(400).json({ result: 'ERROR', error: 'Invalid airport or runway designator' });
+  }
+  const appliedAt = new Date().toISOString();
+  await sbLog({ strip_id: 'RWY-CONFIG-' + ap, callsign: '-', action_type: 'ASSIGN_RWY', from_bay: null, to_bay: null,
+    from_status: null, to_status: mode, details: 'active runways: ' + rwys.join(',') , operated_at: b.appliedAt || appliedAt,
+    metadata: { airport: ap, activeRunways: rwys, mode, operatorId: b.operatorId || null, interfaceId: 'I-EFS-INT-0060' } });
+  return res.status(200).json({ result: 'OK', appliedAt });
+}
+
+async function timed(fn) {
+  const t0 = Date.now();
+  try { const v = await fn(); return { ok: true, ms: Date.now() - t0, v }; } catch (e) { return { ok: false, ms: Date.now() - t0, err: e.message }; }
+}
+
+async function handleHeartbeat(req, res) {
+  const sentAt = new Date();
+  const db = await timed(async () => {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/efs_flight_strips?select=updated_at&order=updated_at.desc&limit=1', { headers: RO_HEADERS });
+    if (!r.ok) throw new Error('db ' + r.status);
+    const d = r.headers.get('date');
+    return { last: (await r.json())[0]?.updated_at || null, date: d };
+  });
+  const amhs = await timed(async () => {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/efs_amhs_messages?select=created_at&order=created_at.desc&limit=1', { headers: RO_HEADERS });
+    if (!r.ok) throw new Error('amhs ' + r.status);
+    return (await r.json())[0]?.created_at || null;
+  });
+  const host = req.headers?.host;
+  const fids = await timed(async () => {
+    if (!host) throw new Error('no host');
+    const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 3000);
+    const r = await fetch('https://' + host + '/api/crawler?status=true', { signal: ctl.signal });
+    clearTimeout(t);
+    if (!r.ok) throw new Error('fids ' + r.status);
+    return new Date().toISOString();
+  });
+  const st = (x, staleMin) => !x.ok ? 'DOWN' : (staleMin && x.v && (Date.now() - Date.parse(x.v)) > staleMin * 60000 ? 'DEGRADED' : 'UP');
+  let ntpOffsetMs = null;
+  if (db.ok && db.v.date) ntpOffsetMs = Date.parse(db.v.date) + Math.round(db.ms / 2) - Date.now();
+  const msg = {
+    type: 'LINK_HEARTBEAT',
+    sentAt: sentAt.toISOString(),
+    links: [
+      { name: 'AMHS', interfaceIds: 'I-EFS-EXT-0010 ~ 0070', state: st(amhs, 24 * 60), lastReceivedAt: amhs.ok ? amhs.v : null, latencyMs: amhs.ms },
+      { name: 'FIDS', interfaceIds: 'I-EFS-EXT-0080', state: st(fids), lastReceivedAt: fids.ok ? fids.v : null, latencyMs: fids.ms },
+      { name: 'DB', interfaceIds: 'I-EFS-INT-0070 · 0080', state: db.ok ? 'UP' : 'DOWN', lastReceivedAt: db.ok ? new Date().toISOString() : null, latencyMs: db.ms }
+    ],
+    ntpOffsetMs
+  };
+  res.setHeader('Cache-Control', 'no-store');
+  return res.status(200).json(msg);
+}
+
 export default async function handler(req, res) {
   if (setCorsHeaders(req, res)) return;
   if (await checkRateLimit(req, res)) return;
@@ -228,7 +435,15 @@ export default async function handler(req, res) {
   const action = url.searchParams.get('action') || req.query?.action || '';
   const airport = (url.searchParams.get('airport') || req.query?.airport || 'RKSI').toUpperCase();
 
+  const route = url.searchParams.get('route') || req.query?.route || '';
+  const routeId = url.searchParams.get('id') || req.query?.id || '';
+
   try {
+    if (route === 'status' && (method === 'PATCH' || method === 'POST')) return await handleStatus(req, res, routeId);
+    if (route === 'bay' && (method === 'PATCH' || method === 'POST')) return await handleBay(req, res, routeId);
+    if (route === 'runway-config') return await handleRunwayConfig(req, res, airport);
+    if (route === 'heartbeat') return await handleHeartbeat(req, res);
+
     if (action === 'samples' || action === 'sample-data') {
       return res.status(200).json({
         success: true,

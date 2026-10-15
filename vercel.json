@@ -27,6 +27,10 @@
     }
   ],
   "rewrites": [
+    { "source": "/api/strips/:id/status", "destination": "/api/efs?route=status&id=:id" },
+    { "source": "/api/strips/:id/bay", "destination": "/api/efs?route=bay&id=:id" },
+    { "source": "/api/runway-config", "destination": "/api/efs?route=runway-config" },
+    { "source": "/api/efs/heartbeat", "destination": "/api/efs?route=heartbeat" },
     {
       "source": "/privacy",
       "destination": "/privacy.html"
