@@ -11,6 +11,8 @@ type ChartBounds = [[number, number], [number, number], [number, number], [numbe
 
 interface ChartData {
   file: string;
+  /** transparent, frame-cropped image georeferenced to `bounds` */
+  overlayFile?: string;
   bounds?: ChartBounds;
 }
 
@@ -25,7 +27,9 @@ const useChartOverlay = (
   activeCharts: Record<string, boolean>,
   chartOpacities: Record<string, number>,
   allChartBounds: AllChartBounds,
-  selectedAirport: string
+  selectedAirport: string,
+  /** dark basemap: invert luminance so black linework reads as light (Navigraph night mode) */
+  invert = false
 ): void => {
   const prevLayersRef = useRef<Set<string>>(new Set());
   // styleReady tick — style 미준비 시 idle 이벤트 후 effect 강제 재실행 trigger.
@@ -73,15 +77,24 @@ const useChartOverlay = (
         if (import.meta.env.DEV) {
           logger.debug('ChartOverlay', `Adding chart: ${chartId}`, { file: chartData.file, bounds });
         }
+        const paint = {
+          'raster-opacity': chartOpacities[chartId] || 0.85,
+          'raster-brightness-min': invert ? 1 : 0,
+          'raster-brightness-max': invert ? 0.12 : 1,
+        };
+        const m = map.current!;
+        if (m.getLayer(layerId) && m.getSource(sourceId)) {
+          Object.entries(paint).forEach(([k, v]) => m.setPaintProperty(layerId, k as 'raster-opacity', v));
+          return;
+        }
         try {
-          // Remove existing layer/source first if they exist (for style changes)
           safeRemoveLayer(map.current, layerId);
           safeRemoveSource(map.current, sourceId);
 
           // Add source and layer
           map.current?.addSource(sourceId, {
             type: 'image',
-            url: chartData.file,
+            url: chartData.overlayFile || chartData.file,
             coordinates: bounds
           });
 
@@ -91,7 +104,7 @@ const useChartOverlay = (
             id: layerId,
             type: 'raster',
             source: sourceId,
-            paint: { 'raster-opacity': chartOpacities[chartId] || 0.7 }
+            paint: { ...paint, 'raster-fade-duration': 0 }
           }, beforeLayer);
           if (import.meta.env.DEV) {
             logger.debug('ChartOverlay', `Successfully added chart layer: ${layerId}`);
@@ -115,7 +128,7 @@ const useChartOverlay = (
     });
 
     prevLayersRef.current = currentLayers;
-  }, [map, activeCharts, chartOpacities, allChartBounds, selectedAirport, mapLoaded, styleReadyTick]);
+  }, [map, activeCharts, chartOpacities, allChartBounds, selectedAirport, mapLoaded, styleReadyTick, invert]);
 };
 
 export default useChartOverlay;

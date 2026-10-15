@@ -285,7 +285,7 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
   // allChartBounds from useDataLoading is Record<string, Record<string, unknown>>; hook expects AllChartBounds.
   // FIXME: Align AllChartBounds between useDataLoading return type and useChartOverlay parameter.
   useChartOverlay(map, mapLoaded, activeCharts, chartOpacities,
-    allChartBounds as Parameters<typeof useChartOverlay>[4], selectedChartAirport);
+    allChartBounds as Parameters<typeof useChartOverlay>[4], selectedChartAirport, isDarkMode && !showSatellite);
 
   // ATC hooks
   useAtcRadarRings(map, mapLoaded, atcOnlyMode, radarRange, radarBlackBackground);

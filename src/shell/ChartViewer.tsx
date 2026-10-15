@@ -128,7 +128,7 @@ export default function ChartViewer(p: ChartViewerProps): React.ReactElement {
       <div className="ks-viewer-bar">
         <div className="t">
           <b title={chart.name}>{chart.name}</b>
-          <small>{chart.airport} {KOREAN_NAMES[chart.airport] || ''} · {chart.type}{chart.method ? ` · 좌표 ${chart.method === 'manual' ? '수동' : chart.method === 'ocr' ? 'OCR' : chart.method}` : ''}</small>
+          <small>{chart.airport} {KOREAN_NAMES[chart.airport] || ''} · {chart.chartNo ? `AD 2-${chart.chartNo.replace(/^2-/, '')}` : chart.type}{chart.bounds ? (chart.rmsM != null ? ` · 지도 정합 ±${Math.max(1, Math.round(chart.rmsM))}m` : chart.method === 'ocr' ? ' · 좌표 OCR(근사)' : '') : ' · 지도 정합 불가(그리드 없음)'}</small>
         </div>
         {chart.bounds && (
           <>
@@ -142,7 +142,7 @@ export default function ChartViewer(p: ChartViewerProps): React.ReactElement {
             )}
           </>
         )}
-        <a className="ks-icon-btn" href={chart.file} target="_blank" rel="noopener noreferrer" title="원본 이미지 새 탭으로"><ExternalLink size={15} /></a>
+        <a className="ks-icon-btn" href={chart.pdf ? `${chart.pdf}${chart.page ? `#page=${chart.page}` : ''}` : chart.file} target="_blank" rel="noopener noreferrer" title={chart.pdf ? 'eAIP 원본 PDF 새 탭으로' : '원본 이미지 새 탭으로'}><ExternalLink size={15} /></a>
         <button type="button" className="ks-icon-btn" onClick={p.onClose} title="뷰어 닫기" aria-label="차트 뷰어 닫기"><X size={17} /></button>
       </div>
 

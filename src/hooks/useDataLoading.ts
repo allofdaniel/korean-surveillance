@@ -307,7 +307,7 @@ export default function useDataLoading(): UseDataLoadingReturn {
   const [apchVisible, setApchVisible] = useState<Record<string, boolean>>({});
   const [procColors, setProcColors] = useState<ProcColors>({ SID: {}, STAR: {}, APPROACH: {} });
 
-  const [chartBounds, setChartBounds] = useState<Record<string, unknown>>({});
+  const [chartBounds] = useState<Record<string, unknown>>({});
   const [allChartBounds, setAllChartBounds] = useState<AllChartBounds>({});
   const [chartOpacities, setChartOpacities] = useState<Record<string, number>>({});
 
@@ -350,48 +350,42 @@ export default function useDataLoading(): UseDataLoadingReturn {
       });
   }, []);
 
-  // Load all chart bounds (multi-airport) + merge RKPU manual charts
+  // AIP charts: current-AIRAC index produced by scripts/charts/build_chart_index.py
+  // (graticule-georeferenced overlays). Falls back to the legacy OCR bounds file.
   useEffect(() => {
-    Promise.all([
-      fetch('/charts/all_chart_bounds.json').then(res => res.ok ? res.json() : {}),
-      fetch('/charts/chart_bounds.json').then(res => res.ok ? res.json() : {})
-    ]).then(([allBounds, rkpuManualBounds]: [Record<string, Record<string, unknown>>, Record<string, unknown>]) => {
-      // RKPU 수동 피팅 차트를 allBounds에 병합 (기존 RKPU 덮어쓰기)
-      const rkpuCharts: Record<string, unknown> = {};
-      Object.entries(rkpuManualBounds).forEach(([chartId, bounds]) => {
-        // chart_bounds.json 형식: { chartId: { bounds: [[lon,lat],...] } }
-        // 파일 경로 추가
-        rkpuCharts[chartId] = {
-          bounds: (bounds as { bounds: unknown }).bounds,
-          file: `/charts/${chartId}.png`,
-          type: chartId.startsWith('sid') ? 'SID' :
-                chartId.startsWith('star') ? 'STAR' :
-                chartId.startsWith('apch') ? 'IAC' : 'OTHER',
-          name: chartId.replace(/_/g, ' ').toUpperCase(),
-          method: 'manual'
-        };
-      });
-
-      // RKPU 수동 차트로 덮어쓰기
-      if (Object.keys(rkpuCharts).length > 0) {
-        allBounds['RKPU'] = rkpuCharts;
-        logger.debug('DataLoading', `Merged ${Object.keys(rkpuCharts).length} manual RKPU charts`);
+    type AipEntry = {
+      id: string; type: string; name: string; chartNo?: string; pdf?: string; page?: number; file?: string;
+      overlay?: { file: string; bounds: [[number, number], [number, number], [number, number], [number, number]]; rmsM: number };
+    };
+    const load = async (): Promise<Record<string, Record<string, unknown>>> => {
+      const res = await fetch('/charts/aip_index.json');
+      if (res.ok) {
+        const idx = await res.json() as { airac?: string; airports: Record<string, AipEntry[]> };
+        const out: Record<string, Record<string, unknown>> = {};
+        Object.entries(idx.airports || {}).forEach(([icao, list]) => {
+          const m: Record<string, unknown> = {};
+          list.forEach((e, i) => {
+            m[e.id] = {
+              file: e.file || '', type: e.type, name: e.name, chartNo: e.chartNo, pdf: e.pdf, page: e.page, order: i,
+              ...(e.overlay ? { overlayFile: e.overlay.file, bounds: e.overlay.bounds, rmsM: e.overlay.rmsM, method: 'graticule' } : {}),
+            };
+          });
+          out[icao] = m;
+        });
+        logger.debug('DataLoading', `AIP chart index ${idx.airac || ''}: ${Object.keys(out).length} airports`);
+        return out;
       }
-
-      // 외부 JSON 컨트랙트 단언: all_chart_bounds.json 의 각 entry 는
-      // { file?, bounds? } 형태 (AllChartBounds = Record<string, Record<string, ChartData>>)
+      const legacy = await fetch('/charts/all_chart_bounds.json');
+      return legacy.ok ? legacy.json() : {};
+    };
+    load().then((allBounds) => {
       setAllChartBounds(allBounds as unknown as AllChartBounds);
-      setChartBounds(rkpuManualBounds);
-
       const opacities: Record<string, number> = {};
       Object.values(allBounds).forEach(airport => {
-        Object.keys(airport).forEach(chartId => {
-          opacities[chartId] = 0.7;
-        });
+        Object.keys(airport).forEach(chartId => { opacities[chartId] = 0.85; });
       });
       setChartOpacities(opacities);
-      logger.debug('DataLoading', `Loaded chart bounds for ${Object.keys(allBounds).length} airports`);
-    }).catch((err) => logger.warn('DataLoading', 'Failed to load chart bounds', { error: (err as Error).message }));
+    }).catch((err) => logger.warn('DataLoading', 'Failed to load chart index', { error: (err as Error).message }));
   }, []);
 
   // Load ATC sectors

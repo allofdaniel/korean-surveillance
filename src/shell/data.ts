@@ -11,43 +11,65 @@ export interface ChartEntry {
   airport: string;
   type: string;
   name: string;
+  /** Full-sheet raster for the viewer ('' for link-only charts). */
   file: string;
+  /** Transparent, frame-cropped raster draped on the map (falls back to `file`). */
+  overlayFile?: string;
   bounds?: ChartBounds;
   method?: string;
+  chartNo?: string;
+  /** Source PDF on the eAIP. */
+  pdf?: string;
+  page?: number;
+  /** Georeference residual (m) from the graticule fit. */
+  rmsM?: number;
+  order?: number;
 }
 
 export type ChartGroupKey = 'airport' | 'departure' | 'arrival' | 'approach' | 'other';
 
 export const CHART_GROUPS: { key: ChartGroupKey; label: string; types: string[] }[] = [
-  { key: 'airport', label: '공항', types: ['ADC', 'PDC', 'GMC', 'AOC-A', 'AOC-B'] },
+  { key: 'airport', label: '공항', types: ['ADC', 'PDC', 'GMC'] },
   { key: 'departure', label: '출발 SID', types: ['SID'] },
-  { key: 'arrival', label: '도착 STAR', types: ['STAR'] },
-  { key: 'approach', label: '접근', types: ['IAC', 'VAC'] },
-  { key: 'other', label: '기타', types: ['BIRD', 'OTHER'] },
+  { key: 'arrival', label: '도착 STAR', types: ['STAR', 'AREA'] },
+  { key: 'approach', label: '접근', types: ['IAC', 'VAC', 'ATCSMAC'] },
+  { key: 'other', label: '참고', types: ['AOC-A', 'AOC-B', 'AOC-C', 'PATC', 'BIRD', 'OTHER'] },
 ];
 
-const TYPE_ORDER = ['ADC', 'PDC', 'GMC', 'AOC-A', 'AOC-B', 'SID', 'STAR', 'IAC', 'VAC', 'BIRD', 'OTHER'];
+const TYPE_ORDER = ['ADC', 'PDC', 'GMC', 'SID', 'AREA', 'STAR', 'IAC', 'VAC', 'ATCSMAC', 'AOC-A', 'AOC-B', 'AOC-C', 'PATC', 'BIRD', 'OTHER'];
+const typeRank = (t: string): number => { const i = TYPE_ORDER.indexOf(t); return i < 0 ? TYPE_ORDER.length : i; };
 
-type RawChart = { file?: string; bounds?: ChartBounds; type?: string; name?: string; method?: string };
+type RawChart = {
+  file?: string; overlayFile?: string; bounds?: ChartBounds; type?: string; name?: string; method?: string;
+  chartNo?: string; pdf?: string; page?: number; rmsM?: number; order?: number;
+};
 export type RawAllCharts = Record<string, Record<string, RawChart>> | null | undefined;
 
 export function chartsForAirport(all: RawAllCharts, icao: string): ChartEntry[] {
   const src = all?.[icao];
   if (!src) return [];
   const list = Object.entries(src)
-    .filter(([, c]) => !!c?.file)
-    .map(([id, c]) => ({
+    .filter(([, c]) => !!(c?.file || c?.pdf))
+    .map(([id, c]): ChartEntry => ({
       id,
       airport: icao,
       type: (c.type || 'OTHER').toUpperCase(),
       name: prettyChartName(c.name || id),
-      file: c.file as string,
+      file: c.file || '',
+      overlayFile: c.overlayFile,
       bounds: c.bounds,
       method: c.method,
+      chartNo: c.chartNo,
+      pdf: c.pdf,
+      page: c.page,
+      rmsM: c.rmsM,
+      order: c.order,
     }))
     .sort((a, b) => {
-      const d = TYPE_ORDER.indexOf(a.type) - TYPE_ORDER.indexOf(b.type);
-      return d !== 0 ? d : a.name.localeCompare(b.name, 'ko') || a.file.localeCompare(b.file);
+      const d = typeRank(a.type) - typeRank(b.type);
+      if (d !== 0) return d;
+      if (a.order != null && b.order != null) return a.order - b.order;
+      return a.name.localeCompare(b.name, 'ko') || a.file.localeCompare(b.file);
     });
   return numberDuplicates(list);
 }

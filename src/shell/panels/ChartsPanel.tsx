@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Layers, Eye } from 'lucide-react';
+import { Layers, Eye, ExternalLink } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useLayerStore } from '../../stores';
 import type { AirportMeta, ChartEntry, Metar, RawAllCharts } from '../data';
@@ -122,16 +122,22 @@ function ChartsTab(p: ChartsPanelProps & { airport: AirportMeta; groups: ReturnT
         </div>
       </div>
 
-      {p.groups.length === 0 && <div className="ks-empty">이 비행장은 아직 래스터화된 AIP 차트가 없습니다.</div>}
+      {p.groups.length === 0 && <div className="ks-empty">이 비행장은 eAIP에 게시된 차트가 없습니다.</div>}
       {p.groups.map(g => (
         <div className="ks-chart-group ks-section" key={g.key}>
           <div className="ks-chart-group-head">{g.label} <span className="k">{g.charts.length}</span></div>
-          {g.charts.map(c => (
+          {g.charts.map(c => (!c.file && c.pdf) ? (
+            <a key={c.id} className="ks-chart-row" href={c.pdf} target="_blank" rel="noopener noreferrer" title="eAIP 원본 PDF (새 탭)">
+              <span className="ty">{c.type}</span>
+              <span className="nm">{c.name}{c.chartNo && <small> {c.chartNo}</small>}</span>
+              <ExternalLink size={13} color="var(--ks-text-3)" />
+            </a>
+          ) : (
             <div key={c.id} className="ks-chart-row" role="button" tabIndex={0} aria-current={p.viewerChartId === c.id}
               onClick={() => p.onOpenChart(c)}
               onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); p.onOpenChart(c); } }}>
               <span className="ty">{c.type}</span>
-              <span className="nm" title={c.name}>{c.name}</span>
+              <span className="nm" title={c.name}>{c.name}{c.chartNo && <small> {c.chartNo}</small>}</span>
               {c.bounds ? (
                 <button type="button" className="ks-overlay-toggle" aria-pressed={!!p.overlay[c.id]} title="지도에 겹치기"
                   onClick={e => { e.stopPropagation(); p.onToggleOverlay(c); }}>

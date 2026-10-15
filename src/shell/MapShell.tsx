@@ -150,7 +150,9 @@ export default function MapShell(p: MapShellProps): React.ReactElement {
     if (on && !isMobile() && window.innerWidth < 1700) setPanel(null); // give the map room
     if (on && c.bounds && p.map.current) {
       const [[w, s], [e, n]] = boundsBBox(c.bounds);
-      try { p.map.current.fitBounds([[w, s], [e, n]], { padding: 40, duration: 1000, maxZoom: 14 }); } catch { /* ignore */ }
+      const m = p.map.current;
+      // run after the drawer-padding ease so it does not cancel this camera move
+      window.setTimeout(() => { try { m.fitBounds([[w, s], [e, n]], { padding: 40, duration: 900, maxZoom: 16 }); } catch { /* ignore */ } }, 380);
     }
   }, [p]);
 
