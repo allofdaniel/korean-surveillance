@@ -60,10 +60,15 @@ function bboxFromRadius(lat, lon, radiusNm) {
   };
 }
 
+// airplanes.live / adsb.lol `/v2/point` accept at most 250 nm — larger values return an
+// empty list (the frontend's Korea fallback asks for 500 nm, which showed 0 aircraft).
+const UPSTREAM_MAX_RADIUS_NM = 250;
+
 async function fetchAdsbLive(lat, lon, radius) {
+  const r = Math.min(Math.round(radius), UPSTREAM_MAX_RADIUS_NM);
   const urls = [
-    `https://api.airplanes.live/v2/point/${lat}/${lon}/${radius}`,
-    `https://api.adsb.lol/v2/point/${lat}/${lon}/${radius}`
+    `https://api.airplanes.live/v2/point/${lat}/${lon}/${r}`,
+    `https://api.adsb.lol/v2/point/${lat}/${lon}/${r}`
   ];
 
   for (const url of urls) {
