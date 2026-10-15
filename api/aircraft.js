@@ -236,24 +236,57 @@ export default async function handler(req, res) {
   }
   const { lat: validLat, lon: validLon, radius: r } = validation.values;
 
-  const [adsbResult, osResult] = await Promise.all([
-    fetchAdsbLive(validLat, validLon, r),
-    fetchOpenSky(validLat, validLon, r)
-  ]);
-  const osList = osResult.ac || [];
+  // Every client polls about once a second; calling the upstream feeds on each poll gets the
+  // shared Vercel egress IP rate-limited within seconds (responses turn empty). Share one
+  // upstream fetch per key across requests, and fall back to the last good snapshot.
+  const key = `${validLat.toFixed(2)},${validLon.toFixed(2)},${Math.round(r)}`;
+  const now = Date.now();
+  const cached = acCache.get(key);
+  res.setHeader('Cache-Control', 'public, s-maxage=2, stale-while-revalidate=30');
 
-  const merged = mergeAndFilter(adsbResult.ac || [], osList, validLat, validLon, r);
+  if (cached && now - cached.at < FRESH_MS) {
+    return res.status(200).json({ ...cached.payload, cache: 'hit' });
+  }
 
-  return res.status(200).json({
-    ac: merged,
-    msg: 'No error',
-    now: Date.now(),
-    total: merged.length,
-    sources: {
-      adsb: adsbResult.ac?.length || 0,
-      adsb_src: adsbResult.source || 'none',
-      opensky: osList.length,
-      merged: merged.length
-    }
-  });
+  let pending = inFlight.get(key);
+  if (!pending) {
+    pending = (async () => {
+      const [adsbResult, osResult] = await Promise.all([
+        fetchAdsbLive(validLat, validLon, r),
+        fetchOpenSky(validLat, validLon, r)
+      ]);
+      const osList = osResult.ac || [];
+      const merged = mergeAndFilter(adsbResult.ac || [], osList, validLat, validLon, r);
+      return {
+        ac: merged,
+        msg: 'No error',
+        now: Date.now(),
+        total: merged.length,
+        sources: {
+          adsb: adsbResult.ac?.length || 0,
+          adsb_src: adsbResult.source || 'none',
+          opensky: osList.length,
+          merged: merged.length
+        }
+      };
+    })().finally(() => inFlight.delete(key));
+    inFlight.set(key, pending);
+  }
+
+  const payload = await pending;
+  if (payload.total > 0) {
+    acCache.set(key, { at: Date.now(), payload });
+    return res.status(200).json(payload);
+  }
+  // Upstream returned nothing (usually throttled) — serve the last good snapshot if recent.
+  if (cached && now - cached.at < STALE_MS) {
+    return res.status(200).json({ ...cached.payload, cache: 'stale', stale_ms: now - cached.at });
+  }
+  res.setHeader('Cache-Control', 'no-store'); // never pin an empty result at the edge
+  return res.status(200).json(payload);
 }
+
+const FRESH_MS = 2500;
+const STALE_MS = 60_000;
+const acCache = new Map();
+const inFlight = new Map();
