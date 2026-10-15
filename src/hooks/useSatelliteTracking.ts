@@ -6,6 +6,7 @@ import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
 import type { Map as MapboxMap, GeoJSONSource } from 'mapbox-gl';
 import * as satellite from 'satellite.js';
 import { logger } from '../utils/logger';
+import { isStyleReady } from '../utils/mapbox';
 
 const TLE_URLS = [
   'https://celestrak.org/NORAD/elements/gp.php?GROUP=stations&FORMAT=tle',
@@ -225,7 +226,7 @@ export default function useSatelliteTracking(
     };
 
     const start = async () => {
-      if (m.isStyleLoaded()) ensureLayers();
+      if (isStyleReady(m)) ensureLayers();
       else await new Promise<void>(r => m.once('style.load', () => { ensureLayers(); r(); }));
 
       if (!showSatellites) {

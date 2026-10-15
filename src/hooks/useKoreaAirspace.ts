@@ -14,7 +14,7 @@
  */
 import { useEffect, useRef, type MutableRefObject } from 'react';
 import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
-import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
+import { safeRemoveLayer, safeRemoveSource, isStyleReady } from '../utils/mapbox';
 import { escapeHtml } from '../utils/sanitize';
 import type { KoreaAirspaceData, KoreaAirport } from './useDataLoading';
 import {
@@ -85,7 +85,7 @@ const useKoreaAirspace = (
   // -------------------------------------------------------------------------
   useEffect(() => {
     if (!map?.current || !mapLoaded || !koreaAirspaceData) return;
-    if (!map.current.isStyleLoaded()) return;
+    if (!isStyleReady(map.current)) return;
 
     const m = map.current;
 

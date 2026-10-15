@@ -95,15 +95,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToMap }) => 
     <div className={styles.loginPage}>
       {/* Background Images */}
       <img
-        src="/assets/landing/login_background.png"
+        src="/assets/landing/landingpagebackgroundimage.webp"
         className={styles.backgroundImage}
-        alt="Korean Surveillance Background"
+        alt=""
+        aria-hidden="true"
+        onError={(e) => { e.currentTarget.style.display = 'none'; }}
       />
       {isLoggedIn && (
         <img
           src="/assets/landing/login_background_human.png"
           className={styles.backgroundImage_human}
-          alt="Korean Surveillance Control Room"
+          alt=""
+          aria-hidden="true"
+          onError={(e) => { e.currentTarget.style.display = 'none'; }}
         />
       )}
 

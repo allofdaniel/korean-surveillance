@@ -113,6 +113,7 @@ export default async function handler(req, res) {
   try {
     switch (type) {
       case 'metar':
+        return await handleMetar(req, res);
       case 'amos':
         return await handleAmos(req, res);
       case 'kma_metar':
@@ -173,6 +174,49 @@ export default async function handler(req, res) {
       code: 'WEATHER_ERROR',
       ...(isLocalDev && { details: error.message })
     });
+  }
+}
+
+// METAR — decoded METAR objects from aviationweather.gov (icaoId, rawOb, fltCat, temp, dewp,
+// wdir, wspd, visib, altim, clouds …). `type=metar` used to return AMOS runway-sensor rows,
+// which the map UI could not parse, so METAR never showed.
+const KOREA_METAR_IDS = [
+  'RKPU', 'RKSI', 'RKSS', 'RKPC', 'RKPK', 'RKTU', 'RKTN', 'RKJJ', 'RKJB', 'RKJY',
+  'RKNY', 'RKNW', 'RKPS', 'RKTH', 'RKTL', 'RKSM', 'RKJK', 'RKSO', 'RKSG', 'RKTE'
+];
+const METAR_TTL_MS = 120_000;
+const metarCache = new Map();
+
+async function handleMetar(req, res) {
+  const urlObj = new URL(req.url, `http://${req.headers?.host || 'localhost'}`);
+  const raw = urlObj.searchParams.get('ids') || urlObj.searchParams.get('icao') || '';
+  const ids = (raw ? raw.split(',') : KOREA_METAR_IDS)
+    .map(s => s.trim().toUpperCase())
+    .filter(s => /^[A-Z]{4}$/.test(s))
+    .slice(0, 40);
+  if (ids.length === 0) return res.status(400).json({ error: 'Invalid ids' });
+
+  const key = ids.join(',');
+  const hit = metarCache.get(key);
+  res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=600');
+  if (hit && Date.now() - hit.at < METAR_TTL_MS) return res.status(200).json(hit.data);
+
+  try {
+    const url = `https://aviationweather.gov/api/data/metar?ids=${encodeURIComponent(key)}&format=json`;
+    const r = await fetchWithTimeout(url, { headers: { 'User-Agent': 'koreasurveillance/1.0' } }, 6000);
+    if (!r.ok) throw new Error(`aviationweather ${r.status}`);
+    const list = await r.json();
+    // Keep the caller's order so element [0] is the first requested airport (RKPU by default).
+    const order = new Map(ids.map((id, i) => [id, i]));
+    const data = (Array.isArray(list) ? list : [])
+      .filter(m => m && m.icaoId)
+      .sort((a, b) => (order.get(a.icaoId) ?? 99) - (order.get(b.icaoId) ?? 99));
+    metarCache.set(key, { at: Date.now(), data });
+    return res.status(200).json(data);
+  } catch (e) {
+    logWeatherError('METAR', 'FETCH_FAILED', e.message, { ids: key });
+    if (hit) return res.status(200).json(hit.data); // stale beats empty
+    return res.status(502).json({ error: 'METAR source unavailable' });
   }
 }
 

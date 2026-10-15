@@ -38,6 +38,10 @@ export default function useMapInit(
       minZoom: 4,
       maxZoom: 18,
     });
+    // Diagnostics: expose the map only when the page is opened with ?ksdebug
+    if (typeof window !== 'undefined' && window.location.search.includes('ksdebug')) {
+      (window as unknown as { __ksMap?: unknown }).__ksMap = map.current;
+    }
 
     map.current.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 

@@ -3,7 +3,7 @@
 
 import { useEffect, useState, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
-import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
+import { safeRemoveLayer, safeRemoveSource, isStyleReady } from '../utils/mapbox';
 import type { MetarData } from '../utils/weather';
 import type { AviationData } from './useDataLoading';
 
@@ -76,7 +76,7 @@ export default function useWeatherLayers(
   useEffect(() => {
     if (!map.current || !mapLoaded || !weatherData?.metar?.wdir || !data?.airport) return;
     // 스타일이 완전히 로드될 때까지 대기
-    if (!map.current.isStyleLoaded()) return;
+    if (!isStyleReady(map.current)) return;
 
     const windDir = weatherData.metar.wdir;
     const windSpd = weatherData.metar.wspd || 5;
@@ -255,7 +255,7 @@ export default function useWeatherLayers(
   // Lightning layer rendering
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
-    if (!map.current.isStyleLoaded()) return;
+    if (!isStyleReady(map.current)) return;
 
     const sourceId = 'lightning-strikes';
     const layerId = 'lightning-strikes-layer';
@@ -314,7 +314,7 @@ export default function useWeatherLayers(
   // SIGMET rendering
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
-    if (!map.current.isStyleLoaded()) return;
+    if (!isStyleReady(map.current)) return;
 
     const sourceId = 'sigmet-areas';
     const layerId = 'sigmet-fill-layer';
@@ -428,7 +428,7 @@ export default function useWeatherLayers(
   // Radar overlay rendering
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
-    if (!map.current.isStyleLoaded()) return;
+    if (!isStyleReady(map.current)) return;
 
     const sourceId = 'radar-overlay';
     const layerId = 'radar-layer';

@@ -2,10 +2,11 @@
  * useMapStyle Hook
  * 맵 스타일 및 뷰 모드 관리
  */
-import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
+import { useEffect, useRef, useCallback, useState, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
 import { MAP_STYLES } from '../constants/config';
 import { logger } from '../utils/logger';
+import { isStyleReady } from '../utils/mapbox';
 
 export interface UseMapStyleOptions {
   map: MutableRefObject<MapboxMap | null>;
@@ -47,6 +48,7 @@ const useMapStyle = ({
   show3DAltitude
 }: UseMapStyleOptions): void => {
   const prevStyleRef = useRef<string | null>(null);
+  const [styleRetry, setStyleRetry] = useState(0);
   const prev3DViewRef = useRef<boolean | null>(null);
   const hiddenLayersRef = useRef<string[]>([]);
   // setTimeout 추적 — unmount 시 setMapLoaded(true) 가 unmounted component 에서 호출되지 않도록
@@ -217,7 +219,7 @@ const useMapStyle = ({
   useEffect(() => {
     const mapInstance = map.current;
     if (!mapInstance || !mapLoaded) return;
-    if (!mapInstance.isStyleLoaded()) return;
+    if (!isStyleReady(mapInstance)) return;
 
     const blackOverlayId = 'radar-black-overlay';
 
@@ -323,7 +325,7 @@ const useMapStyle = ({
       }
     };
 
-    if (map.current.isStyleLoaded()) {
+    if (isStyleReady(map.current)) {
       toggleSatelliteLayer();
     } else {
       map.current.once('style.load', toggleSatelliteLayer);
@@ -334,6 +336,13 @@ const useMapStyle = ({
   useEffect(() => {
     const mapInstance = map.current;
     if (!mapInstance || !mapLoaded) return;
+    // addSource() throws while a style is (re)loading — e.g. right after a dark/light switch or a
+    // slow first load — and that exception used to take the whole app down via the ErrorBoundary.
+    if (!isStyleReady(mapInstance)) {
+      const rerun = (): void => setStyleRetry(n => n + 1);
+      mapInstance.once('idle', rerun);
+      return () => { mapInstance.off('idle', rerun); };
+    }
     const is3DChanged = prev3DViewRef.current !== is3DView;
     prev3DViewRef.current = is3DView;
 
@@ -407,7 +416,7 @@ const useMapStyle = ({
         mapInstance.easeTo({ pitch: 0, bearing: 0, duration: 1000 });
       }
     }
-  }, [map, is3DView, mapLoaded, showTerrain, show3DAltitude, showSatellite]);
+  }, [map, is3DView, mapLoaded, showTerrain, show3DAltitude, showSatellite, styleRetry]);
 
   // 피치 변경에 따른 2D/3D 자동 전환
   useEffect(() => {

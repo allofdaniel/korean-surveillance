@@ -8,6 +8,7 @@ import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
 import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
 import { logger } from '../utils/logger';
 import { escapeHtml, sanitizeUrl } from '../utils/sanitize';
+import { isStyleReady } from '../utils/mapbox';
 
 interface CctvCamera {
   id: string;
@@ -334,7 +335,7 @@ export default function useCctvLayer(
     };
 
     const run = async () => {
-      if (m.isStyleLoaded()) ensureLayers();
+      if (isStyleReady(m)) ensureLayers();
       else await new Promise<void>(r => m.once('style.load', () => { ensureLayers(); r(); }));
 
       if (!showCctv) { setVis(false); return; }

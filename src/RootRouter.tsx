@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import App from './App';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+// The map workspace (Mapbox, Three.js, ~1 MB gzip) loads only when /map is opened,
+// so the landing page no longer pays for it.
+const App = lazy(() => import('./App'));
 import LandingPage from './components/Landing/LandingPage';
 
 export const RootRouter: React.FC = () => {
@@ -40,7 +42,11 @@ export const RootRouter: React.FC = () => {
     return <LandingPage onNavigateToMap={navigateToMap} />;
   }
 
-  return <App onNavigateToLanding={navigateToLanding} />;
+  return (
+    <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: '#05070c' }} aria-busy="true" />}>
+      <App onNavigateToLanding={navigateToLanding} />
+    </Suspense>
+  );
 };
 
 export default RootRouter;

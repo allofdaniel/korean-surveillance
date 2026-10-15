@@ -5,7 +5,7 @@
 import { useEffect, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
 import { ftToM } from '../utils/geometry';
-import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
+import { safeRemoveLayer, safeRemoveSource, isStyleReady } from '../utils/mapbox';
 import type { AtcData, AtcSector } from '../types';
 
 // 이 hook 이 사용하는 sector subset alias — superset 의 일부 필드만 사용
@@ -38,7 +38,7 @@ const useAtcSectors = (
 ): void => {
   useEffect(() => {
     if (!map?.current || !mapLoaded || !atcData) return;
-    if (!map.current.isStyleLoaded()) return;
+    if (!isStyleReady(map.current)) return;
 
     // Get all sectors and current selected set
     const allSectors: SectorData[] = [...(atcData.ACC || []), ...(atcData.TMA || []), ...(atcData.CTR || [])];

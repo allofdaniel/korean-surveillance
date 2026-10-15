@@ -8,7 +8,7 @@ import { useEffect, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
 import { createObstacleShape } from '../utils/geometry';
 import { OBSTACLE_COLORS } from '../utils/colors';
-import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
+import { safeRemoveLayer, safeRemoveSource, isStyleReady } from '../utils/mapbox';
 
 interface Waypoint {
   lat: number;
@@ -99,7 +99,7 @@ const useAirspaceLayers = (
 ): void => {
   useEffect(() => {
     if (!map.current || !data || !mapLoaded) return;
-    if (!map.current.isStyleLoaded()) return;
+    if (!isStyleReady(map.current)) return;
 
     // Clean up previous layers
     ['waypoints-2d', 'waypoints-labels', 'obstacles-3d', 'obstacles-2d', 'airspace', 'airspace-outline']

@@ -14,21 +14,9 @@ import {
 } from './stores';
 
 // Import constants
-import {
-  MAPBOX_ACCESS_TOKEN,
-  PROCEDURE_CHARTS,
-} from './constants/config';
+import { MAPBOX_ACCESS_TOKEN } from './constants/config';
 
-import { AIRPORT_DATABASE, AIRPORT_COORDINATES } from './constants/airports';
-
-// 모듈 상수: runway별 차트 (한 번만 계산)
-const CHARTS_BY_RUNWAY = {
-  '18': Object.entries(PROCEDURE_CHARTS).filter(([, c]) => c.runway === '18'),
-  '36': Object.entries(PROCEDURE_CHARTS).filter(([, c]) => c.runway === '36'),
-};
-
-// Import weather utilities
-import { parseMetar, parseMetarTime } from './utils/weather';
+import { AIRPORT_DATABASE } from './constants/airports';
 
 // Import aircraft constants
 import { getAircraftImage } from './constants/aircraft';
@@ -44,15 +32,12 @@ import {
 // Import components
 import {
   AircraftDetailPanel,
-  TimeWeatherBar,
-  ViewControlsBar,
   MapContextMenu,
-  ControlPanel,
   ApiDashboardModal,
 } from './components';
-import LoadingOverlay from './components/LoadingOverlay';
-import OnboardingTour from './components/OnboardingTour';
+import NotamPanel from './components/NotamPanel';
 import AccessibleAircraftList from './components/AccessibleAircraftList';
+import MapShell from './shell/MapShell';
 
 // Import hooks
 import {
@@ -118,119 +103,93 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
   // Map store
   const {
     is3DView, setIs3DView,
-    isDarkMode, setIsDarkMode,
-    showSatellite, setShowSatellite,
+    isDarkMode,
+    showSatellite,
     showBuildings,
-    showTerrain, setShowTerrain,
-    show3DAltitude, setShow3DAltitude,
-    viewFilter, cycleViewFilter,
-    showSatellites, setShowSatellites,
-    showCctv, setShowCctv,
-    showShips, setShowShips,
-    showVwBuildings, setShowVwBuildings,
-    showVwSpecial, setShowVwSpecial,
-    showVwRoads, setShowVwRoads,
+    showTerrain,
+    show3DAltitude,
+    viewFilter,
+    showSatellites,
+    showCctv,
+    showShips,
+    showVwBuildings,
+    showVwSpecial,
+    showVwRoads,
   } = useMapStore(useShallow(s => ({
     is3DView: s.is3DView, setIs3DView: s.setIs3DView,
-    isDarkMode: s.isDarkMode, setIsDarkMode: s.setIsDarkMode,
-    showSatellite: s.showSatellite, setShowSatellite: s.setShowSatellite,
+    isDarkMode: s.isDarkMode,
+    showSatellite: s.showSatellite,
     showBuildings: s.showBuildings,
-    showTerrain: s.showTerrain, setShowTerrain: s.setShowTerrain,
-    show3DAltitude: s.show3DAltitude, setShow3DAltitude: s.setShow3DAltitude,
-    viewFilter: s.viewFilter, cycleViewFilter: s.cycleViewFilter,
-    showSatellites: s.showSatellites, setShowSatellites: s.setShowSatellites,
-    showCctv: s.showCctv, setShowCctv: s.setShowCctv,
-    showShips: s.showShips, setShowShips: s.setShowShips,
-    showVwBuildings: s.showVwBuildings, setShowVwBuildings: s.setShowVwBuildings,
-    showVwSpecial: s.showVwSpecial, setShowVwSpecial: s.setShowVwSpecial,
-    showVwRoads: s.showVwRoads, setShowVwRoads: s.setShowVwRoads,
+    showTerrain: s.showTerrain,
+    show3DAltitude: s.show3DAltitude,
+    viewFilter: s.viewFilter,
+    showSatellites: s.showSatellites,
+    showCctv: s.showCctv,
+    showShips: s.showShips,
+    showVwBuildings: s.showVwBuildings,
+    showVwSpecial: s.showVwSpecial,
+    showVwRoads: s.showVwRoads,
   })));
 
   // UI store
   const {
-    isPanelOpen, setIsPanelOpen,
-    layersExpanded, setLayersExpanded,
-    aircraftExpanded, setAircraftExpanded,
-    sidExpanded, setSidExpanded,
-    chartExpanded, setChartExpanded,
-    showAtcPanel, setShowAtcPanel,
-    atcExpanded, toggleAtcSection,
     showWxPanel,
     showNotamPanel, setShowNotamPanel,
-    showMetarPopup, setShowMetarPopup,
-    showTafPopup, setShowTafPopup,
-    metarPinned, setMetarPinned,
-    tafPinned, setTafPinned,
     sectionExpanded, toggleSection,
   } = useUIStore(useShallow(s => ({
-    isPanelOpen: s.isPanelOpen, setIsPanelOpen: s.setIsPanelOpen,
-    layersExpanded: s.layersExpanded, setLayersExpanded: s.setLayersExpanded,
-    aircraftExpanded: s.aircraftExpanded, setAircraftExpanded: s.setAircraftExpanded,
-    sidExpanded: s.sidExpanded, setSidExpanded: s.setSidExpanded,
-    chartExpanded: s.chartExpanded, setChartExpanded: s.setChartExpanded,
-    showAtcPanel: s.showAtcPanel, setShowAtcPanel: s.setShowAtcPanel,
-    atcExpanded: s.atcExpanded, toggleAtcSection: s.toggleAtcSection,
     showWxPanel: s.showWxPanel,
     showNotamPanel: s.showNotamPanel, setShowNotamPanel: s.setShowNotamPanel,
-    showMetarPopup: s.showMetarPopup, setShowMetarPopup: s.setShowMetarPopup,
-    showTafPopup: s.showTafPopup, setShowTafPopup: s.setShowTafPopup,
-    metarPinned: s.metarPinned, setMetarPinned: s.setMetarPinned,
-    tafPinned: s.tafPinned, setTafPinned: s.setTafPinned,
     sectionExpanded: s.sectionExpanded, toggleSection: s.toggleSection,
   })));
 
   // Aircraft store
   const {
-    showAircraft, setShowAircraft,
-    showAircraftTrails, setShowAircraftTrails,
-    show3DAircraft, setShow3DAircraft,
-    trailDuration, setTrailDuration,
-    headingPrediction, setHeadingPrediction,
-    labelOffset, setLabelOffset,
-    isDraggingLabel, setIsDraggingLabel,
+    showAircraft,
+    showAircraftTrails,
+    show3DAircraft,
+    trailDuration,
+    headingPrediction,
+    labelOffset,
     selectedAircraft, setSelectedAircraft,
     graphHoverData, setGraphHoverData,
   } = useAircraftStore(useShallow(s => ({
-    showAircraft: s.showAircraft, setShowAircraft: s.setShowAircraft,
-    showAircraftTrails: s.showAircraftTrails, setShowAircraftTrails: s.setShowAircraftTrails,
-    show3DAircraft: s.show3DAircraft, setShow3DAircraft: s.setShow3DAircraft,
-    trailDuration: s.trailDuration, setTrailDuration: s.setTrailDuration,
-    headingPrediction: s.headingPrediction, setHeadingPrediction: s.setHeadingPrediction,
-    labelOffset: s.labelOffset, setLabelOffset: s.setLabelOffset,
-    isDraggingLabel: s.isDraggingLabel, setIsDraggingLabel: s.setIsDraggingLabel,
+    showAircraft: s.showAircraft,
+    showAircraftTrails: s.showAircraftTrails,
+    show3DAircraft: s.show3DAircraft,
+    trailDuration: s.trailDuration,
+    headingPrediction: s.headingPrediction,
+    labelOffset: s.labelOffset,
     selectedAircraft: s.selectedAircraft, setSelectedAircraft: s.setSelectedAircraft,
     graphHoverData: s.graphHoverData, setGraphHoverData: s.setGraphHoverData,
   })));
 
   // ATC store
   const {
-    atcOnlyMode, setAtcOnlyMode,
-    radarRange, setRadarRange,
-    radarBlackBackground, setRadarBlackBackground,
-    selectedAtcSectors, setSelectedAtcSectors,
-    toggleSectorGroup,
+    atcOnlyMode,
+    radarRange,
+    radarBlackBackground,
+    selectedAtcSectors,
   } = useAtcStore(useShallow(s => ({
-    atcOnlyMode: s.atcOnlyMode, setAtcOnlyMode: s.setAtcOnlyMode,
-    radarRange: s.radarRange, setRadarRange: s.setRadarRange,
-    radarBlackBackground: s.radarBlackBackground, setRadarBlackBackground: s.setRadarBlackBackground,
-    selectedAtcSectors: s.selectedAtcSectors, setSelectedAtcSectors: s.setSelectedAtcSectors,
-    toggleSectorGroup: s.toggleSectorGroup,
+    atcOnlyMode: s.atcOnlyMode,
+    radarRange: s.radarRange,
+    radarBlackBackground: s.radarBlackBackground,
+    selectedAtcSectors: s.selectedAtcSectors,
   })));
 
   // Layer store
   const {
-    showWaypoints, setShowWaypoints,
-    showObstacles, setShowObstacles,
-    showAirspace, setShowAirspace,
+    showWaypoints,
+    showObstacles,
+    showAirspace,
     showLightning, setShowLightning,
     showSigmet, setShowSigmet,
-    showKoreaRoutes, setShowKoreaRoutes,
-    showKoreaWaypoints, setShowKoreaWaypoints,
-    showKoreaNavaids, setShowKoreaNavaids,
-    showKoreaAirspaces, setShowKoreaAirspaces,
-    showKoreaAirports, setShowKoreaAirports,
-    showKoreaHoldings, setShowKoreaHoldings,
-    showKoreaTerminalWaypoints, setShowKoreaTerminalWaypoints,
+    showKoreaRoutes,
+    showKoreaWaypoints,
+    showKoreaNavaids,
+    showKoreaAirspaces,
+    showKoreaAirports,
+    showKoreaHoldings,
+    showKoreaTerminalWaypoints,
     showKoreaSids,
     showKoreaStars,
     showKoreaIaps,
@@ -245,18 +204,18 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
     showGlobalRestrAirspace,
     showGlobalFirUir,
   } = useLayerStore(useShallow(s => ({
-    showWaypoints: s.showWaypoints, setShowWaypoints: s.setShowWaypoints,
-    showObstacles: s.showObstacles, setShowObstacles: s.setShowObstacles,
-    showAirspace: s.showAirspace, setShowAirspace: s.setShowAirspace,
+    showWaypoints: s.showWaypoints,
+    showObstacles: s.showObstacles,
+    showAirspace: s.showAirspace,
     showLightning: s.showLightning, setShowLightning: s.setShowLightning,
     showSigmet: s.showSigmet, setShowSigmet: s.setShowSigmet,
-    showKoreaRoutes: s.showKoreaRoutes, setShowKoreaRoutes: s.setShowKoreaRoutes,
-    showKoreaWaypoints: s.showKoreaWaypoints, setShowKoreaWaypoints: s.setShowKoreaWaypoints,
-    showKoreaNavaids: s.showKoreaNavaids, setShowKoreaNavaids: s.setShowKoreaNavaids,
-    showKoreaAirspaces: s.showKoreaAirspaces, setShowKoreaAirspaces: s.setShowKoreaAirspaces,
-    showKoreaAirports: s.showKoreaAirports, setShowKoreaAirports: s.setShowKoreaAirports,
-    showKoreaHoldings: s.showKoreaHoldings, setShowKoreaHoldings: s.setShowKoreaHoldings,
-    showKoreaTerminalWaypoints: s.showKoreaTerminalWaypoints, setShowKoreaTerminalWaypoints: s.setShowKoreaTerminalWaypoints,
+    showKoreaRoutes: s.showKoreaRoutes,
+    showKoreaWaypoints: s.showKoreaWaypoints,
+    showKoreaNavaids: s.showKoreaNavaids,
+    showKoreaAirspaces: s.showKoreaAirspaces,
+    showKoreaAirports: s.showKoreaAirports,
+    showKoreaHoldings: s.showKoreaHoldings,
+    showKoreaTerminalWaypoints: s.showKoreaTerminalWaypoints,
     showKoreaSids: s.showKoreaSids,
     showKoreaStars: s.showKoreaStars,
     showKoreaIaps: s.showKoreaIaps,
@@ -289,9 +248,9 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
   // Data loading hook
   const {
     data,
-    sidVisible, setSidVisible,
-    starVisible, setStarVisible,
-    apchVisible, setApchVisible,
+    sidVisible,
+    starVisible,
+    apchVisible,
     procColors,
     allChartBounds,
     chartOpacities, setChartOpacities,
@@ -388,7 +347,7 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
   // Weather data hook
   // data?.airport is typed as unknown in AviationData; hook expects { lat: number; lon: number } | null.
   // FIXME: AviationData.airport should be typed more precisely in useDataLoading.
-  const { weatherData, lightningData, sigmetData, weatherHealth } = useWeatherData(
+  const { weatherData, lightningData, sigmetData } = useWeatherData(
     data?.airport as { lat: number; lon: number } | null | undefined ?? null,
     false, false, showLightning, showSigmet, showWxPanel
   );
@@ -401,7 +360,6 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
     notamExpanded: notamItemExpanded, setNotamExpanded: setNotamItemExpanded,
     notamLocationsOnMap, setNotamLocationsOnMap,
     fetchNotamData,
-    notamHealth,
   } = useNotamData();
 
   // Weather layers hook
@@ -442,33 +400,22 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
     return () => clearInterval(timer);
   }, []);
 
-  // Refs for stale-closure-free ESC handler (registered once, reads live state via refs)
+  // ESC: close the newest Mapbox popup, then the aircraft detail panel.
   const showAircraftPanelRef = useRef(showAircraftPanel);
-  const showNotamPanelRef = useRef(showNotamPanel);
-  const isPanelOpenRef = useRef(isPanelOpen);
   useEffect(() => { showAircraftPanelRef.current = showAircraftPanel; }, [showAircraftPanel]);
-  useEffect(() => { showNotamPanelRef.current = showNotamPanel; }, [showNotamPanel]);
-  useEffect(() => { isPanelOpenRef.current = isPanelOpen; }, [isPanelOpen]);
-
-  // ESC 키: 팝업 → 모바일 패널 닫기 (registered once — stable setter refs prevent stale closure)
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent): void => {
       if (e.key !== 'Escape') return;
-      // 1. Mapbox popup 닫기 (가장 최근 팝업)
       const popups = document.querySelectorAll('.mapboxgl-popup-close-button');
       if (popups.length > 0) {
         (popups[popups.length - 1] as HTMLElement).click();
         return;
       }
-      // 2. NOTAM/Aircraft 패널이 열려 있으면 닫기 (read live values via refs)
-      if (showNotamPanelRef.current) { setShowNotamPanel(false); return; }
-      if (showAircraftPanelRef.current) { setShowAircraftPanel(false); return; }
-      // 3. 모바일에서 제어 패널 열림 → 닫기
-      if (window.innerWidth <= 768 && isPanelOpenRef.current) { setIsPanelOpen(false); return; }
+      if (showAircraftPanelRef.current) setShowAircraftPanel(false);
     };
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
-  }, [setShowNotamPanel, setShowAircraftPanel, setIsPanelOpen]); // setters are stable
+  }, [setShowAircraftPanel]);
 
   // Handle terrain toggle (showTerrain 체크박스로만 제어)
   useEffect(() => {
@@ -499,28 +446,14 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
   // Handlers
   // ============================================
 
-  const toggleChart = useCallback((chartId: string): void =>
-    setActiveCharts(prev => ({ ...prev, [chartId]: !prev[chartId] })), [setActiveCharts]);
   const updateChartOpacity = useCallback((chartId: string, opacity: number): void =>
     setChartOpacities(prev => ({ ...prev, [chartId]: opacity })), [setChartOpacities]);
 
-  const flyToAirport = useCallback((): void => {
-    // map은 ref 이므로 안정 — deps 에서 의도적으로 제외
-    const coords = AIRPORT_COORDINATES[selectedKoreaAirport] ?? AIRPORT_COORDINATES['RKPU'];
-    if (!coords) return;
-    map.current?.flyTo({
-      center: [coords.lon, coords.lat],
-      zoom: 12,
-      pitch: is3DView ? 60 : 0,
-      bearing: is3DView ? -30 : 0,
-      duration: 2000
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [is3DView, selectedKoreaAirport]);
+  const goHome = useCallback((): void => {
+    if (onNavigateToLanding) onNavigateToLanding(); else window.location.href = '/';
+  }, [onNavigateToLanding]);
 
-  const handleAtcModeToggle = useCallback((enabled: boolean): void => {
-    setAtcOnlyMode(enabled);
-  }, [setAtcOnlyMode]);
+  const notamCount = (notamData as { data?: unknown[] } | null)?.data?.length ?? 0;
 
   // ============================================
   // Render
@@ -579,11 +512,6 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
         style={{ height: `${windowHeight}px` }}
       />
 
-      {/* 첫 로드 시 항적 도착까지 표시 (페이드아웃 후 unmount) */}
-      <LoadingOverlay ready={mapLoaded && !!data} aircraftCount={rawAircraft.length} />
-
-      {/* 신규 사용자 안내 (localStorage 한 번만 자동 표시 — 햄버거에서 재호출 가능) */}
-      <OnboardingTour />
       <AccessibleAircraftList aircraft={rawAircraft} />
 
       {/* Visual Filter Overlays (NVG/FLIR/CRT) */}
@@ -596,216 +524,54 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
         </>
       )}
 
-      {/* Time & Weather Display */}
-      <TimeWeatherBar
-        currentTime={currentTime}
-        weatherData={weatherData as Parameters<typeof TimeWeatherBar>[0]['weatherData']}
-        dataHealth={dataHealth}
-        weatherHealth={weatherHealth}
-        notamHealth={notamHealth}
-        showMetarPopup={showMetarPopup}
-        setShowMetarPopup={setShowMetarPopup}
-        metarPinned={metarPinned}
-        setMetarPinned={setMetarPinned}
-        showTafPopup={showTafPopup}
-        setShowTafPopup={setShowTafPopup}
-        tafPinned={tafPinned}
-        setTafPinned={setTafPinned}
-        parseMetar={parseMetar}
-        parseMetarTime={parseMetarTime}
-      />
-
-      {/* 우측 상단 — NOTAM 만 (나머지 9개 토글은 햄버거 안 "보기 & 오버레이" 로 통합됨) */}
-      <ViewControlsBar
-        showLightning={showLightning}
-        setShowLightning={setShowLightning}
-        showSigmet={showSigmet}
-        setShowSigmet={setShowSigmet}
-        sigmetData={sigmetData}
-        lightningData={lightningData}
-        showNotamPanel={showNotamPanel}
-        setShowNotamPanel={setShowNotamPanel}
-        notamData={notamData}
-        notamLoading={notamLoading}
-        notamError={notamError}
-        notamPeriod={notamPeriod}
-        setNotamPeriod={setNotamPeriod}
-        notamFilter={notamFilter}
-        setNotamFilter={setNotamFilter}
-        notamExpanded={notamItemExpanded}
-        setNotamExpanded={setNotamItemExpanded}
-        notamLocationsOnMap={notamLocationsOnMap}
-        setNotamLocationsOnMap={setNotamLocationsOnMap}
-        fetchNotamData={fetchNotamData}
-      />
-
-      {/* Hamburger Menu Toggle Button & Korean Air Home Brand Link */}
-      {!isPanelOpen && (
-        <>
-          <button
-            className="mobile-menu-toggle"
-            onClick={() => setIsPanelOpen(true)}
-            aria-label="메뉴 열기"
-            aria-expanded={isPanelOpen}
-            aria-controls="main-control-panel"
-          >
-            ☰
-          </button>
-          <button
-            type="button"
-            onClick={onNavigateToLanding || (() => { window.location.href = '/'; })}
-            className="radar-brand-btn"
-            style={{
-              position: 'absolute',
-              top: '10px',
-              left: '60px',
-              zIndex: 1100,
-              height: '44px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '0 12px',
-              background: 'rgba(30, 35, 42, 0.95)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              borderRadius: '10px',
-              cursor: 'pointer',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.3)',
-              transition: 'all 0.2s ease',
-            }}
-            title="홈으로 이동"
-          >
-            <img
-              src="/assets/logos/KE_primary-logo_white_online.svg"
-              alt="Korean Air"
-              style={{ height: '17px', width: 'auto' }}
-            />
-            <span style={{ color: '#ffffff', fontSize: '12.5px', fontWeight: 600, letterSpacing: '0.3px' }}>
-              대한감시
-            </span>
-          </button>
-        </>
-      )}
-
-      {/* 모바일 백드롭 (패널 열려있을 때) */}
-      {isPanelOpen && (
-        <div className="panel-backdrop" onClick={() => setIsPanelOpen(false)} />
-      )}
-
-      {/* Control Panel */}
-      <ControlPanel
-        isPanelOpen={isPanelOpen}
-        setIsPanelOpen={setIsPanelOpen}
-        onNavigateToLanding={onNavigateToLanding}
-        layersExpanded={layersExpanded}
-        setLayersExpanded={setLayersExpanded}
-        aircraftExpanded={aircraftExpanded}
-        setAircraftExpanded={setAircraftExpanded}
-        sidExpanded={sidExpanded}
-        setSidExpanded={setSidExpanded}
-        chartExpanded={chartExpanded}
-        setChartExpanded={setChartExpanded}
-        showAtcPanel={showAtcPanel}
-        setShowAtcPanel={setShowAtcPanel}
-        atcExpanded={atcExpanded}
-        toggleAtcSection={toggleAtcSection as (type: string) => void}
-        is3DView={is3DView}
-        show3DAltitude={show3DAltitude}
-        setShow3DAltitude={setShow3DAltitude}
-        showTerrain={showTerrain}
-        setShowTerrain={setShowTerrain}
-        showBuildings={showBuildings}
-        showWaypoints={showWaypoints}
-        setShowWaypoints={setShowWaypoints}
-        showObstacles={showObstacles}
-        setShowObstacles={setShowObstacles}
-        showAirspace={showAirspace}
-        setShowAirspace={setShowAirspace}
-        showKoreaRoutes={showKoreaRoutes}
-        setShowKoreaRoutes={setShowKoreaRoutes}
-        showKoreaWaypoints={showKoreaWaypoints}
-        setShowKoreaWaypoints={setShowKoreaWaypoints}
-        showKoreaNavaids={showKoreaNavaids}
-        setShowKoreaNavaids={setShowKoreaNavaids}
-        showKoreaAirspaces={showKoreaAirspaces}
-        setShowKoreaAirspaces={setShowKoreaAirspaces}
-        showKoreaAirports={showKoreaAirports}
-        setShowKoreaAirports={setShowKoreaAirports}
-        showKoreaHoldings={showKoreaHoldings}
-        setShowKoreaHoldings={setShowKoreaHoldings}
-        showKoreaTerminalWaypoints={showKoreaTerminalWaypoints}
-        setShowKoreaTerminalWaypoints={setShowKoreaTerminalWaypoints}
-        showKoreaSids={showKoreaSids}
-        showKoreaStars={showKoreaStars}
-        showKoreaIaps={showKoreaIaps}
-        atcOnlyMode={atcOnlyMode}
-        handleAtcModeToggle={handleAtcModeToggle}
-        radarRange={radarRange}
-        setRadarRange={setRadarRange}
-        radarBlackBackground={radarBlackBackground}
-        setRadarBlackBackground={setRadarBlackBackground}
-        selectedAtcSectors={selectedAtcSectors}
-        setSelectedAtcSectors={setSelectedAtcSectors}
-        toggleSectorGroup={toggleSectorGroup}
-        atcData={atcData as Parameters<typeof ControlPanel>[0]['atcData']}
-        showAircraft={showAircraft}
-        setShowAircraft={setShowAircraft}
-        showAircraftTrails={showAircraftTrails}
-        setShowAircraftTrails={setShowAircraftTrails}
-        show3DAircraft={show3DAircraft}
-        setShow3DAircraft={setShow3DAircraft}
-        trailDuration={trailDuration}
-        setTrailDuration={setTrailDuration}
-        headingPrediction={headingPrediction}
-        setHeadingPrediction={setHeadingPrediction}
-        labelOffset={labelOffset}
-        setLabelOffset={setLabelOffset}
-        isDraggingLabel={isDraggingLabel}
-        setIsDraggingLabel={setIsDraggingLabel}
-        sidProcedures={data?.procedures?.SID as Parameters<typeof ControlPanel>[0]['sidProcedures']}
-        starProcedures={data?.procedures?.STAR as Parameters<typeof ControlPanel>[0]['starProcedures']}
-        apchProcedures={data?.procedures?.APPROACH as Parameters<typeof ControlPanel>[0]['apchProcedures']}
-        sidVisible={sidVisible}
-        setSidVisible={setSidVisible}
-        starVisible={starVisible}
-        setStarVisible={setStarVisible}
-        apchVisible={apchVisible}
-        setApchVisible={setApchVisible}
-        sidColors={procColors.SID}
-        starColors={procColors.STAR}
-        apchColors={procColors.APPROACH}
-        hasActiveProcedure={hasActiveProcedure}
-        chartsByRunway={CHARTS_BY_RUNWAY}
+      {/* Navigraph-style workspace: top bar · rail · drawer · chart viewer */}
+      <MapShell
+        map={map}
+        mapLoaded={mapLoaded}
+        dataReady={!!data}
+        now={currentTime}
+        koreaAirspaceData={koreaAirspaceData}
+        allChartBounds={allChartBounds as Parameters<typeof MapShell>[0]['allChartBounds']}
         activeCharts={activeCharts}
-        toggleChart={toggleChart}
+        setActiveCharts={setActiveCharts}
         chartOpacities={chartOpacities}
         updateChartOpacity={updateChartOpacity}
-        allChartBounds={allChartBounds}
         selectedChartAirport={selectedChartAirport}
         setSelectedChartAirport={setSelectedChartAirport}
-        map={map}
-        koreaAirspaceData={koreaAirspaceData}
-        flyToAirport={flyToAirport}
-        // 5번째 카테고리: 보기 & 오버레이
-        isDarkMode={isDarkMode}
-        setIsDarkMode={setIsDarkMode}
-        setIs3DView={setIs3DView}
-        showSatellite={showSatellite}
-        setShowSatellite={setShowSatellite}
-        viewFilter={viewFilter}
-        cycleViewFilter={cycleViewFilter}
-        showSatellites={showSatellites}
-        setShowSatellites={setShowSatellites}
-        showCctv={showCctv}
-        setShowCctv={setShowCctv}
-        showShips={showShips}
-        setShowShips={setShowShips}
-        showVwBuildings={showVwBuildings}
-        setShowVwBuildings={setShowVwBuildings}
-        showVwSpecial={showVwSpecial}
-        setShowVwSpecial={setShowVwSpecial}
-        showVwRoads={showVwRoads}
-        setShowVwRoads={setShowVwRoads}
+        aircraft={rawAircraft}
+        selectedAircraftHex={(selectedAircraft as AircraftData | null)?.hex ?? null}
+        onSelectAircraft={ac => setSelectedAircraft(ac as unknown as Parameters<typeof setSelectedAircraft>[0])}
+        adsbHealth={dataHealth as Parameters<typeof MapShell>[0]['adsbHealth']}
+        notamOk={!notamError && !!notamData}
+        notamCount={notamCount}
+        setShowNotamPanel={setShowNotamPanel}
+        atcData={atcData}
+        onOpenApiDashboard={() => setIsApiDashboardOpen(true)}
+        onHome={goHome}
+        notamPanel={
+          <NotamPanel
+            showNotamPanel={showNotamPanel}
+            setShowNotamPanel={setShowNotamPanel}
+            notamData={notamData as Parameters<typeof NotamPanel>[0]['notamData']}
+            notamLoading={notamLoading}
+            notamError={notamError}
+            notamPeriod={notamPeriod}
+            setNotamPeriod={setNotamPeriod}
+            notamFilter={notamFilter}
+            setNotamFilter={setNotamFilter}
+            notamExpanded={notamItemExpanded}
+            setNotamExpanded={setNotamItemExpanded}
+            notamLocationsOnMap={notamLocationsOnMap}
+            setNotamLocationsOnMap={setNotamLocationsOnMap}
+            fetchNotamData={fetchNotamData}
+            showLightning={showLightning}
+            setShowLightning={setShowLightning}
+            showSigmet={showSigmet}
+            setShowSigmet={setShowSigmet}
+            sigmetData={sigmetData as Parameters<typeof NotamPanel>[0]['sigmetData']}
+            lightningData={lightningData as Parameters<typeof NotamPanel>[0]['lightningData']}
+          />
+        }
       />
 
       {/* Aircraft Detail Panel */}

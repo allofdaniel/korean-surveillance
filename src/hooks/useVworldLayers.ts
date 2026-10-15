@@ -5,6 +5,7 @@
 import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
 import type { Map as MapboxMap, GeoJSONSource } from 'mapbox-gl';
 import { logger } from '../utils/logger';
+import { isStyleReady } from '../utils/mapbox';
 
 const MIN_ZOOM = 5; // 줌 5 이상에서 로드
 const DEBOUNCE_MS = 800;
@@ -211,7 +212,7 @@ export default function useVworldLayers(
       }
     };
 
-    if (m.isStyleLoaded()) ensureLayers();
+    if (isStyleReady(m)) ensureLayers();
     else m.once('style.load', ensureLayers);
 
     return () => {

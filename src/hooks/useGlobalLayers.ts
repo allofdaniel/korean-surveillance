@@ -9,7 +9,7 @@ import { useEffect, useRef } from 'react';
 import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
 import type { MutableRefObject } from 'react';
 import type { GlobalDataState } from './useGlobalData';
-import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
+import { safeRemoveLayer, safeRemoveSource, isStyleReady } from '../utils/mapbox';
 import { escapeHtml } from '../utils/sanitize';
 
 // All layer/source IDs managed by this hook
@@ -74,7 +74,7 @@ const useGlobalLayers = (
   // ========== Layer creation effect ==========
   useEffect(() => {
     if (!map?.current || !mapLoaded) return;
-    if (!map.current.isStyleLoaded()) return;
+    if (!isStyleReady(map.current)) return;
     const m = map.current;
 
     // Clean all

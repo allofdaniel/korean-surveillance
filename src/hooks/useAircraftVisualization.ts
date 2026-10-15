@@ -102,6 +102,28 @@ function createAircraftShape(lon: number, lat: number, heading: number, size = 0
  * 항적은 1Hz 갱신만 일어나는데 기존엔 30Hz 로 재빌드되어 메인 스레드를 잡아먹었음.
  * 위치 관련 레이어만 빠르게 갱신하고 항적은 실측 변화 때만 다시 그린다.
  */
+/** Airliner silhouette (north-up) registered as an SDF icon so `icon-color` can tint it. */
+function ensurePlaneIcon(m: MapboxMap | null): void {
+  if (!m || m.hasImage('ks-plane')) return;
+  const size = 48;
+  const c = document.createElement('canvas');
+  c.width = size; c.height = size;
+  const g = c.getContext('2d');
+  if (!g) return;
+  g.fillStyle = '#ffffff';
+  g.beginPath();
+  g.moveTo(24, 2);
+  g.bezierCurveTo(27, 4, 27.5, 8, 27.5, 12);
+  g.lineTo(27.5, 19); g.lineTo(45, 28.5); g.lineTo(45, 32.5); g.lineTo(27.5, 27.5);
+  g.lineTo(27.5, 37); g.lineTo(33.5, 41.5); g.lineTo(33.5, 45); g.lineTo(24, 42.5);
+  g.lineTo(14.5, 45); g.lineTo(14.5, 41.5); g.lineTo(20.5, 37); g.lineTo(20.5, 27.5);
+  g.lineTo(3, 32.5); g.lineTo(3, 28.5); g.lineTo(20.5, 19); g.lineTo(20.5, 12);
+  g.bezierCurveTo(20.5, 8, 21, 4, 24, 2);
+  g.closePath();
+  g.fill();
+  try { m.addImage('ks-plane', g.getImageData(0, 0, size, size), { sdf: true, pixelRatio: 1 }); } catch { /* style reloading */ }
+}
+
 export default function useAircraftVisualization(
   map: MutableRefObject<MapboxMap | null>,
   mapLoaded: boolean,
@@ -139,7 +161,8 @@ export default function useAircraftVisualization(
     const flyingAircraft = aircraft.filter(ac => !ac.on_ground && ac.altitude_ft > 100);
 
     // 3D Aircraft
-    const features3d: GeoJSONFeature[] = (show3DAircraft && flyingAircraft.length > 0)
+    const use3DModels = show3DAircraft && is3DView;
+    const features3d: GeoJSONFeature[] = (use3DModels && flyingAircraft.length > 0)
       ? flyingAircraft.map(ac => {
           const altM = ftToM(ac.altitude_ft);
           return {
@@ -151,13 +174,19 @@ export default function useAircraftVisualization(
       : [];
 
     // 2D Aircraft
-    const features2d: GeoJSONFeature[] = (!show3DAircraft) && flyingAircraft.length > 0
+    const features2d: GeoJSONFeature[] = (!use3DModels) && flyingAircraft.length > 0
       ? flyingAircraft.map(ac => ({
           type: 'Feature',
           geometry: { type: 'Point', coordinates: [ac.lon, ac.lat] },
-          properties: { callsign: ac.callsign, color: AIRCRAFT_CATEGORY_COLORS[ac.category] || '#00BCD4', rotation: ac.track || 0 }
+          properties: {
+            callsign: ac.callsign,
+            color: ['7700', '7600', '7500'].includes(ac.squawk) ? '#ff4d4f' : (selectedAircraft?.hex === ac.hex ? AIRCRAFT_LABEL_SELECTED_COLOR : (AIRCRAFT_CATEGORY_COLORS[ac.category] || '#00BCD4')),
+            rotation: ac.track || 0,
+            sel: selectedAircraft?.hex === ac.hex ? 1 : 0
+          }
         }))
       : [];
+    ensurePlaneIcon(map.current);
 
     // Labels
     const labelFeatures: GeoJSONFeature[] = flyingAircraft.map(ac => {
@@ -165,6 +194,10 @@ export default function useAircraftVisualization(
       const vsIndicator = ac.vertical_rate > 100 ? '↑' : ac.vertical_rate < -100 ? '↓' : '';
       const isSelected = selectedAircraft?.hex === ac.hex;
 
+      const altFt = ac.altitude_ft || 0;
+      const altTxt = altFt >= 14000 ? `FL${String(Math.round(altFt / 100)).padStart(3, '0')}` : `${altFt.toLocaleString()}ft`;
+      const short = `${(ac.callsign || ac.hex).trim()}`;
+      const mid = `${short}\n${altTxt} ${ac.ground_speed || 0}kt${vsIndicator}${isEmergency ? `\nSQK ${ac.squawk}` : ''}`;
       let label: string;
       if (isSelected) {
         const route = (ac.origin || ac.destination) ? `${ac.origin || '???'}→${ac.destination || '???'}` : '';
@@ -175,7 +208,7 @@ export default function useAircraftVisualization(
           `\nHDG ${Math.round(ac.track || 0)}°  VS ${ac.vertical_rate > 0 ? '+' : ''}${ac.vertical_rate || 0}fpm` +
           `\nSQK ${ac.squawk || '----'}`;
       } else {
-        label = `${ac.callsign || ac.hex}\n${ac.altitude_ft || 0} ${ac.ground_speed || 0}kt${vsIndicator}\n${ac.squawk || '----'}`;
+        label = mid;
       }
 
       return {
@@ -183,8 +216,10 @@ export default function useAircraftVisualization(
         geometry: { type: 'Point', coordinates: [ac.lon, ac.lat] },
         properties: {
           label,
+          short: isSelected || isEmergency ? label : short,
           hex: ac.hex,
-          color: isEmergency ? '#ff0000' : (isSelected ? AIRCRAFT_LABEL_SELECTED_COLOR : '#FFFFFF')
+          prio: isSelected ? 0 : isEmergency ? 1 : 2,
+          color: isEmergency ? '#ff4d4f' : (isSelected ? AIRCRAFT_LABEL_SELECTED_COLOR : '#FFFFFF')
         }
       };
     });
@@ -245,8 +280,11 @@ export default function useAircraftVisualization(
         map.current?.addLayer({
           id: 'aircraft-2d', type: 'symbol', source: 'aircraft-2d',
           layout: {
-            'icon-image': 'airport-15',
-            'icon-size': ['interpolate', ['linear'], ['zoom'], 6, 1.5, 10, 2.5, 14, 3.5],
+            'icon-image': 'ks-plane',
+            'icon-size': ['interpolate', ['linear'], ['zoom'],
+              5, ['case', ['==', ['get', 'sel'], 1], 0.62, 0.4],
+              9, ['case', ['==', ['get', 'sel'], 1], 0.85, 0.58],
+              13, ['case', ['==', ['get', 'sel'], 1], 1.1, 0.8]],
             'icon-rotate': ['get', 'rotation'],
             'icon-rotation-alignment': 'map',
             'icon-allow-overlap': true
@@ -265,13 +303,15 @@ export default function useAircraftVisualization(
         map.current?.addLayer({
           id: 'aircraft-labels', type: 'symbol', source: 'aircraft-labels',
           layout: {
-            'text-field': ['get', 'label'],
-            'text-size': 10,
+            'text-field': ['step', ['zoom'], ['get', 'short'], 8.5, ['get', 'label']],
+            'text-size': ['interpolate', ['linear'], ['zoom'], 5, 9.5, 10, 11],
             'text-anchor': currentAnchor,
             'text-offset': [labelOffset.x, labelOffset.y],
             'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-            'text-allow-overlap': true,
-            'text-ignore-placement': true
+            'text-allow-overlap': false,
+            'text-ignore-placement': false,
+            'text-padding': 1,
+            'symbol-sort-key': ['get', 'prio']
           },
           paint: { 'text-color': ['get', 'color'], 'text-halo-color': '#000000', 'text-halo-width': 1.5, 'text-halo-blur': 0.5 }
         });
@@ -298,7 +338,7 @@ export default function useAircraftVisualization(
         });
       }
     );
-  }, [aircraft, showAircraft, show3DAircraft, mapLoaded, headingPrediction, selectedAircraft, labelOffset, map]);
+  }, [aircraft, showAircraft, show3DAircraft, is3DView, mapLoaded, headingPrediction, selectedAircraft, labelOffset, map]);
 
   // ─────────────────────────────────────────────────────────────────────────
   // Effect B: 항적 리본 (1Hz 실측 변화 시에만)

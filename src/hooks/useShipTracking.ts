@@ -6,6 +6,7 @@ import { useEffect, useRef, useCallback, type MutableRefObject } from 'react';
 import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
 import { logger } from '../utils/logger';
 import { escapeHtml } from '../utils/sanitize';
+import { isStyleReady } from '../utils/mapbox';
 
 const UPDATE_INTERVAL = 30000; // 30초마다 업데이트
 
@@ -195,7 +196,7 @@ export default function useShipTracking(
     };
 
     const start = async () => {
-      if (m.isStyleLoaded()) ensureLayers();
+      if (isStyleReady(m)) ensureLayers();
       else await new Promise<void>(r => m.once('style.load', () => { ensureLayers(); r(); }));
 
       if (!showShips) {

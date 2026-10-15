@@ -4,7 +4,7 @@
  */
 import { useEffect, useRef, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
-import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
+import { safeRemoveLayer, safeRemoveSource, isStyleReady } from '../utils/mapbox';
 import { logger } from '../utils/logger';
 
 // 울산공항 좌표 (RKPU)
@@ -68,7 +68,7 @@ const useAtcRadarRings = (
       if (!map.current) return;
 
       // 스타일이 아직 로딩 중이면 재시도
-      if (!map.current.isStyleLoaded()) {
+      if (!isStyleReady(map.current)) {
         retryTimeoutRef.current = setTimeout(createLayers, 200);
         return;
       }

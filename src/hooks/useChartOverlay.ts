@@ -4,7 +4,7 @@
  */
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import type { Map as MapboxMap } from 'mapbox-gl';
-import { safeRemoveLayer, safeRemoveSource } from '../utils/mapbox';
+import { safeRemoveLayer, safeRemoveSource, isStyleReady } from '../utils/mapbox';
 import { logger } from '../utils/logger';
 
 type ChartBounds = [[number, number], [number, number], [number, number], [number, number]];
@@ -46,7 +46,7 @@ const useChartOverlay = (
 
     // Mapbox style 가 setStyle() 직후엔 잠깐 not-loaded 상태 — addSource 호출 시 throw.
     // mapLoaded 만으로는 부족하므로 isStyleLoaded() 추가 검사 + 미로드 시 styledata 이벤트 대기.
-    if (!map.current.isStyleLoaded()) {
+    if (!isStyleReady(map.current)) {
       const m = map.current;
       const onceLoaded = (): void => {
         m.off('idle', onceLoaded);
