@@ -159,7 +159,9 @@ export default function MapShell(p: MapShellProps): React.ReactElement {
   const openChart = useCallback((c: ChartEntry): void => {
     setTabs(t => (t.some(x => x.id === c.id) ? t : [...t, c].slice(-8)));
     setActiveTab(c.id);
-    if (isMobile()) setPanel(null);
+    // drawer + viewer together leave almost no map on narrower screens — fold the list away
+    // (it comes back from the rail; open charts stay as viewer tabs)
+    if (isMobile() || window.innerWidth < 1440) setPanel(null);
   }, []);
 
   const closeTab = useCallback((id: string): void => {

@@ -57,8 +57,12 @@ def norm_quotes(s):
 
 
 def graticule_points(page):
+    return parse_labels(page.get_text('words'))
+
+
+def parse_labels(words):
     pts = []
-    for x0, y0, x1, y1, t, *_ in page.get_text('words'):
+    for x0, y0, x1, y1, t, *_ in words:
         m = LABEL.match(norm_quotes(t.strip()))
         if not m:
             continue
@@ -73,6 +77,23 @@ def graticule_points(page):
             continue
         pts.append(((x0 + x1) / 2, (y0 + y1) / 2, v, kind, y1 - y0))
     return list({(round(p[0], 1), round(p[1], 1), p[2], p[3]): p for p in pts}.values())  # (x, y, value, kind, h)
+
+
+def ocr_graticule_points(page, dpi=400):
+    """Graticule labels drawn as outlines (no text layer): OCR the sheet sparsely with tesseract."""
+    import csv, subprocess, tempfile
+    tmp = os.path.join(tempfile.mkdtemp(), 'g.png')
+    page.get_pixmap(dpi=dpi).save(tmp)
+    out = subprocess.run(['tesseract', tmp, '-', '--psm', '11', '-c', 'tessedit_create_tsv=1'],
+                         capture_output=True, text=True).stdout
+    k = 72 / dpi
+    words = []
+    for r in csv.DictReader(io.StringIO(out), delimiter='\t', quoting=csv.QUOTE_NONE):
+        t = (r.get('text') or '').strip().replace('˚', '°').replace('º', '°')
+        if t:
+            x, y, w, h = (float(r[c]) * k for c in ('left', 'top', 'width', 'height'))
+            words.append((x, y, x + w, y + h, t))
+    return parse_labels(words)
 
 
 R_EARTH = 6378.137  # km, WGS84 / Web Mercator sphere
@@ -354,6 +375,48 @@ def save_webp(img, path, quality):
     img.save(path, 'WEBP', quality=quality, method=6)
 
 
+def georeference(page, ctype, icao, cid, lat0, lon0, runways, out_dir, ocr=False):
+    """Fit the sheet to its graticule (text layer, or OCR of outlined labels) and write the overlay.
+    Returns the overlay record or None."""
+    if 'NOT TO SCALE' in page.get_text().upper():
+        return None
+    pts = graticule_points(page)
+    if ocr and len(pts) < 5:
+        pts = ocr_graticule_points(page)
+    fit = ransac(pts, lat0, lon0) if len(pts) >= 5 else None
+    refine = None
+    if fit and ctype in ('ADC', 'GMC', 'PDC') and runways:
+        fit, refine = refine_with_runways(page, fit, runways, lat0, lon0)
+    if not fit:
+        return None
+    model, inl, rms = fit
+    s_m = math.hypot(model[0][0], model[0][1]) * 1000   # metres per PDF point
+    xs = [p[0] for p in inl]; ys = [p[1] for p in inl]
+    W, H = page.rect.width, page.rect.height
+    mg = float(np.median([p[4] for p in inl]))   # labels sit just outside the neat line
+    x0, x1 = max(0, min(xs) + mg), min(W, max(xs) - mg)
+    y0, y1 = max(0, min(ys) + mg), min(H, max(ys) - mg)
+    cx, cy = to_lonlat(model, (x0 + x1) / 2, (y0 + y1) / 2, lat0, lon0)
+    dist = math.hypot((cx - lon0) * math.cos(math.radians(lat0)) * KM_LON_EQ, (cy - lat0) * KM_LAT)
+    big = (x1 - x0) * (y1 - y0) > 0.12 * W * H
+    rot = math.degrees(math.atan2(model[0][1], model[0][0]))
+    if not (rms <= max(80, 3 * s_m) and dist <= 160 and big and len(inl) >= 6 and abs(rot) < 2):
+        return None
+    opix = page.get_pixmap(dpi=OVL_DPI, clip=pymupdf.Rect(x0, y0, x1, y1), alpha=False)
+    save_webp(transparent_overlay(opix), os.path.join(out_dir, f'{cid}.ov.webp'), 80)
+    ov = {
+        'file': f'/charts/aip/{icao}/{cid}.ov.webp',
+        'bounds': [to_lonlat(model, x0, y0, lat0, lon0), to_lonlat(model, x1, y0, lat0, lon0),
+                   to_lonlat(model, x1, y1, lat0, lon0), to_lonlat(model, x0, y1, lat0, lon0)],
+        'rmsM': round(rms, 1), 'gcps': len(inl), 'mPerPt': round(s_m, 2), 'rotDeg': round(rot, 2),
+    }
+    if ocr and len(graticule_points(page)) < 5:
+        ov['ocr'] = True
+    if refine and not refine.get('rejected'):
+        ov['runwayFit'] = refine
+    return ov
+
+
 def main():
     cache, public = sys.argv[1], sys.argv[2]
     only = set(sys.argv[3:])
@@ -402,37 +465,11 @@ def main():
                 save_webp(Image.frombytes('RGB', (vpix.width, vpix.height), vpix.samples),
                           os.path.join(out_dir, f'{cid}.webp'), 72)
                 # georeference
-                if not tab and 'NOT TO SCALE' not in page.get_text().upper():
-                    pts = graticule_points(page)
-                    fit = ransac(pts, lat0, lon0) if len(pts) >= 5 else None
-                    refine = None
-                    if fit and ctype in ('ADC', 'GMC', 'PDC') and arp_rwys.get(icao):
-                        fit, refine = refine_with_runways(page, fit, arp_rwys[icao], lat0, lon0)
-                    if fit:
-                        model, inl, rms = fit
-                        s_m = math.hypot(model[0][0], model[0][1]) * 1000   # metres per PDF point
-                        xs = [p[0] for p in inl]; ys = [p[1] for p in inl]
-                        W, H = page.rect.width, page.rect.height
-                        mg = float(np.median([p[4] for p in inl]))   # labels sit just outside the neat line
-                        x0, x1 = max(0, min(xs) + mg), min(W, max(xs) - mg)
-                        y0, y1 = max(0, min(ys) + mg), min(H, max(ys) - mg)
-                        cx, cy = to_lonlat(model, (x0 + x1) / 2, (y0 + y1) / 2, lat0, lon0)
-                        dist = math.hypot((cx - lon0) * math.cos(math.radians(lat0)) * KM_LON_EQ, (cy - lat0) * KM_LAT)
-                        big = (x1 - x0) * (y1 - y0) > 0.12 * W * H
-                        rot = math.degrees(math.atan2(model[0][1], model[0][0]))
-                        if rms <= max(80, 3 * s_m) and dist <= 160 and big and len(inl) >= 6 and abs(rot) < 2:
-                            opix = page.get_pixmap(dpi=OVL_DPI, clip=pymupdf.Rect(x0, y0, x1, y1), alpha=False)
-                            save_webp(transparent_overlay(opix), os.path.join(out_dir, f'{cid}.ov.webp'), 80)
-                            e['overlay'] = {
-                                'file': f'/charts/aip/{icao}/{cid}.ov.webp',
-                                'bounds': [to_lonlat(model, x0, y0, lat0, lon0), to_lonlat(model, x1, y0, lat0, lon0),
-                                           to_lonlat(model, x1, y1, lat0, lon0), to_lonlat(model, x0, y1, lat0, lon0)],
-                                'rmsM': round(rms, 1), 'gcps': len(inl), 'mPerPt': round(s_m, 2),
-                                'rotDeg': round(math.degrees(math.atan2(model[0][1], model[0][0])), 2),
-                            }
-                            if refine and not refine.get('rejected'):
-                                e['overlay']['runwayFit'] = refine
-                            stats['georef'] += 1
+                if not tab:
+                    ov = georeference(page, ctype, icao, cid, lat0, lon0, arp_rwys.get(icao), out_dir)
+                    if ov:
+                        e['overlay'] = ov
+                        stats['georef'] += 1
                 entries.append(e)
         index['airports'][icao] = entries
         g = sum(1 for e in entries if e.get('overlay'))
