@@ -128,7 +128,7 @@ export default function ChartViewer(p: ChartViewerProps): React.ReactElement {
       <div className="ks-viewer-bar">
         <div className="t">
           <b title={chart.name}>{chart.name}</b>
-          <small>{chart.airport} {KOREAN_NAMES[chart.airport] || ''} · {chart.chartNo ? `AD 2-${chart.chartNo.replace(/^2-/, '')}` : chart.type}{chart.bounds ? (chart.rmsM != null ? ` · 지도 정합 ±${Math.max(1, Math.round(chart.rmsM))}m` : chart.method === 'ocr' ? ' · 좌표 OCR(근사)' : '') : ' · 지도 정합 불가(그리드 없음)'}</small>
+          <small>{chart.airport} {KOREAN_NAMES[chart.airport] || ''} · {chart.chartNo ? `AD 2-${chart.chartNo.replace(/^2-/, '')}` : chart.type}{chart.bounds ? (chart.rmsM != null ? ` · 지도 정합 ±${Math.max(1, Math.round(chart.rmsM))}m` : chart.method === 'ocr' ? ' · 좌표 OCR(근사)' : '') : ''}</small>
         </div>
         {chart.bounds && (
           <>

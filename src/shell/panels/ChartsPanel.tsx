@@ -17,6 +17,8 @@ interface ChartsPanelProps {
   onToggleOverlay: (c: ChartEntry) => void;
   /** navdata procedure names per airport, used to draw a chart's procedure on the map */
   procNames?: Record<string, AirportProcNames>;
+  /** frame the drawn procedure on the map once it has rendered */
+  onFitProcedure?: (kind: ProcKind) => void;
 }
 
 const AirportRow = React.memo(function AirportRow({ a, n, metar, onSelect }: { a: AirportMeta; n: number; metar?: Metar; onSelect: (icao: string) => void }): React.ReactElement {
@@ -147,7 +149,14 @@ function ChartsTab(p: ChartsPanelProps & { airport: AirportMeta; groups: ReturnT
     } else {
       st.setSel({ ...sel, [m.kind]: Array.from(new Set([...(cur ?? []), ...m.names])) });
       st.set[m.kind](true);
+      p.onFitProcedure?.(m.kind);
     }
+  };
+  // opening a procedure chart draws its route too (Navigraph-style), unless it is already shown
+  const openChart = (c: ChartEntry): void => {
+    p.onOpenChart(c);
+    const m = proceduresForChart(c, names);
+    if (m && !chartProcOn(m)) toggleChartProc(m);
   };
 
   return (
@@ -173,8 +182,8 @@ function ChartsTab(p: ChartsPanelProps & { airport: AirportMeta; groups: ReturnT
             </a>
           ) : (
             <div key={c.id} className="ks-chart-row" role="button" tabIndex={0} aria-current={p.viewerChartId === c.id}
-              onClick={() => p.onOpenChart(c)}
-              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); p.onOpenChart(c); } }}>
+              onClick={() => openChart(c)}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openChart(c); } }}>
               <span className="ty">{c.type}</span>
               <span className="nm" title={c.name}>{c.name}{c.chartNo && <small> {c.chartNo}</small>}</span>
               <ChartActions c={c} overlayOn={!!p.overlay[c.id]} onOverlay={() => p.onToggleOverlay(c)}

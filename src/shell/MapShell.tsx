@@ -188,6 +188,30 @@ export default function MapShell(p: MapShellProps): React.ReactElement {
     }
   }, [p]);
 
+  // frame a just-enabled procedure: wait for the layer to receive its geometry, then fit
+  const fitProcedure = useCallback((kind: ProcKind): void => {
+    const m = p.map.current;
+    if (!m) return;
+    let tries = 0;
+    const attempt = (): void => {
+      const src = m.getSource(`korea-${kind}`) as unknown as { _data?: GeoJSON.FeatureCollection } | undefined;
+      const feats = src?._data?.features || [];
+      const pts: number[][] = [];
+      feats.forEach(f => {
+        const g = f.geometry;
+        if (g.type === 'LineString') pts.push(...g.coordinates);
+        else if (g.type === 'MultiLineString') g.coordinates.forEach(c => pts.push(...c));
+      });
+      if (!pts.length) { if (++tries < 12) window.setTimeout(attempt, 150); return; }
+      const lons = pts.map(c => c[0]!), lats = pts.map(c => c[1]!);
+      try {
+        m.fitBounds([[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]],
+          { padding: { ...mapPadding(true, true), top: 80, bottom: 60 }, duration: 900, maxZoom: 12 });
+      } catch { /* ignore */ }
+    };
+    window.setTimeout(attempt, 200);
+  }, [p.map, mapPadding]);
+
   const selectAircraft = useCallback((ac: AircraftData): void => {
     p.onSelectAircraft(ac);
     p.map.current?.flyTo({ center: [ac.lon, ac.lat], zoom: Math.max(p.map.current.getZoom(), 9), duration: 900 });
@@ -256,6 +280,7 @@ export default function MapShell(p: MapShellProps): React.ReactElement {
                 overlay={p.activeCharts}
                 onToggleOverlay={toggleOverlay}
                 procNames={procNames}
+                onFitProcedure={fitProcedure}
               />
             )}
             {panel === 'traffic' && (
