@@ -9,7 +9,7 @@ import { logger } from '../utils/logger';
 import { isStyleReady } from '../utils/mapbox';
 
 // CelesTrak sends no CORS headers — fetch through our /api/tle proxy
-const TLE_URLS = ['stations', 'weather', 'resource', 'sarsat', 'geo'].map(g => `/api/tle?group=${g}`);
+const TLE_URLS = ['/api/tle'];
 const MAX_SATELLITES = 300;
 const UPDATE_INTERVAL = 2000; // 2초마다 위치 업데이트 (부드러운 이동)
 const ORBIT_UPDATE_INTERVAL = 30000; // 30초마다 궤도선 재계산 (성능)
