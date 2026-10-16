@@ -12,9 +12,11 @@ const AIS_SOURCES = {
     if (!key) return [];
     const url = `https://apis.data.go.kr/1192000/VesselPositionService/getVesselPositionList?serviceKey=${encodeURIComponent(key)}&numOfRows=200&pageNo=1&type=json`;
     try {
-      const resp = await fetch(url);
-      if (!resp.ok) return [];
-      const data = await resp.json();
+      const resp = await fetch(url, { signal: AbortSignal.timeout(15000) });
+      if (!resp.ok) { console.error('[ships] data.go.kr HTTP', resp.status); return []; }
+      const text = await resp.text();
+      let data;
+      try { data = JSON.parse(text); } catch { console.error('[ships] non-JSON reply:', text.slice(0, 200)); return []; }
       const items = data?.response?.body?.items?.item || [];
       return (Array.isArray(items) ? items : [items]).map(item => ({
         mmsi: item.mmsi || item.shipId || '',
@@ -25,7 +27,7 @@ const AIS_SOURCES = {
         speed: parseFloat(item.speed || item.sog || 0),
         type: item.shipType || item.vesselType || 'cargo',
       })).filter(s => s.lat !== 0 && s.lng !== 0);
-    } catch { return []; }
+    } catch (e) { console.error('[ships] fetch failed:', e?.message, e?.cause?.code || ''); return []; }
   },
 };
 

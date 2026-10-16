@@ -56,6 +56,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid source. Use: its, yeosu' });
     }
   } catch (err) {
+    console.error('[cctv] upstream failed:', err?.message, err?.cause?.code || err?.cause?.message || '');
     // VERCEL_ENV 도 함께 체크 — preview deployment 에서 leak 방지
     const isLocalDev = process.env.NODE_ENV === 'development' && !process.env.VERCEL_ENV;
     return res.status(500).json({
