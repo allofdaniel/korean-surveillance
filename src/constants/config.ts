@@ -14,7 +14,7 @@ export const MAPBOX_ACCESS_TOKEN: string = mapboxToken || DEFAULT_MAPBOX_KEY;
 // 항공기 업데이트 간격 (밀리초) — Kalman filter 보간이 극단적으로 외삽하지 않도록
 // 1초 주기로 폴링. Vercel edge cache(s-maxage=1)가 중복 요청을 흡수하므로
 // airplanes.live 측 부하는 크지 않다.
-export const AIRCRAFT_UPDATE_INTERVAL = 1000;
+export const AIRCRAFT_UPDATE_INTERVAL = 2000; // server caches 2.5 s; smoothing hook interpolates between polls
 
 // NOTAM 캐시 설정
 export const NOTAM_CACHE_DURATION = 10 * 60 * 1000; // 10분

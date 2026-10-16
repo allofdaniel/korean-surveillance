@@ -174,21 +174,17 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
     let cancelled = false;
     const controller = new AbortController();
 
+    // hexdb.io sends no CORS headers (every call failed in the browser); ADS-B already carries
+    // registration / type / operator, so details are taken from the live record instead.
     const fetchDetails = async () => {
-      try {
-        // FIXME: SECURITY P0 — direct hexdb.io fetch leaks user IP. Move to /api/aircraft-details proxy in next phase.
-        const res = await fetch(`https://hexdb.io/api/v1/aircraft/${hex}`, { signal: controller.signal });
-        if (cancelled) return;
-        if (res.ok) {
-          const data = await res.json();
-          if (!cancelled) setAircraftDetails(data);
-        }
-      } catch (err) {
-        if ((err as Error).name === 'AbortError') return;
-        logger.warn('Aircraft', 'Failed to fetch aircraft details from hexdb.io', { error: (err as Error).message });
-      } finally {
-        if (!cancelled) setAircraftDetailsLoading(false);
-      }
+      if (cancelled) return;
+      setAircraftDetails({
+        Registration: selectedAircraft.registration || undefined,
+        ModeS: hex,
+        Type: selectedAircraft.icao_type || undefined,
+        Operator: selectedAircraft.operator || undefined,
+      });
+      setAircraftDetailsLoading(false);
     };
 
     fetchDetails();
@@ -490,43 +486,7 @@ export default function useSelectedAircraft(selectedAircraft: AircraftData | nul
           }
         }
 
-        // 2차: OpenSky REST tracks API (제한된 데이터)
-        if (trackCancelled) return;
-        logger.debug('FlightTrack', `Falling back to OpenSky REST API for ${hex}`);
-        const res = await fetch(
-          `https://opensky-network.org/api/tracks/all?icao24=${hex}&time=0`,
-          { signal: trackController.signal }
-        );
-        if (res.ok) {
-          const data = await res.json();
-          logger.debug('FlightTrack', 'OpenSky REST response received', { pathLength: data?.path?.length || 0 });
-          if (data && data.path && data.path.length > 0) {
-            const trackData: FlightTrackPoint[] = data.path.map((p: number[]) => ({
-              time: p[0],
-              lat: p[1],
-              lon: p[2],
-              altitude_ft: p[3] ? Math.round(p[3] * 3.28084) : 0,
-              track: p[4],
-              on_ground: p[5]
-            }));
-            logger.info('FlightTrack', `REST: ${trackData.length} points`);
-            const firstTrack = trackData[0];
-            const lastTrack = trackData[trackData.length-1];
-            if (firstTrack && lastTrack) {
-              logger.debug('FlightTrack', `Time range: ${new Date(firstTrack.time * 1000).toLocaleString()} ~ ${new Date(lastTrack.time * 1000).toLocaleString()}`);
-            }
-            setFlightTrack({
-              icao24: data.icao24,
-              callsign: data.callsign,
-              startTime: data.startTime,
-              endTime: data.endTime,
-              path: trackData,
-              source: 'rest'
-            });
-          }
-        } else {
-          logger.warn('FlightTrack', 'OpenSky REST API error', { status: res.status });
-        }
+        // (OpenSky REST fallback removed: it sends no CORS headers, so browsers always failed it)
       } catch (err) {
         if ((err as Error).name === 'AbortError') return;
         logger.warn('FlightTrack', 'Failed to fetch flight track from OpenSky', { error: (err as Error).message });

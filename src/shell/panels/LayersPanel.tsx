@@ -26,8 +26,6 @@ export default function LayersPanel({ atcData }: { atcData: AtcData }): React.Re
     show3DAltitude: s.show3DAltitude, setShow3DAltitude: s.setShow3DAltitude,
     showBuildings: s.showBuildings, setShowBuildings: s.setShowBuildings,
     viewFilter: s.viewFilter, cycleViewFilter: s.cycleViewFilter,
-    showCctv: s.showCctv, setShowCctv: s.setShowCctv,
-    showShips: s.showShips, setShowShips: s.setShowShips,
     showSatellites: s.showSatellites, setShowSatellites: s.setShowSatellites,
     showVwBuildings: s.showVwBuildings, setShowVwBuildings: s.setShowVwBuildings,
     showVwSpecial: s.showVwSpecial, setShowVwSpecial: s.setShowVwSpecial,
@@ -135,8 +133,6 @@ export default function LayersPanel({ atcData }: { atcData: AtcData }): React.Re
 
       <div className="ks-section">
         <div className="ks-section-title">기타 실시간</div>
-        <Toggle label="CCTV" hint="공항·도로 실시간 영상" on={m.showCctv} set={m.setShowCctv} />
-        <Toggle label="선박 (AIS)" on={m.showShips} set={m.setShowShips} />
         <Toggle label="인공위성" hint="CelesTrak TLE" on={m.showSatellites} set={m.setShowSatellites} />
         <Toggle label="V-World 건물" hint="줌 13 이상, 화면 중앙" on={m.showVwBuildings} set={m.setShowVwBuildings} />
         <Toggle label="V-World 주요시설" hint="이름 있는 건물 강조" on={m.showVwSpecial} set={m.setShowVwSpecial} />

@@ -54,6 +54,8 @@ interface FeatureCollection {
   features: GeoJSONFeature[];
 }
 
+const WIND_THREADS_ENABLED = false as boolean;
+
 /**
  * useWeatherLayers - 기상 레이어 시각화 관리 훅
  * - Wind thread animation (바람 실타래 애니메이션)
@@ -74,6 +76,8 @@ export default function useWeatherLayers(
 ): void {
   // Wind thread animation - thin silk-like threads with fade in/out
   useEffect(() => {
+    // Legacy single-airport (Ulsan) wind animation: it ran forever at RKPU whatever airport was in view.
+    if (!WIND_THREADS_ENABLED) return;
     if (!map.current || !mapLoaded || !weatherData?.metar?.wdir || !data?.airport) return;
     // 스타일이 완전히 로드될 때까지 대기
     if (!isStyleReady(map.current)) return;

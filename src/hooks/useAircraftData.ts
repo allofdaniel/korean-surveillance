@@ -101,6 +101,7 @@ export default function useAircraftData(
   const lastErrorTimeRef = useRef<number>(0);
   // AbortController for cleanup (race condition 방지)
   const abortControllerRef = useRef<AbortController | null>(null);
+  const pollInFlightRef = useRef(false);
 
   // 개별 항공기의 과거 위치 히스토리 로드
   // Trace API 429 cooldown — 429 한 번 받으면 60초 동안 trace fetch 자체 skip.
@@ -177,6 +178,52 @@ export default function useAircraftData(
     }
   }, [trailDuration]);
 
+  const traceAbortRef = useRef<AbortController | null>(new AbortController());
+  const tracesInFlightRef = useRef(false);
+  const loadNewTraces = useCallback(async (processed: AircraftData[]): Promise<void> => {
+    if (tracesInFlightRef.current) return;
+    tracesInFlightRef.current = true;
+    try {
+      // 새로운 항공기들의 trace 로드 (이미 로드한 항공기 제외)
+      const newAircraft = processed.filter(ac => !tracesLoadedRef.current.has(ac.hex) && !ac.on_ground);
+      if (newAircraft.length > 0) {
+        // 처음 로드 시에도 5개로 제한 (외부 접속 성능 최적화)
+        const isFirstLoad = tracesLoadedRef.current.size === 0;
+        const maxLoad = isFirstLoad ? 5 : 3;
+        const toLoad = newAircraft.slice(0, maxLoad);
+
+        // 병렬로 trace 로드 (처음에는 모두, 이후에는 일부) - signal 전달하여 취소 가능
+        const tracePromises = toLoad.map(ac => loadAircraftTrace(ac.hex, traceAbortRef.current!.signal).then(trace => ({ hex: ac.hex, trace })));
+        const settled = await Promise.allSettled(tracePromises);
+        if (traceAbortRef.current?.signal.aborted) return;
+        const traces = settled
+          .filter(r => r.status === 'fulfilled')
+          .map(r => (r as PromiseFulfilledResult<{hex: string; trace: TrailPoint[] | null}>).value);
+
+        // ref와 state 모두 업데이트 (ref는 fetchAircraftData 내부용, state는 외부 노출용)
+        toLoad.forEach(ac => tracesLoadedRef.current.add(ac.hex));
+        setTracesLoaded(prev => {
+          const next = new Set(prev);
+          toLoad.forEach(ac => next.add(ac.hex));
+          return next;
+        });
+
+        setAircraftTrails(prev => {
+          const trails = { ...prev };
+          traces.forEach(({ hex, trace }) => {
+            if (trace && trace.length > 0) {
+              trails[hex] = trace;
+            }
+          });
+          return trails;
+        });
+      }
+
+    } finally {
+      tracesInFlightRef.current = false;
+    }
+  }, [loadAircraftTrace]);
+
   const fetchAircraftData = useCallback(async () => {
     // 백오프 중이면 스킵
     if (backoffRef.current > 0 && Date.now() - lastErrorTimeRef.current < backoffRef.current) {
@@ -184,10 +231,9 @@ export default function useAircraftData(
       return;
     }
 
-    // 진행 중인 요청이 있으면 취소하고 새로 시작
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
+    // 이전 요청이 아직 진행 중이면 이번 주기는 건너뛴다 (예전엔 매초 abort 해서 느린 회선에선 항적이 영영 안 떴다)
+    if (pollInFlightRef.current) return;
+    pollInFlightRef.current = true;
     abortControllerRef.current = new AbortController();
     const signal = abortControllerRef.current.signal;
 
@@ -253,41 +299,6 @@ export default function useAircraftData(
           timestamp: Date.now(),
         }));
 
-      // 새로운 항공기들의 trace 로드 (이미 로드한 항공기 제외)
-      const newAircraft = processed.filter(ac => !tracesLoadedRef.current.has(ac.hex) && !ac.on_ground);
-      if (newAircraft.length > 0) {
-        // 처음 로드 시에도 5개로 제한 (외부 접속 성능 최적화)
-        const isFirstLoad = tracesLoadedRef.current.size === 0;
-        const maxLoad = isFirstLoad ? 5 : 3;
-        const toLoad = newAircraft.slice(0, maxLoad);
-
-        // 병렬로 trace 로드 (처음에는 모두, 이후에는 일부) - signal 전달하여 취소 가능
-        const tracePromises = toLoad.map(ac => loadAircraftTrace(ac.hex, signal).then(trace => ({ hex: ac.hex, trace })));
-        const settled = await Promise.allSettled(tracePromises);
-        if (signal.aborted) return;
-        const traces = settled
-          .filter(r => r.status === 'fulfilled')
-          .map(r => (r as PromiseFulfilledResult<{hex: string; trace: TrailPoint[] | null}>).value);
-
-        // ref와 state 모두 업데이트 (ref는 fetchAircraftData 내부용, state는 외부 노출용)
-        toLoad.forEach(ac => tracesLoadedRef.current.add(ac.hex));
-        setTracesLoaded(prev => {
-          const next = new Set(prev);
-          toLoad.forEach(ac => next.add(ac.hex));
-          return next;
-        });
-
-        setAircraftTrails(prev => {
-          const trails = { ...prev };
-          traces.forEach(({ hex, trace }) => {
-            if (trace && trace.length > 0) {
-              trails[hex] = trace;
-            }
-          });
-          return trails;
-        });
-      }
-
       // Maximum trail points per aircraft to prevent memory issues
       const MAX_TRAIL_POINTS = 500;
 
@@ -332,6 +343,8 @@ export default function useAircraftData(
       tracesLoadedRef.current = newTracesLoaded;
       if (signal.aborted) return;
       setAircraft(processed);
+      // history trails load in the background — never hold up the live picture for them
+      void loadNewTraces(processed);
 
       // 데이터 헬스 업데이트
       setDataHealth({
@@ -345,8 +358,10 @@ export default function useAircraftData(
       if (e instanceof Error && e.name === 'AbortError') return;
       logger.error('Aircraft', 'Fetch failed', e as Error);
       setDataHealth(prev => ({ ...prev, isConnected: false, errorCount: prev.errorCount + 1 }));
+    } finally {
+      pollInFlightRef.current = false;
     }
-  }, [trailDuration, loadAircraftTrace]);
+  }, [trailDuration, loadNewTraces]);
 
   // Fetching doesn't need the map — start polling on mount so traffic is ready the moment the
   // map finishes loading (it used to wait for the map, delaying the first aircraft by seconds).
@@ -363,6 +378,7 @@ export default function useAircraftData(
         abortControllerRef.current.abort();
         abortControllerRef.current = null;
       }
+      pollInFlightRef.current = false;
     };
   }, [showAircraft, fetchAircraftData]);
 

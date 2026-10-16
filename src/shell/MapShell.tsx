@@ -98,17 +98,25 @@ export default function MapShell(p: MapShellProps): React.ReactElement {
   const viewerOpen = tabs.length > 0 && !!activeTab;
 
   // keep the map's visual centre clear of the drawer / viewer
+  const mapPadding = useCallback((panelOpen: boolean, viewer: boolean) => {
+    const css = getComputedStyle(document.documentElement);
+    const px = (v: string): number => parseFloat(css.getPropertyValue(v)) || 0;
+    return isMobile()
+      ? { top: px('--ks-top'), left: 0, right: 0, bottom: 60 + (panelOpen ? window.innerHeight * 0.58 : 0) }
+      : { top: px('--ks-top'), left: px('--ks-rail') + (panelOpen ? px('--ks-drawer') : 0), right: viewer ? Math.min(window.innerWidth * 0.42, 760) : 0, bottom: 0 };
+  }, []);
   useEffect(() => {
     const m = p.map.current;
     if (!m || !p.mapLoaded) return;
-    const css = getComputedStyle(document.documentElement);
-    const px = (v: string): number => parseFloat(css.getPropertyValue(v)) || 0;
-    const mobile = isMobile();
-    const pad = mobile
-      ? { top: px('--ks-top'), left: 0, right: 0, bottom: 60 + (panel ? window.innerHeight * 0.58 : 0) }
-      : { top: px('--ks-top'), left: px('--ks-rail') + (panel ? px('--ks-drawer') : 0), right: viewerOpen ? Math.min(window.innerWidth * 0.42, 760) : 0, bottom: 0 };
+    const pad = mapPadding(!!panel, viewerOpen);
+    // never interrupt a camera move that is already flying somewhere (airport / chart / aircraft)
+    if (m.isMoving() || m.isEasing()) {
+      const apply = (): void => { try { m.easeTo({ padding: pad, duration: 200 }); } catch { /* ignore */ } };
+      m.once('moveend', apply);
+      return () => { m.off('moveend', apply); };
+    }
     try { m.easeTo({ padding: pad, duration: 300 }); } catch { /* map not ready */ }
-  }, [p.map, p.mapLoaded, panel, viewerOpen]);
+  }, [p.map, p.mapLoaded, panel, viewerOpen, mapPadding]);
 
   useEffect(() => {
     document.body.classList.add('ks-has-shell');
@@ -122,8 +130,9 @@ export default function MapShell(p: MapShellProps): React.ReactElement {
   const flyToAirport = useCallback((icao: string): void => {
     const a = airportByIcao.get(icao);
     if (!a || !p.map.current) return;
-    p.map.current.flyTo({ center: [a.lon, a.lat], zoom: 11.2, duration: 1200, essential: true });
-  }, [airportByIcao, p.map]);
+    // the charts drawer opens alongside — fly with its padding so the airport lands in the visible part
+    p.map.current.flyTo({ center: [a.lon, a.lat], zoom: 11.2, duration: 1200, essential: true, padding: mapPadding(true, viewerOpen) });
+  }, [airportByIcao, p.map, mapPadding, viewerOpen]);
 
   const openAirport = useCallback((icao: string | null): void => {
     setAirport(icao);

@@ -198,18 +198,8 @@ export default function useAircraftVisualization(
       const altTxt = altFt >= 14000 ? `FL${String(Math.round(altFt / 100)).padStart(3, '0')}` : `${altFt.toLocaleString()}ft`;
       const short = `${(ac.callsign || ac.hex).trim()}`;
       const mid = `${short}\n${altTxt} ${ac.ground_speed || 0}kt${vsIndicator}${isEmergency ? `\nSQK ${ac.squawk}` : ''}`;
-      let label: string;
-      if (isSelected) {
-        const route = (ac.origin || ac.destination) ? `${ac.origin || '???'}→${ac.destination || '???'}` : '';
-        label = `${ac.callsign || ac.hex} [${ac.icao_type || ac.type || '?'}]` +
-          `${ac.registration ? ` ${ac.registration}` : ''}` +
-          `${route ? `\n${route}` : ''}` +
-          `\nALT ${(ac.altitude_ft || 0).toLocaleString()}ft  GS ${ac.ground_speed || 0}kt` +
-          `\nHDG ${Math.round(ac.track || 0)}°  VS ${ac.vertical_rate > 0 ? '+' : ''}${ac.vertical_rate || 0}fpm` +
-          `\nSQK ${ac.squawk || '----'}`;
-      } else {
-        label = mid;
-      }
+      // details live in the aircraft card — the map label stays a compact data block (Navigraph style)
+      const label = mid;
 
       return {
         type: 'Feature',

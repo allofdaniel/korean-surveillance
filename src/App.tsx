@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -16,28 +16,16 @@ import {
 // Import constants
 import { MAPBOX_ACCESS_TOKEN } from './constants/config';
 
-import { AIRPORT_DATABASE } from './constants/airports';
-
-// Import aircraft constants
-import { getAircraftImage } from './constants/aircraft';
-
-// Import flight utilities
-import {
-  detectFlightPhase,
-  detectCurrentAirspace,
-  findNearestWaypoints,
-  detectCurrentProcedure,
-} from './utils/flight';
 
 // Import components
 import {
-  AircraftDetailPanel,
   MapContextMenu,
   ApiDashboardModal,
 } from './components';
 import NotamPanel from './components/NotamPanel';
 import AccessibleAircraftList from './components/AccessibleAircraftList';
 import MapShell from './shell/MapShell';
+import AircraftCard from './shell/AircraftCard';
 
 // Import hooks
 import {
@@ -63,8 +51,6 @@ import {
   useGlobalData,
   useGlobalLayers,
   useSatelliteTracking,
-  useCctvLayer,
-  useShipTracking,
   useVworldLayers,
 } from './hooks';
 
@@ -110,8 +96,6 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
     show3DAltitude,
     viewFilter,
     showSatellites,
-    showCctv,
-    showShips,
     showVwBuildings,
     showVwSpecial,
     showVwRoads,
@@ -124,8 +108,6 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
     show3DAltitude: s.show3DAltitude,
     viewFilter: s.viewFilter,
     showSatellites: s.showSatellites,
-    showCctv: s.showCctv,
-    showShips: s.showShips,
     showVwBuildings: s.showVwBuildings,
     showVwSpecial: s.showVwSpecial,
     showVwRoads: s.showVwRoads,
@@ -135,11 +117,9 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
   const {
     showWxPanel,
     showNotamPanel, setShowNotamPanel,
-    sectionExpanded, toggleSection,
   } = useUIStore(useShallow(s => ({
     showWxPanel: s.showWxPanel,
     showNotamPanel: s.showNotamPanel, setShowNotamPanel: s.setShowNotamPanel,
-    sectionExpanded: s.sectionExpanded, toggleSection: s.toggleSection,
   })));
 
   // Aircraft store
@@ -151,7 +131,6 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
     headingPrediction,
     labelOffset,
     selectedAircraft, setSelectedAircraft,
-    graphHoverData, setGraphHoverData,
   } = useAircraftStore(useShallow(s => ({
     showAircraft: s.showAircraft,
     showAircraftTrails: s.showAircraftTrails,
@@ -160,7 +139,6 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
     headingPrediction: s.headingPrediction,
     labelOffset: s.labelOffset,
     selectedAircraft: s.selectedAircraft, setSelectedAircraft: s.setSelectedAircraft,
-    graphHoverData: s.graphHoverData, setGraphHoverData: s.setGraphHoverData,
   })));
 
   // ATC store
@@ -266,12 +244,6 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
   // Satellite tracking hook (CelesTrak TLE)
   useSatelliteTracking(map, mapLoaded, showSatellites);
 
-  // CCTV layer hook (ITS + 고정 CCTV)
-  useCctvLayer(map, mapLoaded, showCctv);
-
-  // Ship AIS tracking hook
-  useShipTracking(map, mapLoaded, showShips);
-
   // V-World spatial data layers (buildings, special buildings, roads)
   useVworldLayers(map, mapLoaded, showVwBuildings, showVwSpecial, showVwRoads);
 
@@ -305,11 +277,8 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
   // SelectedAircraft (store) is structurally compatible with AircraftData at runtime;
   // the store type is looser (optional fields + index sig). Cast is safe.
   const {
-    aircraftPhoto, aircraftPhotoLoading,
-    aircraftDetails, aircraftDetailsLoading,
-    flightSchedule, flightScheduleLoading,
-    flightTrack, flightTrackLoading,
-    showAircraftPanel, setShowAircraftPanel,
+    aircraftPhoto,
+    flightSchedule,
   } = useSelectedAircraft(selectedAircraft as AircraftData | null);
 
   // Debug logging for procedure rendering (DEV only)
@@ -343,6 +312,11 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
   // Aircraft click handler hook
   // setSelectedAircraft from store is (SelectedAircraft | null) => void; hook expects AircraftData dispatch.
   // Cast is safe because AircraftData satisfies SelectedAircraft's index signature at runtime.
+  // live record of the selected aircraft (the store keeps the snapshot from the moment it was picked)
+  const selHex = (selectedAircraft as AircraftData | null)?.hex;
+  const selectedLive = useMemo(() => (selHex ? rawAircraft.find(a => a.hex === selHex) ?? (selectedAircraft as unknown as AircraftData) : null),
+    [selHex, rawAircraft, selectedAircraft]);
+
   useAircraftClickHandler(map, mapLoaded, aircraft, selectedAircraft as AircraftData | null,
     setSelectedAircraft as React.Dispatch<React.SetStateAction<AircraftData | null>>);
 
@@ -411,22 +385,22 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
     return () => clearInterval(timer);
   }, []);
 
-  // ESC: close the newest Mapbox popup, then the aircraft detail panel.
-  const showAircraftPanelRef = useRef(showAircraftPanel);
-  useEffect(() => { showAircraftPanelRef.current = showAircraftPanel; }, [showAircraftPanel]);
+  // ESC: close the newest Mapbox popup, then deselect the aircraft (unless typing in a field).
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent): void => {
       if (e.key !== 'Escape') return;
+      const t = e.target as HTMLElement | null;
+      if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
       const popups = document.querySelectorAll('.mapboxgl-popup-close-button');
       if (popups.length > 0) {
         (popups[popups.length - 1] as HTMLElement).click();
         return;
       }
-      if (showAircraftPanelRef.current) setShowAircraftPanel(false);
+      setSelectedAircraft(null);
     };
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
-  }, [setShowAircraftPanel]);
+  }, [setSelectedAircraft]);
 
   // Handle terrain toggle (showTerrain 체크박스로만 제어)
   useEffect(() => {
@@ -585,38 +559,16 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
         }
       />
 
-      {/* Aircraft Detail Panel */}
-      {/* AircraftDetailPanel uses its own AircraftData (sparse optional fields from AircraftDetail/types.ts).
-          SelectedAircraft (store) and AircraftData (useAircraftData) are cast to satisfy that local type.
-          FIXME: Unify AircraftData types across stores, hooks, and components. */}
-      <AircraftDetailPanel
-        showAircraftPanel={showAircraftPanel}
-        setShowAircraftPanel={setShowAircraftPanel}
-        selectedAircraft={selectedAircraft as Parameters<typeof AircraftDetailPanel>[0]['selectedAircraft']}
-        setSelectedAircraft={setSelectedAircraft as Parameters<typeof AircraftDetailPanel>[0]['setSelectedAircraft']}
-        aircraft={aircraft as unknown as Parameters<typeof AircraftDetailPanel>[0]['aircraft']}
-        aircraftPhoto={aircraftPhoto}
-        aircraftPhotoLoading={aircraftPhotoLoading}
-        aircraftDetails={aircraftDetails}
-        aircraftDetailsLoading={aircraftDetailsLoading}
-        flightSchedule={flightSchedule as Parameters<typeof AircraftDetailPanel>[0]['flightSchedule']}
-        flightScheduleLoading={flightScheduleLoading}
-        flightTrack={flightTrack as Parameters<typeof AircraftDetailPanel>[0]['flightTrack']}
-        flightTrackLoading={flightTrackLoading}
-        aircraftTrails={aircraftTrails}
-        sectionExpanded={sectionExpanded}
-        toggleSection={toggleSection}
-        graphHoverData={graphHoverData as Parameters<typeof AircraftDetailPanel>[0]['graphHoverData']}
-        setGraphHoverData={setGraphHoverData as Parameters<typeof AircraftDetailPanel>[0]['setGraphHoverData']}
-        data={data as Parameters<typeof AircraftDetailPanel>[0]['data']}
-        atcData={atcData as Parameters<typeof AircraftDetailPanel>[0]['atcData']}
-        getAircraftImage={getAircraftImage}
-        detectFlightPhase={detectFlightPhase as unknown as Parameters<typeof AircraftDetailPanel>[0]['detectFlightPhase']}
-        detectCurrentAirspace={detectCurrentAirspace as unknown as Parameters<typeof AircraftDetailPanel>[0]['detectCurrentAirspace']}
-        findNearestWaypoints={findNearestWaypoints as unknown as Parameters<typeof AircraftDetailPanel>[0]['findNearestWaypoints']}
-        detectCurrentProcedure={detectCurrentProcedure as unknown as Parameters<typeof AircraftDetailPanel>[0]['detectCurrentProcedure']}
-        AIRPORT_DATABASE={AIRPORT_DATABASE}
-      />
+      {selectedLive && (
+        <AircraftCard
+          map={map}
+          ac={selectedLive}
+          photo={aircraftPhoto}
+          schedule={flightSchedule}
+          trail={aircraftTrails[selectedLive.hex]}
+          onClose={() => setSelectedAircraft(null)}
+        />
+      )}
 
       {/* Map Context Menu */}
       <MapContextMenu
