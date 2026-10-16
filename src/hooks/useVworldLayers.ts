@@ -7,16 +7,27 @@ import type { Map as MapboxMap, GeoJSONSource } from 'mapbox-gl';
 import { logger } from '../utils/logger';
 import { isStyleReady } from '../utils/mapbox';
 
-const MIN_ZOOM = 5; // 줌 5 이상에서 로드
+const MIN_ZOOM = 11; // V-World GetFeature 는 bbox 크기 제한이 있어 확대했을 때만 로드
 const DEBOUNCE_MS = 800;
 
 type LayerType = 'buildings' | 'special' | 'roads';
+type Box = { minX: number; maxX: number; minY: number; maxY: number };
+
+// V-World rejects large boxes (INVALID_RANGE): special buildings ~0.04°, others well above 0.2°.
+const MAX_SPAN: Record<LayerType, number> = { buildings: 0.2, roads: 0.15, special: 0.03 };
+function clampBox(b: Box, span: number): Box {
+  const cx = (b.minX + b.maxX) / 2, cy = (b.minY + b.maxY) / 2;
+  const hx = Math.min((b.maxX - b.minX) / 2, span / 2), hy = Math.min((b.maxY - b.minY) / 2, span / 2);
+  const r = (v: number): number => Math.round(v * 1000) / 1000;
+  return { minX: r(cx - hx), maxX: r(cx + hx), minY: r(cy - hy), maxY: r(cy + hy) };
+}
 
 // V-World API 가 자주 502/500 → circuit breaker 로 연속 실패 시 일시 차단.
 // 5분간 3회 이상 실패하면 그 후 5분간 호출 안함 — 콘솔 도배 + 서버 부하 방지.
 const vworldCircuit = { failures: 0, openedAt: 0, COOLDOWN_MS: 5 * 60 * 1000 };
 
-async function fetchVworldData(type: LayerType, bounds: { minX: number; maxX: number; minY: number; maxY: number }) {
+async function fetchVworldData(type: LayerType, view: Box) {
+  const bounds = clampBox(view, MAX_SPAN[type]);
   // Circuit open — 지난 5분 안에 3회 이상 실패했으면 skip
   if (vworldCircuit.failures >= 3) {
     if (Date.now() - vworldCircuit.openedAt < vworldCircuit.COOLDOWN_MS) return null;
@@ -91,7 +102,7 @@ export default function useVworldLayers(
     }
 
     if (showSpecial && zoom >= 13) {
-      // SPBD: bbox 10km² 제한이라 줌 13+ 에서만
+      // SPBD: bbox 제한이 가장 작아 줌 13+ 에서 화면 중앙 부분만
       loads.push((async () => {
         const fc = await fetchVworldData('special', b);
         if (fc) {
