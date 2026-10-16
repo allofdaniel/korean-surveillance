@@ -241,11 +241,22 @@ export function proceduresForChart(c: Pick<ChartEntry, 'type' | 'name'>, names: 
   const rwys = chartRunways(n);
   if (c.type === 'SID' || c.type === 'STAR') {
     const kind: ProcKind = c.type === 'SID' ? 'sids' : 'stars';
-    const list = names[kind].filter(p => {
+    const byRunway = (p: string): boolean => {
       if (!rwys.length) return true;
       const dot = p.indexOf('.');
       return dot < 0 ? true : suffixServes(p.slice(dot + 1), rwys);
-    });
+    };
+    // named procedures on the chart ("RNAV BINIL 3C", "SEL 1S") -> navdata idents (BINI3C, SEL1S)
+    const wanted = Array.from(n.matchAll(/\b([A-Z]{3,7})\s?(\d[A-Z]?)\b/g))
+      .filter(m => m[1] !== 'RWY')
+      .map(m => ({ word: m[1]!, num: m[2]! }));
+    const isNamed = (p: string): boolean => {
+      const m = (p.split('.')[0] ?? '').match(/^([A-Z]+)(\d[A-Z]?)$/);
+      if (!m) return false;
+      return wanted.some(w => w.num === m[2] && (m[1] === w.word || (m[1]!.length >= 3 && w.word.startsWith(m[1]!))));
+    };
+    const named = wanted.length ? names[kind].filter(p => isNamed(p) && byRunway(p)) : [];
+    const list = named.length ? named : names[kind].filter(byRunway);
     return list.length ? { kind, names: list } : null;
   }
   if (c.type === 'IAC' && rwys.length) {
@@ -255,15 +266,19 @@ export function proceduresForChart(c: Pick<ChartEntry, 'type' | 'name'>, names: 
     if (/\bRNP\b|\bRNAV\b|\bGNSS\b/.test(n)) prefixes.push('R', 'H');
     if (/\bVOR\b/.test(n)) prefixes.push('D', 'V', 'S');
     if (/\bNDB\b/.test(n)) prefixes.push('N', 'Q');
+    if (/\bTACAN\b/.test(n)) prefixes.push('T', 'D');
     if (!prefixes.length) return null;
     const variant = n.match(/\b(?:ILS|LOC|RNP|RNAV|VOR|NDB)(?:\/DME)?\s+([W-Z])\b/)?.[1] ?? '';
-    const list = names.iaps.filter(p => {
+    const pick = (withVariant: boolean): string[] => names.iaps.filter(p => {
       const base = p.split('.')[0] ?? p;
       const m = base.match(/^([A-Z])(\d{2}[LRC]?)-?([A-Z]?)$/);
       if (!m) return false;
       const [, t, r, v] = m;
-      return prefixes.includes(t!) && rwys.includes(r!) && (!variant || v === variant);
+      return prefixes.includes(t!) && rwys.includes(r!) && (!withVariant || !variant || v === variant);
     });
+    // navdata sometimes drops the Y/Z suffix the chart carries — fall back to type + runway
+    let list = pick(true);
+    if (!list.length && variant) list = pick(false);
     return list.length ? { kind: 'iaps', names: list } : null;
   }
   return null;
