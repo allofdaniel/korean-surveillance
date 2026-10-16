@@ -83,6 +83,8 @@ export default function AircraftCard({ map, ac, photo, schedule, trail, onClose 
   const vs = ac.vertical_rate || 0;
   const recent = useMemo(() => (trail || []).filter(p => Date.now() - p.timestamp < 30 * 60 * 1000), [trail]);
   const callsign = (ac.callsign || '').trim() || ac.hex.toUpperCase();
+  // some feeds (MLAT / partial ADS-B) carry no velocity — show a dash instead of a fake 0 kt / 000°
+  const noVector = !ac.on_ground && !(ac.ground_speed > 0);
 
   return (
     <aside className={`ks-ac-card ${emerg ? 'emerg' : ''}`} aria-label={`${callsign} 항공기 정보`}>
@@ -116,8 +118,8 @@ export default function AircraftCard({ map, ac, photo, schedule, trail, onClose 
 
       <div className="ks-ac-grid">
         <div><small>고도</small><b className="ks-mono">{ac.on_ground ? 'GND' : fl(ac.altitude_ft)}</b></div>
-        <div><small>속도</small><b className="ks-mono">{Math.round(ac.ground_speed || 0)}<i> kt</i></b></div>
-        <div><small>방향</small><b className="ks-mono">{Math.round(ac.track || 0).toString().padStart(3, '0')}°</b></div>
+        <div><small>속도</small><b className="ks-mono">{noVector ? '—' : <>{Math.round(ac.ground_speed)}<i> kt</i></>}</b></div>
+        <div><small>방향</small><b className="ks-mono">{noVector ? '—' : `${Math.round(ac.track || 0).toString().padStart(3, '0')}°`}</b></div>
         <div><small>수직</small><b className={`ks-mono ${vs > 300 ? 'up' : vs < -300 ? 'dn' : ''}`}>{vs > 0 ? '+' : ''}{Math.round(vs).toLocaleString()}<i> fpm</i></b></div>
         <div><small>스쿽</small><b className={`ks-mono ${emerg ? 'dn' : ''}`}>{ac.squawk || '—'}</b></div>
         <div><small>단계</small><b>{phase(ac)}</b></div>
