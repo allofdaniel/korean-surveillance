@@ -5,6 +5,8 @@
 import { setCorsHeaders, checkRateLimit } from './_utils/cors.js';
 
 const VWORLD_KEY = process.env.VITE_VWORLD_API_KEY;
+// V-World checks server-side calls against the service URL registered with the key
+const VWORLD_DOMAIN = process.env.VWORLD_DOMAIN || 'koreasurveillance.com';
 
 const DATA_CODES = {
   buildings: 'LT_C_UQ111',      // 건물 (58K)
@@ -40,10 +42,15 @@ export default async function handler(req, res) {
   const box = `BOX(${safeMinX},${safeMinY},${safeMaxX},${safeMaxY})`;
 
   try {
-    const url = `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=${dataCode}&key=${VWORLD_KEY}&geomFilter=${box}&size=${boxSize}&format=json&crs=EPSG:4326`;
-    const resp = await fetch(url);
+    const url = `https://api.vworld.kr/req/data?service=data&request=GetFeature&data=${dataCode}&key=${VWORLD_KEY}&geomFilter=${box}&size=${boxSize}&format=json&crs=EPSG:4326&domain=${encodeURIComponent(VWORLD_DOMAIN)}`;
+    const resp = await fetch(url, { headers: { Referer: `https://${VWORLD_DOMAIN}/` }, signal: AbortSignal.timeout(15000) });
     if (!resp.ok) return res.status(resp.status).json({ error: `V-World returned ${resp.status}` });
     const data = await resp.json();
+    const err = data?.response?.status === 'ERROR' ? data.response.error : null;
+    if (err && err.code !== 'NOT_FOUND') {
+      console.error('[vworld-data]', err.code, err.text);
+      return res.status(502).json({ error: `V-World ${err.code}` });
+    }
     return res.status(200).json(data);
   } catch (err) {
     // VERCEL_ENV 도 함께 체크 — preview deployment 에서 leak 방지
