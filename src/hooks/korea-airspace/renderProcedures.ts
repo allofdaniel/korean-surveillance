@@ -432,10 +432,14 @@ function renderOneProcedureType(
   wptCoordMap: Map<string, [number, number]>,
   navaidCoordMap: Map<string, [number, number]>,
   ilsCoordMap: Map<string, [number, number]>,
-  airportNavaidMap: Map<string, [number, number]>
+  airportNavaidMap: Map<string, [number, number]>,
+  only?: string[] | null
 ): void {
-  const airportProcs = procData[airportIcao];
-  if (!airportProcs) return;
+  const allProcs = procData[airportIcao];
+  if (!allProcs) return;
+  const airportProcs = only
+    ? Object.fromEntries(Object.entries(allProcs).filter(([name]) => only.includes(name)))
+    : allProcs;
 
   interface ProcFeature {
     type: 'Feature';
@@ -548,6 +552,8 @@ export interface RenderProceduresOptions {
   showSids: boolean;
   showStars: boolean;
   showIaps: boolean;
+  /** null/undefined = all procedures of that type; array = only these procedure names */
+  selection?: { sids?: string[] | null; stars?: string[] | null; iaps?: string[] | null };
 }
 
 export function renderProcedures({
@@ -560,7 +566,8 @@ export function renderProcedures({
   airports,
   showSids,
   showStars,
-  showIaps
+  showIaps,
+  selection
 }: RenderProceduresOptions): void {
   const wptCoordMap = buildWptCoordMap(terminalWaypoints, enrouteWaypoints, navaids, airports);
   const ilsCoordMap = buildIlsCoordMap(airports);
@@ -570,19 +577,19 @@ export function renderProcedures({
   if (showSids && procedures.sids && selectedAirport) {
     renderOneProcedureType(
       map, procedures.sids, selectedAirport, 'korea-sids', '#4CAF50',
-      wptCoordMap, navaidCoordMap, ilsCoordMap, airportNavaidMap
+      wptCoordMap, navaidCoordMap, ilsCoordMap, airportNavaidMap, selection?.sids
     );
   }
   if (showStars && procedures.stars && selectedAirport) {
     renderOneProcedureType(
       map, procedures.stars, selectedAirport, 'korea-stars', '#2196F3',
-      wptCoordMap, navaidCoordMap, ilsCoordMap, airportNavaidMap
+      wptCoordMap, navaidCoordMap, ilsCoordMap, airportNavaidMap, selection?.stars
     );
   }
   if (showIaps && procedures.iaps && selectedAirport) {
     renderOneProcedureType(
       map, procedures.iaps, selectedAirport, 'korea-iaps', '#FF9800',
-      wptCoordMap, navaidCoordMap, ilsCoordMap, airportNavaidMap
+      wptCoordMap, navaidCoordMap, ilsCoordMap, airportNavaidMap, selection?.iaps
     );
   }
 }

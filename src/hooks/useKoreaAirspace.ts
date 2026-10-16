@@ -12,7 +12,7 @@
  *   renderProcedures.ts   - holdings, terminal waypoints, SID/STAR/IAP
  *   types.ts              - shared interfaces, constants, utilities
  */
-import { useEffect, useRef, type MutableRefObject } from 'react';
+import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import mapboxgl, { type Map as MapboxMap } from 'mapbox-gl';
 import { safeRemoveLayer, safeRemoveSource, isStyleReady } from '../utils/mapbox';
 import { escapeHtml } from '../utils/sanitize';
@@ -76,16 +76,24 @@ const useKoreaAirspace = (
   showKoreaStars: boolean,
   showKoreaIaps: boolean,
   selectedKoreaAirport: string,
-  isDayMode: boolean = false
+  isDayMode: boolean = false,
+  procSelection: { sids: string[] | null; stars: string[] | null; iaps: string[] | null } | null = null
 ): void => {
   const popupRef = useRef<mapboxgl.Popup | null>(null);
+  const [styleTick, setStyleTick] = useState(0);
 
   // -------------------------------------------------------------------------
   // Layer creation effect
   // -------------------------------------------------------------------------
   useEffect(() => {
     if (!map?.current || !mapLoaded || !koreaAirspaceData) return;
-    if (!isStyleReady(map.current)) return;
+    if (!isStyleReady(map.current)) {
+      // style still (re)loading — try again once it settles instead of silently dropping the layers
+      const mm = map.current;
+      const retry = (): void => setStyleTick(t => t + 1);
+      mm.once('idle', retry);
+      return () => { mm.off('idle', retry); };
+    }
 
     const m = map.current;
 
@@ -147,7 +155,8 @@ const useKoreaAirspace = (
         airports: koreaAirspaceData.airports || [],
         showSids: showKoreaSids,
         showStars: showKoreaStars,
-        showIaps: showKoreaIaps
+        showIaps: showKoreaIaps,
+        selection: procSelection ?? undefined
       });
     }
   }, [
@@ -156,7 +165,7 @@ const useKoreaAirspace = (
     is3DView, show3DAltitude,
     showKoreaHoldings, showKoreaTerminalWaypoints,
     showKoreaSids, showKoreaStars, showKoreaIaps,
-    selectedKoreaAirport, isDayMode
+    selectedKoreaAirport, isDayMode, procSelection, styleTick
   ]);
 
   // -------------------------------------------------------------------------

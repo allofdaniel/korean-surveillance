@@ -194,6 +194,7 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
     showKoreaStars,
     showKoreaIaps,
     selectedKoreaAirport,
+    procSelection,
     showGlobalAirports,
     showGlobalNavaids,
     showGlobalHeliports,
@@ -220,6 +221,7 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
     showKoreaStars: s.showKoreaStars,
     showKoreaIaps: s.showKoreaIaps,
     selectedKoreaAirport: s.selectedKoreaAirport,
+    procSelection: s.procSelection,
     showGlobalAirports: s.showGlobalAirports,
     showGlobalNavaids: s.showGlobalNavaids,
     showGlobalHeliports: s.showGlobalHeliports,
@@ -292,7 +294,7 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
   // atcData is unknown from useDataLoading; hook expects its own AtcData shape (ACC/TMA/CTR arrays).
   // FIXME: Export AtcData type from useAtcSectors or useDataLoading and align.
   useAtcSectors(map, mapLoaded, atcData as Parameters<typeof useAtcSectors>[2], selectedAtcSectors);
-  useKoreaAirspace(map, mapLoaded, koreaAirspaceData, showKoreaRoutes, showKoreaWaypoints, showKoreaNavaids, showKoreaAirspaces, showKoreaAirports, is3DView, show3DAltitude, showKoreaHoldings, showKoreaTerminalWaypoints, showKoreaSids, showKoreaStars, showKoreaIaps, selectedKoreaAirport, !isDarkMode);
+  useKoreaAirspace(map, mapLoaded, koreaAirspaceData, showKoreaRoutes, showKoreaWaypoints, showKoreaNavaids, showKoreaAirspaces, showKoreaAirports, is3DView, show3DAltitude, showKoreaHoldings, showKoreaTerminalWaypoints, showKoreaSids, showKoreaStars, showKoreaIaps, selectedKoreaAirport, !isDarkMode, procSelection);
 
   // Aircraft data hook
   const { aircraft: rawAircraft, aircraftTrails, dataHealth } = useAircraftData(data, mapLoaded, showAircraft, trailDuration);
@@ -371,6 +373,15 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
 
   // NOTAM layer hook
   useNotamLayer(map, mapLoaded, notamLocationsOnMap, notamData, is3DView);
+  // NOTAM 패널을 처음 열면 비행장 NOTAM을 지도에 바로 보여준다 (FIR 전역 NOTAM은 너무 많아 제외).
+  const notamAutoShownRef = useRef(false);
+  useEffect(() => {
+    if (!showNotamPanel || notamAutoShownRef.current || notamLocationsOnMap.size > 0) return;
+    const list = (notamData as { data?: { location?: string }[] } | null)?.data;
+    if (!list?.length) return;
+    notamAutoShownRef.current = true;
+    setNotamLocationsOnMap(new Set(list.map(n => n.location || '').filter(l => /^RK[A-Z]{2}$/.test(l) && l !== 'RKRR')));
+  }, [showNotamPanel, notamData, notamLocationsOnMap, setNotamLocationsOnMap]);
 
   // Airspace layers hook - pass isDarkMode for Navigraph Charts waypoint styling
   // data (AviationData) is structurally compatible with hook's internal AirspaceData at runtime.

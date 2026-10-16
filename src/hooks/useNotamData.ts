@@ -1,4 +1,4 @@
-﻿import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { NOTAM_CACHE_DURATION } from '../constants/config';
 import { logger } from '../utils/logger';
 import { isoToYymmddhhmm } from '../utils/format';
@@ -154,12 +154,17 @@ export default function useNotamData(): UseNotamDataReturn {
       setNotamError(null);
     }
 
-    // 진행 중인 요청이 있으면 취소하고 새로 시작
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
+    // 화면에 보이는 요청끼리만 서로 취소한다. 백그라운드 prefetch(silent)는 자기 컨트롤러를 쓴다 —
+    // 예전엔 prefetch가 공용 컨트롤러로 'current' 요청을 abort 시켜 NOTAM이 영영 표시되지 않았다.
+    let controller: AbortController;
+    if (silent) {
+      controller = new AbortController();
+    } else {
+      abortControllerRef.current?.abort();
+      controller = new AbortController();
+      abortControllerRef.current = controller;
     }
-    abortControllerRef.current = new AbortController();
-    const signal = abortControllerRef.current.signal;
+    const signal = controller.signal;
 
     try {
       let response: Response;
@@ -273,7 +278,7 @@ export default function useNotamData(): UseNotamDataReturn {
         }
       }
     } finally {
-      if (!silent) setNotamLoading(false);
+      if (!silent && abortControllerRef.current === controller) setNotamLoading(false);
     }
   }, []);
 

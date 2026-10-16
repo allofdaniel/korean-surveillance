@@ -71,9 +71,8 @@ export default function TopBar(p: TopBarProps): React.ReactElement {
 
   return (
     <header className="ks-top" role="banner">
-      <button type="button" className="ks-brand" onClick={p.onBrand} title="대한감시 홈">
-        <span className="ks-brand-mark"><Radar size={17} color="#fff" strokeWidth={2.2} /></span>
-        <span className="ks-brand-text"><b>대한감시</b><span>CHARTS · LIVE</span></span>
+      <button type="button" className="ks-brand" onClick={p.onBrand} title="홈" aria-label="홈">
+        <Radar size={20} strokeWidth={1.9} />
       </button>
 
       <div className="ks-search" ref={boxRef}>

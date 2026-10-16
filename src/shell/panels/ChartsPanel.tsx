@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { Layers, Eye, ExternalLink } from 'lucide-react';
+import { Layers, Eye, ExternalLink, Route } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useLayerStore } from '../../stores';
-import type { AirportMeta, ChartEntry, Metar, RawAllCharts } from '../data';
-import { airportLabel, chartsForAirport, flightCategory, groupCharts, metarAge, metarSummary, useTaf } from '../data';
+import type { AirportMeta, AirportProcNames, ChartEntry, Metar, ProcKind, RawAllCharts } from '../data';
+import { airportLabel, chartsForAirport, proceduresForChart, flightCategory, groupCharts, metarAge, metarSummary, useTaf } from '../data';
 
 interface ChartsPanelProps {
   airports: AirportMeta[];
@@ -15,6 +15,8 @@ interface ChartsPanelProps {
   onOpenChart: (c: ChartEntry) => void;
   overlay: Record<string, boolean>;
   onToggleOverlay: (c: ChartEntry) => void;
+  /** navdata procedure names per airport, used to draw a chart's procedure on the map */
+  procNames?: Record<string, AirportProcNames>;
 }
 
 const AirportRow = React.memo(function AirportRow({ a, n, metar, onSelect }: { a: AirportMeta; n: number; metar?: Metar; onSelect: (icao: string) => void }): React.ReactElement {
@@ -101,24 +103,61 @@ export function AirportPage(p: ChartsPanelProps & { airport: AirportMeta }): Rea
 }
 
 function ChartsTab(p: ChartsPanelProps & { airport: AirportMeta; groups: ReturnType<typeof groupCharts> }): React.ReactElement {
-  const { showSids, showStars, showIaps, selectedApt, setSids, setStars, setIaps, setApt } = useLayerStore(useShallow(s => ({
-    showSids: s.showKoreaSids, showStars: s.showKoreaStars, showIaps: s.showKoreaIaps, selectedApt: s.selectedKoreaAirport,
-    setSids: s.setShowKoreaSids, setStars: s.setShowKoreaStars, setIaps: s.setShowKoreaIaps, setApt: s.setSelectedKoreaAirport,
+  const raw = useLayerStore(useShallow(s => ({
+    showSids: s.showKoreaSids, showStars: s.showKoreaStars, showIaps: s.showKoreaIaps,
+    setSids: s.setShowKoreaSids, setStars: s.setShowKoreaStars, setIaps: s.setShowKoreaIaps,
+    sel: s.procSelection, setSel: s.setProcSelection, selectedApt: s.selectedKoreaAirport, setApt: s.setSelectedKoreaAirport,
   })));
-  const here = selectedApt === p.airport.icao;
-  const proc = (on: boolean, set: (v: boolean) => void): void => {
-    if (!here) setApt(p.airport.icao);
-    set(here ? !on : true);
+  const st = {
+    show: { sids: raw.showSids, stars: raw.showStars, iaps: raw.showIaps } as Record<ProcKind, boolean>,
+    set: { sids: raw.setSids, stars: raw.setStars, iaps: raw.setIaps } as Record<ProcKind, (v: boolean) => void>,
+    sel: raw.sel, setSel: raw.setSel, selectedApt: raw.selectedApt, setApt: raw.setApt,
+  };
+  const icao = p.airport.icao;
+  const here = st.selectedApt === icao;
+  const names = p.procNames?.[icao];
+  const KINDS: ProcKind[] = ['sids', 'stars', 'iaps'];
+
+  /** switch the procedure layer to this airport, clearing whatever another airport had drawn */
+  const claim = (): typeof st.sel => {
+    if (here) return st.sel;
+    st.setApt(icao);
+    KINDS.forEach(k => st.set[k](false));
+    return { sids: null, stars: null, iaps: null };
+  };
+  // "SID / STAR / 접근" buttons: every procedure of that type
+  const toggleAll = (k: ProcKind): void => {
+    const on = here && st.show[k] && st.sel[k] === null;
+    const sel = claim();
+    st.setSel({ ...sel, [k]: null });
+    st.set[k](!on);
+  };
+  const isAllOn = (k: ProcKind): boolean => here && st.show[k] && st.sel[k] === null;
+  // per chart: just the procedures that chart depicts
+  const chartProcOn = (m: { kind: ProcKind; names: string[] }): boolean =>
+    here && st.show[m.kind] && (st.sel[m.kind] === null || m.names.every(n => st.sel[m.kind]!.includes(n)));
+  const toggleChartProc = (m: { kind: ProcKind; names: string[] }): void => {
+    const on = chartProcOn(m);
+    const sel = claim();
+    const cur = here && st.show[m.kind] ? sel[m.kind] : [];
+    if (on) {
+      const next = (cur ?? names?.[m.kind] ?? []).filter(n => !m.names.includes(n));
+      st.setSel({ ...sel, [m.kind]: next });
+      if (!next.length) st.set[m.kind](false);
+    } else {
+      st.setSel({ ...sel, [m.kind]: Array.from(new Set([...(cur ?? []), ...m.names])) });
+      st.set[m.kind](true);
+    }
   };
 
   return (
     <>
       <div className="ks-section">
-        <div className="ks-section-title">절차를 지도에 그리기 <span className="count">navdata</span></div>
+        <div className="ks-section-title">절차를 지도에 그리기 <span className="count">차트별 <Route size={10} /> 버튼</span></div>
         <div className="ks-proc-toggles">
-          <button type="button" className="ks-overlay-toggle" aria-pressed={here && showSids} onClick={() => proc(showSids, setSids)}>SID</button>
-          <button type="button" className="ks-overlay-toggle" aria-pressed={here && showStars} onClick={() => proc(showStars, setStars)}>STAR</button>
-          <button type="button" className="ks-overlay-toggle" aria-pressed={here && showIaps} onClick={() => proc(showIaps, setIaps)}>접근(IAP)</button>
+          <button type="button" className="ks-overlay-toggle" aria-pressed={isAllOn('sids')} onClick={() => toggleAll('sids')}>SID 전체</button>
+          <button type="button" className="ks-overlay-toggle" aria-pressed={isAllOn('stars')} onClick={() => toggleAll('stars')}>STAR 전체</button>
+          <button type="button" className="ks-overlay-toggle" aria-pressed={isAllOn('iaps')} onClick={() => toggleAll('iaps')}>접근 전체</button>
         </div>
       </div>
 
@@ -138,17 +177,38 @@ function ChartsTab(p: ChartsPanelProps & { airport: AirportMeta; groups: ReturnT
               onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); p.onOpenChart(c); } }}>
               <span className="ty">{c.type}</span>
               <span className="nm" title={c.name}>{c.name}{c.chartNo && <small> {c.chartNo}</small>}</span>
-              {c.bounds ? (
-                <button type="button" className="ks-overlay-toggle" aria-pressed={!!p.overlay[c.id]} title="지도에 겹치기"
-                  onClick={e => { e.stopPropagation(); p.onToggleOverlay(c); }}>
-                  <Layers size={12} />{p.overlay[c.id] ? '지도' : ''}
-                </button>
-              ) : <Eye size={14} color="var(--ks-text-3)" />}
+              <ChartActions c={c} overlayOn={!!p.overlay[c.id]} onOverlay={() => p.onToggleOverlay(c)}
+                proc={proceduresForChart(c, names)} procOn={chartProcOn} onProc={toggleChartProc} />
             </div>
           ))}
         </div>
       ))}
     </>
+  );
+}
+
+function ChartActions({ c, overlayOn, onOverlay, proc, procOn, onProc }: {
+  c: ChartEntry; overlayOn: boolean; onOverlay: () => void;
+  proc: { kind: ProcKind; names: string[] } | null;
+  procOn: (m: { kind: ProcKind; names: string[] }) => boolean; onProc: (m: { kind: ProcKind; names: string[] }) => void;
+}): React.ReactElement {
+  if (!c.bounds && !proc) return <Eye size={14} color="var(--ks-text-3)" />;
+  return (
+    <span className="ks-chart-actions">
+      {proc && (
+        <button type="button" className="ks-overlay-toggle" aria-pressed={procOn(proc)}
+          title={`이 차트의 절차 경로를 지도에 그리기 (${proc.names.map(n => n.split('.')[0]).filter((v, i, a) => a.indexOf(v) === i).join(', ')})`}
+          onClick={e => { e.stopPropagation(); onProc(proc); }}>
+          <Route size={12} />{procOn(proc) ? '경로' : ''}
+        </button>
+      )}
+      {c.bounds && (
+        <button type="button" className="ks-overlay-toggle" aria-pressed={overlayOn} title="차트 이미지를 지도에 겹치기"
+          onClick={e => { e.stopPropagation(); onOverlay(); }}>
+          <Layers size={12} />{overlayOn ? '차트' : ''}
+        </button>
+      )}
+    </span>
   );
 }
 

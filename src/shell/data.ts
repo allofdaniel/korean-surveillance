@@ -213,3 +213,58 @@ export function metarAge(m: Metar): string {
   const min = Math.round((Date.now() - t) / 60000);
   return min < 1 ? '방금' : min < 60 ? `${min}분 전` : `${Math.floor(min / 60)}시간 전`;
 }
+
+// ── Chart → navdata procedures ─────────────────────────────────────────
+export type ProcKind = 'sids' | 'stars' | 'iaps';
+export type AirportProcNames = Record<ProcKind, string[]>;
+
+/** Runways named on a chart, e.g. "RNAV SID RWY 14L/14R" -> ['14L','14R']. */
+function chartRunways(name: string): string[] {
+  const m = name.toUpperCase().match(/RWY\s*([0-9]{2}[LRC]?(?:\s*\/\s*[0-9]{2}[LRC]?)*)/);
+  return m?.[1] ? m[1].split('/').map(s => s.trim()) : [];
+}
+
+/** Does a navdata transition/runway suffix (".RW14L", ".RW14B", ".RW14") serve one of these runways? */
+function suffixServes(suffix: string, rwys: string[]): boolean {
+  const m = suffix.match(/^RW(\d{2})([LRCB]?)$/);
+  if (!m) return true; // enroute transition (".GONAV") or common segment — part of every runway's procedure
+  return rwys.some(r => r.slice(0, 2) === m[1] && (!m[2] || m[2] === 'B' || r.slice(2) === '' || r.slice(2) === m[2]));
+}
+
+/**
+ * Which navdata procedures a chart depicts. SID/STAR charts match by runway; approach charts by
+ * approach type, runway and Y/Z variant (navdata ids: I=ILS, L=LOC, R=RNAV/RNP, D/V=VOR, N=NDB).
+ */
+export function proceduresForChart(c: Pick<ChartEntry, 'type' | 'name'>, names: AirportProcNames | null | undefined): { kind: ProcKind; names: string[] } | null {
+  if (!names) return null;
+  const n = c.name.toUpperCase();
+  const rwys = chartRunways(n);
+  if (c.type === 'SID' || c.type === 'STAR') {
+    const kind: ProcKind = c.type === 'SID' ? 'sids' : 'stars';
+    const list = names[kind].filter(p => {
+      if (!rwys.length) return true;
+      const dot = p.indexOf('.');
+      return dot < 0 ? true : suffixServes(p.slice(dot + 1), rwys);
+    });
+    return list.length ? { kind, names: list } : null;
+  }
+  if (c.type === 'IAC' && rwys.length) {
+    const prefixes: string[] = [];
+    if (/\bILS\b/.test(n)) prefixes.push('I');
+    if (/\bLOC\b/.test(n)) prefixes.push('L', 'I');
+    if (/\bRNP\b|\bRNAV\b|\bGNSS\b/.test(n)) prefixes.push('R', 'H');
+    if (/\bVOR\b/.test(n)) prefixes.push('D', 'V', 'S');
+    if (/\bNDB\b/.test(n)) prefixes.push('N', 'Q');
+    if (!prefixes.length) return null;
+    const variant = n.match(/\b(?:ILS|LOC|RNP|RNAV|VOR|NDB)(?:\/DME)?\s+([W-Z])\b/)?.[1] ?? '';
+    const list = names.iaps.filter(p => {
+      const base = p.split('.')[0] ?? p;
+      const m = base.match(/^([A-Z])(\d{2}[LRC]?)-?([A-Z]?)$/);
+      if (!m) return false;
+      const [, t, r, v] = m;
+      return prefixes.includes(t!) && rwys.includes(r!) && (!variant || v === variant);
+    });
+    return list.length ? { kind: 'iaps', names: list } : null;
+  }
+  return null;
+}

@@ -7,6 +7,9 @@ import { create } from 'zustand';
  * - 한국 공역/항로
  */
 
+export type ProcKind = 'sids' | 'stars' | 'iaps';
+export type ProcSelection = Record<ProcKind, string[] | null>;
+
 interface LayerState {
   // RKPU layers
   showWaypoints: boolean;
@@ -31,6 +34,8 @@ interface LayerState {
   showKoreaStars: boolean;
   showKoreaIaps: boolean;
   selectedKoreaAirport: string;
+  /** per procedure type: null = draw every procedure of the airport, array = only these names */
+  procSelection: ProcSelection;
 
   // Global data layers
   showGlobalAirports: boolean;
@@ -68,6 +73,7 @@ interface LayerActions {
   setShowKoreaStars: (value: boolean) => void;
   setShowKoreaIaps: (value: boolean) => void;
   setSelectedKoreaAirport: (value: string) => void;
+  setProcSelection: (value: ProcSelection) => void;
 
   // Global data layers
   setShowGlobalAirports: (value: boolean) => void;
@@ -117,6 +123,7 @@ const useLayerStore = create<LayerStore>((set) => ({
   showKoreaStars: false,
   showKoreaIaps: false,
   selectedKoreaAirport: '',
+  procSelection: { sids: null, stars: null, iaps: null },
 
   // Global data layers
   showGlobalAirports: false,
@@ -152,6 +159,7 @@ const useLayerStore = create<LayerStore>((set) => ({
   setShowKoreaStars: (value) => set({ showKoreaStars: value }),
   setShowKoreaIaps: (value) => set({ showKoreaIaps: value }),
   setSelectedKoreaAirport: (value) => set({ selectedKoreaAirport: value }),
+  setProcSelection: (value) => set({ procSelection: value }),
 
   // Actions - Global data layers
   setShowGlobalAirports: (value) => set({ showGlobalAirports: value }),
@@ -189,6 +197,7 @@ const useLayerStore = create<LayerStore>((set) => ({
     showKoreaStars: false,
     showKoreaIaps: false,
     selectedKoreaAirport: '',
+    procSelection: { sids: null, stars: null, iaps: null },
     showGlobalAirports: false,
     showGlobalNavaids: false,
     showGlobalHeliports: false,

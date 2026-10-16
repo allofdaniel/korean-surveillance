@@ -256,10 +256,6 @@ const useMapStyle = ({
   useEffect(() => {
     if (!map?.current || !mapLoaded) return;
 
-    // V-World WMTS 위성 래스터: 이 키는 V-World 포털에서 도메인 제한(koreasurveillance.com)으로
-    // 등록된 퍼블릭 타일 키입니다. /api/vworld-tile 프록시 라우트가 추가되면 그쪽으로 이전하세요.
-    // TODO: /api/vworld-tile 프록시 라우트가 추가되면 아래 WMTS URL을 프록시로 교체할 것.
-    const vworldKey = import.meta.env.VITE_VWORLD_API_KEY;
     const sourceId = 'satellite-overlay';
     const layerId = 'satellite-overlay-layer';
 
@@ -270,25 +266,13 @@ const useMapStyle = ({
         if (showSatellite) {
           // V-World 위성 소스 추가
           // 이 키는 V-World 포털에서 도메인 제한이 설정된 래스터 타일 키라 클라이언트 노출이 허용됩니다.
-          // TODO: route through /api/vworld-tile when proxy added
+          // Mapbox 위성 래스터. V-World WMTS는 CORS 헤더가 없어 Mapbox GL이 타일을 읽지 못한다.
           if (!map.current.getSource(sourceId)) {
-            if (vworldKey) {
-              logger.info('MapStyle', 'Adding V-World satellite source');
-              map.current.addSource(sourceId, {
-                type: 'raster',
-                tiles: [`https://api.vworld.kr/req/wmts/1.0.0/${vworldKey}/Satellite/{z}/{y}/{x}.jpeg`],
-                tileSize: 256,
-                minzoom: 5,
-                maxzoom: 19,
-                attribution: '&copy; V-World (국토교통부)'
-              });
-            } else {
-              map.current.addSource(sourceId, {
-                type: 'raster',
-                url: 'mapbox://mapbox.satellite',
-                tileSize: 256
-              });
-            }
+            map.current.addSource(sourceId, {
+              type: 'raster',
+              url: 'mapbox://mapbox.satellite',
+              tileSize: 256,
+            });
           }
           // 위성 레이어 추가 (background 바로 위)
           if (!map.current.getLayer(layerId)) {

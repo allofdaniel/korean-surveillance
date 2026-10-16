@@ -75,31 +75,57 @@ def graticule_points(page):
     return list({(round(p[0], 1), round(p[1], 1), p[2], p[3]): p for p in pts}.values())  # (x, y, value, kind, h)
 
 
-def fit_similarity(pts, lat0, lon0):
-    """E = a x + b y + c ; N = b x - a y + d  (y down, north up when b≈0). Units: km per PDF point."""
-    k = math.cos(math.radians(lat0)) * KM_LON_EQ
+R_EARTH = 6378.137  # km, WGS84 / Web Mercator sphere
+
+
+def _merc(lat):
+    return math.log(math.tan(math.pi / 4 + math.radians(lat) / 2))
+
+
+def to_local(lat, lon, lat0, lon0):
+    """Web-Mercator coordinates scaled to km at lat0. A similarity fitted in this frame maps straight
+    onto Mapbox's image-source corners (which interpolate linearly in Web Mercator)."""
+    k = R_EARTH * math.cos(math.radians(lat0))
+    E = None if lon is None else math.radians(lon - lon0) * k
+    N = None if lat is None else (_merc(lat) - _merc(lat0)) * k
+    return E, N
+
+
+def from_local(E, N, lat0, lon0):
+    k = R_EARTH * math.cos(math.radians(lat0))
+    lon = lon0 + math.degrees(E / k)
+    lat = math.degrees(2 * math.atan(math.exp(_merc(lat0) + N / k)) - math.pi / 2)
+    return lat, lon
+
+
+def gcp_rows(pts, lat0, lon0):
     rows, rhs = [], []
     for x, y, v, kind, *_ in pts:
         if kind == 'lon':
-            rows.append([x, y, 1, 0]); rhs.append((v - lon0) * k)
+            rows.append([x, y, 1, 0]); rhs.append(to_local(None, v, lat0, lon0)[0])
         else:
-            rows.append([-y, x, 0, 1]); rhs.append((v - lat0) * KM_LAT)
+            rows.append([-y, x, 0, 1]); rhs.append(to_local(v, None, lat0, lon0)[1])
+    return rows, rhs
+
+
+def fit_similarity(pts, lat0, lon0, extra=None):
+    """E = a x + b y + c ; N = b x - a y + d  (y down, north up when b≈0). Units: km per PDF point.
+    `extra` = (rows, rhs, weight) appended to the graticule equations (runway centreline constraints)."""
+    rows, rhs = gcp_rows(pts, lat0, lon0)
     A, B = np.array(rows, float), np.array(rhs, float)
+    if extra and extra[0]:
+        A = np.vstack([A, np.array(extra[0], float) * extra[2]])
+        B = np.concatenate([B, np.array(extra[1], float) * extra[2]])
     if np.linalg.matrix_rank(A) < 4:
         return None
     sol, *_ = np.linalg.lstsq(A, B, rcond=None)
-    return sol, k
+    return sol, None
 
 
 def residuals_km(model, pts, lat0, lon0):
-    (a, b, c, d), k = model
-    out = []
-    for x, y, v, kind, *_ in pts:
-        if kind == 'lon':
-            out.append(abs(a * x + b * y + c - (v - lon0) * k))
-        else:
-            out.append(abs(b * x - a * y + d - (v - lat0) * KM_LAT))
-    return np.array(out)
+    a, b, c, d = model[0]
+    rows, rhs = gcp_rows(pts, lat0, lon0)
+    return np.array([abs(r[0] * a + r[1] * b + r[2] * c + r[3] * d - t) for r, t in zip(rows, rhs)])
 
 
 def ransac(pts, lat0, lon0, iters=400):
@@ -137,8 +163,148 @@ def ransac(pts, lat0, lon0, iters=400):
 
 
 def to_lonlat(model, x, y, lat0, lon0):
-    (a, b, c, d), k = model
-    return [round(lon0 + (a * x + b * y + c) / k, 7), round(lat0 + (b * x - a * y + d) / KM_LAT, 7)]
+    a, b, c, d = model[0]
+    lat, lon = from_local(a * x + b * y + c, b * x - a * y + d, lat0, lon0)
+    return [round(lon, 7), round(lat, 7)]
+
+
+def to_page(model, lat, lon, lat0, lon0):
+    a, b, c, d = model[0]
+    E, N = to_local(lat, lon, lat0, lon0)
+    M = np.array([[a, b], [b, -a]])
+    return np.linalg.solve(M, np.array([E - c, N - d]))
+
+
+# ── Runway refinement ────────────────────────────────────────────────────
+# Graticule labels only pin a large-scale chart to ~5-15 m (label centring, drafting). Aerodrome
+# charts draw runways to scale, and the navdata thresholds are surveyed, so the drawn runway edges
+# give an independent, much tighter constraint on rotation and lateral position.
+
+def page_segments(page):
+    S = []
+    for dr in page.get_drawings():
+        for it in dr['items']:
+            if it[0] == 'l':
+                S.append(((it[1].x, it[1].y), (it[2].x, it[2].y)))
+            elif it[0] in ('re', 'qu'):
+                if it[0] == 're':
+                    r = it[1]; c = [(r.x0, r.y0), (r.x1, r.y0), (r.x1, r.y1), (r.x0, r.y1)]
+                else:
+                    q = it[1]; c = [(p.x, p.y) for p in (q.ul, q.ur, q.lr, q.ll)]
+                S += [(c[i], c[(i + 1) % 4]) for i in range(4)]
+    return np.array(S, float).reshape(-1, 2, 2)
+
+
+def runway_pairs(runways):
+    by = {r['id']: r for r in runways or [] if r.get('id', '').startswith('RW') and r.get('lat')}
+    out, seen = [], set()
+    for k, r in by.items():
+        try:
+            n = int(k[2:4])
+        except ValueError:
+            continue
+        opp = f"RW{(n + 18 - 1) % 36 + 1:02d}{ {'L': 'R', 'R': 'L', 'C': 'C'}.get(k[4:5], '') }"
+        if opp in by and opp not in seen and k not in seen:
+            out.append((r, by[opp])); seen.update((k, opp))
+    return out
+
+
+def runway_constraints(page, model, runways, lat0, lon0, segs=None):
+    """For each runway, find its two drawn edge lines and return centreline constraint rows:
+    a point on the drawn centreline must map onto the surveyed centreline (cross-track only)."""
+    a, b, c, d = model[0]
+    s_km = math.hypot(a, b)
+    segs = page_segments(page) if segs is None else segs
+    if not len(segs):
+        return [], [], []
+    P, Q = segs[:, 0], segs[:, 1]
+    V = Q - P
+    Ls = np.linalg.norm(V, axis=1) + 1e-9
+    rows, rhs, found = [], [], []
+    for r1, r2 in runway_pairs(runways):
+        A = to_page(model, r1['lat'], r1['lon'], lat0, lon0)
+        B = to_page(model, r2['lat'], r2['lon'], lat0, lon0)
+        L = np.linalg.norm(B - A)
+        if L * s_km * 1000 < 300:
+            continue
+        u = (B - A) / L; nrm = np.array([-u[1], u[0]])
+        par = np.abs(V @ u) / Ls > math.cos(math.radians(1.0))
+        o1 = (P - A) @ nrm; o2 = (Q - A) @ nrm
+        t1 = (P - A) @ u; t2 = (Q - A) @ u
+        om_m = (o1 + o2) / 2 * s_km * 1000
+        inside = (np.maximum(t1, t2) > -0.05 * L) & (np.minimum(t1, t2) < 1.05 * L)
+        idx = np.where(par & inside & (Ls > 0.01 * L) & (np.abs(om_m) < 60))[0]
+        if len(idx) < 2:
+            continue
+        # edges are often drawn as many short collinear pieces: cluster by lateral offset (1 m bins)
+        idx = idx[np.argsort(om_m[idx])]
+        clusters, cur = [], [idx[0]]
+        for k in idx[1:]:
+            if om_m[k] - om_m[cur[-1]] <= 1.0:
+                cur.append(k)
+            else:
+                clusters.append(cur); cur = [k]
+        clusters.append(cur)
+        lines = []
+        for cl in clusters:
+            ts = np.concatenate([t1[cl], t2[cl]]); os_ = np.concatenate([o1[cl], o2[cl]])
+            lo, hi = max(ts.min(), 0), min(ts.max(), L)
+            cover = sum(max(0.0, min(max(t1[k], t2[k]), L) - max(min(t1[k], t2[k]), 0)) for k in cl)
+            if cover < 0.4 * L or hi - lo < 0.5 * L:
+                continue
+            Aa = np.vstack([np.ones_like(ts), ts]).T
+            (al, be), *_ = np.linalg.lstsq(Aa, os_, rcond=None)
+            lines.append((float(np.mean(om_m[cl])), al, be))
+        if len(lines) < 2:
+            continue
+        width_m = (r1.get('width_m') or 150) * 0.3048          # navdata width is in feet
+        best = None
+        for i in range(len(lines)):
+            for j in range(i + 1, len(lines)):
+                sep = lines[j][0] - lines[i][0]
+                if not (0.6 * width_m <= sep <= 1.6 * width_m):
+                    continue
+                score = abs(sep - width_m) + 0.5 * abs((lines[i][0] + lines[j][0]) / 2)
+                if best is None or score < best[0]:
+                    best = (score, lines[i], lines[j])
+        if not best:
+            continue
+        _, li, lj = best
+        E1, N1 = to_local(r1['lat'], r1['lon'], lat0, lon0)
+        E2, N2 = to_local(r2['lat'], r2['lon'], lat0, lon0)
+        g = np.array([E2 - E1, N2 - N1]); g /= np.linalg.norm(g)
+        nE, nN = -g[1], g[0]
+        for t in (0.15 * L, 0.85 * L):
+            off = (li[1] + li[2] * t + lj[1] + lj[2] * t) / 2
+            x, y = A + u * t + nrm * off
+            rows.append([nE * x - nN * y, nE * y + nN * x, nE, nN])
+            rhs.append(nE * E1 + nN * N1)
+        om_m = {'i': li[0], 'j': lj[0]}
+        found.append((r1['id'], r2['id'], round((li[0] + lj[0]) / 2, 1), round(lj[0] - li[0], 1)))
+    return rows, rhs, found
+
+
+def refine_with_runways(page, fit, runways, lat0, lon0):
+    """Re-fit with runway centreline constraints (σ≈1 m) on top of the graticule GCPs (σ≈rms)."""
+    model, inl, rms = fit
+    rows, rhs, found = runway_constraints(page, model, runways, lat0, lon0)
+    if not found:
+        return fit, None
+    w = max(rms, 3.0) / 0.3          # weight ratio: graticule σ / runway σ (the drawn runway is what we overlay)
+    m2 = fit_similarity(inl, lat0, lon0, (rows, rhs, w))
+    if not m2:
+        return fit, None
+    # sanity: the graticule must still agree (allow drafting error) and the correction must be modest
+    r = residuals_km(m2, inl, lat0, lon0)
+    rms2 = float(np.sqrt(np.mean(r ** 2)) * 1000)
+    shift = max(np.linalg.norm(np.array(to_lonlat(m2, x, y, lat0, lon0)) - np.array(to_lonlat(model, x, y, lat0, lon0)))
+                for x, y in ((p[0], p[1]) for p in inl)) * 111_000
+    if rms2 > max(25.0, 3 * rms) or shift > 80:
+        return fit, {'rejected': True, 'runways': found, 'shiftM': round(shift, 1)}
+    # residual of runway constraints after refit
+    a, b, c, d = m2[0]
+    rr = [abs(rw[0] * a + rw[1] * b + rw[2] * c + rw[3] * d - t) * 1000 for rw, t in zip(rows, rhs)]
+    return (m2, inl, rms2), {'runways': found, 'rwyResM': round(max(rr), 1), 'shiftM': round(shift, 1)}
 
 
 def page_text_top(page, frac=0.25):
@@ -192,10 +358,11 @@ def main():
     cache, public = sys.argv[1], sys.argv[2]
     only = set(sys.argv[3:])
     man = json.load(open(os.path.join(cache, 'manifest.json')))
-    arp = {}
+    arp, arp_rwys = {}, {}
     try:
         for a in json.load(open(os.path.join(public, 'data', 'korea_airspace.json')))['airports']:
             arp[a['icao']] = (a['lat'], a['lon'])
+            arp_rwys[a['icao']] = a.get('runways') or []
     except Exception:
         pass
     idx_path = os.path.join(public, 'charts', 'aip_index.json')
@@ -238,6 +405,9 @@ def main():
                 if not tab and 'NOT TO SCALE' not in page.get_text().upper():
                     pts = graticule_points(page)
                     fit = ransac(pts, lat0, lon0) if len(pts) >= 5 else None
+                    refine = None
+                    if fit and ctype in ('ADC', 'GMC', 'PDC') and arp_rwys.get(icao):
+                        fit, refine = refine_with_runways(page, fit, arp_rwys[icao], lat0, lon0)
                     if fit:
                         model, inl, rms = fit
                         s_m = math.hypot(model[0][0], model[0][1]) * 1000   # metres per PDF point
@@ -260,6 +430,8 @@ def main():
                                 'rmsM': round(rms, 1), 'gcps': len(inl), 'mPerPt': round(s_m, 2),
                                 'rotDeg': round(math.degrees(math.atan2(model[0][1], model[0][0])), 2),
                             }
+                            if refine and not refine.get('rejected'):
+                                e['overlay']['runwayFit'] = refine
                             stats['georef'] += 1
                 entries.append(e)
         index['airports'][icao] = entries

@@ -8,13 +8,8 @@ import * as satellite from 'satellite.js';
 import { logger } from '../utils/logger';
 import { isStyleReady } from '../utils/mapbox';
 
-const TLE_URLS = [
-  'https://celestrak.org/NORAD/elements/gp.php?GROUP=stations&FORMAT=tle',
-  'https://celestrak.org/NORAD/elements/gp.php?GROUP=weather&FORMAT=tle',
-  'https://celestrak.org/NORAD/elements/gp.php?GROUP=resource&FORMAT=tle',
-  'https://celestrak.org/NORAD/elements/gp.php?GROUP=sarsat&FORMAT=tle',
-  'https://celestrak.org/NORAD/elements/gp.php?GROUP=geo&FORMAT=tle',
-];
+// CelesTrak sends no CORS headers — fetch through our /api/tle proxy
+const TLE_URLS = ['stations', 'weather', 'resource', 'sarsat', 'geo'].map(g => `/api/tle?group=${g}`);
 const MAX_SATELLITES = 300;
 const UPDATE_INTERVAL = 2000; // 2초마다 위치 업데이트 (부드러운 이동)
 const ORBIT_UPDATE_INTERVAL = 30000; // 30초마다 궤도선 재계산 (성능)

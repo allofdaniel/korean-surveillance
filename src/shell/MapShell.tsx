@@ -8,7 +8,7 @@ import TrafficPanel from './panels/TrafficPanel';
 import WxPanel from './panels/WxPanel';
 import LayersPanel from './panels/LayersPanel';
 import ToolsPanel from './panels/ToolsPanel';
-import type { AirportMeta, ChartEntry, RawAllCharts } from './data';
+import type { AirportMeta, AirportProcNames, ChartEntry, ProcKind, RawAllCharts } from './data';
 import { airportLabel, boundsBBox, chartsForAirport, useKoreaMetars } from './data';
 import type { AircraftData } from '../hooks/useAircraftData';
 import './shell.css';
@@ -65,6 +65,16 @@ export default function MapShell(p: MapShellProps): React.ReactElement {
     return list.sort((a, b) => a.icao.localeCompare(b.icao));
   }, [p.koreaAirspaceData]);
   const airportByIcao = useMemo(() => new Map(airports.map(a => [a.icao, a])), [airports]);
+  const procNames = useMemo(() => {
+    const pr = (p.koreaAirspaceData as { procedures?: Record<ProcKind, Record<string, Record<string, unknown>>> } | null)?.procedures;
+    const out: Record<string, AirportProcNames> = {};
+    if (!pr) return out;
+    (['sids', 'stars', 'iaps'] as ProcKind[]).forEach(k => Object.entries(pr[k] || {}).forEach(([icao, procs]) => {
+      out[icao] ??= { sids: [], stars: [], iaps: [] };
+      out[icao]![k] = Object.keys(procs);
+    }));
+    return out;
+  }, [p.koreaAirspaceData]);
   const chartCounts = useMemo(() => {
     const m: Record<string, number> = {};
     Object.keys(p.allChartBounds || {}).forEach(k => { m[k] = chartsForAirport(p.allChartBounds, k).length; });
@@ -223,6 +233,7 @@ export default function MapShell(p: MapShellProps): React.ReactElement {
                 onOpenChart={openChart}
                 overlay={p.activeCharts}
                 onToggleOverlay={toggleOverlay}
+                procNames={procNames}
               />
             )}
             {panel === 'traffic' && (
