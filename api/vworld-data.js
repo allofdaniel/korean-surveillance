@@ -9,8 +9,8 @@ const VWORLD_KEY = process.env.VITE_VWORLD_API_KEY;
 const VWORLD_DOMAIN = process.env.VWORLD_DOMAIN || 'koreasurveillance.com';
 
 const DATA_CODES = {
-  buildings: 'LT_C_UQ111',      // 건물 (58K)
-  special: 'LT_C_SPBD',         // 특수건물 (이름/층수)
+  buildings: 'LT_C_SPBD',       // 도로명주소 건물 외곽선 (LT_C_UQ111 은 용도지역이라 화면을 통째로 덮었다)
+  special: 'LT_C_SPBD',         // 같은 데이터 — 화면에서는 이름 있는 건물만 강조
   roads: 'LT_L_MOCTLINK',       // 도로망 (1.5M)
 };
 

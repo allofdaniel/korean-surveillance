@@ -138,8 +138,8 @@ export default function LayersPanel({ atcData }: { atcData: AtcData }): React.Re
         <Toggle label="CCTV" hint="공항·도로 실시간 영상" on={m.showCctv} set={m.setShowCctv} />
         <Toggle label="선박 (AIS)" on={m.showShips} set={m.setShowShips} />
         <Toggle label="인공위성" hint="CelesTrak TLE" on={m.showSatellites} set={m.setShowSatellites} />
-        <Toggle label="V-World 건물" on={m.showVwBuildings} set={m.setShowVwBuildings} />
-        <Toggle label="V-World 주요시설" on={m.showVwSpecial} set={m.setShowVwSpecial} />
+        <Toggle label="V-World 건물" hint="줌 13 이상, 화면 중앙" on={m.showVwBuildings} set={m.setShowVwBuildings} />
+        <Toggle label="V-World 주요시설" hint="이름 있는 건물 강조" on={m.showVwSpecial} set={m.setShowVwSpecial} />
         <Toggle label="V-World 도로" on={m.showVwRoads} set={m.setShowVwRoads} />
       </div>
     </>

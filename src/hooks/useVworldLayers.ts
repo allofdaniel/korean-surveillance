@@ -7,14 +7,14 @@ import type { Map as MapboxMap, GeoJSONSource } from 'mapbox-gl';
 import { logger } from '../utils/logger';
 import { isStyleReady } from '../utils/mapbox';
 
-const MIN_ZOOM = 11; // V-World GetFeature 는 bbox 크기 제한이 있어 확대했을 때만 로드
+const MIN_ZOOM = 13; // V-World GetFeature 는 bbox 크기 제한이 있어 확대했을 때만 로드
 const DEBOUNCE_MS = 800;
 
 type LayerType = 'buildings' | 'special' | 'roads';
 type Box = { minX: number; maxX: number; minY: number; maxY: number };
 
 // V-World rejects large boxes (INVALID_RANGE): special buildings ~0.04°, others well above 0.2°.
-const MAX_SPAN: Record<LayerType, number> = { buildings: 0.2, roads: 0.15, special: 0.03 };
+const MAX_SPAN: Record<LayerType, number> = { buildings: 0.03, roads: 0.15, special: 0.03 };
 function clampBox(b: Box, span: number): Box {
   const cx = (b.minX + b.maxX) / 2, cy = (b.minY + b.maxY) / 2;
   const hx = Math.min((b.maxX - b.minX) / 2, span / 2), hy = Math.min((b.maxY - b.minY) / 2, span / 2);
@@ -65,13 +65,19 @@ export default function useVworldLayers(
   showSpecial: boolean,
   showRoads: boolean
 ) {
-  const layersAddedRef = useRef(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastBoundsRef = useRef('');
 
   const loadData = useCallback(async () => {
     const m = map.current;
-    if (!m) return;
+    if (!m || !isStyleReady(m)) return;
+    try {
+      ensureVwLayers(m);
+      applyVisibility(m, showBuildings, showSpecial, showRoads);
+    } catch (err) {
+      logger.error('VWorld', `Layer error: ${err}`);
+      return;
+    }
     const zoom = m.getZoom();
     if (zoom < MIN_ZOOM) return;
 
@@ -131,106 +137,16 @@ export default function useVworldLayers(
     debounceRef.current = setTimeout(loadData, DEBOUNCE_MS);
   }, [loadData]);
 
-  // 레이어 생성
+  // 지도 이동 / 스타일 교체(다크·위성 전환) 후 다시 로드 — 레이어는 loadData 에서 매번 보장한다
   useEffect(() => {
     const m = map.current;
     if (!m || !mapLoaded) return;
-
-    const ensureLayers = () => {
-      if (layersAddedRef.current) return;
-      try {
-        // 도로망 소스/레이어
-        if (!m.getSource('vw-roads')) {
-          m.addSource('vw-roads', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-        }
-        if (!m.getLayer('vw-roads-line')) {
-          m.addLayer({
-            id: 'vw-roads-line', type: 'line', source: 'vw-roads',
-            minzoom: MIN_ZOOM,
-            layout: { visibility: 'none' },
-            paint: {
-              'line-color': '#4a5568',
-              'line-width': ['interpolate', ['linear'], ['zoom'], 5, 0.2, 10, 0.8, 15, 2, 18, 4],
-              'line-opacity': 0.6,
-            },
-          });
-        }
-
-        // 건물 소스/레이어 (줌 5+)
-        if (!m.getSource('vw-buildings')) {
-          m.addSource('vw-buildings', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-        }
-        if (!m.getLayer('vw-buildings-fill')) {
-          m.addLayer({
-            id: 'vw-buildings-fill', type: 'fill', source: 'vw-buildings',
-            minzoom: MIN_ZOOM,
-            layout: { visibility: 'none' },
-            paint: {
-              'fill-color': '#2d3748',
-              'fill-opacity': ['interpolate', ['linear'], ['zoom'], 5, 0.2, 10, 0.4, 15, 0.6],
-              'fill-outline-color': '#4a5568',
-            },
-          });
-        }
-
-        // 특수건물 소스/레이어 (줌 13+, bbox 10km² 제한)
-        if (!m.getSource('vw-special')) {
-          m.addSource('vw-special', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-        }
-        if (!m.getLayer('vw-special-fill')) {
-          m.addLayer({
-            id: 'vw-special-fill', type: 'fill', source: 'vw-special',
-            minzoom: 13,
-            layout: { visibility: 'none' },
-            paint: {
-              'fill-color': '#e53e3e',
-              'fill-opacity': 0.3,
-              'fill-outline-color': '#e53e3e',
-            },
-          });
-        }
-        if (!m.getLayer('vw-special-labels')) {
-          m.addLayer({
-            id: 'vw-special-labels', type: 'symbol', source: 'vw-special',
-            minzoom: 13,
-            layout: {
-              'text-field': ['concat',
-                ['get', 'rd_nm'], ' ',
-                ['get', 'buld_no'],
-                ['case', ['!=', ['get', 'buld_nm'], ''], ['concat', '\n', ['get', 'buld_nm']], ''],
-              ],
-              'text-size': 10,
-              'text-anchor': 'center',
-              'text-allow-overlap': false,
-              visibility: 'none',
-            },
-            paint: {
-              'text-color': '#fc8181',
-              'text-halo-color': '#000',
-              'text-halo-width': 1,
-            },
-          });
-        }
-
-        // 맵 이동 이벤트
-        m.on('moveend', debouncedLoad);
-        m.on('zoomend', debouncedLoad);
-
-        layersAddedRef.current = true;
-        logger.info('VWorld', 'Layers created');
-      } catch (err) {
-        logger.error('VWorld', `Layer error: ${err}`);
-      }
-    };
-
-    if (isStyleReady(m)) ensureLayers();
-    else m.once('style.load', ensureLayers);
-
+    const onStyle = (): void => { lastBoundsRef.current = ''; debouncedLoad(); };
+    m.on('moveend', debouncedLoad);
+    m.on('style.load', onStyle);
     return () => {
-      if (m) {
-        m.off('moveend', debouncedLoad);
-        m.off('zoomend', debouncedLoad);
-      }
+      m.off('moveend', debouncedLoad);
+      m.off('style.load', onStyle);
     };
   }, [map, mapLoaded, debouncedLoad]);
 
@@ -238,17 +154,63 @@ export default function useVworldLayers(
   useEffect(() => {
     const m = map.current;
     if (!m || !mapLoaded) return;
-    try {
-      if (m.getLayer('vw-buildings-fill')) m.setLayoutProperty('vw-buildings-fill', 'visibility', showBuildings ? 'visible' : 'none');
-      if (m.getLayer('vw-special-fill')) m.setLayoutProperty('vw-special-fill', 'visibility', showSpecial ? 'visible' : 'none');
-      if (m.getLayer('vw-special-labels')) m.setLayoutProperty('vw-special-labels', 'visibility', showSpecial ? 'visible' : 'none');
-      if (m.getLayer('vw-roads-line')) m.setLayoutProperty('vw-roads-line', 'visibility', showRoads ? 'visible' : 'none');
-    } catch { /* ignore */ }
-
-    // 켜지면 즉시 로드
+    if (isStyleReady(m)) applyVisibility(m, showBuildings, showSpecial, showRoads);
     if (showBuildings || showSpecial || showRoads) {
       lastBoundsRef.current = ''; // 강제 새로고침
       debouncedLoad();
     }
   }, [map, mapLoaded, showBuildings, showSpecial, showRoads, debouncedLoad]);
+}
+
+/** Create the V-World sources/layers if the current style lacks them (style switches wipe them). */
+function ensureVwLayers(m: MapboxMap): void {
+  const empty = { type: 'FeatureCollection' as const, features: [] };
+  if (!m.getSource('vw-roads')) m.addSource('vw-roads', { type: 'geojson', data: empty });
+  if (!m.getLayer('vw-roads-line')) {
+    m.addLayer({
+      id: 'vw-roads-line', type: 'line', source: 'vw-roads', minzoom: MIN_ZOOM,
+      layout: { visibility: 'none' },
+      paint: {
+        'line-color': '#8fa3bf',
+        'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.6, 15, 2, 18, 4],
+        'line-opacity': 0.7,
+      },
+    });
+  }
+  if (!m.getSource('vw-buildings')) m.addSource('vw-buildings', { type: 'geojson', data: empty });
+  if (!m.getLayer('vw-buildings-fill')) {
+    m.addLayer({
+      id: 'vw-buildings-fill', type: 'fill', source: 'vw-buildings', minzoom: MIN_ZOOM,
+      layout: { visibility: 'none' },
+      paint: { 'fill-color': '#7d8ca3', 'fill-opacity': 0.45, 'fill-outline-color': '#b8c4d6' },
+    });
+  }
+  if (!m.getSource('vw-special')) m.addSource('vw-special', { type: 'geojson', data: empty });
+  if (!m.getLayer('vw-special-fill')) {
+    m.addLayer({
+      id: 'vw-special-fill', type: 'fill', source: 'vw-special', minzoom: 13,
+      filter: ['!=', ['coalesce', ['get', 'buld_nm'], ''], ''],
+      layout: { visibility: 'none' },
+      paint: { 'fill-color': '#e53e3e', 'fill-opacity': 0.3, 'fill-outline-color': '#e53e3e' },
+    });
+  }
+  if (!m.getLayer('vw-special-labels')) {
+    m.addLayer({
+      id: 'vw-special-labels', type: 'symbol', source: 'vw-special', minzoom: 15,
+      filter: ['!=', ['coalesce', ['get', 'buld_nm'], ''], ''],
+      layout: {
+        'text-field': ['coalesce', ['get', 'buld_nm'], ''],
+        'text-size': 10, 'text-anchor': 'center', 'text-allow-overlap': false, visibility: 'none',
+      },
+      paint: { 'text-color': '#fc8181', 'text-halo-color': '#000', 'text-halo-width': 1 },
+    });
+  }
+}
+
+function applyVisibility(m: MapboxMap, buildings: boolean, special: boolean, roads: boolean): void {
+  const set = (id: string, on: boolean): void => { if (m.getLayer(id)) m.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none'); };
+  set('vw-buildings-fill', buildings);
+  set('vw-special-fill', special);
+  set('vw-special-labels', special);
+  set('vw-roads-line', roads);
 }
