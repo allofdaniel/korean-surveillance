@@ -66,12 +66,25 @@ export default function MapShell(p: MapShellProps): React.ReactElement {
   }, [p.koreaAirspaceData]);
   const airportByIcao = useMemo(() => new Map(airports.map(a => [a.icao, a])), [airports]);
   const procNames = useMemo(() => {
-    const pr = (p.koreaAirspaceData as { procedures?: Record<ProcKind, Record<string, Record<string, unknown>>> } | null)?.procedures;
+    type Leg = { wpt?: string | null };
+    const d = p.koreaAirspaceData as {
+      procedures?: Record<ProcKind, Record<string, Record<string, Leg[]>>>;
+      terminalWaypoints?: { id?: string; name?: string }[]; waypoints?: { name?: string }[]; navaids?: { ident?: string }[];
+    } | null;
+    const pr = d?.procedures;
     const out: Record<string, AirportProcNames> = {};
     if (!pr) return out;
+    // only offer procedures the map can actually draw (≥ 2 legs ending at a known fix);
+    // heading/vector-only departures would toggle on and show nothing
+    const known = new Set<string>();
+    d?.terminalWaypoints?.forEach(w => { if (w.id) known.add(w.id); if (w.name) known.add(w.name); });
+    d?.waypoints?.forEach(w => { if (w.name) known.add(w.name); });
+    d?.navaids?.forEach(n => { if (n.ident) known.add(n.ident); });
     (['sids', 'stars', 'iaps'] as ProcKind[]).forEach(k => Object.entries(pr[k] || {}).forEach(([icao, procs]) => {
       out[icao] ??= { sids: [], stars: [], iaps: [] };
-      out[icao]![k] = Object.keys(procs);
+      out[icao]![k] = Object.entries(procs)
+        .filter(([, legs]) => (legs || []).filter(l => l.wpt && (known.has(l.wpt) || /^RW\d/.test(l.wpt))).length >= 2)
+        .map(([name]) => name);
     }));
     return out;
   }, [p.koreaAirspaceData]);

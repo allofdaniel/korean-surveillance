@@ -29,6 +29,7 @@ def ocr_corner(page, tmp):
 def clean(s):
     s = s.replace('_', ' ')
     s = re.sub(r'^[a-z]{1,3}\s+', '', s)                  # stray lowercase OCR fragments
+    s = re.sub(r'^\d{2}[LRC]?(?:/[LRC])?\s+(?=[A-Za-z])', '', s)   # runway spill-over from the line above
     s = re.sub(r'\bRWY\s*O', 'RWY 0', s)
     s = re.sub(r'(?<=\d)O\b', '0', s)
     s = re.sub(r'^[^A-Za-z]+', '', s)                      # leading frequencies / OCR noise
