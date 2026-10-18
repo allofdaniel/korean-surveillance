@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { X, Plus, Minus, Maximize2, Layers, ExternalLink } from 'lucide-react';
+import { X, Plus, Minus, Maximize2, Layers, ExternalLink, Plane } from 'lucide-react';
 import type { ChartEntry } from './data';
 import { KOREAN_NAMES } from './data';
+import ChartTraffic from './ChartTraffic';
+import type { AircraftData } from '../hooks/useAircraftData';
 
 interface ChartViewerProps {
   tabs: ChartEntry[];
@@ -13,7 +15,12 @@ interface ChartViewerProps {
   onToggleOverlay: () => void;
   opacity: number;
   onOpacity: (v: number) => void;
+  aircraft: AircraftData[];
+  selectedHex: string | null;
+  onSelectAircraft: (ac: AircraftData) => void;
 }
+
+const TRAFFIC_KEY = 'ks.viewer.traffic';
 
 type View = { s: number; x: number; y: number };
 const MIN = 0.05, MAX = 8;
@@ -25,6 +32,9 @@ export default function ChartViewer(p: ChartViewerProps): React.ReactElement {
   const [view, setView] = useState<View>({ s: 1, x: 0, y: 0 });
   const [loaded, setLoaded] = useState(false);
   const [dragging, setDragging] = useState(false);
+  const [natural, setNatural] = useState<{ w: number; h: number } | null>(null);
+  const [traffic, setTraffic] = useState<boolean>(() => { try { return localStorage.getItem(TRAFFIC_KEY) !== '0'; } catch { return true; } });
+  useEffect(() => { try { localStorage.setItem(TRAFFIC_KEY, traffic ? '1' : '0'); } catch { /* ignore */ } }, [traffic]);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef<{ d: number; v: View; cx: number; cy: number } | null>(null);
 
@@ -35,7 +45,7 @@ export default function ChartViewer(p: ChartViewerProps): React.ReactElement {
     setView({ s, x: (st.clientWidth - im.naturalWidth * s) / 2, y: (st.clientHeight - im.naturalHeight * s) / 2 });
   }, []);
 
-  useEffect(() => { setLoaded(false); }, [chart?.file]);
+  useEffect(() => { setLoaded(false); setNatural(null); }, [chart?.file]);
   useEffect(() => {
     const st = stageRef.current;
     if (!st) return;
@@ -130,6 +140,12 @@ export default function ChartViewer(p: ChartViewerProps): React.ReactElement {
           <b title={chart.name}>{chart.name}</b>
           <small>{chart.airport} {KOREAN_NAMES[chart.airport] || ''} · {chart.chartNo ? `AD 2-${chart.chartNo.replace(/^2-/, '')}` : chart.type}{chart.bounds ? (chart.rmsM != null ? ` · 지도 정합 ±${Math.max(1, Math.round(chart.rmsM))}m` : chart.method === 'ocr' ? ' · 좌표 OCR(근사)' : '') : ''}</small>
         </div>
+        {chart.bounds && chart.clip && (
+          <button type="button" className="ks-icon-btn" aria-pressed={traffic} onClick={() => setTraffic(t => !t)}
+            title={traffic ? '차트 위 항공기 숨기기' : '차트 위에 실시간 항공기 표시'} aria-label="차트 위 항공기">
+            <Plane size={15} />
+          </button>
+        )}
         {chart.bounds && (
           <>
             <button type="button" className="ks-overlay-toggle" style={{ height: 30, padding: '0 10px', fontSize: 12 }} aria-pressed={p.overlayOn} onClick={p.onToggleOverlay}>
@@ -150,8 +166,13 @@ export default function ChartViewer(p: ChartViewerProps): React.ReactElement {
         onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} onDoubleClick={fit}>
         {!loaded && <div className="ks-viewer-loading">차트 불러오는 중…</div>}
         <img ref={imgRef} key={chart.file} src={chart.file} alt={`${chart.airport} ${chart.name}`} draggable={false}
-          onLoad={() => { setLoaded(true); requestAnimationFrame(fit); }}
+          onLoad={e => { setLoaded(true); setNatural({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight }); requestAnimationFrame(fit); }}
           style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.s})`, opacity: loaded ? 1 : 0 }} />
+        {traffic && loaded && natural && chart.bounds && chart.clip && (
+          <ChartTraffic aircraft={p.aircraft} bounds={chart.bounds} clip={chart.clip} width={natural.w} height={natural.h}
+            view={view} selectedHex={p.selectedHex} onSelect={p.onSelectAircraft}
+            showGround={['ADC', 'PDC', 'GMC'].includes(chart.type)} />
+        )}
         <div className="ks-viewer-zoom">
           <button type="button" onClick={() => zoomAt(1.3, ...center())} aria-label="확대"><Plus size={16} /></button>
           <button type="button" onClick={() => zoomAt(1 / 1.3, ...center())} aria-label="축소"><Minus size={16} /></button>

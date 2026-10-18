@@ -15,6 +15,9 @@ import pymupdf
 GENERIC = re.compile(r'^(INSTR APCH CHART|SID|STAR|RNAV SID|RNAV STAR|AD CHART|VISUAL APCH CHART)( \(\d+\))?$'
                      r'|^(RNAV )?(SID|STAR) RWY [0-9LRC/ ]+( \(\d+\))?$')
 NO_RE = re.compile(r'AD\s*CHART\s*([0-9]\s*-\s*[0-9]+(?:\s*-\s*[0-9]+)?)', re.I)
+# titles OCR cannot read reliably (thin "or", lone circling letters) — checked by eye against the sheet
+OVERRIDES = {'RKJK-2-5-p5': 'TACAN OR VOR/DME RWY 18', 'RKNW-2-10-p5': 'VOR/DME A',
+             'RKPK-2-21-p5': 'VOR C RWY 18L/R'}
 JUNK = re.compile(r'ELEV|ALT IN|DIST IN|BRG|TRANSITION|FREQ|\bAPP\b|\bTWR\b|\bDEP\b|NOT TO SCALE', re.I)
 
 
@@ -141,6 +144,10 @@ def main():
     for entries in index['airports'].values():
         for e in entries:
             e['name'] = re.sub(r' \(\d+\)(?=$| ·| \(계속\))', '', e['name'])
+    for entries in index['airports'].values():
+        for e in entries:
+            if e['id'] in OVERRIDES:
+                e['name'] = OVERRIDES[e['id']]
     with open(idx_path, 'w') as f:
         json.dump(index, f, ensure_ascii=False, separators=(',', ':'))
     print('renamed', fixed)

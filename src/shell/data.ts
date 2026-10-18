@@ -23,6 +23,8 @@ export interface ChartEntry {
   page?: number;
   /** Georeference residual (m) from the graticule fit. */
   rmsM?: number;
+  /** Overlay frame on the sheet as fractions [x0, y0, x1, y1] — `bounds` are its corners on the map. */
+  clip?: [number, number, number, number];
   order?: number;
 }
 
@@ -41,7 +43,7 @@ const typeRank = (t: string): number => { const i = TYPE_ORDER.indexOf(t); retur
 
 type RawChart = {
   file?: string; overlayFile?: string; bounds?: ChartBounds; type?: string; name?: string; method?: string;
-  chartNo?: string; pdf?: string; page?: number; rmsM?: number; order?: number;
+  chartNo?: string; pdf?: string; page?: number; rmsM?: number; order?: number; clip?: [number, number, number, number];
 };
 export type RawAllCharts = Record<string, Record<string, RawChart>> | null | undefined;
 
@@ -63,6 +65,7 @@ export function chartsForAirport(all: RawAllCharts, icao: string): ChartEntry[] 
       pdf: c.pdf,
       page: c.page,
       rmsM: c.rmsM,
+      clip: c.clip,
       order: c.order,
     }))
     .sort((a, b) => {
@@ -258,6 +261,13 @@ export function proceduresForChart(c: Pick<ChartEntry, 'type' | 'name'>, names: 
     const named = wanted.length ? names[kind].filter(p => isNamed(p) && byRunway(p)) : [];
     const list = named.length ? named : names[kind].filter(byRunway);
     return list.length ? { kind, names: list } : null;
+  }
+  // circling-only approaches ("VOR/DME A", "RNAV B"): navdata idents VDMA / VORA / RNVB / NDBA
+  const circ = c.type === 'IAC' ? n.match(/\b(VOR\/DME|VOR|RNAV|RNP|NDB)\s+([A-H])$/) : null;
+  if (circ) {
+    const pre = { 'VOR/DME': ['VDM', 'VOR'], VOR: ['VOR', 'VDM'], RNAV: ['RNV'], RNP: ['RNV'], NDB: ['NDB'] }[circ[1]!] ?? [];
+    const list = names.iaps.filter(p => pre.some(x => (p.split('.')[0] ?? '') === x + circ[2]));
+    return list.length ? { kind: 'iaps', names: list } : null;
   }
   if (c.type === 'IAC' && rwys.length) {
     const prefixes: string[] = [];

@@ -355,7 +355,7 @@ export default function useDataLoading(): UseDataLoadingReturn {
   useEffect(() => {
     type AipEntry = {
       id: string; type: string; name: string; chartNo?: string; pdf?: string; page?: number; file?: string;
-      overlay?: { file: string; bounds: [[number, number], [number, number], [number, number], [number, number]]; rmsM: number };
+      overlay?: { file: string; bounds: [[number, number], [number, number], [number, number], [number, number]]; rmsM: number; clip?: [number, number, number, number] };
     };
     const load = async (): Promise<Record<string, Record<string, unknown>>> => {
       const res = await fetch('/charts/aip_index.json');
@@ -367,7 +367,7 @@ export default function useDataLoading(): UseDataLoadingReturn {
           list.forEach((e, i) => {
             m[e.id] = {
               file: e.file || '', type: e.type, name: e.name, chartNo: e.chartNo, pdf: e.pdf, page: e.page, order: i,
-              ...(e.overlay ? { overlayFile: e.overlay.file, bounds: e.overlay.bounds, rmsM: e.overlay.rmsM, method: 'graticule' } : {}),
+              ...(e.overlay ? { overlayFile: e.overlay.file, bounds: e.overlay.bounds, rmsM: e.overlay.rmsM, clip: e.overlay.clip, method: 'graticule' } : {}),
             };
           });
           out[icao] = m;

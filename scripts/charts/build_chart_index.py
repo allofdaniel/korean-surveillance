@@ -365,9 +365,17 @@ def name_page(page, item_title, ctype, idx, npages):
 def transparent_overlay(pix):
     img = Image.frombytes('RGB', (pix.width, pix.height), pix.samples).convert('RGBA')
     a = np.array(img)
-    white = (a[:, :, 0] >= WHITE) & (a[:, :, 1] >= WHITE) & (a[:, :, 2] >= WHITE)
-    a[white, 3] = 0
+    a[background_mask(a), 3] = 0
     return Image.fromarray(a)
+
+
+def background_mask(a):
+    """Paper white plus the pale area tints (sea blue, land beige/green) — they would hide the map."""
+    rgb = a[:, :, :3].astype(np.int16)
+    lo, hi = rgb.min(axis=2), rgb.max(axis=2)
+    white = lo >= WHITE
+    tint = (lo >= 190) & (hi - lo >= 4) & (hi - lo <= 48)   # hued pastel only — neutral apron greys stay
+    return white | tint
 
 
 def save_webp(img, path, quality):
@@ -409,6 +417,8 @@ def georeference(page, ctype, icao, cid, lat0, lon0, runways, out_dir, ocr=False
         'bounds': [to_lonlat(model, x0, y0, lat0, lon0), to_lonlat(model, x1, y0, lat0, lon0),
                    to_lonlat(model, x1, y1, lat0, lon0), to_lonlat(model, x0, y1, lat0, lon0)],
         'rmsM': round(rms, 1), 'gcps': len(inl), 'mPerPt': round(s_m, 2), 'rotDeg': round(rot, 2),
+        # overlay frame as fractions of the sheet — lets the chart viewer place live traffic on the page
+        'clip': [round(x0 / W, 5), round(y0 / H, 5), round(x1 / W, 5), round(y1 / H, 5)],
     }
     if ocr and len(graticule_points(page)) < 5:
         ov['ocr'] = True

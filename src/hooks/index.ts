@@ -41,10 +41,8 @@ export { default as useGlobalLayers } from './useGlobalLayers';
 export { default as useSatelliteTracking } from './useSatelliteTracking';
 
 // CCTV 훅
-export { default as useCctvLayer } from './useCctvLayer';
 
 // 선박 AIS 훅
-export { default as useShipTracking } from './useShipTracking';
 
 // V-World 공간데이터 훅
 export { default as useVworldLayers } from './useVworldLayers';
