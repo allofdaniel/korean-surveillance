@@ -182,7 +182,8 @@ export default function useAircraftVisualization(
             callsign: ac.callsign,
             color: ['7700', '7600', '7500'].includes(ac.squawk) ? '#ff4d4f' : (selectedAircraft?.hex === ac.hex ? AIRCRAFT_LABEL_SELECTED_COLOR : (AIRCRAFT_CATEGORY_COLORS[ac.category] || '#00BCD4')),
             rotation: ac.track || 0,
-            sel: selectedAircraft?.hex === ac.hex ? 1 : 0
+            sel: selectedAircraft?.hex === ac.hex ? 1 : 0,
+            coast: ac.coasting ? 1 : 0
           }
         }))
       : [];
@@ -209,6 +210,7 @@ export default function useAircraftVisualization(
           short: isSelected || isEmergency ? label : short,
           hex: ac.hex,
           prio: isSelected ? 0 : isEmergency ? 1 : 2,
+          coast: ac.coasting ? 1 : 0,
           color: isEmergency ? '#ff4d4f' : (isSelected ? AIRCRAFT_LABEL_SELECTED_COLOR : '#FFFFFF')
         }
       };
@@ -279,7 +281,7 @@ export default function useAircraftVisualization(
             'icon-rotation-alignment': 'map',
             'icon-allow-overlap': true
           },
-          paint: { 'icon-color': ['get', 'color'] }
+          paint: { 'icon-color': ['get', 'color'], 'icon-opacity': ['case', ['==', ['get', 'coast'], 1], 0.5, 1] }
         });
       }
     );
@@ -303,7 +305,7 @@ export default function useAircraftVisualization(
             'text-padding': 1,
             'symbol-sort-key': ['get', 'prio']
           },
-          paint: { 'text-color': ['get', 'color'], 'text-halo-color': '#000000', 'text-halo-width': 1.5, 'text-halo-blur': 0.5 }
+          paint: { 'text-color': ['get', 'color'], 'text-opacity': ['case', ['==', ['get', 'coast'], 1], 0.55, 1], 'text-halo-color': '#000000', 'text-halo-width': 1.5, 'text-halo-blur': 0.5 }
         });
       }
     );

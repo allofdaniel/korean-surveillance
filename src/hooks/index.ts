@@ -22,7 +22,7 @@ export { default as useAirspaceLayers } from './useAirspaceLayers';
 // 항공기 관련 훅
 export { default as useAircraftVisualization } from './useAircraftVisualization';
 export { default as useAircraftData } from './useAircraftData';
-export { default as useSmoothedAircraft } from './useSmoothedAircraft';
+export { default as useSurveillance } from './useSurveillance';
 export { default as useSelectedAircraft } from './useSelectedAircraft';
 export { default as useAircraftClickHandler } from './useAircraftClickHandler';
 

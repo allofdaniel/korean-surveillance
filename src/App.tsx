@@ -37,7 +37,7 @@ import {
   useWeatherLayers,
   useAircraftVisualization,
   useAircraftData,
-  useSmoothedAircraft,
+  useSurveillance,
   useSelectedAircraft,
   useAircraftClickHandler,
   useProcedureRendering,
@@ -269,9 +269,10 @@ function App({ onNavigateToLanding }: AppProps = {}): React.ReactElement | null 
   useKoreaAirspace(map, mapLoaded, koreaAirspaceData, showKoreaRoutes, showKoreaWaypoints, showKoreaNavaids, showKoreaAirspaces, showKoreaAirports, is3DView, show3DAltitude, showKoreaHoldings, showKoreaTerminalWaypoints, showKoreaSids, showKoreaStars, showKoreaIaps, selectedKoreaAirport, !isDarkMode, procSelection);
 
   // Aircraft data hook
-  const { aircraft: rawAircraft, aircraftTrails, dataHealth } = useAircraftData(data, mapLoaded, showAircraft, trailDuration);
-  // Kalman 필터로 위치 평활화 (RAF 30Hz로 보간 — 시각적 점프 제거)
-  const aircraft = useSmoothedAircraft(rawAircraft);
+  const { batch, aircraftTrails, dataHealth } = useAircraftData(data, mapLoaded, showAircraft, trailDuration);
+  // surveillance tracker: time-registered reports → filtered, extrapolated, smoothly corrected tracks
+  const { aircraft } = useSurveillance(batch);
+  const rawAircraft = aircraft;
 
   // Selected aircraft details hook
   // SelectedAircraft (store) is structurally compatible with AircraftData at runtime;

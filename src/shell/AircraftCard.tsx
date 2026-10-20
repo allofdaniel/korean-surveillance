@@ -129,6 +129,7 @@ export default function AircraftCard({ map, ac, photo, schedule, trail, onClose 
 
       <footer className="ks-ac-foot ks-mono">
         {ac.lat.toFixed(4)}°N {ac.lon.toFixed(4)}°E · {ac.hex.toUpperCase()}
+        {ac.pos_age != null && <span className={ac.coasting ? 'dn' : ''}> · {ac.coasting ? '추정 위치' : '위치'} {Math.round(ac.pos_age)}초 전</span>}
       </footer>
     </aside>
   );

@@ -35,8 +35,22 @@ export interface AircraftData {
   mach: number;
   mag_heading: number;
   true_heading: number;
+  /** client receive time of the batch, ms */
   timestamp: number;
+  /** age of the position / of the last message at the server, seconds */
+  seen_pos: number | null;
+  seen: number | null;
+  /** deg/s, clockwise (ADS-B) */
+  track_rate: number | null;
+  /** time the position was valid, client clock, ms */
+  pos_time: number;
+  /** set by the tracker on displayed records */
+  coasting?: boolean;
+  pos_age?: number;
 }
+
+/** one polled batch: when it arrived and the server clock it carried (for time registration) */
+export interface AircraftBatch { at: number; serverNow: number | null; aircraft: AircraftData[] }
 
 export interface TrailPoint {
   lat: number;
@@ -63,6 +77,7 @@ export interface DataHealthStatus {
 
 export interface UseAircraftDataReturn {
   aircraft: AircraftData[];
+  batch: AircraftBatch;
   setAircraft: React.Dispatch<React.SetStateAction<AircraftData[]>>;
   aircraftTrails: AircraftTrails;
   setAircraftTrails: React.Dispatch<React.SetStateAction<AircraftTrails>>;
@@ -85,6 +100,7 @@ export default function useAircraftData(
   trailDuration: number
 ): UseAircraftDataReturn {
   const [aircraft, setAircraft] = useState<AircraftData[]>([]);
+  const [batch, setBatch] = useState<AircraftBatch>({ at: 0, serverNow: null, aircraft: [] });
   const [aircraftTrails, setAircraftTrails] = useState<AircraftTrails>({});
   const [tracesLoaded, setTracesLoaded] = useState<Set<string>>(new Set());
   const [dataHealth, setDataHealth] = useState<DataHealthStatus>({
@@ -264,6 +280,8 @@ export default function useAircraftData(
 
       const result = await response.json();
       const aircraftData = result.ac || [];
+      const receivedAt = Date.now();
+      const serverNow: number | null = Number.isFinite(result.now) ? Number(result.now) : null;
 
       const processed: AircraftData[] = aircraftData
         // 좌표 유효성 검사: 유효한 위도/경도 범위 내의 항공기만 포함
@@ -296,7 +314,12 @@ export default function useAircraftData(
           mach: (ac.mach as number) ?? 0,
           mag_heading: (ac.mag_heading as number) ?? (ac.track as number) ?? 0,
           true_heading: (ac.true_heading as number) ?? (ac.track as number) ?? 0,
-          timestamp: Date.now(),
+          timestamp: receivedAt,
+          seen_pos: Number.isFinite(ac.seen_pos as number) ? (ac.seen_pos as number) : null,
+          seen: Number.isFinite(ac.seen as number) ? (ac.seen as number) : null,
+          track_rate: Number.isFinite(ac.track_rate as number) ? (ac.track_rate as number) : null,
+          // the position was valid seen_pos seconds before the server answered — not when we received it
+          pos_time: receivedAt - Math.max(0, ((ac.seen_pos as number) ?? (ac.seen as number) ?? 0)) * 1000,
         }));
 
       // Maximum trail points per aircraft to prevent memory issues
@@ -309,8 +332,9 @@ export default function useAircraftData(
           const trail = trails[ac.hex];
           if (!trail) return;
           const last = trail[trail.length - 1];
-          if (!last || last.lat !== ac.lat || last.lon !== ac.lon) {
-            trail.push({ lat: ac.lat, lon: ac.lon, altitude_m: ac.altitude_m, altitude_ft: ac.altitude_ft, timestamp: ac.timestamp });
+          // a trail point is a new *position*: repeated snapshots of the same report add nothing
+          if (!last || (ac.pos_time > last.timestamp && (last.lat !== ac.lat || last.lon !== ac.lon))) {
+            trail.push({ lat: ac.lat, lon: ac.lon, altitude_m: ac.altitude_m, altitude_ft: ac.altitude_ft, timestamp: ac.pos_time });
           }
           // Clean up old trail points by time
           let firstPoint = trail[0];
@@ -343,6 +367,7 @@ export default function useAircraftData(
       tracesLoadedRef.current = newTracesLoaded;
       if (signal.aborted) return;
       setAircraft(processed);
+      setBatch({ at: receivedAt, serverNow, aircraft: processed });
       // history trails load in the background — never hold up the live picture for them
       void loadNewTraces(processed);
 
@@ -384,6 +409,7 @@ export default function useAircraftData(
 
   return {
     aircraft,
+    batch,
     setAircraft,
     aircraftTrails,
     setAircraftTrails,

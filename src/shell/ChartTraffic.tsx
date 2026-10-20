@@ -112,6 +112,7 @@ export default function ChartTraffic(p: ChartTrafficProps): React.ReactElement |
           <span><i>수직</i>{ac.on_ground ? '—' : `${(ac.vertical_rate || 0) > 0 ? '+' : ''}${Math.round(ac.vertical_rate || 0)}`}</span>
           <span><i>방향</i>{ac.ground_speed > 0 ? `${Math.round(ac.track || 0).toString().padStart(3, '0')}°` : '—'}</span>
           <span><i>스쿽</i>{ac.squawk || '—'}</span>
+          <span><i>위치 수신</i>{ac.pos_age != null ? `${Math.round(ac.pos_age)}초 전` : '—'}</span>
         </div>
         <button type="button" className="go" onClick={() => { setPick(null); p.onShowOnMap(ac); }}><MapPin size={13} /> 지도에서 보기</button>
       </div>
@@ -132,7 +133,7 @@ export default function ChartTraffic(p: ChartTrafficProps): React.ReactElement |
           // parked aircraft without a callsign: symbol only (hex codes are noise on a ground chart)
           const label = cs || (ac.on_ground ? '' : nameOf(ac));
           return (
-            <div key={ac.hex} className={`ks-ct-ac ${isSel ? 'sel' : ''} ${ac.on_ground ? 'gnd' : ''} ${EMERG[ac.squawk] ? 'emerg' : ''}`}
+            <div key={ac.hex} className={`ks-ct-ac ${isSel ? 'sel' : ''} ${ac.on_ground ? 'gnd' : ''} ${EMERG[ac.squawk] ? 'emerg' : ''} ${ac.coasting ? 'coast' : ''}`}
               style={{ left: px, top: py, transform: `scale(${inv})` }}>
               <button type="button" className="sym" onPointerDown={e => e.stopPropagation()}
                 onClick={e => { e.stopPropagation(); setPick(h => (h === ac.hex ? null : ac.hex)); }}

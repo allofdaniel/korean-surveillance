@@ -352,7 +352,9 @@ a.ks-chart-row { color: inherit; text-decoration: none; }
 .ks-chart-traffic { position: absolute; top: 0; left: 0; transform-origin: 0 0; pointer-events: none; }
 .ks-chart-traffic .vec { position: absolute; inset: 0; overflow: visible; }
 .ks-chart-traffic .vec line { stroke: #d1006b; stroke-width: 2; stroke-linecap: round; opacity: .85; }
-.ks-ct-ac { position: absolute; width: 0; height: 0; transform-origin: 0 0; transition: left 2s linear, top 2s linear; }
+.ks-ct-ac { position: absolute; width: 0; height: 0; transform-origin: 0 0; }
+.ks-ct-ac.coast { opacity: .55; }
+.ks-ct-ac.coast .sym svg { stroke-dasharray: 2 1.5; }
 .ks-ct-ac .sym { position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; padding: 0; border: 0; background: none; cursor: pointer; pointer-events: auto; color: #e0007a; }
 .ks-ct-ac .sym svg { display: block; fill: currentColor; stroke: #fff; stroke-width: 1.8; paint-order: stroke; stroke-linejoin: round; filter: drop-shadow(0 1px 2px rgba(0,0,0,.55)); }
 .ks-ct-ac .lbl { position: absolute; left: 15px; top: -24px; pointer-events: auto; cursor: pointer; display: flex; flex-direction: column; gap: 1px;
@@ -366,7 +368,6 @@ a.ks-chart-row { color: inherit; text-decoration: none; }
 .ks-ct-ac.sel .lbl { border-left-color: #f59e0b; background: #111827; }
 .ks-ct-ac.emerg .sym { color: #ef4444; }
 .ks-ct-ac.emerg .lbl { border-left-color: #ef4444; }
-@media (prefers-reduced-motion: reduce) { .ks-ct-ac { transition: none; } }
 .ks-ct-card { position: absolute; z-index: 5; width: 248px; background: rgba(10, 14, 22, .96); color: #fff; border: 1px solid var(--ks-line-strong); border-radius: 10px;
   padding: 10px 12px 12px; box-shadow: 0 10px 30px rgba(0,0,0,.45); display: flex; flex-direction: column; gap: 6px; cursor: default; }
 .ks-ct-card.emerg { border-color: #ef4444; }
