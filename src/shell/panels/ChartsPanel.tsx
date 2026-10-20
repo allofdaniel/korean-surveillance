@@ -1,9 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { Layers, Eye, ExternalLink, Route } from 'lucide-react';
-import { useShallow } from 'zustand/react/shallow';
-import { useLayerStore } from '../../stores';
+import { Layers, Eye, ExternalLink } from 'lucide-react';
 import type { AirportMeta, AirportProcNames, ChartEntry, Metar, ProcKind, RawAllCharts } from '../data';
-import { airportLabel, chartsForAirport, proceduresForChart, flightCategory, groupCharts, metarAge, metarSummary, useTaf } from '../data';
+import { airportLabel, chartsForAirport, flightCategory, groupCharts, metarAge, metarSummary, useTaf } from '../data';
 
 interface ChartsPanelProps {
   airports: AirportMeta[];
@@ -105,71 +103,12 @@ export function AirportPage(p: ChartsPanelProps & { airport: AirportMeta }): Rea
 }
 
 function ChartsTab(p: ChartsPanelProps & { airport: AirportMeta; groups: ReturnType<typeof groupCharts> }): React.ReactElement {
-  const raw = useLayerStore(useShallow(s => ({
-    showSids: s.showKoreaSids, showStars: s.showKoreaStars, showIaps: s.showKoreaIaps,
-    setSids: s.setShowKoreaSids, setStars: s.setShowKoreaStars, setIaps: s.setShowKoreaIaps,
-    sel: s.procSelection, setSel: s.setProcSelection, selectedApt: s.selectedKoreaAirport, setApt: s.setSelectedKoreaAirport,
-  })));
-  const st = {
-    show: { sids: raw.showSids, stars: raw.showStars, iaps: raw.showIaps } as Record<ProcKind, boolean>,
-    set: { sids: raw.setSids, stars: raw.setStars, iaps: raw.setIaps } as Record<ProcKind, (v: boolean) => void>,
-    sel: raw.sel, setSel: raw.setSel, selectedApt: raw.selectedApt, setApt: raw.setApt,
-  };
-  const icao = p.airport.icao;
-  const here = st.selectedApt === icao;
-  const names = p.procNames?.[icao];
-  const KINDS: ProcKind[] = ['sids', 'stars', 'iaps'];
-
-  /** switch the procedure layer to this airport, clearing whatever another airport had drawn */
-  const claim = (): typeof st.sel => {
-    if (here) return st.sel;
-    st.setApt(icao);
-    KINDS.forEach(k => st.set[k](false));
-    return { sids: null, stars: null, iaps: null };
-  };
-  // "SID / STAR / 접근" buttons: every procedure of that type
-  const toggleAll = (k: ProcKind): void => {
-    const on = here && st.show[k] && st.sel[k] === null;
-    const sel = claim();
-    st.setSel({ ...sel, [k]: null });
-    st.set[k](!on);
-  };
-  const isAllOn = (k: ProcKind): boolean => here && st.show[k] && st.sel[k] === null;
-  // per chart: just the procedures that chart depicts
-  const chartProcOn = (m: { kind: ProcKind; names: string[] }): boolean =>
-    here && st.show[m.kind] && (st.sel[m.kind] === null || m.names.every(n => st.sel[m.kind]!.includes(n)));
-  const toggleChartProc = (m: { kind: ProcKind; names: string[] }): void => {
-    const on = chartProcOn(m);
-    const sel = claim();
-    const cur = here && st.show[m.kind] ? sel[m.kind] : [];
-    if (on) {
-      const next = (cur ?? names?.[m.kind] ?? []).filter(n => !m.names.includes(n));
-      st.setSel({ ...sel, [m.kind]: next });
-      if (!next.length) st.set[m.kind](false);
-    } else {
-      st.setSel({ ...sel, [m.kind]: Array.from(new Set([...(cur ?? []), ...m.names])) });
-      st.set[m.kind](true);
-      p.onFitProcedure?.(m.kind);
-    }
-  };
-  // opening a procedure chart draws its route too (Navigraph-style), unless it is already shown
-  const openChart = (c: ChartEntry): void => {
-    p.onOpenChart(c);
-    const m = proceduresForChart(c, names);
-    if (m && !chartProcOn(m)) toggleChartProc(m);
-  };
+  // Charts are read on the chart itself (with live traffic on top) — procedures are no longer redrawn on the map:
+  // navdata geometry never quite matched the published sheet.
+  const openChart = (c: ChartEntry): void => p.onOpenChart(c);
 
   return (
     <>
-      <div className="ks-section">
-        <div className="ks-section-title">절차를 지도에 그리기 <span className="count">차트별 <Route size={10} /> 버튼</span></div>
-        <div className="ks-proc-toggles">
-          <button type="button" className="ks-overlay-toggle" aria-pressed={isAllOn('sids')} onClick={() => toggleAll('sids')}>SID 전체</button>
-          <button type="button" className="ks-overlay-toggle" aria-pressed={isAllOn('stars')} onClick={() => toggleAll('stars')}>STAR 전체</button>
-          <button type="button" className="ks-overlay-toggle" aria-pressed={isAllOn('iaps')} onClick={() => toggleAll('iaps')}>접근 전체</button>
-        </div>
-      </div>
-
       {p.groups.length === 0 && <div className="ks-empty">이 비행장은 eAIP에 게시된 차트가 없습니다.</div>}
       {p.groups.map(g => (
         <div className="ks-chart-group ks-section" key={g.key}>
@@ -186,8 +125,7 @@ function ChartsTab(p: ChartsPanelProps & { airport: AirportMeta; groups: ReturnT
               onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openChart(c); } }}>
               <span className="ty">{c.type}</span>
               <span className="nm" title={c.name}>{c.name}{c.chartNo && <small> {c.chartNo}</small>}</span>
-              <ChartActions c={c} overlayOn={!!p.overlay[c.id]} onOverlay={() => p.onToggleOverlay(c)}
-                proc={proceduresForChart(c, names)} procOn={chartProcOn} onProc={toggleChartProc} />
+              <ChartActions c={c} overlayOn={!!p.overlay[c.id]} onOverlay={() => p.onToggleOverlay(c)} />
             </div>
           ))}
         </div>
@@ -196,27 +134,14 @@ function ChartsTab(p: ChartsPanelProps & { airport: AirportMeta; groups: ReturnT
   );
 }
 
-function ChartActions({ c, overlayOn, onOverlay, proc, procOn, onProc }: {
-  c: ChartEntry; overlayOn: boolean; onOverlay: () => void;
-  proc: { kind: ProcKind; names: string[] } | null;
-  procOn: (m: { kind: ProcKind; names: string[] }) => boolean; onProc: (m: { kind: ProcKind; names: string[] }) => void;
-}): React.ReactElement {
-  if (!c.bounds && !proc) return <Eye size={14} color="var(--ks-text-3)" />;
+function ChartActions({ c, overlayOn, onOverlay }: { c: ChartEntry; overlayOn: boolean; onOverlay: () => void }): React.ReactElement {
+  if (!c.bounds) return <Eye size={14} color="var(--ks-text-3)" />;
   return (
     <span className="ks-chart-actions">
-      {proc && (
-        <button type="button" className="ks-overlay-toggle" aria-pressed={procOn(proc)}
-          title={`이 차트의 절차 경로를 지도에 그리기 (${proc.names.map(n => n.split('.')[0]).filter((v, i, a) => a.indexOf(v) === i).join(', ')})`}
-          onClick={e => { e.stopPropagation(); onProc(proc); }}>
-          <Route size={12} />{procOn(proc) ? '경로' : ''}
-        </button>
-      )}
-      {c.bounds && (
-        <button type="button" className="ks-overlay-toggle" aria-pressed={overlayOn} title="차트 이미지를 지도에 겹치기"
-          onClick={e => { e.stopPropagation(); onOverlay(); }}>
-          <Layers size={12} />{overlayOn ? '차트' : ''}
-        </button>
-      )}
+      <button type="button" className="ks-overlay-toggle" aria-pressed={overlayOn} title="차트 이미지를 지도에 겹치기"
+        onClick={e => { e.stopPropagation(); onOverlay(); }}>
+        <Layers size={12} />{overlayOn ? '차트' : ''}
+      </button>
     </span>
   );
 }

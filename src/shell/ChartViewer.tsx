@@ -16,8 +16,8 @@ interface ChartViewerProps {
   opacity: number;
   onOpacity: (v: number) => void;
   aircraft: AircraftData[];
-  selectedHex: string | null;
-  onSelectAircraft: (ac: AircraftData) => void;
+  /** close the viewer and show this aircraft on the map */
+  onShowAircraftOnMap: (ac: AircraftData) => void;
 }
 
 const TRAFFIC_KEY = 'ks.viewer.traffic';
@@ -170,8 +170,8 @@ export default function ChartViewer(p: ChartViewerProps): React.ReactElement {
           style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.s})`, opacity: loaded ? 1 : 0 }} />
         {traffic && loaded && natural && chart.bounds && chart.clip && (
           <ChartTraffic aircraft={p.aircraft} bounds={chart.bounds} clip={chart.clip} width={natural.w} height={natural.h}
-            view={view} selectedHex={p.selectedHex} onSelect={p.onSelectAircraft}
-            showGround={['ADC', 'PDC', 'GMC'].includes(chart.type)} />
+            view={view} stage={{ w: stageRef.current?.clientWidth ?? 0, h: stageRef.current?.clientHeight ?? 0 }}
+            onShowOnMap={p.onShowAircraftOnMap} showGround={['ADC', 'PDC', 'GMC'].includes(chart.type)} />
         )}
         <div className="ks-viewer-zoom">
           <button type="button" onClick={() => zoomAt(1.3, ...center())} aria-label="확대"><Plus size={16} /></button>

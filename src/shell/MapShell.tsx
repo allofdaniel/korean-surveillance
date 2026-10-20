@@ -311,8 +311,7 @@ export default function MapShell(p: MapShellProps): React.ReactElement {
           opacity={p.chartOpacities[activeChart.id] ?? 0.7}
           onOpacity={v => p.updateChartOpacity(activeChart.id, v)}
           aircraft={p.aircraft}
-          selectedHex={p.selectedAircraftHex}
-          onSelectAircraft={p.onSelectAircraft}
+          onShowAircraftOnMap={ac => { setActiveTab(null); selectAircraft(ac); }}
         />
       )}
     </div>
