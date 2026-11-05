@@ -35,14 +35,15 @@ def detect_icao(path):
 def report_md(ds, airac):
     L = [f"# {ds['icao']} AIP 자동판독 리포트 (AIRAC {airac})", '',
          f"- 절차 {len(ds['procedures'])}개 / Fix {len(ds['fixes'])}개 / 홀딩 {len(ds['holdings'])}개 / 장애물 {len(ds['obstacles'])}개",
+         f"- 지도 반영 {len([p for p in ds['procedures'] if p.get('qa') != 'reject'])}개 / 제외(검토 필요) {len([p for p in ds['procedures'] if p.get('qa') == 'reject'])}개",
          f"- 원본: {', '.join(s['file'] for s in ds['sources'])}", '', '## 검증 결과']
     if not ds['issues']:
         L.append('- 이상 없음 (모든 RNAV 구간 거리·방위가 게재값과 일치)')
     for i in ds['issues']:
         L.append(f"- [{i['level']}] {i['what']}")
-    L += ['', '## 절차', '| 종류 | 이름 | 활주로 | 구간 | 근사 |', '|---|---|---|---|---|']
+    L += ['', '## 절차', '| 종류 | 이름 | 활주로 | 구간 | 근사 | 판정 |', '|---|---|---|---|---|---|']
     for p in ds['procedures']:
-        L.append(f"| {p['type']} | {p['name']} {p.get('transition') or ''} | {p.get('runway') or ''} | {len(p['legs'])} | {'예' if p.get('approx') else ''} |")
+        L.append(f"| {p['type']} | {p['name']} {p.get('transition') or ''} | {p.get('runway') or ''} | {len(p['legs'])} | {'예' if p.get('approx') else ''} | {'제외: ' + ', '.join(p.get('qa_reasons', [])) if p.get('qa') == 'reject' else ''} |")
     return '\n'.join(L) + '\n'
 
 def main(argv=None):
@@ -78,7 +79,7 @@ def main(argv=None):
         if app is not None and ds['procedures']:
             app_adapter.merge(app, ds, a.airac)
         n_err = len([i for i in ds['issues'] if i['level'] == 'error']); n_w = len([i for i in ds['issues'] if i['level'] == 'warn'])
-        summary.append(f"{icao}: procs={len(ds['procedures'])} fixes={len(ds['fixes'])} obst={len(ds['obstacles'])} errors={n_err} warns={n_w}")
+        summary.append(f"{icao}: procs={len(ds['procedures'])} fixes={len(ds['fixes'])} obst={len(ds['obstacles'])} errors={n_err} warns={n_w} rejected={len([p for p in ds['procedures'] if p.get('qa') == 'reject'])}")
     if app is not None:
         json.dump(app, open(a.app, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     open(os.path.join(outdir, 'SUMMARY.txt'), 'w').write('\n'.join(summary) + '\n')

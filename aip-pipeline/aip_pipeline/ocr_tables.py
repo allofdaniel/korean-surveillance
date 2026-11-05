@@ -74,6 +74,8 @@ def pdf_cell_text(page, box, dpi=DPI) -> str:
     k = 72.0 / dpi
     x, y, w, h = box
     r = fitz.Rect(x * k, y * k, (x + w) * k, (y + h) * k)
+    if page.rotation:
+        r = (r * page.derotation_matrix).normalize()   # rendered (rotated) space -> page space
     t = page.get_text('text', clip=r)
     return re.sub(r'\s+', ' ', t).strip()
 
@@ -108,11 +110,68 @@ def read_page_tables(page: fitz.Page, dpi: int = DPI):
         rows = _rows_cols(t['cells'], rot)
         if has_text:
             data = [[pdf_cell_text(page, c, dpi) for c in r] for r in rows]
+            data = _text_rows(page, dpi, t, rot) or data
         else:
             data = [[ocr_cell(gray, c, rot, multiline=(rot and len(r) >= 12 and j in (7, 8, 12))) for j, c in enumerate(r)] for r in rows]
         title = ocr_title(gray, t['bbox'], rot)
         out.append({'bbox': t['bbox'], 'rotated': rot, 'title': title, 'rows': data})
     return out, gray
+
+def _page_words(page, dpi):
+    k = dpi / 72.0
+    m = page.rotation_matrix
+    out = []
+    for w in page.get_text('words'):
+        r = (fitz.Rect(w[:4]) * m).normalize()
+        out.append((r.x0 * k, r.y0 * k, r.x1 * k, r.y1 * k, w[4]))
+    return out
+
+def _text_rows(page, dpi, t, rot=False):
+    """Coding tables on text pages: rebuild rows from serial numbers when the grid lost horizontal rules
+    (cells spanning several legs). Columns come from the best-formed grid row, row bands from the
+    first-column cells holding the serial numbers. Rotated tables are handled in a rotated frame."""
+    if rot:   # reading frame: X = -y, Y = x
+        cells = [(-(c[1] + c[3]), c[0], c[3], c[2]) for c in t['cells']]
+        tw = lambda w: (-w[3], w[0], -w[1], w[2], w[4])
+    else:
+        cells = list(t['cells'])
+        tw = lambda w: w
+    rows = _rows_cols(cells, False)
+    if len(rows) < 2:
+        return None
+    colrow = max(rows, key=len)
+    if len(colrow) < 10:
+        return None
+    cols = [(c[0], c[0] + c[2]) for c in colrow]
+    x0, x1 = cols[0]
+    X0 = min(c[0] for c in cells); X1 = max(c[0] + c[2] for c in cells)
+    Y0 = min(c[1] for c in cells); Y1 = max(c[1] + c[3] for c in cells)
+    words = [w for w in map(tw, _page_words(page, dpi)) if X0 <= (w[0] + w[2]) / 2 <= X1 and Y0 <= (w[1] + w[3]) / 2 <= Y1]
+    cy = lambda w: (w[1] + w[3]) / 2
+    cx = lambda w: (w[0] + w[2]) / 2
+    serials = sorted([w for w in words if re.fullmatch(r'\d{3}', w[4]) and x0 <= cx(w) <= x1], key=cy)
+    if len(serials) < 2:
+        return None
+    first = lambda c: x0 - 3 <= c[0] + c[2] / 2 <= x1 + 3
+    spans = sum(1 for c in cells if not first(c) and sum(1 for w in serials if c[1] <= cy(w) <= c[1] + c[3]) > 1)
+    if not spans:
+        return None
+    first_cells = [c for c in cells if first(c)]
+    bands = []
+    for w in serials:
+        cell = next((c for c in first_cells if c[1] <= cy(w) <= c[1] + c[3]), None)
+        bands.append((cell[1], cell[1] + cell[3]) if cell else (w[1] - 4, w[3] + 4))
+    def text_in(cx0, cx1, y0, y1):
+        ws = [w for w in words if cx0 <= cx(w) <= cx1 and y0 <= cy(w) <= y1]
+        ws.sort(key=lambda w: (round(w[1] / 8), w[0]))
+        return ' '.join(w[4] for w in ws)
+    out = []
+    for r in rows:
+        if max(c[1] + c[3] for c in r) <= bands[0][0] + 3:      # header rows
+            out.append([text_in(c[0], c[0] + c[2], c[1], c[1] + c[3]) for c in sorted(r, key=lambda c: c[0])])
+    for (y0, y1) in bands:
+        out.append([text_in(a_, b_, y0, y1) for (a_, b_) in cols])
+    return out
 
 def ocr_title(gray, bbox, rotated: bool) -> str:
     x, y, w, h = bbox

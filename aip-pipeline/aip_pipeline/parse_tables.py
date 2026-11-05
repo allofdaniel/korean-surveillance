@@ -47,7 +47,11 @@ def coding_from_table(tb: dict):
     for r in rows:
         if len(r) < 10:
             continue
-        if not (re.fullmatch(r'\d{3}', r[0] or '') and (r[1] or '').upper() in PATHS):
+        if not re.fullmatch(r'\d{3}', r[0] or ''):
+            continue
+        if not r[1] and r[0] == '001' and r[2]:
+            r = list(r); r[1] = 'IF'          # first row printed with '–' path = initial fix
+        if (r[1] or '').upper() not in PATHS:
             continue
         r = (r + [''] * 13)[:13]
         rec = fix_ocr_tokens(dict(zip(COLS, r)))
@@ -58,6 +62,8 @@ def coding_from_table(tb: dict):
         sp = re.search(r'([+\-]?)\s*(\d{3})', rec['speed'] or '')
         rec['speed_c'] = [{'-': 'AT_OR_BELOW', '+': 'AT_OR_ABOVE'}.get(sp.group(1), 'AT'), int(sp.group(2))] if sp else None
         rec['latlon'] = parse_latlon(rec['coords'])
+        if not rec['latlon']:     # merged/shifted cells (e.g. runway-dependent first leg): coordinates may sit in a neighbouring column
+            rec['latlon'] = next((ll for ll in (parse_latlon(c) for c in r[3:]) if ll), None)
         rec['flyover'] = rec['flyover'].upper().startswith('Y')
         rec['turn'] = (rec['turn'] or '').upper()[:1] if (rec['turn'] or '').upper()[:1] in ('L', 'R') else None
         vpa = re.search(r'(-?\d[.,]\d{2})\s*/\s*(\d{2})', rec['vpa'] or '')
@@ -96,7 +102,7 @@ def fixpoints_from_table(tb: dict):
     out = []
     for r in rows:
         txt = ' '.join(x for x in r if x)
-        if len(r) == 1 and 'Approach' in txt or 'Approach to RWY' in txt and not parse_latlon(txt):
+        if len(r) == 1 and 'approach' in txt.lower() or re.search(r'approach to RWY', txt, re.I) and not parse_latlon(txt):
             title = txt; continue
         if len(r) < 2:
             continue

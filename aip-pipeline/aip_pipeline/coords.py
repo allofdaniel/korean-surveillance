@@ -1,6 +1,6 @@
 import re
 
-_DMS = re.compile(r"(\d{1,3})\s*[°º*o]\s*(\d{1,2})\s*['’`′]\s*(\d{1,2}(?:[.,]\d+)?)\s*(?:\"|''|”|″|')?\s*[_\-—\s]*([NSEW])")
+_DMS = re.compile(r"(\d{1,3})\s*[°º˚*o]\s*(\d{1,2})\s*['’`′]\s*(\d{1,2}(?:[.,]\d+)?)\s*(?:\"|''|”|″|')?\s*[_\-—\s]*([NSEW])")
 _CLAT = re.compile(r"(?<!\d)(\d{2})(\d{2})(\d{2}(?:\.\d+)?)\s*([NS])")
 _CLON = re.compile(r"(?<!\d)(\d{3})(\d{2})(\d{2}(?:\.\d+)?)\s*([EW])")
 
@@ -13,6 +13,8 @@ def parse_latlon(text: str):
     if not text:
         return None
     t = text.replace('lY', 'IY')
+    # degree sign lost/displaced in text extraction: "35 34'59.5\"N ... ° °"
+    t = re.sub(r'(?<![\d.])(\d{2,3})\s+(\d{2})\s*[\'′]', lambda m: f"{m.group(1)}°{m.group(2)}'", t)
     lat = lon = None
     for m in _DMS.finditer(t):
         d, mi, s, h = m.groups()

@@ -1,34 +1,26 @@
 {
  "icao": "RKJY",
- "built_at": "2026-11-05T02:05:48.694247Z",
+ "built_at": "2026-11-05T05:16:30.411796Z",
  "sources": [
   {
-   "file": "2-12_STAR.pdf",
+   "file": "(2-12) STAR(1).pdf",
    "sha": "69df61be5889b1d6"
   },
   {
-   "file": "2-15_IAC.pdf",
+   "file": "(2-15) INSTR APCH CHART.pdf",
    "sha": "482398d699996c5f"
   },
   {
-   "file": "2-1_AD_CHART.pdf",
-   "sha": "f8ecf1bc3ef52053"
-  },
-  {
-   "file": "2-5_TYPE_A.pdf",
-   "sha": "b070772149cf31a4"
-  },
-  {
-   "file": "2-7_TYPE_B.pdf",
+   "file": "(2-7) AD OBSTACLE CHART TYPE B.pdf",
    "sha": "6bdf011166c4b30b"
   },
   {
-   "file": "2-8_SID.pdf",
+   "file": "(2-8) SID(1).pdf",
    "sha": "067c998dc235919b"
   },
   {
    "file": "RKJY-TEXT.pdf",
-   "sha": "66fa2c3d382a60b9"
+   "sha": "0b5b19dfc5441b65"
   }
  ],
  "airport": {
@@ -40,22 +32,23 @@
   "elev_m": 16.0,
   "magvar": {
    "deg": -8.0,
-   "year": 2020,
-   "annual": 0.092
+   "year": 2025,
+   "annual": 0.041
   },
   "ctr": {
    "radius_nm": 5.0,
    "center": "ARP"
   },
   "text_amdt": [
-   "AIP AMDT 11/22",
-   "AIP AMDT 12/24",
-   "AIP AMDT 4/24",
-   "AIP AMDT 4/25",
+   "AIP AMDT 10/25",
+   "AIP AMDT 10/26",
+   "AIP AMDT 12/25",
+   "AIP AMDT 5/26",
+   "AIP AMDT 6/25",
+   "AIP AMDT 6/26",
    "AIP AMDT 7/20",
-   "AIP AMDT 7/24",
-   "AIP AMDT 8/24",
-   "AIRAC AIP AMDT 10/24"
+   "AIP AMDT 8/26",
+   "AIRAC AIP AMDT 6/26"
   ]
  },
  "runways": [
@@ -170,7 +163,8 @@
     127.621583333
    ],
    "sources": [
-    "AD2.12"
+    "AD2.12",
+    "RKJY AD CHART 2-21-1 (15 DEC 2022)"
    ]
   },
   "IYSO": {
@@ -619,15 +613,6 @@
     "RKJY AD CHART 2-21-1 (15 DEC 2022)"
    ]
   },
-  "RW350": {
-   "pos": [
-    34.833480556,
-    127.621583333
-   ],
-   "sources": [
-    "RKJY AD CHART 2-21-1 (15 DEC 2022)"
-   ]
-  },
   "D11.0 YSU": {
    "pos": [
     34.670888889,
@@ -809,15 +794,6 @@
    "sources": [
     "RKJY AD CHART 2-10-1 (12 JAN 2023)"
    ]
-  },
-  "GOSBO": {
-   "pos": [
-    34.254660278,
-    127.792901972
-   ],
-   "sources": [
-    "ENR"
-   ]
   }
  },
  "procedures": [
@@ -887,6 +863,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      35.128833333,
@@ -1089,6 +1066,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      34.255305556,
@@ -1183,6 +1161,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      35.128833333,
@@ -1354,6 +1333,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      35.128833333,
@@ -1475,6 +1455,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      34.255305556,
@@ -1494,9 +1475,48 @@
   {
    "type": "IAP",
    "name": "ILS Y/LOC Y RWY 17",
-   "transition": "from YEONA",
    "source": "RKJY AD CHART 2-15-1 (11 JAN 2024)",
+   "runway": "17",
    "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "IYSO DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.84925,
+      127.615166667
+     ]
+    },
+    {
+     "name": "YSU VOR/DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.842861111,
+      127.619083333
+     ]
+    },
+    {
+     "name": "IYSO LOC",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.831111111,
+      127.62275
+     ]
+    },
+    {
+     "name": "SOONA",
+     "role": null,
+     "defn": "BRG 166.34°/13.00 NM YSU",
+     "latlon": [
+      34.640972222,
+      127.715555556
+     ]
+    }
+   ],
+   "transition": "from YEONA",
    "legs": [
     {
      "serial": "001",
@@ -1565,45 +1585,7 @@
      ]
     }
    ],
-   "other_points": [
-    {
-     "name": "IYSO DME",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.84925,
-      127.615166667
-     ]
-    },
-    {
-     "name": "YSU VOR/DME",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.842861111,
-      127.619083333
-     ]
-    },
-    {
-     "name": "IYSO LOC",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.831111111,
-      127.62275
-     ]
-    },
-    {
-     "name": "SOONA",
-     "role": null,
-     "defn": "BRG 166.34°/13.00 NM YSU",
-     "latlon": [
-      34.640972222,
-      127.715555556
-     ]
-    }
-   ],
-   "runway": "17",
+   "qa": "ok",
    "coords": [
     [
      34.951055556,
@@ -1635,9 +1617,39 @@
   {
    "type": "IAP",
    "name": "ILS Z/LOC Z RWY 17",
-   "transition": "from SKOTA",
    "source": "RKJY AD CHART 2-16-1 (15 DEC 2022)",
+   "runway": "17",
    "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "IYSO DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.84925,
+      127.615166667
+     ]
+    },
+    {
+     "name": "IYSO LOC",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.831111111,
+      127.62275
+     ]
+    },
+    {
+     "name": "SOONA",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.640972222,
+      127.715555556
+     ]
+    }
+   ],
+   "transition": "from SKOTA",
    "legs": [
     {
      "serial": "001",
@@ -1706,36 +1718,7 @@
      ]
     }
    ],
-   "other_points": [
-    {
-     "name": "IYSO DME",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.84925,
-      127.615166667
-     ]
-    },
-    {
-     "name": "IYSO LOC",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.831111111,
-      127.62275
-     ]
-    },
-    {
-     "name": "SOONA",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.640972222,
-      127.715555556
-     ]
-    }
-   ],
-   "runway": "17",
+   "qa": "ok",
    "coords": [
     [
      35.101361111,
@@ -1835,6 +1818,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      35.101361111,
@@ -1949,6 +1933,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      34.951055556,
@@ -2162,6 +2147,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      35.028166667,
@@ -2193,9 +2179,30 @@
   {
    "type": "IAP",
    "name": "VOR RWY 17",
-   "transition": "from YEONA",
    "source": "RKJY AD CHART 2-18-1 (11 JAN 2024)",
+   "runway": "17",
    "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "YSU VOR/DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.842861111,
+      127.619083333
+     ]
+    },
+    {
+     "name": "SOONA",
+     "role": null,
+     "defn": "BRG 166.34°/13.00 NM YSU",
+     "latlon": [
+      34.640972222,
+      127.715555556
+     ]
+    }
+   ],
+   "transition": "from YEONA",
    "legs": [
     {
      "serial": "001",
@@ -2264,27 +2271,7 @@
      ]
     }
    ],
-   "other_points": [
-    {
-     "name": "YSU VOR/DME",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.842861111,
-      127.619083333
-     ]
-    },
-    {
-     "name": "SOONA",
-     "role": null,
-     "defn": "BRG 166.34°/13.00 NM YSU",
-     "latlon": [
-      34.640972222,
-      127.715555556
-     ]
-    }
-   ],
-   "runway": "17",
+   "qa": "ok",
    "coords": [
     [
      34.951055556,
@@ -2316,9 +2303,57 @@
   {
    "type": "IAP",
    "name": "ILS Y/LOC Y RWY 35",
-   "transition": "from SOONA",
    "source": "RKJY AD CHART 2-19-1 (11 JAN 2024)",
+   "runway": "35",
    "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "IYSU DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.83625,
+      127.621694444
+     ]
+    },
+    {
+     "name": "YSU VOR/DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.842861111,
+      127.619083333
+     ]
+    },
+    {
+     "name": "IYSU LOC",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.853611111,
+      127.611722222
+     ]
+    },
+    {
+     "name": "D5.0 YSU",
+     "role": null,
+     "defn": "BRG 345.94°/5.00 NM YSU",
+     "latlon": [
+      34.919694444,
+      127.579361111
+     ]
+    },
+    {
+     "name": "YEONA",
+     "role": null,
+     "defn": "R311 YSU /12.00 NM YSU",
+     "latlon": [
+      34.951055556,
+      127.414472222
+     ]
+    }
+   ],
+   "transition": "from SOONA",
    "legs": [
     {
      "serial": "001",
@@ -2387,54 +2422,7 @@
      ]
     }
    ],
-   "other_points": [
-    {
-     "name": "IYSU DME",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.83625,
-      127.621694444
-     ]
-    },
-    {
-     "name": "YSU VOR/DME",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.842861111,
-      127.619083333
-     ]
-    },
-    {
-     "name": "IYSU LOC",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.853611111,
-      127.611722222
-     ]
-    },
-    {
-     "name": "D5.0 YSU",
-     "role": null,
-     "defn": "BRG 345.94°/5.00 NM YSU",
-     "latlon": [
-      34.919694444,
-      127.579361111
-     ]
-    },
-    {
-     "name": "YEONA",
-     "role": null,
-     "defn": "R311 YSU /12.00 NM YSU",
-     "latlon": [
-      34.951055556,
-      127.414472222
-     ]
-    }
-   ],
-   "runway": "35",
+   "qa": "ok",
    "coords": [
     [
      34.640972222,
@@ -2466,9 +2454,48 @@
   {
    "type": "IAP",
    "name": "ILS Z/LOC Z RWY 35",
-   "transition": "from SOONA",
    "source": "RKJY AD CHART 2-20-1 (11 JAN 2024)",
+   "runway": "35",
    "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "IYSU DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.83625,
+      127.621694444
+     ]
+    },
+    {
+     "name": "IYSU LOC",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.853611111,
+      127.611722222
+     ]
+    },
+    {
+     "name": "JY505",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.919694444,
+      127.579361111
+     ]
+    },
+    {
+     "name": "YEONA",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.951055556,
+      127.414472222
+     ]
+    }
+   ],
+   "transition": "from SOONA",
    "legs": [
     {
      "serial": "001",
@@ -2537,45 +2564,7 @@
      ]
     }
    ],
-   "other_points": [
-    {
-     "name": "IYSU DME",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.83625,
-      127.621694444
-     ]
-    },
-    {
-     "name": "IYSU LOC",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.853611111,
-      127.611722222
-     ]
-    },
-    {
-     "name": "JY505",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.919694444,
-      127.579361111
-     ]
-    },
-    {
-     "name": "YEONA",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.951055556,
-      127.414472222
-     ]
-    }
-   ],
-   "runway": "35",
+   "qa": "ok",
    "coords": [
     [
      34.640972222,
@@ -2714,7 +2703,7 @@
     {
      "serial": "004",
      "path": "TF",
-     "fix": "RW350",
+     "fix": "RW35",
      "flyover": true,
      "course": "346(338.1)",
      "dist": "4.6",
@@ -2829,6 +2818,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      34.640972222,
@@ -2864,9 +2854,39 @@
   {
    "type": "IAP",
    "name": "VOR RWY 35",
-   "transition": "from SOONA",
    "source": "RKJY AD CHART 2-22-1 (11 JAN 2024)",
+   "runway": "35",
    "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "YSU VOR/DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      34.842861111,
+      127.619083333
+     ]
+    },
+    {
+     "name": "D2.0 YSU",
+     "role": null,
+     "defn": "BRG 347.15°/2.00 NM YSU",
+     "latlon": [
+      34.874138889,
+      127.604722222
+     ]
+    },
+    {
+     "name": "YEONA",
+     "role": null,
+     "defn": "BRG 310.64°/12.00 NM YSU",
+     "latlon": [
+      34.951055556,
+      127.414472222
+     ]
+    }
+   ],
+   "transition": "from SOONA",
    "legs": [
     {
      "serial": "001",
@@ -2935,36 +2955,7 @@
      ]
     }
    ],
-   "other_points": [
-    {
-     "name": "YSU VOR/DME",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      34.842861111,
-      127.619083333
-     ]
-    },
-    {
-     "name": "D2.0 YSU",
-     "role": null,
-     "defn": "BRG 347.15°/2.00 NM YSU",
-     "latlon": [
-      34.874138889,
-      127.604722222
-     ]
-    },
-    {
-     "name": "YEONA",
-     "role": null,
-     "defn": "BRG 310.64°/12.00 NM YSU",
-     "latlon": [
-      34.951055556,
-      127.414472222
-     ]
-    }
-   ],
-   "runway": "35",
+   "qa": "ok",
    "coords": [
     [
      34.640972222,
@@ -3151,6 +3142,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      34.833480556,
@@ -3276,6 +3268,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      34.833480556,
@@ -3426,6 +3419,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      34.833480556,
@@ -3460,6 +3454,7 @@
    "description": "Climb on R 166 YSU until YSU D10, then turn Left direct to YSU via R 126 YSU. Then proceed on R 003 YSU to ANUBA.",
    "restrictions": [],
    "legs": [],
+   "qa": "ok",
    "construction": [
     "Climb on R 166 YSU until YSU D10",
     "turn Left direct to YSU via R 126 YSU",
@@ -3499,6 +3494,7 @@
    "description": "Climb on R 166 YSU until YSU D5, then turn Right HDG 200° to intercept and proceed on R 174 YSU to GOSBO.",
    "restrictions": [],
    "legs": [],
+   "qa": "ok",
    "construction": [
     "Climb on R 166 YSU until YSU D5",
     "turn Right HDG 200° to intercept and proceed on R 174 YSU to GOSBO"
@@ -3515,10 +3511,6 @@
     [
      34.73988228593653,
      127.65035268189658
-    ],
-    [
-     34.254660278,
-     127.792901972
     ]
    ],
    "approx": true
@@ -3717,6 +3709,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      34.851036111,
@@ -3815,6 +3808,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      34.851036111,
@@ -3902,6 +3896,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      34.851036111,
@@ -4054,6 +4049,7 @@
      "rdh_ft": null
     }
    ],
+   "qa": "ok",
    "coords": [
     [
      34.851036111,
@@ -4088,6 +4084,7 @@
    "description": "Climb on RWY HDG until YSU D4, then turn right HDG 030° to intercept and 5 34, proceed on R 003 YSU to ANUBA.",
    "restrictions": [],
    "legs": [],
+   "qa": "ok",
    "construction": [
     "Climb on RWY HDG until YSU D4",
     "turn right HDG 030° to intercept and 5 34, proceed on R 003 YSU to ANUBA"
@@ -4118,6 +4115,7 @@
    "description": "Climb on RWY HDG until YSU D2, then turn right HDG 235° to intercept and proceed on R 174 YSU to GOSBO.",
    "restrictions": [],
    "legs": [],
+   "qa": "ok",
    "construction": [
     "Climb on RWY HDG until YSU D2",
     "turn right HDG 235° to intercept and proceed on R 174 YSU to GOSBO"
@@ -4130,10 +4128,6 @@
     [
      34.87332924173914,
      127.60207893639863
-    ],
-    [
-     34.254660278,
-     127.792901972
     ]
    ],
    "approx": true
@@ -4388,46 +4382,6 @@
   }
  ],
  "obstacles": [
-  {
-   "icao": "RKJY",
-   "chart": "2-5",
-   "amdt": "AIP AMDT 10/25",
-   "no": 1,
-   "lat": 34.8071972,
-   "lon": 127.6408167,
-   "elev_m": 111.0,
-   "type": "Natural high point"
-  },
-  {
-   "icao": "RKJY",
-   "chart": "2-5",
-   "amdt": "AIP AMDT 10/25",
-   "no": 2,
-   "lat": 34.7671528,
-   "lon": 127.6482083,
-   "elev_m": 217.5,
-   "type": "Natural high point"
-  },
-  {
-   "icao": "RKJY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 10/25",
-   "no": 1,
-   "lat": 34.8906528,
-   "lon": 127.6005167,
-   "elev_m": 74.5,
-   "type": "Natural high point"
-  },
-  {
-   "icao": "RKJY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 10/25",
-   "no": 2,
-   "lat": 34.892725,
-   "lon": 127.6004806,
-   "elev_m": 88.0,
-   "type": "Natural high point"
-  },
   {
    "icao": "RKJY",
    "chart": "2-7",
@@ -5812,6 +5766,7 @@
  "issues": [
   {
    "level": "fixed",
+   "proc": "RNAV POVOR 1R",
    "what": "RNAV POVOR 1R 002: dist 77.0 → 7.7 (OCR 소수점 보정)"
   }
  ]

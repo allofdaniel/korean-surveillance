@@ -1,0 +1,3403 @@
+{
+ "icao": "RKPU",
+ "built_at": "2026-11-05T05:16:47.738727Z",
+ "sources": [
+  {
+   "file": "(2-10) STAR.pdf",
+   "sha": "aa56b4dfcaf12327"
+  },
+  {
+   "file": "(2-12) INSTR APCH CHART.pdf",
+   "sha": "cfd988fe2ed74493"
+  },
+  {
+   "file": "(2-5) AD OBSTACLE CHART TYPE B_1748417850.pdf",
+   "sha": "743cf495d0ace55d"
+  },
+  {
+   "file": "(2-6) SID.pdf",
+   "sha": "523fa20488de7090"
+  },
+  {
+   "file": "RKPU-TEXT.pdf",
+   "sha": "e8a5397e842feedd"
+  }
+ ],
+ "airport": {
+  "icao": "RKPU",
+  "arp": [
+   35.593333333,
+   129.352222222
+  ],
+  "elev_m": 13.0,
+  "magvar": {
+   "deg": -9.0,
+   "year": 2025,
+   "annual": 0.041
+  },
+  "ctr": null,
+  "text_amdt": [
+   "AIP AMDT 10/26",
+   "AIP AMDT 7/25",
+   "AIP AMDT 8/26",
+   "AIP AMDT 9/26",
+   "AIRAC AIP AMDT 8/26"
+  ]
+ },
+ "runways": [
+  {
+   "id": "18",
+   "true_brg": 176.1,
+   "len_m": 2000,
+   "width_m": 45,
+   "thr": [
+    35.602469444,
+    129.350983333
+   ],
+   "thr_elev_m": 13.0
+  },
+  {
+   "id": "36",
+   "true_brg": 356.1,
+   "len_m": 2000,
+   "width_m": 45,
+   "thr": [
+    35.584486111,
+    129.352486111
+   ],
+   "thr_elev_m": 8.5
+  }
+ ],
+ "navaids": [
+  {
+   "type": "LOC 36",
+   "ident": "IULS",
+   "freq": "110.3 MHz",
+   "latlon": [
+    35.604527778,
+    129.350805556
+   ],
+   "decl": -9.0
+  },
+  {
+   "type": "GP 36",
+   "ident": null,
+   "freq": "335 MHz",
+   "latlon": [
+    35.587166667,
+    129.353361111
+   ],
+   "decl": null
+  },
+  {
+   "type": "DME 36",
+   "ident": "IULS",
+   "freq": "1001 MHz",
+   "latlon": [
+    35.587166667,
+    129.353361111
+   ],
+   "decl": null
+  },
+  {
+   "type": "VORTAC",
+   "ident": "KPO",
+   "freq": "112.5 MHz",
+   "latlon": [
+    35.977194444,
+    129.474527778
+   ],
+   "decl": -9.0
+  }
+ ],
+ "fixes": {
+  "RW18": {
+   "pos": [
+    35.602472222,
+    129.350972222
+   ],
+   "sources": [
+    "AD2.12",
+    "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)"
+   ]
+  },
+  "RW36": {
+   "pos": [
+    35.584486111,
+    129.352486111
+   ],
+   "sources": [
+    "AD2.12"
+   ]
+  },
+  "IULS": {
+   "pos": [
+    35.604527778,
+    129.350805556
+   ],
+   "sources": [
+    "AD2.19"
+   ]
+  },
+  "KPO": {
+   "pos": [
+    35.977194444,
+    129.474527778
+   ],
+   "sources": [
+    "AD2.19",
+    "RKPU AD CHART 2-6-1 (AIP AMDT 1/22)",
+    "RKPU AD CHART 2-8-1 (AIP AMDT 1/22)"
+   ]
+  },
+  "LAPAL": {
+   "pos": [
+    35.9035,
+    129.081111111
+   ],
+   "sources": [
+    "RKPU AD CHART 2-10-1 (AIP AMDT 7/25)",
+    "RKPU AD CHART 2-11-1 (AIP AMDT 7/25)"
+   ]
+  },
+  "DOGDI": {
+   "pos": [
+    35.926722222,
+    129.200888889
+   ],
+   "sources": [
+    "RKPU AD CHART 2-10-1 (AIP AMDT 7/25)",
+    "RKPU AD CHART 2-11-1 (AIP AMDT 7/25)"
+   ]
+  },
+  "MAKKY": {
+   "pos": [
+    35.871888889,
+    129.259944444
+   ],
+   "sources": [
+    "RKPU AD CHART 2-10-1 (AIP AMDT 7/25)",
+    "RKPU AD CHART 2-12-1 (AIP AMDT 1/23)",
+    "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)",
+    "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)"
+   ]
+  },
+  "APARU": {
+   "pos": [
+    35.411694444,
+    129.158916667
+   ],
+   "sources": [
+    "RKPU AD CHART 2-10-1 (AIP AMDT 7/25)",
+    "RKPU AD CHART 2-11-1 (AIP AMDT 7/25)",
+    "RKPU AD CHART 2-6-1 (AIP AMDT 1/22)",
+    "RKPU AD CHART 2-8-1 (AIP AMDT 1/22)"
+   ]
+  },
+  "PU751": {
+   "pos": [
+    35.787055556,
+    129.412833333
+   ],
+   "sources": [
+    "RKPU AD CHART 2-10-1 (AIP AMDT 7/25)"
+   ]
+  },
+  "PU752": {
+   "pos": [
+    35.899055556,
+    129.371972222
+   ],
+   "sources": [
+    "RKPU AD CHART 2-10-1 (AIP AMDT 7/25)"
+   ]
+  },
+  "PU701": {
+   "pos": [
+    35.579111111,
+    129.409805556
+   ],
+   "sources": [
+    "RKPU AD CHART 2-11-1 (AIP AMDT 7/25)"
+   ]
+  },
+  "HAEGU": {
+   "pos": [
+    35.535194444,
+    129.542305556
+   ],
+   "sources": [
+    "RKPU AD CHART 2-11-1 (AIP AMDT 7/25)",
+    "RKPU AD CHART 2-12-1 (AIP AMDT 1/23)",
+    "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)",
+    "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)",
+    "RKPU AD CHART 2-15-1 (AIP AMDT 5/25)",
+    "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)",
+    "RKPU AD CHART 2-17-1 (AIRAC AIP AMDT 13/23)",
+    "RKPU AD CHART 2-18-1 (AIP AMDT 2/26)"
+   ]
+  },
+  "SEDMO": {
+   "pos": [
+    35.807527778,
+    129.281944444
+   ],
+   "sources": [
+    "RKPU AD CHART 2-12-1 (AIP AMDT 1/23)",
+    "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)",
+    "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)",
+    "RKPU AD CHART 2-15-1 (AIP AMDT 5/25)",
+    "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)",
+    "RKPU AD CHART 2-17-1 (AIRAC AIP AMDT 13/23)",
+    "RKPU AD CHART 2-18-1 (AIP AMDT 2/26)"
+   ]
+  },
+  "PU402": {
+   "pos": [
+    35.737277778,
+    129.305944444
+   ],
+   "sources": [
+    "RKPU AD CHART 2-12-1 (AIP AMDT 1/23)",
+    "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)"
+   ]
+  },
+  "BINJO": {
+   "pos": [
+    35.695416667,
+    129.320222222
+   ],
+   "sources": [
+    "RKPU AD CHART 2-12-1 (AIP AMDT 1/23)"
+   ]
+  },
+  "PU403": {
+   "pos": [
+    35.654305556,
+    129.334888889
+   ],
+   "sources": [
+    "RKPU AD CHART 2-12-1 (AIP AMDT 1/23)"
+   ]
+  },
+  "IGMEL": {
+   "pos": [
+    35.63825,
+    129.340666667
+   ],
+   "sources": [
+    "RKPU AD CHART 2-12-1 (AIP AMDT 1/23)"
+   ]
+  },
+  "PU406": {
+   "pos": [
+    35.52475,
+    129.381194444
+   ],
+   "sources": [
+    "RKPU AD CHART 2-12-1 (AIP AMDT 1/23)"
+   ]
+  },
+  "KALUS": {
+   "pos": [
+    35.693722222,
+    129.320805556
+   ],
+   "sources": [
+    "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)"
+   ]
+  },
+  "GODIS": {
+   "pos": [
+    35.658527778,
+    129.342861111
+   ],
+   "sources": [
+    "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)"
+   ]
+  },
+  "PU407": {
+   "pos": [
+    35.491722222,
+    129.360222222
+   ],
+   "sources": [
+    "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)"
+   ]
+  },
+  "PU408": {
+   "pos": [
+    35.498111111,
+    129.475888889
+   ],
+   "sources": [
+    "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)"
+   ]
+  },
+  "ARC01": {
+   "pos": [
+    35.642722222,
+    129.305
+   ],
+   "sources": [
+    "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)"
+   ]
+  },
+  "D10.1 USN": {
+   "pos": [
+    35.760861111,
+    129.297722222
+   ],
+   "sources": [
+    "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)"
+   ]
+  },
+  "D8.0 USN": {
+   "pos": [
+    35.727111111,
+    129.309305556
+   ],
+   "sources": [
+    "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)"
+   ]
+  },
+  "D5.9 USN": {
+   "pos": [
+    35.693333333,
+    129.320861111
+   ],
+   "sources": [
+    "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)"
+   ]
+  },
+  "D3.3 USN": {
+   "pos": [
+    35.651222222,
+    129.335277778
+   ],
+   "sources": [
+    "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)"
+   ]
+  },
+  "D2.3 USN": {
+   "pos": [
+    35.634833333,
+    129.340861111
+   ],
+   "sources": [
+    "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)"
+   ]
+  },
+  "THR RWY 18": {
+   "pos": [
+    35.602469444,
+    129.350983333
+   ],
+   "sources": [
+    "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)"
+   ]
+  },
+  "USN VOR/DME": {
+   "pos": [
+    35.5985,
+    129.353277778
+   ],
+   "sources": [
+    "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)",
+    "RKPU AD CHART 2-15-1 (AIP AMDT 5/25)",
+    "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)",
+    "RKPU AD CHART 2-18-1 (AIP AMDT 2/26)"
+   ]
+  },
+  "D3.0 USN": {
+   "pos": [
+    35.550361111,
+    129.336555556
+   ],
+   "sources": [
+    "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)"
+   ]
+  },
+  "D9.3 IULS": {
+   "pos": [
+    35.431861111,
+    129.365222222
+   ],
+   "sources": [
+    "RKPU AD CHART 2-15-1 (AIP AMDT 5/25)"
+   ]
+  },
+  "D4.3 IULS": {
+   "pos": [
+    35.516,
+    129.358194444
+   ],
+   "sources": [
+    "RKPU AD CHART 2-15-1 (AIP AMDT 5/25)",
+    "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)"
+   ]
+  },
+  "D1.3 IULS": {
+   "pos": [
+    35.565472222,
+    129.354083333
+   ],
+   "sources": [
+    "RKPU AD CHART 2-15-1 (AIP AMDT 5/25)",
+    "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)"
+   ]
+  },
+  "THR RWY 36": {
+   "pos": [
+    35.584486111,
+    129.352486111
+   ],
+   "sources": [
+    "RKPU AD CHART 2-15-1 (AIP AMDT 5/25)",
+    "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)",
+    "RKPU AD CHART 2-18-1 (AIP AMDT 2/26)"
+   ]
+  },
+  "IULS DME": {
+   "pos": [
+    35.587166667,
+    129.353388889
+   ],
+   "sources": [
+    "RKPU AD CHART 2-15-1 (AIP AMDT 5/25)",
+    "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)"
+   ]
+  },
+  "IULS LOC": {
+   "pos": [
+    35.604527778,
+    129.350805556
+   ],
+   "sources": [
+    "RKPU AD CHART 2-15-1 (AIP AMDT 5/25)",
+    "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)"
+   ]
+  },
+  "D1.0 USN": {
+   "pos": [
+    35.614944444,
+    129.349944444
+   ],
+   "sources": [
+    "RKPU AD CHART 2-15-1 (AIP AMDT 5/25)",
+    "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)"
+   ]
+  },
+  "PU501": {
+   "pos": [
+    35.438361111,
+    129.484138889
+   ],
+   "sources": [
+    "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)",
+    "RKPU AD CHART 2-17-1 (AIRAC AIP AMDT 13/23)"
+   ]
+  },
+  "LUKLI": {
+   "pos": [
+    35.431777778,
+    129.365222222
+   ],
+   "sources": [
+    "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)",
+    "RKPU AD CHART 2-17-1 (AIRAC AIP AMDT 13/23)"
+   ]
+  },
+  "DOOBU": {
+   "pos": [
+    35.515361111,
+    129.35825
+   ],
+   "sources": [
+    "RKPU AD CHART 2-17-1 (AIRAC AIP AMDT 13/23)"
+   ]
+  },
+  "ONAPU": {
+   "pos": [
+    35.565111111,
+    129.354111111
+   ],
+   "sources": [
+    "RKPU AD CHART 2-17-1 (AIRAC AIP AMDT 13/23)"
+   ]
+  },
+  "D10.0 USN": {
+   "pos": [
+    35.43175,
+    129.362472222
+   ],
+   "sources": [
+    "RKPU AD CHART 2-18-1 (AIP AMDT 2/26)"
+   ]
+  },
+  "D5.0 USN": {
+   "pos": [
+    35.515111111,
+    129.357888889
+   ],
+   "sources": [
+    "RKPU AD CHART 2-18-1 (AIP AMDT 2/26)"
+   ]
+  },
+  "D2.0 USN": {
+   "pos": [
+    35.565138889,
+    129.355138889
+   ],
+   "sources": [
+    "RKPU AD CHART 2-18-1 (AIP AMDT 2/26)"
+   ]
+  },
+  "PU851": {
+   "pos": [
+    35.533138889,
+    129.370027778
+   ],
+   "sources": [
+    "RKPU AD CHART 2-6-1 (AIP AMDT 1/22)"
+   ]
+  },
+  "PU852": {
+   "pos": [
+    35.614222222,
+    129.271333333
+   ],
+   "sources": [
+    "RKPU AD CHART 2-6-1 (AIP AMDT 1/22)"
+   ]
+  },
+  "PU853": {
+   "pos": [
+    35.691277778,
+    129.314305556
+   ],
+   "sources": [
+    "RKPU AD CHART 2-6-1 (AIP AMDT 1/22)"
+   ]
+  },
+  "PU801": {
+   "pos": [
+    35.635777778,
+    129.348194444
+   ],
+   "sources": [
+    "RKPU AD CHART 2-8-1 (AIP AMDT 1/22)"
+   ]
+  },
+  "PU802": {
+   "pos": [
+    35.830111111,
+    129.252388889
+   ],
+   "sources": [
+    "RKPU AD CHART 2-8-1 (AIP AMDT 1/22)"
+   ]
+  },
+  "PU803": {
+   "pos": [
+    35.71275,
+    129.326305556
+   ],
+   "sources": [
+    "RKPU AD CHART 2-8-1 (AIP AMDT 1/22)"
+   ]
+  }
+ },
+ "procedures": [
+  {
+   "type": "STAR",
+   "name": "RNAV LAPAL 2D",
+   "transition": null,
+   "source": "RKPU AD CHART 2-10-1 (AIP AMDT 7/25)",
+   "runway": "18",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "LAPAL",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°54'12.6\"N 129°04'52.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.9035,
+      129.081111111
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "DOGDI",
+     "flyover": false,
+     "course": "085(076.6)",
+     "dist": "6.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°55'36.2\"N 129°12'03.2\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 85,
+     "course_true": 76.6,
+     "dist_nm": 6.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.926722222,
+      129.200888889
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "MAKKY",
+     "flyover": false,
+     "course": "147(138.8)",
+     "dist": "4.4",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°52'18.8\"N 129°15'35.8\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 147,
+     "course_true": 138.8,
+     "dist_nm": 4.4,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.871888889,
+      129.259944444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.9035,
+     129.081111111
+    ],
+    [
+     35.926722222,
+     129.200888889
+    ],
+    [
+     35.871888889,
+     129.259944444
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV APARU 2D",
+   "transition": null,
+   "source": "RKPU AD CHART 2-10-1 (AIP AMDT 7/25)",
+   "runway": "18",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "APARU",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°24'42.1\"N 129°09'32.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.411694444,
+      129.158916667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "PU751",
+     "flyover": false,
+     "course": "037(028.8)",
+     "dist": "25.7",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°47'13.4\"N 129°24'46.2\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 37,
+     "course_true": 28.8,
+     "dist_nm": 25.7,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.787055556,
+      129.412833333
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "PU752",
+     "flyover": false,
+     "course": "352(343.5)",
+     "dist": "7.0",
+     "turn": null,
+     "alt": "+7 000",
+     "speed": "",
+     "coords": "35°53'56.6\"N 129°22'19.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 352,
+     "course_true": 343.5,
+     "dist_nm": 7.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       7000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.899055556,
+      129.371972222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "MAKKY",
+     "flyover": false,
+     "course": "262(253.4)",
+     "dist": "5.7",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°52'18.8\"N 129°15'35.8\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 262,
+     "course_true": 253.4,
+     "dist_nm": 5.7,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.871888889,
+      129.259944444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.411694444,
+     129.158916667
+    ],
+    [
+     35.787055556,
+     129.412833333
+    ],
+    [
+     35.899055556,
+     129.371972222
+    ],
+    [
+     35.871888889,
+     129.259944444
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV LAPAL 2C",
+   "transition": null,
+   "source": "RKPU AD CHART 2-11-1 (AIP AMDT 7/25)",
+   "runway": "36",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "LAPAL",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°54'12.6\"N 129°04'52.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.9035,
+      129.081111111
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "DOGDI",
+     "flyover": false,
+     "course": "085(076.6)",
+     "dist": "6.0",
+     "turn": null,
+     "alt": "@7 000",
+     "speed": "",
+     "coords": "35°55'36.2\"N 129°12'03.2\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 85,
+     "course_true": 76.6,
+     "dist_nm": 6.0,
+     "alt_c": [
+      [
+       "AT",
+       7000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.926722222,
+      129.200888889
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "PU701",
+     "flyover": false,
+     "course": "162(153.8)",
+     "dist": "23.2",
+     "turn": null,
+     "alt": "@7 000",
+     "speed": "",
+     "coords": "35°34'44.8\"N 129°24'35.3\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 162,
+     "course_true": 153.8,
+     "dist_nm": 23.2,
+     "alt_c": [
+      [
+       "AT",
+       7000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.579111111,
+      129.409805556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "HAEGU",
+     "flyover": false,
+     "course": "120(112.0)",
+     "dist": "7.0",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°32'06.7\"N 129°32'32.3\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 120,
+     "course_true": 112.0,
+     "dist_nm": 7.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.535194444,
+      129.542305556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.9035,
+     129.081111111
+    ],
+    [
+     35.926722222,
+     129.200888889
+    ],
+    [
+     35.579111111,
+     129.409805556
+    ],
+    [
+     35.535194444,
+     129.542305556
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV APARU 2C",
+   "transition": null,
+   "source": "RKPU AD CHART 2-11-1 (AIP AMDT 7/25)",
+   "runway": "36",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "APARU",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°24'42.1\"N 129°09'32.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.411694444,
+      129.158916667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "PU701",
+     "flyover": false,
+     "course": "059(050.7)",
+     "dist": "15.9",
+     "turn": null,
+     "alt": "+7 000",
+     "speed": "",
+     "coords": "35°34'44.8\"N 129°24'35.3\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 59,
+     "course_true": 50.7,
+     "dist_nm": 15.9,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       7000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.579111111,
+      129.409805556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "HAEGU",
+     "flyover": false,
+     "course": "120(112.0)",
+     "dist": "7.0",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°32'06.7\"N 129°32'32.3\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 120,
+     "course_true": 112.0,
+     "dist_nm": 7.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.535194444,
+      129.542305556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.411694444,
+     129.158916667
+    ],
+    [
+     35.579111111,
+     129.409805556
+    ],
+    [
+     35.535194444,
+     129.542305556
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "RNP Y RWY 18",
+   "transition": null,
+   "source": "RKPU AD CHART 2-12-1 (AIP AMDT 1/23)",
+   "runway": "18",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "MAKKY",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°52'18.8\"N 129°15'35.8\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "IAF",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.871888889,
+      129.259944444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "SEDMO",
+     "flyover": false,
+     "course": "173(164.4)",
+     "dist": "4.0",
+     "turn": null,
+     "alt": "+4 000",
+     "speed": "",
+     "coords": "35°48'27.1\"N 129°16'55.0\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "IF",
+     "course_mag": 173,
+     "course_true": 164.4,
+     "dist_nm": 4.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       4000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.807527778,
+      129.281944444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "PU402",
+     "flyover": false,
+     "course": "173(164.4)",
+     "dist": "4.4",
+     "turn": null,
+     "alt": "+3 000",
+     "speed": "",
+     "coords": "35°44'14.2\"N 129°18'21.4\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "SDF",
+     "course_mag": 173,
+     "course_true": 164.4,
+     "dist_nm": 4.4,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       3000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.737277778,
+      129.305944444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "BINJO",
+     "flyover": false,
+     "course": "173(164.4)",
+     "dist": "2.6",
+     "turn": null,
+     "alt": "+2 400",
+     "speed": "",
+     "coords": "35°41'43.5\"N 129°19'12.8\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "FAF",
+     "course_mag": 173,
+     "course_true": 164.4,
+     "dist_nm": 2.6,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       2400
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.695416667,
+      129.320222222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "PU403",
+     "flyover": false,
+     "course": "172(163.7)",
+     "dist": "2.6",
+     "turn": null,
+     "alt": "+1 300",
+     "speed": "",
+     "coords": "35°39'15.5\"N 129°20'05.6\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "SDF",
+     "course_mag": 172,
+     "course_true": 163.7,
+     "dist_nm": 2.6,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       1300
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.654305556,
+      129.334888889
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "006",
+     "path": "TF",
+     "fix": "IGMEL",
+     "flyover": true,
+     "course": "172(163.7)",
+     "dist": "1.0",
+     "turn": null,
+     "alt": "+990",
+     "speed": "",
+     "coords": "35°38'17.7\"N 129°20'26.4\"E",
+     "vpa": "-3.77/50",
+     "navspec": "RNP APCH",
+     "remarks": "MAPt",
+     "course_mag": 172,
+     "course_true": 163.7,
+     "dist_nm": 1.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       990
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.63825,
+      129.340666667
+     ],
+     "vpa_deg": -3.77,
+     "rdh_ft": 50
+    },
+    {
+     "serial": "007",
+     "path": "TF",
+     "fix": "PU406",
+     "flyover": false,
+     "course": "172(163.7)",
+     "dist": "7.1",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°31'29.1\"N 129°22'52.3\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "",
+     "course_mag": 172,
+     "course_true": 163.7,
+     "dist_nm": 7.1,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.52475,
+      129.381194444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "008",
+     "path": "TF",
+     "fix": "HAEGU",
+     "flyover": true,
+     "course": "094(085.6)",
+     "dist": "7.9",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°32'06.7\"N 129°32'32.3\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "",
+     "course_mag": 94,
+     "course_true": 85.6,
+     "dist_nm": 7.9,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.535194444,
+      129.542305556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "009",
+     "path": "HM",
+     "fix": "HAEGU",
+     "flyover": true,
+     "course": "300 (292.1)",
+     "dist": "",
+     "turn": "R",
+     "alt": "@5 000",
+     "speed": "-200",
+     "coords": "35°32'06.7\"N 129°32'32.3\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "1 min (Outbound timing)",
+     "course_mag": 300,
+     "course_true": 292.1,
+     "dist_nm": null,
+     "alt_c": [
+      [
+       "AT",
+       5000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      200
+     ],
+     "latlon": [
+      35.535194444,
+      129.542305556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.871888889,
+     129.259944444
+    ],
+    [
+     35.807527778,
+     129.281944444
+    ],
+    [
+     35.737277778,
+     129.305944444
+    ],
+    [
+     35.695416667,
+     129.320222222
+    ],
+    [
+     35.654305556,
+     129.334888889
+    ],
+    [
+     35.63825,
+     129.340666667
+    ],
+    [
+     35.52475,
+     129.381194444
+    ],
+    [
+     35.535194444,
+     129.542305556
+    ],
+    [
+     35.535194444,
+     129.542305556
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "RNP Z RWY 18 (AR)",
+   "transition": null,
+   "source": "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)",
+   "runway": "18",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "MAKKY",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "-220",
+     "coords": "35°52'18.8\"N 129°15'35.8\"E",
+     "vpa": "",
+     "navspec": "",
+     "remarks": "IAF",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      220
+     ],
+     "latlon": [
+      35.871888889,
+      129.259944444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "SEDMO",
+     "flyover": false,
+     "course": "173(164.4)",
+     "dist": "4.0",
+     "turn": null,
+     "alt": "+4 000",
+     "speed": "-220",
+     "coords": "35°48'27.1\"N 129°16'55.0\"E",
+     "vpa": "",
+     "navspec": "0.5",
+     "remarks": "IF",
+     "course_mag": 173,
+     "course_true": 164.4,
+     "dist_nm": 4.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       4000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      220
+     ],
+     "latlon": [
+      35.807527778,
+      129.281944444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "PU402",
+     "flyover": false,
+     "course": "173(164.4)",
+     "dist": "4.4",
+     "turn": null,
+     "alt": "+2 800",
+     "speed": "-220",
+     "coords": "35°44'14.2\"N 129°18'21.4\"E",
+     "vpa": "",
+     "navspec": "0.5",
+     "remarks": "",
+     "course_mag": 173,
+     "course_true": 164.4,
+     "dist_nm": 4.4,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       2800
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      220
+     ],
+     "latlon": [
+      35.737277778,
+      129.305944444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "KALUS",
+     "flyover": false,
+     "course": "173(164.4)",
+     "dist": "2.7",
+     "turn": null,
+     "alt": "+2 000",
+     "speed": "-165",
+     "coords": "35°41'37.4\"N 129°19'14.9\"E",
+     "vpa": "",
+     "navspec": "0.3",
+     "remarks": "FAF Bank Angle 18˚",
+     "course_mag": 173,
+     "course_true": 164.4,
+     "dist_nm": 2.7,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       2000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      165
+     ],
+     "latlon": [
+      35.693722222,
+      129.320805556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "GODIS",
+     "flyover": false,
+     "course": "161(152.9)",
+     "dist": "2.4",
+     "turn": "L",
+     "alt": "+1 218",
+     "speed": "-165",
+     "coords": "35°39'30.7\"N 129°20'34.3\"E",
+     "vpa": "-3.10",
+     "navspec": "0.3",
+     "remarks": "Bank Angle 18˚",
+     "course_mag": 161,
+     "course_true": 152.9,
+     "dist_nm": 2.4,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       1218
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      165
+     ],
+     "latlon": [
+      35.658527778,
+      129.342861111
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "007",
+     "path": "TF",
+     "fix": "RW18",
+     "flyover": true,
+     "course": "184(176.1)",
+     "dist": "2.6",
+     "turn": null,
+     "alt": "",
+     "speed": "-165",
+     "coords": "35°36'08.9\"N 129°21'03.5\"E",
+     "vpa": "-3.10/60",
+     "navspec": "0.3",
+     "remarks": "",
+     "course_mag": 184,
+     "course_true": 176.1,
+     "dist_nm": 2.6,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      165
+     ],
+     "latlon": [
+      35.602472222,
+      129.350972222
+     ],
+     "vpa_deg": -3.1,
+     "rdh_ft": 60
+    },
+    {
+     "serial": "008",
+     "path": "TF",
+     "fix": "PU407",
+     "flyover": false,
+     "course": "184(176.1)",
+     "dist": "6.7",
+     "turn": null,
+     "alt": "",
+     "speed": "-220",
+     "coords": "35°29'30.2\"N 129°21'36.8\"E",
+     "vpa": "",
+     "navspec": "1.0",
+     "remarks": "",
+     "course_mag": 184,
+     "course_true": 176.1,
+     "dist_nm": 6.7,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      220
+     ],
+     "latlon": [
+      35.491722222,
+      129.360222222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "009",
+     "path": "TF",
+     "fix": "PU408",
+     "flyover": false,
+     "course": "094(086.1)",
+     "dist": "5.7",
+     "turn": "L",
+     "alt": "",
+     "speed": "-220",
+     "coords": "35°29'53.2\"N 129°28'33.2\"E",
+     "vpa": "",
+     "navspec": "1.0",
+     "remarks": "Bank Angle 18˚",
+     "course_mag": 94,
+     "course_true": 86.1,
+     "dist_nm": 5.7,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      220
+     ],
+     "latlon": [
+      35.498111111,
+      129.475888889
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "010",
+     "path": "TF",
+     "fix": "HAEGU",
+     "flyover": true,
+     "course": "064(055.7)",
+     "dist": "3.9",
+     "turn": "L",
+     "alt": "+5 000",
+     "speed": "-220",
+     "coords": "35°32'06.7\"N 129°32'32.3\"E",
+     "vpa": "",
+     "navspec": "1.0",
+     "remarks": "Bank Angle 18˚",
+     "course_mag": 64,
+     "course_true": 55.7,
+     "dist_nm": 3.9,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      220
+     ],
+     "latlon": [
+      35.535194444,
+      129.542305556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "011",
+     "path": "HM",
+     "fix": "HAEGU",
+     "flyover": true,
+     "course": "300 (292.1)",
+     "dist": "",
+     "turn": "R",
+     "alt": "@5 000",
+     "speed": "-200",
+     "coords": "35°32'06.7\"N 129°32'32.3\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "1 min (Outbound timing)",
+     "course_mag": 300,
+     "course_true": 292.1,
+     "dist_nm": null,
+     "alt_c": [
+      [
+       "AT",
+       5000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      200
+     ],
+     "latlon": [
+      35.535194444,
+      129.542305556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.871888889,
+     129.259944444
+    ],
+    [
+     35.807527778,
+     129.281944444
+    ],
+    [
+     35.737277778,
+     129.305944444
+    ],
+    [
+     35.693722222,
+     129.320805556
+    ],
+    [
+     35.658527778,
+     129.342861111
+    ],
+    [
+     35.602472222,
+     129.350972222
+    ],
+    [
+     35.491722222,
+     129.360222222
+    ],
+    [
+     35.498111111,
+     129.475888889
+    ],
+    [
+     35.535194444,
+     129.542305556
+    ],
+    [
+     35.535194444,
+     129.542305556
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "",
+   "source": "RKPU AD CHART 2-13-1 (AIP AMDT 1/24)",
+   "runway": "18",
+   "coding": "AIP fix/point table (conventional)",
+   "other_points": [],
+   "transition": null,
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "ARC01",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.642722222,
+      129.305
+     ]
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.642722222,
+     129.305
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "VOR RWY 18",
+   "source": "RKPU AD CHART 2-14-1 (AIP AMDT 7/23)",
+   "runway": "18",
+   "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "USN VOR/DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.5985,
+      129.353277778
+     ]
+    },
+    {
+     "name": "D3.0 USN",
+     "role": null,
+     "defn": "BRG 190.62°/ 3.00 NM USN",
+     "latlon": [
+      35.550361111,
+      129.336555556
+     ]
+    },
+    {
+     "name": "HAEGU",
+     "role": null,
+     "defn": "BRG 93.43°/ 10.00 NM USN",
+     "latlon": [
+      35.535194444,
+      129.542305556
+     ]
+    }
+   ],
+   "transition": "from MAKKY",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "MAKKY",
+     "role": "IAF",
+     "defn": "R 353 USN / 17.00 NM USN",
+     "latlon": [
+      35.871888889,
+      129.259944444
+     ]
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "SEDMO",
+     "role": "IF",
+     "defn": "BRG 172.64°/ 13.00 NM USN",
+     "latlon": [
+      35.807527778,
+      129.281944444
+     ]
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "D10.1 USN",
+     "role": "SDF",
+     "defn": "BRG 172.64°/ 10.10 NM USN",
+     "latlon": [
+      35.760861111,
+      129.297722222
+     ]
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "D8.0 USN",
+     "role": "SDF",
+     "defn": "BRG 172.64°/ 8.00 NM USN",
+     "latlon": [
+      35.727111111,
+      129.309305556
+     ]
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "D5.9 USN",
+     "role": "FAF",
+     "defn": "BRG 172.64°/ 5.90 NM USN",
+     "latlon": [
+      35.693333333,
+      129.320861111
+     ]
+    },
+    {
+     "serial": "006",
+     "path": "TF",
+     "fix": "D3.3 USN",
+     "role": "SDF",
+     "defn": "BRG 172.64°/ 3.28 NM USN",
+     "latlon": [
+      35.651222222,
+      129.335277778
+     ]
+    },
+    {
+     "serial": "007",
+     "path": "TF",
+     "fix": "D2.3 USN",
+     "role": "MAPt",
+     "defn": "BRG 172.64°/ 2.26 NM USN",
+     "latlon": [
+      35.634833333,
+      129.340861111
+     ]
+    },
+    {
+     "serial": "008",
+     "path": "TF",
+     "fix": "THR RWY 18",
+     "role": null,
+     "defn": "Final approach descent angle 3.67°(FAF-SDF) / 3.71°(SDF-THR)",
+     "latlon": [
+      35.602469444,
+      129.350983333
+     ]
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.871888889,
+     129.259944444
+    ],
+    [
+     35.807527778,
+     129.281944444
+    ],
+    [
+     35.760861111,
+     129.297722222
+    ],
+    [
+     35.727111111,
+     129.309305556
+    ],
+    [
+     35.693333333,
+     129.320861111
+    ],
+    [
+     35.651222222,
+     129.335277778
+    ],
+    [
+     35.634833333,
+     129.340861111
+    ],
+    [
+     35.602469444,
+     129.350983333
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "ILS Y/LOC Y RWY 36",
+   "source": "RKPU AD CHART 2-15-1 (AIP AMDT 5/25)",
+   "runway": "36",
+   "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "IULS DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.587166667,
+      129.353388889
+     ]
+    },
+    {
+     "name": "USN VOR/DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.5985,
+      129.353277778
+     ]
+    },
+    {
+     "name": "IULS LOC",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.604527778,
+      129.350805556
+     ]
+    },
+    {
+     "name": "D1.0 USN",
+     "role": null,
+     "defn": "BRG 4.31°/ 1.00 NM USN",
+     "latlon": [
+      35.614944444,
+      129.349944444
+     ]
+    },
+    {
+     "name": "SEDMO",
+     "role": null,
+     "defn": "BRG 352.68°/ 13.00 NM USN",
+     "latlon": [
+      35.807527778,
+      129.281944444
+     ]
+    }
+   ],
+   "transition": "from HAEGU",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "HAEGU",
+     "role": "IAF",
+     "defn": "R 120 USN / 10.00 NM USN",
+     "latlon": [
+      35.535194444,
+      129.542305556
+     ]
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "D9.3 IULS",
+     "role": "IF",
+     "defn": "BRG 4.31°/ 9.30 NM IULS",
+     "latlon": [
+      35.431861111,
+      129.365222222
+     ]
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "D4.3 IULS",
+     "role": "FAF LOC ONLY",
+     "defn": "BRG 4.31°/ 4.30 NM IULS",
+     "latlon": [
+      35.516,
+      129.358194444
+     ]
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "D1.3 IULS",
+     "role": "MAPt LOC ONLY",
+     "defn": "BRG 4.31°/ 1.30 NM IULS",
+     "latlon": [
+      35.565472222,
+      129.354083333
+     ]
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "THR RWY 36",
+     "role": null,
+     "defn": "Final approach descent angle 2.90° (LOC ONLY)",
+     "latlon": [
+      35.584486111,
+      129.352486111
+     ]
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.535194444,
+     129.542305556
+    ],
+    [
+     35.431861111,
+     129.365222222
+    ],
+    [
+     35.516,
+     129.358194444
+    ],
+    [
+     35.565472222,
+     129.354083333
+    ],
+    [
+     35.584486111,
+     129.352486111
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "ILS Z/LOC Z RWY 36",
+   "source": "RKPU AD CHART 2-16-1 (AIP AMDT 13/22)",
+   "runway": "36",
+   "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "IULS DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.587166667,
+      129.353388889
+     ]
+    },
+    {
+     "name": "USN VOR/DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.5985,
+      129.353277778
+     ]
+    },
+    {
+     "name": "IULS LOC",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.604527778,
+      129.350805556
+     ]
+    },
+    {
+     "name": "D1.0 USN",
+     "role": null,
+     "defn": "BRG 4.31°/ 1.00 NM USN",
+     "latlon": [
+      35.614944444,
+      129.349944444
+     ]
+    },
+    {
+     "name": "SEDMO",
+     "role": null,
+     "defn": "BRG 352.68°/ 13.00 NM USN",
+     "latlon": [
+      35.807527778,
+      129.281944444
+     ]
+    }
+   ],
+   "transition": "from HAEGU",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "HAEGU",
+     "role": "IAF",
+     "defn": null,
+     "latlon": [
+      35.535194444,
+      129.542305556
+     ]
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "PU501",
+     "role": "SDF",
+     "defn": null,
+     "latlon": [
+      35.438361111,
+      129.484138889
+     ]
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "LUKLI",
+     "role": "IF",
+     "defn": "BRG 4.31°/ 9.30 NM IULS",
+     "latlon": [
+      35.431777778,
+      129.365222222
+     ]
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "D4.3 IULS",
+     "role": "FAF LOC ONLY",
+     "defn": "BRG 4.31°/ 4.30 NM IULS",
+     "latlon": [
+      35.516,
+      129.358194444
+     ]
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "D1.3 IULS",
+     "role": "MAPt LOC ONLY",
+     "defn": "BRG 4.31°/ 1.30 NM IULS",
+     "latlon": [
+      35.565472222,
+      129.354083333
+     ]
+    },
+    {
+     "serial": "006",
+     "path": "TF",
+     "fix": "THR RWY 36",
+     "role": null,
+     "defn": "Final approach descent angle 2.90° (LOC ONLY)",
+     "latlon": [
+      35.584486111,
+      129.352486111
+     ]
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.535194444,
+     129.542305556
+    ],
+    [
+     35.438361111,
+     129.484138889
+    ],
+    [
+     35.431777778,
+     129.365222222
+    ],
+    [
+     35.516,
+     129.358194444
+    ],
+    [
+     35.565472222,
+     129.354083333
+    ],
+    [
+     35.584486111,
+     129.352486111
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "RNP RWY 36",
+   "transition": null,
+   "source": "RKPU AD CHART 2-17-1 (AIRAC AIP AMDT 13/23)",
+   "runway": "36",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "HAEGU",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°32'06.7\"N 129°32'32.3\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "IAF",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.535194444,
+      129.542305556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "PU501",
+     "flyover": false,
+     "course": "214(206.2)",
+     "dist": "6.5",
+     "turn": null,
+     "alt": "+3 500",
+     "speed": "",
+     "coords": "35°26'18.1\"N 129°29'02.9\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "SDF",
+     "course_mag": 214,
+     "course_true": 206.2,
+     "dist_nm": 6.5,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       3500
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.438361111,
+      129.484138889
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "LUKLI",
+     "flyover": false,
+     "course": "274(266.2)",
+     "dist": "5.8",
+     "turn": null,
+     "alt": "+2 500",
+     "speed": "",
+     "coords": "35°25'54.4\"N 129°21'54.8\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "IF",
+     "course_mag": 274,
+     "course_true": 266.2,
+     "dist_nm": 5.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       2500
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.431777778,
+      129.365222222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "DOOBU",
+     "flyover": false,
+     "course": "004(356.1)",
+     "dist": "5.0",
+     "turn": null,
+     "alt": "+1 400",
+     "speed": "",
+     "coords": "35°30'55.3\"N 129°21'29.7\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "FAF",
+     "course_mag": 4,
+     "course_true": 356.1,
+     "dist_nm": 5.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       1400
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.515361111,
+      129.35825
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "ONAPU",
+     "flyover": true,
+     "course": "004(356.1)",
+     "dist": "3.0",
+     "turn": null,
+     "alt": "+910",
+     "speed": "",
+     "coords": "35°33'54.4\"N 129°21'14.8\"E",
+     "vpa": "-3.00/50",
+     "navspec": "RNP APCH",
+     "remarks": "MAPt",
+     "course_mag": 4,
+     "course_true": 356.1,
+     "dist_nm": 3.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       910
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.565111111,
+      129.354111111
+     ],
+     "vpa_deg": -3.0,
+     "rdh_ft": 50
+    },
+    {
+     "serial": "006",
+     "path": "HM",
+     "fix": "SEDMO",
+     "flyover": true,
+     "course": "355(346.4)",
+     "dist": "14.9",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°48'27.1\"N 129°16'55.0\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "1 min (Outbound timing)",
+     "course_mag": 355,
+     "course_true": 346.4,
+     "dist_nm": 14.9,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.807527778,
+      129.281944444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.535194444,
+     129.542305556
+    ],
+    [
+     35.438361111,
+     129.484138889
+    ],
+    [
+     35.431777778,
+     129.365222222
+    ],
+    [
+     35.515361111,
+     129.35825
+    ],
+    [
+     35.565111111,
+     129.354111111
+    ],
+    [
+     35.807527778,
+     129.281944444
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "VOR RWY 36",
+   "source": "RKPU AD CHART 2-18-1 (AIP AMDT 2/26)",
+   "runway": "36",
+   "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "USN VOR/DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.5985,
+      129.353277778
+     ]
+    },
+    {
+     "name": "SEDMO",
+     "role": null,
+     "defn": "BRG 352.68°/ 13.00 NM USN",
+     "latlon": [
+      35.807527778,
+      129.281944444
+     ]
+    }
+   ],
+   "transition": "from HAEGU",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "HAEGU",
+     "role": "IAF",
+     "defn": "R 120 USN / 10.00 NM USN",
+     "latlon": [
+      35.535194444,
+      129.542305556
+     ]
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "D10.0 USN",
+     "role": "IF",
+     "defn": "BRG 5.63°/ 10.00 NM USN",
+     "latlon": [
+      35.43175,
+      129.362472222
+     ]
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "D5.0 USN",
+     "role": "FAF",
+     "defn": "BRG 5.63°/ 5.00 NM USN",
+     "latlon": [
+      35.515111111,
+      129.357888889
+     ]
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "D2.0 USN",
+     "role": "MAPt",
+     "defn": "BRG 5.63°/ 2.00 NM USN",
+     "latlon": [
+      35.565138889,
+      129.355138889
+     ]
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "THR RWY 36",
+     "role": null,
+     "defn": "Final approach descent angle 2.99°",
+     "latlon": [
+      35.584486111,
+      129.352486111
+     ]
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.535194444,
+     129.542305556
+    ],
+    [
+     35.43175,
+     129.362472222
+    ],
+    [
+     35.515111111,
+     129.357888889
+    ],
+    [
+     35.565138889,
+     129.355138889
+    ],
+    [
+     35.584486111,
+     129.352486111
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV KPO 1M",
+   "transition": null,
+   "source": "RKPU AD CHART 2-6-1 (AIP AMDT 1/22)",
+   "runway": "18",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "PU851",
+     "flyover": true,
+     "course": "172(164.0)",
+     "dist": "3.1",
+     "turn": null,
+     "alt": "-4 000",
+     "speed": "-250",
+     "coords": "35°31'59.3\"N 129°22'12.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 172,
+     "course_true": 164.0,
+     "dist_nm": 3.1,
+     "alt_c": [
+      [
+       "AT_OR_BELOW",
+       4000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      250
+     ],
+     "latlon": [
+      35.533138889,
+      129.370027778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "DF",
+     "fix": "PU852",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": "R",
+     "alt": "",
+     "speed": "-250",
+     "coords": "35°36'51.2\"N 129°16'16.8\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      250
+     ],
+     "latlon": [
+      35.614222222,
+      129.271333333
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "PU853",
+     "flyover": false,
+     "course": "033(024.5)",
+     "dist": "5.1",
+     "turn": null,
+     "alt": "@6 000",
+     "speed": "",
+     "coords": "35°41'28.6\"N 129°18'51.5\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 33,
+     "course_true": 24.5,
+     "dist_nm": 5.1,
+     "alt_c": [
+      [
+       "AT",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.691277778,
+      129.314305556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "KPO",
+     "flyover": false,
+     "course": "033(024.5)",
+     "dist": "18.8",
+     "turn": null,
+     "alt": "@6 000",
+     "speed": "",
+     "coords": "35°58'37.9\"N 129°28'28.3\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 33,
+     "course_true": 24.5,
+     "dist_nm": 18.8,
+     "alt_c": [
+      [
+       "AT",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.977194444,
+      129.474527778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.584486111,
+     129.352486111
+    ],
+    [
+     35.533138889,
+     129.370027778
+    ],
+    [
+     35.614222222,
+     129.271333333
+    ],
+    [
+     35.691277778,
+     129.314305556
+    ],
+    [
+     35.977194444,
+     129.474527778
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV APARU 1M",
+   "transition": null,
+   "source": "RKPU AD CHART 2-6-1 (AIP AMDT 1/22)",
+   "runway": "18",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "PU851",
+     "flyover": true,
+     "course": "172(164.0)",
+     "dist": "3.1",
+     "turn": null,
+     "alt": "-4 000",
+     "speed": "-250",
+     "coords": "35°31'59.3\"N 129°22'12.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 172,
+     "course_true": 164.0,
+     "dist_nm": 3.1,
+     "alt_c": [
+      [
+       "AT_OR_BELOW",
+       4000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      250
+     ],
+     "latlon": [
+      35.533138889,
+      129.370027778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "DF",
+     "fix": "APARU",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": "R",
+     "alt": "-6 000",
+     "speed": "",
+     "coords": "35°24'42.1\"N 129°09'32.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [
+      [
+       "AT_OR_BELOW",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.411694444,
+      129.158916667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.584486111,
+     129.352486111
+    ],
+    [
+     35.533138889,
+     129.370027778
+    ],
+    [
+     35.411694444,
+     129.158916667
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "APARU 7S",
+   "transition": null,
+   "source": "RKPU AD CHART 2-7 text",
+   "runway": "18",
+   "coding": "conventional (constructed from description)",
+   "description": "turns are limited to maximum of 210 kt IAS until USN D4. Climb on HDG 172˚ until USN D4, then turn Right HDG 275˚ to  intercept and track out-bound to APARU via R 228 USN. Climb and maintain 6 000 ft unless otherwise directed by ATC. Climb on HDG 172° until USN D4, then turn Right HDG 300° to join  airway V11 and proceed to KPO VORTAC.",
+   "restrictions": [
+    "Climb on HDG 172˚ until USN D4, then turn Right HDG 275˚ to",
+    "6% CG is required for ATC purpose and 3.8% CG is ",
+    "6% CG is required for ATC purpose and 4.5% CG is "
+   ],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: turns are limited to maximum of 210 kt IAS until USN D4. Climb on HDG 172˚ until USN D4",
+    "UNPARSED: turn Right HDG 275˚ to intercept and track out-bound to APARU via R 228 USN. Climb and maintain 6 000 ft unless otherwise directed by ATC. Climb on HDG 172° until USN D4",
+    "UNPARSED: turn Right HDG 300° to join airway V11 and proceed to KPO VORTAC"
+   ],
+   "coords": [
+    [
+     35.584486111,
+     129.352486111
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "RNAV KPO 1R",
+   "transition": null,
+   "source": "RKPU AD CHART 2-8-1 (AIP AMDT 1/22)",
+   "runway": "36",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "PU801",
+     "flyover": true,
+     "course": "004(356.1)",
+     "dist": "2.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-200",
+     "coords": "35°38'08.8\"N 129°20'53.5\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 4,
+     "course_true": 356.1,
+     "dist_nm": 2.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      200
+     ],
+     "latlon": [
+      35.635777778,
+      129.348194444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "CF",
+     "fix": "PU802",
+     "flyover": true,
+     "course": "349(340.6)",
+     "dist": "12.5",
+     "turn": null,
+     "alt": "-6 000",
+     "speed": "-215",
+     "coords": "35°49'48.4\"N 129°15'08.6\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 349,
+     "course_true": 340.6,
+     "dist_nm": 12.5,
+     "alt_c": [
+      [
+       "AT_OR_BELOW",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      215
+     ],
+     "latlon": [
+      35.830111111,
+      129.252388889
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "KPO",
+     "flyover": false,
+     "course": "059(050.8)",
+     "dist": "14.0",
+     "turn": null,
+     "alt": "@6 000",
+     "speed": "-215",
+     "coords": "35°58'37.9\"N 129°28'28.3\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 59,
+     "course_true": 50.8,
+     "dist_nm": 14.0,
+     "alt_c": [
+      [
+       "AT",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      215
+     ],
+     "latlon": [
+      35.977194444,
+      129.474527778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.602469444,
+     129.350983333
+    ],
+    [
+     35.635777778,
+     129.348194444
+    ],
+    [
+     35.830111111,
+     129.252388889
+    ],
+    [
+     35.977194444,
+     129.474527778
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV APARU 1R",
+   "transition": null,
+   "source": "RKPU AD CHART 2-8-1 (AIP AMDT 1/22)",
+   "runway": "36",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "PU801",
+     "flyover": true,
+     "course": "004(356.1)",
+     "dist": "2.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-200",
+     "coords": "35°38'08.8\"N 129°20'53.5\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 4,
+     "course_true": 356.1,
+     "dist_nm": 2.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      200
+     ],
+     "latlon": [
+      35.635777778,
+      129.348194444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "CF",
+     "fix": "PU802",
+     "flyover": true,
+     "course": "349(340.6)",
+     "dist": "12.5",
+     "turn": null,
+     "alt": "-6 000",
+     "speed": "-250",
+     "coords": "35°49'48.4\"N 129°15'08.6\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 349,
+     "course_true": 340.6,
+     "dist_nm": 12.5,
+     "alt_c": [
+      [
+       "AT_OR_BELOW",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      250
+     ],
+     "latlon": [
+      35.830111111,
+      129.252388889
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "DF",
+     "fix": "PU803",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": "R",
+     "alt": "-6 000",
+     "speed": "",
+     "coords": "35°42'45.9\"N 129°19'34.7\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [
+      [
+       "AT_OR_BELOW",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.71275,
+      129.326305556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "APARU",
+     "flyover": false,
+     "course": "213(204.5)",
+     "dist": "19.8",
+     "turn": null,
+     "alt": "@6 000",
+     "speed": "",
+     "coords": "35°24'42.1\"N 129°09'32.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 213,
+     "course_true": 204.5,
+     "dist_nm": 19.8,
+     "alt_c": [
+      [
+       "AT",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.411694444,
+      129.158916667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.602469444,
+     129.350983333
+    ],
+    [
+     35.635777778,
+     129.348194444
+    ],
+    [
+     35.830111111,
+     129.252388889
+    ],
+    [
+     35.71275,
+     129.326305556
+    ],
+    [
+     35.411694444,
+     129.158916667
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "APARU 1A",
+   "transition": null,
+   "source": "RKPU AD CHART 2-9 text",
+   "runway": "36",
+   "coding": "conventional (constructed from description)",
+   "description": "",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "coords": [
+    [
+     35.602469444,
+     129.350983333
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "APARU 8N",
+   "transition": null,
+   "source": "RKPU AD CHART 2-9 text",
+   "runway": "36",
+   "coding": "conventional (constructed from description)",
+   "description": "",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "coords": [
+    [
+     35.602469444,
+     129.350983333
+    ]
+   ],
+   "approx": false
+  }
+ ],
+ "holdings": [
+  {
+   "ident": "RNAV LAPAL 2C",
+   "path": "HM",
+   "fix": "HAEGU",
+   "flyover": true,
+   "course": "300 (292.1)",
+   "time_min": 1.0,
+   "turn": "R",
+   "alt": "@5 000",
+   "speed": "-200",
+   "coords": "35°32'06.7\"N 129°32'32.3\"E",
+   "navspec": "RNAV 1",
+   "course_mag": 300,
+   "course_true": 292.1,
+   "alt_c": [
+    [
+     "AT",
+     5000
+    ]
+   ],
+   "latlon": [
+    35.535194444,
+    129.542305556
+   ],
+   "source": "RKPU AD CHART 2-11-1 (AIP AMDT 7/25)"
+  },
+  {
+   "ident": "RNAV APARU 2C",
+   "path": "HM",
+   "fix": "HAEGU",
+   "flyover": true,
+   "course": "300 (292.1)",
+   "time_min": 1.0,
+   "turn": "R",
+   "alt": "@5 000",
+   "speed": "-200",
+   "coords": "35°32'06.7\"N 129°32'32.3\"E",
+   "navspec": "RNAV 1",
+   "course_mag": 300,
+   "course_true": 292.1,
+   "alt_c": [
+    [
+     "AT",
+     5000
+    ]
+   ],
+   "latlon": [
+    35.535194444,
+    129.542305556
+   ],
+   "source": "RKPU AD CHART 2-11-1 (AIP AMDT 7/25)"
+  },
+  {
+   "ident": "RNP Y RWY 18",
+   "path": "HM",
+   "fix": "SEDMO",
+   "flyover": true,
+   "course": "173(164.4)",
+   "time_min": 1.0,
+   "turn": "L",
+   "alt": "-5 000 +4 000",
+   "speed": "-200",
+   "coords": "35°48'27.1\"N 129°16'55.0\"E",
+   "navspec": "RNAV 1",
+   "course_mag": 173,
+   "course_true": 164.4,
+   "alt_c": [
+    [
+     "AT_OR_BELOW",
+     5000
+    ],
+    [
+     "AT_OR_ABOVE",
+     4000
+    ]
+   ],
+   "latlon": [
+    35.807527778,
+    129.281944444
+   ],
+   "source": "RKPU AD CHART 2-12-1 (AIP AMDT 1/23)"
+  },
+  {
+   "ident": "RNP RWY 36",
+   "path": "HM",
+   "fix": "HAEGU",
+   "flyover": true,
+   "course": "300 (292.1)",
+   "time_min": 1.0,
+   "turn": "R",
+   "alt": "@5 000",
+   "speed": "-200",
+   "coords": "35º32'06.7''N 129º32'32.3''E",
+   "navspec": "RNAV 1",
+   "course_mag": 300,
+   "course_true": 292.1,
+   "alt_c": [
+    [
+     "AT",
+     5000
+    ]
+   ],
+   "latlon": [
+    35.535194444,
+    129.542305556
+   ],
+   "source": "RKPU AD CHART 2-17-1 (AIRAC AIP AMDT 13/23)"
+  },
+  {
+   "ident": "RNP RWY 36",
+   "path": "HM",
+   "fix": "SEDMO",
+   "flyover": true,
+   "course": "173 (164.4)",
+   "time_min": 1.0,
+   "turn": "L",
+   "alt": "-5 000 +4 000",
+   "speed": "-200",
+   "coords": "35º48'27.1''N 129º16'55.0''E",
+   "navspec": "RNAV 1",
+   "course_mag": 173,
+   "course_true": 164.4,
+   "alt_c": [
+    [
+     "AT_OR_BELOW",
+     5000
+    ],
+    [
+     "AT_OR_ABOVE",
+     4000
+    ]
+   ],
+   "latlon": [
+    35.807527778,
+    129.281944444
+   ],
+   "source": "RKPU AD CHART 2-17-1 (AIRAC AIP AMDT 13/23)"
+  }
+ ],
+ "obstacles": [],
+ "issues": [
+  {
+   "level": "warn",
+   "what": "fix IULS differs 1940 m in AD2.19",
+   "fix": "IULS"
+  },
+  {
+   "level": "warn",
+   "proc": "RNP Z RWY 18 (AR)",
+   "what": "RNP Z RWY 18 (AR) 007 GODIS→RW18: 게재 2.6 NM, 계산 3.38 NM"
+  },
+  {
+   "level": "warn",
+   "proc": "RNP Z RWY 18 (AR)",
+   "what": "RNP Z RWY 18 (AR) 007: 게재 진방위 176.1°, 계산 173.3°"
+  }
+ ]
+}

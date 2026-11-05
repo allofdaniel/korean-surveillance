@@ -8,14 +8,14 @@ import json, re, datetime
 
 def proc_ident(pr):
     n = re.sub(r'^RNAV\s+', '', pr['name'] or '').strip()
-    m = re.match(r'([A-Z]{5})\s+(\d)([A-Z])$', n)
+    m = re.match(r'([A-Z]{3,5})\s+(\d)([A-Z]?)$', n)
     if m:
-        return f"{m.group(1)[:4]}{m.group(2)}{m.group(3)}"
+        return f"{m.group(1)[:4] if m.group(3) else m.group(1)}{m.group(2)}{m.group(3)}"
     rwy = pr.get('runway') or ''
     m = re.match(r'(ILS|LOC|RNP|RNAV|VOR|NDB)\s*([A-Z])?(?:/LOC\s*[A-Z])?\s*RWY\s*(\d{2}[LRC]?)', n.replace('/LOC', ' /LOC').replace('  ', ' '))
     if m or n.startswith(('ILS', 'RNP', 'VOR', 'LOC', 'NDB', 'RNAV')):
         kind = n.split()[0].split('/')[0]
-        letter = re.search(r'^(?:ILS|LOC|RNP|VOR|NDB)\s+([A-Z])\b(?!WY)', n)
+        letter = re.search(r'^(?:ILS|LOC|RNP|VOR|NDB)(?:/LOC|/DME)?\s+([A-Z])\b(?!WY)', n)
         code = {'ILS': 'I', 'LOC': 'L', 'RNP': 'R', 'RNAV': 'R', 'VOR': 'D', 'NDB': 'N'}.get(kind, 'X')
         r = re.search(r'RWY\s*(\d{2}[LRC]?)', n)
         return f"{code}{r.group(1) if r else rwy}" + (f"-{letter.group(1)}" if letter else '')
@@ -31,7 +31,9 @@ def alt_fields(L):
     k, v = a[0]
     return {'AT': '@', 'AT_OR_ABOVE': '+', 'AT_OR_BELOW': '-'}[k], v, None
 
-def legs_app(pr, extra_wpts):
+NOFIX = {'CA', 'VA', 'VI', 'VM', 'FA', 'VR', 'VD', 'FM', 'CI', 'CD', 'CR'}
+
+def legs_app(pr, extra_wpts, fixes=None):
     out = []
     if pr['coding'].startswith('conventional') and pr.get('coords'):
         # constructed geometry → synthetic waypoints
@@ -46,6 +48,9 @@ def legs_app(pr, extra_wpts):
         d, a1, a2 = alt_fields(L)
         sp = L.get('speed_c')
         w = L.get('fix') or None
+        if w and fixes is not None and w not in fixes and not w.startswith('THR') and (
+                L.get('path') in NOFIX or not re.fullmatch(r'[A-Z0-9]{2,5}|RW\d{2}[LRC]?|D\d+(\.\d+)? [A-Z]{2,4}', w)):
+            w = None        # e.g. VA leg whose 'fix' column holds an altitude, or table noise
         if w:
             m = re.match(r'THR\s+RWY\s*(\d{2}[LRC]?)$', w)
             if m: w = f"RW{m.group(1)}"
@@ -55,28 +60,47 @@ def legs_app(pr, extra_wpts):
                     **({'flyover': True} if L.get('flyover') else {})})
     return out
 
+def _put(d, key, legs):
+    """Insert without silently overwriting: on a key clash the shorter procedure becomes KEY.<first fix>."""
+    if key not in d:
+        d[key] = legs; return
+    old = d[key]
+    if len(legs) > len(old):
+        legs, old = old, legs
+        d[key] = old
+    first = next((L['wpt'] for L in legs if L.get('wpt')), None) or 'X'
+    k2 = f"{key}.{first}"
+    n = 2
+    while k2 in d:
+        k2 = f"{key}.{first}{n}"; n += 1
+    d[k2] = legs
+
 def merge(app: dict, ds: dict, airac: str):
     icao = ds['icao']
     P = app.setdefault('procedures', {'sids': {}, 'stars': {}, 'iaps': {}})
     extra = []
     sids, stars, iaps = {}, {}, {}
     for pr in ds['procedures']:
+        if pr.get('qa') == 'reject':
+            continue
         ident = proc_ident(pr)
         rw = f".RW{pr['runway']}" if pr.get('runway') else ''
-        legs = legs_app(pr, extra)
+        legs = legs_app(pr, extra, set(ds['fixes']))
         if not legs:
             continue
+        tr = pr.get('transition')
+        sfx = f".{tr}" if tr and re.fullmatch(r'[A-Z]{5}', tr) else rw
         if pr['type'] == 'SID':
-            sids[ident + rw] = legs
+            _put(sids, ident + sfx, legs)
         elif pr['type'] == 'STAR':
-            stars[ident + rw] = legs
+            _put(stars, ident + sfx, legs)
         elif pr['type'] == 'IAP':
             t = pr.get('transition') or ''
             m = re.match(r'(?:via|from)\s+([A-Z]{5})', t)
             key = ident if not m or 'to SOONA' in t or '(MAHF)' in t or t.startswith('via ' + (pr['legs'][0].get('fix') or '?') + '(IF)') else f"{ident}.{m.group(1)}"
             if pr['coding'].startswith('AIP fix/point') and m:
                 key = f"{ident}.{m.group(1)}"
-            iaps[key] = legs
+            _put(iaps, key, legs)
     P['sids'][icao] = sids; P['stars'][icao] = stars; P['iaps'][icao] = iaps
     # terminal waypoints
     navids = {n.get('ident') for n in ds['navaids']}
@@ -100,8 +124,8 @@ def merge(app: dict, ds: dict, airac: str):
         a = [x[1] for x in (h.get('alt_c') or []) if x[0] != 'FL']
         sp = re.search(r'(\d{3})', h.get('speed') or '')
         hold.append({'waypoint': h['fix'], 'name': h['fix'], 'lat': h['latlon'][0], 'lon': h['latlon'][1],
-                     'inbound_course': h.get('course_mag'), 'turn': h.get('turn') or 'R', 'leg_time': h.get('time_min') or 1,
-                     'leg_length': None, 'speed': int(sp.group(1)) if sp else None,
+                     'inbound_course': h.get('course_mag'), 'turn': h.get('turn') or 'R', 'leg_time': h.get('time_min') or (None if h.get('dist_nm') else 1),
+                     'leg_length': h.get('dist_nm'), 'speed': int(sp.group(1)) if sp else None,
                      'min_alt': min(a) if a else None, 'max_alt': max(a) if a else None, 'source': 'AIP'})
     app['holdings'] = hold
     # airport / runways
