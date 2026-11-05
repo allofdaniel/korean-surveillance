@@ -1,0 +1,9775 @@
+{
+ "icao": "RKTN",
+ "built_at": "2026-11-05T07:37:41.837696Z",
+ "sources": [
+  {
+   "file": "(2-10) SID.pdf",
+   "sha": "88ad057efbe3de0b"
+  },
+  {
+   "file": "(2-15) STAR.pdf",
+   "sha": "b5df77a70823931e"
+  },
+  {
+   "file": "(2-18) INSTR APCH CHART.pdf",
+   "sha": "fdc3c1c99c4877fb"
+  },
+  {
+   "file": "(2-5) AD OBSTACLE CHART TYPE A(1).pdf",
+   "sha": "61ee9ebeef467baf"
+  },
+  {
+   "file": "(2-9) AD OBSTACLE CHART TYPE B(2).pdf",
+   "sha": "aee8abced5b1f710"
+  },
+  {
+   "file": "RKTN-TEXT.pdf",
+   "sha": "336f1658b66f3028"
+  }
+ ],
+ "airport": {
+  "icao": "RKTN",
+  "arp": [
+   35.894166667,
+   128.658888889
+  ],
+  "elev_m": 36.6,
+  "magvar": {
+   "deg": -9.0,
+   "year": 2025,
+   "annual": 0.04
+  },
+  "ctr": {
+   "radius_nm": 5.0,
+   "center": "ARP"
+  },
+  "text_amdt": [
+   "AIP AMDT 10/26",
+   "AIP AMDT 11/26",
+   "AIP AMDT 8/26",
+   "AIP AMDT 9/25",
+   "AIRAC AIP AMDT 10/25",
+   "AIRAC AIP AMDT 8/26"
+  ]
+ },
+ "runways": [
+  {
+   "id": "13R",
+   "true_brg": 124.23,
+   "len_m": 2755,
+   "width_m": 45,
+   "thr": [
+    35.900605556,
+    128.64585
+   ],
+   "thr_elev_m": 33.4
+  },
+  {
+   "id": "31L",
+   "true_brg": 304.23,
+   "len_m": 2755,
+   "width_m": 45,
+   "thr": [
+    35.886638889,
+    128.671083333
+   ],
+   "thr_elev_m": 35.9
+  },
+  {
+   "id": "13L",
+   "true_brg": 124.23,
+   "len_m": 2743,
+   "width_m": 45,
+   "thr": [
+    35.901491667,
+    128.646763889
+   ],
+   "thr_elev_m": 34.0
+  },
+  {
+   "id": "31R",
+   "true_brg": 304.23,
+   "len_m": 2743,
+   "width_m": 45,
+   "thr": [
+    35.887583333,
+    128.671894444
+   ],
+   "thr_elev_m": 36.6
+  }
+ ],
+ "navaids": [
+  {
+   "type": "LOC 31L",
+   "ident": "ITAG",
+   "freq": "108.7 MHz",
+   "latlon": [
+    35.90225,
+    128.642861111
+   ],
+   "decl": -9.0
+  },
+  {
+   "type": "DME 31L",
+   "ident": "ITAG",
+   "freq": "985 MHz",
+   "latlon": [
+    35.887555556,
+    128.667444444
+   ],
+   "decl": null
+  },
+  {
+   "type": "GP 31L",
+   "ident": null,
+   "freq": "330.5 MHz",
+   "latlon": [
+    35.887583333,
+    128.667472222
+   ],
+   "decl": null
+  },
+  {
+   "type": "VOR/DME",
+   "ident": "DOC",
+   "freq": "116.5 MHz",
+   "latlon": [
+    35.903777778,
+    128.641388889
+   ],
+   "decl": -9.0
+  },
+  {
+   "type": "VORTAC",
+   "ident": "TGU",
+   "freq": "112.2 MHz",
+   "latlon": [
+    35.809833333,
+    128.590777778
+   ],
+   "decl": -9.0
+  },
+  {
+   "type": "LOC 31R",
+   "ident": "IDAG",
+   "freq": "111.9 MHz",
+   "latlon": [
+    35.903222222,
+    128.643611111
+   ],
+   "decl": -9.0
+  },
+  {
+   "type": "DME 31R",
+   "ident": "IDAG",
+   "freq": "1017 MHz",
+   "latlon": [
+    35.903833333,
+    128.644083333
+   ],
+   "decl": null
+  },
+  {
+   "type": "LOC 13R",
+   "ident": "ITGL",
+   "freq": "108.7 MHz",
+   "latlon": [
+    35.885,
+    128.674055556
+   ],
+   "decl": -9.0
+  },
+  {
+   "type": "DME 13R",
+   "ident": "ITGL",
+   "freq": "985 MHz",
+   "latlon": [
+    35.898277778,
+    128.647916667
+   ],
+   "decl": null
+  },
+  {
+   "type": "GP 13R",
+   "ident": null,
+   "freq": "330.5 MHz",
+   "latlon": [
+    35.898305556,
+    128.647972222
+   ],
+   "decl": null
+  }
+ ],
+ "fixes": {
+  "RW13R": {
+   "pos": [
+    35.900605556,
+    128.64585
+   ],
+   "sources": [
+    "AD2.12"
+   ]
+  },
+  "RW31L": {
+   "pos": [
+    35.886638889,
+    128.671083333
+   ],
+   "sources": [
+    "AD2.12"
+   ]
+  },
+  "RW13L": {
+   "pos": [
+    35.901491667,
+    128.646763889
+   ],
+   "sources": [
+    "AD2.12"
+   ]
+  },
+  "RW31R": {
+   "pos": [
+    35.887580556,
+    128.671913889
+   ],
+   "sources": [
+    "AD2.12",
+    "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "ITAG": {
+   "pos": [
+    35.90225,
+    128.642861111
+   ],
+   "sources": [
+    "AD2.19"
+   ]
+  },
+  "DOC": {
+   "pos": [
+    35.903777778,
+    128.641388889
+   ],
+   "sources": [
+    "AD2.19"
+   ]
+  },
+  "TGU": {
+   "pos": [
+    35.809833333,
+    128.590777778
+   ],
+   "sources": [
+    "AD2.19",
+    "RKTN AD CHART 2-15-2 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-16-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)"
+   ]
+  },
+  "IDAG": {
+   "pos": [
+    35.903222222,
+    128.643611111
+   ],
+   "sources": [
+    "AD2.19"
+   ]
+  },
+  "ITGL": {
+   "pos": [
+    35.885,
+    128.674055556
+   ],
+   "sources": [
+    "AD2.19"
+   ]
+  },
+  "DOVUR": {
+   "pos": [
+    35.83025,
+    128.77275
+   ],
+   "sources": [
+    "RKTN AD CHART 2-13-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-13-2 (AIRAC AIP AMDT 8/26)"
+   ]
+  },
+  "TN131": {
+   "pos": [
+    35.680583333,
+    128.682083333
+   ],
+   "sources": [
+    "RKTN AD CHART 2-13-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-13-2 (AIRAC AIP AMDT 8/26)"
+   ]
+  },
+  "TN132": {
+   "pos": [
+    35.712166667,
+    128.502055556
+   ],
+   "sources": [
+    "RKTN AD CHART 2-13-1 (AIRAC AIP AMDT 8/26)"
+   ]
+  },
+  "VETUP": {
+   "pos": [
+    36.117416667,
+    128.339277778
+   ],
+   "sources": [
+    "RKTN AD CHART 2-13-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)"
+   ]
+  },
+  "BITUX": {
+   "pos": [
+    36.279138889,
+    128.029972222
+   ],
+   "sources": [
+    "RKTN AD CHART 2-13-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-15-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-16-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "OPEDA": {
+   "pos": [
+    35.863472222,
+    127.614444444
+   ],
+   "sources": [
+    "RKTN AD CHART 2-13-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-15-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-16-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "PEDVA": {
+   "pos": [
+    35.636944444,
+    128.131722222
+   ],
+   "sources": [
+    "RKTN AD CHART 2-13-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-15-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-16-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "IGDOK": {
+   "pos": [
+    35.517666667,
+    127.8185
+   ],
+   "sources": [
+    "RKTN AD CHART 2-13-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-15-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-16-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "MASTA": {
+   "pos": [
+    35.479722222,
+    128.561
+   ],
+   "sources": [
+    "RKTN AD CHART 2-13-2 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-15-2 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)"
+   ]
+  },
+  "KALOD": {
+   "pos": [
+    35.503361111,
+    128.774027778
+   ],
+   "sources": [
+    "RKTN AD CHART 2-13-2 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-14-2 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-15-2 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)"
+   ]
+  },
+  "LAPAL": {
+   "pos": [
+    35.9035,
+    129.081111111
+   ],
+   "sources": [
+    "RKTN AD CHART 2-13-2 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-14-2 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-15-2 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)"
+   ]
+  },
+  "KABAS": {
+   "pos": [
+    35.9475,
+    128.560972222
+   ],
+   "sources": [
+    "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-14-2 (AIRAC AIP AMDT 8/26)"
+   ]
+  },
+  "TN311": {
+   "pos": [
+    35.839083333,
+    128.4105
+   ],
+   "sources": [
+    "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-14-2 (AIRAC AIP AMDT 8/26)"
+   ]
+  },
+  "TN312": {
+   "pos": [
+    35.714138889,
+    128.546305556
+   ],
+   "sources": [
+    "RKTN AD CHART 2-14-2 (AIRAC AIP AMDT 8/26)"
+   ]
+  },
+  "OSNOP": {
+   "pos": [
+    36.000194444,
+    128.057111111
+   ],
+   "sources": [
+    "RKTN AD CHART 2-15-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-16-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "TN451": {
+   "pos": [
+    35.853083333,
+    128.215138889
+   ],
+   "sources": [
+    "RKTN AD CHART 2-15-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "YAWAN": {
+   "pos": [
+    35.873555556,
+    128.377222222
+   ],
+   "sources": [
+    "RKTN AD CHART 2-15-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-15-2 (AIRAC AIP AMDT 8/26)",
+    "RKTN AD CHART 2-18-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "TN652": {
+   "pos": [
+    35.928666667,
+    128.7825
+   ],
+   "sources": [
+    "RKTN AD CHART 2-16-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)"
+   ]
+  },
+  "UKBAT": {
+   "pos": [
+    35.937916667,
+    128.946416667
+   ],
+   "sources": [
+    "RKTN AD CHART 2-16-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-18-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-19-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-20-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "TN653": {
+   "pos": [
+    35.643361111,
+    128.575722222
+   ],
+   "sources": [
+    "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)"
+   ]
+  },
+  "TN633": {
+   "pos": [
+    35.659861111,
+    128.680638889
+   ],
+   "sources": [
+    "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)"
+   ]
+  },
+  "D13.5 ITGL": {
+   "pos": [
+    36.025166667,
+    128.420027778
+   ],
+   "sources": [
+    "RKTN AD CHART 2-18-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "D9.4 ITGL": {
+   "pos": [
+    35.987194444,
+    128.489027778
+   ],
+   "sources": [
+    "RKTN AD CHART 2-18-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "THR RWY 13R": {
+   "pos": [
+    35.900608333,
+    128.645852778
+   ],
+   "sources": [
+    "RKTN AD CHART 2-18-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "D5 DOC": {
+   "pos": [
+    35.856333333,
+    128.72575
+   ],
+   "sources": [
+    "RKTN AD CHART 2-18-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "D13.4 ITAG": {
+   "pos": [
+    35.762194444,
+    128.895111111
+   ],
+   "sources": [
+    "RKTN AD CHART 2-19-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "D10.0 ITAG": {
+   "pos": [
+    35.794305556,
+    128.837444444
+   ],
+   "sources": [
+    "RKTN AD CHART 2-19-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "THR RWY 31L": {
+   "pos": [
+    35.886641667,
+    128.671086111
+   ],
+   "sources": [
+    "RKTN AD CHART 2-19-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "DOC VOR/DME": {
+   "pos": [
+    35.903777778,
+    128.641388889
+   ],
+   "sources": [
+    "RKTN AD CHART 2-19-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-20-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "D2.0 ITAG": {
+   "pos": [
+    35.907083333,
+    128.634138889
+   ],
+   "sources": [
+    "RKTN AD CHART 2-19-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "MOSAN": {
+   "pos": [
+    35.866222222,
+    128.337222222
+   ],
+   "sources": [
+    "RKTN AD CHART 2-19-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-20-1 (AIP AMDT 11/26)",
+    "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "D14.9 IDAG": {
+   "pos": [
+    35.763222222,
+    128.895805556
+   ],
+   "sources": [
+    "RKTN AD CHART 2-20-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "D12.0 IDAG": {
+   "pos": [
+    35.790444444,
+    128.846916667
+   ],
+   "sources": [
+    "RKTN AD CHART 2-20-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "THR RWY 31R": {
+   "pos": [
+    35.887580556,
+    128.671913889
+   ],
+   "sources": [
+    "RKTN AD CHART 2-20-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "TN601": {
+   "pos": [
+    35.851805556,
+    128.970166667
+   ],
+   "sources": [
+    "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "IDEVA": {
+   "pos": [
+    35.763222222,
+    128.89575
+   ],
+   "sources": [
+    "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "TN701": {
+   "pos": [
+    35.79525,
+    128.83825
+   ],
+   "sources": [
+    "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "MEVIM": {
+   "pos": [
+    35.821888889,
+    128.790333333
+   ],
+   "sources": [
+    "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "TN702": {
+   "pos": [
+    35.857333333,
+    128.7265
+   ],
+   "sources": [
+    "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "TN731": {
+   "pos": [
+    35.931444444,
+    128.590055556
+   ],
+   "sources": [
+    "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)"
+   ]
+  },
+  "TN632": {
+   "pos": [
+    35.885111111,
+    128.48925
+   ],
+   "sources": [
+    "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)"
+   ]
+  }
+ },
+ "procedures": [
+  {
+   "type": "SID",
+   "name": "RADAR 1E",
+   "transition": null,
+   "source": "RKTN AD CHART 2-10 text",
+   "runway": null,
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 133° to 1 500 ft, then expect radar vectors to intercept filed enroute fix or navaid.",
+   "restrictions": [
+    "6.6% CG required until 5 000 ft due airspace restrictions only.",
+    "If unable to comply with flight restrictions, advise ATC for alternative."
+   ],
+   "legs": [],
+   "qa": "ok",
+   "coords": [],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RADAR 1W",
+   "transition": null,
+   "source": "RKTN AD CHART 2-10 text",
+   "runway": null,
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 313°, then expect radar vectors to intercept filed enroute fix or navaid. turning to filed fix/navaid and proceed filed route and altitude.",
+   "restrictions": [
+    "7.7% CG required until 5 000 ft due airspace restrictions only.",
+    "If unable to comply with flight restrictions, advise ATC for alternative.",
+    "9",
+    "2"
+   ],
+   "legs": [],
+   "qa": "ok",
+   "coords": [],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "BITUX 1B",
+   "transition": null,
+   "source": "RKTN AD CHART 2-11 text",
+   "runway": "13L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft, then Right turn and proceed via the DOC D12 arc to intercept R 312 DOC/D12 and proceed to R 312 DOC/D20 at or above 9 800 ft, then direct to BITUX.",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft",
+    "UNPARSED: Right turn and proceed via the DOC D12 arc to intercept R 312 DOC/D12 and proceed to R 312 DOC/D20 at or above 9 800 ft",
+    "UNPARSED: direct to BITUX"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "OPEDA 1B",
+   "transition": null,
+   "source": "RKTN AD CHART 2-11 text",
+   "runway": "13L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft, then Right turn and proceed via the DOC D12 arc to intercept R 276 DOC/D12 and proceed to OPEDA.",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft",
+    "UNPARSED: Right turn and proceed via the DOC D12 arc to intercept R 276 DOC/D12 and proceed to OPEDA"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "IGDOK 1B",
+   "transition": null,
+   "source": "RKTN AD CHART 2-11 text",
+   "runway": "13L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft, then Right turn and proceed via the DOC D12 arc to intercept R 249 DOC/D12 and proceed to IGDOK.",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft",
+    "UNPARSED: Right turn and proceed via the DOC D12 arc to intercept R 249 DOC/D12 and proceed to IGDOK"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "MASTA 1B",
+   "transition": null,
+   "source": "RKTN AD CHART 2-11 text",
+   "runway": "13L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft, then Right turn and proceed via the DOC D12 arc to intercept R 197 DOC/D12 and proceed to MASTA.",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft",
+    "UNPARSED: Right turn and proceed via the DOC D12 arc to intercept R 197 DOC/D12 and proceed to MASTA"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "KALOD 1B",
+   "transition": null,
+   "source": "RKTN AD CHART 2-11 text",
+   "runway": "13L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft, then Right turn and proceed via the DOC D12 arc to intercept R 173 DOC/D12 and proceed to KALOD.",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft",
+    "UNPARSED: Right turn and proceed via the DOC D12 arc to intercept R 173 DOC/D12 and proceed to KALOD"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "LAPAL 1B",
+   "transition": null,
+   "source": "RKTN AD CHART 2-11 text",
+   "runway": "13L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft, then Left turn and proceed via the DOC D12 arc to intercept R 099 DOC/D12 and proceed to LAPAL.",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 132° to intercept R 132 DOC and proceed to DOC D12 at or above 5 000 ft",
+    "UNPARSED: Left turn and proceed via the DOC D12 arc to intercept R 099 DOC/D12 and proceed to LAPAL"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "BITUX 1A",
+   "transition": null,
+   "source": "RKTN AD CHART 2-12 text",
+   "runway": "31L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft and proceed to DOC D20 at or above 9 800 ft, then direct to BITUX.",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft and proceed to DOC D20 at or above 9 800 ft",
+    "UNPARSED: direct to BITUX"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "OPEDA 1A",
+   "transition": null,
+   "source": "RKTN AD CHART 2-12 text",
+   "runway": "31L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft, then Left turn and proceed via the DOC D12 arc to intercept R 276 DOC/D12 and proceed to OPEDA.",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft",
+    "UNPARSED: Left turn and proceed via the DOC D12 arc to intercept R 276 DOC/D12 and proceed to OPEDA"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "IGDOK 1A",
+   "transition": null,
+   "source": "RKTN AD CHART 2-12 text",
+   "runway": "31L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft, then Left turn and proceed via the DOC D12 arc to intercept R 249 DOC/D12 and proceed to IGDOK.",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft",
+    "UNPARSED: Left turn and proceed via the DOC D12 arc to intercept R 249 DOC/D12 and proceed to IGDOK"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "MASTA 1A",
+   "transition": null,
+   "source": "RKTN AD CHART 2-12 text",
+   "runway": "31L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft, then Left turn and proceed via the DOC D12 arc to intercept R 197 DOC/D12 and proceed to MASTA.",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft",
+    "UNPARSED: Left turn and proceed via the DOC D12 arc to intercept R 197 DOC/D12 and proceed to MASTA"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "KALOD 1A",
+   "transition": null,
+   "source": "RKTN AD CHART 2-12 text",
+   "runway": "31L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft, then Left turn and proceed via the DOC D12 arc to intercept R 173 DOC/D12 and proceed to KALOD.",
+   "restrictions": [],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft",
+    "UNPARSED: Left turn and proceed via the DOC D12 arc to intercept R 173 DOC/D12 and proceed to KALOD"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "LAPAL 1A",
+   "transition": null,
+   "source": "RKTN AD CHART 2-12 text",
+   "runway": "31L",
+   "coding": "conventional (constructed from description)",
+   "description": "Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft, then Left turn and proceed via the DOC D12 arc to intercept R 099 DOC/D12 and proceed to LAPAL.",
+   "restrictions": [
+    "9",
+    "2 "
+   ],
+   "legs": [],
+   "qa": "ok",
+   "construction": [
+    "UNPARSED: Climb on HDG 312° to intercept R 312 DOC and proceed to DOC D12 at or above 6 000 ft",
+    "UNPARSED: Left turn and proceed via the DOC D12 arc to intercept R 099 DOC/D12 and proceed to LAPAL"
+   ],
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ]
+   ],
+   "approx": true
+  },
+  {
+   "type": "SID",
+   "name": "RNAV BITUX 1D",
+   "transition": null,
+   "source": "RKTN AD CHART 2-13-1 (AIRAC AIP AMDT 8/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "DOVUR",
+     "flyover": false,
+     "course": "13L-134(124.9) 13R-133(124.2)",
+     "dist": "6.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-250",
+     "coords": "35°49'48.9''N 128°46'21.9''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 134,
+     "course_true": 124.9,
+     "dist_nm": 6.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      250
+     ],
+     "latlon": [
+      35.83025,
+      128.77275
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN131",
+     "flyover": false,
+     "course": "215(206.3)",
+     "dist": "10.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°40'50.1''N 128°40'55.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 215,
+     "course_true": 206.3,
+     "dist_nm": 10.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.680583333,
+      128.682083333
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "TN132",
+     "flyover": false,
+     "course": "291(282.2)",
+     "dist": "9.0",
+     "turn": null,
+     "alt": "+8 000",
+     "speed": "",
+     "coords": "35°42'43.8''N 128°30'07.4''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 291,
+     "course_true": 282.2,
+     "dist_nm": 9.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       8000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.712166667,
+      128.502055556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "VETUP",
+     "flyover": false,
+     "course": "351(342.0)",
+     "dist": "25.5",
+     "turn": null,
+     "alt": "+8 000 -9 000",
+     "speed": "",
+     "coords": "36°07'02.7''N 128°20'21.4''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 351,
+     "course_true": 342.0,
+     "dist_nm": 25.5,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       8000
+      ],
+      [
+       "AT_OR_BELOW",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      36.117416667,
+      128.339277778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "BITUX",
+     "flyover": false,
+     "course": "312(302.9)",
+     "dist": "17.9",
+     "turn": null,
+     "alt": "-9 000",
+     "speed": "",
+     "coords": "36°16'44.9''N 128°01'47.9''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 312,
+     "course_true": 302.9,
+     "dist_nm": 17.9,
+     "alt_c": [
+      [
+       "AT_OR_BELOW",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      36.279138889,
+      128.029972222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.83025,
+     128.77275
+    ],
+    [
+     35.680583333,
+     128.682083333
+    ],
+    [
+     35.712166667,
+     128.502055556
+    ],
+    [
+     36.117416667,
+     128.339277778
+    ],
+    [
+     36.279138889,
+     128.029972222
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV OPEDA 1D",
+   "transition": null,
+   "source": "RKTN AD CHART 2-13-1 (AIRAC AIP AMDT 8/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "DOVUR",
+     "flyover": false,
+     "course": "13L-134(124.9) 13R-133(124.2)",
+     "dist": "6.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-250",
+     "coords": "35°49'48.9''N 128°46'21.9''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 134,
+     "course_true": 124.9,
+     "dist_nm": 6.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      250
+     ],
+     "latlon": [
+      35.83025,
+      128.77275
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN131",
+     "flyover": false,
+     "course": "215(206.3)",
+     "dist": "10.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°40'50.1''N 128°40'55.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 215,
+     "course_true": 206.3,
+     "dist_nm": 10.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.680583333,
+      128.682083333
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "TN132",
+     "flyover": false,
+     "course": "291(282.2)",
+     "dist": "9.0",
+     "turn": null,
+     "alt": "+8 000",
+     "speed": "",
+     "coords": "35°42'43.8''N 128°30'07.4''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 291,
+     "course_true": 282.2,
+     "dist_nm": 9.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       8000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.712166667,
+      128.502055556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "OPEDA",
+     "flyover": false,
+     "course": "291(282.1)",
+     "dist": "44.3",
+     "turn": null,
+     "alt": "+8 000",
+     "speed": "",
+     "coords": "35°51'48.5''N 127°36'52.0''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 291,
+     "course_true": 282.1,
+     "dist_nm": 44.3,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       8000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.863472222,
+      127.614444444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.83025,
+     128.77275
+    ],
+    [
+     35.680583333,
+     128.682083333
+    ],
+    [
+     35.712166667,
+     128.502055556
+    ],
+    [
+     35.863472222,
+     127.614444444
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV IGDOK 1D",
+   "transition": null,
+   "source": "RKTN AD CHART 2-13-1 (AIRAC AIP AMDT 8/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "DOVUR",
+     "flyover": false,
+     "course": "13L-134(124.9) 13R-133(124.2)",
+     "dist": "6.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-250",
+     "coords": "35°49'48.9''N 128°46'21.9''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 134,
+     "course_true": 124.9,
+     "dist_nm": 6.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      250
+     ],
+     "latlon": [
+      35.83025,
+      128.77275
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN131",
+     "flyover": false,
+     "course": "215(206.3)",
+     "dist": "10.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°40'50.1''N 128°40'55.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 215,
+     "course_true": 206.3,
+     "dist_nm": 10.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.680583333,
+      128.682083333
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "PEDVA",
+     "flyover": false,
+     "course": "273(264.6)",
+     "dist": "27.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°38'13.0''N 128°07'54.2''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 273,
+     "course_true": 264.6,
+     "dist_nm": 27.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.636944444,
+      128.131722222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "IGDOK",
+     "flyover": false,
+     "course": "254(245.1)",
+     "dist": "16.9",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°31'03.6''N 127°49'06.6''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 254,
+     "course_true": 245.1,
+     "dist_nm": 16.9,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.517666667,
+      127.8185
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.83025,
+     128.77275
+    ],
+    [
+     35.680583333,
+     128.682083333
+    ],
+    [
+     35.636944444,
+     128.131722222
+    ],
+    [
+     35.517666667,
+     127.8185
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV MASTA 1D",
+   "transition": null,
+   "source": "RKTN AD CHART 2-13-2 (AIRAC AIP AMDT 8/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "DOVUR",
+     "flyover": false,
+     "course": "13L-134(124.9) 13R-133(124.2)",
+     "dist": "6.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-250",
+     "coords": "35°49'48.9''N 128°46'21.9''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 134,
+     "course_true": 124.9,
+     "dist_nm": 6.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      250
+     ],
+     "latlon": [
+      35.83025,
+      128.77275
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN131",
+     "flyover": false,
+     "course": "215(206.3)",
+     "dist": "10.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°40'50.1''N 128°40'55.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 215,
+     "course_true": 206.3,
+     "dist_nm": 10.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.680583333,
+      128.682083333
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "MASTA",
+     "flyover": false,
+     "course": "215(206.3)",
+     "dist": "13.4",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°28'47.0''N 128°33'39.6''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 215,
+     "course_true": 206.3,
+     "dist_nm": 13.4,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.479722222,
+      128.561
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.83025,
+     128.77275
+    ],
+    [
+     35.680583333,
+     128.682083333
+    ],
+    [
+     35.479722222,
+     128.561
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV KALOD 1D",
+   "transition": null,
+   "source": "RKTN AD CHART 2-13-2 (AIRAC AIP AMDT 8/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "DOVUR",
+     "flyover": false,
+     "course": "13L-134(124.9) 13R-133(124.2)",
+     "dist": "6.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-250",
+     "coords": "35°49'48.9''N 128°46'21.9''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 134,
+     "course_true": 124.9,
+     "dist_nm": 6.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      250
+     ],
+     "latlon": [
+      35.83025,
+      128.77275
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "KALOD",
+     "flyover": false,
+     "course": "188(179.8)",
+     "dist": "19.6",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°30'12.1''N 128°46'26.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 188,
+     "course_true": 179.8,
+     "dist_nm": 19.6,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.503361111,
+      128.774027778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.83025,
+     128.77275
+    ],
+    [
+     35.503361111,
+     128.774027778
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV LAPAL 1D",
+   "transition": null,
+   "source": "RKTN AD CHART 2-13-2 (AIRAC AIP AMDT 8/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "DOVUR",
+     "flyover": false,
+     "course": "13L-134(124.9) 13R-133(124.2)",
+     "dist": "6.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-250",
+     "coords": "35°49'48.9''N 128°46'21.9''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 134,
+     "course_true": 124.9,
+     "dist_nm": 6.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      250
+     ],
+     "latlon": [
+      35.83025,
+      128.77275
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "LAPAL",
+     "flyover": false,
+     "course": "082(073.6)",
+     "dist": "15.7",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°54'12.6''N 129°04'52.0''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 82,
+     "course_true": 73.6,
+     "dist_nm": 15.7,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.9035,
+      129.081111111
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.83025,
+     128.77275
+    ],
+    [
+     35.9035,
+     129.081111111
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV BITUX 1K",
+   "transition": null,
+   "source": "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "KABAS",
+     "flyover": false,
+     "course": "31L-313(304.2) 31R-312(303.4)",
+     "dist": "5.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-230",
+     "coords": "35°56'51.0''N 128°33'39.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 313,
+     "course_true": 304.2,
+     "dist_nm": 5.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.9475,
+      128.560972222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "VETUP",
+     "flyover": false,
+     "course": "322(313.4)",
+     "dist": "14.8",
+     "turn": null,
+     "alt": "+6 000 -9 000",
+     "speed": "",
+     "coords": "36°07'02.7''N 128°20'21.4''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 322,
+     "course_true": 313.4,
+     "dist_nm": 14.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ],
+      [
+       "AT_OR_BELOW",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      36.117416667,
+      128.339277778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "BITUX",
+     "flyover": false,
+     "course": "312(302.9)",
+     "dist": "17.9",
+     "turn": null,
+     "alt": "-9 000",
+     "speed": "",
+     "coords": "36°16'44.9''N 128°01'47.9''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 312,
+     "course_true": 302.9,
+     "dist_nm": 17.9,
+     "alt_c": [
+      [
+       "AT_OR_BELOW",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      36.279138889,
+      128.029972222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.9475,
+     128.560972222
+    ],
+    [
+     36.117416667,
+     128.339277778
+    ],
+    [
+     36.279138889,
+     128.029972222
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV OPEDA 1K",
+   "transition": null,
+   "source": "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "KABAS",
+     "flyover": false,
+     "course": "31L-313(304.2) 31R-312(303.4)",
+     "dist": "5.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-230",
+     "coords": "35°56'51.0''N 128°33'39.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 313,
+     "course_true": 304.2,
+     "dist_nm": 5.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.9475,
+      128.560972222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "OPEDA",
+     "flyover": false,
+     "course": "273(264.1)",
+     "dist": "46.4",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°51'48.5''N 127°36'52.0''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 273,
+     "course_true": 264.1,
+     "dist_nm": 46.4,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.863472222,
+      127.614444444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.9475,
+     128.560972222
+    ],
+    [
+     35.863472222,
+     127.614444444
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV IGDOK 1K",
+   "transition": null,
+   "source": "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "KABAS",
+     "flyover": false,
+     "course": "31L-313(304.2) 31R-312(303.4)",
+     "dist": "5.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-230",
+     "coords": "35°56'51.0''N 128°33'39.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 313,
+     "course_true": 304.2,
+     "dist_nm": 5.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.9475,
+      128.560972222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN311",
+     "flyover": false,
+     "course": "237(228.5)",
+     "dist": "9.8",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°50'20.7''N 128°24'37.8''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 237,
+     "course_true": 228.5,
+     "dist_nm": 9.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.839083333,
+      128.4105
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "PEDVA",
+     "flyover": false,
+     "course": "237(228.4)",
+     "dist": "18.2",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°38'13.0''N 128°07'54.2''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 237,
+     "course_true": 228.4,
+     "dist_nm": 18.2,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.636944444,
+      128.131722222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "IGDOK",
+     "flyover": false,
+     "course": "254(245.1)",
+     "dist": "16.9",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°31'03.6''N 127°49'06.6''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 254,
+     "course_true": 245.1,
+     "dist_nm": 16.9,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.517666667,
+      127.8185
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.9475,
+     128.560972222
+    ],
+    [
+     35.839083333,
+     128.4105
+    ],
+    [
+     35.636944444,
+     128.131722222
+    ],
+    [
+     35.517666667,
+     127.8185
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV MASTA 1K",
+   "transition": null,
+   "source": "RKTN AD CHART 2-14-1 (AIRAC AIP AMDT 8/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "KABAS",
+     "flyover": false,
+     "course": "31L-313(304.2) 31R-312(303.4)",
+     "dist": "5.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-230",
+     "coords": "35°56'51.0''N 128°33'39.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 313,
+     "course_true": 304.2,
+     "dist_nm": 5.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.9475,
+      128.560972222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN311",
+     "flyover": false,
+     "course": "237(228.5)",
+     "dist": "9.8",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°50'20.7''N 128°24'37.8''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 237,
+     "course_true": 228.5,
+     "dist_nm": 9.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.839083333,
+      128.4105
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "MASTA",
+     "flyover": false,
+     "course": "170(161.1)",
+     "dist": "22.8",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°28'47.0''N 128°33'39.6''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 170,
+     "course_true": 161.1,
+     "dist_nm": 22.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.479722222,
+      128.561
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.9475,
+     128.560972222
+    ],
+    [
+     35.839083333,
+     128.4105
+    ],
+    [
+     35.479722222,
+     128.561
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV KALOD 1K",
+   "transition": null,
+   "source": "RKTN AD CHART 2-14-2 (AIRAC AIP AMDT 8/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "KABAS",
+     "flyover": false,
+     "course": "31L-313(304.2) 31R-312(303.4)",
+     "dist": "5.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-230",
+     "coords": "35°56'51.0''N 128°33'39.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 313,
+     "course_true": 304.2,
+     "dist_nm": 5.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.9475,
+      128.560972222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN311",
+     "flyover": false,
+     "course": "237(228.5)",
+     "dist": "9.8",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°50'20.7''N 128°24'37.8''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 237,
+     "course_true": 228.5,
+     "dist_nm": 9.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.839083333,
+      128.4105
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "TN312",
+     "flyover": false,
+     "course": "147(138.4)",
+     "dist": "10.0",
+     "turn": null,
+     "alt": "+8 000",
+     "speed": "",
+     "coords": "35°42'50.9''N 128°32'46.7''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 147,
+     "course_true": 138.4,
+     "dist_nm": 10.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       8000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.714138889,
+      128.546305556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "KALOD",
+     "flyover": false,
+     "course": "147(138.5)",
+     "dist": "16.8",
+     "turn": null,
+     "alt": "+8 000",
+     "speed": "",
+     "coords": "35°30'12.1''N 128°46'26.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 147,
+     "course_true": 138.5,
+     "dist_nm": 16.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       8000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.503361111,
+      128.774027778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.9475,
+     128.560972222
+    ],
+    [
+     35.839083333,
+     128.4105
+    ],
+    [
+     35.714138889,
+     128.546305556
+    ],
+    [
+     35.503361111,
+     128.774027778
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "SID",
+   "name": "RNAV LAPAL 1K",
+   "transition": null,
+   "source": "RKTN AD CHART 2-14-2 (AIRAC AIP AMDT 8/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "CF",
+     "fix": "KABAS",
+     "flyover": false,
+     "course": "31L-313(304.2) 31R-312(303.4)",
+     "dist": "5.0",
+     "turn": null,
+     "alt": "",
+     "speed": "-230",
+     "coords": "35°56'51.0''N 128°33'39.5''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 313,
+     "course_true": 304.2,
+     "dist_nm": 5.0,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.9475,
+      128.560972222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN311",
+     "flyover": false,
+     "course": "237(228.5)",
+     "dist": "9.8",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "",
+     "coords": "35°50'20.7''N 128°24'37.8''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 237,
+     "course_true": 228.5,
+     "dist_nm": 9.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.839083333,
+      128.4105
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "TN312",
+     "flyover": false,
+     "course": "147(138.4)",
+     "dist": "10.0",
+     "turn": null,
+     "alt": "+8 000",
+     "speed": "",
+     "coords": "35°42'50.9''N 128°32'46.7''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 147,
+     "course_true": 138.4,
+     "dist_nm": 10.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       8000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.714138889,
+      128.546305556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "LAPAL",
+     "flyover": false,
+     "course": "075(066.3)",
+     "dist": "28.5",
+     "turn": null,
+     "alt": "+8 000",
+     "speed": "",
+     "coords": "35°54'12.6''N 129°04'52.0''E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 75,
+     "course_true": 66.3,
+     "dist_nm": 28.5,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       8000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.9035,
+      129.081111111
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.900605556,
+     128.64585
+    ],
+    [
+     35.9475,
+     128.560972222
+    ],
+    [
+     35.839083333,
+     128.4105
+    ],
+    [
+     35.714138889,
+     128.546305556
+    ],
+    [
+     35.9035,
+     129.081111111
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV BITUX 1Y",
+   "transition": null,
+   "source": "RKTN AD CHART 2-15-1 (AIP AMDT 11/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "BITUX",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "36°16'44.9\"N 128°01'47.9\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      36.279138889,
+      128.029972222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "OSNOP",
+     "flyover": false,
+     "course": "184(175.5)",
+     "dist": "16.8",
+     "turn": null,
+     "alt": "+7 000",
+     "speed": "",
+     "coords": "36°00'00.7\"N 128°03'25.6\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 184,
+     "course_true": 175.5,
+     "dist_nm": 16.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       7000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      36.000194444,
+      128.057111111
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "TN451",
+     "flyover": false,
+     "course": "147(138.8)",
+     "dist": "11.7",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°51'11.1\"N 128°12'54.5\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 147,
+     "course_true": 138.8,
+     "dist_nm": 11.7,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.853083333,
+      128.215138889
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "YAWAN",
+     "flyover": false,
+     "course": "090(081.1)",
+     "dist": "8.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°52'24.8\"N 128°22'38.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 90,
+     "course_true": 81.1,
+     "dist_nm": 8.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.873555556,
+      128.377222222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     36.279138889,
+     128.029972222
+    ],
+    [
+     36.000194444,
+     128.057111111
+    ],
+    [
+     35.853083333,
+     128.215138889
+    ],
+    [
+     35.873555556,
+     128.377222222
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV OPEDA 1Y",
+   "transition": null,
+   "source": "RKTN AD CHART 2-15-1 (AIP AMDT 11/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "OPEDA",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°51'48.5\"N 127°36'52.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.863472222,
+      127.614444444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN451",
+     "flyover": false,
+     "course": "100(091.0)",
+     "dist": "29.3",
+     "turn": null,
+     "alt": "+7 000",
+     "speed": "",
+     "coords": "35°51'11.1\"N 128°12'54.5\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 100,
+     "course_true": 91.0,
+     "dist_nm": 29.3,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       7000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.853083333,
+      128.215138889
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "YAWAN",
+     "flyover": false,
+     "course": "090(081.1)",
+     "dist": "8.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°52'24.8\"N 128°22'38.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 90,
+     "course_true": 81.1,
+     "dist_nm": 8.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.873555556,
+      128.377222222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.863472222,
+     127.614444444
+    ],
+    [
+     35.853083333,
+     128.215138889
+    ],
+    [
+     35.873555556,
+     128.377222222
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV IGDOK 1Y",
+   "transition": null,
+   "source": "RKTN AD CHART 2-15-1 (AIP AMDT 11/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "IGDOK",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°31'03.6\"N 127°49'06.6\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.517666667,
+      127.8185
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "PEDVA",
+     "flyover": false,
+     "course": "074(064.9)",
+     "dist": "16.9",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°38'13.0\"N 128°07'54.2\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 74,
+     "course_true": 64.9,
+     "dist_nm": 16.9,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.636944444,
+      128.131722222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "YAWAN",
+     "flyover": false,
+     "course": "049(040.2)",
+     "dist": "18.6",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°52'24.8\"N 128°22'38.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 49,
+     "course_true": 40.2,
+     "dist_nm": 18.6,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.873555556,
+      128.377222222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.517666667,
+     127.8185
+    ],
+    [
+     35.636944444,
+     128.131722222
+    ],
+    [
+     35.873555556,
+     128.377222222
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV MASTA 1Y",
+   "transition": null,
+   "source": "RKTN AD CHART 2-15-2 (AIRAC AIP AMDT 8/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "MASTA",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "36°28'47.0\"N 128°33'39.6\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      36.479722222,
+      128.561
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "YAWAN",
+     "flyover": false,
+     "course": "348(339.2)",
+     "dist": "25.2",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°52'24.8\"N 128°22'38.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 348,
+     "course_true": 339.2,
+     "dist_nm": 25.2,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.873555556,
+      128.377222222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.479722222,
+     128.561
+    ],
+    [
+     35.873555556,
+     128.377222222
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV KALOD 1Y",
+   "transition": null,
+   "source": "RKTN AD CHART 2-15-2 (AIRAC AIP AMDT 8/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "KALOD",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°30'12.1\"N 128°46'26.5\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.503361111,
+      128.774027778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TGU",
+     "flyover": false,
+     "course": "343(334.0)",
+     "dist": "20.4",
+     "turn": null,
+     "alt": "+9 000",
+     "speed": "",
+     "coords": "35°48'35.4\"N 128°35'26.8\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 343,
+     "course_true": 334.0,
+     "dist_nm": 20.4,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.809833333,
+      128.590777778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "YAWAN",
+     "flyover": false,
+     "course": "299(290.2)",
+     "dist": "11.1",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°52'24.8\"N 128°22'38.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 299,
+     "course_true": 290.2,
+     "dist_nm": 11.1,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.873555556,
+      128.377222222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.503361111,
+     128.774027778
+    ],
+    [
+     35.809833333,
+     128.590777778
+    ],
+    [
+     35.873555556,
+     128.377222222
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV LAPAL 1Y",
+   "transition": null,
+   "source": "RKTN AD CHART 2-15-2 (AIRAC AIP AMDT 8/26)",
+   "runway": "13L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "LAPAL",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°54'12.6\"N 129°04'52.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.9035,
+      129.081111111
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TGU",
+     "flyover": false,
+     "course": "266(256.9)",
+     "dist": "24.6",
+     "turn": null,
+     "alt": "+9 000",
+     "speed": "",
+     "coords": "35°48'35.4\"N 128°35'26.8\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 266,
+     "course_true": 256.9,
+     "dist_nm": 24.6,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.809833333,
+      128.590777778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "YAWAN",
+     "flyover": false,
+     "course": "299(290.2)",
+     "dist": "11.1",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°52'24.8\"N 128°22'38.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 299,
+     "course_true": 290.2,
+     "dist_nm": 11.1,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.873555556,
+      128.377222222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.9035,
+     129.081111111
+    ],
+    [
+     35.809833333,
+     128.590777778
+    ],
+    [
+     35.873555556,
+     128.377222222
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV BITUX 1U",
+   "transition": null,
+   "source": "RKTN AD CHART 2-16-1 (AIP AMDT 11/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "BITUX",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "36°16'44.9\"N 128°01'47.9\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      36.279138889,
+      128.029972222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "OSNOP",
+     "flyover": false,
+     "course": "184(175.5)",
+     "dist": "16.8",
+     "turn": null,
+     "alt": "+9 000",
+     "speed": "",
+     "coords": "36°00'00.7\"N 128°03'25.6\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 184,
+     "course_true": 175.5,
+     "dist_nm": 16.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      36.000194444,
+      128.057111111
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "TGU",
+     "flyover": false,
+     "course": "122(113.5)",
+     "dist": "28.4",
+     "turn": null,
+     "alt": "+9 000",
+     "speed": "",
+     "coords": "35°48'35.4\"N 128°35'26.8\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 122,
+     "course_true": 113.5,
+     "dist_nm": 28.4,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.809833333,
+      128.590777778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "TN652",
+     "flyover": false,
+     "course": "061(052.7)",
+     "dist": "11.8",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°55'43.2\"N 128°46'57.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 61,
+     "course_true": 52.7,
+     "dist_nm": 11.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.928666667,
+      128.7825
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "UKBAT",
+     "flyover": false,
+     "course": "095(086.0)",
+     "dist": "8.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°56'16.5\"N 128°56'47.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 95,
+     "course_true": 86.0,
+     "dist_nm": 8.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.937916667,
+      128.946416667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     36.279138889,
+     128.029972222
+    ],
+    [
+     36.000194444,
+     128.057111111
+    ],
+    [
+     35.809833333,
+     128.590777778
+    ],
+    [
+     35.928666667,
+     128.7825
+    ],
+    [
+     35.937916667,
+     128.946416667
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV OPEDA 1U",
+   "transition": null,
+   "source": "RKTN AD CHART 2-16-1 (AIP AMDT 11/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "OPEDA",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°51'48.5\"N 127°36'52.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.863472222,
+      127.614444444
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TGU",
+     "flyover": false,
+     "course": "102(093.6)",
+     "dist": "47.7",
+     "turn": null,
+     "alt": "+9 000",
+     "speed": "",
+     "coords": "35°48'35.4\"N 128°35'26.8\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 102,
+     "course_true": 93.6,
+     "dist_nm": 47.7,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.809833333,
+      128.590777778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "TN652",
+     "flyover": false,
+     "course": "061(052.7)",
+     "dist": "11.8",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°55'43.2\"N 128°46'57.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 61,
+     "course_true": 52.7,
+     "dist_nm": 11.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.928666667,
+      128.7825
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "UKBAT",
+     "flyover": false,
+     "course": "095(086.0)",
+     "dist": "8.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°56'16.5\"N 128°56'47.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 95,
+     "course_true": 86.0,
+     "dist_nm": 8.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.937916667,
+      128.946416667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.863472222,
+     127.614444444
+    ],
+    [
+     35.809833333,
+     128.590777778
+    ],
+    [
+     35.928666667,
+     128.7825
+    ],
+    [
+     35.937916667,
+     128.946416667
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV IGDOK 1U",
+   "transition": null,
+   "source": "RKTN AD CHART 2-16-1 (AIP AMDT 11/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "IGDOK",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°31'03.6\"N 127°49'06.6\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.517666667,
+      127.8185
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "PEDVA",
+     "flyover": false,
+     "course": "074(064.9)",
+     "dist": "16.9",
+     "turn": null,
+     "alt": "+9 000",
+     "speed": "",
+     "coords": "35°38'13.0\"N 128°07'54.2\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 74,
+     "course_true": 64.9,
+     "dist_nm": 16.9,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.636944444,
+      128.131722222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "TGU",
+     "flyover": false,
+     "course": "074(065.1)",
+     "dist": "24.7",
+     "turn": null,
+     "alt": "+9 000",
+     "speed": "",
+     "coords": "35°48'35.4\"N 128°35'26.8\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 74,
+     "course_true": 65.1,
+     "dist_nm": 24.7,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.809833333,
+      128.590777778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "TN652",
+     "flyover": false,
+     "course": "061(052.7)",
+     "dist": "11.8",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°55'43.2\"N 128°46'57.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 61,
+     "course_true": 52.7,
+     "dist_nm": 11.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.928666667,
+      128.7825
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "UKBAT",
+     "flyover": false,
+     "course": "095(086.0)",
+     "dist": "8.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°56'16.5\"N 128°56'47.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 95,
+     "course_true": 86.0,
+     "dist_nm": 8.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.937916667,
+      128.946416667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.517666667,
+     127.8185
+    ],
+    [
+     35.636944444,
+     128.131722222
+    ],
+    [
+     35.809833333,
+     128.590777778
+    ],
+    [
+     35.928666667,
+     128.7825
+    ],
+    [
+     35.937916667,
+     128.946416667
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV MASTA 1U",
+   "transition": null,
+   "source": "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "MASTA",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "36°28'47.0\"N 128°33'39.6\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      36.479722222,
+      128.561
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN653",
+     "flyover": false,
+     "course": "013(004.2)",
+     "dist": "9.8",
+     "turn": null,
+     "alt": "+9 000",
+     "speed": "",
+     "coords": "35°38'36.1\"N 128°34'32.6\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 13,
+     "course_true": 4.2,
+     "dist_nm": 9.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.643361111,
+      128.575722222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "TGU",
+     "flyover": false,
+     "course": "013(004.2)",
+     "dist": "10.0",
+     "turn": null,
+     "alt": "+9 000",
+     "speed": "",
+     "coords": "35°48'35.4\"N 128°35'26.8\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 13,
+     "course_true": 4.2,
+     "dist_nm": 10.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.809833333,
+      128.590777778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "TN652",
+     "flyover": false,
+     "course": "061(052.7)",
+     "dist": "11.8",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°55'43.2\"N 128°46'57.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 61,
+     "course_true": 52.7,
+     "dist_nm": 11.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.928666667,
+      128.7825
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "UKBAT",
+     "flyover": false,
+     "course": "095(086.0)",
+     "dist": "8.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°56'16.5\"N 128°56'47.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 95,
+     "course_true": 86.0,
+     "dist_nm": 8.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.937916667,
+      128.946416667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.479722222,
+     128.561
+    ],
+    [
+     35.643361111,
+     128.575722222
+    ],
+    [
+     35.809833333,
+     128.590777778
+    ],
+    [
+     35.928666667,
+     128.7825
+    ],
+    [
+     35.937916667,
+     128.946416667
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV KALOD 1U",
+   "transition": null,
+   "source": "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "KALOD",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°30'12.1\"N 128°46'26.5\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.503361111,
+      128.774027778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN633",
+     "flyover": false,
+     "course": "343(334.0)",
+     "dist": "10.4",
+     "turn": null,
+     "alt": "+9 000",
+     "speed": "",
+     "coords": "35°39'35.5\"N 128°40'50.3\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 343,
+     "course_true": 334.0,
+     "dist_nm": 10.4,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.659861111,
+      128.680638889
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "TGU",
+     "flyover": false,
+     "course": "343(334.0)",
+     "dist": "10.0",
+     "turn": null,
+     "alt": "+9 000",
+     "speed": "",
+     "coords": "35°48'35.4\"N 128°35'26.8\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 343,
+     "course_true": 334.0,
+     "dist_nm": 10.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       9000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.809833333,
+      128.590777778
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "TN652",
+     "flyover": false,
+     "course": "061(052.7)",
+     "dist": "11.8",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "",
+     "coords": "35°55'43.2\"N 128°46'57.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": 61,
+     "course_true": 52.7,
+     "dist_nm": 11.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.928666667,
+      128.7825
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "UKBAT",
+     "flyover": false,
+     "course": "095(086.0)",
+     "dist": "8.0",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°56'16.5\"N 128°56'47.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 95,
+     "course_true": 86.0,
+     "dist_nm": 8.0,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.937916667,
+      128.946416667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.503361111,
+     128.774027778
+    ],
+    [
+     35.659861111,
+     128.680638889
+    ],
+    [
+     35.809833333,
+     128.590777778
+    ],
+    [
+     35.928666667,
+     128.7825
+    ],
+    [
+     35.937916667,
+     128.946416667
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "STAR",
+   "name": "RNAV LAPAL 1U",
+   "transition": null,
+   "source": "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)",
+   "runway": "31L",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "LAPAL",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°54'12.6\"N 129°04'52.0\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.9035,
+      129.081111111
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "UKBAT",
+     "flyover": false,
+     "course": "296(287.5)",
+     "dist": "6.9",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°56'16.5\"N 128°56'47.1\"E",
+     "vpa": "",
+     "navspec": "RNAV 1",
+     "remarks": "IAF",
+     "course_mag": 296,
+     "course_true": 287.5,
+     "dist_nm": 6.9,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.937916667,
+      128.946416667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.9035,
+     129.081111111
+    ],
+    [
+     35.937916667,
+     128.946416667
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "ILS/LOC RWY 13R",
+   "source": "RKTN AD CHART 2-18-1 (AIP AMDT 11/26)",
+   "runway": "13R",
+   "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "D5 DOC",
+     "role": null,
+     "defn": "HDG 133",
+     "latlon": [
+      35.856333333,
+      128.72575
+     ]
+    },
+    {
+     "name": "UKBAT",
+     "role": null,
+     "defn": "R 091/15.00 NM DOC",
+     "latlon": [
+      35.937916667,
+      128.946416667
+     ]
+    }
+   ],
+   "transition": "from YAWAN",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "YAWAN",
+     "role": "IAF",
+     "defn": "R 271/13.00 NM DOC",
+     "latlon": [
+      35.873555556,
+      128.377222222
+     ]
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "D13.5 ITGL",
+     "role": "IF",
+     "defn": "BRG 132.71°/13.50 NM ITGL",
+     "latlon": [
+      36.025166667,
+      128.420027778
+     ]
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "D9.4 ITGL",
+     "role": "SDF",
+     "defn": "BRG 132.75°/9.40 NM ITGL",
+     "latlon": [
+      35.987194444,
+      128.489027778
+     ]
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "THR RWY 13R",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.900608333,
+      128.645852778
+     ]
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.873555556,
+     128.377222222
+    ],
+    [
+     36.025166667,
+     128.420027778
+    ],
+    [
+     35.987194444,
+     128.489027778
+    ],
+    [
+     35.900608333,
+     128.645852778
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "ILS/LOC RWY 31L",
+   "source": "RKTN AD CHART 2-19-1 (AIP AMDT 11/26)",
+   "runway": "31L",
+   "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "DOC VOR/DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.903777778,
+      128.641388889
+     ]
+    },
+    {
+     "name": "D2.0 ITAG",
+     "role": null,
+     "defn": "HDG 313/2.00 NM ITAG",
+     "latlon": [
+      35.907083333,
+      128.634138889
+     ]
+    },
+    {
+     "name": "MOSAN",
+     "role": null,
+     "defn": "R 270/15.00 NM DOC",
+     "latlon": [
+      35.866222222,
+      128.337222222
+     ]
+    }
+   ],
+   "transition": "from UKBAT",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "UKBAT",
+     "role": "IAF",
+     "defn": "15 DME ARC/15.00 NM DOC",
+     "latlon": [
+      35.937916667,
+      128.946416667
+     ]
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "D13.4 ITAG",
+     "role": "IF",
+     "defn": "BRG 312.99°/13.40 NM ITAG",
+     "latlon": [
+      35.762194444,
+      128.895111111
+     ]
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "D10.0 ITAG",
+     "role": "SDF",
+     "defn": "BRG 312.96°/10.00 NM ITAG",
+     "latlon": [
+      35.794305556,
+      128.837444444
+     ]
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "THR RWY 31L",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.886641667,
+      128.671086111
+     ]
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.937916667,
+     128.946416667
+    ],
+    [
+     35.762194444,
+     128.895111111
+    ],
+    [
+     35.794305556,
+     128.837444444
+    ],
+    [
+     35.886641667,
+     128.671086111
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "LOC Y RWY 31R",
+   "source": "RKTN AD CHART 2-20-1 (AIP AMDT 11/26)",
+   "runway": "31R",
+   "coding": "AIP fix/point table (conventional)",
+   "other_points": [
+    {
+     "name": "DOC VOR/DME",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.903777778,
+      128.641388889
+     ]
+    },
+    {
+     "name": "MOSAN",
+     "role": null,
+     "defn": "R 270/15.00 NM DOC",
+     "latlon": [
+      35.866222222,
+      128.337222222
+     ]
+    }
+   ],
+   "transition": "from UKBAT",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "UKBAT",
+     "role": "IAF",
+     "defn": "15 DME ARC/15.00 NM DOC",
+     "latlon": [
+      35.937916667,
+      128.946416667
+     ]
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "D14.9 IDAG",
+     "role": "IF",
+     "defn": "BRG 312.99°/14.90 NM IDAG",
+     "latlon": [
+      35.763222222,
+      128.895805556
+     ]
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "D12.0 IDAG",
+     "role": "SDF",
+     "defn": "BRG 312.96°/12.00 NM IDAG",
+     "latlon": [
+      35.790444444,
+      128.846916667
+     ]
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "THR RWY 31R",
+     "role": null,
+     "defn": null,
+     "latlon": [
+      35.887580556,
+      128.671913889
+     ]
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.937916667,
+     128.946416667
+    ],
+    [
+     35.763222222,
+     128.895805556
+    ],
+    [
+     35.790444444,
+     128.846916667
+    ],
+    [
+     35.887580556,
+     128.671913889
+    ]
+   ],
+   "approx": false
+  },
+  {
+   "type": "IAP",
+   "name": "RNP Y RWY 31R",
+   "transition": null,
+   "source": "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)",
+   "runway": "31R",
+   "coding": "AIP coding table",
+   "legs": [
+    {
+     "serial": "001",
+     "path": "IF",
+     "fix": "UKBAT",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "+6 000",
+     "speed": "-230",
+     "coords": "35°56'16.5\"N 128°56'47.1\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "IAF",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.937916667,
+      128.946416667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "002",
+     "path": "TF",
+     "fix": "TN601",
+     "flyover": false,
+     "course": "176(167.3)",
+     "dist": "5.3",
+     "turn": null,
+     "alt": "+5 000",
+     "speed": "-230",
+     "coords": "35°51'06.5\"N 128°58'12.6\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "",
+     "course_mag": 176,
+     "course_true": 167.3,
+     "dist_nm": 5.3,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       5000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.851805556,
+      128.970166667
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "003",
+     "path": "TF",
+     "fix": "IDEVA",
+     "flyover": false,
+     "course": "223(214.4)",
+     "dist": "6.4",
+     "turn": null,
+     "alt": "+4 200",
+     "speed": "-230",
+     "coords": "35°45'47.6\"N 128°53'44.7\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "IF",
+     "course_mag": 223,
+     "course_true": 214.4,
+     "dist_nm": 6.4,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       4200
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.763222222,
+      128.89575
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "004",
+     "path": "TF",
+     "fix": "TN701",
+     "flyover": false,
+     "course": "313(304.4)",
+     "dist": "3.4",
+     "turn": null,
+     "alt": "+3 300",
+     "speed": "-230",
+     "coords": "35°47'42.9\"N 128°50'17.7\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "",
+     "course_mag": 313,
+     "course_true": 304.4,
+     "dist_nm": 3.4,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       3300
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.79525,
+      128.83825
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "005",
+     "path": "TF",
+     "fix": "MEVIM",
+     "flyover": false,
+     "course": "313(304.3)",
+     "dist": "2.8",
+     "turn": null,
+     "alt": "+2 400",
+     "speed": "-230",
+     "coords": "35°49'18.8\"N 128°47'25.2\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "FAF",
+     "course_mag": 313,
+     "course_true": 304.3,
+     "dist_nm": 2.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       2400
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.821888889,
+      128.790333333
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "006",
+     "path": "TF",
+     "fix": "TN702",
+     "flyover": false,
+     "course": "313(304.3)",
+     "dist": "3.8",
+     "turn": null,
+     "alt": "+1 200",
+     "speed": "",
+     "coords": "35°51'26.4\"N 128°43'35.4\"E",
+     "vpa": "-3.00/56",
+     "navspec": "RNP APCH",
+     "remarks": "SDF",
+     "course_mag": 313,
+     "course_true": 304.3,
+     "dist_nm": 3.8,
+     "alt_c": [
+      [
+       "AT_OR_ABOVE",
+       1200
+      ]
+     ],
+     "speed_c": null,
+     "latlon": [
+      35.857333333,
+      128.7265
+     ],
+     "vpa_deg": -3.0,
+     "rdh_ft": 56
+    },
+    {
+     "serial": "007",
+     "path": "TF",
+     "fix": "RW31R",
+     "flyover": true,
+     "course": "313(304.3)",
+     "dist": "3.2",
+     "turn": null,
+     "alt": "",
+     "speed": "",
+     "coords": "35°53'15.29\"N 128°40'18.89\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "MAPt",
+     "course_mag": 313,
+     "course_true": 304.3,
+     "dist_nm": 3.2,
+     "alt_c": [],
+     "speed_c": null,
+     "latlon": [
+      35.887580556,
+      128.671913889
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "008",
+     "path": "DF",
+     "fix": "TN731",
+     "flyover": false,
+     "course": "",
+     "dist": "",
+     "turn": null,
+     "alt": "",
+     "speed": "-230",
+     "coords": "35°55'53.2\"N 128°35'24.2\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "",
+     "course_mag": null,
+     "course_true": null,
+     "dist_nm": null,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.931444444,
+      128.590055556
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "009",
+     "path": "TF",
+     "fix": "TN632",
+     "flyover": false,
+     "course": "249(240.6)",
+     "dist": "5.6",
+     "turn": null,
+     "alt": "",
+     "speed": "-230",
+     "coords": "35°53'06.4\"N 128°29'21.3\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "",
+     "course_mag": 249,
+     "course_true": 240.6,
+     "dist_nm": 5.6,
+     "alt_c": [],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.885111111,
+      128.48925
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "010",
+     "path": "TF",
+     "fix": "MOSAN",
+     "flyover": false,
+     "course": "270(261.4)",
+     "dist": "7.5",
+     "turn": null,
+     "alt": "@6 000",
+     "speed": "-230",
+     "coords": "35°51'58.4\"N 128°20'14.0\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "",
+     "course_mag": 270,
+     "course_true": 261.4,
+     "dist_nm": 7.5,
+     "alt_c": [
+      [
+       "AT",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.866222222,
+      128.337222222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    },
+    {
+     "serial": "011",
+     "path": "HM",
+     "fix": "MOSAN",
+     "flyover": true,
+     "course": "090(081.8)",
+     "dist": "",
+     "turn": "R",
+     "alt": "@6 000",
+     "speed": "-230",
+     "coords": "35°51'58.4\"N 128°20'14.0\"E",
+     "vpa": "",
+     "navspec": "RNP APCH",
+     "remarks": "5 NM (Outbound Leg)",
+     "course_mag": 90,
+     "course_true": 81.8,
+     "dist_nm": null,
+     "alt_c": [
+      [
+       "AT",
+       6000
+      ]
+     ],
+     "speed_c": [
+      "AT_OR_BELOW",
+      230
+     ],
+     "latlon": [
+      35.866222222,
+      128.337222222
+     ],
+     "vpa_deg": null,
+     "rdh_ft": null
+    }
+   ],
+   "qa": "ok",
+   "coords": [
+    [
+     35.937916667,
+     128.946416667
+    ],
+    [
+     35.851805556,
+     128.970166667
+    ],
+    [
+     35.763222222,
+     128.89575
+    ],
+    [
+     35.79525,
+     128.83825
+    ],
+    [
+     35.821888889,
+     128.790333333
+    ],
+    [
+     35.857333333,
+     128.7265
+    ],
+    [
+     35.887580556,
+     128.671913889
+    ],
+    [
+     35.931444444,
+     128.590055556
+    ],
+    [
+     35.885111111,
+     128.48925
+    ],
+    [
+     35.866222222,
+     128.337222222
+    ],
+    [
+     35.866222222,
+     128.337222222
+    ]
+   ],
+   "approx": false
+  }
+ ],
+ "holdings": [
+  {
+   "ident": "Path Descriptor",
+   "path": "HM",
+   "fix": "",
+   "flyover": false,
+   "course": "",
+   "time_min": null,
+   "turn": null,
+   "alt": "",
+   "speed": "",
+   "coords": "",
+   "navspec": "",
+   "course_mag": null,
+   "course_true": null,
+   "alt_c": [],
+   "latlon": null,
+   "source": "RKTN AD CHART 2-16-2 (AIP AMDT 11/26)"
+  },
+  {
+   "ident": "RNP Y RWY 31R",
+   "path": "HM",
+   "fix": "UKBAT",
+   "flyover": true,
+   "course": "091(082.2)",
+   "time_min": 5.0,
+   "turn": "L",
+   "alt": "-8 000 +6 000",
+   "speed": "-230",
+   "coords": "35°56'16.5\"N 128°56'47.1\"E",
+   "navspec": "RNP 1",
+   "course_mag": 91,
+   "course_true": 82.2,
+   "alt_c": [
+    [
+     "AT_OR_BELOW",
+     8000
+    ],
+    [
+     "AT_OR_ABOVE",
+     6000
+    ]
+   ],
+   "latlon": [
+    35.937916667,
+    128.946416667
+   ],
+   "source": "RKTN AD CHART 2-21-1 (AIP AMDT 11/26)"
+  }
+ ],
+ "obstacles": [
+  {
+   "id": "RKTNOB001",
+   "lat": 35.825527778,
+   "lon": 129.027111111,
+   "elev_m": 773.9,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": "31L/R APCH 13L/R TKOF",
+   "position_estimated": false,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 714.7,
+   "hgt_est_m": 59.2
+  },
+  {
+   "id": "RKTNOB002",
+   "lat": 35.782083333,
+   "lon": 128.946166667,
+   "elev_m": 680.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "position_estimated": false,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 679.5,
+   "hgt_est_m": 0.5
+  },
+  {
+   "id": "RKTNOB003",
+   "lat": 35.7385,
+   "lon": 128.827083333,
+   "elev_m": 641.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "position_estimated": false,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 640.5,
+   "hgt_est_m": 0.8
+  },
+  {
+   "id": "RKTNOB004",
+   "lat": 35.934944444,
+   "lon": 128.615861111,
+   "elev_m": 276.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "position_estimated": false,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 276.1,
+   "hgt_est_m": 0.4
+  },
+  {
+   "id": "RKTNOB005",
+   "lat": 35.87255259914185,
+   "lon": 128.69651627643623,
+   "elev_m": 81.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": "1.5 NM from RWY 31L THR (위치 추정)",
+   "position_estimated": true,
+   "sources": [
+    "AD 2.10"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 45.7,
+   "hgt_est_m": 35.4
+  },
+  {
+   "id": "RKTNOB006",
+   "lat": 35.880166667,
+   "lon": 128.696305556,
+   "elev_m": 131.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": "In RWY 31L/R, 13L/R circling area and at AD",
+   "position_estimated": false,
+   "sources": [
+    "AD 2.10 Area 2",
+    "AD CHART 2-9 #4"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 132.1,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTNOB007",
+   "lat": 35.864833333,
+   "lon": 128.661388889,
+   "elev_m": 171.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "position_estimated": false,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 163.3,
+   "hgt_est_m": 7.7
+  },
+  {
+   "id": "RKTNOB008",
+   "lat": 35.862388889,
+   "lon": 128.656861111,
+   "elev_m": 199.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "position_estimated": false,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 143.1,
+   "hgt_est_m": 55.9
+  },
+  {
+   "id": "RKTNOB009",
+   "lat": 35.910861111,
+   "lon": 128.628194444,
+   "elev_m": 85.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "position_estimated": false,
+   "sources": [
+    "AD 2.10 Area 2",
+    "AD CHART 2-7 #6",
+    "AD CHART 2-8 #4",
+    "AD CHART 2-9 #5"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 88.4,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTNOB010",
+   "lat": 35.935,
+   "lon": 128.615555556,
+   "elev_m": 278.9,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": "13L/R APCH 31L/R TKOF",
+   "position_estimated": false,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 273.3,
+   "hgt_est_m": 5.6
+  },
+  {
+   "id": "RKTN-2-5-1",
+   "lat": 35.8852861,
+   "lon": 128.6760639,
+   "elev_m": 38.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Light",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #1"
+   ],
+   "category": "Mast",
+   "airport": "RKTN",
+   "ground_m": 36.1,
+   "hgt_est_m": 2.4
+  },
+  {
+   "id": "RKTN-2-5-2",
+   "lat": 35.8786361,
+   "lon": 128.6823111,
+   "elev_m": 50.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #2",
+    "AD CHART 2-6 #2"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 37.3,
+   "hgt_est_m": 12.7
+  },
+  {
+   "id": "RKTN-2-5-3",
+   "lat": 35.8783611,
+   "lon": 128.6838944,
+   "elev_m": 52.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #3",
+    "AD CHART 2-6 #3"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 37.2,
+   "hgt_est_m": 15.3
+  },
+  {
+   "id": "RKTN-2-5-4",
+   "lat": 35.8800861,
+   "lon": 128.6907528,
+   "elev_m": 71.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #4"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 74.4,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-5-5",
+   "lat": 35.8783139,
+   "lon": 128.6935306,
+   "elev_m": 78.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #5",
+    "AD CHART 2-6 #4"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 82.3,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-5-6",
+   "lat": 35.8735611,
+   "lon": 128.6927333,
+   "elev_m": 81.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #6",
+    "AD CHART 2-6 #5"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 42.4,
+   "hgt_est_m": 39.1
+  },
+  {
+   "id": "RKTN-2-5-7",
+   "lat": 35.8744361,
+   "lon": 128.6983583,
+   "elev_m": 85.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #7",
+    "AD CHART 2-6 #6"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 47.7,
+   "hgt_est_m": 37.8
+  },
+  {
+   "id": "RKTN-2-5-8",
+   "lat": 35.8707167,
+   "lon": 128.7083333,
+   "elev_m": 87.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #8",
+    "AD CHART 2-6 #7"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 46.3,
+   "hgt_est_m": 41.2
+  },
+  {
+   "id": "RKTN-2-6-1",
+   "lat": 35.8842806,
+   "lon": 128.6744944,
+   "elev_m": 38.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #1"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 35.9,
+   "hgt_est_m": 2.1
+  },
+  {
+   "id": "RKTN-2-7-1",
+   "lat": 35.9019139,
+   "lon": 128.6428806,
+   "elev_m": 35.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Light",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #1"
+   ],
+   "category": "Mast",
+   "airport": "RKTN",
+   "ground_m": 33.2,
+   "hgt_est_m": 1.8
+  },
+  {
+   "id": "RKTN-2-7-2",
+   "lat": 35.9017667,
+   "lon": 128.6425111,
+   "elev_m": 36.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #2"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 32.8,
+   "hgt_est_m": 3.2
+  },
+  {
+   "id": "RKTN-2-7-3",
+   "lat": 35.9037694,
+   "lon": 128.6413778,
+   "elev_m": 39.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #3",
+    "AD CHART 2-8 #2"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 34.2,
+   "hgt_est_m": 4.8
+  },
+  {
+   "id": "RKTN-2-7-4",
+   "lat": 35.9099389,
+   "lon": 128.6288611,
+   "elev_m": 64.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #4"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 68.4,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-7-5",
+   "lat": 35.9082806,
+   "lon": 128.627375,
+   "elev_m": 73.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #5",
+    "AD CHART 2-9 #118"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 74.9,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-7-7",
+   "lat": 35.9263417,
+   "lon": 128.6058667,
+   "elev_m": 121.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #7"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 128.3,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-7-8",
+   "lat": 35.9261944,
+   "lon": 128.5853028,
+   "elev_m": 274.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #8",
+    "AD CHART 2-8 #7",
+    "AD CHART 2-9 #41"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 272.7,
+   "hgt_est_m": 1.3
+  },
+  {
+   "id": "RKTN-2-7-9",
+   "lat": 35.9370056,
+   "lon": 128.5843972,
+   "elev_m": 210.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #9",
+    "AD CHART 2-8 #9",
+    "AD CHART 2-9 #112"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 209.2,
+   "hgt_est_m": 1.3
+  },
+  {
+   "id": "RKTN-2-7-10",
+   "lat": 35.9373528,
+   "lon": 128.5740917,
+   "elev_m": 225.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #10",
+    "AD CHART 2-8 #10",
+    "AD CHART 2-9 #110"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 227.0,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-8-1",
+   "lat": 35.9033444,
+   "lon": 128.6436972,
+   "elev_m": 35.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Light",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-8 #1"
+   ],
+   "category": "Mast",
+   "airport": "RKTN",
+   "ground_m": 33.6,
+   "hgt_est_m": 1.9
+  },
+  {
+   "id": "RKTN-2-8-3",
+   "lat": 35.9047806,
+   "lon": 128.6419778,
+   "elev_m": 43.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Light",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-8 #3"
+   ],
+   "category": "Mast",
+   "airport": "RKTN",
+   "ground_m": 36.0,
+   "hgt_est_m": 7.0
+  },
+  {
+   "id": "RKTN-2-8-5",
+   "lat": 35.9289111,
+   "lon": 128.6094111,
+   "elev_m": 188.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-8 #5",
+    "AD CHART 2-9 #116"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 190.9,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-8-6",
+   "lat": 35.9321917,
+   "lon": 128.59695,
+   "elev_m": 100.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-8 #6"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 104.5,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-8-8",
+   "lat": 35.9282972,
+   "lon": 128.5827028,
+   "elev_m": 249.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-8 #8",
+    "AD CHART 2-9 #105"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 247.5,
+   "hgt_est_m": 2.0
+  },
+  {
+   "id": "RKTN-2-9-1",
+   "lat": 35.8798889,
+   "lon": 128.6965917,
+   "elev_m": 131.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 128.5,
+   "hgt_est_m": 2.5
+  },
+  {
+   "id": "RKTN-2-9-21",
+   "lat": 35.9276667,
+   "lon": 128.6588333,
+   "elev_m": 153.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #21"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 127.9,
+   "hgt_est_m": 25.1
+  },
+  {
+   "id": "RKTN-2-9-61",
+   "lat": 35.9112944,
+   "lon": 128.7016333,
+   "elev_m": 480.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #61"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 470.5,
+   "hgt_est_m": 9.5
+  },
+  {
+   "id": "RKTN-2-9-81",
+   "lat": 35.9816056,
+   "lon": 128.517275,
+   "elev_m": 219.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pylon",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #81"
+   ],
+   "category": "Tower",
+   "airport": "RKTN",
+   "ground_m": 220.3,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-101",
+   "lat": 35.9837694,
+   "lon": 128.5380917,
+   "elev_m": 220.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #101"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 219.0,
+   "hgt_est_m": 1.0
+  },
+  {
+   "id": "RKTN-2-9-121",
+   "lat": 35.9158111,
+   "lon": 128.6284722,
+   "elev_m": 78.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #121"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 33.7,
+   "hgt_est_m": 44.3
+  },
+  {
+   "id": "RKTN-2-9-141",
+   "lat": 35.9207083,
+   "lon": 128.6680806,
+   "elev_m": 130.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Fence",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #141"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 128.2,
+   "hgt_est_m": 1.8
+  },
+  {
+   "id": "RKTN-2-9-161",
+   "lat": 35.9255083,
+   "lon": 128.6768389,
+   "elev_m": 382.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #161"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 381.2,
+   "hgt_est_m": 0.8
+  },
+  {
+   "id": "RKTN-2-9-181",
+   "lat": 35.9119472,
+   "lon": 128.6893722,
+   "elev_m": 132.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #181"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 130.0,
+   "hgt_est_m": 2.0
+  },
+  {
+   "id": "RKTN-2-9-201",
+   "lat": 35.8959278,
+   "lon": 128.7015972,
+   "elev_m": 111.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #201"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 108.6,
+   "hgt_est_m": 2.4
+  },
+  {
+   "id": "RKTN-2-9-221",
+   "lat": 35.874025,
+   "lon": 128.6542333,
+   "elev_m": 85.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #221"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 44.8,
+   "hgt_est_m": 40.2
+  },
+  {
+   "id": "RKTN-2-9-2",
+   "lat": 35.9108722,
+   "lon": 128.6283806,
+   "elev_m": 85.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #2"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 89.7,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-22",
+   "lat": 35.9295,
+   "lon": 128.649,
+   "elev_m": 140.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #22"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 145.2,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-42",
+   "lat": 35.9368333,
+   "lon": 128.5738333,
+   "elev_m": 226.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #42"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 227.4,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-62",
+   "lat": 35.983325,
+   "lon": 128.5281833,
+   "elev_m": 420.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #62"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 420.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-82",
+   "lat": 35.983625,
+   "lon": 128.518075,
+   "elev_m": 260.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #82"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 257.5,
+   "hgt_est_m": 3.0
+  },
+  {
+   "id": "RKTN-2-9-102",
+   "lat": 35.9228278,
+   "lon": 128.5871056,
+   "elev_m": 218.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #102"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 219.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-122",
+   "lat": 35.8988194,
+   "lon": 128.6433028,
+   "elev_m": 43.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #122"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 32.1,
+   "hgt_est_m": 11.4
+  },
+  {
+   "id": "RKTN-2-9-142",
+   "lat": 35.9179389,
+   "lon": 128.6640028,
+   "elev_m": 160.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #142"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 153.5,
+   "hgt_est_m": 6.5
+  },
+  {
+   "id": "RKTN-2-9-162",
+   "lat": 35.9269583,
+   "lon": 128.6808528,
+   "elev_m": 195.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #162"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 195.8,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-182",
+   "lat": 35.9120111,
+   "lon": 128.6954417,
+   "elev_m": 407.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #182"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 401.7,
+   "hgt_est_m": 5.3
+  },
+  {
+   "id": "RKTN-2-9-202",
+   "lat": 35.89555,
+   "lon": 128.706225,
+   "elev_m": 164.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #202"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 163.8,
+   "hgt_est_m": 0.7
+  },
+  {
+   "id": "RKTN-2-9-222",
+   "lat": 35.8847889,
+   "lon": 128.6670472,
+   "elev_m": 47.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #222"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 36.1,
+   "hgt_est_m": 11.4
+  },
+  {
+   "id": "RKTN-2-9-3",
+   "lat": 35.8961028,
+   "lon": 128.6930111,
+   "elev_m": 170.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #3"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 160.4,
+   "hgt_est_m": 9.6
+  },
+  {
+   "id": "RKTN-2-9-23",
+   "lat": 35.919,
+   "lon": 128.6928333,
+   "elev_m": 416.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #23"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 402.3,
+   "hgt_est_m": 13.7
+  },
+  {
+   "id": "RKTN-2-9-43",
+   "lat": 35.9117,
+   "lon": 128.7015222,
+   "elev_m": 480.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #43"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 442.7,
+   "hgt_est_m": 37.3
+  },
+  {
+   "id": "RKTN-2-9-63",
+   "lat": 35.9523444,
+   "lon": 128.5181028,
+   "elev_m": 253.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #63"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 256.5,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-83",
+   "lat": 35.9759611,
+   "lon": 128.5271583,
+   "elev_m": 392.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #83"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 387.5,
+   "hgt_est_m": 4.5
+  },
+  {
+   "id": "RKTN-2-9-103",
+   "lat": 35.9280139,
+   "lon": 128.5760889,
+   "elev_m": 229.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #103"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 228.4,
+   "hgt_est_m": 1.1
+  },
+  {
+   "id": "RKTN-2-9-123",
+   "lat": 35.9019167,
+   "lon": 128.6452833,
+   "elev_m": 35.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Light",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #123"
+   ],
+   "category": "Mast",
+   "airport": "RKTN",
+   "ground_m": 33.3,
+   "hgt_est_m": 2.2
+  },
+  {
+   "id": "RKTN-2-9-143",
+   "lat": 35.9172139,
+   "lon": 128.6675778,
+   "elev_m": 117.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Fence",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #143"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 110.5,
+   "hgt_est_m": 7.0
+  },
+  {
+   "id": "RKTN-2-9-163",
+   "lat": 35.9261778,
+   "lon": 128.6858778,
+   "elev_m": 353.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #163"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 359.9,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-183",
+   "lat": 35.9150472,
+   "lon": 128.700375,
+   "elev_m": 440.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #183"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 440.2,
+   "hgt_est_m": 0.3
+  },
+  {
+   "id": "RKTN-2-9-203",
+   "lat": 35.8901889,
+   "lon": 128.7107889,
+   "elev_m": 155.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #203"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 155.5,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-223",
+   "lat": 35.8870083,
+   "lon": 128.6644306,
+   "elev_m": 36.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #223"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 33.7,
+   "hgt_est_m": 2.3
+  },
+  {
+   "id": "RKTN-2-9-24",
+   "lat": 35.926,
+   "lon": 128.6879444,
+   "elev_m": 360.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #24"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 268.5,
+   "hgt_est_m": 91.5
+  },
+  {
+   "id": "RKTN-2-9-44",
+   "lat": 35.9583333,
+   "lon": 128.5345,
+   "elev_m": 262.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #44"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 263.4,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-64",
+   "lat": 35.95435,
+   "lon": 128.5170667,
+   "elev_m": 190.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pylon",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #64"
+   ],
+   "category": "Tower",
+   "airport": "RKTN",
+   "ground_m": 187.8,
+   "hgt_est_m": 2.2
+  },
+  {
+   "id": "RKTN-2-9-84",
+   "lat": 35.9737972,
+   "lon": 128.5277694,
+   "elev_m": 402.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #84"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 400.4,
+   "hgt_est_m": 1.6
+  },
+  {
+   "id": "RKTN-2-9-104",
+   "lat": 35.9261944,
+   "lon": 128.5853028,
+   "elev_m": 274.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #104"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 272.7,
+   "hgt_est_m": 1.3
+  },
+  {
+   "id": "RKTN-2-9-124",
+   "lat": 35.9050944,
+   "lon": 128.643375,
+   "elev_m": 47.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #124"
+   ],
+   "category": "Tree",
+   "airport": "RKTN",
+   "ground_m": 39.2,
+   "hgt_est_m": 7.8
+  },
+  {
+   "id": "RKTN-2-9-144",
+   "lat": 35.913375,
+   "lon": 128.6630861,
+   "elev_m": 108.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #144"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 95.8,
+   "hgt_est_m": 12.2
+  },
+  {
+   "id": "RKTN-2-9-164",
+   "lat": 35.9238194,
+   "lon": 128.6927611,
+   "elev_m": 256.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #164"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 261.3,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-184",
+   "lat": 35.9157472,
+   "lon": 128.7055278,
+   "elev_m": 416.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #184"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 417.0,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-204",
+   "lat": 35.8934944,
+   "lon": 128.7128278,
+   "elev_m": 226.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #204"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 222.6,
+   "hgt_est_m": 3.9
+  },
+  {
+   "id": "RKTN-2-9-224",
+   "lat": 35.8883583,
+   "lon": 128.6620722,
+   "elev_m": 35.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #224"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 34.0,
+   "hgt_est_m": 1.5
+  },
+  {
+   "id": "RKTN-2-9-25",
+   "lat": 35.9375,
+   "lon": 128.651,
+   "elev_m": 301.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #25"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 287.2,
+   "hgt_est_m": 13.8
+  },
+  {
+   "id": "RKTN-2-9-45",
+   "lat": 35.9831667,
+   "lon": 128.5278333,
+   "elev_m": 420.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #45"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 404.9,
+   "hgt_est_m": 15.1
+  },
+  {
+   "id": "RKTN-2-9-65",
+   "lat": 35.9544222,
+   "lon": 128.5215,
+   "elev_m": 262.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #65"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 260.9,
+   "hgt_est_m": 1.6
+  },
+  {
+   "id": "RKTN-2-9-85",
+   "lat": 35.9728333,
+   "lon": 128.5317028,
+   "elev_m": 316.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #85"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 317.9,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-125",
+   "lat": 35.9354944,
+   "lon": 128.625175,
+   "elev_m": 199.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #125"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 208.5,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-145",
+   "lat": 35.9108917,
+   "lon": 128.6623389,
+   "elev_m": 83.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #145"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 76.7,
+   "hgt_est_m": 6.8
+  },
+  {
+   "id": "RKTN-2-9-165",
+   "lat": 35.9190083,
+   "lon": 128.6967306,
+   "elev_m": 351.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #165"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 351.1,
+   "hgt_est_m": 0.4
+  },
+  {
+   "id": "RKTN-2-9-185",
+   "lat": 35.9129694,
+   "lon": 128.7032361,
+   "elev_m": 493.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #185"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 485.0,
+   "hgt_est_m": 8.0
+  },
+  {
+   "id": "RKTN-2-9-205",
+   "lat": 35.8958472,
+   "lon": 128.7140694,
+   "elev_m": 219.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #205"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 216.0,
+   "hgt_est_m": 3.0
+  },
+  {
+   "id": "RKTN-2-9-225",
+   "lat": 35.8913472,
+   "lon": 128.6564556,
+   "elev_m": 59.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #225"
+   ],
+   "category": "Antenna",
+   "airport": "RKTN",
+   "ground_m": 34.4,
+   "hgt_est_m": 24.6
+  },
+  {
+   "id": "RKTN-2-9-6",
+   "lat": 35.9051667,
+   "lon": 128.6595,
+   "elev_m": 66.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #6"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 63.4,
+   "hgt_est_m": 2.6
+  },
+  {
+   "id": "RKTN-2-9-26",
+   "lat": 35.8798889,
+   "lon": 128.6965917,
+   "elev_m": 131.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #26"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 128.5,
+   "hgt_est_m": 2.5
+  },
+  {
+   "id": "RKTN-2-9-46",
+   "lat": 35.9899278,
+   "lon": 128.5195194,
+   "elev_m": 518.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #46"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 515.1,
+   "hgt_est_m": 2.9
+  },
+  {
+   "id": "RKTN-2-9-66",
+   "lat": 35.9569333,
+   "lon": 128.5207583,
+   "elev_m": 264.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #66"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 264.2,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-86",
+   "lat": 35.9683361,
+   "lon": 128.5388417,
+   "elev_m": 193.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #86"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 193.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-106",
+   "lat": 35.9300778,
+   "lon": 128.5815389,
+   "elev_m": 228.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #106"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 222.9,
+   "hgt_est_m": 5.1
+  },
+  {
+   "id": "RKTN-2-9-126",
+   "lat": 35.9361722,
+   "lon": 128.6296306,
+   "elev_m": 183.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #126"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 193.0,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-146",
+   "lat": 35.9103528,
+   "lon": 128.6660111,
+   "elev_m": 111.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #146"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 103.9,
+   "hgt_est_m": 7.6
+  },
+  {
+   "id": "RKTN-2-9-166",
+   "lat": 35.9191556,
+   "lon": 128.6925278,
+   "elev_m": 416.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #166"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 417.3,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-186",
+   "lat": 35.911275,
+   "lon": 128.7016111,
+   "elev_m": 474.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #186"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 470.5,
+   "hgt_est_m": 4.0
+  },
+  {
+   "id": "RKTN-2-9-206",
+   "lat": 35.9005111,
+   "lon": 128.7178472,
+   "elev_m": 311.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #206"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 312.8,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-226",
+   "lat": 35.8926694,
+   "lon": 128.6529972,
+   "elev_m": 49.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #226"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 32.3,
+   "hgt_est_m": 17.2
+  },
+  {
+   "id": "RKTN-2-9-7",
+   "lat": 35.9005,
+   "lon": 128.6704444,
+   "elev_m": 115.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #7"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 98.9,
+   "hgt_est_m": 16.1
+  },
+  {
+   "id": "RKTN-2-9-27",
+   "lat": 35.8653056,
+   "lon": 128.6613556,
+   "elev_m": 180.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #27"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 170.2,
+   "hgt_est_m": 9.8
+  },
+  {
+   "id": "RKTN-2-9-47",
+   "lat": 35.9773333,
+   "lon": 128.5473333,
+   "elev_m": 185.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #47"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 171.3,
+   "hgt_est_m": 13.7
+  },
+  {
+   "id": "RKTN-2-9-67",
+   "lat": 35.9525083,
+   "lon": 128.5325444,
+   "elev_m": 185.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #67"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 187.8,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-87",
+   "lat": 35.9656806,
+   "lon": 128.546325,
+   "elev_m": 198.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #87"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 198.5,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-107",
+   "lat": 35.9290194,
+   "lon": 128.5902056,
+   "elev_m": 165.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #107"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 166.8,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-127",
+   "lat": 35.9034028,
+   "lon": 128.6497806,
+   "elev_m": 45.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #127"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 39.9,
+   "hgt_est_m": 5.6
+  },
+  {
+   "id": "RKTN-2-9-147",
+   "lat": 35.9094056,
+   "lon": 128.6586722,
+   "elev_m": 105.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #147"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 109.5,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-167",
+   "lat": 35.9195778,
+   "lon": 128.6885194,
+   "elev_m": 464.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #167"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 459.1,
+   "hgt_est_m": 4.9
+  },
+  {
+   "id": "RKTN-2-9-187",
+   "lat": 35.9066111,
+   "lon": 128.6952083,
+   "elev_m": 343.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #187"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 346.4,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-207",
+   "lat": 35.8946444,
+   "lon": 128.7198194,
+   "elev_m": 305.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #207"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 304.2,
+   "hgt_est_m": 0.8
+  },
+  {
+   "id": "RKTN-2-9-227",
+   "lat": 35.8942306,
+   "lon": 128.6512278,
+   "elev_m": 41.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #227"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 32.0,
+   "hgt_est_m": 9.5
+  },
+  {
+   "id": "RKTN-2-9-8",
+   "lat": 35.894,
+   "lon": 128.677,
+   "elev_m": 59.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #8"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 56.5,
+   "hgt_est_m": 2.5
+  },
+  {
+   "id": "RKTN-2-9-28",
+   "lat": 35.8646667,
+   "lon": 128.6328333,
+   "elev_m": 116.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #28"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 116.8,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-48",
+   "lat": 35.9296667,
+   "lon": 128.628,
+   "elev_m": 76.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #48"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 71.4,
+   "hgt_est_m": 4.6
+  },
+  {
+   "id": "RKTN-2-9-68",
+   "lat": 35.9735028,
+   "lon": 128.5052389,
+   "elev_m": 232.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #68"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 234.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-88",
+   "lat": 35.9703472,
+   "lon": 128.5448389,
+   "elev_m": 191.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #88"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 184.2,
+   "hgt_est_m": 6.8
+  },
+  {
+   "id": "RKTN-2-9-108",
+   "lat": 35.9338389,
+   "lon": 128.5814667,
+   "elev_m": 191.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #108"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 190.2,
+   "hgt_est_m": 0.8
+  },
+  {
+   "id": "RKTN-2-9-128",
+   "lat": 35.9074472,
+   "lon": 128.6523778,
+   "elev_m": 110.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #128"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 107.5,
+   "hgt_est_m": 3.0
+  },
+  {
+   "id": "RKTN-2-9-148",
+   "lat": 35.9042917,
+   "lon": 128.6562778,
+   "elev_m": 92.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #148"
+   ],
+   "category": "Mast",
+   "airport": "RKTN",
+   "ground_m": 77.5,
+   "hgt_est_m": 14.5
+  },
+  {
+   "id": "RKTN-2-9-168",
+   "lat": 35.9167,
+   "lon": 128.6889194,
+   "elev_m": 384.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #168"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 366.8,
+   "hgt_est_m": 17.2
+  },
+  {
+   "id": "RKTN-2-9-188",
+   "lat": 35.9067972,
+   "lon": 128.6929667,
+   "elev_m": 209.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #188"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 213.7,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-208",
+   "lat": 35.8801417,
+   "lon": 128.696325,
+   "elev_m": 131.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #208"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 132.1,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-228",
+   "lat": 35.8961583,
+   "lon": 128.6476306,
+   "elev_m": 43.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #228"
+   ],
+   "category": "Tree",
+   "airport": "RKTN",
+   "ground_m": 30.7,
+   "hgt_est_m": 12.3
+  },
+  {
+   "id": "RKTN-2-9-9",
+   "lat": 35.8851667,
+   "lon": 128.6466667,
+   "elev_m": 62.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #9"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 28.9,
+   "hgt_est_m": 33.1
+  },
+  {
+   "id": "RKTN-2-9-29",
+   "lat": 35.8561667,
+   "lon": 128.6626667,
+   "elev_m": 151.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #29"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 145.6,
+   "hgt_est_m": 5.4
+  },
+  {
+   "id": "RKTN-2-9-49",
+   "lat": 35.9133333,
+   "lon": 128.6295,
+   "elev_m": 52.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #49"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 49.0,
+   "hgt_est_m": 3.0
+  },
+  {
+   "id": "RKTN-2-9-69",
+   "lat": 35.9814861,
+   "lon": 128.5090667,
+   "elev_m": 274.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #69"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 274.7,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-89",
+   "lat": 35.9726583,
+   "lon": 128.5382944,
+   "elev_m": 207.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #89"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 205.9,
+   "hgt_est_m": 1.6
+  },
+  {
+   "id": "RKTN-2-9-109",
+   "lat": 35.9348,
+   "lon": 128.578875,
+   "elev_m": 198.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #109"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 200.0,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-129",
+   "lat": 35.9132472,
+   "lon": 128.6528139,
+   "elev_m": 84.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #129"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 83.5,
+   "hgt_est_m": 0.5
+  },
+  {
+   "id": "RKTN-2-9-149",
+   "lat": 35.9015167,
+   "lon": 128.6528694,
+   "elev_m": 40.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #149"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 36.8,
+   "hgt_est_m": 3.2
+  },
+  {
+   "id": "RKTN-2-9-169",
+   "lat": 35.9121083,
+   "lon": 128.6837417,
+   "elev_m": 243.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #169"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 243.7,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-189",
+   "lat": 35.9035556,
+   "lon": 128.6906694,
+   "elev_m": 132.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #189"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 134.1,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-209",
+   "lat": 35.8876139,
+   "lon": 128.6783861,
+   "elev_m": 50.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #209"
+   ],
+   "category": "Tree",
+   "airport": "RKTN",
+   "ground_m": 39.7,
+   "hgt_est_m": 10.3
+  },
+  {
+   "id": "RKTN-2-9-229",
+   "lat": 35.8795361,
+   "lon": 128.6360528,
+   "elev_m": 96.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #229"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 65.8,
+   "hgt_est_m": 30.7
+  },
+  {
+   "id": "RKTN-2-9-10",
+   "lat": 35.9133333,
+   "lon": 128.6481667,
+   "elev_m": 83.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #10"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 81.7,
+   "hgt_est_m": 1.3
+  },
+  {
+   "id": "RKTN-2-9-30",
+   "lat": 35.9118333,
+   "lon": 128.6955,
+   "elev_m": 410.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #30"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 401.7,
+   "hgt_est_m": 8.3
+  },
+  {
+   "id": "RKTN-2-9-50",
+   "lat": 35.9108722,
+   "lon": 128.6283806,
+   "elev_m": 85.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #50"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 89.7,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-70",
+   "lat": 35.9791222,
+   "lon": 128.51205,
+   "elev_m": 189.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #70"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 192.8,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-90",
+   "lat": 35.976075,
+   "lon": 128.5336778,
+   "elev_m": 209.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #90"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 209.5,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-130",
+   "lat": 35.9146,
+   "lon": 128.6499722,
+   "elev_m": 91.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #130"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 91.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-150",
+   "lat": 35.9002611,
+   "lon": 128.6551472,
+   "elev_m": 44.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #150"
+   ],
+   "category": "Tree",
+   "airport": "RKTN",
+   "ground_m": 34.4,
+   "hgt_est_m": 9.6
+  },
+  {
+   "id": "RKTN-2-9-170",
+   "lat": 35.9106722,
+   "lon": 128.6796611,
+   "elev_m": 110.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #170"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 109.1,
+   "hgt_est_m": 0.9
+  },
+  {
+   "id": "RKTN-2-9-190",
+   "lat": 35.9009667,
+   "lon": 128.6874083,
+   "elev_m": 82.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #190"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 79.2,
+   "hgt_est_m": 2.8
+  },
+  {
+   "id": "RKTN-2-9-210",
+   "lat": 35.884075,
+   "lon": 128.6713278,
+   "elev_m": 43.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #210"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 33.9,
+   "hgt_est_m": 9.1
+  },
+  {
+   "id": "RKTN-2-9-230",
+   "lat": 35.8846028,
+   "lon": 128.6242889,
+   "elev_m": 100.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #230"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 57.4,
+   "hgt_est_m": 43.1
+  },
+  {
+   "id": "RKTN-2-9-11",
+   "lat": 35.9183333,
+   "lon": 128.6536667,
+   "elev_m": 118.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #11"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 111.5,
+   "hgt_est_m": 6.5
+  },
+  {
+   "id": "RKTN-2-9-31",
+   "lat": 35.9048333,
+   "lon": 128.707,
+   "elev_m": 369.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #31"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 367.4,
+   "hgt_est_m": 1.6
+  },
+  {
+   "id": "RKTN-2-9-51",
+   "lat": 35.9073333,
+   "lon": 128.6534222,
+   "elev_m": 110.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #51"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 75.9,
+   "hgt_est_m": 34.1
+  },
+  {
+   "id": "RKTN-2-9-71",
+   "lat": 35.9641917,
+   "lon": 128.522275,
+   "elev_m": 248.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #71"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 250.7,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-91",
+   "lat": 35.9781528,
+   "lon": 128.5365194,
+   "elev_m": 282.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #91"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 282.2,
+   "hgt_est_m": 0.3
+  },
+  {
+   "id": "RKTN-2-9-111",
+   "lat": 35.9379861,
+   "lon": 128.5781444,
+   "elev_m": 186.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #111"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 185.8,
+   "hgt_est_m": 0.7
+  },
+  {
+   "id": "RKTN-2-9-131",
+   "lat": 35.918775,
+   "lon": 128.6506306,
+   "elev_m": 119.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #131"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 118.1,
+   "hgt_est_m": 0.9
+  },
+  {
+   "id": "RKTN-2-9-151",
+   "lat": 35.8991444,
+   "lon": 128.6572056,
+   "elev_m": 41.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #151"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 35.2,
+   "hgt_est_m": 5.8
+  },
+  {
+   "id": "RKTN-2-9-171",
+   "lat": 35.9111639,
+   "lon": 128.6760083,
+   "elev_m": 153.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #171"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 159.9,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-191",
+   "lat": 35.8972778,
+   "lon": 128.6851583,
+   "elev_m": 94.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #191"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 93.6,
+   "hgt_est_m": 0.4
+  },
+  {
+   "id": "RKTN-2-9-211",
+   "lat": 35.8812861,
+   "lon": 128.6733139,
+   "elev_m": 47.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #211"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 35.5,
+   "hgt_est_m": 12.0
+  },
+  {
+   "id": "RKTN-2-9-231",
+   "lat": 35.8895139,
+   "lon": 128.6246583,
+   "elev_m": 83.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #231"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 57.1,
+   "hgt_est_m": 25.9
+  },
+  {
+   "id": "RKTN-2-9-12",
+   "lat": 35.9178333,
+   "lon": 128.664,
+   "elev_m": 160.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #12"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 159.4,
+   "hgt_est_m": 0.6
+  },
+  {
+   "id": "RKTN-2-9-32",
+   "lat": 35.9052139,
+   "lon": 128.6437111,
+   "elev_m": 37.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #32"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 38.4,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-52",
+   "lat": 35.9736972,
+   "lon": 128.5278861,
+   "elev_m": 402.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #52"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 397.2,
+   "hgt_est_m": 4.8
+  },
+  {
+   "id": "RKTN-2-9-72",
+   "lat": 35.9669667,
+   "lon": 128.5222694,
+   "elev_m": 233.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #72"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 235.9,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-92",
+   "lat": 35.9803028,
+   "lon": 128.5314389,
+   "elev_m": 373.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #92"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 372.5,
+   "hgt_est_m": 0.5
+  },
+  {
+   "id": "RKTN-2-9-132",
+   "lat": 35.9170583,
+   "lon": 128.6570278,
+   "elev_m": 97.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #132"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 101.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-152",
+   "lat": 35.8975667,
+   "lon": 128.6601333,
+   "elev_m": 56.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #152"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 39.0,
+   "hgt_est_m": 17.0
+  },
+  {
+   "id": "RKTN-2-9-172",
+   "lat": 35.9087444,
+   "lon": 128.6761556,
+   "elev_m": 91.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #172"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 88.4,
+   "hgt_est_m": 3.1
+  },
+  {
+   "id": "RKTN-2-9-192",
+   "lat": 35.8924111,
+   "lon": 128.6908472,
+   "elev_m": 99.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #192"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 105.7,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-212",
+   "lat": 35.8753667,
+   "lon": 128.6704556,
+   "elev_m": 82.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #212"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 32.8,
+   "hgt_est_m": 49.2
+  },
+  {
+   "id": "RKTN-2-9-232",
+   "lat": 35.8915917,
+   "lon": 128.62925,
+   "elev_m": 84.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #232"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 56.8,
+   "hgt_est_m": 27.7
+  },
+  {
+   "id": "RKTN-2-9-13",
+   "lat": 35.8928333,
+   "lon": 128.6281667,
+   "elev_m": 80.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #13"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 57.2,
+   "hgt_est_m": 22.8
+  },
+  {
+   "id": "RKTN-2-9-33",
+   "lat": 35.8931667,
+   "lon": 128.7133333,
+   "elev_m": 225.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #33"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 208.3,
+   "hgt_est_m": 16.7
+  },
+  {
+   "id": "RKTN-2-9-53",
+   "lat": 35.9803528,
+   "lon": 128.5289667,
+   "elev_m": 420.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #53"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 412.0,
+   "hgt_est_m": 8.0
+  },
+  {
+   "id": "RKTN-2-9-73",
+   "lat": 35.9709472,
+   "lon": 128.52165,
+   "elev_m": 254.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #73"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 253.6,
+   "hgt_est_m": 0.4
+  },
+  {
+   "id": "RKTN-2-9-93",
+   "lat": 35.9803389,
+   "lon": 128.528875,
+   "elev_m": 414.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #93"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 412.0,
+   "hgt_est_m": 2.0
+  },
+  {
+   "id": "RKTN-2-9-113",
+   "lat": 35.9381611,
+   "lon": 128.5882056,
+   "elev_m": 198.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #113"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 198.5,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-133",
+   "lat": 35.9211472,
+   "lon": 128.6563111,
+   "elev_m": 165.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #133"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 168.2,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-153",
+   "lat": 35.897425,
+   "lon": 128.664925,
+   "elev_m": 78.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #153"
+   ],
+   "category": "Antenna",
+   "airport": "RKTN",
+   "ground_m": 47.5,
+   "hgt_est_m": 30.5
+  },
+  {
+   "id": "RKTN-2-9-173",
+   "lat": 35.9052028,
+   "lon": 128.6776167,
+   "elev_m": 133.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #173"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 132.8,
+   "hgt_est_m": 0.2
+  },
+  {
+   "id": "RKTN-2-9-193",
+   "lat": 35.8960944,
+   "lon": 128.693,
+   "elev_m": 160.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #193"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 160.4,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-213",
+   "lat": 35.8698417,
+   "lon": 128.6711639,
+   "elev_m": 102.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #213"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 109.5,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-233",
+   "lat": 35.8986333,
+   "lon": 128.6242028,
+   "elev_m": 83.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #233"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 45.7,
+   "hgt_est_m": 37.8
+  },
+  {
+   "id": "RKTN-2-9-14",
+   "lat": 35.912,
+   "lon": 128.6793333,
+   "elev_m": 199.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #14"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 100.9,
+   "hgt_est_m": 98.1
+  },
+  {
+   "id": "RKTN-2-9-34",
+   "lat": 35.8506667,
+   "lon": 128.6601667,
+   "elev_m": 136.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #34"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 133.1,
+   "hgt_est_m": 2.9
+  },
+  {
+   "id": "RKTN-2-9-54",
+   "lat": 35.9287583,
+   "lon": 128.6094028,
+   "elev_m": 200.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #54"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 190.9,
+   "hgt_est_m": 9.1
+  },
+  {
+   "id": "RKTN-2-9-74",
+   "lat": 35.9735861,
+   "lon": 128.5222889,
+   "elev_m": 267.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #74"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 268.1,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-94",
+   "lat": 35.9828361,
+   "lon": 128.5254778,
+   "elev_m": 375.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #94"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 377.3,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-114",
+   "lat": 35.9396722,
+   "lon": 128.5843194,
+   "elev_m": 177.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #114"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 178.3,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-134",
+   "lat": 35.9276889,
+   "lon": 128.654125,
+   "elev_m": 150.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #134"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 154.0,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-154",
+   "lat": 35.9006111,
+   "lon": 128.6695333,
+   "elev_m": 114.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #154"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 114.1,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-174",
+   "lat": 35.8946944,
+   "lon": 128.6670333,
+   "elev_m": 52.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #174"
+   ],
+   "category": "Mast",
+   "airport": "RKTN",
+   "ground_m": 43.4,
+   "hgt_est_m": 8.6
+  },
+  {
+   "id": "RKTN-2-9-194",
+   "lat": 35.9005722,
+   "lon": 128.6937833,
+   "elev_m": 99.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #194"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 98.7,
+   "hgt_est_m": 0.3
+  },
+  {
+   "id": "RKTN-2-9-214",
+   "lat": 35.86485,
+   "lon": 128.6681917,
+   "elev_m": 114.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #214"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 120.7,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-234",
+   "lat": 35.9018667,
+   "lon": 128.6180556,
+   "elev_m": 96.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #234"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 39.2,
+   "hgt_est_m": 56.8
+  },
+  {
+   "id": "RKTN-2-9-15",
+   "lat": 35.896,
+   "lon": 128.693,
+   "elev_m": 161.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #15"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 160.4,
+   "hgt_est_m": 0.6
+  },
+  {
+   "id": "RKTN-2-9-35",
+   "lat": 35.8525,
+   "lon": 128.6736667,
+   "elev_m": 128.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #35"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 134.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-55",
+   "lat": 35.8798889,
+   "lon": 128.6965917,
+   "elev_m": 131.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #55"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 128.5,
+   "hgt_est_m": 2.5
+  },
+  {
+   "id": "RKTN-2-9-75",
+   "lat": 35.9765306,
+   "lon": 128.5201611,
+   "elev_m": 213.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #75"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 208.6,
+   "hgt_est_m": 4.9
+  },
+  {
+   "id": "RKTN-2-9-95",
+   "lat": 35.9849056,
+   "lon": 128.523525,
+   "elev_m": 320.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pylon",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #95"
+   ],
+   "category": "Tower",
+   "airport": "RKTN",
+   "ground_m": 324.8,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-115",
+   "lat": 35.941275,
+   "lon": 128.5939472,
+   "elev_m": 171.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pylon",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #115"
+   ],
+   "category": "Tower",
+   "airport": "RKTN",
+   "ground_m": 172.3,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-135",
+   "lat": 35.9295583,
+   "lon": 128.6486222,
+   "elev_m": 141.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #135"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 146.4,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-155",
+   "lat": 35.9050917,
+   "lon": 128.6690028,
+   "elev_m": 94.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Fence",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #155"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 86.3,
+   "hgt_est_m": 7.7
+  },
+  {
+   "id": "RKTN-2-9-175",
+   "lat": 35.8928861,
+   "lon": 128.6698528,
+   "elev_m": 48.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #175"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 43.4,
+   "hgt_est_m": 5.1
+  },
+  {
+   "id": "RKTN-2-9-195",
+   "lat": 35.9014306,
+   "lon": 128.6970861,
+   "elev_m": 158.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #195"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 160.9,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-215",
+   "lat": 35.8562972,
+   "lon": 128.6626806,
+   "elev_m": 150.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #215"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 147.1,
+   "hgt_est_m": 2.9
+  },
+  {
+   "id": "RKTN-2-9-235",
+   "lat": 35.9078889,
+   "lon": 128.6202417,
+   "elev_m": 91.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #235"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 47.1,
+   "hgt_est_m": 43.9
+  },
+  {
+   "id": "RKTN-2-9-16",
+   "lat": 35.9225,
+   "lon": 128.6645,
+   "elev_m": 148.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #16"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 150.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-36",
+   "lat": 35.9001667,
+   "lon": 128.5998333,
+   "elev_m": 128.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #36"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 131.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-56",
+   "lat": 35.8650778,
+   "lon": 128.6614778,
+   "elev_m": 170.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #56"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 170.9,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-76",
+   "lat": 35.9615056,
+   "lon": 128.5312722,
+   "elev_m": 281.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #76"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 282.5,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-96",
+   "lat": 35.9878917,
+   "lon": 128.5223528,
+   "elev_m": 490.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #96"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 480.9,
+   "hgt_est_m": 9.1
+  },
+  {
+   "id": "RKTN-2-9-136",
+   "lat": 35.9372361,
+   "lon": 128.6552861,
+   "elev_m": 339.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #136"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 336.9,
+   "hgt_est_m": 2.6
+  },
+  {
+   "id": "RKTN-2-9-156",
+   "lat": 35.9077833,
+   "lon": 128.6708139,
+   "elev_m": 103.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #156"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 98.5,
+   "hgt_est_m": 5.0
+  },
+  {
+   "id": "RKTN-2-9-176",
+   "lat": 35.8923444,
+   "lon": 128.6717667,
+   "elev_m": 77.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #176"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 43.7,
+   "hgt_est_m": 33.3
+  },
+  {
+   "id": "RKTN-2-9-196",
+   "lat": 35.9074444,
+   "lon": 128.7075722,
+   "elev_m": 357.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #196"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 355.9,
+   "hgt_est_m": 1.6
+  },
+  {
+   "id": "RKTN-2-9-216",
+   "lat": 35.8588417,
+   "lon": 128.6567028,
+   "elev_m": 151.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #216"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 150.7,
+   "hgt_est_m": 0.8
+  },
+  {
+   "id": "RKTN-2-9-17",
+   "lat": 35.9245,
+   "lon": 128.6748333,
+   "elev_m": 368.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #17"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 363.1,
+   "hgt_est_m": 4.9
+  },
+  {
+   "id": "RKTN-2-9-37",
+   "lat": 35.9273333,
+   "lon": 128.6091667,
+   "elev_m": 163.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #37"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 157.7,
+   "hgt_est_m": 5.3
+  },
+  {
+   "id": "RKTN-2-9-57",
+   "lat": 35.9055778,
+   "lon": 128.6441472,
+   "elev_m": 39.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #57"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 39.3,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-77",
+   "lat": 35.9585056,
+   "lon": 128.5299889,
+   "elev_m": 216.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pylon",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #77"
+   ],
+   "category": "Tower",
+   "airport": "RKTN",
+   "ground_m": 219.8,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-97",
+   "lat": 35.9900278,
+   "lon": 128.5194639,
+   "elev_m": 521.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #97"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 515.1,
+   "hgt_est_m": 6.4
+  },
+  {
+   "id": "RKTN-2-9-117",
+   "lat": 35.9078944,
+   "lon": 128.6235972,
+   "elev_m": 77.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #117"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 66.9,
+   "hgt_est_m": 10.1
+  },
+  {
+   "id": "RKTN-2-9-137",
+   "lat": 35.9352222,
+   "lon": 128.6585917,
+   "elev_m": 323.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #137"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 326.9,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-157",
+   "lat": 35.9139778,
+   "lon": 128.6701528,
+   "elev_m": 130.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #157"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 131.9,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-177",
+   "lat": 35.8900306,
+   "lon": 128.6738222,
+   "elev_m": 48.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #177"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 44.2,
+   "hgt_est_m": 4.3
+  },
+  {
+   "id": "RKTN-2-9-197",
+   "lat": 35.9049583,
+   "lon": 128.7069556,
+   "elev_m": 369.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #197"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 369.4,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-217",
+   "lat": 35.8614556,
+   "lon": 128.65595,
+   "elev_m": 192.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #217"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 189.3,
+   "hgt_est_m": 3.2
+  },
+  {
+   "id": "RKTN-2-9-18",
+   "lat": 35.9068333,
+   "lon": 128.6953333,
+   "elev_m": 347.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #18"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 338.9,
+   "hgt_est_m": 8.1
+  },
+  {
+   "id": "RKTN-2-9-38",
+   "lat": 35.8971444,
+   "lon": 128.6961806,
+   "elev_m": 180.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #38"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 157.2,
+   "hgt_est_m": 22.8
+  },
+  {
+   "id": "RKTN-2-9-58",
+   "lat": 35.8961028,
+   "lon": 128.6930111,
+   "elev_m": 170.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #58"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 160.4,
+   "hgt_est_m": 9.6
+  },
+  {
+   "id": "RKTN-2-9-78",
+   "lat": 35.9579861,
+   "lon": 128.5343722,
+   "elev_m": 259.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #78"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 265.1,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-98",
+   "lat": 35.9833444,
+   "lon": 128.5280083,
+   "elev_m": 420.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #98"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 420.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-138",
+   "lat": 35.9338028,
+   "lon": 128.66205,
+   "elev_m": 332.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #138"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 332.7,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-158",
+   "lat": 35.9127861,
+   "lon": 128.6737194,
+   "elev_m": 158.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #158"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 162.5,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-178",
+   "lat": 35.8894694,
+   "lon": 128.6760389,
+   "elev_m": 51.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #178"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 43.2,
+   "hgt_est_m": 7.8
+  },
+  {
+   "id": "RKTN-2-9-198",
+   "lat": 35.90095,
+   "lon": 128.6997194,
+   "elev_m": 123.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #198"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 122.2,
+   "hgt_est_m": 1.3
+  },
+  {
+   "id": "RKTN-2-9-218",
+   "lat": 35.8637333,
+   "lon": 128.6639611,
+   "elev_m": 132.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #218"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 130.9,
+   "hgt_est_m": 1.1
+  },
+  {
+   "id": "RKTN-2-9-19",
+   "lat": 35.9066667,
+   "lon": 128.6235,
+   "elev_m": 94.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #19"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 58.3,
+   "hgt_est_m": 35.7
+  },
+  {
+   "id": "RKTN-2-9-39",
+   "lat": 35.8616306,
+   "lon": 128.6559222,
+   "elev_m": 180.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #39"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 182.7,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-59",
+   "lat": 35.8613,
+   "lon": 128.6558889,
+   "elev_m": 180.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #59"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 189.3,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-79",
+   "lat": 35.9578472,
+   "lon": 128.5385472,
+   "elev_m": 217.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pylon",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #79"
+   ],
+   "category": "Tower",
+   "airport": "RKTN",
+   "ground_m": 222.3,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-99",
+   "lat": 35.9838139,
+   "lon": 128.5305111,
+   "elev_m": 365.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #99"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 363.2,
+   "hgt_est_m": 2.3
+  },
+  {
+   "id": "RKTN-2-9-119",
+   "lat": 35.9106722,
+   "lon": 128.6266611,
+   "elev_m": 75.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #119"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 81.2,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-139",
+   "lat": 35.9319861,
+   "lon": 128.6642917,
+   "elev_m": 327.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #139"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 329.0,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-159",
+   "lat": 35.9170472,
+   "lon": 128.6788778,
+   "elev_m": 287.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #159"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 290.1,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-179",
+   "lat": 35.9011611,
+   "lon": 128.68235,
+   "elev_m": 82.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #179"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 81.2,
+   "hgt_est_m": 1.3
+  },
+  {
+   "id": "RKTN-2-9-199",
+   "lat": 35.8976444,
+   "lon": 128.6995694,
+   "elev_m": 178.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #199"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 182.9,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-219",
+   "lat": 35.8654833,
+   "lon": 128.6616861,
+   "elev_m": 160.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #219"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 161.1,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-20",
+   "lat": 35.9221667,
+   "lon": 128.681,
+   "elev_m": 359.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #20"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 359.0,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-40",
+   "lat": 35.9401667,
+   "lon": 128.5935,
+   "elev_m": 167.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #40"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 173.0,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-60",
+   "lat": 35.9261611,
+   "lon": 128.58535,
+   "elev_m": 275.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #60"
+   ],
+   "category": "Unknown",
+   "airport": "RKTN",
+   "ground_m": 272.7,
+   "hgt_est_m": 2.3
+  },
+  {
+   "id": "RKTN-2-9-80",
+   "lat": 35.9584139,
+   "lon": 128.542375,
+   "elev_m": 185.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pylon",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #80"
+   ],
+   "category": "Tower",
+   "airport": "RKTN",
+   "ground_m": 188.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-100",
+   "lat": 35.9891861,
+   "lon": 128.5277083,
+   "elev_m": 415.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pylon",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #100"
+   ],
+   "category": "Tower",
+   "airport": "RKTN",
+   "ground_m": 413.0,
+   "hgt_est_m": 2.0
+  },
+  {
+   "id": "RKTN-2-9-120",
+   "lat": 35.9109167,
+   "lon": 128.6288111,
+   "elev_m": 83.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #120"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 84.2,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-140",
+   "lat": 35.9224972,
+   "lon": 128.6645417,
+   "elev_m": 146.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #140"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 150.6,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-160",
+   "lat": 35.9222778,
+   "lon": 128.6808111,
+   "elev_m": 357.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #160"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 361.1,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-180",
+   "lat": 35.9079639,
+   "lon": 128.6869028,
+   "elev_m": 104.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #180"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 102.8,
+   "hgt_est_m": 1.2
+  },
+  {
+   "id": "RKTN-2-9-200",
+   "lat": 35.8883306,
+   "lon": 128.6996056,
+   "elev_m": 100.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #200"
+   ],
+   "category": "Natural",
+   "airport": "RKTN",
+   "ground_m": 100.1,
+   "hgt_est_m": 0.0
+  },
+  {
+   "id": "RKTN-2-9-220",
+   "lat": 35.8677083,
+   "lon": 128.6656611,
+   "elev_m": 86.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Fence",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #220"
+   ],
+   "category": "Building",
+   "airport": "RKTN",
+   "ground_m": 80.6,
+   "hgt_est_m": 5.9
+  }
+ ],
+ "issues": [
+  {
+   "level": "warn",
+   "what": "fix ITAG differs 2754 m in AD2.19",
+   "fix": "ITAG"
+  },
+  {
+   "level": "warn",
+   "what": "fix IDAG differs 80 m in AD2.19",
+   "fix": "IDAG"
+  },
+  {
+   "level": "warn",
+   "what": "fix ITGL differs 2782 m in AD2.19",
+   "fix": "ITGL"
+  },
+  {
+   "level": "warn",
+   "what": "fix MASTA differs 110959 m in RKTN AD CHART 2-15-2 (AIRAC AIP AMDT 8/26)",
+   "fix": "MASTA"
+  },
+  {
+   "level": "warn",
+   "what": "fix MASTA differs 110959 m in RKTN AD CHART 2-16-2 (AIP AMDT 11/26)",
+   "fix": "MASTA"
+  }
+ ]
+}

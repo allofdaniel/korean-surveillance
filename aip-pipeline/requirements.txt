@@ -1,0 +1,5 @@
+pymupdf>=1.24
+opencv-python-headless>=4.9
+pytesseract>=0.3.10
+pyproj>=3.6
+beautifulsoup4>=4.12
