@@ -1,6 +1,6 @@
 {
  "icao": "RKNY",
- "built_at": "2026-11-05T05:16:36.666707Z",
+ "built_at": "2026-11-05T05:58:50.238257Z",
  "sources": [
   {
    "file": "(2-12) STAR.pdf",
@@ -2861,7 +2861,1058 @@
    "source": "RKNY AD CHART 2-16-1 (AIP AMDT 3/23)"
   }
  ],
- "obstacles": [],
+ "obstacles": [
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "1",
+   "lat": 38.0698361,
+   "lon": 128.6638806,
+   "elev_m": 88.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "21",
+   "lat": 38.0079444,
+   "lon": 128.6643417,
+   "elev_m": 326.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "41",
+   "lat": 38.0260833,
+   "lon": 128.65245,
+   "elev_m": 162.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "61",
+   "lat": 38.0402972,
+   "lon": 128.6441833,
+   "elev_m": 121.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "81",
+   "lat": 38.0559472,
+   "lon": 128.6558167,
+   "elev_m": 115.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "101",
+   "lat": 38.0617139,
+   "lon": 128.6314111,
+   "elev_m": 186.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "2",
+   "lat": 38.0626694,
+   "lon": 128.6706528,
+   "elev_m": 81.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "22",
+   "lat": 38.0558667,
+   "lon": 128.6684194,
+   "elev_m": 118.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "42",
+   "lat": 38.0159417,
+   "lon": 128.6478611,
+   "elev_m": 171.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "62",
+   "lat": 38.0379417,
+   "lon": 128.6416167,
+   "elev_m": 120.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "82",
+   "lat": 38.0433972,
+   "lon": 128.6242694,
+   "elev_m": 186.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "102",
+   "lat": 38.0626417,
+   "lon": 128.6327194,
+   "elev_m": 129.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "3",
+   "lat": 38.0223944,
+   "lon": 128.6916611,
+   "elev_m": 116.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "23",
+   "lat": 38.0228667,
+   "lon": 128.6640722,
+   "elev_m": 157.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "43",
+   "lat": 38.0208694,
+   "lon": 128.648225,
+   "elev_m": 185.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "63",
+   "lat": 38.03145,
+   "lon": 128.6289222,
+   "elev_m": 152.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "83",
+   "lat": 38.045425,
+   "lon": 128.627475,
+   "elev_m": 139.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "103",
+   "lat": 38.0643028,
+   "lon": 128.6613667,
+   "elev_m": 103.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "4",
+   "lat": 38.0181444,
+   "lon": 128.6854139,
+   "elev_m": 114.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "24",
+   "lat": 38.0108278,
+   "lon": 128.6613778,
+   "elev_m": 306.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "44",
+   "lat": 38.0276361,
+   "lon": 128.6513972,
+   "elev_m": 186.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "64",
+   "lat": 38.0333833,
+   "lon": 128.6309833,
+   "elev_m": 142.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "84",
+   "lat": 38.0472917,
+   "lon": 128.6321083,
+   "elev_m": 127.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "104",
+   "lat": 38.0656278,
+   "lon": 128.6595528,
+   "elev_m": 108.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "5",
+   "lat": 38.0137139,
+   "lon": 128.6844889,
+   "elev_m": 130.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "25",
+   "lat": 38.0253167,
+   "lon": 128.6634333,
+   "elev_m": 131.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "45",
+   "lat": 38.0175722,
+   "lon": 128.6460639,
+   "elev_m": 180.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "65",
+   "lat": 38.037225,
+   "lon": 128.6356583,
+   "elev_m": 116.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "85",
+   "lat": 38.0453389,
+   "lon": 128.6224472,
+   "elev_m": 191.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "105",
+   "lat": 38.0634583,
+   "lon": 128.6645333,
+   "elev_m": 75.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "6",
+   "lat": 38.0538722,
+   "lon": 128.6708917,
+   "elev_m": 112.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "26",
+   "lat": 38.0141611,
+   "lon": 128.6616111,
+   "elev_m": 225.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "46",
+   "lat": 38.0312194,
+   "lon": 128.6526806,
+   "elev_m": 132.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "66",
+   "lat": 38.0205583,
+   "lon": 128.6356583,
+   "elev_m": 172.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "86",
+   "lat": 38.0478222,
+   "lon": 128.6280667,
+   "elev_m": 133.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "7",
+   "lat": 38.0291056,
+   "lon": 128.6730056,
+   "elev_m": 121.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "27",
+   "lat": 38.0105111,
+   "lon": 128.6598917,
+   "elev_m": 301.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "47",
+   "lat": 38.0154139,
+   "lon": 128.6442639,
+   "elev_m": 216.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "67",
+   "lat": 38.0482278,
+   "lon": 128.6498333,
+   "elev_m": 115.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "87",
+   "lat": 38.0494167,
+   "lon": 128.6323639,
+   "elev_m": 132.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "8",
+   "lat": 38.0262639,
+   "lon": 128.6732083,
+   "elev_m": 125.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "28",
+   "lat": 38.0257556,
+   "lon": 128.6621167,
+   "elev_m": 127.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "48",
+   "lat": 38.0235222,
+   "lon": 128.6450472,
+   "elev_m": 135.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "68",
+   "lat": 38.0368833,
+   "lon": 128.6327111,
+   "elev_m": 129.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "88",
+   "lat": 38.0572667,
+   "lon": 128.6559222,
+   "elev_m": 129.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "9",
+   "lat": 38.0271694,
+   "lon": 128.6729139,
+   "elev_m": 137.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "29",
+   "lat": 38.0197944,
+   "lon": 128.6600611,
+   "elev_m": 177.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "49",
+   "lat": 38.0302972,
+   "lon": 128.6487556,
+   "elev_m": 128.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "69",
+   "lat": 38.0347306,
+   "lon": 128.6278306,
+   "elev_m": 148.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "89",
+   "lat": 38.0467694,
+   "lon": 128.62225,
+   "elev_m": 169.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "10",
+   "lat": 38.0243361,
+   "lon": 128.6725472,
+   "elev_m": 125.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "30",
+   "lat": 38.0178528,
+   "lon": 128.6591389,
+   "elev_m": 235.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "50",
+   "lat": 38.0282472,
+   "lon": 128.6414444,
+   "elev_m": 160.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "70",
+   "lat": 38.0435167,
+   "lon": 128.6405917,
+   "elev_m": 115.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "90",
+   "lat": 38.046875,
+   "lon": 128.6185611,
+   "elev_m": 167.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "11",
+   "lat": 38.0163111,
+   "lon": 128.6726139,
+   "elev_m": 119.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "31",
+   "lat": 38.03625,
+   "lon": 128.6632778,
+   "elev_m": 118.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "51",
+   "lat": 38.029475,
+   "lon": 128.6414278,
+   "elev_m": 175.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "71",
+   "lat": 38.0424889,
+   "lon": 128.6384389,
+   "elev_m": 135.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "91",
+   "lat": 38.0500417,
+   "lon": 128.6293417,
+   "elev_m": 126.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "12",
+   "lat": 38.0182972,
+   "lon": 128.6712111,
+   "elev_m": 144.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "32",
+   "lat": 38.020875,
+   "lon": 128.6577139,
+   "elev_m": 177.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "52",
+   "lat": 38.0334639,
+   "lon": 128.6441361,
+   "elev_m": 144.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "72",
+   "lat": 38.03995,
+   "lon": 128.6342694,
+   "elev_m": 121.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "92",
+   "lat": 38.0480722,
+   "lon": 128.6209333,
+   "elev_m": 204.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "13",
+   "lat": 38.0074889,
+   "lon": 128.6715167,
+   "elev_m": 185.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "33",
+   "lat": 38.0152889,
+   "lon": 128.6561444,
+   "elev_m": 239.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "53",
+   "lat": 38.0248333,
+   "lon": 128.636325,
+   "elev_m": 164.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "73",
+   "lat": 38.0343722,
+   "lon": 128.6244333,
+   "elev_m": 169.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "93",
+   "lat": 38.0526611,
+   "lon": 128.6331833,
+   "elev_m": 129.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "14",
+   "lat": 38.0202833,
+   "lon": 128.6699111,
+   "elev_m": 139.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "34",
+   "lat": 38.0229139,
+   "lon": 128.6580944,
+   "elev_m": 156.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "54",
+   "lat": 38.0391389,
+   "lon": 128.6486167,
+   "elev_m": 138.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "74",
+   "lat": 38.0395139,
+   "lon": 128.6325583,
+   "elev_m": 131.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "94",
+   "lat": 38.0494167,
+   "lon": 128.6197472,
+   "elev_m": 174.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "15",
+   "lat": 38.0075833,
+   "lon": 128.669325,
+   "elev_m": 185.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "35",
+   "lat": 38.0596472,
+   "lon": 128.668475,
+   "elev_m": 75.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "55",
+   "lat": 38.0402056,
+   "lon": 128.6491056,
+   "elev_m": 147.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "75",
+   "lat": 38.0376444,
+   "lon": 128.62455,
+   "elev_m": 224.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "95",
+   "lat": 38.0533472,
+   "lon": 128.6165694,
+   "elev_m": 188.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "16",
+   "lat": 38.0096111,
+   "lon": 128.6677667,
+   "elev_m": 220.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "36",
+   "lat": 38.0267778,
+   "lon": 128.6571528,
+   "elev_m": 142.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "56",
+   "lat": 38.0280944,
+   "lon": 128.6372583,
+   "elev_m": 142.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "76",
+   "lat": 38.0466194,
+   "lon": 128.6408778,
+   "elev_m": 135.5,
+   "type": "etc"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "96",
+   "lat": 38.0549056,
+   "lon": 128.6205194,
+   "elev_m": 121.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "17",
+   "lat": 38.026075,
+   "lon": 128.6678889,
+   "elev_m": 120.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "37",
+   "lat": 38.0287333,
+   "lon": 128.6574222,
+   "elev_m": 130.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "57",
+   "lat": 38.0305528,
+   "lon": 128.6391583,
+   "elev_m": 147.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "77",
+   "lat": 38.0391722,
+   "lon": 128.6261278,
+   "elev_m": 208.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "97",
+   "lat": 38.0558472,
+   "lon": 128.6204556,
+   "elev_m": 126.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "18",
+   "lat": 38.0108778,
+   "lon": 128.6670333,
+   "elev_m": 163.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "38",
+   "lat": 38.0210722,
+   "lon": 128.6543167,
+   "elev_m": 215.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "58",
+   "lat": 38.043075,
+   "lon": 128.6510778,
+   "elev_m": 122.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "78",
+   "lat": 38.047925,
+   "lon": 128.6416722,
+   "elev_m": 130.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "98",
+   "lat": 38.0559056,
+   "lon": 128.617075,
+   "elev_m": 136.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "19",
+   "lat": 38.0165167,
+   "lon": 128.6669667,
+   "elev_m": 177.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "39",
+   "lat": 38.0237722,
+   "lon": 128.6531167,
+   "elev_m": 160.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "59",
+   "lat": 38.0440667,
+   "lon": 128.6509111,
+   "elev_m": 116.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "79",
+   "lat": 38.0394944,
+   "lon": 128.6231111,
+   "elev_m": 144.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "99",
+   "lat": 38.0591028,
+   "lon": 128.6315278,
+   "elev_m": 147.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "20",
+   "lat": 38.0134944,
+   "lon": 128.6650278,
+   "elev_m": 212.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "40",
+   "lat": 38.0148111,
+   "lon": 128.6481083,
+   "elev_m": 174.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "60",
+   "lat": 38.0487583,
+   "lon": 128.6544389,
+   "elev_m": 125.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "80",
+   "lat": 38.0569861,
+   "lon": 128.6595333,
+   "elev_m": 119.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKNY",
+   "chart": "2-6",
+   "amdt": "AIP AMDT 5/25",
+   "no": "100",
+   "lat": 38.0598639,
+   "lon": 128.6328972,
+   "elev_m": 119.0,
+   "type": "Natural High Point"
+  }
+ ],
  "issues": [
   {
    "level": "warn",

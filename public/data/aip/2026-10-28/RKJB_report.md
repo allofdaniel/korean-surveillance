@@ -1,6 +1,6 @@
 # RKJB AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 37개 / Fix 85개 / 홀딩 2개 / 장애물 0개
+- 절차 37개 / Fix 85개 / 홀딩 2개 / 장애물 6개
 - 지도 반영 37개 / 제외(검토 필요) 0개
 - 원본: (2-11) STAR.pdf, (2-14) INSTR APCH CHART(1).pdf, (2-6) AD OBSTACLE CHART TYPE B(1).pdf, (2-7) SID.pdf, RKJB-TEXT.pdf
 
@@ -47,3 +47,23 @@
 | SID | RNAV MAKSA 6S  | 19 | 6 |  |  |
 | SID | RNAV DOTOL 1S  | 19 | 5 |  |  |
 | SID | IPDAS 3S  | 19 | 0 | 예 |  |
+
+## 재래식 절차 (기준 코딩 구조 + AIP 좌표, 차트 대조)
+기준 DB의 레그 구조만 사용하고 좌표는 AIP(항행안전시설 위치·방위/DME·활주로 시단·fix 표)로 다시 계산. 차트 대조 = 현재 AIP 차트에 fix 이름·코스가 실려 있는 비율.
+
+| 종류 | 절차 | 결과 | fix 대조 | 코스 대조 | 기준 대비 최대 편차 | 근거 차트 | 비고 |
+|---|---|---|---|---|---|---|---|
+| sids | IPDA3S.RW19 | 반영 | 100% | 67% | 0 m | (2-7) SID.pdf p7 | AIP 미확인 fix: KWA42; heading 구간 근사 |
+| sids | KWA3N.RW01 | 반영 | 100% | 67% | 12 m | (2-7) SID.pdf p3 | heading 구간 근사 |
+| sids | KWA3S.RW19 | 반영 | 100% | 100% | 12 m | (2-7) SID.pdf p7 | heading 구간 근사 |
+| iaps | D01 | 반영 | 100% | 67% | 0 m | (2-14) INSTR APCH CHART(1).pdf p9 | heading 구간 근사 |
+| iaps | D01.OVGEN | 반영 | 100% | 100% | 928 m | (2-14) INSTR APCH CHART(1).pdf p1 |  |
+| iaps | D01.PEGRO | 반영 | 100% | 100% | 928 m | (2-14) INSTR APCH CHART(1).pdf p1 |  |
+| iaps | D19.DOVRA | 반영 | 100% | 100% | 1 m | (2-14) INSTR APCH CHART(1).pdf p11 |  |
+| iaps | D19.GUPLA | 반영 | 100% | 100% | 1 m | (2-14) INSTR APCH CHART(1).pdf p11 |  |
+| iaps | I01-Y | 반영 | 100% | 67% | 0 m | (2-14) INSTR APCH CHART(1).pdf p1 | heading 구간 근사 |
+| iaps | I01-Y.OVGEN | 반영 | 100% | 100% | 1090 m | (2-14) INSTR APCH CHART(1).pdf p1 |  |
+| iaps | I01-Y.PEGRO | 반영 | 100% | 100% | 1090 m | (2-14) INSTR APCH CHART(1).pdf p1 |  |
+| iaps | I19-Y | 반영 | 100% | 100% | 660 m | (2-14) INSTR APCH CHART(1).pdf p11 | heading 구간 근사 |
+| iaps | I19-Y.DOVRA | 반영 | 100% | 100% | 660 m | (2-14) INSTR APCH CHART(1).pdf p11 |  |
+| iaps | I19-Y.GUPLA | 반영 | 100% | 100% | 660 m | (2-14) INSTR APCH CHART(1).pdf p11 |  |

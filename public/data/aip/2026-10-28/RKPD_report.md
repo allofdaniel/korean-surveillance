@@ -32,3 +32,27 @@
 | SID | TENUL 1S  | 19 | 0 |  |  |
 | SID | SUPUL 1A  | 19 | 0 | 예 |  |
 | SID | EGOMI 1S  | 19 | 0 |  |  |
+
+## 재래식 절차 (기준 코딩 구조 + AIP 좌표, 차트 대조)
+기준 DB의 레그 구조만 사용하고 좌표는 AIP(항행안전시설 위치·방위/DME·활주로 시단·fix 표)로 다시 계산. 차트 대조 = 현재 AIP 차트에 fix 이름·코스가 실려 있는 비율.
+
+| 종류 | 절차 | 결과 | fix 대조 | 코스 대조 | 기준 대비 최대 편차 | 근거 차트 | 비고 |
+|---|---|---|---|---|---|---|---|
+| sids | CJU6A.RW01 | 반영 | 100% | 50% | 184 m | (2-4) SID.pdf p2 | heading 구간 근사 |
+| sids | CJU6B.RW19 | 반영 | 100% | 67% | 79 m | (2-4) SID.pdf p13 | heading 구간 근사 |
+| sids | EGOM1S.RW19 | 반영 | 100% | 100% | 22 m | (2-4) SID.pdf p15 | heading 구간 근사 |
+| sids | GONE1A.RW01 | 반영 | 100% | 100% | 16 m | (2-4) SID.pdf p7 | heading 구간 근사 |
+| sids | SUPU1A.RW19 | 반영 | 100% | 100% | 123 m | (2-4) SID.pdf p15 | heading 구간 근사 |
+| sids | TENU1N.RW01 | 반영 | 100% | 50% | 929 m | (2-4) SID.pdf p5 | heading 구간 근사 |
+| sids | TENU1S.RW19 | 반영 | 100% | 100% | 0 m | (2-4) SID.pdf p13 | heading 구간 근사 |
+| stars | GEB1A.RW01 | 반영 | 100% | 100% | 0 m | (2-12) STAR(2).pdf p5 |  |
+| stars | TDL1A.RW01 | 반영 | 100% | 100% | 0 m | (2-12) STAR(2).pdf p5 |  |
+| iaps | D01 | 반영 | 100% | 100% | 927 m | (2-15) INSTR APCH CHART(1).pdf p7 | heading 구간 근사 |
+| iaps | D01.EGOMI | 반영 | 100% | 100% | 0 m | (2-15) INSTR APCH CHART(1).pdf p7 |  |
+| iaps | D01.TENUL | 반영 | 100% | 100% | 0 m | (2-15) INSTR APCH CHART(1).pdf p7 |  |
+| iaps | I01 | 반영 | 100% | 100% | 56 m | (2-15) INSTR APCH CHART(1).pdf p1 | heading 구간 근사 |
+| iaps | I01.EGOMI | 반영 | 100% | 50% | 172 m | (2-15) INSTR APCH CHART(1).pdf p1 | heading 구간 근사 |
+| iaps | I01.TENUL | 반영 | 100% | 50% | 172 m | (2-15) INSTR APCH CHART(1).pdf p1 | heading 구간 근사 |
+| iaps | L01 | 반영 | 100% | 100% | 56 m | (2-15) INSTR APCH CHART(1).pdf p1 | heading 구간 근사 |
+| iaps | L01.EGOMI | 반영 | 100% | 50% | 172 m | (2-15) INSTR APCH CHART(1).pdf p1 | heading 구간 근사 |
+| iaps | L01.TENUL | 반영 | 100% | 50% | 172 m | (2-15) INSTR APCH CHART(1).pdf p1 | heading 구간 근사 |

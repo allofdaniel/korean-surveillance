@@ -38,3 +38,28 @@
 | SID | LOSTO 2N  | 35 | 0 | 예 |  |
 | SID | LOSTO 2A  | 35 | 0 | 예 |  |
 | SID | RADAR 1A  | 25 | 0 |  |  |
+
+## 재래식 절차 (기준 코딩 구조 + AIP 좌표, 차트 대조)
+기준 DB의 레그 구조만 사용하고 좌표는 AIP(항행안전시설 위치·방위/DME·활주로 시단·fix 표)로 다시 계산. 차트 대조 = 현재 AIP 차트에 fix 이름·코스가 실려 있는 비율.
+
+| 종류 | 절차 | 결과 | fix 대조 | 코스 대조 | 기준 대비 최대 편차 | 근거 차트 | 비고 |
+|---|---|---|---|---|---|---|---|
+| sids | LOST2A.RW35 | 반영 | 100% | 50% | 427 m | (2-7) SID(1).pdf p9 (OCR) | heading 구간 근사 |
+| sids | LOST2N.RW35 | 반영 | 100% | 100% | 427 m | (2-7) SID(1).pdf p9 (OCR) | heading 구간 근사 |
+| sids | LOST2S.RW17 | 반영 | 100% | 100% | 10 m | (2-7) SID(1).pdf p3 (OCR) | heading 구간 근사 |
+| sids | LOST6S.RW17 | 반영 | 100% | 100% | 10 m | (2-7) SID(1).pdf p3 (OCR) | heading 구간 근사 |
+| sids | NOBU2S.RW17 | 반영 | 100% | 100% | 377 m | (2-7) SID(1).pdf p3 (OCR) | heading 구간 근사 |
+| sids | NOBU3N.RW35 | 반영 | 100% | 100% | 402 m | (2-7) SID(1).pdf p9 (OCR) | heading 구간 근사 |
+| sids | RADA1A.RW35 | 반영 | 100% | 100% | 0 m | (2-7) SID(1).pdf p9 (OCR) | heading 구간 근사 |
+| stars | LOST2C.RW35 | 반영 | 100% | 100% | 342 m | (2-14) STAR(1).pdf p5 |  |
+| stars | NOBU2D.RW17 | 반영 | 100% | 100% | 301 m | (2-14) STAR(1).pdf p1 |  |
+| iaps | D17 | 반영 | 100% | 100% | 39 m | (2-18) INSTR APCH CHART(1).pdf p3 |  |
+| iaps | D17.ALDON | 반영 | 100% | 100% | 3649 m | (2-18) INSTR APCH CHART(1).pdf p3 |  |
+| iaps | D35 | 반영 | 100% | 100% | 0 m | (2-18) INSTR APCH CHART(1).pdf p15 |  |
+| iaps | D35.BANYA | 반영 | 100% | 100% | 0 m | (2-18) INSTR APCH CHART(1).pdf p11 |  |
+| iaps | I17-Y | 반영 | 100% | 100% | 49 m | (2-18) INSTR APCH CHART(1).pdf p1 |  |
+| iaps | I17-Y.ALDON | 반영 | 100% | 100% | 268 m | (2-18) INSTR APCH CHART(1).pdf p1 |  |
+| iaps | I17-Z | 반영 | 100% | 100% | 0 m | (2-18) INSTR APCH CHART(1).pdf p1 |  |
+| iaps | I35-Y | 반영 | 100% | 100% | 44 m | (2-18) INSTR APCH CHART(1).pdf p9 |  |
+| iaps | I35-Y.BANYA | 반영 | 100% | 50% | 4 m | (2-18) INSTR APCH CHART(1).pdf p9 | heading 구간 근사 |
+| iaps | I35-Z | 반영 | 100% | 100% | 0 m | (2-18) INSTR APCH CHART(1).pdf p9 |  |

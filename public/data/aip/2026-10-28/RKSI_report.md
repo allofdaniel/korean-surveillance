@@ -1,6 +1,6 @@
 # RKSI AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 88개 / Fix 240개 / 홀딩 0개 / 장애물 0개
+- 절차 88개 / Fix 240개 / 홀딩 0개 / 장애물 166개
 - 지도 반영 88개 / 제외(검토 필요) 0개
 - 원본: (2-18) AD OBSTACLE CHART TYPE B.pdf, (2-28) SID.pdf, (2-42) STAR.pdf, (2-51) INSTR APCH CHART.pdf, RKSI-TEXT.pdf
 
@@ -105,3 +105,47 @@
 | IAP | ILS/LOC RWY 34R from NIPUT | 34R | 4 |  |  |
 | IAP | RNP RWY 34R via PAMBI(IAF) to PY985(MAHF) | 34R | 5 |  |  |
 | IAP | RNP RWY 34R via ENPIL(IAF) to PY985(MAHF) | 34R | 7 |  |  |
+
+## 재래식 절차 (기준 코딩 구조 + AIP 좌표, 차트 대조)
+기준 DB의 레그 구조만 사용하고 좌표는 AIP(항행안전시설 위치·방위/DME·활주로 시단·fix 표)로 다시 계산. 차트 대조 = 현재 AIP 차트에 fix 이름·코스가 실려 있는 비율.
+
+| 종류 | 절차 | 결과 | fix 대조 | 코스 대조 | 기준 대비 최대 편차 | 근거 차트 | 비고 |
+|---|---|---|---|---|---|---|---|
+| sids | RADA3A.RW33B | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p13 | heading 구간 근사 |
+| sids | RADA3D.RW34B | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p25 | heading 구간 근사 |
+| sids | RADA3U.RW16L | 반영 | 100% | 50% | 0 m | (2-28) SID.pdf p7 | heading 구간 근사 |
+| sids | RADA3U.RW16R | 반영 | 100% | 50% | 0 m | (2-28) SID.pdf p7 | heading 구간 근사 |
+| sids | RADA5S.RW15L | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p5 | heading 구간 근사 |
+| sids | RADA5S.RW15R | 반영 | 100% | 50% | 0 m | (2-28) SID.pdf p1 | heading 구간 근사 |
+| sids | SEL1S | 반영 | 100% | 100% | 2 m | (2-28) SID.pdf p5 | heading 구간 근사 |
+| sids | SEL1S.RW15L | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p5 |  |
+| sids | SEL1S.RW15R | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p5 | heading 구간 근사 |
+| sids | SEL2A.RW33L | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p13 | AIP 미확인 fix: SEL28; heading 구간 근사 |
+| sids | SEL2A.RW33R | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p13 | AIP 미확인 fix: SEL28; heading 구간 근사 |
+| sids | SOT1A.RW33L | 반영 | 100% | 67% | 0 m | (2-28) SID.pdf p13 | AIP 미확인 fix: SOT40; heading 구간 근사 |
+| sids | SOT1A.RW33R | 반영 | 100% | 67% | 0 m | (2-28) SID.pdf p13 | AIP 미확인 fix: SOT40; heading 구간 근사 |
+| sids | SOT1S.OLMEN | 제외: 현재 AIP 차트에서 확인 안 됨 | 100% | 0% |  | (2-28) SID.pdf p5 (OCR) |  |
+| sids | SOT1S.OSPOT | 제외: 현재 AIP 차트에서 확인 안 됨 | 100% | 0% |  | (2-28) SID.pdf p3 (OCR) |  |
+| sids | SOT1S.RW15L | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p5 (OCR) |  |
+| sids | SOT1S.RW15R | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p5 (OCR) | heading 구간 근사 |
+| iaps | D15L | 반영 | 100% | 100% | 54 m | (2-51) INSTR APCH CHART.pdf p1 |  |
+| iaps | D15L.POSEP | 반영 | 100% | 100% | 3 m | (2-51) INSTR APCH CHART.pdf p7 |  |
+| iaps | D33R | 반영 | 100% | 100% | 40 m | (2-51) INSTR APCH CHART.pdf p23 |  |
+| iaps | I15LY | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p3 | heading 구간 근사 |
+| iaps | I15LY.BITIM | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p1 |  |
+| iaps | I15LY.MUNAN | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p1 |  |
+| iaps | I15LZ | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p1 | heading 구간 근사 |
+| iaps | I15LZ.BITIM | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p1 |  |
+| iaps | I15LZ.MUNAN | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p1 |  |
+| iaps | I15RY | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p11 | heading 구간 근사 |
+| iaps | I15RY.BITIM | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p9 |  |
+| iaps | I15RY.MUNAN | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p9 |  |
+| iaps | I15RZ | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p9 | heading 구간 근사 |
+| iaps | I15RZ.BITIM | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p9 |  |
+| iaps | I15RZ.MUNAN | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p9 |  |
+| iaps | I16L | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p15 | heading 구간 근사 |
+| iaps | I16R | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p19 | heading 구간 근사 |
+| iaps | I33L | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p23 | heading 구간 근사 |
+| iaps | I33R | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p27 | heading 구간 근사 |
+| iaps | I34L | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p33 | heading 구간 근사 |
+| iaps | I34R | 반영 | 100% | 100% | 0 m | (2-51) INSTR APCH CHART.pdf p37 | heading 구간 근사 |

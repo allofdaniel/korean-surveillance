@@ -47,3 +47,37 @@
 | STAR | RNAV PUDEN 1 ELAPI | 28 | 2 |  |  |
 | STAR | RNAV PUDEN 1 LAPAL | 28 | 2 |  |  |
 | STAR | RNAV PUDEN 1  | 28 | 2 |  |  |
+
+## 재래식 절차 (기준 코딩 구조 + AIP 좌표, 차트 대조)
+기준 DB의 레그 구조만 사용하고 좌표는 AIP(항행안전시설 위치·방위/DME·활주로 시단·fix 표)로 다시 계산. 차트 대조 = 현재 AIP 차트에 fix 이름·코스가 실려 있는 비율.
+
+| 종류 | 절차 | 결과 | fix 대조 | 코스 대조 | 기준 대비 최대 편차 | 근거 차트 | 비고 |
+|---|---|---|---|---|---|---|---|
+| sids | POHAN3.APARU | 반영 | 100% | 100% | 32 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN3.BULGA | 반영 | 100% | 100% | 32 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN3.ELAPI | 반영 | 100% | 100% | 32 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN3.LAPAL | 반영 | 100% | 100% | 32 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN3.LOSTO | 반영 | 100% | 100% | 32 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN3.RW10 | 반영 | 100% | 100% | 32 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN4.APARU | 반영 | 100% | 100% | 129 m | (2-3) SID(3).pdf p7 | heading 구간 근사 |
+| sids | POHAN4.BULGA | 반영 | 100% | 100% | 129 m | (2-3) SID(3).pdf p7 | heading 구간 근사 |
+| sids | POHAN4.ELAPI | 반영 | 100% | 100% | 129 m | (2-3) SID(3).pdf p7 | heading 구간 근사 |
+| sids | POHAN4.LAPAL | 반영 | 100% | 100% | 129 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN4.LOSTO | 반영 | 100% | 100% | 129 m | (2-3) SID(3).pdf p7 | heading 구간 근사 |
+| sids | POHAN4.RW28 | 반영 | 100% | 100% | 129 m | (2-3) SID(3).pdf p7 | heading 구간 근사 |
+| sids | POHAN5.APARU | 반영 | 100% | 100% | 130 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN5.BULGA | 반영 | 100% | 100% | 130 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN5.ELAPI | 반영 | 100% | 100% | 130 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN5.LAPAL | 반영 | 100% | 100% | 130 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN5.LOSTO | 반영 | 100% | 100% | 130 m | (2-3) SID(3).pdf p1 | heading 구간 근사 |
+| sids | POHAN5.RW10 | 반영 | 100% | 100% | 130 m | (2-3) SID(3).pdf p1 |  |
+| iaps | D10 | 반영 | 100% | 100% | 0 m | (2-11) INSTR APCH CHART(1).pdf p1 | AIP 미확인 fix: CD10, 80VOR; heading 구간 근사 |
+| iaps | D10.POSCO | 반영 | 100% | 100% | 0 m | (2-11) INSTR APCH CHART(1).pdf p1 | AIP 미확인 fix: CD10 |
+| iaps | D28 | 반영 | 100% | 100% | 0 m | (2-11) INSTR APCH CHART(1).pdf p9 | AIP 미확인 fix: CD28; heading 구간 근사 |
+| iaps | D28.DAEBO | 반영 | 100% | 100% | 0 m | (2-11) INSTR APCH CHART(1).pdf p9 | AIP 미확인 fix: CD28 |
+| iaps | L10 | 반영 | 100% | 100% | 121 m | (2-11) INSTR APCH CHART(1).pdf p1 | AIP 미확인 fix: 90LOC, 48LOC, ML10; heading 구간 근사 |
+| iaps | L10.POSCO | 반영 | 100% | 50% | 355 m | (2-11) INSTR APCH CHART(1).pdf p1 | heading 구간 근사 |
+| iaps | T10 | 반영 | 100% | 100% | 0 m | (2-11) INSTR APCH CHART(1).pdf p1 | AIP 미확인 fix: CD10, 80VOR; heading 구간 근사 |
+| iaps | T10.POSCO | 반영 | 100% | 100% | 0 m | (2-11) INSTR APCH CHART(1).pdf p1 | AIP 미확인 fix: CD10 |
+| iaps | T28 | 반영 | 100% | 100% | 0 m | (2-11) INSTR APCH CHART(1).pdf p9 | AIP 미확인 fix: CD28; heading 구간 근사 |
+| iaps | T28.DAEBO | 반영 | 100% | 100% | 0 m | (2-11) INSTR APCH CHART(1).pdf p9 | AIP 미확인 fix: CD28 |

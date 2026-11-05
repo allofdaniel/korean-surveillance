@@ -36,3 +36,21 @@
 | SID | RNAV POVOR 6R  | 35 | 4 | 예 |  |
 | SID | ANUBA 5N  | 35 | 0 | 예 |  |
 | SID | GOSBO 5N  | 35 | 0 | 예 |  |
+
+## 재래식 절차 (기준 코딩 구조 + AIP 좌표, 차트 대조)
+기준 DB의 레그 구조만 사용하고 좌표는 AIP(항행안전시설 위치·방위/DME·활주로 시단·fix 표)로 다시 계산. 차트 대조 = 현재 AIP 차트에 fix 이름·코스가 실려 있는 비율.
+
+| 종류 | 절차 | 결과 | fix 대조 | 코스 대조 | 기준 대비 최대 편차 | 근거 차트 | 비고 |
+|---|---|---|---|---|---|---|---|
+| sids | ANUB5N.RW35 | 반영 | 100% | 67% | 6 m | (2-8) SID(1).pdf p7 (OCR) | heading 구간 근사 |
+| sids | ANUB5S.RW17 | 반영 | 100% | 67% | 6 m | (2-8) SID(1).pdf p3 (OCR) | heading 구간 근사 |
+| sids | GOSB4S.RW17 | 반영 | 100% | 100% | 0 m | (2-8) SID(1).pdf p3 (OCR) | heading 구간 근사 |
+| sids | GOSB5N.RW35 | 반영 | 100% | 67% | 26 m | (2-8) SID(1).pdf p7 (OCR) | heading 구간 근사 |
+| iaps | D17 | 반영 | 100% | 100% | 4 m | (2-15) INSTR APCH CHART.pdf p7 |  |
+| iaps | D17.YEONA | 반영 | 100% | 100% | 4 m | (2-15) INSTR APCH CHART.pdf p1 |  |
+| iaps | D35 | 반영 | 100% | 100% | 13 m | (2-15) INSTR APCH CHART.pdf p9 | heading 구간 근사 |
+| iaps | I17-Y | 반영 | 100% | 100% | 0 m | (2-15) INSTR APCH CHART.pdf p1 |  |
+| iaps | I17-Y.YEONA | 반영 | 100% | 100% | 213 m | (2-15) INSTR APCH CHART.pdf p1 |  |
+| iaps | I17-Z | 반영 | 100% | 100% | 0 m | (2-15) INSTR APCH CHART.pdf p1 |  |
+| iaps | I35-Y | 반영 | 100% | 100% | 188 m | (2-15) INSTR APCH CHART.pdf p9 | heading 구간 근사 |
+| iaps | I35-Z | 반영 | 100% | 100% | 0 m | (2-15) INSTR APCH CHART.pdf p11 |  |

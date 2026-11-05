@@ -1,6 +1,6 @@
 {
  "icao": "RKPD",
- "built_at": "2026-11-05T05:16:41.847722Z",
+ "built_at": "2026-11-05T05:58:55.019270Z",
  "sources": [
   {
    "file": "(2-12) STAR(2).pdf",
@@ -2986,7 +2986,7 @@
    "icao": "RKPD",
    "chart": "2-3",
    "amdt": "AIRAC AIP AMDT 9/26",
-   "no": 1,
+   "no": "1",
    "lat": 33.4421944,
    "lon": 126.71775,
    "elev_m": 471.5,
@@ -2996,7 +2996,7 @@
    "icao": "RKPD",
    "chart": "2-3",
    "amdt": "AIRAC AIP AMDT 9/26",
-   "no": 2,
+   "no": "2",
    "lat": 33.4464167,
    "lon": 126.7085278,
    "elev_m": 472.0,
@@ -3006,7 +3006,7 @@
    "icao": "RKPD",
    "chart": "2-3",
    "amdt": "AIRAC AIP AMDT 9/26",
-   "no": 3,
+   "no": "3",
    "lat": 33.45475,
    "lon": 126.7181944,
    "elev_m": 458.0,

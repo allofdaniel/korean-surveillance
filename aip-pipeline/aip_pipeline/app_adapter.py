@@ -63,7 +63,8 @@ def legs_app(pr, extra_wpts, fixes=None):
 def _put(d, key, legs):
     """Insert without silently overwriting: on a key clash the shorter procedure becomes KEY.<first fix>."""
     if key not in d:
-        d[key] = legs; return
+        d[key] = legs; return key
+    new = legs
     old = d[key]
     if len(legs) > len(old):
         legs, old = old, legs
@@ -74,6 +75,7 @@ def _put(d, key, legs):
     while k2 in d:
         k2 = f"{key}.{first}{n}"; n += 1
     d[k2] = legs
+    return k2 if d[k2] is new else key
 
 def merge(app: dict, ds: dict, airac: str):
     icao = ds['icao']
@@ -91,16 +93,16 @@ def merge(app: dict, ds: dict, airac: str):
         tr = pr.get('transition')
         sfx = f".{tr}" if tr and re.fullmatch(r'[A-Z]{5}', tr) else rw
         if pr['type'] == 'SID':
-            _put(sids, ident + sfx, legs)
+            ds.setdefault('app_keys', {})[('sids', _put(sids, ident + sfx, legs))] = pr['coding']
         elif pr['type'] == 'STAR':
-            _put(stars, ident + sfx, legs)
+            ds.setdefault('app_keys', {})[('stars', _put(stars, ident + sfx, legs))] = pr['coding']
         elif pr['type'] == 'IAP':
             t = pr.get('transition') or ''
             m = re.match(r'(?:via|from)\s+([A-Z]{5})', t)
             key = ident if not m or 'to SOONA' in t or '(MAHF)' in t or t.startswith('via ' + (pr['legs'][0].get('fix') or '?') + '(IF)') else f"{ident}.{m.group(1)}"
             if pr['coding'].startswith('AIP fix/point') and m:
                 key = f"{ident}.{m.group(1)}"
-            _put(iaps, key, legs)
+            ds.setdefault('app_keys', {})[('iaps', _put(iaps, key, legs))] = pr['coding']
     P['sids'][icao] = sids; P['stars'][icao] = stars; P['iaps'][icao] = iaps
     # terminal waypoints
     navids = {n.get('ident') for n in ds['navaids']}

@@ -46,6 +46,22 @@ def report_md(ds, airac):
         L.append(f"| {p['type']} | {p['name']} {p.get('transition') or ''} | {p.get('runway') or ''} | {len(p['legs'])} | {'예' if p.get('approx') else ''} | {'제외: ' + ', '.join(p.get('qa_reasons', [])) if p.get('qa') == 'reject' else ''} |")
     return '\n'.join(L) + '\n'
 
+def template_md(ds):
+    rows = ds.get('template_report') or []
+    if not rows:
+        return ''
+    L = ['', '## 재래식 절차 (기준 코딩 구조 + AIP 좌표, 차트 대조)',
+         '기준 DB의 레그 구조만 사용하고 좌표는 AIP(항행안전시설 위치·방위/DME·활주로 시단·fix 표)로 다시 계산. 차트 대조 = 현재 AIP 차트에 fix 이름·코스가 실려 있는 비율.', '',
+         '| 종류 | 절차 | 결과 | fix 대조 | 코스 대조 | 기준 대비 최대 편차 | 근거 차트 | 비고 |', '|---|---|---|---|---|---|---|---|']
+    for r in rows:
+        note = []
+        if r.get('ref_only_fixes'):
+            note.append('AIP 미확인 fix: ' + ', '.join(r['ref_only_fixes']))
+        if r.get('approx'):
+            note.append('heading 구간 근사')
+        L.append(f"| {r['kind']} | {r['key']} | {r['result']} | {r['fix_match']:.0%} | {r['course_match']:.0%} | {str(r.get('max_dev_m', '')) + ' m' if 'max_dev_m' in r else ''} | {r.get('page') or ''} | {'; '.join(note)} |")
+    return '\n'.join(L) + '\n'
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog='aip_pipeline')
     sub = ap.add_subparsers(dest='cmd', required=True)
@@ -53,6 +69,7 @@ def main(argv=None):
     b.add_argument('--inbox', required=True); b.add_argument('--airac', required=True); b.add_argument('--out', required=True)
     b.add_argument('--app'); b.add_argument('--enr-fixes', help='JSON {name:[lat,lon]} for en-route fixes')
     b.add_argument('--only', help='comma-separated ICAO filter')
+    b.add_argument('--ref', help='reference nav database JSON (structure/validation only, never exported)')
     a = ap.parse_args(argv)
     files = sorted(f for f in glob.glob(os.path.join(a.inbox, '**', '*'), recursive=True) if f.lower().endswith(('.pdf', '.html', '.htm')))
     from . import parse_enr
@@ -67,6 +84,10 @@ def main(argv=None):
         groups[detect_icao(f) or 'UNKNOWN'].append(f)
     outdir = os.path.join(a.out, a.airac); os.makedirs(outdir, exist_ok=True)
     app = json.load(open(a.app, encoding='utf-8')) if a.app else None
+    if not a.ref:
+        dflt = os.path.join(os.path.dirname(here), 'reference', 'navigraph_ref.json')
+        a.ref = dflt if os.path.exists(dflt) else None
+    ref = json.load(open(a.ref, encoding='utf-8')) if a.ref and a.app else None
     summary = []
     for icao, fl in sorted(groups.items()):
         if icao == 'UNKNOWN' or (a.only and icao not in a.only.split(',')):
@@ -78,6 +99,10 @@ def main(argv=None):
         open(os.path.join(outdir, f'{icao}_report.md'), 'w', encoding='utf-8').write(report_md(ds, a.airac))
         if app is not None and ds['procedures']:
             app_adapter.merge(app, ds, a.airac)
+            if ref is not None:
+                from . import template, corpus
+                template.augment(app, ds, ref, corpus.airport_corpus(fl), enr)
+                open(os.path.join(outdir, f'{icao}_report.md'), 'a', encoding='utf-8').write(template_md(ds))
         n_err = len([i for i in ds['issues'] if i['level'] == 'error']); n_w = len([i for i in ds['issues'] if i['level'] == 'warn'])
         summary.append(f"{icao}: procs={len(ds['procedures'])} fixes={len(ds['fixes'])} obst={len(ds['obstacles'])} errors={n_err} warns={n_w} rejected={len([p for p in ds['procedures'] if p.get('qa') == 'reject'])}")
     if app is not None:

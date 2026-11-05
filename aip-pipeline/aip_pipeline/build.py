@@ -238,6 +238,8 @@ def build_airport(icao: str, files: list[str], enr_fixes: dict | None = None, lo
                                    'defn': fp['defn'], 'latlon': fp['latlon']} for i, fp in enumerate(pts)]
                 base = {'type': 'IAP', 'name': pname, 'source': src, 'runway': pg['rwy'] or (re.sub(r'RWY\s*', '', m.group(2)) if m else None),
                         'coding': 'AIP fix/point table (conventional)', 'other_points': [fp for fp in fps if fp not in seq]}
+                if not pname.strip() or len(seq) < 2:
+                    continue
                 iafs = [k for k, fp in enumerate(seq) if 'IAF' in (fp['role'] or '')]
                 ifk = next((k for k, fp in enumerate(seq) if re.search(r'\bIF\b', fp['role'] or '') and 'IAF' not in (fp['role'] or '')), None)
                 if len(iafs) > 1 and ifk is not None and ifk > max(iafs):

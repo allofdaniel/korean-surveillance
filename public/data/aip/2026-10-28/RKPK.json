@@ -1,6 +1,6 @@
 {
  "icao": "RKPK",
- "built_at": "2026-11-05T05:16:42.675618Z",
+ "built_at": "2026-11-05T05:58:55.920677Z",
  "sources": [
   {
    "file": "(2-11) AD OBSTACLE CHART TYPE B_1760589223.pdf",
@@ -54,17 +54,6 @@
    "thr": [
     35.193872222,
     128.935127778
-   ],
-   "thr_elev_m": 4.0
-  },
-  {
-   "id": "18R",
-   "true_brg": 173.95,
-   "len_m": 2600,
-   "width_m": 60,
-   "thr": [
-    35.188494444,
-    128.935822222
    ],
    "thr_elev_m": 4.0
   },
@@ -657,8 +646,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -680,8 +669,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -704,8 +693,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -729,8 +718,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -754,8 +743,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -779,8 +768,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -802,8 +791,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -825,8 +814,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -848,8 +837,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -871,8 +860,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -894,8 +883,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -916,8 +905,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -942,8 +931,8 @@
    ],
    "coords": [
     [
-     35.188494444,
-     128.935822222
+     35.193872222,
+     128.935127778
     ]
    ],
    "approx": true
@@ -3812,36 +3801,6 @@
     ]
    ],
    "approx": false
-  },
-  {
-   "type": "IAP",
-   "name": "",
-   "source": "RKPK AD CHART 2-24-1 (AIP AMDT 11/26)",
-   "runway": "18R",
-   "coding": "AIP fix/point table (conventional)",
-   "other_points": [],
-   "transition": null,
-   "legs": [
-    {
-     "serial": "001",
-     "path": "IF",
-     "fix": "ARC01",
-     "role": null,
-     "defn": null,
-     "latlon": [
-      35.207805556,
-      128.90975
-     ]
-    }
-   ],
-   "qa": "ok",
-   "coords": [
-    [
-     35.207805556,
-     128.90975
-    ]
-   ],
-   "approx": false
   }
  ],
  "holdings": [
@@ -4020,7 +3979,2258 @@
    "source": "RKPK AD CHART 2-24-1 (AIP AMDT 11/26)"
   }
  ],
- "obstacles": [],
+ "obstacles": [
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C1",
+   "lat": 35.0617639,
+   "lon": 128.9673944,
+   "elev_m": 183.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C21",
+   "lat": 35.2489694,
+   "lon": 128.92345,
+   "elev_m": 407.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C41",
+   "lat": 35.273025,
+   "lon": 128.91185,
+   "elev_m": 590.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C61",
+   "lat": 35.2941778,
+   "lon": 128.9147889,
+   "elev_m": 181.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C81",
+   "lat": 35.331125,
+   "lon": 128.9378917,
+   "elev_m": 188.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M151",
+   "lat": 35.2698639,
+   "lon": 128.9167139,
+   "elev_m": 620.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M176",
+   "lat": 35.1601083,
+   "lon": 128.9383556,
+   "elev_m": 7.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M205",
+   "lat": 35.2372306,
+   "lon": 128.9127556,
+   "elev_m": 158.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A19",
+   "lat": 35.2487139,
+   "lon": 128.9331889,
+   "elev_m": 134.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A39",
+   "lat": 35.2734583,
+   "lon": 128.9354556,
+   "elev_m": 405.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A59",
+   "lat": 35.2920333,
+   "lon": 128.9161083,
+   "elev_m": 220.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A79",
+   "lat": 35.3302889,
+   "lon": 128.9442778,
+   "elev_m": 262.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C2",
+   "lat": 35.0658694,
+   "lon": 128.9691472,
+   "elev_m": 233.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C22",
+   "lat": 35.2529222,
+   "lon": 128.9362306,
+   "elev_m": 368.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C42",
+   "lat": 35.2774333,
+   "lon": 128.9353778,
+   "elev_m": 452.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C62",
+   "lat": 35.2977861,
+   "lon": 128.9069889,
+   "elev_m": 245.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C82",
+   "lat": 35.3310167,
+   "lon": 128.9242472,
+   "elev_m": 424.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M152",
+   "lat": 35.2481194,
+   "lon": 128.9230528,
+   "elev_m": 400.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M177",
+   "lat": 35.1595722,
+   "lon": 128.9383528,
+   "elev_m": 8.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M206",
+   "lat": 35.2372194,
+   "lon": 128.9120889,
+   "elev_m": 162.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A20",
+   "lat": 35.2498972,
+   "lon": 128.9384667,
+   "elev_m": 250.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A40",
+   "lat": 35.2733056,
+   "lon": 128.9293194,
+   "elev_m": 282.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A60",
+   "lat": 35.2925083,
+   "lon": 128.9191722,
+   "elev_m": 348.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A80",
+   "lat": 35.3286611,
+   "lon": 128.9093111,
+   "elev_m": 452.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C3",
+   "lat": 35.0750583,
+   "lon": 128.9669444,
+   "elev_m": 166.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C23",
+   "lat": 35.2529306,
+   "lon": 128.9229861,
+   "elev_m": 391.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C43",
+   "lat": 35.2789528,
+   "lon": 128.9400444,
+   "elev_m": 531.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C63",
+   "lat": 35.3023889,
+   "lon": 128.9393972,
+   "elev_m": 306.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C83",
+   "lat": 35.1816833,
+   "lon": 128.9508056,
+   "elev_m": 65.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M153",
+   "lat": 35.0619139,
+   "lon": 128.9675722,
+   "elev_m": 200.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M178",
+   "lat": 35.1560222,
+   "lon": 128.9379806,
+   "elev_m": 9.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A1",
+   "lat": 35.0617639,
+   "lon": 128.9673944,
+   "elev_m": 183.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A21",
+   "lat": 35.2489694,
+   "lon": 128.92345,
+   "elev_m": 407.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A41",
+   "lat": 35.273025,
+   "lon": 128.91185,
+   "elev_m": 590.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A61",
+   "lat": 35.2941778,
+   "lon": 128.9147889,
+   "elev_m": 181.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A81",
+   "lat": 35.331125,
+   "lon": 128.9378917,
+   "elev_m": 188.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C4",
+   "lat": 35.1730194,
+   "lon": 128.9321028,
+   "elev_m": 42.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C24",
+   "lat": 35.2539667,
+   "lon": 128.93175,
+   "elev_m": 185.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C44",
+   "lat": 35.2782222,
+   "lon": 128.9284583,
+   "elev_m": 186.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C64",
+   "lat": 35.3017194,
+   "lon": 128.9172389,
+   "elev_m": 190.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M1",
+   "lat": 35.2430583,
+   "lon": 128.9328194,
+   "elev_m": 379.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M155",
+   "lat": 35.0648222,
+   "lon": 128.9690444,
+   "elev_m": 220.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M179",
+   "lat": 35.1970778,
+   "lon": 128.9340611,
+   "elev_m": 3.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A2",
+   "lat": 35.0658694,
+   "lon": 128.9691472,
+   "elev_m": 233.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A22",
+   "lat": 35.2529222,
+   "lon": 128.9362306,
+   "elev_m": 368.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A42",
+   "lat": 35.2774333,
+   "lon": 128.9353778,
+   "elev_m": 452.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A62",
+   "lat": 35.2977861,
+   "lon": 128.9069889,
+   "elev_m": 245.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A82",
+   "lat": 35.3310167,
+   "lon": 128.9242472,
+   "elev_m": 424.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C5",
+   "lat": 35.1795278,
+   "lon": 128.9322528,
+   "elev_m": 32.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C25",
+   "lat": 35.2549444,
+   "lon": 128.9289028,
+   "elev_m": 275.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C45",
+   "lat": 35.2801778,
+   "lon": 128.9264028,
+   "elev_m": 164.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C65",
+   "lat": 35.3030611,
+   "lon": 128.9239083,
+   "elev_m": 181.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M2",
+   "lat": 35.3296694,
+   "lon": 128.9222944,
+   "elev_m": 463.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M156",
+   "lat": 35.0750583,
+   "lon": 128.9669278,
+   "elev_m": 180.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M180",
+   "lat": 35.1971611,
+   "lon": 128.9342056,
+   "elev_m": 4.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A3",
+   "lat": 35.0750583,
+   "lon": 128.9669444,
+   "elev_m": 166.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A23",
+   "lat": 35.2529306,
+   "lon": 128.9229861,
+   "elev_m": 391.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A43",
+   "lat": 35.2789528,
+   "lon": 128.9400444,
+   "elev_m": 531.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A63",
+   "lat": 35.3023889,
+   "lon": 128.9393972,
+   "elev_m": 306.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A83",
+   "lat": 35.1816833,
+   "lon": 128.9508056,
+   "elev_m": 65.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C6",
+   "lat": 35.1838194,
+   "lon": 128.9319528,
+   "elev_m": 24.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C26",
+   "lat": 35.2568611,
+   "lon": 128.9368639,
+   "elev_m": 362.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C46",
+   "lat": 35.2804167,
+   "lon": 128.9162194,
+   "elev_m": 385.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C66",
+   "lat": 35.306225,
+   "lon": 128.9411778,
+   "elev_m": 260.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M3",
+   "lat": 35.2341611,
+   "lon": 128.9395306,
+   "elev_m": 171.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M157",
+   "lat": 35.2477917,
+   "lon": 128.9216028,
+   "elev_m": 360.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M181",
+   "lat": 35.1971833,
+   "lon": 128.933825,
+   "elev_m": 4.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A4",
+   "lat": 35.1730194,
+   "lon": 128.9321028,
+   "elev_m": 42.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A24",
+   "lat": 35.2539667,
+   "lon": 128.93175,
+   "elev_m": 185.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A44",
+   "lat": 35.2782222,
+   "lon": 128.9284583,
+   "elev_m": 186.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A64",
+   "lat": 35.3017194,
+   "lon": 128.9172389,
+   "elev_m": 190.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C7",
+   "lat": 35.2277639,
+   "lon": 128.9277722,
+   "elev_m": 86.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C27",
+   "lat": 35.2575833,
+   "lon": 128.9243861,
+   "elev_m": 399.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C47",
+   "lat": 35.2823278,
+   "lon": 128.9313444,
+   "elev_m": 348.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C67",
+   "lat": 35.3054806,
+   "lon": 128.8994917,
+   "elev_m": 166.5,
+   "type": "tower"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M4",
+   "lat": 35.2771111,
+   "lon": 128.9421278,
+   "elev_m": 522.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M158",
+   "lat": 35.2539778,
+   "lon": 128.9176972,
+   "elev_m": 319.5,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M182",
+   "lat": 35.1971833,
+   "lon": 128.9336417,
+   "elev_m": 4.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A5",
+   "lat": 35.1795278,
+   "lon": 128.9322528,
+   "elev_m": 332.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A25",
+   "lat": 35.2549444,
+   "lon": 128.9289028,
+   "elev_m": 275.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A45",
+   "lat": 35.2801778,
+   "lon": 128.9264028,
+   "elev_m": 164.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A65",
+   "lat": 35.3030611,
+   "lon": 128.9239083,
+   "elev_m": 181.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C8",
+   "lat": 35.2292417,
+   "lon": 128.9301972,
+   "elev_m": 173.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C28",
+   "lat": 35.2582139,
+   "lon": 128.9200472,
+   "elev_m": 362.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C48",
+   "lat": 35.2816583,
+   "lon": 128.9230333,
+   "elev_m": 190.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C68",
+   "lat": 35.3117306,
+   "lon": 128.9162139,
+   "elev_m": 211.0,
+   "type": "tower"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M71",
+   "lat": 35.065875,
+   "lon": 128.9691472,
+   "elev_m": 234.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M159",
+   "lat": 35.0605583,
+   "lon": 128.9610806,
+   "elev_m": 159.5,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M183",
+   "lat": 35.2306889,
+   "lon": 128.9260028,
+   "elev_m": 100.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A6",
+   "lat": 35.1838194,
+   "lon": 128.9319528,
+   "elev_m": 324.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A26",
+   "lat": 35.2568611,
+   "lon": 128.9368639,
+   "elev_m": 362.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A46",
+   "lat": 35.2804167,
+   "lon": 128.9162194,
+   "elev_m": 385.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A66",
+   "lat": 35.306225,
+   "lon": 128.9411778,
+   "elev_m": 260.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C9",
+   "lat": 35.2349278,
+   "lon": 128.9290111,
+   "elev_m": 238.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C29",
+   "lat": 35.26085,
+   "lon": 128.9217083,
+   "elev_m": 429.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C49",
+   "lat": 35.2835167,
+   "lon": 128.9402833,
+   "elev_m": 470.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C69",
+   "lat": 35.3140472,
+   "lon": 128.9159944,
+   "elev_m": 222.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M72",
+   "lat": 35.0755306,
+   "lon": 128.9593694,
+   "elev_m": 89.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M160",
+   "lat": 35.0726417,
+   "lon": 128.9647583,
+   "elev_m": 240.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M189",
+   "lat": 35.1973833,
+   "lon": 128.9369056,
+   "elev_m": 4.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A7",
+   "lat": 35.2277639,
+   "lon": 128.9277722,
+   "elev_m": 86.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A27",
+   "lat": 35.2575833,
+   "lon": 128.9243861,
+   "elev_m": 399.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A47",
+   "lat": 35.2823278,
+   "lon": 128.9313444,
+   "elev_m": 348.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A67",
+   "lat": 35.3054806,
+   "lon": 128.8994917,
+   "elev_m": 166.5,
+   "type": "tower"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C10",
+   "lat": 35.2363111,
+   "lon": 128.9382444,
+   "elev_m": 196.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C30",
+   "lat": 35.2635167,
+   "lon": 128.9343778,
+   "elev_m": 183.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C50",
+   "lat": 35.2843833,
+   "lon": 128.9200083,
+   "elev_m": 177.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C70",
+   "lat": 35.3126583,
+   "lon": 128.8982917,
+   "elev_m": 336.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M73",
+   "lat": 35.0694722,
+   "lon": 128.9613472,
+   "elev_m": 155.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M161",
+   "lat": 35.1572056,
+   "lon": 128.9448417,
+   "elev_m": 10.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M190",
+   "lat": 35.1974389,
+   "lon": 128.9366806,
+   "elev_m": 4.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A8",
+   "lat": 35.2292417,
+   "lon": 128.9301972,
+   "elev_m": 173.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A28",
+   "lat": 35.2582139,
+   "lon": 128.9200472,
+   "elev_m": 362.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A48",
+   "lat": 35.2816583,
+   "lon": 128.9230333,
+   "elev_m": 190.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A68",
+   "lat": 35.3117306,
+   "lon": 128.9162139,
+   "elev_m": 211.0,
+   "type": "tower"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C11",
+   "lat": 35.2375528,
+   "lon": 128.9352806,
+   "elev_m": 142.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C31",
+   "lat": 35.2641111,
+   "lon": 128.9153889,
+   "elev_m": 324.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C51",
+   "lat": 35.2846889,
+   "lon": 128.9156889,
+   "elev_m": 253.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C71",
+   "lat": 35.3166028,
+   "lon": 128.9300583,
+   "elev_m": 170.5,
+   "type": "tower"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M138",
+   "lat": 36.0016667,
+   "lon": 128.6943333,
+   "elev_m": 817.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M162",
+   "lat": 35.9078333,
+   "lon": 128.5083333,
+   "elev_m": 241.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M191",
+   "lat": 36.0403333,
+   "lon": 128.7383333,
+   "elev_m": 649.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A9",
+   "lat": 35.2349278,
+   "lon": 128.9290111,
+   "elev_m": 238.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A29",
+   "lat": 35.26085,
+   "lon": 128.9217083,
+   "elev_m": 429.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A49",
+   "lat": 35.2835167,
+   "lon": 128.9402833,
+   "elev_m": 470.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A69",
+   "lat": 35.3140472,
+   "lon": 128.9159944,
+   "elev_m": 222.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C12",
+   "lat": 35.2396111,
+   "lon": 128.936525,
+   "elev_m": 220.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C32",
+   "lat": 35.2669861,
+   "lon": 128.9235778,
+   "elev_m": 606.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C52",
+   "lat": 35.2875667,
+   "lon": 128.9383,
+   "elev_m": 403.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C72",
+   "lat": 35.3177472,
+   "lon": 128.9141222,
+   "elev_m": 203.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M139",
+   "lat": 35.2349778,
+   "lon": 128.9291222,
+   "elev_m": 236.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M163",
+   "lat": 35.1568,
+   "lon": 128.9453056,
+   "elev_m": 22.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M192",
+   "lat": 35.2021833,
+   "lon": 128.9332222,
+   "elev_m": 10.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A10",
+   "lat": 35.2363111,
+   "lon": 128.9382444,
+   "elev_m": 196.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A30",
+   "lat": 35.2635167,
+   "lon": 128.9343778,
+   "elev_m": 183.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A50",
+   "lat": 35.2843833,
+   "lon": 128.9200083,
+   "elev_m": 177.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A70",
+   "lat": 35.3126583,
+   "lon": 128.8982917,
+   "elev_m": 336.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C13",
+   "lat": 35.2406639,
+   "lon": 128.9316528,
+   "elev_m": 303.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C33",
+   "lat": 35.2684194,
+   "lon": 128.9412583,
+   "elev_m": 378.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C53",
+   "lat": 35.286475,
+   "lon": 128.9166028,
+   "elev_m": 191.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C73",
+   "lat": 35.3196861,
+   "lon": 128.9227222,
+   "elev_m": 200.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M140",
+   "lat": 35.24885,
+   "lon": 128.923275,
+   "elev_m": 406.5,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M164",
+   "lat": 35.1583611,
+   "lon": 128.9391389,
+   "elev_m": 17.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M193",
+   "lat": 35.231975,
+   "lon": 128.9276472,
+   "elev_m": 190.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A11",
+   "lat": 35.2375528,
+   "lon": 128.9352806,
+   "elev_m": 142.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A31",
+   "lat": 35.2641111,
+   "lon": 128.9153889,
+   "elev_m": 324.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A51",
+   "lat": 35.2846889,
+   "lon": 128.9156889,
+   "elev_m": 253.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A71",
+   "lat": 35.3166028,
+   "lon": 128.9300583,
+   "elev_m": 170.5,
+   "type": "tower"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C14",
+   "lat": 35.2394583,
+   "lon": 128.920525,
+   "elev_m": 121.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C34",
+   "lat": 35.2709694,
+   "lon": 128.9417389,
+   "elev_m": 210.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C54",
+   "lat": 35.2876,
+   "lon": 128.9193139,
+   "elev_m": 159.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C74",
+   "lat": 35.3223028,
+   "lon": 128.9322861,
+   "elev_m": 281.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M141",
+   "lat": 35.2699306,
+   "lon": 128.9205056,
+   "elev_m": 631.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M167",
+   "lat": 35.0924333,
+   "lon": 128.9555111,
+   "elev_m": 112.0,
+   "type": "chimney"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M198",
+   "lat": 35.0617639,
+   "lon": 128.9673944,
+   "elev_m": 183.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A12",
+   "lat": 35.2396111,
+   "lon": 128.936525,
+   "elev_m": 220.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A32",
+   "lat": 35.2669861,
+   "lon": 128.9235778,
+   "elev_m": 606.5,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A52",
+   "lat": 35.2875667,
+   "lon": 128.9383,
+   "elev_m": 403.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A72",
+   "lat": 35.3177472,
+   "lon": 128.9141222,
+   "elev_m": 203.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C15",
+   "lat": 35.2416083,
+   "lon": 128.9247,
+   "elev_m": 163.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C35",
+   "lat": 35.2699694,
+   "lon": 128.9203139,
+   "elev_m": 632.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C55",
+   "lat": 35.2908861,
+   "lon": 128.9414528,
+   "elev_m": 191.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C75",
+   "lat": 35.3251444,
+   "lon": 128.9279472,
+   "elev_m": 285.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M142",
+   "lat": 35.1947556,
+   "lon": 128.9437306,
+   "elev_m": 36.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M168",
+   "lat": 35.1816806,
+   "lon": 128.9508,
+   "elev_m": 62.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M199",
+   "lat": 35.0658694,
+   "lon": 128.9691472,
+   "elev_m": 233.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A13",
+   "lat": 35.2406639,
+   "lon": 128.9316528,
+   "elev_m": 303.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A33",
+   "lat": 35.2684194,
+   "lon": 128.9412583,
+   "elev_m": 378.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A53",
+   "lat": 35.286475,
+   "lon": 128.9166028,
+   "elev_m": 191.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A73",
+   "lat": 35.3196861,
+   "lon": 128.9227222,
+   "elev_m": 200.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C16",
+   "lat": 35.2428667,
+   "lon": 128.9331139,
+   "elev_m": 381.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C36",
+   "lat": 35.2696111,
+   "lon": 128.9106056,
+   "elev_m": 455.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C56",
+   "lat": 35.2888139,
+   "lon": 128.9136083,
+   "elev_m": 185.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C76",
+   "lat": 35.3238139,
+   "lon": 128.8996694,
+   "elev_m": 266.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M144",
+   "lat": 35.1969139,
+   "lon": 128.9158667,
+   "elev_m": 40.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M169",
+   "lat": 35.1086528,
+   "lon": 128.9476111,
+   "elev_m": 39.0,
+   "type": "tower"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M200",
+   "lat": 35.0750583,
+   "lon": 128.9669444,
+   "elev_m": 166.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A14",
+   "lat": 35.2395833,
+   "lon": 128.920525,
+   "elev_m": 121.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A34",
+   "lat": 35.2709694,
+   "lon": 128.9417389,
+   "elev_m": 210.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A54",
+   "lat": 35.2876,
+   "lon": 128.9193139,
+   "elev_m": 159.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A74",
+   "lat": 35.3223028,
+   "lon": 128.9322861,
+   "elev_m": 281.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C17",
+   "lat": 35.24625,
+   "lon": 128.92615,
+   "elev_m": 382.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C37",
+   "lat": 35.2715944,
+   "lon": 128.9314806,
+   "elev_m": 275.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C57",
+   "lat": 35.2900361,
+   "lon": 128.909825,
+   "elev_m": 193.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C77",
+   "lat": 35.3245056,
+   "lon": 128.9033139,
+   "elev_m": 270.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M145",
+   "lat": 35.1944944,
+   "lon": 128.9016083,
+   "elev_m": 59.5,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M170",
+   "lat": 35.23495,
+   "lon": 128.9290917,
+   "elev_m": 240.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M201",
+   "lat": 35.1730194,
+   "lon": 128.9321028,
+   "elev_m": 42.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A15",
+   "lat": 35.2416083,
+   "lon": 128.9247,
+   "elev_m": 163.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A35",
+   "lat": 35.2699694,
+   "lon": 128.9203139,
+   "elev_m": 632.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A55",
+   "lat": 35.2908861,
+   "lon": 128.9414528,
+   "elev_m": 191.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A75",
+   "lat": 35.3251444,
+   "lon": 128.9279472,
+   "elev_m": 285.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C18",
+   "lat": 35.2460444,
+   "lon": 128.9215778,
+   "elev_m": 258.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C38",
+   "lat": 35.2722194,
+   "lon": 128.9223194,
+   "elev_m": 584.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C58",
+   "lat": 35.2938694,
+   "lon": 128.9382194,
+   "elev_m": 341.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C78",
+   "lat": 35.3266611,
+   "lon": 128.9217083,
+   "elev_m": 433.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M146",
+   "lat": 35.2316417,
+   "lon": 128.9283111,
+   "elev_m": 200.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M173",
+   "lat": 35.1617944,
+   "lon": 128.9434611,
+   "elev_m": 8.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M202",
+   "lat": 35.1795278,
+   "lon": 128.9322528,
+   "elev_m": 32.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A16",
+   "lat": 35.2428667,
+   "lon": 128.9331139,
+   "elev_m": 381.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A36",
+   "lat": 35.2696111,
+   "lon": 128.9106056,
+   "elev_m": 455.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A56",
+   "lat": 35.2888139,
+   "lon": 128.9136083,
+   "elev_m": 185.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A76",
+   "lat": 35.3238139,
+   "lon": 128.8996694,
+   "elev_m": 266.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C19",
+   "lat": 35.2487139,
+   "lon": 128.9331889,
+   "elev_m": 134.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C39",
+   "lat": 35.2734583,
+   "lon": 128.9354556,
+   "elev_m": 405.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C59",
+   "lat": 35.2920333,
+   "lon": 128.9161083,
+   "elev_m": 220.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C79",
+   "lat": 35.3302889,
+   "lon": 128.9442778,
+   "elev_m": 262.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M147",
+   "lat": 35.2669917,
+   "lon": 128.9235861,
+   "elev_m": 620.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M174",
+   "lat": 35.1615444,
+   "lon": 128.9431056,
+   "elev_m": 8.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M203",
+   "lat": 35.1838167,
+   "lon": 128.9319528,
+   "elev_m": 24.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A17",
+   "lat": 35.24625,
+   "lon": 128.92615,
+   "elev_m": 382.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A37",
+   "lat": 35.2715944,
+   "lon": 128.9314806,
+   "elev_m": 275.0,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A57",
+   "lat": 35.2900361,
+   "lon": 128.909825,
+   "elev_m": 193.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A77",
+   "lat": 35.3245056,
+   "lon": 128.9033139,
+   "elev_m": 270.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C20",
+   "lat": 35.2498972,
+   "lon": 128.9384667,
+   "elev_m": 250.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C40",
+   "lat": 35.2733056,
+   "lon": 128.9293194,
+   "elev_m": 282.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C60",
+   "lat": 35.2925083,
+   "lon": 128.9191722,
+   "elev_m": 348.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "C80",
+   "lat": 35.3286611,
+   "lon": 128.9093111,
+   "elev_m": 452.5,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M150",
+   "lat": 35.2749389,
+   "lon": 128.9104278,
+   "elev_m": 660.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M175",
+   "lat": 35.1606556,
+   "lon": 128.9383944,
+   "elev_m": 7.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "M204",
+   "lat": 35.2400778,
+   "lon": 128.931275,
+   "elev_m": 300.0,
+   "type": "etc"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A18",
+   "lat": 35.2460444,
+   "lon": 128.9215778,
+   "elev_m": 258.5,
+   "type": "building"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A38",
+   "lat": 35.2722194,
+   "lon": 128.9223194,
+   "elev_m": 584.0,
+   "type": "tree"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A58",
+   "lat": 35.2938694,
+   "lon": 128.9382194,
+   "elev_m": 341.0,
+   "type": "natural high point"
+  },
+  {
+   "icao": "RKPK",
+   "chart": "2-11",
+   "amdt": "AIRAC AIP AMDT 11/25",
+   "no": "A78",
+   "lat": 35.3266611,
+   "lon": 128.9217083,
+   "elev_m": 433.5,
+   "type": "natural high point"
+  }
+ ],
  "issues": [
   {
    "level": "warn",

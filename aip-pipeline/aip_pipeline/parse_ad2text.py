@@ -31,8 +31,15 @@ def parse(path: str) -> dict:
     # AD 2.12 runways
     s12 = _section(t, 12)
     rwys = []
-    for m in re.finditer(r'(?m)^\s*(\d{2}[LRC]?)\s+(\d{3}\.\d{1,2})°\s+([\d\s]+?)\s*[×x]\s*(\d+)', s12):
+    feet = bool(re.search(r'RWY\s*\(ft\)', s12[:600]))
+    seen = set()
+    for m in re.finditer(r'(?m)^\s*(\d{2}[LRC]?)\s+(\d{1,3}\.\d{1,2})\s*[°˚º]?\s+([\d ]+?)\s*[×xX]\s*(\d+)', s12):
         rid, tb, ln, wd = m.groups()
+        if rid in seen:
+            continue
+        seen.add(rid)
+        if feet:
+            ln, wd = str(round(int(ln.replace(' ', '')) * 0.3048)), str(round(int(wd) * 0.3048))
         seg = s12[m.start(): m.start() + 600]
         ll = parse_latlon(seg)
         e = re.search(r'THR\s+(\d+(?:\.\d+)?)\s*m', seg)

@@ -1,6 +1,6 @@
 {
  "icao": "RKJB",
- "built_at": "2026-11-05T05:16:16.535997Z",
+ "built_at": "2026-11-05T05:58:31.131599Z",
  "sources": [
   {
    "file": "(2-11) STAR.pdf",
@@ -5542,7 +5542,68 @@
    "source": "RKJB AD CHART 2-16-1 (8 FEB 2024)"
   }
  ],
- "obstacles": [],
+ "obstacles": [
+  {
+   "icao": "RKJB",
+   "chart": "2-6",
+   "amdt": "AIRAC AIP AMDT 9/26",
+   "no": "1",
+   "lat": 34.9490861,
+   "lon": 126.391525,
+   "elev_m": 87.5,
+   "type": "Natural high point"
+  },
+  {
+   "icao": "RKJB",
+   "chart": "2-6",
+   "amdt": "AIRAC AIP AMDT 9/26",
+   "no": "2",
+   "lat": 34.9531667,
+   "lon": 126.4137528,
+   "elev_m": 106.5,
+   "type": "Natural high point"
+  },
+  {
+   "icao": "RKJB",
+   "chart": "2-6",
+   "amdt": "AIRAC AIP AMDT 9/26",
+   "no": "3",
+   "lat": 34.9664861,
+   "lon": 126.4172444,
+   "elev_m": 68.0,
+   "type": "Natural high point"
+  },
+  {
+   "icao": "RKJB",
+   "chart": "2-6",
+   "amdt": "AIRAC AIP AMDT 9/26",
+   "no": "4",
+   "lat": 34.9435889,
+   "lon": 126.3954444,
+   "elev_m": 182.5,
+   "type": "Natural high point"
+  },
+  {
+   "icao": "RKJB",
+   "chart": "2-6",
+   "amdt": "AIRAC AIP AMDT 9/26",
+   "no": "5",
+   "lat": 34.9445139,
+   "lon": 126.3920917,
+   "elev_m": 91.0,
+   "type": "Natural high point"
+  },
+  {
+   "icao": "RKJB",
+   "chart": "2-6",
+   "amdt": "AIRAC AIP AMDT 9/26",
+   "no": "6",
+   "lat": 34.9535361,
+   "lon": 126.3912361,
+   "elev_m": 66.5,
+   "type": "Natural high point"
+  }
+ ],
  "issues": [
   {
    "level": "warn",

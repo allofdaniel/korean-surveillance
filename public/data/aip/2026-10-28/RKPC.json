@@ -1,6 +1,6 @@
 {
  "icao": "RKPC",
- "built_at": "2026-11-05T05:16:38.620166Z",
+ "built_at": "2026-11-05T05:58:52.044072Z",
  "sources": [
   {
    "file": "(2-12) SID.pdf",
@@ -97,17 +97,6 @@
     126.504013889
    ],
    "thr_elev_m": 36.0
-  },
-  {
-   "id": "31",
-   "true_brg": 305.63,
-   "len_m": 1489,
-   "width_m": 45,
-   "thr": [
-    33.507641667,
-    126.500419444
-   ],
-   "thr_elev_m": 32.0
   }
  ],
  "navaids": [
@@ -10536,13 +10525,229 @@
    "source": "RKPC AD CHART 2-29-1 (AIP AMDT 4/26)"
   }
  ],
- "obstacles": [],
- "issues": [
+ "obstacles": [
   {
-   "level": "warn",
-   "what": "fix RW31 differs 411 m in AD2.12",
-   "fix": "RW31"
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "1",
+   "lat": 33.5176417,
+   "lon": 126.5445111,
+   "elev_m": 159.0,
+   "type": "NATURAL HIGH POINT"
   },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "2",
+   "lat": 33.4725806,
+   "lon": 126.4971417,
+   "elev_m": 310.5,
+   "type": "NATURAL HIGH POINT"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "3",
+   "lat": 33.4933222,
+   "lon": 126.4606472,
+   "elev_m": 46.0,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "4",
+   "lat": 33.4928528,
+   "lon": 126.45775,
+   "elev_m": 52.5,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "5",
+   "lat": 33.4928694,
+   "lon": 126.4582389,
+   "elev_m": 50.0,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "6",
+   "lat": 33.4927583,
+   "lon": 126.4599222,
+   "elev_m": 49.5,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "7",
+   "lat": 33.4931944,
+   "lon": 126.4604528,
+   "elev_m": 47.5,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "8",
+   "lat": 33.4930333,
+   "lon": 126.4602167,
+   "elev_m": 51.5,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "9",
+   "lat": 33.4925306,
+   "lon": 126.4602556,
+   "elev_m": 49.0,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "10",
+   "lat": 33.4931361,
+   "lon": 126.4609778,
+   "elev_m": 46.5,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "11",
+   "lat": 33.4915417,
+   "lon": 126.4575833,
+   "elev_m": 55.5,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "12",
+   "lat": 33.4915972,
+   "lon": 126.4574444,
+   "elev_m": 58.0,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "13",
+   "lat": 33.5179972,
+   "lon": 126.5448222,
+   "elev_m": 156.0,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "14",
+   "lat": 33.5052056,
+   "lon": 126.4919667,
+   "elev_m": 96.5,
+   "type": "TOWER"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "15",
+   "lat": 33.491925,
+   "lon": 126.4590111,
+   "elev_m": 51.0,
+   "type": "POLE"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "16",
+   "lat": 33.4925361,
+   "lon": 126.4601222,
+   "elev_m": 48.0,
+   "type": "POLE"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "17",
+   "lat": 33.5039361,
+   "lon": 126.5046806,
+   "elev_m": 49.0,
+   "type": "POLE"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "18",
+   "lat": 33.4729917,
+   "lon": 126.4971139,
+   "elev_m": 302.5,
+   "type": "PYLON"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "19",
+   "lat": 33.4924417,
+   "lon": 126.460725,
+   "elev_m": 54.0,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "20",
+   "lat": 33.5029972,
+   "lon": 126.5049056,
+   "elev_m": 59.5,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "21",
+   "lat": 33.4996389,
+   "lon": 126.5172278,
+   "elev_m": 95.5,
+   "type": "BUILDING"
+  },
+  {
+   "icao": "RKPC",
+   "chart": "2-9",
+   "amdt": "AIP AMDT 9/26",
+   "no": "22",
+   "lat": 33.4728611,
+   "lon": 126.4973361,
+   "elev_m": 313.0,
+   "type": "PYLON"
+  }
+ ],
+ "issues": [
   {
    "level": "warn",
    "what": "fix THR RWY 07 differs 2256 m in RKPC AD CHART 2-25-1 (AIP AMDT 4/26)",

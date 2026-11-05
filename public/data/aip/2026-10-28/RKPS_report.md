@@ -46,3 +46,25 @@
 | STAR | RNAV KABVO 1 MASTA | 24L | 3 |  |  |
 | STAR | RNAV NOBOP 1 ANUBA | 24L | 3 |  |  |
 | STAR | RNAV NOBOP 1 MASTA | 24L | 2 |  |  |
+
+## 재래식 절차 (기준 코딩 구조 + AIP 좌표, 차트 대조)
+기준 DB의 레그 구조만 사용하고 좌표는 AIP(항행안전시설 위치·방위/DME·활주로 시단·fix 표)로 다시 계산. 차트 대조 = 현재 AIP 차트에 fix 이름·코스가 실려 있는 비율.
+
+| 종류 | 절차 | 결과 | fix 대조 | 코스 대조 | 기준 대비 최대 편차 | 근거 차트 | 비고 |
+|---|---|---|---|---|---|---|---|
+| sids | SAC5.RW06B | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p7 | heading 구간 근사 |
+| sids | SAC5.RW24B | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p19 | heading 구간 근사 |
+| iaps | D06L | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p5 | heading 구간 근사 |
+| iaps | D06L.SOLYI | 반영 | 100% | 100% | 4 m | (2-13) INSTR APCH CHART.pdf p5 |  |
+| iaps | D06R | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p11 | heading 구간 근사 |
+| iaps | D06R.SOLYI | 반영 | 100% | 100% | 17 m | (2-13) INSTR APCH CHART.pdf p11 |  |
+| iaps | D24L | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p29 |  |
+| iaps | D24L.KABVO | 반영 | 100% | 100% | 2288 m | (2-13) INSTR APCH CHART.pdf p29 |  |
+| iaps | D24R | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p23 |  |
+| iaps | D24R.KABVO | 반영 | 100% | 100% | 75 m | (2-13) INSTR APCH CHART.pdf p23 |  |
+| iaps | I24R | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p17 | heading 구간 근사 |
+| iaps | I24R.KABVO | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p17 |  |
+| iaps | L06L | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p1 | heading 구간 근사 |
+| iaps | L06L.SOLYI | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p1 |  |
+| iaps | L24R | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p19 | heading 구간 근사 |
+| iaps | L24R.KABVO | 반영 | 100% | 100% | 0 m | (2-13) INSTR APCH CHART.pdf p19 |  |

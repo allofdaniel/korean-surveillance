@@ -1,6 +1,6 @@
 {
  "icao": "RKSI",
- "built_at": "2026-11-05T05:16:52.168126Z",
+ "built_at": "2026-11-05T05:59:04.620416Z",
  "sources": [
   {
    "file": "(2-18) AD OBSTACLE CHART TYPE B.pdf",
@@ -20647,7 +20647,1668 @@
   }
  ],
  "holdings": [],
- "obstacles": [],
+ "obstacles": [
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "1",
+   "lat": 37.5092583,
+   "lon": 126.4791806,
+   "elev_m": 115.5,
+   "type": "Pylon"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "2",
+   "lat": 37.5043972,
+   "lon": 126.4922361,
+   "elev_m": 129.5,
+   "type": "Pylon"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "3",
+   "lat": 37.4557833,
+   "lon": 126.4808056,
+   "elev_m": 76.0,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "4",
+   "lat": 37.4609278,
+   "lon": 126.4405139,
+   "elev_m": 106.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "5",
+   "lat": 37.4564167,
+   "lon": 126.4445278,
+   "elev_m": 74.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "6",
+   "lat": 37.4667167,
+   "lon": 126.3617306,
+   "elev_m": 182.0,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "7",
+   "lat": 37.4647361,
+   "lon": 126.3632,
+   "elev_m": 138.0,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "8",
+   "lat": 37.4044611,
+   "lon": 126.4401083,
+   "elev_m": 57.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "9",
+   "lat": 37.4076583,
+   "lon": 126.4095806,
+   "elev_m": 135.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "10",
+   "lat": 37.4012556,
+   "lon": 126.4092639,
+   "elev_m": 117.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "11",
+   "lat": 37.3982806,
+   "lon": 126.4164611,
+   "elev_m": 139.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "12",
+   "lat": 37.5286806,
+   "lon": 126.4240028,
+   "elev_m": 118.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "13",
+   "lat": 37.5187667,
+   "lon": 126.4319833,
+   "elev_m": 67.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "14",
+   "lat": 37.5221667,
+   "lon": 126.4366639,
+   "elev_m": 83.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "15",
+   "lat": 37.5247667,
+   "lon": 126.4457417,
+   "elev_m": 190.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "16",
+   "lat": 37.5279861,
+   "lon": 126.4486583,
+   "elev_m": 183.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "17",
+   "lat": 37.5227667,
+   "lon": 126.4573833,
+   "elev_m": 152.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "18",
+   "lat": 37.5201139,
+   "lon": 126.4604556,
+   "elev_m": 75.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "19",
+   "lat": 37.4666028,
+   "lon": 126.3688667,
+   "elev_m": 90.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "20",
+   "lat": 37.4683778,
+   "lon": 126.3632361,
+   "elev_m": 144.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "21",
+   "lat": 37.4436222,
+   "lon": 126.3863472,
+   "elev_m": 87.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "22",
+   "lat": 37.452025,
+   "lon": 126.3741306,
+   "elev_m": 63.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "23",
+   "lat": 37.4561972,
+   "lon": 126.3808889,
+   "elev_m": 61.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "24",
+   "lat": 37.4623639,
+   "lon": 126.3746167,
+   "elev_m": 67.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "25",
+   "lat": 37.4303806,
+   "lon": 126.421375,
+   "elev_m": 72.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "26",
+   "lat": 37.4324306,
+   "lon": 126.4235444,
+   "elev_m": 76.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "27",
+   "lat": 37.4463194,
+   "lon": 126.4263556,
+   "elev_m": 64.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "28",
+   "lat": 37.4508667,
+   "lon": 126.412125,
+   "elev_m": 82.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "29",
+   "lat": 37.4537611,
+   "lon": 126.4102722,
+   "elev_m": 68.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "30",
+   "lat": 37.4534472,
+   "lon": 126.4018083,
+   "elev_m": 84.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "31",
+   "lat": 37.4358278,
+   "lon": 126.4020472,
+   "elev_m": 62.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "32",
+   "lat": 37.4411694,
+   "lon": 126.4059806,
+   "elev_m": 65.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "33",
+   "lat": 37.4426778,
+   "lon": 126.4122944,
+   "elev_m": 70.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "34",
+   "lat": 37.4444083,
+   "lon": 126.4191694,
+   "elev_m": 65.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "35",
+   "lat": 37.440675,
+   "lon": 126.4209472,
+   "elev_m": 60.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "36",
+   "lat": 37.4450583,
+   "lon": 126.4163111,
+   "elev_m": 66.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "37",
+   "lat": 37.4379528,
+   "lon": 126.4308472,
+   "elev_m": 63.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "38",
+   "lat": 37.4370306,
+   "lon": 126.4225556,
+   "elev_m": 64.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "39",
+   "lat": 37.41855,
+   "lon": 126.4141194,
+   "elev_m": 60.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "40",
+   "lat": 37.4541306,
+   "lon": 126.4771444,
+   "elev_m": 57.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "41",
+   "lat": 37.4459694,
+   "lon": 126.482025,
+   "elev_m": 57.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "42",
+   "lat": 37.4910694,
+   "lon": 126.474875,
+   "elev_m": 63.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "43",
+   "lat": 37.48545,
+   "lon": 126.4938861,
+   "elev_m": 72.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "44",
+   "lat": 37.4743806,
+   "lon": 126.4920917,
+   "elev_m": 85.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "45",
+   "lat": 37.4803306,
+   "lon": 126.4872306,
+   "elev_m": 66.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "46",
+   "lat": 37.4880667,
+   "lon": 126.5319889,
+   "elev_m": 101.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "47",
+   "lat": 37.48795,
+   "lon": 126.5313444,
+   "elev_m": 103.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "48",
+   "lat": 37.48875,
+   "lon": 126.5314056,
+   "elev_m": 97.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "49",
+   "lat": 37.4882528,
+   "lon": 126.5307167,
+   "elev_m": 106.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "50",
+   "lat": 37.4888694,
+   "lon": 126.5305389,
+   "elev_m": 92.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "51",
+   "lat": 37.4887528,
+   "lon": 126.5297944,
+   "elev_m": 108.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "52",
+   "lat": 37.4890611,
+   "lon": 126.5293,
+   "elev_m": 111.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "53",
+   "lat": 37.4896556,
+   "lon": 126.52905,
+   "elev_m": 111.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "54",
+   "lat": 37.4901917,
+   "lon": 126.5291333,
+   "elev_m": 105.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "55",
+   "lat": 37.4935361,
+   "lon": 126.5161833,
+   "elev_m": 258.0,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "56",
+   "lat": 37.4826889,
+   "lon": 126.5086639,
+   "elev_m": 58.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "57",
+   "lat": 37.4826556,
+   "lon": 126.5095,
+   "elev_m": 59.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "58",
+   "lat": 37.4816556,
+   "lon": 126.5076083,
+   "elev_m": 61.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "59",
+   "lat": 37.4818278,
+   "lon": 126.5083667,
+   "elev_m": 61.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "60",
+   "lat": 37.4817861,
+   "lon": 126.5091444,
+   "elev_m": 64.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "61",
+   "lat": 37.4812222,
+   "lon": 126.5079333,
+   "elev_m": 61.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "62",
+   "lat": 37.4811806,
+   "lon": 126.5087167,
+   "elev_m": 61.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "63",
+   "lat": 37.4811694,
+   "lon": 126.5094806,
+   "elev_m": 64.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "64",
+   "lat": 37.4907444,
+   "lon": 126.507425,
+   "elev_m": 65.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "65",
+   "lat": 37.4907694,
+   "lon": 126.5079917,
+   "elev_m": 69.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "66",
+   "lat": 37.4906194,
+   "lon": 126.5088028,
+   "elev_m": 72.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "67",
+   "lat": 37.4896361,
+   "lon": 126.5101639,
+   "elev_m": 70.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "68",
+   "lat": 37.4916722,
+   "lon": 126.5101806,
+   "elev_m": 77.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "69",
+   "lat": 37.4906833,
+   "lon": 126.5099806,
+   "elev_m": 70.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "70",
+   "lat": 37.4923694,
+   "lon": 126.5099556,
+   "elev_m": 79.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "71",
+   "lat": 37.492075,
+   "lon": 126.5082306,
+   "elev_m": 66.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "73",
+   "lat": 37.4920722,
+   "lon": 126.5092417,
+   "elev_m": 61.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "74",
+   "lat": 37.4925194,
+   "lon": 126.50855,
+   "elev_m": 72.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "75",
+   "lat": 37.4952944,
+   "lon": 126.5090861,
+   "elev_m": 70.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "76",
+   "lat": 37.4955833,
+   "lon": 126.508425,
+   "elev_m": 66.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "77",
+   "lat": 37.495025,
+   "lon": 126.5086028,
+   "elev_m": 65.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "78",
+   "lat": 37.4946861,
+   "lon": 126.5087833,
+   "elev_m": 73.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "79",
+   "lat": 37.4949278,
+   "lon": 126.4910972,
+   "elev_m": 55.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "80",
+   "lat": 37.4930806,
+   "lon": 126.49085,
+   "elev_m": 55.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "81",
+   "lat": 37.5398833,
+   "lon": 126.4602778,
+   "elev_m": 143.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "82",
+   "lat": 37.536125,
+   "lon": 126.4584611,
+   "elev_m": 119.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "83",
+   "lat": 37.535075,
+   "lon": 126.4664306,
+   "elev_m": 107.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "84",
+   "lat": 37.5313306,
+   "lon": 126.4691556,
+   "elev_m": 73.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "85",
+   "lat": 37.4936111,
+   "lon": 126.5163361,
+   "elev_m": 261.0,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "86",
+   "lat": 37.5095389,
+   "lon": 126.5053306,
+   "elev_m": 86.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "87",
+   "lat": 37.5103389,
+   "lon": 126.50875,
+   "elev_m": 118.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "88",
+   "lat": 37.5036861,
+   "lon": 126.49475,
+   "elev_m": 104.5,
+   "type": "Natural High Point"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "89",
+   "lat": 37.4844111,
+   "lon": 126.5004694,
+   "elev_m": 59.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "90",
+   "lat": 37.4848694,
+   "lon": 126.5005056,
+   "elev_m": 59.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "91",
+   "lat": 37.4853722,
+   "lon": 126.5001944,
+   "elev_m": 73.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "92",
+   "lat": 37.4851583,
+   "lon": 126.499625,
+   "elev_m": 70.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "93",
+   "lat": 37.4846222,
+   "lon": 126.499275,
+   "elev_m": 61.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "94",
+   "lat": 37.4841389,
+   "lon": 126.4993528,
+   "elev_m": 61.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "95",
+   "lat": 37.4836583,
+   "lon": 126.4996083,
+   "elev_m": 62.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "96",
+   "lat": 37.4839778,
+   "lon": 126.5003444,
+   "elev_m": 62.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "97",
+   "lat": 37.4960944,
+   "lon": 126.5074056,
+   "elev_m": 71.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "98",
+   "lat": 37.4949111,
+   "lon": 126.4919333,
+   "elev_m": 53.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "99",
+   "lat": 37.4947944,
+   "lon": 126.4923667,
+   "elev_m": 54.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "101",
+   "lat": 37.4822389,
+   "lon": 126.5095056,
+   "elev_m": 54.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "102",
+   "lat": 37.4692111,
+   "lon": 126.3629972,
+   "elev_m": 137.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "103",
+   "lat": 37.44015,
+   "lon": 126.458325,
+   "elev_m": 52.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "104",
+   "lat": 37.4652,
+   "lon": 126.3703056,
+   "elev_m": 55.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "105",
+   "lat": 37.5127944,
+   "lon": 126.4696806,
+   "elev_m": 61.0,
+   "type": "Pylon"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "106",
+   "lat": 37.5029056,
+   "lon": 126.49625,
+   "elev_m": 95.0,
+   "type": "Pylon"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "107",
+   "lat": 37.5089167,
+   "lon": 126.5118306,
+   "elev_m": 90.0,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "108",
+   "lat": 37.4408083,
+   "lon": 126.4319556,
+   "elev_m": 51.5,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "109",
+   "lat": 37.4546,
+   "lon": 126.4819444,
+   "elev_m": 75.5,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "110",
+   "lat": 37.4666361,
+   "lon": 126.4354222,
+   "elev_m": 101.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "111",
+   "lat": 37.4899722,
+   "lon": 126.500525,
+   "elev_m": 92.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "112",
+   "lat": 37.4905861,
+   "lon": 126.4995556,
+   "elev_m": 60.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "113",
+   "lat": 37.492175,
+   "lon": 126.4988444,
+   "elev_m": 69.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "114",
+   "lat": 37.4920611,
+   "lon": 126.4993806,
+   "elev_m": 82.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "115",
+   "lat": 37.4939111,
+   "lon": 126.4985944,
+   "elev_m": 58.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "116",
+   "lat": 37.4775806,
+   "lon": 126.5128722,
+   "elev_m": 73.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "117",
+   "lat": 37.4772472,
+   "lon": 126.5132972,
+   "elev_m": 70.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "118",
+   "lat": 37.4769694,
+   "lon": 126.5137806,
+   "elev_m": 72.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "119",
+   "lat": 37.4774694,
+   "lon": 126.5142472,
+   "elev_m": 72.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "120",
+   "lat": 37.4779722,
+   "lon": 126.5147861,
+   "elev_m": 77.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "122",
+   "lat": 37.4786389,
+   "lon": 126.5137806,
+   "elev_m": 77.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "123",
+   "lat": 37.4781139,
+   "lon": 126.5132583,
+   "elev_m": 77.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "124",
+   "lat": 37.4881083,
+   "lon": 126.5027056,
+   "elev_m": 83.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "125",
+   "lat": 37.4891778,
+   "lon": 126.5021417,
+   "elev_m": 81.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "126",
+   "lat": 37.4886167,
+   "lon": 126.5021333,
+   "elev_m": 81.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "127",
+   "lat": 37.4877583,
+   "lon": 126.5014556,
+   "elev_m": 78.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "128",
+   "lat": 37.4879694,
+   "lon": 126.5021361,
+   "elev_m": 80.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "129",
+   "lat": 37.4869528,
+   "lon": 126.4991111,
+   "elev_m": 74.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "130",
+   "lat": 37.4874333,
+   "lon": 126.4991222,
+   "elev_m": 74.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "132",
+   "lat": 37.4876889,
+   "lon": 126.4999722,
+   "elev_m": 74.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "133",
+   "lat": 37.4874833,
+   "lon": 126.5006806,
+   "elev_m": 77.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "134",
+   "lat": 37.4872278,
+   "lon": 126.4998167,
+   "elev_m": 71.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "135",
+   "lat": 37.490975,
+   "lon": 126.4989,
+   "elev_m": 58.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "136",
+   "lat": 37.4904667,
+   "lon": 126.4998917,
+   "elev_m": 72.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "137",
+   "lat": 37.49125,
+   "lon": 126.4965861,
+   "elev_m": 65.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "138",
+   "lat": 37.4936083,
+   "lon": 126.4909556,
+   "elev_m": 53.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "139",
+   "lat": 37.4907417,
+   "lon": 126.4976694,
+   "elev_m": 54.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "140",
+   "lat": 37.4932417,
+   "lon": 126.4968583,
+   "elev_m": 76.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "142",
+   "lat": 37.4557389,
+   "lon": 126.4804333,
+   "elev_m": 59.0,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "143",
+   "lat": 37.4554583,
+   "lon": 126.4805861,
+   "elev_m": 61.5,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "144",
+   "lat": 37.4552194,
+   "lon": 126.480825,
+   "elev_m": 62.0,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "145",
+   "lat": 37.4550167,
+   "lon": 126.4810639,
+   "elev_m": 62.5,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "146",
+   "lat": 37.4548056,
+   "lon": 126.4813556,
+   "elev_m": 62.5,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "147",
+   "lat": 37.4546,
+   "lon": 126.4815639,
+   "elev_m": 62.5,
+   "type": "Pole"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "148",
+   "lat": 37.49015,
+   "lon": 126.4992556,
+   "elev_m": 59.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "149",
+   "lat": 37.4913028,
+   "lon": 126.5008278,
+   "elev_m": 108.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "150",
+   "lat": 37.4778694,
+   "lon": 126.5072611,
+   "elev_m": 71.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "151",
+   "lat": 37.4782972,
+   "lon": 126.5070778,
+   "elev_m": 68.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "152",
+   "lat": 37.4787083,
+   "lon": 126.5070556,
+   "elev_m": 74.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "153",
+   "lat": 37.4785056,
+   "lon": 126.5078222,
+   "elev_m": 73.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "154",
+   "lat": 37.4787028,
+   "lon": 126.5080333,
+   "elev_m": 68.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "155",
+   "lat": 37.4794833,
+   "lon": 126.5075222,
+   "elev_m": 71.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "156",
+   "lat": 37.4792028,
+   "lon": 126.5069972,
+   "elev_m": 77.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "157",
+   "lat": 37.4798028,
+   "lon": 126.5066111,
+   "elev_m": 82.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "158",
+   "lat": 37.4802778,
+   "lon": 126.5070639,
+   "elev_m": 77.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "159",
+   "lat": 37.4804333,
+   "lon": 126.5059972,
+   "elev_m": 76.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "160",
+   "lat": 37.4800056,
+   "lon": 126.5054333,
+   "elev_m": 77.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "162",
+   "lat": 37.4793333,
+   "lon": 126.5054139,
+   "elev_m": 71.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "163",
+   "lat": 37.4792917,
+   "lon": 126.5048917,
+   "elev_m": 71.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "164",
+   "lat": 37.4788639,
+   "lon": 126.5057472,
+   "elev_m": 71.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "165",
+   "lat": 37.4788306,
+   "lon": 126.5062556,
+   "elev_m": 71.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "166",
+   "lat": 37.4783639,
+   "lon": 126.5064333,
+   "elev_m": 71.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "167",
+   "lat": 37.5112694,
+   "lon": 126.4965833,
+   "elev_m": 64.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "168",
+   "lat": 37.4916389,
+   "lon": 126.5003139,
+   "elev_m": 60.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "169",
+   "lat": 37.4904333,
+   "lon": 126.4979917,
+   "elev_m": 56.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "170",
+   "lat": 37.4898,
+   "lon": 126.4994833,
+   "elev_m": 75.0,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "172",
+   "lat": 37.489575,
+   "lon": 126.4989194,
+   "elev_m": 89.5,
+   "type": "Building"
+  },
+  {
+   "icao": "RKSI",
+   "chart": "2-18",
+   "amdt": "AIP AMDT 11/26",
+   "no": "173",
+   "lat": 37.4893056,
+   "lon": 126.4992917,
+   "elev_m": 86.5,
+   "type": "Building"
+  }
+ ],
  "issues": [
   {
    "level": "warn",

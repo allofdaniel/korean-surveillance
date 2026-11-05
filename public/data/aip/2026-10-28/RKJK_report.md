@@ -36,3 +36,40 @@
 | IAP | VOR/DME RWY 36 from TRASK | 36 | 2 |  |  |
 | IAP | RNP RWY 18  | 18 | 6 |  |  |
 | IAP | RNP RWY 36  | 36 | 7 |  |  |
+
+## 재래식 절차 (기준 코딩 구조 + AIP 좌표, 차트 대조)
+기준 DB의 레그 구조만 사용하고 좌표는 AIP(항행안전시설 위치·방위/DME·활주로 시단·fix 표)로 다시 계산. 차트 대조 = 현재 AIP 차트에 fix 이름·코스가 실려 있는 비율.
+
+| 종류 | 절차 | 결과 | fix 대조 | 코스 대조 | 기준 대비 최대 편차 | 근거 차트 | 비고 |
+|---|---|---|---|---|---|---|---|
+| sids | ENTEL3.RW18 | 반영 | 100% | 67% | 0 m | (2-2) SID.pdf p3 | AIP 미확인 fix: KUZ30; heading 구간 근사 |
+| sids | ENTEL3.RW36 | 반영 | 100% | 67% | 0 m | (2-2) SID.pdf p3 (OCR) | AIP 미확인 fix: KUZ30; heading 구간 근사 |
+| sids | LINTA3.RW18 | 반영 | 100% | 50% | 0 m | (2-2) SID.pdf p1 (OCR) | heading 구간 근사 |
+| sids | LINTA3.RW36 | 반영 | 100% | 50% | 0 m | (2-2) SID.pdf p1 (OCR) | heading 구간 근사 |
+| iaps | I18.EKIVA | 제외: 현재 AIP 차트에서 확인 안 됨 | 50% | 100% |  | (2-5) INSTR APCH CHART.pdf p1 (OCR) |  |
+| iaps | I18.JULOP | 제외: 현재 AIP 차트에서 확인 안 됨 | 67% | 100% |  | (2-5) INSTR APCH CHART.pdf p1 (OCR) |  |
+| iaps | I18.WWOLF | 제외: 현재 AIP 차트에서 확인 안 됨 | 50% | 100% |  | (2-5) INSTR APCH CHART.pdf p1 (OCR) |  |
+| iaps | I18.WYZRD | 제외: 현재 AIP 차트에서 확인 안 됨 | 50% | 50% |  | (2-5) INSTR APCH CHART.pdf p1 (OCR) |  |
+| iaps | I36.EKIVA | 제외: 현재 AIP 차트에서 확인 안 됨 | 60% | 100% |  | (2-5) INSTR APCH CHART.pdf p3 (OCR) |  |
+| iaps | I36.WWOLF | 반영 | 75% | 100% | 3703 m | (2-5) INSTR APCH CHART.pdf p3 (OCR) |  |
+| iaps | I36.WYZRD | 반영 | 75% | 100% | 3703 m | (2-5) INSTR APCH CHART.pdf p3 (OCR) |  |
+| iaps | S18 | 반영 | 100% | 100% | 3705 m | (2-5) INSTR APCH CHART.pdf p5 |  |
+| iaps | S18.COBET | 반영 | 100% | 100% | 3705 m | (2-5) INSTR APCH CHART.pdf p5 |  |
+| iaps | S18.TRASK | 반영 | 75% | 100% | 3705 m | (2-5) INSTR APCH CHART.pdf p5 |  |
+| iaps | S18.WWOLF | 제외: 현재 AIP 차트에서 확인 안 됨 | 67% | 100% |  | (2-5) INSTR APCH CHART.pdf p5 (OCR) |  |
+| iaps | S18.WYZRD | 제외: 현재 AIP 차트에서 확인 안 됨 | 67% | 100% |  | (2-5) INSTR APCH CHART.pdf p5 (OCR) |  |
+| iaps | S36 | 반영 | 80% | 100% | 3703 m | (2-5) INSTR APCH CHART.pdf p7 |  |
+| iaps | S36.COBET | 반영 | 75% | 100% | 3705 m | (2-5) INSTR APCH CHART.pdf p7 |  |
+| iaps | S36.TRASK | 반영 | 100% | 100% | 3703 m | (2-5) INSTR APCH CHART.pdf p7 |  |
+| iaps | S36.WWOLF | 제외: 현재 AIP 차트에서 확인 안 됨 | 67% | 100% |  | (2-5) INSTR APCH CHART.pdf p7 (OCR) |  |
+| iaps | S36.WYZRD | 제외: 현재 AIP 차트에서 확인 안 됨 | 67% | 100% |  | (2-5) INSTR APCH CHART.pdf p7 (OCR) |  |
+| iaps | T18 | 반영 | 100% | 100% | 3705 m | (2-5) INSTR APCH CHART.pdf p5 (OCR) |  |
+| iaps | T18.COBET | 반영 | 100% | 100% | 3705 m | (2-5) INSTR APCH CHART.pdf p5 (OCR) |  |
+| iaps | T18.TRASK | 반영 | 75% | 100% | 3705 m | (2-5) INSTR APCH CHART.pdf p5 (OCR) |  |
+| iaps | T18.WWOLF | 제외: 현재 AIP 차트에서 확인 안 됨 | 67% | 100% |  | (2-5) INSTR APCH CHART.pdf p5 (OCR) |  |
+| iaps | T18.WYZRD | 제외: 현재 AIP 차트에서 확인 안 됨 | 67% | 100% |  | (2-5) INSTR APCH CHART.pdf p5 (OCR) |  |
+| iaps | T36 | 반영 | 80% | 100% | 3703 m | (2-5) INSTR APCH CHART.pdf p7 (OCR) |  |
+| iaps | T36.COBET | 반영 | 75% | 100% | 3705 m | (2-5) INSTR APCH CHART.pdf p7 (OCR) |  |
+| iaps | T36.TRASK | 반영 | 100% | 100% | 3703 m | (2-5) INSTR APCH CHART.pdf p7 (OCR) |  |
+| iaps | T36.WWOLF | 제외: 현재 AIP 차트에서 확인 안 됨 | 67% | 100% |  | (2-5) INSTR APCH CHART.pdf p7 (OCR) |  |
+| iaps | T36.WYZRD | 제외: 현재 AIP 차트에서 확인 안 됨 | 67% | 100% |  | (2-5) INSTR APCH CHART.pdf p7 (OCR) |  |
