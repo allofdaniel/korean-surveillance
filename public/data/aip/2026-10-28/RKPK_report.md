@@ -1,8 +1,8 @@
 # RKPK AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 36개 / Fix 48개 / 홀딩 7개 / 장애물 225개
+- 절차 36개 / Fix 48개 / 홀딩 7개 / 장애물 238개
 - 지도 반영 35개 / 제외(검토 필요) 1개
-- 원본: (2-11) AD OBSTACLE CHART TYPE B_1760589223.pdf, (2-14) SID(1).pdf, (2-17) STAR.pdf, (2-21) INSTR APCH CHART(1).pdf, RKPK-TEXT.pdf
+- 원본: (2-11) AD OBSTACLE CHART TYPE B_1760589223.pdf, (2-14) SID(1).pdf, (2-17) STAR.pdf, (2-21) INSTR APCH CHART(1).pdf, (2-7) AD OBSTACLE CHART TYPE A(2).pdf, RKPK-TEXT.pdf
 
 ## 검증 결과
 - [warn] fix RW18R differs 600 m in AD2.12
@@ -55,7 +55,7 @@
 
 | 종류 | 절차 | 결과 | fix 대조 | 코스 대조 | 기준 대비 최대 편차 | 근거 차트 | 비고 |
 |---|---|---|---|---|---|---|---|
-| sids | ATLAX2.RW36B | 제외: 현재 AIP 차트에서 확인 안 됨 | 0% | 33% |  | (2-14) SID(1).pdf p5 (OCR) |  |
+| sids | ATLAX2.RW36B | 제외: 현재 AIP 차트에서 확인 안 됨 | 0% | 67% |  | (2-7) AD OBSTACLE CHART TYPE A(2).pdf p1 (OCR) |  |
 | sids | BAHDA2.APELA | 반영 | 100% | 100% | 259 m | (2-14) SID(1).pdf p3 |  |
 | sids | BAHDA2.BESNA | 반영 | 100% | 100% | 13 m | (2-14) SID(1).pdf p3 | heading 구간 근사 |
 | sids | BAHDA2.ENGOT | 반영 | 100% | 100% | 13 m | (2-14) SID(1).pdf p3 | heading 구간 근사 |
@@ -75,7 +75,7 @@
 | sids | BURIM3.PSN | 제외: 현재 AIP 차트에서 확인 안 됨 | 50% | 100% |  | (2-14) SID(1).pdf p1 (OCR) |  |
 | sids | BURIM3.RW18L | 제외: 현재 AIP 차트에서 확인 안 됨 | 0% | 50% |  | (2-14) SID(1).pdf p3 (OCR) |  |
 | sids | BURIM3.RW18R | 제외: 현재 AIP 차트에서 확인 안 됨 | 0% | 50% |  | (2-14) SID(1).pdf p3 (OCR) |  |
-| sids | GIMHA2.RW18B | 반영 | 100% | 50% | 0 m | (2-14) SID(1).pdf p5 (OCR) | heading 구간 근사 |
+| sids | GIMHA2.RW18B | 반영 | 100% | 100% | 0 m | (2-7) AD OBSTACLE CHART TYPE A(2).pdf p1 (OCR) | heading 구간 근사 |
 | sids | GIMHA2.RW36B | 반영 | 100% | 50% | 0 m | (2-14) SID(1).pdf p5 (OCR) | heading 구간 근사 |
 | sids | OPONO3.BESNA | 제외: 현재 AIP 차트에서 확인 안 됨 | 50% | 100% |  | (2-14) SID(1).pdf p1 (OCR) |  |
 | sids | SOORO2.BESNA | 반영 | 100% | 100% | 329 m | (2-14) SID(1).pdf p1 (OCR) |  |
@@ -88,7 +88,7 @@
 | sids | ULSUK3.KALOD | 제외: 현재 AIP 차트에서 확인 안 됨 | 50% | 0% |  | (2-14) SID(1).pdf p1 (OCR) |  |
 | sids | ULSUK3.MASTA | 제외: 현재 AIP 차트에서 확인 안 됨 | 50% | 0% |  | (2-14) SID(1).pdf p1 (OCR) |  |
 | sids | ULSUK3.PSN | 제외: 현재 AIP 차트에서 확인 안 됨 | 50% | 50% |  | (2-14) SID(1).pdf p1 (OCR) |  |
-| sids | ULSUK3.RW18B | 제외: 현재 AIP 차트에서 확인 안 됨 | 0% | 0% |  | (2-14) SID(1).pdf p3 (OCR) |  |
+| sids | ULSUK3.RW18B | 제외: 현재 AIP 차트에서 확인 안 됨 | 0% | 33% |  | (2-7) AD OBSTACLE CHART TYPE A(2).pdf p1 (OCR) |  |
 | sids | ULSUK3.SAPDI | 제외: 현재 AIP 차트에서 확인 안 됨 | 50% | 0% |  | (2-14) SID(1).pdf p5 (OCR) |  |
 | sids | ULSUK3.TOPAX | 제외: 현재 AIP 차트에서 확인 안 됨 | 50% | 100% |  | (2-14) SID(1).pdf p1 (OCR) |  |
 | iaps | D36L | 제외: 현재 AIP 차트에서 확인 안 됨 | 0% | 0% |  | (2-21) INSTR APCH CHART(1).pdf p5 (OCR) |  |

@@ -1,6 +1,6 @@
 # RKJK AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 23개 / Fix 34개 / 홀딩 0개 / 장애물 0개
+- 절차 23개 / Fix 34개 / 홀딩 0개 / 장애물 2개
 - 지도 반영 23개 / 제외(검토 필요) 0개
 - 원본: (2-2) SID.pdf, (2-5) INSTR APCH CHART.pdf, RKJK-TEXT.pdf
 

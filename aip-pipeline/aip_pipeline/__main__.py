@@ -69,6 +69,7 @@ def main(argv=None):
     b.add_argument('--inbox', required=True); b.add_argument('--airac', required=True); b.add_argument('--out', required=True)
     b.add_argument('--app'); b.add_argument('--enr-fixes', help='JSON {name:[lat,lon]} for en-route fixes')
     b.add_argument('--only', help='comma-separated ICAO filter')
+    b.add_argument('--aviation-data', help='app aviation_data.json whose obstacles list gets the AIP obstacles')
     b.add_argument('--ref', help='reference nav database JSON (structure/validation only, never exported)')
     a = ap.parse_args(argv)
     files = sorted(f for f in glob.glob(os.path.join(a.inbox, '**', '*'), recursive=True) if f.lower().endswith(('.pdf', '.html', '.htm')))
@@ -89,10 +90,12 @@ def main(argv=None):
         a.ref = dflt if os.path.exists(dflt) else None
     ref = json.load(open(a.ref, encoding='utf-8')) if a.ref and a.app else None
     summary = []
+    all_obst = {}
     for icao, fl in sorted(groups.items()):
         if icao == 'UNKNOWN' or (a.only and icao not in a.only.split(',')):
             summary.append(f"skip {icao}: {len(fl)} files"); continue
         ds, log = build_airport(icao, fl, enr)
+        all_obst[icao] = ds['obstacles']
         geometry(ds)
         json.dump(ds, open(os.path.join(outdir, f'{icao}.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1, default=list)
         json.dump(to_geojson(ds), open(os.path.join(outdir, f'{icao}.geojson'), 'w', encoding='utf-8'), ensure_ascii=False)
@@ -105,6 +108,19 @@ def main(argv=None):
                 open(os.path.join(outdir, f'{icao}_report.md'), 'a', encoding='utf-8').write(template_md(ds))
         n_err = len([i for i in ds['issues'] if i['level'] == 'error']); n_w = len([i for i in ds['issues'] if i['level'] == 'warn'])
         summary.append(f"{icao}: procs={len(ds['procedures'])} fixes={len(ds['fixes'])} obst={len(ds['obstacles'])} errors={n_err} warns={n_w} rejected={len([p for p in ds['procedures'] if p.get('qa') == 'reject'])}")
+    if a.aviation_data or (a.app and os.path.exists(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(a.app))), 'aviation_data.json'))):
+        from . import obstacles as om
+        avp = a.aviation_data or os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(a.app))), 'aviation_data.json')
+        av = json.load(open(avp, encoding='utf-8'))
+        done = set(all_obst)
+        from .geo import inv as _inv
+        arps = [tuple(app_ap['lat_lon']) for app_ap in []]
+        arps = [(x['lat'], x['lon']) for x in (app or {}).get('airports', []) if x.get('icao') in done]
+        # legacy (non-AIP) obstacles near the converted airports are replaced by the AIP set
+        keep = [o for o in av.get('obstacles', []) if not str(o.get('source', '')).startswith('AIP')
+                and not any(_inv((o['lat'], o['lon']), p)[1] < 25 for p in arps)]
+        av['obstacles'] = keep + [x for ic in sorted(all_obst) for x in om.to_app(all_obst[ic])]
+        json.dump(av, open(avp, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     if app is not None:
         json.dump(app, open(a.app, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     open(os.path.join(outdir, 'SUMMARY.txt'), 'w').write('\n'.join(summary) + '\n')

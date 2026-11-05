@@ -1,6 +1,6 @@
 {
  "icao": "RKJY",
- "built_at": "2026-11-05T05:58:43.457586Z",
+ "built_at": "2026-11-05T06:18:19.759401Z",
  "sources": [
   {
    "file": "(2-12) STAR(1).pdf",
@@ -9,6 +9,10 @@
   {
    "file": "(2-15) INSTR APCH CHART.pdf",
    "sha": "482398d699996c5f"
+  },
+  {
+   "file": "(2-5) AD OBSTACLE CHART TYPE A(4).pdf",
+   "sha": "b070772149cf31a4"
   },
   {
    "file": "(2-7) AD OBSTACLE CHART TYPE B.pdf",
@@ -4383,1384 +4387,2940 @@
  ],
  "obstacles": [
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "1",
+   "id": "RKJYOB001",
+   "lat": 34.936916667,
+   "lon": 127.642083333,
+   "elev_m": 487.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "17/APCH 35/TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB002",
+   "lat": 34.996083333,
+   "lon": 127.639916667,
+   "elev_m": 571.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pylon",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB003",
+   "lat": 35.106305556,
+   "lon": 127.621666667,
+   "elev_m": 1216.8,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB004",
+   "lat": 35.089805556,
+   "lon": 127.530444444,
+   "elev_m": 858.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB005",
+   "lat": 35.025,
+   "lon": 127.560694444,
+   "elev_m": 555.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB006",
+   "lat": 34.975277778,
+   "lon": 127.555194444,
+   "elev_m": 311.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB007",
+   "lat": 34.916472222,
+   "lon": 127.566222222,
+   "elev_m": 120.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB008",
+   "lat": 35.059833333,
+   "lon": 127.528222222,
+   "elev_m": 729.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB009",
+   "lat": 35.027444444,
+   "lon": 127.558166667,
+   "elev_m": 595.6,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB010",
+   "lat": 35.001305556,
+   "lon": 127.313638889,
+   "elev_m": 887.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB011",
+   "lat": 34.971722222,
+   "lon": 127.506388889,
+   "elev_m": 355.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB012",
+   "lat": 34.896638889,
+   "lon": 127.562916667,
+   "elev_m": 179.8,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pylon",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB013",
+   "lat": 34.924722222,
+   "lon": 127.350055556,
+   "elev_m": 668.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB014",
+   "lat": 34.934277778,
+   "lon": 127.625583333,
+   "elev_m": 399.9,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB015",
+   "lat": 34.868444444,
+   "lon": 127.609555556,
+   "elev_m": 19.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB016",
+   "lat": 34.840833333,
+   "lon": 127.607972222,
+   "elev_m": 60.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB017",
+   "lat": 34.808333333,
+   "lon": 127.624861111,
+   "elev_m": 158.8,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Light",
+   "marking": "NIL",
+   "remarks": "35/APCH 17/TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB018",
+   "lat": 34.83525,
+   "lon": 127.592861111,
+   "elev_m": 328.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2",
+    "AD CHART 2-7 #13"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB019",
+   "lat": 34.817388889,
+   "lon": 127.608833333,
+   "elev_m": 366.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB020",
+   "lat": 34.738972222,
+   "lon": 127.708194444,
+   "elev_m": 386.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB021",
+   "lat": 34.750388889,
+   "lon": 127.645277778,
+   "elev_m": 278.6,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2",
+    "AD CHART 2-7 #33"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB022",
+   "lat": 34.842638889,
+   "lon": 127.603638889,
+   "elev_m": 249.9,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB023",
+   "lat": 34.62325,
+   "lon": 127.76775,
+   "elev_m": 460.6,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB024",
+   "lat": 34.652416667,
+   "lon": 127.750055556,
+   "elev_m": 412.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": "35/APCH 17/TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB025",
+   "lat": 34.744805556,
+   "lon": 127.64025,
+   "elev_m": 348.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB026",
+   "lat": 34.818444444,
+   "lon": 127.648388889,
+   "elev_m": 56.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB027",
+   "lat": 34.818277778,
+   "lon": 127.648166667,
+   "elev_m": 55.8,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB028",
+   "lat": 34.814416667,
+   "lon": 127.647472222,
+   "elev_m": 125.6,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": "Marked/LGTD",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2",
+    "AD CHART 2-7 #133"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB029",
+   "lat": 34.81475,
+   "lon": 127.647472222,
+   "elev_m": 125.6,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": "Marked/LGTD",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2",
+    "AD CHART 2-7 #134"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB030",
+   "lat": 34.813722222,
+   "lon": 127.617611111,
+   "elev_m": 56.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB031",
+   "lat": 34.827722222,
+   "lon": 127.58075,
+   "elev_m": 104.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2",
+    "AD CHART 2-7 #136"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB032",
+   "lat": 34.828333333,
+   "lon": 127.580638889,
+   "elev_m": 105.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2",
+    "AD CHART 2-7 #137"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB033",
+   "lat": 34.828,
+   "lon": 127.580416667,
+   "elev_m": 105.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2",
+    "AD CHART 2-7 #138"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB034",
+   "lat": 34.848972222,
+   "lon": 127.615444444,
+   "elev_m": 19.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Mast",
+   "marking": null,
+   "remarks": "32.8 ft Marked/ LGTD RWY 17, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB035",
+   "lat": 34.848861111,
+   "lon": 127.615472222,
+   "elev_m": 13.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "RVR Maintenance Structure",
+   "marking": null,
+   "remarks": "14.4 ft Marked/ LGTD RWY 17, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB036",
+   "lat": 34.848472222,
+   "lon": 127.615666667,
+   "elev_m": 13.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "RVR Maintenance Structure",
+   "marking": null,
+   "remarks": "14.4 ft Marked/ LGTD RWY 17, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB037",
+   "lat": 34.836444444,
+   "lon": 127.621555556,
+   "elev_m": 20.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Mast",
+   "marking": null,
+   "remarks": "32.8 ft Marked/ LGTD RWY 35, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB038",
+   "lat": 34.836555556,
+   "lon": 127.6215,
+   "elev_m": 14.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "RVR Maintenance Structure",
+   "marking": null,
+   "remarks": "14.4 ft Marked/ LGTD RWY 35, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB039",
+   "lat": 34.836972222,
+   "lon": 127.621277778,
+   "elev_m": 14.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "RVR Maintenance Structure",
+   "marking": null,
+   "remarks": "14.4 ft Marked/ LGTD RWY 35, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB040",
+   "lat": 34.853611111,
+   "lon": 127.611722222,
+   "elev_m": 10.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Localizer Foundation Structure",
+   "marking": null,
+   "remarks": "15.0 ft Marked/LGTD RWY 35/APCH, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB041",
+   "lat": 34.853583333,
+   "lon": 127.611777778,
+   "elev_m": 10.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "ALS",
+   "marking": null,
+   "remarks": "15.9 ft NIL RWY 17/APCH, Material(Aluminum/Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB042",
+   "lat": 34.848416667,
+   "lon": 127.615388889,
+   "elev_m": 16.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Cone (WDI)",
+   "marking": null,
+   "remarks": "21.7 ft LGTD RWY 17, Material(Aluminum)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Unknown",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB043",
+   "lat": 34.836111111,
+   "lon": 127.619194444,
+   "elev_m": 16.8,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Cone (WDI)",
+   "marking": null,
+   "remarks": "21.7 ft LGTD RWY 35, Material(Aluminum)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Unknown",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB044",
+   "lat": 34.849166667,
+   "lon": 127.615,
+   "elev_m": 23.8,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "GP/DME Antenna",
+   "marking": null,
+   "remarks": "47.9 ft Marked/LGTD RWY 17/APCH, Material(Aluminum)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB045",
+   "lat": 34.849166667,
+   "lon": 127.615,
+   "elev_m": 12.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "GP/DME Shelter",
+   "marking": null,
+   "remarks": "9.8 ft Marked RWY 17/APCH, Material(FRP)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB046",
+   "lat": 34.849722222,
+   "lon": 127.614722222,
+   "elev_m": 14.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "GP NFM Antenna",
+   "marking": null,
+   "remarks": "19.7 ft Marked/LGTD RWY 17/APCH, Material(Aluminum)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB047",
+   "lat": 34.836111111,
+   "lon": 127.621666667,
+   "elev_m": 24.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "GP/DME Antenna",
+   "marking": null,
+   "remarks": "47.9 ft Marked/LGTD RWY 35/APCH, Material(Aluminum)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB048",
+   "lat": 34.836111111,
+   "lon": 127.621666667,
+   "elev_m": 12.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "GP/DME Shelter",
+   "marking": null,
+   "remarks": "9.8 ft Marked RWY 35/APCH, Material(FRP)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJYOB049",
+   "lat": 34.835555556,
+   "lon": 127.621944444,
+   "elev_m": 15.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "GP NFM Antenna",
+   "marking": null,
+   "remarks": "19.7 ft Marked/LGTD RWY 35/APCH, Material(Aluminum)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJY-2-5-1",
+   "lat": 34.8071972,
+   "lon": 127.6408167,
+   "elev_m": 111.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJY-2-5-2",
+   "lat": 34.7671528,
+   "lon": 127.6482083,
+   "elev_m": 217.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #2",
+    "AD CHART 2-7 #60"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJY-2-6-1",
+   "lat": 34.8906528,
+   "lon": 127.6005167,
+   "elev_m": 74.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJY-2-6-2",
+   "lat": 34.892725,
+   "lon": 127.6004806,
+   "elev_m": 88.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
+  },
+  {
+   "id": "RKJY-2-7-1",
    "lat": 34.8802778,
    "lon": 127.6177778,
    "elev_m": 80.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "21",
+   "id": "RKJY-2-7-21",
    "lat": 34.8341667,
    "lon": 127.595,
    "elev_m": 319.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #21"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "41",
+   "id": "RKJY-2-7-41",
    "lat": 34.8483333,
    "lon": 127.6163889,
    "elev_m": 22.5,
-   "type": "Tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #41"
+   ],
+   "category": "Tree",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "61",
+   "id": "RKJY-2-7-61",
    "lat": 34.8141667,
    "lon": 127.6475,
    "elev_m": 125.0,
-   "type": "Chimney"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Chimney",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #61"
+   ],
+   "category": "Chimney",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "81",
+   "id": "RKJY-2-7-81",
    "lat": 34.8563889,
    "lon": 127.5905556,
    "elev_m": 58.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #81"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "101",
+   "id": "RKJY-2-7-101",
    "lat": 34.8180556,
    "lon": 127.6186111,
    "elev_m": 68.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #101"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "121",
+   "id": "RKJY-2-7-121",
    "lat": 34.8147222,
    "lon": 127.6477778,
    "elev_m": 84.43,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #121"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "2",
+   "id": "RKJY-2-7-2",
    "lat": 34.8697222,
    "lon": 127.5861111,
    "elev_m": 89.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #2"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "22",
+   "id": "RKJY-2-7-22",
    "lat": 34.8294444,
    "lon": 127.5941667,
    "elev_m": 297.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #22"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "42",
+   "id": "RKJY-2-7-42",
    "lat": 34.8413889,
    "lon": 127.6291667,
    "elev_m": 56.0,
-   "type": "Tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #42"
+   ],
+   "category": "Tree",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "62",
+   "id": "RKJY-2-7-62",
    "lat": 34.8222222,
    "lon": 127.6483333,
    "elev_m": 65.0,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #62"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "82",
+   "id": "RKJY-2-7-82",
    "lat": 34.8575,
    "lon": 127.5888889,
    "elev_m": 97.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #82"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "102",
+   "id": "RKJY-2-7-102",
    "lat": 34.8230556,
    "lon": 127.6113889,
    "elev_m": 84.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #102"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "122",
+   "id": "RKJY-2-7-122",
    "lat": 34.8147222,
    "lon": 127.6472222,
    "elev_m": 78.71,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #122"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "3",
+   "id": "RKJY-2-7-3",
    "lat": 34.8680556,
    "lon": 127.5794444,
    "elev_m": 89.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #3"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "23",
+   "id": "RKJY-2-7-23",
    "lat": 34.8291667,
    "lon": 127.5972222,
    "elev_m": 309.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #23"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "43",
+   "id": "RKJY-2-7-43",
    "lat": 34.8688889,
    "lon": 127.5861111,
    "elev_m": 80.0,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #43"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "63",
+   "id": "RKJY-2-7-63",
    "lat": 34.825,
    "lon": 127.6461111,
    "elev_m": 55.5,
-   "type": "Chimney"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Chimney",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #63"
+   ],
+   "category": "Chimney",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "83",
+   "id": "RKJY-2-7-83",
    "lat": 34.8602778,
    "lon": 127.5858333,
    "elev_m": 56.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #83"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "103",
+   "id": "RKJY-2-7-103",
    "lat": 34.8263889,
    "lon": 127.6077778,
    "elev_m": 86.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #103"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "123",
+   "id": "RKJY-2-7-123",
    "lat": 34.815,
    "lon": 127.6472222,
    "elev_m": 75.24,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #123"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "4",
+   "id": "RKJY-2-7-4",
    "lat": 34.8666667,
    "lon": 127.5761111,
    "elev_m": 144.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #4"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "24",
+   "id": "RKJY-2-7-24",
    "lat": 34.8297222,
    "lon": 127.6,
    "elev_m": 299.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #24"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "44",
+   "id": "RKJY-2-7-44",
    "lat": 34.8647222,
    "lon": 127.5777778,
    "elev_m": 86.0,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #44"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "64",
+   "id": "RKJY-2-7-64",
    "lat": 34.8286111,
    "lon": 127.6555556,
    "elev_m": 88.0,
-   "type": "Chimney"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Chimney",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #64"
+   ],
+   "category": "Chimney",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "84",
+   "id": "RKJY-2-7-84",
    "lat": 34.8630556,
    "lon": 127.5813889,
    "elev_m": 83.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #84"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "104",
+   "id": "RKJY-2-7-104",
    "lat": 34.8277778,
    "lon": 127.6072222,
    "elev_m": 85.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #104"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "124",
+   "id": "RKJY-2-7-124",
    "lat": 34.8141667,
    "lon": 127.6180556,
    "elev_m": 69.7,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #124"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "5",
+   "id": "RKJY-2-7-5",
    "lat": 34.8633333,
    "lon": 127.5758333,
    "elev_m": 147.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #5"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "25",
+   "id": "RKJY-2-7-25",
    "lat": 34.8125,
    "lon": 127.5988889,
    "elev_m": 375.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #25"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "45",
+   "id": "RKJY-2-7-45",
    "lat": 34.8530556,
    "lon": 127.5836111,
    "elev_m": 145.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #45"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "65",
+   "id": "RKJY-2-7-65",
    "lat": 34.8155556,
    "lon": 127.6433333,
    "elev_m": 140.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #65"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "85",
+   "id": "RKJY-2-7-85",
    "lat": 34.8663889,
    "lon": 127.5802778,
    "elev_m": 94.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #85"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "105",
+   "id": "RKJY-2-7-105",
    "lat": 34.8019444,
    "lon": 127.6141667,
    "elev_m": 177.0,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #105"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "125",
+   "id": "RKJY-2-7-125",
    "lat": 34.8277778,
    "lon": 127.5808333,
    "elev_m": 98.45,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #125"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "6",
+   "id": "RKJY-2-7-6",
    "lat": 34.8608333,
    "lon": 127.6036111,
    "elev_m": 46.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #6"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "26",
+   "id": "RKJY-2-7-26",
    "lat": 34.8152778,
    "lon": 127.6002778,
    "elev_m": 380.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #26"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "46",
+   "id": "RKJY-2-7-46",
    "lat": 34.8408333,
    "lon": 127.5919444,
    "elev_m": 88.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #46"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "66",
+   "id": "RKJY-2-7-66",
    "lat": 34.8675,
    "lon": 127.5802778,
    "elev_m": 82.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #66"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "86",
+   "id": "RKJY-2-7-86",
    "lat": 34.8483333,
    "lon": 127.5763889,
    "elev_m": 237.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #86"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "106",
+   "id": "RKJY-2-7-106",
    "lat": 34.8019444,
    "lon": 127.6108333,
    "elev_m": 230.0,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #106"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "126",
+   "id": "RKJY-2-7-126",
    "lat": 34.8280556,
    "lon": 127.5808333,
    "elev_m": 101.39,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #126"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "7",
+   "id": "RKJY-2-7-7",
    "lat": 34.8680556,
    "lon": 127.5841667,
    "elev_m": 122.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #7"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "27",
+   "id": "RKJY-2-7-27",
    "lat": 34.8144444,
    "lon": 127.6225,
    "elev_m": 78.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #27"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "47",
+   "id": "RKJY-2-7-47",
    "lat": 34.8530556,
    "lon": 127.5894444,
    "elev_m": 130.0,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #47"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "67",
+   "id": "RKJY-2-7-67",
    "lat": 34.8680556,
    "lon": 127.5819444,
    "elev_m": 146.5,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #67"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "87",
+   "id": "RKJY-2-7-87",
    "lat": 34.8075,
    "lon": 127.5952778,
    "elev_m": 247.0,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #87"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "107",
+   "id": "RKJY-2-7-107",
    "lat": 34.8080556,
    "lon": 127.625,
    "elev_m": 157.0,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #107"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "127",
+   "id": "RKJY-2-7-127",
    "lat": 34.8141667,
    "lon": 127.6180556,
    "elev_m": 69.16,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #127"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "8",
+   "id": "RKJY-2-7-8",
    "lat": 34.865,
    "lon": 127.5816667,
    "elev_m": 105.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #8"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "28",
+   "id": "RKJY-2-7-28",
    "lat": 34.8175,
    "lon": 127.6088889,
    "elev_m": 370.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #28"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "48",
+   "id": "RKJY-2-7-48",
    "lat": 34.8480556,
    "lon": 127.5977778,
    "elev_m": 63.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #48"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "68",
+   "id": "RKJY-2-7-68",
    "lat": 34.8536111,
    "lon": 127.5905556,
    "elev_m": 102.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #68"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "88",
+   "id": "RKJY-2-7-88",
    "lat": 34.8119444,
    "lon": 127.5925,
    "elev_m": 206.5,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #88"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "108",
+   "id": "RKJY-2-7-108",
    "lat": 34.8252778,
    "lon": 127.595,
    "elev_m": 184.0,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #108"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "128",
+   "id": "RKJY-2-7-128",
    "lat": 34.8136111,
    "lon": 127.6477778,
    "elev_m": 67.9,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #128"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "9",
+   "id": "RKJY-2-7-9",
    "lat": 34.8658333,
    "lon": 127.5791667,
    "elev_m": 115.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #9"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "29",
+   "id": "RKJY-2-7-29",
    "lat": 34.8308333,
    "lon": 127.5861111,
    "elev_m": 314.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #29"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "49",
+   "id": "RKJY-2-7-49",
    "lat": 34.8455556,
    "lon": 127.6180556,
    "elev_m": 23.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #49"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "69",
+   "id": "RKJY-2-7-69",
    "lat": 34.8388889,
    "lon": 127.5761111,
    "elev_m": 278.5,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #69"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "89",
+   "id": "RKJY-2-7-89",
    "lat": 34.8141667,
    "lon": 127.5913889,
    "elev_m": 145.5,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #89"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "109",
+   "id": "RKJY-2-7-109",
    "lat": 34.8155556,
    "lon": 127.6452778,
    "elev_m": 125.5,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #109"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "129",
+   "id": "RKJY-2-7-129",
    "lat": 34.8141667,
    "lon": 127.6477778,
    "elev_m": 65.9,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #129"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "10",
+   "id": "RKJY-2-7-10",
    "lat": 34.855,
    "lon": 127.5758333,
    "elev_m": 302.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #10"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "30",
+   "id": "RKJY-2-7-30",
    "lat": 34.8197222,
    "lon": 127.5836111,
    "elev_m": 256.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #30"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "50",
+   "id": "RKJY-2-7-50",
    "lat": 34.84,
    "lon": 127.6141667,
    "elev_m": 45.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #50"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "70",
+   "id": "RKJY-2-7-70",
    "lat": 34.8458333,
    "lon": 127.6180556,
    "elev_m": 28.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #70"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "90",
+   "id": "RKJY-2-7-90",
    "lat": 34.8286111,
    "lon": 127.5822222,
    "elev_m": 163.0,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #90"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "110",
+   "id": "RKJY-2-7-110",
    "lat": 34.8091667,
    "lon": 127.6461111,
    "elev_m": 134.0,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #110"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "130",
+   "id": "RKJY-2-7-130",
    "lat": 34.8408333,
    "lon": 127.6080556,
    "elev_m": 66.0,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #130"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "11",
+   "id": "RKJY-2-7-11",
    "lat": 34.8569444,
    "lon": 127.5766667,
    "elev_m": 296.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #11"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "31",
+   "id": "RKJY-2-7-31",
    "lat": 34.8172222,
    "lon": 127.585,
    "elev_m": 247.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #31"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "51",
+   "id": "RKJY-2-7-51",
    "lat": 34.8380556,
    "lon": 127.6136111,
    "elev_m": 83.0,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #51"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "71",
+   "id": "RKJY-2-7-71",
    "lat": 34.8458333,
    "lon": 127.6180556,
    "elev_m": 28.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #71"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "91",
+   "id": "RKJY-2-7-91",
    "lat": 34.8302778,
    "lon": 127.5813889,
    "elev_m": 190.0,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #91"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "111",
+   "id": "RKJY-2-7-111",
    "lat": 34.8075,
    "lon": 127.6477778,
    "elev_m": 133.5,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #111"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "131",
+   "id": "RKJY-2-7-131",
    "lat": 34.8183333,
    "lon": 127.6483333,
    "elev_m": 52.1,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #131"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "12",
+   "id": "RKJY-2-7-12",
    "lat": 34.8533333,
    "lon": 127.5855556,
    "elev_m": 193.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #12"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "32",
+   "id": "RKJY-2-7-32",
    "lat": 34.8030556,
    "lon": 127.6236111,
    "elev_m": 214.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #32"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "52",
+   "id": "RKJY-2-7-52",
    "lat": 34.8641667,
    "lon": 127.5786111,
    "elev_m": 89.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #52"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "72",
+   "id": "RKJY-2-7-72",
    "lat": 34.8511111,
    "lon": 127.615,
    "elev_m": 14.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #72"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "92",
+   "id": "RKJY-2-7-92",
    "lat": 34.835,
    "lon": 127.5786111,
    "elev_m": 181.0,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #92"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "112",
+   "id": "RKJY-2-7-112",
    "lat": 34.8261111,
    "lon": 127.6411111,
    "elev_m": 56.5,
-   "type": "Chimney"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Chimney",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #112"
+   ],
+   "category": "Chimney",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "132",
+   "id": "RKJY-2-7-132",
    "lat": 34.8183333,
    "lon": 127.6480556,
    "elev_m": 50.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #132"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "13",
-   "lat": 34.8352778,
-   "lon": 127.5927778,
-   "elev_m": 328.5,
-   "type": "Natural high point"
-  },
-  {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "33",
-   "lat": 34.7502778,
-   "lon": 127.6452778,
-   "elev_m": 279.5,
-   "type": "Natural high point"
-  },
-  {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "53",
+   "id": "RKJY-2-7-53",
    "lat": 34.8408333,
    "lon": 127.5880556,
    "elev_m": 107.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #53"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "73",
+   "id": "RKJY-2-7-73",
    "lat": 34.8408333,
    "lon": 127.6072222,
    "elev_m": 76.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #73"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "93",
+   "id": "RKJY-2-7-93",
    "lat": 34.8269444,
    "lon": 127.5802778,
    "elev_m": 115.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #93"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "113",
+   "id": "RKJY-2-7-113",
    "lat": 34.8144444,
    "lon": 127.6483333,
    "elev_m": 64.75,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #113"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "133",
-   "lat": 34.8144444,
-   "lon": 127.6475,
-   "elev_m": 125.0,
-   "type": "Tower"
-  },
-  {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "14",
+   "id": "RKJY-2-7-14",
    "lat": 34.8452778,
    "lon": 127.585,
    "elev_m": 342.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #14"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "34",
+   "id": "RKJY-2-7-34",
    "lat": 34.8055556,
    "lon": 127.6394444,
    "elev_m": 116.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #34"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "54",
+   "id": "RKJY-2-7-54",
    "lat": 34.835,
    "lon": 127.5988889,
    "elev_m": 118.0,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #54"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "74",
+   "id": "RKJY-2-7-74",
    "lat": 34.8344444,
    "lon": 127.6008333,
    "elev_m": 95.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #74"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "94",
+   "id": "RKJY-2-7-94",
    "lat": 34.8252778,
    "lon": 127.5816667,
    "elev_m": 122.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #94"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "114",
+   "id": "RKJY-2-7-114",
    "lat": 34.8144444,
    "lon": 127.6480556,
    "elev_m": 64.41,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #114"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "134",
-   "lat": 34.8147222,
-   "lon": 127.6475,
-   "elev_m": 125.0,
-   "type": "Tower"
-  },
-  {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "15",
+   "id": "RKJY-2-7-15",
    "lat": 34.8519444,
    "lon": 127.5752778,
    "elev_m": 298.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #15"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "35",
+   "id": "RKJY-2-7-35",
    "lat": 34.7672222,
    "lon": 127.6480556,
    "elev_m": 220.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #35"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "55",
+   "id": "RKJY-2-7-55",
    "lat": 34.8147222,
    "lon": 127.6180556,
    "elev_m": 78.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #55"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "75",
+   "id": "RKJY-2-7-75",
    "lat": 34.8338889,
    "lon": 127.6019444,
    "elev_m": 94.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #75"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "95",
+   "id": "RKJY-2-7-95",
    "lat": 34.8216667,
    "lon": 127.5863889,
    "elev_m": 167.0,
-   "type": "Tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #95"
+   ],
+   "category": "Tower",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "115",
+   "id": "RKJY-2-7-115",
    "lat": 34.8147222,
    "lon": 127.6466667,
    "elev_m": 81.9,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #115"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "135",
+   "id": "RKJY-2-7-135",
    "lat": 34.8136111,
    "lon": 127.6175,
    "elev_m": 56.2,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #135"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "16",
+   "id": "RKJY-2-7-16",
    "lat": 34.8455556,
    "lon": 127.58,
    "elev_m": 375.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #16"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "36",
+   "id": "RKJY-2-7-36",
    "lat": 34.7527778,
    "lon": 127.6480556,
    "elev_m": 243.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #36"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "56",
+   "id": "RKJY-2-7-56",
    "lat": 34.8294444,
    "lon": 127.6086111,
    "elev_m": 54.5,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #56"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "76",
+   "id": "RKJY-2-7-76",
    "lat": 34.84,
    "lon": 127.5972222,
    "elev_m": 91.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #76"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "96",
+   "id": "RKJY-2-7-96",
    "lat": 34.8205556,
    "lon": 127.6147222,
    "elev_m": 70.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #96"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "116",
+   "id": "RKJY-2-7-116",
    "lat": 34.815,
    "lon": 127.6472222,
    "elev_m": 76.8,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #116"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "136",
-   "lat": 34.8277778,
-   "lon": 127.5808333,
-   "elev_m": 104.5,
-   "type": "Building"
-  },
-  {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "17",
+   "id": "RKJY-2-7-17",
    "lat": 34.8388889,
    "lon": 127.5794444,
    "elev_m": 281.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #17"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "37",
+   "id": "RKJY-2-7-37",
    "lat": 34.8219444,
    "lon": 127.6569444,
    "elev_m": 166.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #37"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "57",
+   "id": "RKJY-2-7-57",
    "lat": 34.8269444,
    "lon": 127.5861111,
    "elev_m": 95.0,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #57"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "77",
+   "id": "RKJY-2-7-77",
    "lat": 34.8466667,
    "lon": 127.5941667,
    "elev_m": 80.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #77"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "97",
+   "id": "RKJY-2-7-97",
    "lat": 34.8225,
    "lon": 127.6122222,
    "elev_m": 76.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #97"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "117",
+   "id": "RKJY-2-7-117",
    "lat": 34.8147222,
    "lon": 127.6486111,
    "elev_m": 71.29,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #117"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "137",
-   "lat": 34.8283333,
-   "lon": 127.5805556,
-   "elev_m": 105.7,
-   "type": "Building"
-  },
-  {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "18",
+   "id": "RKJY-2-7-18",
    "lat": 34.8552778,
    "lon": 127.5727778,
    "elev_m": 279.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #18"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "38",
+   "id": "RKJY-2-7-38",
    "lat": 34.8236111,
    "lon": 127.6533333,
    "elev_m": 135.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #38"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "58",
+   "id": "RKJY-2-7-58",
    "lat": 34.8325,
    "lon": 127.5802778,
    "elev_m": 139.0,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #58"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "78",
+   "id": "RKJY-2-7-78",
    "lat": 34.8466667,
    "lon": 127.5944444,
    "elev_m": 83.5,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #78"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "98",
+   "id": "RKJY-2-7-98",
    "lat": 34.8230556,
    "lon": 127.6113889,
    "elev_m": 78.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #98"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "118",
+   "id": "RKJY-2-7-118",
    "lat": 34.8147222,
    "lon": 127.6472222,
    "elev_m": 88.62,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #118"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "138",
-   "lat": 34.8280556,
-   "lon": 127.5805556,
-   "elev_m": 105.7,
-   "type": "Building"
-  },
-  {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "19",
+   "id": "RKJY-2-7-19",
    "lat": 34.8425,
    "lon": 127.6036111,
    "elev_m": 250.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #19"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "39",
+   "id": "RKJY-2-7-39",
    "lat": 34.8127778,
    "lon": 127.6422222,
    "elev_m": 142.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #39"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "59",
+   "id": "RKJY-2-7-59",
    "lat": 34.825,
    "lon": 127.585,
    "elev_m": 102.0,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #59"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "79",
+   "id": "RKJY-2-7-79",
    "lat": 34.8372222,
    "lon": 127.5986111,
    "elev_m": 98.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #79"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "99",
+   "id": "RKJY-2-7-99",
    "lat": 34.8238889,
    "lon": 127.6105556,
    "elev_m": 80.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #99"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "119",
+   "id": "RKJY-2-7-119",
    "lat": 34.8147222,
    "lon": 127.6480556,
    "elev_m": 64.15,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #119"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "20",
+   "id": "RKJY-2-7-20",
    "lat": 34.8441667,
    "lon": 127.5977778,
    "elev_m": 259.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #20"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "40",
+   "id": "RKJY-2-7-40",
    "lat": 34.8069444,
    "lon": 127.645,
    "elev_m": 150.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #40"
+   ],
+   "category": "Natural",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "60",
-   "lat": 34.7672222,
-   "lon": 127.6483333,
-   "elev_m": 217.5,
-   "type": "Building"
-  },
-  {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "80",
+   "id": "RKJY-2-7-80",
    "lat": 34.8527778,
    "lon": 127.5922222,
    "elev_m": 80.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #80"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "100",
+   "id": "RKJY-2-7-100",
    "lat": 34.8255556,
    "lon": 127.6091667,
    "elev_m": 83.0,
-   "type": "Pole"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Pole",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #100"
+   ],
+   "category": "Mast",
+   "airport": "RKJY"
   },
   {
-   "icao": "RKJY",
-   "chart": "2-7",
-   "amdt": "AIP AMDT 6/25",
-   "no": "120",
+   "id": "RKJY-2-7-120",
    "lat": 34.8147222,
    "lon": 127.6477778,
    "elev_m": 72.39,
-   "type": "Building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #120"
+   ],
+   "category": "Building",
+   "airport": "RKJY"
   }
  ],
  "issues": [

@@ -1,6 +1,6 @@
 # RKSM AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 18개 / Fix 31개 / 홀딩 0개 / 장애물 0개
+- 절차 18개 / Fix 31개 / 홀딩 0개 / 장애물 6개
 - 지도 반영 18개 / 제외(검토 필요) 0개
 - 원본: (2-11) INSTR APCH CHART.pdf, (2-3) SID(2).pdf, RKSM-TEXT.pdf
 

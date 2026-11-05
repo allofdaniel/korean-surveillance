@@ -1,8 +1,8 @@
 # RKSI AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 88개 / Fix 240개 / 홀딩 0개 / 장애물 166개
+- 절차 88개 / Fix 240개 / 홀딩 0개 / 장애물 350개
 - 지도 반영 88개 / 제외(검토 필요) 0개
-- 원본: (2-18) AD OBSTACLE CHART TYPE B.pdf, (2-28) SID.pdf, (2-42) STAR.pdf, (2-51) INSTR APCH CHART.pdf, RKSI-TEXT.pdf
+- 원본: (2-10) AD OBSTACLE CHART TYPE A.pdf, (2-18) AD OBSTACLE CHART TYPE B.pdf, (2-28) SID.pdf, (2-42) STAR.pdf, (2-51) INSTR APCH CHART.pdf, RKSI-TEXT.pdf
 
 ## 검증 결과
 - [warn] fix ISRR differs 3745 m in AD2.19
@@ -120,8 +120,8 @@
 | sids | SEL1S | 반영 | 100% | 100% | 2 m | (2-28) SID.pdf p5 | heading 구간 근사 |
 | sids | SEL1S.RW15L | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p5 |  |
 | sids | SEL1S.RW15R | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p5 | heading 구간 근사 |
-| sids | SEL2A.RW33L | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p13 | AIP 미확인 fix: SEL28; heading 구간 근사 |
-| sids | SEL2A.RW33R | 반영 | 100% | 100% | 0 m | (2-28) SID.pdf p13 | AIP 미확인 fix: SEL28; heading 구간 근사 |
+| sids | SEL2A.RW33L | 반영 | 100% | 100% | 8 m | (2-28) SID.pdf p13 | heading 구간 근사 |
+| sids | SEL2A.RW33R | 반영 | 100% | 100% | 8 m | (2-28) SID.pdf p13 | heading 구간 근사 |
 | sids | SOT1A.RW33L | 반영 | 100% | 67% | 0 m | (2-28) SID.pdf p13 | AIP 미확인 fix: SOT40; heading 구간 근사 |
 | sids | SOT1A.RW33R | 반영 | 100% | 67% | 0 m | (2-28) SID.pdf p13 | AIP 미확인 fix: SOT40; heading 구간 근사 |
 | sids | SOT1S.OLMEN | 제외: 현재 AIP 차트에서 확인 안 됨 | 100% | 0% |  | (2-28) SID.pdf p5 (OCR) |  |

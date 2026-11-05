@@ -1,6 +1,6 @@
 {
  "icao": "RKNY",
- "built_at": "2026-11-05T05:58:50.238257Z",
+ "built_at": "2026-11-05T06:18:28.470675Z",
  "sources": [
   {
    "file": "(2-12) STAR.pdf",
@@ -9,6 +9,10 @@
   {
    "file": "(2-14) INSTR APCH CHART.pdf",
    "sha": "8c88dd29ff704609"
+  },
+  {
+   "file": "(2-4) AD OBSTACLE CHART TYPE A.pdf",
+   "sha": "f21077febd765d6a"
   },
   {
    "file": "(2-6) AD OBSTACLE CHART TYPE B.pdf",
@@ -61,7 +65,7 @@
     38.07005,
     128.660183333
    ],
-   "thr_elev_m": null
+   "thr_elev_m": 70.1
   },
   {
    "id": "33",
@@ -72,7 +76,7 @@
     38.052558333,
     128.678125
    ],
-   "thr_elev_m": null
+   "thr_elev_m": 69.1
   }
  ],
  "navaids": [
@@ -2863,1054 +2867,1972 @@
  ],
  "obstacles": [
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "1",
+   "id": "RKNYOB001",
+   "lat": 37.907083333,
+   "lon": 128.698555556,
+   "elev_m": 398.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": "15/APCH 33/TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB002",
+   "lat": 37.9565,
+   "lon": 128.72975,
+   "elev_m": 324.9,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB003",
+   "lat": 38.008083333,
+   "lon": 128.708388889,
+   "elev_m": 160.9,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": "33/APCH 15/TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB004",
+   "lat": 37.983305556,
+   "lon": 128.713027778,
+   "elev_m": 284.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB005",
+   "lat": 38.016111111,
+   "lon": 128.686722222,
+   "elev_m": 199.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB006",
+   "lat": 38.025777778,
+   "lon": 128.698166667,
+   "elev_m": 122.8,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB007",
+   "lat": 38.054916667,
+   "lon": 128.677472222,
+   "elev_m": 72.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "RVR Maintenance Structure",
+   "marking": null,
+   "remarks": "16.4 ft Marked/LGTD RWY 33, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB008",
+   "lat": 38.055277778,
+   "lon": 128.677111111,
+   "elev_m": 72.6,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "RVR Maintenance Structure",
+   "marking": null,
+   "remarks": "16.4 ft Marked/LGTD RWY 33, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB009",
+   "lat": 38.069027778,
+   "lon": 128.662972222,
+   "elev_m": 73.6,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "RVR Maintenance Structure",
+   "marking": null,
+   "remarks": "16.4 ft Marked/LGTD RWY 15, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB010",
+   "lat": 38.068694444,
+   "lon": 128.663361111,
+   "elev_m": 73.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "RVR Maintenance Structure",
+   "marking": null,
+   "remarks": "16.4 ft Marked/LGTD RWY 15, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB011",
+   "lat": 38.054388889,
+   "lon": 128.674805556,
+   "elev_m": 75.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Cone (WDI)",
+   "marking": null,
+   "remarks": "21.8 ft Marked/LGTD RWY 33, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Unknown",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB012",
+   "lat": 38.068861111,
+   "lon": 128.662888889,
+   "elev_m": 75.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Cone (WDI)",
+   "marking": null,
+   "remarks": "21.8 ft Marked/LGTD RWY 15, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Unknown",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB013",
+   "lat": 38.053861111,
+   "lon": 128.675027778,
+   "elev_m": 82.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "GP Antenna",
+   "marking": null,
+   "remarks": "44.9 ft Marked/LGTD RWY 33, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB014",
+   "lat": 38.068638889,
+   "lon": 128.663333333,
+   "elev_m": 73.9,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "MLAT Antenna (RVR)",
+   "marking": null,
+   "remarks": "16.4 ft Marked Material (Stainless Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNYOB015",
+   "lat": 38.069861111,
+   "lon": 128.659833333,
+   "elev_m": 70.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "RTIL Power Supply Box",
+   "marking": null,
+   "remarks": "2.2 ft Marked RWY 15, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 3"
+   ],
+   "category": "Navaid",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNY-2-4-1",
+   "lat": 38.0136111,
+   "lon": 128.7264972,
+   "elev_m": 92.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "NATURAL",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-4 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNY-2-5-1",
+   "lat": 38.1058611,
+   "lon": 128.6149528,
+   "elev_m": 74.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNY-2-5-2",
+   "lat": 38.12605,
+   "lon": 128.6266,
+   "elev_m": 78.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #2"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
+  },
+  {
+   "id": "RKNY-2-6-1",
    "lat": 38.0698361,
    "lon": 128.6638806,
    "elev_m": 88.0,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #1"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "21",
+   "id": "RKNY-2-6-21",
    "lat": 38.0079444,
    "lon": 128.6643417,
    "elev_m": 326.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #21"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "41",
+   "id": "RKNY-2-6-41",
    "lat": 38.0260833,
    "lon": 128.65245,
    "elev_m": 162.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #41"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "61",
+   "id": "RKNY-2-6-61",
    "lat": 38.0402972,
    "lon": 128.6441833,
    "elev_m": 121.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #61"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "81",
+   "id": "RKNY-2-6-81",
    "lat": 38.0559472,
    "lon": 128.6558167,
    "elev_m": 115.0,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #81"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "101",
+   "id": "RKNY-2-6-101",
    "lat": 38.0617139,
    "lon": 128.6314111,
    "elev_m": 186.5,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #101"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "2",
+   "id": "RKNY-2-6-2",
    "lat": 38.0626694,
    "lon": 128.6706528,
    "elev_m": 81.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #2"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "22",
+   "id": "RKNY-2-6-22",
    "lat": 38.0558667,
    "lon": 128.6684194,
    "elev_m": 118.0,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #22"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "42",
+   "id": "RKNY-2-6-42",
    "lat": 38.0159417,
    "lon": 128.6478611,
    "elev_m": 171.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #42"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "62",
+   "id": "RKNY-2-6-62",
    "lat": 38.0379417,
    "lon": 128.6416167,
    "elev_m": 120.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #62"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "82",
+   "id": "RKNY-2-6-82",
    "lat": 38.0433972,
    "lon": 128.6242694,
    "elev_m": 186.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #82"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "102",
+   "id": "RKNY-2-6-102",
    "lat": 38.0626417,
    "lon": 128.6327194,
    "elev_m": 129.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #102"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "3",
+   "id": "RKNY-2-6-3",
    "lat": 38.0223944,
    "lon": 128.6916611,
    "elev_m": 116.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #3"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "23",
+   "id": "RKNY-2-6-23",
    "lat": 38.0228667,
    "lon": 128.6640722,
    "elev_m": 157.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #23"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "43",
+   "id": "RKNY-2-6-43",
    "lat": 38.0208694,
    "lon": 128.648225,
    "elev_m": 185.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #43"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "63",
+   "id": "RKNY-2-6-63",
    "lat": 38.03145,
    "lon": 128.6289222,
    "elev_m": 152.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #63"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "83",
+   "id": "RKNY-2-6-83",
    "lat": 38.045425,
    "lon": 128.627475,
    "elev_m": 139.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #83"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "103",
+   "id": "RKNY-2-6-103",
    "lat": 38.0643028,
    "lon": 128.6613667,
    "elev_m": 103.0,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #103"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "4",
+   "id": "RKNY-2-6-4",
    "lat": 38.0181444,
    "lon": 128.6854139,
    "elev_m": 114.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #4"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "24",
+   "id": "RKNY-2-6-24",
    "lat": 38.0108278,
    "lon": 128.6613778,
    "elev_m": 306.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #24"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "44",
+   "id": "RKNY-2-6-44",
    "lat": 38.0276361,
    "lon": 128.6513972,
    "elev_m": 186.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #44"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "64",
+   "id": "RKNY-2-6-64",
    "lat": 38.0333833,
    "lon": 128.6309833,
    "elev_m": 142.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #64"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "84",
+   "id": "RKNY-2-6-84",
    "lat": 38.0472917,
    "lon": 128.6321083,
    "elev_m": 127.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #84"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "104",
+   "id": "RKNY-2-6-104",
    "lat": 38.0656278,
    "lon": 128.6595528,
    "elev_m": 108.5,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #104"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "5",
+   "id": "RKNY-2-6-5",
    "lat": 38.0137139,
    "lon": 128.6844889,
    "elev_m": 130.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #5"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "25",
+   "id": "RKNY-2-6-25",
    "lat": 38.0253167,
    "lon": 128.6634333,
    "elev_m": 131.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #25"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "45",
+   "id": "RKNY-2-6-45",
    "lat": 38.0175722,
    "lon": 128.6460639,
    "elev_m": 180.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #45"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "65",
+   "id": "RKNY-2-6-65",
    "lat": 38.037225,
    "lon": 128.6356583,
    "elev_m": 116.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #65"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "85",
+   "id": "RKNY-2-6-85",
    "lat": 38.0453389,
    "lon": 128.6224472,
    "elev_m": 191.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #85"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "105",
+   "id": "RKNY-2-6-105",
    "lat": 38.0634583,
    "lon": 128.6645333,
    "elev_m": 75.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #105"
+   ],
+   "category": "Unknown",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "6",
+   "id": "RKNY-2-6-6",
    "lat": 38.0538722,
    "lon": 128.6708917,
    "elev_m": 112.5,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #6"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "26",
+   "id": "RKNY-2-6-26",
    "lat": 38.0141611,
    "lon": 128.6616111,
    "elev_m": 225.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #26"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "46",
+   "id": "RKNY-2-6-46",
    "lat": 38.0312194,
    "lon": 128.6526806,
    "elev_m": 132.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #46"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "66",
+   "id": "RKNY-2-6-66",
    "lat": 38.0205583,
    "lon": 128.6356583,
    "elev_m": 172.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #66"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "86",
+   "id": "RKNY-2-6-86",
    "lat": 38.0478222,
    "lon": 128.6280667,
    "elev_m": 133.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #86"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "7",
+   "id": "RKNY-2-6-7",
    "lat": 38.0291056,
    "lon": 128.6730056,
    "elev_m": 121.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #7"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "27",
+   "id": "RKNY-2-6-27",
    "lat": 38.0105111,
    "lon": 128.6598917,
    "elev_m": 301.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #27"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "47",
+   "id": "RKNY-2-6-47",
    "lat": 38.0154139,
    "lon": 128.6442639,
    "elev_m": 216.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #47"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "67",
+   "id": "RKNY-2-6-67",
    "lat": 38.0482278,
    "lon": 128.6498333,
    "elev_m": 115.5,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #67"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "87",
+   "id": "RKNY-2-6-87",
    "lat": 38.0494167,
    "lon": 128.6323639,
    "elev_m": 132.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #87"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "8",
+   "id": "RKNY-2-6-8",
    "lat": 38.0262639,
    "lon": 128.6732083,
    "elev_m": 125.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #8"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "28",
+   "id": "RKNY-2-6-28",
    "lat": 38.0257556,
    "lon": 128.6621167,
    "elev_m": 127.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #28"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "48",
+   "id": "RKNY-2-6-48",
    "lat": 38.0235222,
    "lon": 128.6450472,
    "elev_m": 135.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #48"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "68",
+   "id": "RKNY-2-6-68",
    "lat": 38.0368833,
    "lon": 128.6327111,
    "elev_m": 129.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #68"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "88",
+   "id": "RKNY-2-6-88",
    "lat": 38.0572667,
    "lon": 128.6559222,
    "elev_m": 129.5,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #88"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "9",
+   "id": "RKNY-2-6-9",
    "lat": 38.0271694,
    "lon": 128.6729139,
    "elev_m": 137.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #9"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "29",
+   "id": "RKNY-2-6-29",
    "lat": 38.0197944,
    "lon": 128.6600611,
    "elev_m": 177.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #29"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "49",
+   "id": "RKNY-2-6-49",
    "lat": 38.0302972,
    "lon": 128.6487556,
    "elev_m": 128.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #49"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "69",
+   "id": "RKNY-2-6-69",
    "lat": 38.0347306,
    "lon": 128.6278306,
    "elev_m": 148.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #69"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "89",
+   "id": "RKNY-2-6-89",
    "lat": 38.0467694,
    "lon": 128.62225,
    "elev_m": 169.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #89"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "10",
+   "id": "RKNY-2-6-10",
    "lat": 38.0243361,
    "lon": 128.6725472,
    "elev_m": 125.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #10"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "30",
+   "id": "RKNY-2-6-30",
    "lat": 38.0178528,
    "lon": 128.6591389,
    "elev_m": 235.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #30"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "50",
+   "id": "RKNY-2-6-50",
    "lat": 38.0282472,
    "lon": 128.6414444,
    "elev_m": 160.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #50"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "70",
+   "id": "RKNY-2-6-70",
    "lat": 38.0435167,
    "lon": 128.6405917,
    "elev_m": 115.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #70"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "90",
+   "id": "RKNY-2-6-90",
    "lat": 38.046875,
    "lon": 128.6185611,
    "elev_m": 167.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #90"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "11",
+   "id": "RKNY-2-6-11",
    "lat": 38.0163111,
    "lon": 128.6726139,
    "elev_m": 119.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #11"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "31",
+   "id": "RKNY-2-6-31",
    "lat": 38.03625,
    "lon": 128.6632778,
    "elev_m": 118.0,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #31"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "51",
+   "id": "RKNY-2-6-51",
    "lat": 38.029475,
    "lon": 128.6414278,
    "elev_m": 175.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #51"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "71",
+   "id": "RKNY-2-6-71",
    "lat": 38.0424889,
    "lon": 128.6384389,
    "elev_m": 135.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #71"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "91",
+   "id": "RKNY-2-6-91",
    "lat": 38.0500417,
    "lon": 128.6293417,
    "elev_m": 126.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #91"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "12",
+   "id": "RKNY-2-6-12",
    "lat": 38.0182972,
    "lon": 128.6712111,
    "elev_m": 144.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #12"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "32",
+   "id": "RKNY-2-6-32",
    "lat": 38.020875,
    "lon": 128.6577139,
    "elev_m": 177.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #32"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "52",
+   "id": "RKNY-2-6-52",
    "lat": 38.0334639,
    "lon": 128.6441361,
    "elev_m": 144.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #52"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "72",
+   "id": "RKNY-2-6-72",
    "lat": 38.03995,
    "lon": 128.6342694,
    "elev_m": 121.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #72"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "92",
+   "id": "RKNY-2-6-92",
    "lat": 38.0480722,
    "lon": 128.6209333,
    "elev_m": 204.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #92"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "13",
+   "id": "RKNY-2-6-13",
    "lat": 38.0074889,
    "lon": 128.6715167,
    "elev_m": 185.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #13"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "33",
+   "id": "RKNY-2-6-33",
    "lat": 38.0152889,
    "lon": 128.6561444,
    "elev_m": 239.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #33"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "53",
+   "id": "RKNY-2-6-53",
    "lat": 38.0248333,
    "lon": 128.636325,
    "elev_m": 164.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #53"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "73",
+   "id": "RKNY-2-6-73",
    "lat": 38.0343722,
    "lon": 128.6244333,
    "elev_m": 169.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #73"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "93",
+   "id": "RKNY-2-6-93",
    "lat": 38.0526611,
    "lon": 128.6331833,
    "elev_m": 129.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #93"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "14",
+   "id": "RKNY-2-6-14",
    "lat": 38.0202833,
    "lon": 128.6699111,
    "elev_m": 139.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #14"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "34",
+   "id": "RKNY-2-6-34",
    "lat": 38.0229139,
    "lon": 128.6580944,
    "elev_m": 156.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #34"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "54",
+   "id": "RKNY-2-6-54",
    "lat": 38.0391389,
    "lon": 128.6486167,
    "elev_m": 138.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #54"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "74",
+   "id": "RKNY-2-6-74",
    "lat": 38.0395139,
    "lon": 128.6325583,
    "elev_m": 131.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #74"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "94",
+   "id": "RKNY-2-6-94",
    "lat": 38.0494167,
    "lon": 128.6197472,
    "elev_m": 174.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #94"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "15",
+   "id": "RKNY-2-6-15",
    "lat": 38.0075833,
    "lon": 128.669325,
    "elev_m": 185.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #15"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "35",
+   "id": "RKNY-2-6-35",
    "lat": 38.0596472,
    "lon": 128.668475,
    "elev_m": 75.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #35"
+   ],
+   "category": "Unknown",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "55",
+   "id": "RKNY-2-6-55",
    "lat": 38.0402056,
    "lon": 128.6491056,
    "elev_m": 147.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #55"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "75",
+   "id": "RKNY-2-6-75",
    "lat": 38.0376444,
    "lon": 128.62455,
    "elev_m": 224.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #75"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "95",
+   "id": "RKNY-2-6-95",
    "lat": 38.0533472,
    "lon": 128.6165694,
    "elev_m": 188.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #95"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "16",
+   "id": "RKNY-2-6-16",
    "lat": 38.0096111,
    "lon": 128.6677667,
    "elev_m": 220.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #16"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "36",
+   "id": "RKNY-2-6-36",
    "lat": 38.0267778,
    "lon": 128.6571528,
    "elev_m": 142.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #36"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "56",
+   "id": "RKNY-2-6-56",
    "lat": 38.0280944,
    "lon": 128.6372583,
    "elev_m": 142.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #56"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "76",
+   "id": "RKNY-2-6-76",
    "lat": 38.0466194,
    "lon": 128.6408778,
    "elev_m": 135.5,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #76"
+   ],
+   "category": "Unknown",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "96",
+   "id": "RKNY-2-6-96",
    "lat": 38.0549056,
    "lon": 128.6205194,
    "elev_m": 121.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #96"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "17",
+   "id": "RKNY-2-6-17",
    "lat": 38.026075,
    "lon": 128.6678889,
    "elev_m": 120.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #17"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "37",
+   "id": "RKNY-2-6-37",
    "lat": 38.0287333,
    "lon": 128.6574222,
    "elev_m": 130.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #37"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "57",
+   "id": "RKNY-2-6-57",
    "lat": 38.0305528,
    "lon": 128.6391583,
    "elev_m": 147.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #57"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "77",
+   "id": "RKNY-2-6-77",
    "lat": 38.0391722,
    "lon": 128.6261278,
    "elev_m": 208.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #77"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "97",
+   "id": "RKNY-2-6-97",
    "lat": 38.0558472,
    "lon": 128.6204556,
    "elev_m": 126.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #97"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "18",
+   "id": "RKNY-2-6-18",
    "lat": 38.0108778,
    "lon": 128.6670333,
    "elev_m": 163.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #18"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "38",
+   "id": "RKNY-2-6-38",
    "lat": 38.0210722,
    "lon": 128.6543167,
    "elev_m": 215.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #38"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "58",
+   "id": "RKNY-2-6-58",
    "lat": 38.043075,
    "lon": 128.6510778,
    "elev_m": 122.0,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #58"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "78",
+   "id": "RKNY-2-6-78",
    "lat": 38.047925,
    "lon": 128.6416722,
    "elev_m": 130.5,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #78"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "98",
+   "id": "RKNY-2-6-98",
    "lat": 38.0559056,
    "lon": 128.617075,
    "elev_m": 136.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #98"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "19",
+   "id": "RKNY-2-6-19",
    "lat": 38.0165167,
    "lon": 128.6669667,
    "elev_m": 177.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #19"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "39",
+   "id": "RKNY-2-6-39",
    "lat": 38.0237722,
    "lon": 128.6531167,
    "elev_m": 160.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #39"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "59",
+   "id": "RKNY-2-6-59",
    "lat": 38.0440667,
    "lon": 128.6509111,
    "elev_m": 116.0,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #59"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "79",
+   "id": "RKNY-2-6-79",
    "lat": 38.0394944,
    "lon": 128.6231111,
    "elev_m": 144.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #79"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "99",
+   "id": "RKNY-2-6-99",
    "lat": 38.0591028,
    "lon": 128.6315278,
    "elev_m": 147.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #99"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "20",
+   "id": "RKNY-2-6-20",
    "lat": 38.0134944,
    "lon": 128.6650278,
    "elev_m": 212.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #20"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "40",
+   "id": "RKNY-2-6-40",
    "lat": 38.0148111,
    "lon": 128.6481083,
    "elev_m": 174.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #40"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "60",
+   "id": "RKNY-2-6-60",
    "lat": 38.0487583,
    "lon": 128.6544389,
    "elev_m": 125.5,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #60"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "80",
+   "id": "RKNY-2-6-80",
    "lat": 38.0569861,
    "lon": 128.6595333,
    "elev_m": 119.5,
-   "type": "tree"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tree",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #80"
+   ],
+   "category": "Tree",
+   "airport": "RKNY"
   },
   {
-   "icao": "RKNY",
-   "chart": "2-6",
-   "amdt": "AIP AMDT 5/25",
-   "no": "100",
+   "id": "RKNY-2-6-100",
    "lat": 38.0598639,
    "lon": 128.6328972,
    "elev_m": 119.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #100"
+   ],
+   "category": "Natural",
+   "airport": "RKNY"
   }
  ],
  "issues": [

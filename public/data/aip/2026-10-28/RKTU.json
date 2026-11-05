@@ -1,6 +1,6 @@
 {
  "icao": "RKTU",
- "built_at": "2026-11-05T05:59:23.631026Z",
+ "built_at": "2026-11-05T06:19:41.825203Z",
  "sources": [
   {
    "file": "(2-11) SID.pdf",
@@ -13,6 +13,10 @@
   {
    "file": "(2-17) INSTR APCH CHART.pdf",
    "sha": "8e32493fa9e280e1"
+  },
+  {
+   "file": "(2-5) AD OBSTACLE CHART TYPE A.pdf",
+   "sha": "17e86939b9109236"
   },
   {
    "file": "(2-9) AD OBSTACLE CHART TYPE B(1).pdf",
@@ -78,7 +82,7 @@
     36.70785,
     127.487455556
    ],
-   "thr_elev_m": 52.202
+   "thr_elev_m": 52.2
   },
   {
    "id": "24L",
@@ -89,7 +93,7 @@
     36.722925,
     127.511794444
    ],
-   "thr_elev_m": 58.357
+   "thr_elev_m": 58.4
   }
  ],
  "navaids": [
@@ -6126,754 +6130,1348 @@
  ],
  "obstacles": [
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "C1",
+   "id": "RKTUOB001",
+   "lat": 36.830416667,
+   "lon": 127.566305556,
+   "elev_m": 598.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": "24R/APCH 06L/TKOF In circling area and at AD",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
+  },
+  {
+   "id": "RKTUOB002",
+   "lat": 36.7195,
+   "lon": 127.461583333,
+   "elev_m": 124.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "LGTD",
+   "remarks": "In circling area and at AD",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKTU"
+  },
+  {
+   "id": "RKTUOB003",
+   "lat": 36.821833333,
+   "lon": 127.683694444,
+   "elev_m": 557.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": "24L/APCH 06R/TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
+  },
+  {
+   "id": "RKTU-2-5-1",
+   "lat": 36.7430083,
+   "lon": 127.5331944,
+   "elev_m": 82.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
+  },
+  {
+   "id": "RKTU-2-6-1",
+   "lat": 36.7365944,
+   "lon": 127.5409917,
+   "elev_m": 79.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
+  },
+  {
+   "id": "RKTU-2-6-2",
+   "lat": 36.7412028,
+   "lon": 127.5423333,
+   "elev_m": 87.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #2"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
+  },
+  {
+   "id": "RKTU-2-6-3",
+   "lat": 36.7461083,
+   "lon": 127.5440889,
+   "elev_m": 91.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #3"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
+  },
+  {
+   "id": "RKTU-2-7-1",
+   "lat": 36.706225,
+   "lon": 127.4834833,
+   "elev_m": 55.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-7 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
+  },
+  {
+   "id": "RKTU-2-8-1",
+   "lat": 36.6814806,
+   "lon": 127.4027528,
+   "elev_m": 76.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-8 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
+  },
+  {
+   "id": "RKTU-2-9-C1",
    "lat": 36.7594917,
    "lon": 127.5889389,
    "elev_m": 233.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #C1"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M38",
+   "id": "RKTU-2-9-M38",
    "lat": 36.7624167,
    "lon": 127.5626667,
    "elev_m": 82.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M38"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M123",
+   "id": "RKTU-2-9-M123",
    "lat": 36.7061667,
    "lon": 127.4992778,
    "elev_m": 66.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M123"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M163",
+   "id": "RKTU-2-9-M163",
    "lat": 36.669,
    "lon": 127.4291944,
    "elev_m": 73.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M163"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M245",
+   "id": "RKTU-2-9-M245",
    "lat": 36.7343639,
    "lon": 127.5209889,
    "elev_m": 70.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M245"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "A11",
+   "id": "RKTU-2-9-A11",
    "lat": 36.6800833,
    "lon": 127.5166444,
    "elev_m": 192.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #A11"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "C2",
+   "id": "RKTU-2-9-C2",
    "lat": 36.6573889,
    "lon": 127.4189444,
    "elev_m": 126.0,
-   "type": "TOWER"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "TOWER",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #C2"
+   ],
+   "category": "Tower",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M40",
+   "id": "RKTU-2-9-M40",
    "lat": 36.7411528,
    "lon": 127.5421972,
    "elev_m": 84.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M40"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M127",
+   "id": "RKTU-2-9-M127",
    "lat": 36.6829722,
    "lon": 127.4966111,
    "elev_m": 75.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M127"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M164",
+   "id": "RKTU-2-9-M164",
    "lat": 36.6573889,
    "lon": 127.4189444,
    "elev_m": 126.0,
-   "type": "TOWER"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "TOWER",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M164"
+   ],
+   "category": "Tower",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M247",
+   "id": "RKTU-2-9-M247",
    "lat": 36.7157417,
    "lon": 127.5075556,
    "elev_m": 90.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M247"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M6",
+   "id": "RKTU-2-9-M6",
    "lat": 36.7388611,
    "lon": 127.5016944,
    "elev_m": 63.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M6"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M42",
+   "id": "RKTU-2-9-M42",
    "lat": 36.7453333,
    "lon": 127.5560278,
    "elev_m": 78.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M42"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M138",
+   "id": "RKTU-2-9-M138",
    "lat": 36.69275,
    "lon": 127.4893611,
    "elev_m": 82.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M138"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M165",
+   "id": "RKTU-2-9-M165",
    "lat": 36.63575,
    "lon": 127.3606667,
    "elev_m": 52.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M165"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M248",
+   "id": "RKTU-2-9-M248",
    "lat": 36.7243194,
    "lon": 127.4973056,
    "elev_m": 51.5,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M248"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M10",
+   "id": "RKTU-2-9-M10",
    "lat": 36.74425,
    "lon": 127.5043889,
    "elev_m": 81.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M10"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M43",
+   "id": "RKTU-2-9-M43",
    "lat": 36.7544528,
    "lon": 127.5838556,
    "elev_m": 223.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M43"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M141",
+   "id": "RKTU-2-9-M141",
    "lat": 36.7010556,
    "lon": 127.4885278,
    "elev_m": 82.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M141"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M166",
+   "id": "RKTU-2-9-M166",
    "lat": 36.6296111,
    "lon": 127.35675,
    "elev_m": 67.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M166"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M252",
+   "id": "RKTU-2-9-M252",
    "lat": 36.7055028,
    "lon": 127.4380167,
    "elev_m": 90.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M252"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M11",
+   "id": "RKTU-2-9-M11",
    "lat": 36.7504167,
    "lon": 127.5081389,
    "elev_m": 86.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M11"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M45",
+   "id": "RKTU-2-9-M45",
    "lat": 36.7235556,
    "lon": 127.5223056,
    "elev_m": 66.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M45"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M142",
+   "id": "RKTU-2-9-M142",
    "lat": 36.6878889,
    "lon": 127.4820556,
    "elev_m": 86.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M142"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M168",
+   "id": "RKTU-2-9-M168",
    "lat": 36.6938056,
    "lon": 127.4470278,
    "elev_m": 70.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M168"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M253",
+   "id": "RKTU-2-9-M253",
    "lat": 36.7028083,
    "lon": 127.486875,
    "elev_m": 68.5,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M253"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M15",
+   "id": "RKTU-2-9-M15",
    "lat": 36.7622778,
    "lon": 127.5169722,
    "elev_m": 69.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M15"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M59",
+   "id": "RKTU-2-9-M59",
    "lat": 36.7176944,
    "lon": 127.52525,
    "elev_m": 73.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M59"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M149",
+   "id": "RKTU-2-9-M149",
    "lat": 36.705,
    "lon": 127.4891667,
    "elev_m": 69.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M149"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M185",
+   "id": "RKTU-2-9-M185",
    "lat": 36.7142222,
    "lon": 127.4596111,
    "elev_m": 60.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M185"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "A1",
+   "id": "RKTU-2-9-A1",
    "lat": 36.7594917,
    "lon": 127.5889389,
    "elev_m": 233.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #A1"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M20",
+   "id": "RKTU-2-9-M20",
    "lat": 36.7622222,
    "lon": 127.5283889,
    "elev_m": 69.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M20"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M65",
+   "id": "RKTU-2-9-M65",
    "lat": 36.7178333,
    "lon": 127.5505556,
    "elev_m": 95.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M65"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M150",
+   "id": "RKTU-2-9-M150",
    "lat": 36.6785,
    "lon": 127.4676667,
    "elev_m": 76.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M150"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M191",
+   "id": "RKTU-2-9-M191",
    "lat": 36.7175278,
    "lon": 127.4623056,
    "elev_m": 147.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M191"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "A2",
-   "lat": 36.7545639,
-   "lon": 127.5838806,
-   "elev_m": 221.0,
-   "type": "Natural High Point"
+   "id": "RKTU-2-9-1",
+   "lat": 36.74765,
+   "lon": 127.5401278,
+   "elev_m": 89.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M68",
+   "id": "RKTU-2-9-M68",
    "lat": 36.7143889,
    "lon": 127.5126111,
    "elev_m": 120.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M68"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M153",
+   "id": "RKTU-2-9-M153",
    "lat": 36.6966389,
    "lon": 127.4788056,
    "elev_m": 65.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M153"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M195",
+   "id": "RKTU-2-9-M195",
    "lat": 36.7195,
    "lon": 127.4616667,
    "elev_m": 45.0,
-   "type": "TOWER"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "TOWER",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M195"
+   ],
+   "category": "Tower",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "A3",
+   "id": "RKTU-2-9-A3",
    "lat": 36.7219806,
    "lon": 127.5290083,
    "elev_m": 105.0,
-   "type": "building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #A3"
+   ],
+   "category": "Building",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M24",
+   "id": "RKTU-2-9-M24",
    "lat": 36.7514444,
    "lon": 127.5200833,
    "elev_m": 83.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M24"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M69",
+   "id": "RKTU-2-9-M69",
    "lat": 36.7135833,
    "lon": 127.5323889,
    "elev_m": 104.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M69"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M155",
+   "id": "RKTU-2-9-M155",
    "lat": 36.6579444,
    "lon": 127.4417778,
    "elev_m": 33.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M155"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M198",
+   "id": "RKTU-2-9-M198",
    "lat": 36.72125,
    "lon": 127.4625556,
    "elev_m": 58.0,
-   "type": "TOWER"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "TOWER",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M198"
+   ],
+   "category": "Tower",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "A4",
+   "id": "RKTU-2-9-A4",
    "lat": 36.7200778,
    "lon": 127.5292333,
    "elev_m": 104.0,
-   "type": "building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #A4"
+   ],
+   "category": "Building",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M27",
+   "id": "RKTU-2-9-M27",
    "lat": 36.7368056,
    "lon": 127.5166111,
    "elev_m": 65.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M27"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M73",
+   "id": "RKTU-2-9-M73",
    "lat": 36.7078333,
    "lon": 127.5496944,
    "elev_m": 114.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M73"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M157",
+   "id": "RKTU-2-9-M157",
    "lat": 36.7063333,
    "lon": 127.4833583,
    "elev_m": 56.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M157"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M203",
+   "id": "RKTU-2-9-M203",
    "lat": 36.7178333,
    "lon": 127.4950833,
    "elev_m": 63.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M203"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "A5",
+   "id": "RKTU-2-9-A5",
    "lat": 36.7171472,
    "lon": 127.5301528,
    "elev_m": 115.5,
-   "type": "tower"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Tower",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #A5"
+   ],
+   "category": "Tower",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M31",
+   "id": "RKTU-2-9-M31",
    "lat": 36.7458889,
    "lon": 127.5283889,
    "elev_m": 74.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M31"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M78",
+   "id": "RKTU-2-9-M78",
    "lat": 36.7056111,
    "lon": 127.5351111,
    "elev_m": 129.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M78"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M158",
+   "id": "RKTU-2-9-M158",
    "lat": 36.6709444,
    "lon": 127.4435556,
    "elev_m": 59.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M158"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M210",
+   "id": "RKTU-2-9-M210",
    "lat": 36.7315278,
    "lon": 127.4565278,
    "elev_m": 66.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M210"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "A6",
+   "id": "RKTU-2-9-A6",
    "lat": 36.7178306,
    "lon": 127.52875,
    "elev_m": 106.0,
-   "type": "building"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #A6"
+   ],
+   "category": "Building",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M33",
+   "id": "RKTU-2-9-M33",
    "lat": 36.7680278,
    "lon": 127.5659444,
    "elev_m": 93.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M33"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M86",
+   "id": "RKTU-2-9-M86",
    "lat": 36.6963056,
    "lon": 127.5388889,
    "elev_m": 122.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M86"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M159",
+   "id": "RKTU-2-9-M159",
    "lat": 36.6652222,
    "lon": 127.4326667,
    "elev_m": 74.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M159"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M229",
+   "id": "RKTU-2-9-M229",
    "lat": 36.7469722,
    "lon": 127.4691111,
    "elev_m": 67.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M229"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "A7",
+   "id": "RKTU-2-9-A7",
    "lat": 36.7135972,
    "lon": 127.5322722,
    "elev_m": 105.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #A7"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M34",
+   "id": "RKTU-2-9-M34",
    "lat": 36.7920278,
    "lon": 127.59925,
    "elev_m": 102.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M34"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M98",
+   "id": "RKTU-2-9-M98",
    "lat": 36.7011944,
    "lon": 127.5136389,
    "elev_m": 101.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M98"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M160",
+   "id": "RKTU-2-9-M160",
    "lat": 36.6408889,
    "lon": 127.4051944,
    "elev_m": 92.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M160"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M234",
+   "id": "RKTU-2-9-M234",
    "lat": 36.7501389,
    "lon": 127.4736667,
    "elev_m": 61.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M234"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "A8",
+   "id": "RKTU-2-9-A8",
    "lat": 36.7219472,
    "lon": 127.5151472,
    "elev_m": 66.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #A8"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M36",
+   "id": "RKTU-2-9-M36",
    "lat": 36.7377583,
    "lon": 127.532275,
    "elev_m": 69.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M36"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M99",
+   "id": "RKTU-2-9-M99",
    "lat": 36.6964722,
    "lon": 127.5180556,
    "elev_m": 115.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M99"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M161",
+   "id": "RKTU-2-9-M161",
    "lat": 36.6305556,
    "lon": 127.39325,
    "elev_m": 117.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M161"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M243",
+   "id": "RKTU-2-9-M243",
    "lat": 36.7159278,
    "lon": 127.5066333,
    "elev_m": 80.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M243"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "A9",
+   "id": "RKTU-2-9-A9",
    "lat": 36.7148389,
    "lon": 127.5124361,
    "elev_m": 119.5,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #A9"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M37",
+   "id": "RKTU-2-9-M37",
    "lat": 36.7531944,
    "lon": 127.5532778,
    "elev_m": 77.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M37"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M118",
+   "id": "RKTU-2-9-M118",
    "lat": 36.6982778,
    "lon": 127.50275,
    "elev_m": 76.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M118"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M162",
+   "id": "RKTU-2-9-M162",
    "lat": 36.6243611,
    "lon": 127.3880556,
    "elev_m": 151.0,
-   "type": "etc"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Etc",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M162"
+   ],
+   "category": "Unknown",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "M244",
+   "id": "RKTU-2-9-M244",
    "lat": 36.7607194,
    "lon": 127.5884306,
    "elev_m": 240.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #M244"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
   },
   {
-   "icao": "RKTU",
-   "chart": "2-9",
-   "amdt": "AIP AMDT 10/25",
-   "no": "A10",
+   "id": "RKTU-2-9-A10",
    "lat": 36.6966667,
    "lon": 127.5155333,
    "elev_m": 115.0,
-   "type": "Natural High Point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #A10"
+   ],
+   "category": "Natural",
+   "airport": "RKTU"
   }
  ],
  "issues": [

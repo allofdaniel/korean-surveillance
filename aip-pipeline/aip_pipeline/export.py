@@ -39,5 +39,6 @@ def to_geojson(ds):
                             {'kind': 'HOLD', 'icao': ds['icao'], 'name': h['fix'], 'ident': h.get('ident'), 'inbound': h.get('course'), 'turn': h.get('turn'), 'alt': h.get('alt'), 'speed': h.get('speed')}))
     for o in ds['obstacles']:
         feats.append(_f({'type': 'Point', 'coordinates': [o['lon'], o['lat']]},
-                        {'kind': 'OBST', 'icao': ds['icao'], 'elev_m': o['elev_m'], 'obst_type': o['type'], 'src': f"AD CHART {o['chart']} ({o['amdt']})"}))
+                        {'kind': 'OBST', 'icao': ds['icao'], 'id': o['id'], 'elev_m': o['elev_m'], 'hgt_m': o.get('hgt_m'),
+                         'obst_type': o['type'], 'category': o.get('category'), 'marking': o.get('marking'), 'src': ', '.join(o['sources'])}))
     return {'type': 'FeatureCollection', 'features': feats}

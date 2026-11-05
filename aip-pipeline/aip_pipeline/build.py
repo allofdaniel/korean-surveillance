@@ -3,7 +3,7 @@ from __future__ import annotations
 import re, glob, os, json, hashlib, datetime
 import pymupdf as fitz
 from collections import defaultdict, Counter
-from . import docs, parse_tables as pt, parse_ad2text, parse_obstacles, conventional
+from . import docs, parse_tables as pt, parse_ad2text, parse_obstacles, conventional, parse_ad210, obstacles as obst_mod
 from .ocr_tables import read_page_tables
 from .geo import inv, fwd, angdiff
 
@@ -152,6 +152,7 @@ def build_airport(icao: str, files: list[str], enr_fixes: dict | None = None, lo
     ds = {'icao': icao, 'built_at': datetime.datetime.utcnow().isoformat() + 'Z', 'sources': [], 'airport': {}, 'runways': [],
           'navaids': [], 'fixes': {}, 'procedures': [], 'holdings': [], 'obstacles': [], 'issues': []}
     fix_obs = defaultdict(list)   # name -> [(latlon, source)]
+    ad210 = []
     pages = []
     for f in files:
         ds['sources'].append({'file': os.path.basename(f), 'sha': sha(f)})
@@ -164,6 +165,10 @@ def build_airport(icao: str, files: list[str], enr_fixes: dict | None = None, lo
                 if r['thr']: fix_obs[f"RW{r['id']}"].append((r['thr'], 'AD2.12'))
             for n in a['navaids']:
                 if n['ident'] and n['latlon']: fix_obs[n['ident']].append((n['latlon'], 'AD2.19'))
+            try:
+                ad210 += parse_ad210.parse(f)
+            except Exception as e:
+                ds['issues'].append({'level': 'warn', 'what': f'AD 2.10 판독 실패: {e}'})
             continue
         p0 = fitz.open(f)[0]
         hdr = docs.page_meta(p0)
@@ -291,6 +296,7 @@ def build_airport(icao: str, files: list[str], enr_fixes: dict | None = None, lo
     for h in ds['holdings']:
         if not h.get('latlon') and h.get('fix') in ds['fixes']:
             h['latlon'] = tuple(ds['fixes'][h['fix']]['pos'])
+    ds['obstacles'] = obst_mod.unify(icao, ad210, ds['obstacles'], ds['airport'].get('elev_m'))
     validate(ds)
     return ds, log
 

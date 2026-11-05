@@ -1,6 +1,6 @@
 {
  "icao": "RKJB",
- "built_at": "2026-11-05T05:58:31.131599Z",
+ "built_at": "2026-11-05T06:18:05.207826Z",
  "sources": [
   {
    "file": "(2-11) STAR.pdf",
@@ -9,6 +9,10 @@
   {
    "file": "(2-14) INSTR APCH CHART(1).pdf",
    "sha": "74858b75f47c4724"
+  },
+  {
+   "file": "(2-5) AD OBSTACLE CHART TYPE A(2).pdf",
+   "sha": "1ef7ca651c607068"
   },
   {
    "file": "(2-6) AD OBSTACLE CHART TYPE B(1).pdf",
@@ -60,7 +64,7 @@
     34.978788889,
     126.382902778
    ],
-   "thr_elev_m": null
+   "thr_elev_m": 9.9
   },
   {
    "id": "19",
@@ -71,7 +75,7 @@
     35.007272222,
     126.382702778
    ],
-   "thr_elev_m": null
+   "thr_elev_m": 16.3
   }
  ],
  "navaids": [
@@ -5544,64 +5548,885 @@
  ],
  "obstacles": [
   {
-   "icao": "RKJB",
-   "chart": "2-6",
-   "amdt": "AIRAC AIP AMDT 9/26",
-   "no": "1",
+   "id": "RKJBOB001",
+   "lat": 34.943583333,
+   "lon": 126.395444444,
+   "elev_m": 183.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": "01/APCH 19/TKOF",
+   "sources": [
+    "AD 2.10 Area 2",
+    "AD CHART 2-6 #4"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB002",
+   "lat": 34.811694444,
+   "lon": 126.407555556,
+   "elev_m": 156.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB003",
+   "lat": 34.857166667,
+   "lon": 126.415277778,
+   "elev_m": 206.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB004",
+   "lat": 34.949111111,
+   "lon": 126.391555556,
+   "elev_m": 81.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB005",
+   "lat": 34.705194444,
+   "lon": 126.340472222,
+   "elev_m": 289.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB006",
+   "lat": 34.789916667,
+   "lon": 126.372638889,
+   "elev_m": 229.8,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB007",
+   "lat": 35.0105,
+   "lon": 126.383583333,
+   "elev_m": 24.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": "19/APCH 01/TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB008",
+   "lat": 35.172861111,
+   "lon": 126.435305556,
+   "elev_m": 405.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB009",
+   "lat": 35.0495,
+   "lon": 126.35825,
+   "elev_m": 104.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB010",
+   "lat": 35.053722222,
+   "lon": 126.376805556,
+   "elev_m": 84.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB011",
+   "lat": 35.190666667,
+   "lon": 126.565,
+   "elev_m": 518.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": "NIL",
+   "remarks": null,
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB012",
+   "lat": 34.985527778,
+   "lon": 126.311666667,
+   "elev_m": 228.9,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Turbine",
+   "marking": "NIL",
+   "remarks": "Medium, low intensity obstacle light",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Tower",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB013",
+   "lat": 34.982611111,
+   "lon": 126.310055556,
+   "elev_m": 226.8,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Turbine",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Tower",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB014",
+   "lat": 34.978027778,
+   "lon": 126.309083333,
+   "elev_m": 211.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Turbine",
+   "marking": "NIL",
+   "remarks": "Medium, low intensity obstacle light",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Tower",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB015",
+   "lat": 34.974138889,
+   "lon": 126.310305556,
+   "elev_m": 205.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Turbine",
+   "marking": "NIL",
+   "remarks": "Medium, low intensity obstacle light",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Tower",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB016",
+   "lat": 35.007888889,
+   "lon": 126.372861111,
+   "elev_m": 53.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB017",
+   "lat": 35.005138889,
+   "lon": 126.372083333,
+   "elev_m": 60.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB018",
+   "lat": 35.002166667,
+   "lon": 126.373027778,
+   "elev_m": 41.8,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB019",
+   "lat": 34.999444444,
+   "lon": 126.373388889,
+   "elev_m": 53.9,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB020",
+   "lat": 34.997083333,
+   "lon": 126.369805556,
+   "elev_m": 56.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB021",
+   "lat": 34.995416667,
+   "lon": 126.367305556,
+   "elev_m": 48.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB022",
+   "lat": 34.991805556,
+   "lon": 126.367138889,
+   "elev_m": 55.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB023",
+   "lat": 34.9895,
+   "lon": 126.367527778,
+   "elev_m": 51.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB024",
+   "lat": 34.986527778,
+   "lon": 126.366277778,
+   "elev_m": 49.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB025",
+   "lat": 34.984611111,
+   "lon": 126.364666667,
+   "elev_m": 60.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB026",
+   "lat": 34.981083333,
+   "lon": 126.364222222,
+   "elev_m": 59.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB027",
+   "lat": 34.979305556,
+   "lon": 126.361694444,
+   "elev_m": 59.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB028",
+   "lat": 34.977138889,
+   "lon": 126.360444444,
+   "elev_m": 54.9,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB029",
+   "lat": 34.975555556,
+   "lon": 126.357972222,
+   "elev_m": 60.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB030",
+   "lat": 34.975194444,
+   "lon": 126.354638889,
+   "elev_m": 60.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB031",
+   "lat": 34.972444444,
+   "lon": 126.35225,
+   "elev_m": 60.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB032",
+   "lat": 34.969777778,
+   "lon": 126.353333333,
+   "elev_m": 60.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB033",
+   "lat": 34.967111111,
+   "lon": 126.350944444,
+   "elev_m": 60.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB034",
+   "lat": 34.967555556,
+   "lon": 126.347472222,
+   "elev_m": 60.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB035",
+   "lat": 34.96625,
+   "lon": 126.34525,
+   "elev_m": 52.7,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB036",
+   "lat": 34.963722222,
+   "lon": 126.342361111,
+   "elev_m": 58.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB037",
+   "lat": 34.962527778,
+   "lon": 126.339,
+   "elev_m": 60.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB038",
+   "lat": 34.962083333,
+   "lon": 126.334888889,
+   "elev_m": 50.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB039",
+   "lat": 34.961916667,
+   "lon": 126.332361111,
+   "elev_m": 43.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Antenna",
+   "marking": "NIL",
+   "remarks": "-",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Antenna",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB040",
+   "lat": 34.982111111,
+   "lon": 126.381638889,
+   "elev_m": 19.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Mast",
+   "marking": null,
+   "remarks": "32.8 ft Marked/LGTD RWY 01, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Mast",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB041",
+   "lat": 34.982055556,
+   "lon": 126.381555556,
+   "elev_m": 13.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "RVR Maintenance Structure",
+   "marking": null,
+   "remarks": "14.8 ft Marked/LGTD RWY 01, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB042",
+   "lat": 34.982305556,
+   "lon": 126.381555556,
+   "elev_m": 13.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "RVR Maintenance Structure",
+   "marking": null,
+   "remarks": "14.8 ft Marked/LGTD RWY 01, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Navaid",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB043",
+   "lat": 35.000555556,
+   "lon": 126.381527778,
+   "elev_m": 23.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Wind Mast",
+   "marking": null,
+   "remarks": "32.8 ft Marked/LGTD RWY 19, Material(Steel)",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Mast",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB044",
+   "lat": 34.978472222,
+   "lon": 126.38325,
+   "elev_m": 10.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "ALS Power Supply Box",
+   "marking": null,
+   "remarks": "2.9 ft NIL -",
+   "sources": [
+    "AD 2.10 Area 3"
+   ],
+   "category": "Navaid",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB045",
+   "lat": 34.978222222,
+   "lon": 126.38325,
+   "elev_m": 10.3,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "ALS Power Supply Box",
+   "marking": null,
+   "remarks": "2.9 ft NIL -",
+   "sources": [
+    "AD 2.10 Area 3"
+   ],
+   "category": "Navaid",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB046",
+   "lat": 34.977944444,
+   "lon": 126.38325,
+   "elev_m": 10.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "ALS Power Supply Box",
+   "marking": null,
+   "remarks": "2.9 ft NIL -",
+   "sources": [
+    "AD 2.10 Area 3"
+   ],
+   "category": "Navaid",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB047",
+   "lat": 34.977666667,
+   "lon": 126.382944444,
+   "elev_m": 10.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "ALS Power Supply Box",
+   "marking": null,
+   "remarks": "2.6 ft NIL -",
+   "sources": [
+    "AD 2.10 Area 3"
+   ],
+   "category": "Navaid",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJBOB048",
+   "lat": 34.977416667,
+   "lon": 126.382944444,
+   "elev_m": 9.6,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "ALS Power Supply Box",
+   "marking": null,
+   "remarks": "2.7 ft NIL -",
+   "sources": [
+    "AD 2.10 Area 3"
+   ],
+   "category": "Navaid",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJB-2-5-1",
+   "lat": 35.0534722,
+   "lon": 126.37975,
+   "elev_m": 93.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJB-2-5-2",
+   "lat": 34.876,
+   "lon": 126.3798889,
+   "elev_m": 82.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-5 #2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
+  },
+  {
+   "id": "RKJB-2-6-1",
    "lat": 34.9490861,
    "lon": 126.391525,
    "elev_m": 87.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #1"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
   },
   {
-   "icao": "RKJB",
-   "chart": "2-6",
-   "amdt": "AIRAC AIP AMDT 9/26",
-   "no": "2",
+   "id": "RKJB-2-6-2",
    "lat": 34.9531667,
    "lon": 126.4137528,
    "elev_m": 106.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #2"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
   },
   {
-   "icao": "RKJB",
-   "chart": "2-6",
-   "amdt": "AIRAC AIP AMDT 9/26",
-   "no": "3",
+   "id": "RKJB-2-6-3",
    "lat": 34.9664861,
    "lon": 126.4172444,
    "elev_m": 68.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #3"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
   },
   {
-   "icao": "RKJB",
-   "chart": "2-6",
-   "amdt": "AIRAC AIP AMDT 9/26",
-   "no": "4",
-   "lat": 34.9435889,
-   "lon": 126.3954444,
-   "elev_m": 182.5,
-   "type": "Natural high point"
-  },
-  {
-   "icao": "RKJB",
-   "chart": "2-6",
-   "amdt": "AIRAC AIP AMDT 9/26",
-   "no": "5",
+   "id": "RKJB-2-6-5",
    "lat": 34.9445139,
    "lon": 126.3920917,
    "elev_m": 91.0,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #5"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
   },
   {
-   "icao": "RKJB",
-   "chart": "2-6",
-   "amdt": "AIRAC AIP AMDT 9/26",
-   "no": "6",
+   "id": "RKJB-2-6-6",
    "lat": 34.9535361,
    "lon": 126.3912361,
    "elev_m": 66.5,
-   "type": "Natural high point"
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural high point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-6 #6"
+   ],
+   "category": "Natural",
+   "airport": "RKJB"
   }
  ],
  "issues": [

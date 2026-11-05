@@ -1,8 +1,8 @@
 # RKJB AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 37개 / Fix 85개 / 홀딩 2개 / 장애물 6개
+- 절차 37개 / Fix 85개 / 홀딩 2개 / 장애물 55개
 - 지도 반영 37개 / 제외(검토 필요) 0개
-- 원본: (2-11) STAR.pdf, (2-14) INSTR APCH CHART(1).pdf, (2-6) AD OBSTACLE CHART TYPE B(1).pdf, (2-7) SID.pdf, RKJB-TEXT.pdf
+- 원본: (2-11) STAR.pdf, (2-14) INSTR APCH CHART(1).pdf, (2-5) AD OBSTACLE CHART TYPE A(2).pdf, (2-6) AD OBSTACLE CHART TYPE B(1).pdf, (2-7) SID.pdf, RKJB-TEXT.pdf
 
 ## 검증 결과
 - [warn] fix THR RWY 19 differs 300 m in RKJB AD CHART 2-21-1 (AIRAC AIP AMDT 9/24)

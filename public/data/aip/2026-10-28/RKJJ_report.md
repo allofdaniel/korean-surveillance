@@ -1,8 +1,8 @@
 # RKJJ AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 29개 / Fix 58개 / 홀딩 10개 / 장애물 235개
+- 절차 29개 / Fix 58개 / 홀딩 10개 / 장애물 275개
 - 지도 반영 29개 / 제외(검토 필요) 0개
-- 원본: (2-11) SID_1772608055.pdf, (2-16) STAR.pdf, (2-20) INSTR APCH CHART.pdf, (2-9) AD OBSTACLE CHART TYPE B(3).pdf, RKJJ-TEXT.pdf
+- 원본: (2-11) SID_1772608055.pdf, (2-16) STAR.pdf, (2-20) INSTR APCH CHART.pdf, (2-5) AD OBSTACLE CHART TYPE A(3).pdf, (2-9) AD OBSTACLE CHART TYPE B(3).pdf, RKJJ-TEXT.pdf
 
 ## 검증 결과
 - [warn] fix IMDG differs 2855 m in AD2.19

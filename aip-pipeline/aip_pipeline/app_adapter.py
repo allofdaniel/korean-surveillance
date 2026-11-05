@@ -139,6 +139,9 @@ def merge(app: dict, ds: dict, airac: str):
             apt['lat'], apt['lon'] = a['arp']
         if a.get('magvar'):
             apt['mag_var'] = a['magvar']['deg']
+        if a.get('elev_m') is not None:
+            apt['elevation_ft'] = round(a['elev_m'] / 0.3048)
+            apt['elevation_m'] = a['elev_m']
         byid = {f"RW{r['id']}": r for r in ds['runways']}
         for r in apt.get('runways', []):
             src = byid.get(r.get('id'))
@@ -146,6 +149,7 @@ def merge(app: dict, ds: dict, airac: str):
                 r['lat'], r['lon'] = src['thr']; r['heading_true'] = src['true_brg']
                 if src.get('len_m'): r['length_m'] = src['len_m']
                 if src.get('width_m'): r['width_m'] = src['width_m']
+                if src.get('thr_elev_m') is not None: r['elevation_ft'] = round(src['thr_elev_m'] / 0.3048)
         apt['data_source'] = 'AIP'
     md = app.setdefault('metadata', {})
     md.setdefault('aip_airports', {})[icao] = {'airac': airac, 'built_at': ds['built_at'],

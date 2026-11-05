@@ -1,6 +1,6 @@
 # RKPD AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 22개 / Fix 48개 / 홀딩 1개 / 장애물 3개
+- 절차 22개 / Fix 48개 / 홀딩 1개 / 장애물 9개
 - 지도 반영 22개 / 제외(검토 필요) 0개
 - 원본: (2-12) STAR(2).pdf, (2-15) INSTR APCH CHART(1).pdf, (2-3) AERODROME OBST CHART.pdf, (2-4) SID.pdf, RKPD-TEXT.pdf
 

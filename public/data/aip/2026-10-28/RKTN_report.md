@@ -1,8 +1,8 @@
 # RKTN AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 42개 / Fix 50개 / 홀딩 2개 / 장애물 235개
+- 절차 42개 / Fix 50개 / 홀딩 2개 / 장애물 259개
 - 지도 반영 42개 / 제외(검토 필요) 0개
-- 원본: (2-10) SID.pdf, (2-15) STAR.pdf, (2-18) INSTR APCH CHART.pdf, (2-9) AD OBSTACLE CHART TYPE B(2).pdf, RKTN-TEXT.pdf
+- 원본: (2-10) SID.pdf, (2-15) STAR.pdf, (2-18) INSTR APCH CHART.pdf, (2-5) AD OBSTACLE CHART TYPE A(1).pdf, (2-9) AD OBSTACLE CHART TYPE B(2).pdf, RKTN-TEXT.pdf
 
 ## 검증 결과
 - [warn] fix ITAG differs 2754 m in AD2.19

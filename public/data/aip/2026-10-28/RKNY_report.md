@@ -1,8 +1,8 @@
 # RKNY AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 12개 / Fix 32개 / 홀딩 3개 / 장애물 105개
+- 절차 12개 / Fix 32개 / 홀딩 3개 / 장애물 123개
 - 지도 반영 12개 / 제외(검토 필요) 0개
-- 원본: (2-12) STAR.pdf, (2-14) INSTR APCH CHART.pdf, (2-6) AD OBSTACLE CHART TYPE B.pdf, (2-8) SID.pdf, RKNY-TEXT.pdf
+- 원본: (2-12) STAR.pdf, (2-14) INSTR APCH CHART.pdf, (2-4) AD OBSTACLE CHART TYPE A.pdf, (2-6) AD OBSTACLE CHART TYPE B.pdf, (2-8) SID.pdf, RKNY-TEXT.pdf
 
 ## 검증 결과
 - [warn] fix IYAN differs 2515 m in AD2.19

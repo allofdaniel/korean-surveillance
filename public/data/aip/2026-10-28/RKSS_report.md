@@ -1,8 +1,8 @@
 # RKSS AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 45개 / Fix 158개 / 홀딩 11개 / 장애물 300개
+- 절차 45개 / Fix 158개 / 홀딩 11개 / 장애물 376개
 - 지도 반영 44개 / 제외(검토 필요) 1개
-- 원본: (2-11) AD OBSTACLE CHART TYPE B.pdf, (2-14) SID.pdf, (2-23) STAR.pdf, (2-29) INSTR APCH CHART.pdf, RKSS-TEXT.pdf
+- 원본: (2-11) AD OBSTACLE CHART TYPE B.pdf, (2-14) SID.pdf, (2-23) STAR.pdf, (2-29) INSTR APCH CHART.pdf, (2-7) AD OBSTACLE CHART TYPE A.pdf, RKSS-TEXT.pdf
 
 ## 검증 결과
 - [warn] fix IOFR differs 3207 m in AD2.19

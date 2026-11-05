@@ -1,6 +1,6 @@
 # RKTL AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 24개 / Fix 48개 / 홀딩 3개 / 장애물 0개
+- 절차 24개 / Fix 48개 / 홀딩 3개 / 장애물 17개
 - 지도 반영 24개 / 제외(검토 필요) 0개
 - 원본: (2-14) STAR(1).pdf, (2-18) INSTR APCH CHART(1).pdf, (2-7) SID(1).pdf, RKTL-TEXT.pdf
 

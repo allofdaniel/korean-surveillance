@@ -1,8 +1,8 @@
 # RKTU AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 46개 / Fix 63개 / 홀딩 4개 / 장애물 75개
+- 절차 46개 / Fix 63개 / 홀딩 4개 / 장애물 84개
 - 지도 반영 46개 / 제외(검토 필요) 0개
-- 원본: (2-11) SID.pdf, (2-14) STAR.pdf, (2-17) INSTR APCH CHART.pdf, (2-9) AD OBSTACLE CHART TYPE B(1).pdf, RKTU-TEXT.pdf
+- 원본: (2-11) SID.pdf, (2-14) STAR.pdf, (2-17) INSTR APCH CHART.pdf, (2-5) AD OBSTACLE CHART TYPE A.pdf, (2-9) AD OBSTACLE CHART TYPE B(1).pdf, RKTU-TEXT.pdf
 
 ## 검증 결과
 - [warn] fix ICHG differs 8679 m in AD2.19

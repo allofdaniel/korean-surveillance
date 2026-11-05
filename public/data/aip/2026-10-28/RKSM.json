@@ -1,6 +1,6 @@
 {
  "icao": "RKSM",
- "built_at": "2026-11-05T05:59:10.913968Z",
+ "built_at": "2026-11-05T06:19:23.887691Z",
  "sources": [
   {
    "file": "(2-11) INSTR APCH CHART.pdf",
@@ -50,7 +50,7 @@
     37.434055556,
     127.114972222
    ],
-   "thr_elev_m": null
+   "thr_elev_m": 23.6
   },
   {
    "id": "19",
@@ -61,7 +61,7 @@
     37.458777778,
     127.115944444
    ],
-   "thr_elev_m": null
+   "thr_elev_m": 20.8
   },
   {
    "id": "02",
@@ -72,7 +72,7 @@
     37.432388889,
     127.110583333
    ],
-   "thr_elev_m": null
+   "thr_elev_m": 28.4
   },
   {
    "id": "20",
@@ -83,7 +83,7 @@
     37.458777778,
     127.115277778
    ],
-   "thr_elev_m": null
+   "thr_elev_m": 20.8
   }
  ],
  "navaids": [
@@ -3062,6 +3062,103 @@
   }
  ],
  "holdings": [],
- "obstacles": [],
+ "obstacles": [
+  {
+   "id": "RKSMOB001",
+   "lat": 37.468,
+   "lon": 127.111416667,
+   "elev_m": 72.2,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": "19/20 APCH 1/2 TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKSM"
+  },
+  {
+   "id": "RKSMOB002",
+   "lat": 37.478305556,
+   "lon": 127.118777778,
+   "elev_m": 72.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Building",
+   "marking": null,
+   "remarks": "19/20 APCH",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Building",
+   "airport": "RKSM"
+  },
+  {
+   "id": "RKSMOB003",
+   "lat": 37.42475,
+   "lon": 127.11125,
+   "elev_m": 56.1,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": "19/20 TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKSM"
+  },
+  {
+   "id": "RKSMOB004",
+   "lat": 37.423555556,
+   "lon": 127.11275,
+   "elev_m": 57.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": "19/20 TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKSM"
+  },
+  {
+   "id": "RKSMOB005",
+   "lat": 37.413611111,
+   "lon": 127.106027778,
+   "elev_m": 108.5,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": "19 TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKSM"
+  },
+  {
+   "id": "RKSMOB006",
+   "lat": 37.417666667,
+   "lon": 127.113166667,
+   "elev_m": 84.4,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": "1/2 APCH 20 TKOF",
+   "sources": [
+    "AD 2.10 Area 2"
+   ],
+   "category": "Natural",
+   "airport": "RKSM"
+  }
+ ],
  "issues": []
 }

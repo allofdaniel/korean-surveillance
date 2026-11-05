@@ -1,8 +1,8 @@
 # RKPU AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 18개 / Fix 51개 / 홀딩 5개 / 장애물 244개
+- 절차 18개 / Fix 51개 / 홀딩 5개 / 장애물 372개
 - 지도 반영 18개 / 제외(검토 필요) 0개
-- 원본: (2-10) STAR.pdf, (2-12) INSTR APCH CHART.pdf, (2-5) AD OBSTACLE CHART TYPE B_1748417850.pdf, (2-6) SID.pdf, RKPU-TEXT.pdf
+- 원본: (2-10) STAR.pdf, (2-12) INSTR APCH CHART.pdf, (2-3) AD OBSTACLE CHART TYPE A.pdf, (2-5) AD OBSTACLE CHART TYPE B_1748417850.pdf, (2-6) SID.pdf, RKPU-TEXT.pdf
 
 ## 검증 결과
 - [warn] fix IULS differs 1940 m in AD2.19

@@ -1,6 +1,6 @@
 # RKPS AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 35개 / Fix 65개 / 홀딩 8개 / 장애물 0개
+- 절차 35개 / Fix 65개 / 홀딩 8개 / 장애물 15개
 - 지도 반영 35개 / 제외(검토 필요) 0개
 - 원본: (2-13) INSTR APCH CHART.pdf, (2-3) SID(1).pdf, (2-8) STAR.pdf, RKPS-TEXT.pdf
 

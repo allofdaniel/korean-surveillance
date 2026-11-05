@@ -22,8 +22,11 @@ def parse(path: str) -> dict:
     s2 = _section(t, 2)
     arp = re.search(r'ARP coordinates.*?(\d{6}(?:\.\d+)?\s*[NS])\s*(\d{7}(?:\.\d+)?\s*[EW])', s2, re.S)
     out['arp'] = parse_latlon(arp.group(1) + ' ' + arp.group(2)) if arp else None
-    el = re.search(r'Elevation.*?(\d+(?:\.\d+)?)\s*m', s2, re.S)
-    out['elev_m'] = float(el.group(1)) if el else None
+    el = re.search(r'Elevation\s*/\s*Reference\s+temperature\D{0,40}?(\d+(?:\.\d+)?)\s*(m|ft)\b', s2, re.S) \
+        or re.search(r'Elevation\D{0,60}?(\d+(?:\.\d+)?)\s*(m|ft)\b', s2, re.S)
+    out['elev_m'] = (float(el.group(1)) * (0.3048 if el.group(2) == 'ft' else 1)) if el else None
+    if out['elev_m'] is not None:
+        out['elev_m'] = round(out['elev_m'], 1)
     mv = re.search(r'MAG VAR.*?(\d+(?:\.\d+)?)\s*°\s*([EW])\s*\((\d{4})\)(?:\s*/\s*([\d.]+)\s*°\s*(\w+))?', s2, re.S)
     if mv:
         out['magvar'] = {'deg': float(mv.group(1)) * (-1 if mv.group(2) == 'W' else 1), 'year': int(mv.group(3)),
@@ -42,9 +45,9 @@ def parse(path: str) -> dict:
             ln, wd = str(round(int(ln.replace(' ', '')) * 0.3048)), str(round(int(wd) * 0.3048))
         seg = s12[m.start(): m.start() + 600]
         ll = parse_latlon(seg)
-        e = re.search(r'THR\s+(\d+(?:\.\d+)?)\s*m', seg)
+        e = re.search(r'THR\s*:?\s*(\d+(?:\.\d+)?)\s*(m|ft)\b', seg)
         rwys.append({'id': rid, 'true_brg': float(tb), 'len_m': int(ln.replace(' ', '')), 'width_m': int(wd),
-                     'thr': ll, 'thr_elev_m': float(e.group(1)) if e else None})
+                     'thr': ll, 'thr_elev_m': round(float(e.group(1)) * (0.3048 if e.group(2) == 'ft' else 1), 1) if e else None})
     out['runways'] = rwys
     # AD 2.17 CTR
     s17 = _section(t, 17)

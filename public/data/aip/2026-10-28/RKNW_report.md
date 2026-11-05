@@ -1,6 +1,6 @@
 # RKNW AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 17개 / Fix 38개 / 홀딩 5개 / 장애물 0개
+- 절차 17개 / Fix 38개 / 홀딩 5개 / 장애물 10개
 - 지도 반영 17개 / 제외(검토 필요) 0개
 - 원본: (2-10) INSTR APCH CHART.pdf, (2-3) SID.pdf, (2-8)_STAR[1].pdf, RKNW-TEXT.pdf
 
