@@ -1,0 +1,16 @@
+name: AIP data check
+on:
+  pull_request:
+    paths:
+      - 'public/data/korea_airspace.json'
+      - 'public/data/aip/**'
+      - 'aip-pipeline/**'
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Validate app JSON references
+        run: python aip-pipeline/scripts/check_app_json.py public/data/korea_airspace.json
