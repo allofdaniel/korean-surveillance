@@ -1,6 +1,6 @@
 {
  "icao": "RKNW",
- "built_at": "2026-11-05T06:18:27.609845Z",
+ "built_at": "2026-11-05T07:36:26.141056Z",
  "sources": [
   {
    "file": "(2-10) INSTR APCH CHART.pdf",
@@ -2897,11 +2897,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "817 ft NIL 03 APCH, 21 TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNW"
+   "airport": "RKNW",
+   "ground_m": 345.7,
+   "hgt_est_m": 2.4
   },
   {
    "id": "RKNWOB002",
@@ -2913,11 +2916,14 @@
    "type": "Pylon",
    "marking": null,
    "remarks": "224 ft LGTD 03 APCH, 21 TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Tower",
-   "airport": "RKNW"
+   "airport": "RKNW",
+   "ground_m": 320.5,
+   "hgt_est_m": 67.5
   },
   {
    "id": "RKNWOB003",
@@ -2929,11 +2935,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "1 385 ft NIL 03 APCH",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNW"
+   "airport": "RKNW",
+   "ground_m": 515.7,
+   "hgt_est_m": 5.5
   },
   {
    "id": "RKNWOB004",
@@ -2945,11 +2954,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "2 264 ft NIL 03 TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNW"
+   "airport": "RKNW",
+   "ground_m": 776.2,
+   "hgt_est_m": 12.9
   },
   {
    "id": "RKNWOB005",
@@ -2961,11 +2973,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "694 ft NIL 21 APCH",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNW"
+   "airport": "RKNW",
+   "ground_m": 292.5,
+   "hgt_est_m": 19.6
   },
   {
    "id": "RKNWOB006",
@@ -2977,11 +2992,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "676 ft NIL 21 APCH",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNW"
+   "airport": "RKNW",
+   "ground_m": 306.8,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNWOB007",
@@ -2993,11 +3011,14 @@
    "type": "Building",
    "marking": null,
    "remarks": "14 ft NIL 21 TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Building",
-   "airport": "RKNW"
+   "airport": "RKNW",
+   "ground_m": 97.9,
+   "hgt_est_m": 5.4
   },
   {
    "id": "RKNWOB008",
@@ -3009,11 +3030,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "740 ft NIL In 03/21 circling area",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNW"
+   "airport": "RKNW",
+   "ground_m": 229.9,
+   "hgt_est_m": 96.2
   },
   {
    "id": "RKNWOB009",
@@ -3025,11 +3049,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "819 ft NIL In 03/21 circling area",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNW"
+   "airport": "RKNW",
+   "ground_m": 302.8,
+   "hgt_est_m": 47.4
   },
   {
    "id": "RKNWOB010",
@@ -3041,11 +3068,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "629 ft NIL In 03/21 circling area",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNW"
+   "airport": "RKNW",
+   "ground_m": 583.7,
+   "hgt_est_m": 13.4
   }
  ],
  "issues": [

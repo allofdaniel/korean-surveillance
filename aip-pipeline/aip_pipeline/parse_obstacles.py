@@ -8,7 +8,7 @@ PAT = re.compile(r"(\d{1,3})\s+(\d{2})°\s?(\d{2})'\s?([\d.]+)\"\s?N\s+(\d{3})°
 PAT2 = re.compile(r"(?m)^([A-Z]?\d{1,3})\n\s*(\d{2})°\s?(\d{2})'\s?([\d.]+)\s*\"\s?N?\s*(\d{3})°\s?(\d{2})'\s?([\d.]+)\s*\"\s?E?\s*\n\s*([\d.]+)\s*\n\s*([A-Za-z][A-Za-z ,/()-]{1,40})")
 
 Q = r"(?:\"|″|''|”)"
-PAT3 = re.compile(r"(?<![\d.°'])([A-Z]?\d{1,3})\s+(\d{2})\s*°\s*(\d{2})\s*'\s*([\d.]+)\s*" + Q + r"\s*N?\s*(\d{3})\s*°\s*(\d{2})\s*'\s*([\d.]+)\s*" + Q + r"\s*E?\s+(\d{1,4}(?:\.\d+)?)\s+([A-Za-z][A-Za-z ,/()\-]{1,40}?)(?=\s+[A-Z]?\d{1,3}\s+\d{2}\s*°|\s+[A-Z]{3,}|\s+A I P|\s+\d|$)")
+PAT3 = re.compile(r"(?<![\d.°'])([A-Z]?\d{1,3}(?:_\d+)?)\s+(\d{2})\s*°\s*(\d{2})\s*'?\s*([\d.]+)\s*" + Q + r"\s*N?\s*(\d{3})\s*°\s*(\d{2})\s*'?\s*([\d.]+)\s*" + Q + r"\s*E?\s+(\d{1,4}(?:\s?\.\s?\d+)?)\s+([A-Za-z][A-Za-z ,/()\-]{1,40}?)(?=\s+[A-Z]?\d{1,3}(?:_\d+)?\s+\d{2}\s*°|\s+[A-Z]{3,}|\s+A I P|\s+\d|$)")
 
 def parse(path: str):
     doc = fitz.open(path)
@@ -26,7 +26,7 @@ def parse(path: str):
             if not (33 <= lat <= 39 and 124 <= lon <= 132):
                 continue
             out.append({'icao': m.group(1) if m else None, 'chart': chart, 'amdt': a.group(1) if a else None,
-                        'no': n, 'lat': round(lat, 7), 'lon': round(lon, 7), 'elev_m': float(el), 'type': typ.strip()})
+                        'no': n, 'lat': round(lat, 7), 'lon': round(lon, 7), 'elev_m': float(el.replace(' ', '')), 'type': typ.strip()})
     seen = {}
     for o in out:
         seen[(o['chart'], o['no'], round(o['lat'], 5))] = o

@@ -30,6 +30,18 @@ def parse(path: str):
         oid = m.group(1)
         seg = one[m.end(): ids[n + 1].start() if n + 1 < len(ids) else len(one)]
         g = LL.search(seg)
+        rel = re.match(r'\s*([A-Za-z][A-Za-z ]*?)\s+(\d+(?:\.\d+)?)\s*NM from RWY\s*(\d{2}[LRC]?)\s*THR', seg)
+        if oid not in seen and rel and (not g or g.start() > rel.end()):
+            e = next((x for x in EH.finditer(seg, rel.end()) if x.group(1) or x.group(3)), None)
+            if e:
+                seen.add(oid)
+                k = 0.3048 if (e.group(2) or e.group(4)) == 'ft' else 1.0
+                out.append({'id': oid, 'type': rel.group(1).strip(), 'lat': None, 'lon': None,
+                            'rel': {'nm': float(rel.group(2)), 'rwy': rel.group(3)},
+                            'elev_m': round(float(e.group(1).replace(' ', '')) * k, 1) if e.group(1) else None,
+                            'hgt_m': None, 'marking': None, 'remarks': f'{rel.group(2)} NM from RWY {rel.group(3)} THR (위치 추정)',
+                            'area': None, 'source': 'AD 2.10'})
+            continue
         if oid in seen or not g:
             continue
         ll = parse_latlon(f'{g.group(1)}{g.group(2)} {g.group(3)}{g.group(4)}')

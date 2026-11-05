@@ -15,6 +15,18 @@ def is_enr(path):
         return False
     return bool(re.search(r'ENR\s*4\.[14]', t))
 
+def _p0(path):
+    try:
+        return fitz.open(path)[0].get_text()
+    except Exception:
+        return ''
+
+def is_enr54(path):
+    return bool(re.search(r'ENR\s*5\.4\s+AIR NAVIGATION OBSTACLES', _p0(path)))
+
+def is_enr_other(path):
+    return bool(re.search(r'\bENR\s*[0-9]\.\d+\s*-\s*\d', _p0(path)[:300]))
+
 def parse(path):
     out = {}
     for p in fitz.open(path):

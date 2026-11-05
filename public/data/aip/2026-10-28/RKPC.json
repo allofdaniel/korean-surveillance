@@ -1,6 +1,6 @@
 {
  "icao": "RKPC",
- "built_at": "2026-11-05T06:18:30.638972Z",
+ "built_at": "2026-11-05T07:36:30.270516Z",
  "sources": [
   {
    "file": "(2-12) SID.pdf",
@@ -10540,11 +10540,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": "07/APCH 25/TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 254.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKPCOB002",
@@ -10556,11 +10559,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 405.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKPCOB003",
@@ -10572,11 +10578,14 @@
    "type": "Pole",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Mast",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 73.3,
+   "hgt_est_m": 9.6
   },
   {
    "id": "RKPCOB004",
@@ -10588,11 +10597,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 65.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKPCOB005",
@@ -10604,11 +10616,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 59.9,
+   "hgt_est_m": 3.2
   },
   {
    "id": "RKPCOB006",
@@ -10620,12 +10635,15 @@
    "type": "Tower",
    "marking": "LGTD",
    "remarks": "/FLS W",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2",
     "AD CHART 2-9 #14"
    ],
    "category": "Tower",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 34.1,
+   "hgt_est_m": 60.7
   },
   {
    "id": "RKPCOB007",
@@ -10637,11 +10655,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 236.1,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKPCOB008",
@@ -10653,11 +10674,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 462.6,
+   "hgt_est_m": 3.7
   },
   {
    "id": "RKPCOB009",
@@ -10669,11 +10693,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 356.5,
+   "hgt_est_m": 2.6
   },
   {
    "id": "RKPCOB010",
@@ -10685,11 +10712,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 274.2,
+   "hgt_est_m": 15.1
   },
   {
    "id": "RKPCOB011",
@@ -10701,11 +10731,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 515.1,
+   "hgt_est_m": 4.3
   },
   {
    "id": "RKPCOB012",
@@ -10717,11 +10750,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 451.0,
+   "hgt_est_m": 1.0
   },
   {
    "id": "RKPCOB013",
@@ -10733,11 +10769,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 202.3,
+   "hgt_est_m": 26.9
   },
   {
    "id": "RKPCOB014",
@@ -10749,11 +10788,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 83.3,
+   "hgt_est_m": 2.3
   },
   {
    "id": "RKPCOB015",
@@ -10765,12 +10807,15 @@
    "type": "Building",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2",
     "AD CHART 2-9 #8"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 37.5,
+   "hgt_est_m": 12.5
   },
   {
    "id": "RKPCOB016",
@@ -10782,11 +10827,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 1213.7,
+   "hgt_est_m": 1.5
   },
   {
    "id": "RKPCOB017",
@@ -10798,11 +10846,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": "25/APCH 07/TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 143.5,
+   "hgt_est_m": 12.9
   },
   {
    "id": "RKPCOB018",
@@ -10814,11 +10865,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 106.2,
+   "hgt_est_m": 5.4
   },
   {
    "id": "RKPCOB019",
@@ -10830,11 +10884,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 1914.2,
+   "hgt_est_m": 32.6
   },
   {
    "id": "RKPCOB020",
@@ -10846,11 +10903,14 @@
    "type": "Building",
    "marking": "LGTD",
    "remarks": "/FLS W In circling area (RWY 31)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 62.4,
+   "hgt_est_m": 61.3
   },
   {
    "id": "RKPCOB021",
@@ -10862,11 +10922,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 143.5,
+   "hgt_est_m": 12.9
   },
   {
    "id": "RKPCOB022",
@@ -10878,11 +10941,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 272.7,
+   "hgt_est_m": 6.5
   },
   {
    "id": "RKPCOB023",
@@ -10894,11 +10960,14 @@
    "type": "Wind Mast",
    "marking": null,
    "remarks": "32.8 ft Marked/LGTD RWY 25, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Mast",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 20.4,
+   "hgt_est_m": 10.5
   },
   {
    "id": "RKPCOB024",
@@ -10910,11 +10979,14 @@
    "type": "GP Antenna",
    "marking": null,
    "remarks": "51.5 ft Marked/LGTD RWY 07, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 22.9,
+   "hgt_est_m": 15.3
   },
   {
    "id": "RKPCOB025",
@@ -10926,11 +10998,14 @@
    "type": "GP Antenna",
    "marking": null,
    "remarks": "51.57 ft Marked/LGTD RWY 25, Material(FRP)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 21.1,
+   "hgt_est_m": 15.3
   },
   {
    "id": "RKPCOB026",
@@ -10942,11 +11017,14 @@
    "type": "GP NFM Antenna",
    "marking": null,
    "remarks": "20.24 ft Marked/LGTD RWY 25, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 20.7,
+   "hgt_est_m": 6.1
   },
   {
    "id": "RKPCOB027",
@@ -10958,11 +11036,14 @@
    "type": "DME Antenna",
    "marking": null,
    "remarks": "19.89 ft Marked RWY 25, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 21.1,
+   "hgt_est_m": 5.5
   },
   {
    "id": "RKPC-2-7-1",
@@ -10978,7 +11059,9 @@
     "AD CHART 2-7 #1"
    ],
    "category": "Tree",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 28.3,
+   "hgt_est_m": 3.7
   },
   {
    "id": "RKPC-2-7-2",
@@ -10994,7 +11077,9 @@
     "AD CHART 2-7 #2"
    ],
    "category": "Tree",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 21.3,
+   "hgt_est_m": 13.7
   },
   {
    "id": "RKPC-2-7-3",
@@ -11010,7 +11095,9 @@
     "AD CHART 2-7 #3"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 35.1,
+   "hgt_est_m": 12.4
   },
   {
    "id": "RKPC-2-7-4",
@@ -11026,7 +11113,9 @@
     "AD CHART 2-7 #4"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 34.7,
+   "hgt_est_m": 16.3
   },
   {
    "id": "RKPC-2-7-5",
@@ -11043,7 +11132,9 @@
     "AD CHART 2-9 #5"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 34.4,
+   "hgt_est_m": 15.6
   },
   {
    "id": "RKPC-2-7-6",
@@ -11060,7 +11151,9 @@
     "AD CHART 2-9 #4"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 33.2,
+   "hgt_est_m": 19.3
   },
   {
    "id": "RKPC-2-9-1",
@@ -11076,7 +11169,9 @@
     "AD CHART 2-9 #1"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 143.5,
+   "hgt_est_m": 15.5
   },
   {
    "id": "RKPC-2-9-2",
@@ -11092,7 +11187,9 @@
     "AD CHART 2-9 #2"
    ],
    "category": "Natural",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 297.0,
+   "hgt_est_m": 13.5
   },
   {
    "id": "RKPC-2-9-3",
@@ -11108,7 +11205,9 @@
     "AD CHART 2-9 #3"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 32.0,
+   "hgt_est_m": 14.0
   },
   {
    "id": "RKPC-2-9-6",
@@ -11124,7 +11223,9 @@
     "AD CHART 2-9 #6"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 37.6,
+   "hgt_est_m": 11.9
   },
   {
    "id": "RKPC-2-9-7",
@@ -11140,7 +11241,9 @@
     "AD CHART 2-9 #7"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 32.5,
+   "hgt_est_m": 15.0
   },
   {
    "id": "RKPC-2-9-9",
@@ -11156,7 +11259,9 @@
     "AD CHART 2-9 #9"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 38.9,
+   "hgt_est_m": 10.1
   },
   {
    "id": "RKPC-2-9-10",
@@ -11172,7 +11277,9 @@
     "AD CHART 2-9 #10"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 32.7,
+   "hgt_est_m": 13.8
   },
   {
    "id": "RKPC-2-9-11",
@@ -11188,7 +11295,9 @@
     "AD CHART 2-9 #11"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 39.6,
+   "hgt_est_m": 15.9
   },
   {
    "id": "RKPC-2-9-12",
@@ -11204,7 +11313,9 @@
     "AD CHART 2-9 #12"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 39.6,
+   "hgt_est_m": 18.4
   },
   {
    "id": "RKPC-2-9-13",
@@ -11220,7 +11331,9 @@
     "AD CHART 2-9 #13"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 145.9,
+   "hgt_est_m": 10.1
   },
   {
    "id": "RKPC-2-9-15",
@@ -11236,7 +11349,9 @@
     "AD CHART 2-9 #15"
    ],
    "category": "Mast",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 37.1,
+   "hgt_est_m": 13.9
   },
   {
    "id": "RKPC-2-9-16",
@@ -11252,7 +11367,9 @@
     "AD CHART 2-9 #16"
    ],
    "category": "Mast",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 38.7,
+   "hgt_est_m": 9.3
   },
   {
    "id": "RKPC-2-9-17",
@@ -11268,7 +11385,9 @@
     "AD CHART 2-9 #17"
    ],
    "category": "Mast",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 41.6,
+   "hgt_est_m": 7.4
   },
   {
    "id": "RKPC-2-9-18",
@@ -11284,7 +11403,9 @@
     "AD CHART 2-9 #18"
    ],
    "category": "Tower",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 281.2,
+   "hgt_est_m": 21.3
   },
   {
    "id": "RKPC-2-9-19",
@@ -11300,7 +11421,9 @@
     "AD CHART 2-9 #19"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 39.4,
+   "hgt_est_m": 14.6
   },
   {
    "id": "RKPC-2-9-20",
@@ -11316,7 +11439,9 @@
     "AD CHART 2-9 #20"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 43.4,
+   "hgt_est_m": 16.1
   },
   {
    "id": "RKPC-2-9-21",
@@ -11332,7 +11457,9 @@
     "AD CHART 2-9 #21"
    ],
    "category": "Building",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 58.3,
+   "hgt_est_m": 37.2
   },
   {
    "id": "RKPC-2-9-22",
@@ -11348,7 +11475,9 @@
     "AD CHART 2-9 #22"
    ],
    "category": "Tower",
-   "airport": "RKPC"
+   "airport": "RKPC",
+   "ground_m": 289.2,
+   "hgt_est_m": 23.8
   }
  ],
  "issues": [

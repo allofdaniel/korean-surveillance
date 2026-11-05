@@ -1,6 +1,6 @@
 {
  "icao": "RKSS",
- "built_at": "2026-11-05T06:19:25.029897Z",
+ "built_at": "2026-11-05T07:37:28.943369Z",
  "sources": [
   {
    "file": "(2-11) AD OBSTACLE CHART TYPE B.pdf",
@@ -11375,11 +11375,14 @@
    "type": "Tower",
    "marking": null,
    "remarks": "2 228 ft LGTD 32L/R APCH",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Tower",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 603.6,
+   "hgt_est_m": 93.5
   },
   {
    "id": "RKSSOB002",
@@ -11391,11 +11394,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "1 289 ft NIL 14L/R TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 407.5,
+   "hgt_est_m": 3.4
   },
   {
    "id": "RKSSOB003",
@@ -11407,11 +11413,14 @@
    "type": "Building",
    "marking": null,
    "remarks": "224 ft NIL",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 24.0,
+   "hgt_est_m": 62.3
   },
   {
    "id": "RKSSOB004",
@@ -11423,11 +11432,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "1 519 ft NIL",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 477.5,
+   "hgt_est_m": 3.5
   },
   {
    "id": "RKSSOB005",
@@ -11439,11 +11451,14 @@
    "type": "Tower",
    "marking": null,
    "remarks": "1 683 ft LGTD",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Tower",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 325.3,
+   "hgt_est_m": 205.7
   },
   {
    "id": "RKSSOB006",
@@ -11455,11 +11470,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "354 ft NIL",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 124.7,
+   "hgt_est_m": 1.2
   },
   {
    "id": "RKSSOB007",
@@ -11471,11 +11489,14 @@
    "type": "Building",
    "marking": null,
    "remarks": "121 ft NIL",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 42.6,
+   "hgt_est_m": 12.3
   },
   {
    "id": "RKSSOB008",
@@ -11487,11 +11508,14 @@
    "type": "Building",
    "marking": null,
    "remarks": "394 ft NIL",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 137.0,
+   "hgt_est_m": 1.1
   },
   {
    "id": "RKSSOB009",
@@ -11503,11 +11527,14 @@
    "type": "Building",
    "marking": null,
    "remarks": "832 ft LGTD",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 2.6,
+   "hgt_est_m": 269.0
   },
   {
    "id": "RKSSOB010",
@@ -11519,13 +11546,16 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "434 ft NIL 14L/R APCH",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2",
     "AD CHART 2-9 #10",
     "AD CHART 2-10 #13"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 145.0,
+   "hgt_est_m": 5.3
   },
   {
    "id": "RKSSOB011",
@@ -11537,11 +11567,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "64 ft NIL 32L/R TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 44.4,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKSSOB012",
@@ -11553,11 +11586,14 @@
    "type": "Tower",
    "marking": null,
    "remarks": "1 447 ft LGTD",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Tower",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 388.7,
+   "hgt_est_m": 70.3
   },
   {
    "id": "RKSSOB013",
@@ -11569,11 +11605,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "647 ft NIL",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 211.1,
+   "hgt_est_m": 4.1
   },
   {
    "id": "RKSSOB014",
@@ -11585,11 +11624,14 @@
    "type": "Antenna",
    "marking": null,
    "remarks": "44 ft LTGD 32L/14R APCH",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Antenna",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 9.1,
+   "hgt_est_m": 22.3
   },
   {
    "id": "RKSSOB015",
@@ -11601,11 +11643,14 @@
    "type": "Wind Mast",
    "marking": null,
    "remarks": "32.8 ft Marked/LGTD RWY 14R, Material(Aluminum)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Mast",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 9.0,
+   "hgt_est_m": 10.3
   },
   {
    "id": "RKSSOB016",
@@ -11617,11 +11662,14 @@
    "type": "RVR Maintenance Structure",
    "marking": null,
    "remarks": "14.8 ft Marked/LGTD RWY 14R, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 12.0,
+   "hgt_est_m": 4.5
   },
   {
    "id": "RKSSOB017",
@@ -11633,11 +11681,14 @@
    "type": "RVR Maintenance Structure",
    "marking": null,
    "remarks": "16.1 ft Marked/LGTD RWY 14R, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 12.6,
+   "hgt_est_m": 4.6
   },
   {
    "id": "RKSSOB018",
@@ -11649,11 +11700,14 @@
    "type": "Wind Mast",
    "marking": null,
    "remarks": "32.8 ft Marked/LGTD RWY 32L, Material(Aluminum)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Mast",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 9.9,
+   "hgt_est_m": 9.8
   },
   {
    "id": "RKSSOB019",
@@ -11665,11 +11719,14 @@
    "type": "Wind Mast",
    "marking": null,
    "remarks": "32.8 ft Marked/LGTD RWY 14L, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Mast",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.8,
+   "hgt_est_m": 10.1
   },
   {
    "id": "RKSSOB020",
@@ -11681,11 +11738,14 @@
    "type": "RVR Maintenance Structure",
    "marking": null,
    "remarks": "16.1 ft Marked/LGTD RWY 14L, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.5,
+   "hgt_est_m": 5.0
   },
   {
    "id": "RKSSOB021",
@@ -11697,11 +11757,14 @@
    "type": "RVR Maintenance Structure",
    "marking": null,
    "remarks": "15.1 ft Marked/LGTD RWY 14L, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 11.1,
+   "hgt_est_m": 4.4
   },
   {
    "id": "RKSSOB022",
@@ -11713,11 +11776,14 @@
    "type": "RVR Maintenance Structure",
    "marking": null,
    "remarks": "16.4 ft Marked/LGTD RWY 14L, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.4,
+   "hgt_est_m": 4.8
   },
   {
    "id": "RKSSOB023",
@@ -11729,11 +11795,14 @@
    "type": "RVR Maintenance Structure",
    "marking": null,
    "remarks": "16.1 ft Marked/LGTD RWY 14L, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 16.1,
+   "hgt_est_m": 4.2
   },
   {
    "id": "RKSSOB024",
@@ -11745,11 +11814,14 @@
    "type": "Wind Mast",
    "marking": null,
    "remarks": "32.8 ft Marked/LGTD RWY 32R, Material(Aluminum)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Mast",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.4,
+   "hgt_est_m": 10.1
   },
   {
    "id": "RKSSOB026",
@@ -11761,11 +11833,14 @@
    "type": "GP Antenna",
    "marking": null,
    "remarks": "49.2 ft Marked/LGTD RWY 14L Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.5,
+   "hgt_est_m": 14.1
   },
   {
    "id": "RKSSOB027",
@@ -11777,11 +11852,14 @@
    "type": "GP Antenna",
    "marking": null,
    "remarks": "49.2 ft Marked/LGTD RWY 14R Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 8.8,
+   "hgt_est_m": 15.6
   },
   {
    "id": "RKSSOB028",
@@ -11793,11 +11871,14 @@
    "type": "GP Monitor Antenna",
    "marking": null,
    "remarks": "14.1 ft Marked/LGTD RWY 14R Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 9.1,
+   "hgt_est_m": 4.6
   },
   {
    "id": "RKSSOB029",
@@ -11809,11 +11890,14 @@
    "type": "DME Antenna",
    "marking": null,
    "remarks": "17.4 ft Marked/LGTD RWY 14R Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 8.8,
+   "hgt_est_m": 5.8
   },
   {
    "id": "RKSSOB030",
@@ -11825,11 +11909,14 @@
    "type": "GP Antenna",
    "marking": null,
    "remarks": "49.2 ft Marked/LGTD RWY 32L Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 11.2,
+   "hgt_est_m": 14.7
   },
   {
    "id": "RKSSOB031",
@@ -11841,11 +11928,14 @@
    "type": "DME Antenna",
    "marking": null,
    "remarks": "27.6 ft Marked/LGTD RWY 32L Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 11.2,
+   "hgt_est_m": 8.1
   },
   {
    "id": "RKSSOB032",
@@ -11857,11 +11947,14 @@
    "type": "GP Antenna",
    "marking": null,
    "remarks": "49.2 ft Marked/LGTD RWY 32R Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 11.5,
+   "hgt_est_m": 15.4
   },
   {
    "id": "RKSSOB033",
@@ -11873,11 +11966,14 @@
    "type": "DME Antenna",
    "marking": null,
    "remarks": "17.1 ft Marked/LGTD RWY 32R Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 11.5,
+   "hgt_est_m": 5.5
   },
   {
    "id": "RKSSOB025",
@@ -11889,11 +11985,14 @@
    "type": "RVR Maintenance Structure",
    "marking": null,
    "remarks": "14.8 ft Marked/LGTD RWY 32R, Material(Steel) RKSS",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 3"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.4,
+   "hgt_est_m": 4.4
   },
   {
    "id": "RKSS-2-11-1",
@@ -11909,7 +12008,9 @@
     "AD CHART 2-11 #1"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 128.3,
+   "hgt_est_m": 9.2
   },
   {
    "id": "RKSS-2-11-26",
@@ -11925,7 +12026,9 @@
     "AD CHART 2-11 #26"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 125.3,
+   "hgt_est_m": 7.2
   },
   {
    "id": "RKSS-2-11-51",
@@ -11942,7 +12045,9 @@
     "AD CHART 2-7 #17"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 49.6,
+   "hgt_est_m": 15.4
   },
   {
    "id": "RKSS-2-11-76",
@@ -11958,7 +12063,9 @@
     "AD CHART 2-11 #76"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 118.3,
+   "hgt_est_m": 4.2
   },
   {
    "id": "RKSS-2-11-101",
@@ -11974,7 +12081,9 @@
     "AD CHART 2-11 #101"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 12.8,
+   "hgt_est_m": 46.2
   },
   {
    "id": "RKSS-2-11-126",
@@ -11990,7 +12099,9 @@
     "AD CHART 2-11 #126"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 91.4,
+   "hgt_est_m": 9.1
   },
   {
    "id": "RKSS-2-11-151",
@@ -12006,7 +12117,9 @@
     "AD CHART 2-11 #151"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 17.3,
+   "hgt_est_m": 44.7
   },
   {
    "id": "RKSS-2-11-176",
@@ -12022,7 +12135,9 @@
     "AD CHART 2-11 #176"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 23.0,
+   "hgt_est_m": 12.0
   },
   {
    "id": "RKSS-2-11-201",
@@ -12038,7 +12153,9 @@
     "AD CHART 2-11 #201"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 44.3,
+   "hgt_est_m": 32.2
   },
   {
    "id": "RKSS-2-11-226",
@@ -12054,7 +12171,9 @@
     "AD CHART 2-11 #226"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 54.2,
+   "hgt_est_m": 4.8
   },
   {
    "id": "RKSS-2-11-251",
@@ -12070,7 +12189,9 @@
     "AD CHART 2-11 #251"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 30.2,
+   "hgt_est_m": 28.8
   },
   {
    "id": "RKSS-2-11-276",
@@ -12086,7 +12207,9 @@
     "AD CHART 2-11 #276"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.0,
+   "hgt_est_m": 47.0
   },
   {
    "id": "RKSS-2-11-2",
@@ -12102,7 +12225,9 @@
     "AD CHART 2-11 #2"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 76.1,
+   "hgt_est_m": 8.4
   },
   {
    "id": "RKSS-2-11-27",
@@ -12118,7 +12243,9 @@
     "AD CHART 2-11 #27"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 137.5,
+   "hgt_est_m": 8.5
   },
   {
    "id": "RKSS-2-11-52",
@@ -12135,7 +12262,9 @@
     "AD CHART 2-7 #18"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 42.3,
+   "hgt_est_m": 18.2
   },
   {
    "id": "RKSS-2-11-77",
@@ -12151,7 +12280,9 @@
     "AD CHART 2-11 #77"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 18.0,
+   "hgt_est_m": 41.0
   },
   {
    "id": "RKSS-2-11-102",
@@ -12167,7 +12298,9 @@
     "AD CHART 2-11 #102"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 7.7,
+   "hgt_est_m": 63.8
   },
   {
    "id": "RKSS-2-11-127",
@@ -12183,7 +12316,9 @@
     "AD CHART 2-11 #127"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 56.0,
+   "hgt_est_m": 17.0
   },
   {
    "id": "RKSS-2-11-152",
@@ -12199,7 +12334,9 @@
     "AD CHART 2-11 #152"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 25.5,
+   "hgt_est_m": 34.5
   },
   {
    "id": "RKSS-2-11-177",
@@ -12215,7 +12352,9 @@
     "AD CHART 2-11 #177"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 33.6,
+   "hgt_est_m": 24.9
   },
   {
    "id": "RKSS-2-11-202",
@@ -12231,7 +12370,9 @@
     "AD CHART 2-11 #202"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.7,
+   "hgt_est_m": 43.3
   },
   {
    "id": "RKSS-2-11-227",
@@ -12247,7 +12388,9 @@
     "AD CHART 2-11 #227"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 65.1,
+   "hgt_est_m": 5.4
   },
   {
    "id": "RKSS-2-11-252",
@@ -12263,7 +12406,9 @@
     "AD CHART 2-11 #252"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 66.6,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKSS-2-11-277",
@@ -12279,7 +12424,9 @@
     "AD CHART 2-11 #277"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 18.5,
+   "hgt_est_m": 40.0
   },
   {
    "id": "RKSS-2-11-3",
@@ -12295,7 +12442,9 @@
     "AD CHART 2-11 #3"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 74.1,
+   "hgt_est_m": 12.4
   },
   {
    "id": "RKSS-2-11-28",
@@ -12311,7 +12460,9 @@
     "AD CHART 2-11 #28"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 71.5,
+   "hgt_est_m": 20.0
   },
   {
    "id": "RKSS-2-11-53",
@@ -12327,7 +12478,9 @@
     "AD CHART 2-11 #53"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 63.7,
+   "hgt_est_m": 13.8
   },
   {
    "id": "RKSS-2-11-78",
@@ -12343,7 +12496,9 @@
     "AD CHART 2-11 #78"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 7.1,
+   "hgt_est_m": 51.4
   },
   {
    "id": "RKSS-2-11-103",
@@ -12359,7 +12514,9 @@
     "AD CHART 2-11 #103"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 24.6,
+   "hgt_est_m": 35.9
   },
   {
    "id": "RKSS-2-11-128",
@@ -12375,7 +12532,9 @@
     "AD CHART 2-11 #128"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 42.5,
+   "hgt_est_m": 25.5
   },
   {
    "id": "RKSS-2-11-153",
@@ -12391,7 +12550,9 @@
     "AD CHART 2-11 #153"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 12.8,
+   "hgt_est_m": 45.2
   },
   {
    "id": "RKSS-2-11-178",
@@ -12407,7 +12568,9 @@
     "AD CHART 2-11 #178"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 25.6,
+   "hgt_est_m": 33.9
   },
   {
    "id": "RKSS-2-11-203",
@@ -12423,7 +12586,9 @@
     "AD CHART 2-11 #203"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 18.2,
+   "hgt_est_m": 45.8
   },
   {
    "id": "RKSS-2-11-228",
@@ -12439,7 +12604,9 @@
     "AD CHART 2-11 #228"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 18.0,
+   "hgt_est_m": 43.0
   },
   {
    "id": "RKSS-2-11-253",
@@ -12455,7 +12622,9 @@
     "AD CHART 2-11 #253"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 90.6,
+   "hgt_est_m": 2.9
   },
   {
    "id": "RKSS-2-11-278",
@@ -12471,7 +12640,9 @@
     "AD CHART 2-11 #278"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 13.4,
+   "hgt_est_m": 45.6
   },
   {
    "id": "RKSS-2-11-4",
@@ -12487,7 +12658,9 @@
     "AD CHART 2-11 #4"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 112.4,
+   "hgt_est_m": 9.6
   },
   {
    "id": "RKSS-2-11-29",
@@ -12503,7 +12676,9 @@
     "AD CHART 2-11 #29"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 90.6,
+   "hgt_est_m": 14.9
   },
   {
    "id": "RKSS-2-11-54",
@@ -12519,7 +12694,9 @@
     "AD CHART 2-11 #54"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.4,
+   "hgt_est_m": 12.6
   },
   {
    "id": "RKSS-2-11-79",
@@ -12535,7 +12712,9 @@
     "AD CHART 2-11 #79"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.9,
+   "hgt_est_m": 43.1
   },
   {
    "id": "RKSS-2-11-104",
@@ -12551,7 +12730,9 @@
     "AD CHART 2-11 #104"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 30.4,
+   "hgt_est_m": 30.1
   },
   {
    "id": "RKSS-2-11-129",
@@ -12567,7 +12748,9 @@
     "AD CHART 2-11 #129"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 28.2,
+   "hgt_est_m": 35.8
   },
   {
    "id": "RKSS-2-11-154",
@@ -12583,7 +12766,9 @@
     "AD CHART 2-11 #154"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 21.1,
+   "hgt_est_m": 44.4
   },
   {
    "id": "RKSS-2-11-179",
@@ -12599,7 +12784,9 @@
     "AD CHART 2-11 #179"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 37.0,
+   "hgt_est_m": 10.5
   },
   {
    "id": "RKSS-2-11-204",
@@ -12615,7 +12802,9 @@
     "AD CHART 2-11 #204"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 20.5,
+   "hgt_est_m": 43.0
   },
   {
    "id": "RKSS-2-11-229",
@@ -12631,7 +12820,9 @@
     "AD CHART 2-11 #229"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 51.7,
+   "hgt_est_m": 9.3
   },
   {
    "id": "RKSS-2-11-254",
@@ -12647,7 +12838,9 @@
     "AD CHART 2-11 #254"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 22.4,
+   "hgt_est_m": 35.6
   },
   {
    "id": "RKSS-2-11-279",
@@ -12663,7 +12856,9 @@
     "AD CHART 2-11 #279"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 117.9,
+   "hgt_est_m": 28.6
   },
   {
    "id": "RKSS-2-11-5",
@@ -12679,7 +12874,9 @@
     "AD CHART 2-11 #5"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 89.5,
+   "hgt_est_m": 22.0
   },
   {
    "id": "RKSS-2-11-30",
@@ -12695,7 +12892,9 @@
     "AD CHART 2-11 #30"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 47.5,
+   "hgt_est_m": 69.0
   },
   {
    "id": "RKSS-2-11-55",
@@ -12712,7 +12911,9 @@
     "AD CHART 2-7 #13"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 34.4,
+   "hgt_est_m": 14.1
   },
   {
    "id": "RKSS-2-11-80",
@@ -12728,7 +12929,9 @@
     "AD CHART 2-11 #80"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 49.0,
+   "hgt_est_m": 14.5
   },
   {
    "id": "RKSS-2-11-105",
@@ -12744,7 +12947,9 @@
     "AD CHART 2-11 #105"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 25.7,
+   "hgt_est_m": 35.3
   },
   {
    "id": "RKSS-2-11-130",
@@ -12760,7 +12965,9 @@
     "AD CHART 2-11 #130"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 40.8,
+   "hgt_est_m": 31.2
   },
   {
    "id": "RKSS-2-11-155",
@@ -12776,7 +12983,9 @@
     "AD CHART 2-11 #155"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.6,
+   "hgt_est_m": 50.4
   },
   {
    "id": "RKSS-2-11-180",
@@ -12792,7 +13001,9 @@
     "AD CHART 2-11 #180"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 33.9,
+   "hgt_est_m": 13.6
   },
   {
    "id": "RKSS-2-11-205",
@@ -12809,7 +13020,9 @@
     "AD CHART 2-7 #20"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 40.3,
+   "hgt_est_m": 64.7
   },
   {
    "id": "RKSS-2-11-230",
@@ -12825,7 +13038,9 @@
     "AD CHART 2-11 #230"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 62.4,
+   "hgt_est_m": 5.1
   },
   {
    "id": "RKSS-2-11-255",
@@ -12841,7 +13056,9 @@
     "AD CHART 2-11 #255"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 11.0,
+   "hgt_est_m": 47.5
   },
   {
    "id": "RKSS-2-11-280",
@@ -12857,7 +13074,9 @@
     "AD CHART 2-11 #280"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 91.1,
+   "hgt_est_m": 12.9
   },
   {
    "id": "RKSS-2-11-6",
@@ -12873,7 +13092,9 @@
     "AD CHART 2-11 #6"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 103.7,
+   "hgt_est_m": 11.8
   },
   {
    "id": "RKSS-2-11-31",
@@ -12889,7 +13110,9 @@
     "AD CHART 2-11 #31"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 60.7,
+   "hgt_est_m": 7.3
   },
   {
    "id": "RKSS-2-11-56",
@@ -12905,7 +13128,9 @@
     "AD CHART 2-11 #56"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 20.6,
+   "hgt_est_m": 12.4
   },
   {
    "id": "RKSS-2-11-81",
@@ -12921,7 +13146,9 @@
     "AD CHART 2-11 #81"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.3,
+   "hgt_est_m": 50.7
   },
   {
    "id": "RKSS-2-11-106",
@@ -12937,7 +13164,9 @@
     "AD CHART 2-11 #106"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 23.3,
+   "hgt_est_m": 38.2
   },
   {
    "id": "RKSS-2-11-131",
@@ -12953,7 +13182,9 @@
     "AD CHART 2-11 #131"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 40.8,
+   "hgt_est_m": 17.7
   },
   {
    "id": "RKSS-2-11-156",
@@ -12969,7 +13200,9 @@
     "AD CHART 2-11 #156"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 48.0,
+   "hgt_est_m": 11.0
   },
   {
    "id": "RKSS-2-11-181",
@@ -12986,7 +13219,9 @@
     "AD CHART 2-7 #15"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 39.6,
+   "hgt_est_m": 14.9
   },
   {
    "id": "RKSS-2-11-206",
@@ -13002,7 +13237,9 @@
     "AD CHART 2-11 #206"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.8,
+   "hgt_est_m": 38.2
   },
   {
    "id": "RKSS-2-11-231",
@@ -13018,7 +13255,9 @@
     "AD CHART 2-11 #231"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 75.2,
+   "hgt_est_m": 4.3
   },
   {
    "id": "RKSS-2-11-256",
@@ -13034,7 +13273,9 @@
     "AD CHART 2-11 #256"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.3,
+   "hgt_est_m": 42.7
   },
   {
    "id": "RKSS-2-11-281",
@@ -13050,7 +13291,9 @@
     "AD CHART 2-11 #281"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 23.7,
+   "hgt_est_m": 37.8
   },
   {
    "id": "RKSS-2-11-7",
@@ -13066,7 +13309,9 @@
     "AD CHART 2-11 #7"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 116.5,
+   "hgt_est_m": 15.0
   },
   {
    "id": "RKSS-2-11-32",
@@ -13082,7 +13327,9 @@
     "AD CHART 2-11 #32"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 86.5,
+   "hgt_est_m": 6.5
   },
   {
    "id": "RKSS-2-11-57",
@@ -13098,7 +13345,9 @@
     "AD CHART 2-11 #57"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 13.9,
+   "hgt_est_m": 23.6
   },
   {
    "id": "RKSS-2-11-82",
@@ -13114,7 +13363,9 @@
     "AD CHART 2-11 #82"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 9.0,
+   "hgt_est_m": 49.0
   },
   {
    "id": "RKSS-2-11-107",
@@ -13130,7 +13381,9 @@
     "AD CHART 2-11 #107"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.4,
+   "hgt_est_m": 42.6
   },
   {
    "id": "RKSS-2-11-132",
@@ -13146,7 +13399,9 @@
     "AD CHART 2-11 #132"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 48.0,
+   "hgt_est_m": 20.0
   },
   {
    "id": "RKSS-2-11-157",
@@ -13162,7 +13417,9 @@
     "AD CHART 2-11 #157"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 30.6,
+   "hgt_est_m": 38.4
   },
   {
    "id": "RKSS-2-11-182",
@@ -13178,7 +13435,9 @@
     "AD CHART 2-11 #182"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 41.1,
+   "hgt_est_m": 11.9
   },
   {
    "id": "RKSS-2-11-207",
@@ -13194,7 +13453,9 @@
     "AD CHART 2-11 #207"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 24.7,
+   "hgt_est_m": 35.3
   },
   {
    "id": "RKSS-2-11-232",
@@ -13210,7 +13471,9 @@
     "AD CHART 2-11 #232"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 74.9,
+   "hgt_est_m": 7.6
   },
   {
    "id": "RKSS-2-11-257",
@@ -13226,7 +13489,9 @@
     "AD CHART 2-11 #257"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 18.2,
+   "hgt_est_m": 40.3
   },
   {
    "id": "RKSS-2-11-282",
@@ -13242,7 +13507,9 @@
     "AD CHART 2-11 #282"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 118.6,
+   "hgt_est_m": 30.4
   },
   {
    "id": "RKSS-2-11-8",
@@ -13258,7 +13525,9 @@
     "AD CHART 2-11 #8"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 99.9,
+   "hgt_est_m": 11.1
   },
   {
    "id": "RKSS-2-11-33",
@@ -13274,7 +13543,9 @@
     "AD CHART 2-11 #33"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 112.3,
+   "hgt_est_m": 7.2
   },
   {
    "id": "RKSS-2-11-58",
@@ -13290,7 +13561,9 @@
     "AD CHART 2-11 #58"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 16.2,
+   "hgt_est_m": 12.8
   },
   {
    "id": "RKSS-2-11-83",
@@ -13306,7 +13579,9 @@
     "AD CHART 2-11 #83"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 12.2,
+   "hgt_est_m": 50.8
   },
   {
    "id": "RKSS-2-11-108",
@@ -13322,7 +13597,9 @@
     "AD CHART 2-11 #108"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.1,
+   "hgt_est_m": 47.9
   },
   {
    "id": "RKSS-2-11-133",
@@ -13338,7 +13615,9 @@
     "AD CHART 2-11 #133"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 49.5,
+   "hgt_est_m": 14.0
   },
   {
    "id": "RKSS-2-11-158",
@@ -13354,7 +13633,9 @@
     "AD CHART 2-11 #158"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 29.1,
+   "hgt_est_m": 30.9
   },
   {
    "id": "RKSS-2-11-183",
@@ -13370,7 +13651,9 @@
     "AD CHART 2-11 #183"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 29.4,
+   "hgt_est_m": 23.6
   },
   {
    "id": "RKSS-2-11-208",
@@ -13386,7 +13669,9 @@
     "AD CHART 2-11 #208"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 25.4,
+   "hgt_est_m": 34.6
   },
   {
    "id": "RKSS-2-11-233",
@@ -13402,7 +13687,9 @@
     "AD CHART 2-11 #233"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 76.7,
+   "hgt_est_m": 23.3
   },
   {
    "id": "RKSS-2-11-258",
@@ -13418,7 +13705,9 @@
     "AD CHART 2-11 #258"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 35.5,
+   "hgt_est_m": 36.5
   },
   {
    "id": "RKSS-2-11-283",
@@ -13435,7 +13724,9 @@
     "AD CHART 2-8 #1"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 12.1,
+   "hgt_est_m": 5.9
   },
   {
    "id": "RKSS-2-11-9",
@@ -13451,7 +13742,9 @@
     "AD CHART 2-11 #9"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 76.4,
+   "hgt_est_m": 17.6
   },
   {
    "id": "RKSS-2-11-34",
@@ -13467,7 +13760,9 @@
     "AD CHART 2-11 #34"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 199.1,
+   "hgt_est_m": 8.9
   },
   {
    "id": "RKSS-2-11-59",
@@ -13485,7 +13780,9 @@
     "AD CHART 2-8 #18"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 22.5,
+   "hgt_est_m": 16.5
   },
   {
    "id": "RKSS-2-11-84",
@@ -13501,7 +13798,9 @@
     "AD CHART 2-11 #84"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 13.4,
+   "hgt_est_m": 44.6
   },
   {
    "id": "RKSS-2-11-109",
@@ -13517,7 +13816,9 @@
     "AD CHART 2-11 #109"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 52.3,
+   "hgt_est_m": 9.2
   },
   {
    "id": "RKSS-2-11-134",
@@ -13533,7 +13834,9 @@
     "AD CHART 2-11 #134"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 21.7,
+   "hgt_est_m": 36.3
   },
   {
    "id": "RKSS-2-11-159",
@@ -13549,7 +13852,9 @@
     "AD CHART 2-11 #159"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 24.5,
+   "hgt_est_m": 33.5
   },
   {
    "id": "RKSS-2-11-184",
@@ -13565,7 +13870,9 @@
     "AD CHART 2-11 #184"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 29.9,
+   "hgt_est_m": 25.1
   },
   {
    "id": "RKSS-2-11-209",
@@ -13581,7 +13888,9 @@
     "AD CHART 2-11 #209"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 51.5,
+   "hgt_est_m": 20.0
   },
   {
    "id": "RKSS-2-11-234",
@@ -13597,7 +13906,9 @@
     "AD CHART 2-11 #234"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 87.1,
+   "hgt_est_m": 4.9
   },
   {
    "id": "RKSS-2-11-259",
@@ -13613,7 +13924,9 @@
     "AD CHART 2-11 #259"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 18.3,
+   "hgt_est_m": 40.7
   },
   {
    "id": "RKSS-2-11-284",
@@ -13629,7 +13942,9 @@
     "AD CHART 2-11 #284"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 17.7,
+   "hgt_est_m": 15.3
   },
   {
    "id": "RKSS-2-11-10",
@@ -13645,7 +13960,9 @@
     "AD CHART 2-11 #10"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 69.5,
+   "hgt_est_m": 17.5
   },
   {
    "id": "RKSS-2-11-35",
@@ -13661,7 +13978,9 @@
     "AD CHART 2-11 #35"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 101.6,
+   "hgt_est_m": 4.4
   },
   {
    "id": "RKSS-2-11-60",
@@ -13679,7 +13998,9 @@
     "AD CHART 2-8 #19"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 39.7,
+   "hgt_est_m": 15.3
   },
   {
    "id": "RKSS-2-11-85",
@@ -13695,7 +14016,9 @@
     "AD CHART 2-11 #85"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 17.8,
+   "hgt_est_m": 40.7
   },
   {
    "id": "RKSS-2-11-110",
@@ -13711,7 +14034,9 @@
     "AD CHART 2-11 #110"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 8.1,
+   "hgt_est_m": 55.9
   },
   {
    "id": "RKSS-2-11-135",
@@ -13727,7 +14052,9 @@
     "AD CHART 2-11 #135"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 35.5,
+   "hgt_est_m": 30.0
   },
   {
    "id": "RKSS-2-11-160",
@@ -13743,7 +14070,9 @@
     "AD CHART 2-11 #160"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 29.8,
+   "hgt_est_m": 32.2
   },
   {
    "id": "RKSS-2-11-185",
@@ -13759,7 +14088,9 @@
     "AD CHART 2-11 #185"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 17.0,
+   "hgt_est_m": 42.5
   },
   {
    "id": "RKSS-2-11-210",
@@ -13775,7 +14106,9 @@
     "AD CHART 2-11 #210"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 60.9,
+   "hgt_est_m": 1.1
   },
   {
    "id": "RKSS-2-11-235",
@@ -13791,7 +14124,9 @@
     "AD CHART 2-11 #235"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 97.1,
+   "hgt_est_m": 7.4
   },
   {
    "id": "RKSS-2-11-260",
@@ -13807,7 +14142,9 @@
     "AD CHART 2-11 #260"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 60.5,
+   "hgt_est_m": 4.5
   },
   {
    "id": "RKSS-2-11-285",
@@ -13823,7 +14160,9 @@
     "AD CHART 2-11 #285"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 29.7,
+   "hgt_est_m": 33.3
   },
   {
    "id": "RKSS-2-11-11",
@@ -13839,7 +14178,9 @@
     "AD CHART 2-11 #11"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 121.4,
+   "hgt_est_m": 18.1
   },
   {
    "id": "RKSS-2-11-36",
@@ -13855,7 +14196,9 @@
     "AD CHART 2-11 #36"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 102.2,
+   "hgt_est_m": 6.8
   },
   {
    "id": "RKSS-2-11-61",
@@ -13871,7 +14214,9 @@
     "AD CHART 2-11 #61"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 74.8,
+   "hgt_est_m": 3.2
   },
   {
    "id": "RKSS-2-11-86",
@@ -13887,7 +14232,9 @@
     "AD CHART 2-11 #86"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 16.4,
+   "hgt_est_m": 45.1
   },
   {
    "id": "RKSS-2-11-111",
@@ -13903,7 +14250,9 @@
     "AD CHART 2-11 #111"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.9,
+   "hgt_est_m": 48.6
   },
   {
    "id": "RKSS-2-11-136",
@@ -13919,7 +14268,9 @@
     "AD CHART 2-11 #136"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 52.0,
+   "hgt_est_m": 33.0
   },
   {
    "id": "RKSS-2-11-161",
@@ -13935,7 +14286,9 @@
     "AD CHART 2-11 #161"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 21.5,
+   "hgt_est_m": 38.0
   },
   {
    "id": "RKSS-2-11-186",
@@ -13951,7 +14304,9 @@
     "AD CHART 2-11 #186"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 13.5,
+   "hgt_est_m": 46.0
   },
   {
    "id": "RKSS-2-11-211",
@@ -13967,7 +14322,9 @@
     "AD CHART 2-11 #211"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 110.7,
+   "hgt_est_m": 3.8
   },
   {
    "id": "RKSS-2-11-236",
@@ -13983,7 +14340,9 @@
     "AD CHART 2-11 #236"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.8,
+   "hgt_est_m": 39.7
   },
   {
    "id": "RKSS-2-11-261",
@@ -13999,7 +14358,9 @@
     "AD CHART 2-11 #261"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 18.8,
+   "hgt_est_m": 44.7
   },
   {
    "id": "RKSS-2-11-286",
@@ -14015,7 +14376,9 @@
     "AD CHART 2-11 #286"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 16.9,
+   "hgt_est_m": 10.6
   },
   {
    "id": "RKSS-2-11-12",
@@ -14031,7 +14394,9 @@
     "AD CHART 2-11 #12"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 96.8,
+   "hgt_est_m": 5.7
   },
   {
    "id": "RKSS-2-11-37",
@@ -14047,7 +14412,9 @@
     "AD CHART 2-11 #37"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 92.2,
+   "hgt_est_m": 6.8
   },
   {
    "id": "RKSS-2-11-62",
@@ -14063,7 +14430,9 @@
     "AD CHART 2-11 #62"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 42.7,
+   "hgt_est_m": 18.3
   },
   {
    "id": "RKSS-2-11-87",
@@ -14079,7 +14448,9 @@
     "AD CHART 2-11 #87"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.9,
+   "hgt_est_m": 39.1
   },
   {
    "id": "RKSS-2-11-112",
@@ -14095,7 +14466,9 @@
     "AD CHART 2-11 #112"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 9.8,
+   "hgt_est_m": 67.7
   },
   {
    "id": "RKSS-2-11-137",
@@ -14111,7 +14484,9 @@
     "AD CHART 2-11 #137"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 58.8,
+   "hgt_est_m": 28.2
   },
   {
    "id": "RKSS-2-11-162",
@@ -14127,7 +14502,9 @@
     "AD CHART 2-11 #162"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 47.5,
+   "hgt_est_m": 25.5
   },
   {
    "id": "RKSS-2-11-187",
@@ -14143,7 +14520,9 @@
     "AD CHART 2-11 #187"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.4,
+   "hgt_est_m": 41.1
   },
   {
    "id": "RKSS-2-11-212",
@@ -14159,7 +14538,9 @@
     "AD CHART 2-11 #212"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 76.3,
+   "hgt_est_m": 1.2
   },
   {
    "id": "RKSS-2-11-237",
@@ -14175,7 +14556,9 @@
     "AD CHART 2-11 #237"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 24.6,
+   "hgt_est_m": 34.9
   },
   {
    "id": "RKSS-2-11-262",
@@ -14191,7 +14574,9 @@
     "AD CHART 2-11 #262"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.3,
+   "hgt_est_m": 43.2
   },
   {
    "id": "RKSS-2-11-287",
@@ -14208,7 +14593,9 @@
     "AD CHART 2-7 #12"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 25.4,
+   "hgt_est_m": 15.6
   },
   {
    "id": "RKSS-2-11-13",
@@ -14224,7 +14611,9 @@
     "AD CHART 2-11 #13"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 86.6,
+   "hgt_est_m": 10.9
   },
   {
    "id": "RKSS-2-11-38",
@@ -14240,7 +14629,9 @@
     "AD CHART 2-11 #38"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 78.5,
+   "hgt_est_m": 15.0
   },
   {
    "id": "RKSS-2-11-63",
@@ -14256,7 +14647,9 @@
     "AD CHART 2-11 #63"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 50.8,
+   "hgt_est_m": 15.2
   },
   {
    "id": "RKSS-2-11-88",
@@ -14272,7 +14665,9 @@
     "AD CHART 2-11 #88"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 20.9,
+   "hgt_est_m": 38.1
   },
   {
    "id": "RKSS-2-11-113",
@@ -14288,7 +14683,9 @@
     "AD CHART 2-11 #113"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 13.5,
+   "hgt_est_m": 47.0
   },
   {
    "id": "RKSS-2-11-138",
@@ -14304,7 +14701,9 @@
     "AD CHART 2-11 #138"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 61.5,
+   "hgt_est_m": 28.5
   },
   {
    "id": "RKSS-2-11-163",
@@ -14320,7 +14719,9 @@
     "AD CHART 2-11 #163"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.8,
+   "hgt_est_m": 42.7
   },
   {
    "id": "RKSS-2-11-188",
@@ -14336,7 +14737,9 @@
     "AD CHART 2-11 #188"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 16.8,
+   "hgt_est_m": 41.7
   },
   {
    "id": "RKSS-2-11-213",
@@ -14352,7 +14755,9 @@
     "AD CHART 2-11 #213"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 72.0,
+   "hgt_est_m": 1.0
   },
   {
    "id": "RKSS-2-11-238",
@@ -14368,7 +14773,9 @@
     "AD CHART 2-11 #238"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 30.3,
+   "hgt_est_m": 34.2
   },
   {
    "id": "RKSS-2-11-263",
@@ -14384,7 +14791,9 @@
     "AD CHART 2-11 #263"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 14.1,
+   "hgt_est_m": 70.9
   },
   {
    "id": "RKSS-2-11-288",
@@ -14400,7 +14809,9 @@
     "AD CHART 2-11 #288"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 51.1,
+   "hgt_est_m": 16.9
   },
   {
    "id": "RKSS-2-11-14",
@@ -14416,7 +14827,9 @@
     "AD CHART 2-11 #14"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 140.9,
+   "hgt_est_m": 12.1
   },
   {
    "id": "RKSS-2-11-39",
@@ -14432,7 +14845,9 @@
     "AD CHART 2-11 #39"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 71.7,
+   "hgt_est_m": 12.8
   },
   {
    "id": "RKSS-2-11-64",
@@ -14448,7 +14863,9 @@
     "AD CHART 2-11 #64"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 48.6,
+   "hgt_est_m": 12.9
   },
   {
    "id": "RKSS-2-11-89",
@@ -14464,7 +14881,9 @@
     "AD CHART 2-11 #89"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 27.4,
+   "hgt_est_m": 43.6
   },
   {
    "id": "RKSS-2-11-114",
@@ -14480,7 +14899,9 @@
     "AD CHART 2-11 #114"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 12.0,
+   "hgt_est_m": 49.5
   },
   {
    "id": "RKSS-2-11-139",
@@ -14496,7 +14917,9 @@
     "AD CHART 2-11 #139"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 59.1,
+   "hgt_est_m": 30.9
   },
   {
    "id": "RKSS-2-11-164",
@@ -14512,7 +14935,9 @@
     "AD CHART 2-11 #164"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 20.7,
+   "hgt_est_m": 40.3
   },
   {
    "id": "RKSS-2-11-189",
@@ -14528,7 +14953,9 @@
     "AD CHART 2-11 #189"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 18.0,
+   "hgt_est_m": 42.5
   },
   {
    "id": "RKSS-2-11-214",
@@ -14544,7 +14971,9 @@
     "AD CHART 2-11 #214"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 23.5,
+   "hgt_est_m": 13.0
   },
   {
    "id": "RKSS-2-11-239",
@@ -14560,7 +14989,9 @@
     "AD CHART 2-11 #239"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 47.8,
+   "hgt_est_m": 11.7
   },
   {
    "id": "RKSS-2-11-264",
@@ -14576,7 +15007,9 @@
     "AD CHART 2-11 #264"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 20.4,
+   "hgt_est_m": 64.6
   },
   {
    "id": "RKSS-2-11-289",
@@ -14592,7 +15025,9 @@
     "AD CHART 2-11 #289"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 79.0,
+   "hgt_est_m": 2.5
   },
   {
    "id": "RKSS-2-11-15",
@@ -14608,7 +15043,9 @@
     "AD CHART 2-11 #15"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 116.4,
+   "hgt_est_m": 12.6
   },
   {
    "id": "RKSS-2-11-40",
@@ -14624,7 +15061,9 @@
     "AD CHART 2-11 #40"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 74.1,
+   "hgt_est_m": 7.9
   },
   {
    "id": "RKSS-2-11-65",
@@ -14640,7 +15079,9 @@
     "AD CHART 2-11 #65"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 46.3,
+   "hgt_est_m": 18.2
   },
   {
    "id": "RKSS-2-11-90",
@@ -14656,7 +15097,9 @@
     "AD CHART 2-11 #90"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.7,
+   "hgt_est_m": 42.3
   },
   {
    "id": "RKSS-2-11-115",
@@ -14672,7 +15115,9 @@
     "AD CHART 2-11 #115"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 8.2,
+   "hgt_est_m": 55.3
   },
   {
    "id": "RKSS-2-11-140",
@@ -14688,7 +15133,9 @@
     "AD CHART 2-11 #140"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 13.2,
+   "hgt_est_m": 45.3
   },
   {
    "id": "RKSS-2-11-165",
@@ -14704,7 +15151,9 @@
     "AD CHART 2-11 #165"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 36.2,
+   "hgt_est_m": 37.3
   },
   {
    "id": "RKSS-2-11-190",
@@ -14720,7 +15169,9 @@
     "AD CHART 2-11 #190"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 36.0,
+   "hgt_est_m": 17.5
   },
   {
    "id": "RKSS-2-11-215",
@@ -14736,7 +15187,9 @@
     "AD CHART 2-11 #215"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 24.9,
+   "hgt_est_m": 34.6
   },
   {
    "id": "RKSS-2-11-240",
@@ -14752,7 +15205,9 @@
     "AD CHART 2-11 #240"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 29.8,
+   "hgt_est_m": 29.7
   },
   {
    "id": "RKSS-2-11-265",
@@ -14768,7 +15223,9 @@
     "AD CHART 2-11 #265"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 8.3,
+   "hgt_est_m": 50.7
   },
   {
    "id": "RKSS-2-11-290",
@@ -14784,7 +15241,9 @@
     "AD CHART 2-11 #290"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 14.3,
+   "hgt_est_m": 51.7
   },
   {
    "id": "RKSS-2-11-16",
@@ -14800,7 +15259,9 @@
     "AD CHART 2-11 #16"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 68.0,
+   "hgt_est_m": 21.5
   },
   {
    "id": "RKSS-2-11-41",
@@ -14816,7 +15277,9 @@
     "AD CHART 2-11 #41"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 118.0,
+   "hgt_est_m": 8.5
   },
   {
    "id": "RKSS-2-11-66",
@@ -14832,7 +15295,9 @@
     "AD CHART 2-11 #66"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.5,
+   "hgt_est_m": 15.0
   },
   {
    "id": "RKSS-2-11-91",
@@ -14848,7 +15313,9 @@
     "AD CHART 2-11 #91"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 21.2,
+   "hgt_est_m": 37.3
   },
   {
    "id": "RKSS-2-11-116",
@@ -14864,7 +15331,9 @@
     "AD CHART 2-11 #116"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 5.3,
+   "hgt_est_m": 60.2
   },
   {
    "id": "RKSS-2-11-141",
@@ -14880,7 +15349,9 @@
     "AD CHART 2-11 #141"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 44.6,
+   "hgt_est_m": 20.9
   },
   {
    "id": "RKSS-2-11-166",
@@ -14896,7 +15367,9 @@
     "AD CHART 2-11 #166"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 36.4,
+   "hgt_est_m": 37.1
   },
   {
    "id": "RKSS-2-11-191",
@@ -14912,7 +15385,9 @@
     "AD CHART 2-11 #191"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 26.8,
+   "hgt_est_m": 31.2
   },
   {
    "id": "RKSS-2-11-216",
@@ -14928,7 +15403,9 @@
     "AD CHART 2-11 #216"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 29.4,
+   "hgt_est_m": 30.1
   },
   {
    "id": "RKSS-2-11-241",
@@ -14944,7 +15421,9 @@
     "AD CHART 2-11 #241"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 23.9,
+   "hgt_est_m": 38.6
   },
   {
    "id": "RKSS-2-11-266",
@@ -14960,7 +15439,9 @@
     "AD CHART 2-11 #266"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 23.1,
+   "hgt_est_m": 40.4
   },
   {
    "id": "RKSS-2-11-291",
@@ -14976,7 +15457,9 @@
     "AD CHART 2-11 #291"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 95.5,
+   "hgt_est_m": 5.0
   },
   {
    "id": "RKSS-2-11-17",
@@ -14992,7 +15475,9 @@
     "AD CHART 2-11 #17"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 100.5,
+   "hgt_est_m": 7.5
   },
   {
    "id": "RKSS-2-11-42",
@@ -15009,7 +15494,9 @@
     "AD CHART 2-7 #5"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 25.9,
+   "hgt_est_m": 10.6
   },
   {
    "id": "RKSS-2-11-67",
@@ -15025,7 +15512,9 @@
     "AD CHART 2-11 #67"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 51.5,
+   "hgt_est_m": 12.0
   },
   {
    "id": "RKSS-2-11-92",
@@ -15041,7 +15530,9 @@
     "AD CHART 2-11 #92"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.5,
+   "hgt_est_m": 42.5
   },
   {
    "id": "RKSS-2-11-117",
@@ -15057,7 +15548,9 @@
     "AD CHART 2-11 #117"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 13.3,
+   "hgt_est_m": 45.7
   },
   {
    "id": "RKSS-2-11-142",
@@ -15073,7 +15566,9 @@
     "AD CHART 2-11 #142"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 46.2,
+   "hgt_est_m": 15.3
   },
   {
    "id": "RKSS-2-11-167",
@@ -15089,7 +15584,9 @@
     "AD CHART 2-11 #167"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 42.5,
+   "hgt_est_m": 24.5
   },
   {
    "id": "RKSS-2-11-192",
@@ -15105,7 +15602,9 @@
     "AD CHART 2-11 #192"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 27.3,
+   "hgt_est_m": 30.2
   },
   {
    "id": "RKSS-2-11-217",
@@ -15121,7 +15620,9 @@
     "AD CHART 2-11 #217"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 39.3,
+   "hgt_est_m": 18.7
   },
   {
    "id": "RKSS-2-11-242",
@@ -15137,7 +15638,9 @@
     "AD CHART 2-11 #242"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 23.2,
+   "hgt_est_m": 35.3
   },
   {
    "id": "RKSS-2-11-267",
@@ -15153,7 +15656,9 @@
     "AD CHART 2-11 #267"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 102.5,
+   "hgt_est_m": 5.0
   },
   {
    "id": "RKSS-2-11-292",
@@ -15169,7 +15674,9 @@
     "AD CHART 2-11 #292"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 90.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKSS-2-11-18",
@@ -15185,7 +15692,9 @@
     "AD CHART 2-11 #18"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 128.2,
+   "hgt_est_m": 8.8
   },
   {
    "id": "RKSS-2-11-43",
@@ -15201,7 +15710,9 @@
     "AD CHART 2-11 #43"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 33.6,
+   "hgt_est_m": 16.9
   },
   {
    "id": "RKSS-2-11-68",
@@ -15217,7 +15728,9 @@
     "AD CHART 2-11 #68"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 59.2,
+   "hgt_est_m": 13.3
   },
   {
    "id": "RKSS-2-11-93",
@@ -15233,7 +15746,9 @@
     "AD CHART 2-11 #93"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 18.6,
+   "hgt_est_m": 39.9
   },
   {
    "id": "RKSS-2-11-118",
@@ -15249,7 +15764,9 @@
     "AD CHART 2-11 #118"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.4,
+   "hgt_est_m": 57.1
   },
   {
    "id": "RKSS-2-11-143",
@@ -15265,7 +15782,9 @@
     "AD CHART 2-11 #143"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 51.0,
+   "hgt_est_m": 10.5
   },
   {
    "id": "RKSS-2-11-168",
@@ -15281,7 +15800,9 @@
     "AD CHART 2-11 #168"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 42.2,
+   "hgt_est_m": 22.8
   },
   {
    "id": "RKSS-2-11-193",
@@ -15297,7 +15818,9 @@
     "AD CHART 2-11 #193"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 43.1,
+   "hgt_est_m": 17.4
   },
   {
    "id": "RKSS-2-11-218",
@@ -15313,7 +15836,9 @@
     "AD CHART 2-11 #218"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 60.9,
+   "hgt_est_m": 1.1
   },
   {
    "id": "RKSS-2-11-243",
@@ -15329,7 +15854,9 @@
     "AD CHART 2-11 #243"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 23.2,
+   "hgt_est_m": 35.3
   },
   {
    "id": "RKSS-2-11-268",
@@ -15345,7 +15872,9 @@
     "AD CHART 2-11 #268"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 105.3,
+   "hgt_est_m": 3.2
   },
   {
    "id": "RKSS-2-11-293",
@@ -15361,7 +15890,9 @@
     "AD CHART 2-11 #293"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 73.5,
+   "hgt_est_m": 10.5
   },
   {
    "id": "RKSS-2-11-19",
@@ -15377,7 +15908,9 @@
     "AD CHART 2-11 #19"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 68.3,
+   "hgt_est_m": 17.7
   },
   {
    "id": "RKSS-2-11-44",
@@ -15393,7 +15926,9 @@
     "AD CHART 2-11 #44"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 72.3,
+   "hgt_est_m": 17.2
   },
   {
    "id": "RKSS-2-11-69",
@@ -15409,7 +15944,9 @@
     "AD CHART 2-11 #69"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 67.6,
+   "hgt_est_m": 11.4
   },
   {
    "id": "RKSS-2-11-94",
@@ -15425,7 +15962,9 @@
     "AD CHART 2-11 #94"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 12.3,
+   "hgt_est_m": 47.7
   },
   {
    "id": "RKSS-2-11-119",
@@ -15441,7 +15980,9 @@
     "AD CHART 2-11 #119"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 11.8,
+   "hgt_est_m": 48.2
   },
   {
    "id": "RKSS-2-11-144",
@@ -15457,7 +15998,9 @@
     "AD CHART 2-11 #144"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 48.6,
+   "hgt_est_m": 10.4
   },
   {
    "id": "RKSS-2-11-169",
@@ -15473,7 +16016,9 @@
     "AD CHART 2-11 #169"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 26.8,
+   "hgt_est_m": 39.2
   },
   {
    "id": "RKSS-2-11-194",
@@ -15489,7 +16034,9 @@
     "AD CHART 2-11 #194"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.7,
+   "hgt_est_m": 47.3
   },
   {
    "id": "RKSS-2-11-219",
@@ -15505,7 +16052,9 @@
     "AD CHART 2-11 #219"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 52.1,
+   "hgt_est_m": 12.4
   },
   {
    "id": "RKSS-2-11-244",
@@ -15521,7 +16070,9 @@
     "AD CHART 2-11 #244"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 28.8,
+   "hgt_est_m": 37.7
   },
   {
    "id": "RKSS-2-11-269",
@@ -15537,7 +16088,9 @@
     "AD CHART 2-11 #269"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 106.6,
+   "hgt_est_m": 4.4
   },
   {
    "id": "RKSS-2-11-294",
@@ -15553,7 +16106,9 @@
     "AD CHART 2-11 #294"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 153.2,
+   "hgt_est_m": 8.3
   },
   {
    "id": "RKSS-2-11-20",
@@ -15569,7 +16124,9 @@
     "AD CHART 2-11 #20"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 81.5,
+   "hgt_est_m": 8.0
   },
   {
    "id": "RKSS-2-11-45",
@@ -15585,7 +16142,9 @@
     "AD CHART 2-11 #45"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 17.4,
+   "hgt_est_m": 9.6
   },
   {
    "id": "RKSS-2-11-70",
@@ -15601,7 +16160,9 @@
     "AD CHART 2-11 #70"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 22.9,
+   "hgt_est_m": 42.1
   },
   {
    "id": "RKSS-2-11-95",
@@ -15617,7 +16178,9 @@
     "AD CHART 2-11 #95"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 14.9,
+   "hgt_est_m": 43.1
   },
   {
    "id": "RKSS-2-11-120",
@@ -15633,7 +16196,9 @@
     "AD CHART 2-11 #120"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 35.3,
+   "hgt_est_m": 59.2
   },
   {
    "id": "RKSS-2-11-145",
@@ -15649,7 +16214,9 @@
     "AD CHART 2-11 #145"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 40.5,
+   "hgt_est_m": 39.5
   },
   {
    "id": "RKSS-2-11-170",
@@ -15665,7 +16232,9 @@
     "AD CHART 2-11 #170"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 30.3,
+   "hgt_est_m": 38.7
   },
   {
    "id": "RKSS-2-11-195",
@@ -15681,7 +16250,9 @@
     "AD CHART 2-11 #195"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 20.1,
+   "hgt_est_m": 47.4
   },
   {
    "id": "RKSS-2-11-220",
@@ -15697,7 +16268,9 @@
     "AD CHART 2-11 #220"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 33.4,
+   "hgt_est_m": 38.1
   },
   {
    "id": "RKSS-2-11-245",
@@ -15713,7 +16286,9 @@
     "AD CHART 2-11 #245"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 25.4,
+   "hgt_est_m": 44.6
   },
   {
    "id": "RKSS-2-11-270",
@@ -15729,7 +16304,9 @@
     "AD CHART 2-11 #270"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 17.7,
+   "hgt_est_m": 42.8
   },
   {
    "id": "RKSS-2-11-295",
@@ -15745,7 +16322,9 @@
     "AD CHART 2-11 #295"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 127.4,
+   "hgt_est_m": 32.6
   },
   {
    "id": "RKSS-2-11-21",
@@ -15761,7 +16340,9 @@
     "AD CHART 2-11 #21"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 109.0,
+   "hgt_est_m": 7.5
   },
   {
    "id": "RKSS-2-11-46",
@@ -15777,7 +16358,9 @@
     "AD CHART 2-11 #46"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 16.5,
+   "hgt_est_m": 12.5
   },
   {
    "id": "RKSS-2-11-71",
@@ -15793,7 +16376,9 @@
     "AD CHART 2-11 #71"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 50.5,
+   "hgt_est_m": 10.5
   },
   {
    "id": "RKSS-2-11-96",
@@ -15809,7 +16394,9 @@
     "AD CHART 2-11 #96"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 17.9,
+   "hgt_est_m": 40.1
   },
   {
    "id": "RKSS-2-11-121",
@@ -15825,7 +16412,9 @@
     "AD CHART 2-11 #121"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 88.9,
+   "hgt_est_m": 1.6
   },
   {
    "id": "RKSS-2-11-146",
@@ -15841,7 +16430,9 @@
     "AD CHART 2-11 #146"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 40.6,
+   "hgt_est_m": 39.4
   },
   {
    "id": "RKSS-2-11-171",
@@ -15857,7 +16448,9 @@
     "AD CHART 2-11 #171"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 27.4,
+   "hgt_est_m": 42.1
   },
   {
    "id": "RKSS-2-11-196",
@@ -15873,7 +16466,9 @@
     "AD CHART 2-11 #196"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 48.5,
+   "hgt_est_m": 51.5
   },
   {
    "id": "RKSS-2-11-221",
@@ -15889,7 +16484,9 @@
     "AD CHART 2-11 #221"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 58.6,
+   "hgt_est_m": 8.9
   },
   {
    "id": "RKSS-2-11-246",
@@ -15905,7 +16502,9 @@
     "AD CHART 2-11 #246"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 75.8,
+   "hgt_est_m": 3.2
   },
   {
    "id": "RKSS-2-11-271",
@@ -15921,7 +16520,9 @@
     "AD CHART 2-11 #271"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 65.3,
+   "hgt_est_m": 5.2
   },
   {
    "id": "RKSS-2-11-296",
@@ -15937,7 +16538,9 @@
     "AD CHART 2-11 #296"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 98.0,
+   "hgt_est_m": 46.5
   },
   {
    "id": "RKSS-2-11-22",
@@ -15953,7 +16556,9 @@
     "AD CHART 2-11 #22"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 68.3,
+   "hgt_est_m": 25.7
   },
   {
    "id": "RKSS-2-11-47",
@@ -15969,7 +16574,9 @@
     "AD CHART 2-11 #47"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.0,
+   "hgt_est_m": 22.5
   },
   {
    "id": "RKSS-2-11-72",
@@ -15985,7 +16592,9 @@
     "AD CHART 2-11 #72"
    ],
    "category": "Tower",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 17.0,
+   "hgt_est_m": 67.5
   },
   {
    "id": "RKSS-2-11-97",
@@ -16001,7 +16610,9 @@
     "AD CHART 2-11 #97"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 4.6,
+   "hgt_est_m": 53.9
   },
   {
    "id": "RKSS-2-11-122",
@@ -16017,7 +16628,9 @@
     "AD CHART 2-11 #122"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 92.2,
+   "hgt_est_m": 6.8
   },
   {
    "id": "RKSS-2-11-147",
@@ -16033,7 +16646,9 @@
     "AD CHART 2-11 #147"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 46.4,
+   "hgt_est_m": 12.6
   },
   {
    "id": "RKSS-2-11-172",
@@ -16049,7 +16664,9 @@
     "AD CHART 2-11 #172"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 41.9,
+   "hgt_est_m": 16.6
   },
   {
    "id": "RKSS-2-11-197",
@@ -16065,7 +16682,9 @@
     "AD CHART 2-11 #197"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.7,
+   "hgt_est_m": 41.3
   },
   {
    "id": "RKSS-2-11-222",
@@ -16081,7 +16700,9 @@
     "AD CHART 2-11 #222"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 104.8,
+   "hgt_est_m": 3.7
   },
   {
    "id": "RKSS-2-11-247",
@@ -16097,7 +16718,9 @@
     "AD CHART 2-11 #247"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.2,
+   "hgt_est_m": 43.3
   },
   {
    "id": "RKSS-2-11-272",
@@ -16113,7 +16736,9 @@
     "AD CHART 2-11 #272"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 9.8,
+   "hgt_est_m": 48.2
   },
   {
    "id": "RKSS-2-11-297",
@@ -16129,7 +16754,9 @@
     "AD CHART 2-11 #297"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 74.2,
+   "hgt_est_m": 46.8
   },
   {
    "id": "RKSS-2-11-23",
@@ -16145,7 +16772,9 @@
     "AD CHART 2-11 #23"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 89.5,
+   "hgt_est_m": 12.0
   },
   {
    "id": "RKSS-2-11-48",
@@ -16161,7 +16790,9 @@
     "AD CHART 2-11 #48"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.7,
+   "hgt_est_m": 7.3
   },
   {
    "id": "RKSS-2-11-73",
@@ -16177,7 +16808,9 @@
     "AD CHART 2-11 #73"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 73.6,
+   "hgt_est_m": 3.4
   },
   {
    "id": "RKSS-2-11-98",
@@ -16193,7 +16826,9 @@
     "AD CHART 2-11 #98"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 51.7,
+   "hgt_est_m": 6.8
   },
   {
    "id": "RKSS-2-11-123",
@@ -16209,7 +16844,9 @@
     "AD CHART 2-11 #123"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 26.6,
+   "hgt_est_m": 36.4
   },
   {
    "id": "RKSS-2-11-148",
@@ -16225,7 +16862,9 @@
     "AD CHART 2-11 #148"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 55.6,
+   "hgt_est_m": 31.9
   },
   {
    "id": "RKSS-2-11-173",
@@ -16241,7 +16880,9 @@
     "AD CHART 2-11 #173"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 41.6,
+   "hgt_est_m": 51.9
   },
   {
    "id": "RKSS-2-11-198",
@@ -16257,7 +16898,9 @@
     "AD CHART 2-11 #198"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 14.3,
+   "hgt_est_m": 45.2
   },
   {
    "id": "RKSS-2-11-223",
@@ -16273,7 +16916,9 @@
     "AD CHART 2-11 #223"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 80.0,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKSS-2-11-248",
@@ -16289,7 +16934,9 @@
     "AD CHART 2-11 #248"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 18.3,
+   "hgt_est_m": 40.7
   },
   {
    "id": "RKSS-2-11-273",
@@ -16305,7 +16952,9 @@
     "AD CHART 2-11 #273"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.7,
+   "hgt_est_m": 39.3
   },
   {
    "id": "RKSS-2-11-298",
@@ -16321,7 +16970,9 @@
     "AD CHART 2-11 #298"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 9.6,
+   "hgt_est_m": 5.9
   },
   {
    "id": "RKSS-2-11-24",
@@ -16337,7 +16988,9 @@
     "AD CHART 2-11 #24"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 104.0,
+   "hgt_est_m": 13.5
   },
   {
    "id": "RKSS-2-11-49",
@@ -16353,7 +17006,9 @@
     "AD CHART 2-11 #49"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 58.1,
+   "hgt_est_m": 20.4
   },
   {
    "id": "RKSS-2-11-74",
@@ -16369,7 +17024,9 @@
     "AD CHART 2-11 #74"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 73.7,
+   "hgt_est_m": 0.8
   },
   {
    "id": "RKSS-2-11-99",
@@ -16385,7 +17042,9 @@
     "AD CHART 2-11 #99"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 35.7,
+   "hgt_est_m": 7.8
   },
   {
    "id": "RKSS-2-11-124",
@@ -16401,7 +17060,9 @@
     "AD CHART 2-11 #124"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 80.3,
+   "hgt_est_m": 0.2
   },
   {
    "id": "RKSS-2-11-149",
@@ -16417,7 +17078,9 @@
     "AD CHART 2-11 #149"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 39.9,
+   "hgt_est_m": 27.1
   },
   {
    "id": "RKSS-2-11-174",
@@ -16433,7 +17096,9 @@
     "AD CHART 2-11 #174"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 73.2,
+   "hgt_est_m": 1.3
   },
   {
    "id": "RKSS-2-11-199",
@@ -16449,7 +17114,9 @@
     "AD CHART 2-11 #199"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 69.6,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKSS-2-11-224",
@@ -16465,7 +17132,9 @@
     "AD CHART 2-11 #224"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 53.8,
+   "hgt_est_m": 6.7
   },
   {
    "id": "RKSS-2-11-249",
@@ -16481,7 +17150,9 @@
     "AD CHART 2-11 #249"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 16.7,
+   "hgt_est_m": 73.8
   },
   {
    "id": "RKSS-2-11-274",
@@ -16497,7 +17168,9 @@
     "AD CHART 2-11 #274"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 11.9,
+   "hgt_est_m": 46.1
   },
   {
    "id": "RKSS-2-11-299",
@@ -16514,7 +17187,9 @@
     "AD CHART 2-10 #1"
    ],
    "category": "Navaid",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.5,
+   "hgt_est_m": 6.5
   },
   {
    "id": "RKSS-2-11-25",
@@ -16530,7 +17205,9 @@
     "AD CHART 2-11 #25"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 88.1,
+   "hgt_est_m": 13.4
   },
   {
    "id": "RKSS-2-11-50",
@@ -16546,7 +17223,9 @@
     "AD CHART 2-11 #50"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 48.3,
+   "hgt_est_m": 14.7
   },
   {
    "id": "RKSS-2-11-75",
@@ -16562,7 +17241,9 @@
     "AD CHART 2-11 #75"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 117.5,
+   "hgt_est_m": 7.5
   },
   {
    "id": "RKSS-2-11-100",
@@ -16578,7 +17259,9 @@
     "AD CHART 2-11 #100"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 13.9,
+   "hgt_est_m": 45.1
   },
   {
    "id": "RKSS-2-11-125",
@@ -16594,7 +17277,9 @@
     "AD CHART 2-11 #125"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 72.9,
+   "hgt_est_m": 8.1
   },
   {
    "id": "RKSS-2-11-150",
@@ -16610,7 +17295,9 @@
     "AD CHART 2-11 #150"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 29.3,
+   "hgt_est_m": 30.2
   },
   {
    "id": "RKSS-2-11-175",
@@ -16626,7 +17313,9 @@
     "AD CHART 2-11 #175"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 62.5,
+   "hgt_est_m": 9.0
   },
   {
    "id": "RKSS-2-11-200",
@@ -16642,7 +17331,9 @@
     "AD CHART 2-11 #200"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 47.9,
+   "hgt_est_m": 12.6
   },
   {
    "id": "RKSS-2-11-225",
@@ -16658,7 +17349,9 @@
     "AD CHART 2-11 #225"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 47.7,
+   "hgt_est_m": 11.3
   },
   {
    "id": "RKSS-2-11-250",
@@ -16674,7 +17367,9 @@
     "AD CHART 2-11 #250"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 29.8,
+   "hgt_est_m": 28.2
   },
   {
    "id": "RKSS-2-11-275",
@@ -16690,7 +17385,9 @@
     "AD CHART 2-11 #275"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 23.6,
+   "hgt_est_m": 34.9
   },
   {
    "id": "RKSS-2-11-300",
@@ -16706,7 +17403,9 @@
     "AD CHART 2-11 #300"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 14.7,
+   "hgt_est_m": 64.8
   },
   {
    "id": "RKSS-2-7-1",
@@ -16722,7 +17421,9 @@
     "AD CHART 2-7 #1"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.4,
+   "hgt_est_m": 1.6
   },
   {
    "id": "RKSS-2-7-11",
@@ -16738,7 +17439,9 @@
     "AD CHART 2-7 #11"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 26.3,
+   "hgt_est_m": 13.7
   },
   {
    "id": "RKSS-2-7-2",
@@ -16754,7 +17457,9 @@
     "AD CHART 2-7 #2"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 16.9,
+   "hgt_est_m": 6.6
   },
   {
    "id": "RKSS-2-7-3",
@@ -16770,7 +17475,9 @@
     "AD CHART 2-7 #3"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 18.5,
+   "hgt_est_m": 7.0
   },
   {
    "id": "RKSS-2-7-4",
@@ -16786,7 +17493,9 @@
     "AD CHART 2-7 #4"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 20.1,
+   "hgt_est_m": 8.4
   },
   {
    "id": "RKSS-2-7-6",
@@ -16802,7 +17511,9 @@
     "AD CHART 2-7 #6"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 25.9,
+   "hgt_est_m": 3.6
   },
   {
    "id": "RKSS-2-7-16",
@@ -16818,7 +17529,9 @@
     "AD CHART 2-7 #16"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 39.1,
+   "hgt_est_m": 15.9
   },
   {
    "id": "RKSS-2-7-7",
@@ -16834,7 +17547,9 @@
     "AD CHART 2-7 #7"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 13.7,
+   "hgt_est_m": 18.8
   },
   {
    "id": "RKSS-2-7-8",
@@ -16851,7 +17566,9 @@
     "AD CHART 2-8 #17"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 28.9,
+   "hgt_est_m": 17.6
   },
   {
    "id": "RKSS-2-7-9",
@@ -16867,7 +17584,9 @@
     "AD CHART 2-7 #9"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 23.1,
+   "hgt_est_m": 12.9
   },
   {
    "id": "RKSS-2-7-19",
@@ -16884,7 +17603,9 @@
     "AD CHART 2-8 #21"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 73.8,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKSS-2-8-13",
@@ -16900,7 +17621,9 @@
     "AD CHART 2-8 #13"
    ],
    "category": "Mast",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 21.2,
+   "hgt_est_m": 12.8
   },
   {
    "id": "RKSS-2-8-2",
@@ -16916,7 +17639,9 @@
     "AD CHART 2-8 #2"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 17.4,
+   "hgt_est_m": 5.1
   },
   {
    "id": "RKSS-2-8-14",
@@ -16932,7 +17657,9 @@
     "AD CHART 2-8 #14"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 27.2,
+   "hgt_est_m": 6.3
   },
   {
    "id": "RKSS-2-8-3",
@@ -16948,7 +17675,9 @@
     "AD CHART 2-8 #3"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 15.4,
+   "hgt_est_m": 11.6
   },
   {
    "id": "RKSS-2-8-15",
@@ -16964,7 +17693,9 @@
     "AD CHART 2-8 #15"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 24.5,
+   "hgt_est_m": 13.5
   },
   {
    "id": "RKSS-2-8-4",
@@ -16980,7 +17711,9 @@
     "AD CHART 2-8 #4"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 16.3,
+   "hgt_est_m": 13.7
   },
   {
    "id": "RKSS-2-8-16",
@@ -16996,7 +17729,9 @@
     "AD CHART 2-8 #16"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 22.3,
+   "hgt_est_m": 20.2
   },
   {
    "id": "RKSS-2-8-5",
@@ -17012,7 +17747,9 @@
     "AD CHART 2-8 #5"
    ],
    "category": "Mast",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 20.6,
+   "hgt_est_m": 11.9
   },
   {
    "id": "RKSS-2-8-6",
@@ -17028,7 +17765,9 @@
     "AD CHART 2-8 #6"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 20.1,
+   "hgt_est_m": 11.4
   },
   {
    "id": "RKSS-2-8-7",
@@ -17044,7 +17783,9 @@
     "AD CHART 2-8 #7"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 24.5,
+   "hgt_est_m": 11.5
   },
   {
    "id": "RKSS-2-8-8",
@@ -17060,7 +17801,9 @@
     "AD CHART 2-8 #8"
    ],
    "category": "Mast",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 22.4,
+   "hgt_est_m": 13.1
   },
   {
    "id": "RKSS-2-8-20",
@@ -17076,7 +17819,9 @@
     "AD CHART 2-8 #20"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 52.4,
+   "hgt_est_m": 7.6
   },
   {
    "id": "RKSS-2-8-9",
@@ -17092,7 +17837,9 @@
     "AD CHART 2-8 #9"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 22.2,
+   "hgt_est_m": 11.3
   },
   {
    "id": "RKSS-2-8-10",
@@ -17108,7 +17855,9 @@
     "AD CHART 2-8 #10"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.1,
+   "hgt_est_m": 14.4
   },
   {
    "id": "RKSS-2-8-22",
@@ -17124,7 +17873,9 @@
     "AD CHART 2-8 #22"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 48.5,
+   "hgt_est_m": 33.0
   },
   {
    "id": "RKSS-2-8-11",
@@ -17140,7 +17891,9 @@
     "AD CHART 2-8 #11"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 20.6,
+   "hgt_est_m": 14.4
   },
   {
    "id": "RKSS-2-8-23",
@@ -17156,7 +17909,9 @@
     "AD CHART 2-8 #23"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 131.0,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKSS-2-8-12",
@@ -17172,7 +17927,9 @@
     "AD CHART 2-8 #12"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 19.9,
+   "hgt_est_m": 15.6
   },
   {
    "id": "RKSS-2-9-1",
@@ -17188,7 +17945,9 @@
     "AD CHART 2-9 #1"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 9.1,
+   "hgt_est_m": 3.9
   },
   {
    "id": "RKSS-2-9-2",
@@ -17204,7 +17963,9 @@
     "AD CHART 2-9 #2"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.3,
+   "hgt_est_m": 1.7
   },
   {
    "id": "RKSS-2-9-3",
@@ -17220,7 +17981,9 @@
     "AD CHART 2-9 #3"
    ],
    "category": "Unknown",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 10.2,
+   "hgt_est_m": 1.8
   },
   {
    "id": "RKSS-2-9-4",
@@ -17237,7 +18000,9 @@
     "AD CHART 2-10 #4"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 24.7,
+   "hgt_est_m": 31.3
   },
   {
    "id": "RKSS-2-9-5",
@@ -17254,7 +18019,9 @@
     "AD CHART 2-10 #6"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 38.5,
+   "hgt_est_m": 9.0
   },
   {
    "id": "RKSS-2-9-6",
@@ -17271,7 +18038,9 @@
     "AD CHART 2-10 #8"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 32.5,
+   "hgt_est_m": 11.5
   },
   {
    "id": "RKSS-2-9-7",
@@ -17288,7 +18057,9 @@
     "AD CHART 2-10 #9"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 11.1,
+   "hgt_est_m": 67.4
   },
   {
    "id": "RKSS-2-9-8",
@@ -17305,7 +18076,9 @@
     "AD CHART 2-10 #10"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 22.2,
+   "hgt_est_m": 60.8
   },
   {
    "id": "RKSS-2-9-9",
@@ -17322,7 +18095,9 @@
     "AD CHART 2-10 #11"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 27.7,
+   "hgt_est_m": 61.8
   },
   {
    "id": "RKSS-2-10-2",
@@ -17338,7 +18113,9 @@
     "AD CHART 2-10 #2"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 5.6,
+   "hgt_est_m": 8.4
   },
   {
    "id": "RKSS-2-10-3",
@@ -17354,7 +18131,9 @@
     "AD CHART 2-10 #3"
    ],
    "category": "Building",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 6.7,
+   "hgt_est_m": 9.8
   },
   {
    "id": "RKSS-2-10-5",
@@ -17370,7 +18149,9 @@
     "AD CHART 2-10 #5"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 44.2,
+   "hgt_est_m": 6.3
   },
   {
    "id": "RKSS-2-10-7",
@@ -17386,7 +18167,9 @@
     "AD CHART 2-10 #7"
    ],
    "category": "Tree",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 36.1,
+   "hgt_est_m": 7.9
   },
   {
    "id": "RKSS-2-10-12",
@@ -17402,7 +18185,9 @@
     "AD CHART 2-10 #12"
    ],
    "category": "Natural",
-   "airport": "RKSS"
+   "airport": "RKSS",
+   "ground_m": 149.9,
+   "hgt_est_m": 3.1
   }
  ],
  "issues": [

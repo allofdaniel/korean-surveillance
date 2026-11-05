@@ -296,6 +296,7 @@ def build_airport(icao: str, files: list[str], enr_fixes: dict | None = None, lo
     for h in ds['holdings']:
         if not h.get('latlon') and h.get('fix') in ds['fixes']:
             h['latlon'] = tuple(ds['fixes'][h['fix']]['pos'])
+    ad210 = obst_mod.resolve_relative(ad210, ds['runways'])
     ds['obstacles'] = obst_mod.unify(icao, ad210, ds['obstacles'], ds['airport'].get('elev_m'))
     validate(ds)
     return ds, log

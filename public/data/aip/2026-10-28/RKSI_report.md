@@ -1,6 +1,6 @@
 # RKSI AIP 자동판독 리포트 (AIRAC 2026-10-28)
 
-- 절차 88개 / Fix 240개 / 홀딩 0개 / 장애물 350개
+- 절차 88개 / Fix 240개 / 홀딩 0개 / 장애물 353개
 - 지도 반영 88개 / 제외(검토 필요) 0개
 - 원본: (2-10) AD OBSTACLE CHART TYPE A.pdf, (2-18) AD OBSTACLE CHART TYPE B.pdf, (2-28) SID.pdf, (2-42) STAR.pdf, (2-51) INSTR APCH CHART.pdf, RKSI-TEXT.pdf
 

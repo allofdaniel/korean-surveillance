@@ -1,6 +1,6 @@
 {
  "icao": "RKTU",
- "built_at": "2026-11-05T06:19:41.825203Z",
+ "built_at": "2026-11-05T07:37:48.002782Z",
  "sources": [
   {
    "file": "(2-11) SID.pdf",
@@ -6139,11 +6139,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": "24R/APCH 06L/TKOF In circling area and at AD",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 596.6,
+   "hgt_est_m": 1.4
   },
   {
    "id": "RKTUOB002",
@@ -6155,11 +6158,14 @@
    "type": "Antenna",
    "marking": "LGTD",
    "remarks": "In circling area and at AD",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Antenna",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 41.6,
+   "hgt_est_m": 82.5
   },
   {
    "id": "RKTUOB003",
@@ -6171,11 +6177,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": "24L/APCH 06R/TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 530.3,
+   "hgt_est_m": 26.9
   },
   {
    "id": "RKTU-2-5-1",
@@ -6191,7 +6200,9 @@
     "AD CHART 2-5 #1"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 77.0,
+   "hgt_est_m": 5.0
   },
   {
    "id": "RKTU-2-6-1",
@@ -6207,7 +6218,9 @@
     "AD CHART 2-6 #1"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 80.9,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-6-2",
@@ -6223,7 +6236,9 @@
     "AD CHART 2-6 #2"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 86.1,
+   "hgt_est_m": 0.9
   },
   {
    "id": "RKTU-2-6-3",
@@ -6239,7 +6254,9 @@
     "AD CHART 2-6 #3"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 89.3,
+   "hgt_est_m": 1.7
   },
   {
    "id": "RKTU-2-7-1",
@@ -6255,7 +6272,9 @@
     "AD CHART 2-7 #1"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 53.8,
+   "hgt_est_m": 1.7
   },
   {
    "id": "RKTU-2-8-1",
@@ -6271,7 +6290,9 @@
     "AD CHART 2-8 #1"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 51.8,
+   "hgt_est_m": 24.7
   },
   {
    "id": "RKTU-2-9-C1",
@@ -6287,7 +6308,9 @@
     "AD CHART 2-9 #C1"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 232.6,
+   "hgt_est_m": 0.9
   },
   {
    "id": "RKTU-2-9-M38",
@@ -6303,7 +6326,9 @@
     "AD CHART 2-9 #M38"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 81.3,
+   "hgt_est_m": 0.7
   },
   {
    "id": "RKTU-2-9-M123",
@@ -6319,7 +6344,9 @@
     "AD CHART 2-9 #M123"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 63.6,
+   "hgt_est_m": 2.4
   },
   {
    "id": "RKTU-2-9-M163",
@@ -6335,7 +6362,9 @@
     "AD CHART 2-9 #M163"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 65.2,
+   "hgt_est_m": 7.8
   },
   {
    "id": "RKTU-2-9-M245",
@@ -6351,7 +6380,9 @@
     "AD CHART 2-9 #M245"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 68.5,
+   "hgt_est_m": 1.5
   },
   {
    "id": "RKTU-2-9-A11",
@@ -6367,7 +6398,9 @@
     "AD CHART 2-9 #A11"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 195.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-C2",
@@ -6383,7 +6416,9 @@
     "AD CHART 2-9 #C2"
    ],
    "category": "Tower",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 65.7,
+   "hgt_est_m": 60.3
   },
   {
    "id": "RKTU-2-9-M40",
@@ -6399,7 +6434,9 @@
     "AD CHART 2-9 #M40"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 86.1,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M127",
@@ -6415,7 +6452,9 @@
     "AD CHART 2-9 #M127"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 74.5,
+   "hgt_est_m": 0.5
   },
   {
    "id": "RKTU-2-9-M164",
@@ -6431,7 +6470,9 @@
     "AD CHART 2-9 #M164"
    ],
    "category": "Tower",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 65.7,
+   "hgt_est_m": 60.3
   },
   {
    "id": "RKTU-2-9-M247",
@@ -6447,7 +6488,9 @@
     "AD CHART 2-9 #M247"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 84.8,
+   "hgt_est_m": 5.2
   },
   {
    "id": "RKTU-2-9-M6",
@@ -6463,7 +6506,9 @@
     "AD CHART 2-9 #M6"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 64.3,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M42",
@@ -6479,7 +6524,9 @@
     "AD CHART 2-9 #M42"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 73.4,
+   "hgt_est_m": 4.6
   },
   {
    "id": "RKTU-2-9-M138",
@@ -6495,7 +6542,9 @@
     "AD CHART 2-9 #M138"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 82.9,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M165",
@@ -6511,7 +6560,9 @@
     "AD CHART 2-9 #M165"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 38.2,
+   "hgt_est_m": 13.8
   },
   {
    "id": "RKTU-2-9-M248",
@@ -6527,7 +6578,9 @@
     "AD CHART 2-9 #M248"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 52.4,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M10",
@@ -6543,7 +6596,9 @@
     "AD CHART 2-9 #M10"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 81.6,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M43",
@@ -6559,7 +6614,9 @@
     "AD CHART 2-9 #M43"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 218.6,
+   "hgt_est_m": 4.4
   },
   {
    "id": "RKTU-2-9-M141",
@@ -6575,7 +6632,9 @@
     "AD CHART 2-9 #M141"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 70.6,
+   "hgt_est_m": 11.4
   },
   {
    "id": "RKTU-2-9-M166",
@@ -6591,7 +6650,9 @@
     "AD CHART 2-9 #M166"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 67.0,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M252",
@@ -6607,7 +6668,9 @@
     "AD CHART 2-9 #M252"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 84.7,
+   "hgt_est_m": 5.3
   },
   {
    "id": "RKTU-2-9-M11",
@@ -6623,7 +6686,9 @@
     "AD CHART 2-9 #M11"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 85.0,
+   "hgt_est_m": 1.0
   },
   {
    "id": "RKTU-2-9-M45",
@@ -6639,7 +6704,9 @@
     "AD CHART 2-9 #M45"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 65.5,
+   "hgt_est_m": 0.5
   },
   {
    "id": "RKTU-2-9-M142",
@@ -6655,7 +6722,9 @@
     "AD CHART 2-9 #M142"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 78.6,
+   "hgt_est_m": 7.4
   },
   {
    "id": "RKTU-2-9-M168",
@@ -6671,7 +6740,9 @@
     "AD CHART 2-9 #M168"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 66.3,
+   "hgt_est_m": 3.7
   },
   {
    "id": "RKTU-2-9-M253",
@@ -6687,7 +6758,9 @@
     "AD CHART 2-9 #M253"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 65.5,
+   "hgt_est_m": 3.0
   },
   {
    "id": "RKTU-2-9-M15",
@@ -6703,7 +6776,9 @@
     "AD CHART 2-9 #M15"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 66.8,
+   "hgt_est_m": 2.2
   },
   {
    "id": "RKTU-2-9-M59",
@@ -6719,7 +6794,9 @@
     "AD CHART 2-9 #M59"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 67.3,
+   "hgt_est_m": 5.7
   },
   {
    "id": "RKTU-2-9-M149",
@@ -6735,7 +6812,9 @@
     "AD CHART 2-9 #M149"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 67.3,
+   "hgt_est_m": 1.7
   },
   {
    "id": "RKTU-2-9-M185",
@@ -6751,7 +6830,9 @@
     "AD CHART 2-9 #M185"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 57.5,
+   "hgt_est_m": 2.5
   },
   {
    "id": "RKTU-2-9-A1",
@@ -6767,7 +6848,9 @@
     "AD CHART 2-9 #A1"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 232.6,
+   "hgt_est_m": 0.9
   },
   {
    "id": "RKTU-2-9-M20",
@@ -6783,7 +6866,9 @@
     "AD CHART 2-9 #M20"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 63.8,
+   "hgt_est_m": 5.2
   },
   {
    "id": "RKTU-2-9-M65",
@@ -6799,7 +6884,9 @@
     "AD CHART 2-9 #M65"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 94.1,
+   "hgt_est_m": 0.9
   },
   {
    "id": "RKTU-2-9-M150",
@@ -6815,7 +6902,9 @@
     "AD CHART 2-9 #M150"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 75.2,
+   "hgt_est_m": 0.8
   },
   {
    "id": "RKTU-2-9-M191",
@@ -6831,10 +6920,30 @@
     "AD CHART 2-9 #M191"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 38.2,
+   "hgt_est_m": 108.8
   },
   {
-   "id": "RKTU-2-9-1",
+   "id": "RKTU-2-9-A2",
+   "lat": 36.7545639,
+   "lon": 127.5838806,
+   "elev_m": 221.0,
+   "elev_estimated": false,
+   "hgt_m": null,
+   "type": "Natural High Point",
+   "marking": null,
+   "remarks": null,
+   "sources": [
+    "AD CHART 2-9 #A2"
+   ],
+   "category": "Natural",
+   "airport": "RKTU",
+   "ground_m": 218.6,
+   "hgt_est_m": 2.4
+  },
+  {
+   "id": "RKTU-2-9-M20_1",
    "lat": 36.74765,
    "lon": 127.5401278,
    "elev_m": 89.0,
@@ -6844,10 +6953,12 @@
    "marking": null,
    "remarks": null,
    "sources": [
-    "AD CHART 2-9 #1"
+    "AD CHART 2-9 #M20_1"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 88.0,
+   "hgt_est_m": 1.0
   },
   {
    "id": "RKTU-2-9-M68",
@@ -6863,7 +6974,9 @@
     "AD CHART 2-9 #M68"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 116.1,
+   "hgt_est_m": 3.9
   },
   {
    "id": "RKTU-2-9-M153",
@@ -6879,7 +6992,9 @@
     "AD CHART 2-9 #M153"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 51.3,
+   "hgt_est_m": 13.7
   },
   {
    "id": "RKTU-2-9-M195",
@@ -6895,7 +7010,9 @@
     "AD CHART 2-9 #M195"
    ],
    "category": "Tower",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 41.6,
+   "hgt_est_m": 3.4
   },
   {
    "id": "RKTU-2-9-A3",
@@ -6911,7 +7028,9 @@
     "AD CHART 2-9 #A3"
    ],
    "category": "Building",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 71.5,
+   "hgt_est_m": 33.5
   },
   {
    "id": "RKTU-2-9-M24",
@@ -6927,7 +7046,9 @@
     "AD CHART 2-9 #M24"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 55.8,
+   "hgt_est_m": 27.2
   },
   {
    "id": "RKTU-2-9-M69",
@@ -6943,7 +7064,9 @@
     "AD CHART 2-9 #M69"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 107.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M155",
@@ -6959,7 +7082,9 @@
     "AD CHART 2-9 #M155"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 54.0,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M198",
@@ -6975,7 +7100,9 @@
     "AD CHART 2-9 #M198"
    ],
    "category": "Tower",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 57.1,
+   "hgt_est_m": 0.9
   },
   {
    "id": "RKTU-2-9-A4",
@@ -6991,7 +7118,9 @@
     "AD CHART 2-9 #A4"
    ],
    "category": "Building",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 72.9,
+   "hgt_est_m": 31.1
   },
   {
    "id": "RKTU-2-9-M27",
@@ -7007,7 +7136,9 @@
     "AD CHART 2-9 #M27"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 64.2,
+   "hgt_est_m": 0.8
   },
   {
    "id": "RKTU-2-9-M73",
@@ -7023,7 +7154,9 @@
     "AD CHART 2-9 #M73"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 118.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M157",
@@ -7039,7 +7172,9 @@
     "AD CHART 2-9 #M157"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 54.0,
+   "hgt_est_m": 2.0
   },
   {
    "id": "RKTU-2-9-M203",
@@ -7055,7 +7190,9 @@
     "AD CHART 2-9 #M203"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 53.7,
+   "hgt_est_m": 9.3
   },
   {
    "id": "RKTU-2-9-A5",
@@ -7071,7 +7208,9 @@
     "AD CHART 2-9 #A5"
    ],
    "category": "Tower",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 79.1,
+   "hgt_est_m": 36.4
   },
   {
    "id": "RKTU-2-9-M31",
@@ -7087,7 +7226,9 @@
     "AD CHART 2-9 #M31"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 75.8,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M78",
@@ -7103,7 +7244,9 @@
     "AD CHART 2-9 #M78"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 129.5,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M158",
@@ -7119,7 +7262,9 @@
     "AD CHART 2-9 #M158"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 59.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M210",
@@ -7135,7 +7280,9 @@
     "AD CHART 2-9 #M210"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 70.5,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-A6",
@@ -7151,7 +7298,9 @@
     "AD CHART 2-9 #A6"
    ],
    "category": "Building",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 72.4,
+   "hgt_est_m": 33.6
   },
   {
    "id": "RKTU-2-9-M33",
@@ -7167,7 +7316,9 @@
     "AD CHART 2-9 #M33"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 86.7,
+   "hgt_est_m": 6.3
   },
   {
    "id": "RKTU-2-9-M86",
@@ -7183,7 +7334,9 @@
     "AD CHART 2-9 #M86"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 116.9,
+   "hgt_est_m": 5.1
   },
   {
    "id": "RKTU-2-9-M159",
@@ -7199,7 +7352,9 @@
     "AD CHART 2-9 #M159"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 78.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M229",
@@ -7215,7 +7370,9 @@
     "AD CHART 2-9 #M229"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 65.7,
+   "hgt_est_m": 1.3
   },
   {
    "id": "RKTU-2-9-A7",
@@ -7231,7 +7388,9 @@
     "AD CHART 2-9 #A7"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 107.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M34",
@@ -7247,7 +7406,9 @@
     "AD CHART 2-9 #M34"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 104.0,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M98",
@@ -7263,7 +7424,9 @@
     "AD CHART 2-9 #M98"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 102.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M160",
@@ -7279,7 +7442,9 @@
     "AD CHART 2-9 #M160"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 83.8,
+   "hgt_est_m": 8.2
   },
   {
    "id": "RKTU-2-9-M234",
@@ -7295,7 +7460,9 @@
     "AD CHART 2-9 #M234"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 57.7,
+   "hgt_est_m": 3.3
   },
   {
    "id": "RKTU-2-9-A8",
@@ -7311,7 +7478,9 @@
     "AD CHART 2-9 #A8"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 63.0,
+   "hgt_est_m": 3.5
   },
   {
    "id": "RKTU-2-9-M36",
@@ -7327,7 +7496,9 @@
     "AD CHART 2-9 #M36"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 72.0,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M99",
@@ -7343,7 +7514,9 @@
     "AD CHART 2-9 #M99"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 117.1,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M161",
@@ -7359,7 +7532,9 @@
     "AD CHART 2-9 #M161"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 112.2,
+   "hgt_est_m": 4.8
   },
   {
    "id": "RKTU-2-9-M243",
@@ -7375,7 +7550,9 @@
     "AD CHART 2-9 #M243"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 73.0,
+   "hgt_est_m": 7.0
   },
   {
    "id": "RKTU-2-9-A9",
@@ -7391,7 +7568,9 @@
     "AD CHART 2-9 #A9"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 115.8,
+   "hgt_est_m": 3.7
   },
   {
    "id": "RKTU-2-9-M37",
@@ -7407,7 +7586,9 @@
     "AD CHART 2-9 #M37"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 74.1,
+   "hgt_est_m": 2.9
   },
   {
    "id": "RKTU-2-9-M118",
@@ -7423,7 +7604,9 @@
     "AD CHART 2-9 #M118"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 78.6,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M162",
@@ -7439,7 +7622,9 @@
     "AD CHART 2-9 #M162"
    ],
    "category": "Unknown",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 154.3,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTU-2-9-M244",
@@ -7455,7 +7640,9 @@
     "AD CHART 2-9 #M244"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 230.9,
+   "hgt_est_m": 9.1
   },
   {
    "id": "RKTU-2-9-A10",
@@ -7471,7 +7658,9 @@
     "AD CHART 2-9 #A10"
    ],
    "category": "Natural",
-   "airport": "RKTU"
+   "airport": "RKTU",
+   "ground_m": 116.6,
+   "hgt_est_m": 0.0
   }
  ],
  "issues": [

@@ -192,7 +192,8 @@ const useAirspaceLayers = (
           return {
             type: 'Feature' as const,
             geometry: { type: 'Polygon' as const, coordinates: [createObstacleShape(obs)] },
-            properties: { height: obs.height_m, color: obstacleColor }
+            // 3D view drapes extrusions on the terrain: extrude the height above ground (AGL), not the AMSL top
+            properties: { height: typeof obs.agl_m === 'number' && obs.agl_m > 0 ? obs.agl_m : obs.height_m, color: obstacleColor }
           };
         });
         if (features3d.length > 0) {

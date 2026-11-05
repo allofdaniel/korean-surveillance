@@ -1,5 +1,5 @@
 RKJB: procs=37 fixes=85 obst=55 errors=0 warns=1 rejected=0
-RKJJ: procs=29 fixes=58 obst=275 errors=0 warns=2 rejected=0
+RKJJ: procs=29 fixes=58 obst=276 errors=0 warns=2 rejected=0
 RKJK: procs=23 fixes=34 obst=2 errors=0 warns=4 rejected=0
 RKJY: procs=26 fixes=67 obst=183 errors=0 warns=0 rejected=0
 RKNW: procs=17 fixes=38 obst=10 errors=0 warns=2 rejected=0
@@ -9,10 +9,10 @@ RKPD: procs=22 fixes=48 obst=9 errors=0 warns=0 rejected=0
 RKPK: procs=36 fixes=48 obst=238 errors=0 warns=4 rejected=1
 RKPS: procs=35 fixes=65 obst=15 errors=0 warns=2 rejected=0
 RKPU: procs=18 fixes=51 obst=372 errors=0 warns=3 rejected=0
-RKSI: procs=88 fixes=240 obst=350 errors=0 warns=8 rejected=0
+RKSI: procs=88 fixes=240 obst=353 errors=0 warns=8 rejected=0
 RKSM: procs=18 fixes=31 obst=6 errors=0 warns=0 rejected=0
 RKSS: procs=45 fixes=158 obst=376 errors=0 warns=18 rejected=1
 RKTH: procs=34 fixes=47 obst=21 errors=0 warns=4 rejected=0
 RKTL: procs=24 fixes=48 obst=17 errors=0 warns=5 rejected=0
-RKTN: procs=42 fixes=50 obst=259 errors=0 warns=5 rejected=0
-RKTU: procs=46 fixes=63 obst=84 errors=0 warns=9 rejected=0
+RKTN: procs=42 fixes=50 obst=260 errors=0 warns=5 rejected=0
+RKTU: procs=46 fixes=63 obst=85 errors=0 warns=9 rejected=0

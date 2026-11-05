@@ -1,6 +1,6 @@
 {
  "icao": "RKSM",
- "built_at": "2026-11-05T06:19:23.887691Z",
+ "built_at": "2026-11-05T07:37:27.253788Z",
  "sources": [
   {
    "file": "(2-11) INSTR APCH CHART.pdf",
@@ -3073,11 +3073,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "19/20 APCH 1/2 TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKSM"
+   "airport": "RKSM",
+   "ground_m": 78.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKSMOB002",
@@ -3089,11 +3092,14 @@
    "type": "Building",
    "marking": null,
    "remarks": "19/20 APCH",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Building",
-   "airport": "RKSM"
+   "airport": "RKSM",
+   "ground_m": 20.4,
+   "hgt_est_m": 52.1
   },
   {
    "id": "RKSMOB003",
@@ -3105,11 +3111,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "19/20 TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKSM"
+   "airport": "RKSM",
+   "ground_m": 56.0,
+   "hgt_est_m": 0.1
   },
   {
    "id": "RKSMOB004",
@@ -3121,11 +3130,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "19/20 TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKSM"
+   "airport": "RKSM",
+   "ground_m": 56.4,
+   "hgt_est_m": 0.6
   },
   {
    "id": "RKSMOB005",
@@ -3137,11 +3149,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "19 TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKSM"
+   "airport": "RKSM",
+   "ground_m": 114.9,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKSMOB006",
@@ -3153,11 +3168,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "1/2 APCH 20 TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKSM"
+   "airport": "RKSM",
+   "ground_m": 91.7,
+   "hgt_est_m": 0.0
   }
  ],
  "issues": []

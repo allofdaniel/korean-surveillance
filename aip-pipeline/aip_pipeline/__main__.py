@@ -79,11 +79,22 @@ def main(argv=None):
     if a.enr_fixes:
         enr.update(json.load(open(a.enr_fixes)))
     groups = defaultdict(list)
+    enr54 = []
     for f in files:
         if f.lower().endswith('.pdf') and parse_enr.is_enr(f):
             enr.update(parse_enr.parse(f)); continue
+        if f.lower().endswith('.pdf') and parse_enr.is_enr54(f):
+            from . import parse_enr54
+            enr54 += parse_enr54.parse(f); continue
+        if f.lower().endswith('.pdf') and parse_enr.is_enr_other(f):
+            continue
         groups[detect_icao(f) or 'UNKNOWN'].append(f)
     outdir = os.path.join(a.out, a.airac); os.makedirs(outdir, exist_ok=True)
+    enr54_recs = []
+    if enr54:
+        from . import obstacles as om0
+        enr54_recs = om0.from_enr54(enr54)
+        json.dump(enr54_recs, open(os.path.join(outdir, 'ENR54_obstacles.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
     app = json.load(open(a.app, encoding='utf-8')) if a.app else None
     if not a.ref:
         dflt = os.path.join(os.path.dirname(here), 'reference', 'navigraph_ref.json')
@@ -120,6 +131,9 @@ def main(argv=None):
         keep = [o for o in av.get('obstacles', []) if not str(o.get('source', '')).startswith('AIP')
                 and not any(_inv((o['lat'], o['lon']), p)[1] < 25 for p in arps)]
         av['obstacles'] = keep + [x for ic in sorted(all_obst) for x in om.to_app(all_obst[ic])]
+        if enr54:
+            av['obstacles'] = [o for o in av['obstacles'] if not str(o.get('source', '')).startswith('AIP ENR 5.4')]
+            av['obstacles'] += om.to_app(enr54_recs)
         json.dump(av, open(avp, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     if app is not None:
         json.dump(app, open(a.app, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))

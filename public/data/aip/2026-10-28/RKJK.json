@@ -1,6 +1,6 @@
 {
  "icao": "RKJK",
- "built_at": "2026-11-05T06:18:19.555516Z",
+ "built_at": "2026-11-05T07:36:17.388966Z",
  "sources": [
   {
    "file": "(2-2) SID.pdf",
@@ -2128,11 +2128,14 @@
    "type": "Antenna",
    "marking": "NIL",
    "remarks": "18/APTH 36/TKOF In 18/36 Circling Area",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Antenna",
-   "airport": "RKJK"
+   "airport": "RKJK",
+   "ground_m": 280.7,
+   "hgt_est_m": 11.0
   },
   {
    "id": "RKJKOB002",
@@ -2144,11 +2147,14 @@
    "type": "Tower",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Tower",
-   "airport": "RKJK"
+   "airport": "RKJK",
+   "ground_m": 5.4,
+   "hgt_est_m": 144.9
   }
  ],
  "issues": [

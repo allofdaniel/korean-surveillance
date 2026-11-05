@@ -38,6 +38,10 @@ AD 2 TEXT(PDF/HTML) + AD CHART 전부(SID, STAR, IAC, Type A/B 포함). 파일 �
 - CA 구간 끝점(상승률 가정), 선회 반경은 근사
 - 기준 DB에도 없는 재래식 절차(서술문만 있는 것)는 서술문 해석으로만 그림
 - 장애물: AD 2.10(TEXT) + Type A + Type B 장애물 표를 합쳐 공항별로 정리(같은 장애물은 15 m·2 m 이내면 하나로, 출처 모두 기록)
-  → `public/aviation_data.json`의 `obstacles`(앱 장애물 레이어)로 내보냄. 국가 항행장애물(ENR 5.4)은 PDF를 넣으면 추가 예정
+  → `public/aviation_data.json`의 `obstacles`(앱 장애물 레이어)로 내보냄
+- ENR 5.4(국가 항행장애물, 100 m AGL 이상) → `ENR54_obstacles.json` + 앱 레이어
+- 지형: Copernicus DEM GLO-30(30 m, 공개데이터)으로 장애물 지반고 산출 → 높이만 있는 장애물의 표고 보완,
+  AIP 표고가 지형+높이와 40 m 넘게 어긋나면 보수적 값(지형+높이)을 쓰고 원래 값·사유를 `qa`에 기록
+- Supabase 적재: `supabase/001_aip_tables.sql`(테이블) + `scripts/load_supabase.py`(AIRAC 단위 업로드)
 - 보호구역·OAS·CRM은 AIP에 없으므로 생성하지 않음
 - 판독 결과는 PR의 리포트로 확인 후 병합하는 것을 원칙으로 함

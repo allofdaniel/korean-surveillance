@@ -1,6 +1,6 @@
 {
  "icao": "RKNY",
- "built_at": "2026-11-05T06:18:28.470675Z",
+ "built_at": "2026-11-05T07:36:27.496472Z",
  "sources": [
   {
    "file": "(2-12) STAR.pdf",
@@ -2876,11 +2876,15 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": "15/APCH 33/TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 701.8,
+   "hgt_est_m": 0.0,
+   "qa": "표고 398.1 m < 지형 701.8 m (좌표/표고 확인 필요)"
   },
   {
    "id": "RKNYOB002",
@@ -2892,11 +2896,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 297.2,
+   "hgt_est_m": 27.7
   },
   {
    "id": "RKNYOB003",
@@ -2908,11 +2915,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": "33/APCH 15/TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 142.4,
+   "hgt_est_m": 18.5
   },
   {
    "id": "RKNYOB004",
@@ -2924,11 +2934,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 280.0,
+   "hgt_est_m": 4.1
   },
   {
    "id": "RKNYOB005",
@@ -2940,11 +2953,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 196.1,
+   "hgt_est_m": 2.9
   },
   {
    "id": "RKNYOB006",
@@ -2956,11 +2972,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 122.8,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNYOB007",
@@ -2972,11 +2991,14 @@
    "type": "RVR Maintenance Structure",
    "marking": null,
    "remarks": "16.4 ft Marked/LGTD RWY 33, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 67.2,
+   "hgt_est_m": 5.2
   },
   {
    "id": "RKNYOB008",
@@ -2988,11 +3010,14 @@
    "type": "RVR Maintenance Structure",
    "marking": null,
    "remarks": "16.4 ft Marked/LGTD RWY 33, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 67.4,
+   "hgt_est_m": 5.2
   },
   {
    "id": "RKNYOB009",
@@ -3004,11 +3029,14 @@
    "type": "RVR Maintenance Structure",
    "marking": null,
    "remarks": "16.4 ft Marked/LGTD RWY 15, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 67.9,
+   "hgt_est_m": 5.7
   },
   {
    "id": "RKNYOB010",
@@ -3020,11 +3048,14 @@
    "type": "RVR Maintenance Structure",
    "marking": null,
    "remarks": "16.4 ft Marked/LGTD RWY 15, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 69.1,
+   "hgt_est_m": 4.6
   },
   {
    "id": "RKNYOB011",
@@ -3036,11 +3067,14 @@
    "type": "Wind Cone (WDI)",
    "marking": null,
    "remarks": "21.8 ft Marked/LGTD RWY 33, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Unknown",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 68.4,
+   "hgt_est_m": 6.9
   },
   {
    "id": "RKNYOB012",
@@ -3052,11 +3086,14 @@
    "type": "Wind Cone (WDI)",
    "marking": null,
    "remarks": "21.8 ft Marked/LGTD RWY 15, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Unknown",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 69.1,
+   "hgt_est_m": 6.6
   },
   {
    "id": "RKNYOB013",
@@ -3068,11 +3105,14 @@
    "type": "GP Antenna",
    "marking": null,
    "remarks": "44.9 ft Marked/LGTD RWY 33, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 68.6,
+   "hgt_est_m": 13.5
   },
   {
    "id": "RKNYOB014",
@@ -3084,11 +3124,14 @@
    "type": "MLAT Antenna (RVR)",
    "marking": null,
    "remarks": "16.4 ft Marked Material (Stainless Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 69.1,
+   "hgt_est_m": 4.8
   },
   {
    "id": "RKNYOB015",
@@ -3100,11 +3143,14 @@
    "type": "RTIL Power Supply Box",
    "marking": null,
    "remarks": "2.2 ft Marked RWY 15, Material(Steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 3"
    ],
    "category": "Navaid",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 69.1,
+   "hgt_est_m": 1.1
   },
   {
    "id": "RKNY-2-4-1",
@@ -3120,7 +3166,9 @@
     "AD CHART 2-4 #1"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 91.0,
+   "hgt_est_m": 1.0
   },
   {
    "id": "RKNY-2-5-1",
@@ -3136,7 +3184,9 @@
     "AD CHART 2-5 #1"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 67.3,
+   "hgt_est_m": 6.7
   },
   {
    "id": "RKNY-2-5-2",
@@ -3152,7 +3202,9 @@
     "AD CHART 2-5 #2"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 72.7,
+   "hgt_est_m": 5.3
   },
   {
    "id": "RKNY-2-6-1",
@@ -3168,7 +3220,9 @@
     "AD CHART 2-6 #1"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 83.5,
+   "hgt_est_m": 4.5
   },
   {
    "id": "RKNY-2-6-21",
@@ -3184,7 +3238,9 @@
     "AD CHART 2-6 #21"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 323.0,
+   "hgt_est_m": 3.0
   },
   {
    "id": "RKNY-2-6-41",
@@ -3200,7 +3256,9 @@
     "AD CHART 2-6 #41"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 160.3,
+   "hgt_est_m": 2.2
   },
   {
    "id": "RKNY-2-6-61",
@@ -3216,7 +3274,9 @@
     "AD CHART 2-6 #61"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 126.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-81",
@@ -3232,7 +3292,9 @@
     "AD CHART 2-6 #81"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 109.4,
+   "hgt_est_m": 5.6
   },
   {
    "id": "RKNY-2-6-101",
@@ -3248,7 +3310,9 @@
     "AD CHART 2-6 #101"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 144.8,
+   "hgt_est_m": 41.7
   },
   {
    "id": "RKNY-2-6-2",
@@ -3264,7 +3328,9 @@
     "AD CHART 2-6 #2"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 77.8,
+   "hgt_est_m": 3.2
   },
   {
    "id": "RKNY-2-6-22",
@@ -3280,7 +3346,9 @@
     "AD CHART 2-6 #22"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 110.9,
+   "hgt_est_m": 7.1
   },
   {
    "id": "RKNY-2-6-42",
@@ -3296,7 +3364,9 @@
     "AD CHART 2-6 #42"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 170.6,
+   "hgt_est_m": 0.4
   },
   {
    "id": "RKNY-2-6-62",
@@ -3312,7 +3382,9 @@
     "AD CHART 2-6 #62"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 124.1,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-82",
@@ -3328,7 +3400,9 @@
     "AD CHART 2-6 #82"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 182.0,
+   "hgt_est_m": 4.0
   },
   {
    "id": "RKNY-2-6-102",
@@ -3344,7 +3418,9 @@
     "AD CHART 2-6 #102"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 129.5,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-3",
@@ -3360,7 +3436,9 @@
     "AD CHART 2-6 #3"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 118.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-23",
@@ -3376,7 +3454,9 @@
     "AD CHART 2-6 #23"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 154.5,
+   "hgt_est_m": 2.5
   },
   {
    "id": "RKNY-2-6-43",
@@ -3392,7 +3472,9 @@
     "AD CHART 2-6 #43"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 185.1,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-63",
@@ -3408,7 +3490,9 @@
     "AD CHART 2-6 #63"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 155.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-83",
@@ -3424,7 +3508,9 @@
     "AD CHART 2-6 #83"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 146.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-103",
@@ -3440,7 +3526,9 @@
     "AD CHART 2-6 #103"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 98.9,
+   "hgt_est_m": 4.1
   },
   {
    "id": "RKNY-2-6-4",
@@ -3456,7 +3544,9 @@
     "AD CHART 2-6 #4"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 112.8,
+   "hgt_est_m": 1.7
   },
   {
    "id": "RKNY-2-6-24",
@@ -3472,7 +3562,9 @@
     "AD CHART 2-6 #24"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 307.9,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-44",
@@ -3488,7 +3580,9 @@
     "AD CHART 2-6 #44"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 179.1,
+   "hgt_est_m": 6.9
   },
   {
    "id": "RKNY-2-6-64",
@@ -3504,7 +3598,9 @@
     "AD CHART 2-6 #64"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 143.5,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-84",
@@ -3520,7 +3616,9 @@
     "AD CHART 2-6 #84"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 130.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-104",
@@ -3536,7 +3634,9 @@
     "AD CHART 2-6 #104"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 100.6,
+   "hgt_est_m": 7.9
   },
   {
    "id": "RKNY-2-6-5",
@@ -3552,7 +3652,9 @@
     "AD CHART 2-6 #5"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 128.9,
+   "hgt_est_m": 1.6
   },
   {
    "id": "RKNY-2-6-25",
@@ -3568,7 +3670,9 @@
     "AD CHART 2-6 #25"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 124.6,
+   "hgt_est_m": 6.4
   },
   {
    "id": "RKNY-2-6-45",
@@ -3584,7 +3688,9 @@
     "AD CHART 2-6 #45"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 184.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-65",
@@ -3600,7 +3706,9 @@
     "AD CHART 2-6 #65"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 122.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-85",
@@ -3616,7 +3724,9 @@
     "AD CHART 2-6 #85"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 188.0,
+   "hgt_est_m": 3.5
   },
   {
    "id": "RKNY-2-6-105",
@@ -3632,7 +3742,9 @@
     "AD CHART 2-6 #105"
    ],
    "category": "Unknown",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 70.1,
+   "hgt_est_m": 4.9
   },
   {
    "id": "RKNY-2-6-6",
@@ -3648,7 +3760,9 @@
     "AD CHART 2-6 #6"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 87.5,
+   "hgt_est_m": 25.0
   },
   {
    "id": "RKNY-2-6-26",
@@ -3664,7 +3778,9 @@
     "AD CHART 2-6 #26"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 231.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-46",
@@ -3680,7 +3796,9 @@
     "AD CHART 2-6 #46"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 129.1,
+   "hgt_est_m": 2.9
   },
   {
    "id": "RKNY-2-6-66",
@@ -3696,7 +3814,9 @@
     "AD CHART 2-6 #66"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 149.1,
+   "hgt_est_m": 23.4
   },
   {
    "id": "RKNY-2-6-86",
@@ -3712,7 +3832,9 @@
     "AD CHART 2-6 #86"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 139.6,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-7",
@@ -3728,7 +3850,9 @@
     "AD CHART 2-6 #7"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 122.9,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-27",
@@ -3744,7 +3868,9 @@
     "AD CHART 2-6 #27"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 302.0,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-47",
@@ -3760,7 +3886,9 @@
     "AD CHART 2-6 #47"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 213.4,
+   "hgt_est_m": 2.6
   },
   {
    "id": "RKNY-2-6-67",
@@ -3776,7 +3904,9 @@
     "AD CHART 2-6 #67"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 110.6,
+   "hgt_est_m": 4.9
   },
   {
    "id": "RKNY-2-6-87",
@@ -3792,7 +3922,9 @@
     "AD CHART 2-6 #87"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 134.6,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-8",
@@ -3808,7 +3940,9 @@
     "AD CHART 2-6 #8"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 125.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-28",
@@ -3824,7 +3958,9 @@
     "AD CHART 2-6 #28"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 122.5,
+   "hgt_est_m": 5.0
   },
   {
    "id": "RKNY-2-6-48",
@@ -3840,7 +3976,9 @@
     "AD CHART 2-6 #48"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 131.0,
+   "hgt_est_m": 4.0
   },
   {
    "id": "RKNY-2-6-68",
@@ -3856,7 +3994,9 @@
     "AD CHART 2-6 #68"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 133.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-88",
@@ -3872,7 +4012,9 @@
     "AD CHART 2-6 #88"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 93.1,
+   "hgt_est_m": 36.4
   },
   {
    "id": "RKNY-2-6-9",
@@ -3888,7 +4030,9 @@
     "AD CHART 2-6 #9"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 137.1,
+   "hgt_est_m": 0.4
   },
   {
    "id": "RKNY-2-6-29",
@@ -3904,7 +4048,9 @@
     "AD CHART 2-6 #29"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 181.0,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-49",
@@ -3920,7 +4066,9 @@
     "AD CHART 2-6 #49"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 125.0,
+   "hgt_est_m": 3.0
   },
   {
    "id": "RKNY-2-6-69",
@@ -3936,7 +4084,9 @@
     "AD CHART 2-6 #69"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 146.8,
+   "hgt_est_m": 1.2
   },
   {
    "id": "RKNY-2-6-89",
@@ -3952,7 +4102,9 @@
     "AD CHART 2-6 #89"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 167.7,
+   "hgt_est_m": 1.3
   },
   {
    "id": "RKNY-2-6-10",
@@ -3968,7 +4120,9 @@
     "AD CHART 2-6 #10"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 125.1,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-30",
@@ -3984,7 +4138,9 @@
     "AD CHART 2-6 #30"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 232.8,
+   "hgt_est_m": 2.7
   },
   {
    "id": "RKNY-2-6-50",
@@ -4000,7 +4156,9 @@
     "AD CHART 2-6 #50"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 163.6,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-70",
@@ -4016,7 +4174,9 @@
     "AD CHART 2-6 #70"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 114.5,
+   "hgt_est_m": 0.5
   },
   {
    "id": "RKNY-2-6-90",
@@ -4032,7 +4192,9 @@
     "AD CHART 2-6 #90"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 163.9,
+   "hgt_est_m": 3.6
   },
   {
    "id": "RKNY-2-6-11",
@@ -4048,7 +4210,9 @@
     "AD CHART 2-6 #11"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 118.7,
+   "hgt_est_m": 0.8
   },
   {
    "id": "RKNY-2-6-31",
@@ -4064,7 +4228,9 @@
     "AD CHART 2-6 #31"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 109.5,
+   "hgt_est_m": 8.5
   },
   {
    "id": "RKNY-2-6-51",
@@ -4080,7 +4246,9 @@
     "AD CHART 2-6 #51"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 173.1,
+   "hgt_est_m": 1.9
   },
   {
    "id": "RKNY-2-6-71",
@@ -4096,7 +4264,9 @@
     "AD CHART 2-6 #71"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 133.3,
+   "hgt_est_m": 2.2
   },
   {
    "id": "RKNY-2-6-91",
@@ -4112,7 +4282,9 @@
     "AD CHART 2-6 #91"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 132.3,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-12",
@@ -4128,7 +4300,9 @@
     "AD CHART 2-6 #12"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 142.8,
+   "hgt_est_m": 1.2
   },
   {
    "id": "RKNY-2-6-32",
@@ -4144,7 +4318,9 @@
     "AD CHART 2-6 #32"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 185.4,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-52",
@@ -4160,7 +4336,9 @@
     "AD CHART 2-6 #52"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 143.2,
+   "hgt_est_m": 0.8
   },
   {
    "id": "RKNY-2-6-72",
@@ -4176,7 +4354,9 @@
     "AD CHART 2-6 #72"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 117.8,
+   "hgt_est_m": 3.7
   },
   {
    "id": "RKNY-2-6-92",
@@ -4192,7 +4372,9 @@
     "AD CHART 2-6 #92"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 198.9,
+   "hgt_est_m": 5.6
   },
   {
    "id": "RKNY-2-6-13",
@@ -4208,7 +4390,9 @@
     "AD CHART 2-6 #13"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 182.7,
+   "hgt_est_m": 2.3
   },
   {
    "id": "RKNY-2-6-33",
@@ -4224,7 +4408,9 @@
     "AD CHART 2-6 #33"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 238.7,
+   "hgt_est_m": 0.3
   },
   {
    "id": "RKNY-2-6-53",
@@ -4240,7 +4426,9 @@
     "AD CHART 2-6 #53"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 162.7,
+   "hgt_est_m": 1.3
   },
   {
    "id": "RKNY-2-6-73",
@@ -4256,7 +4444,9 @@
     "AD CHART 2-6 #73"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 167.6,
+   "hgt_est_m": 1.4
   },
   {
    "id": "RKNY-2-6-93",
@@ -4272,7 +4462,9 @@
     "AD CHART 2-6 #93"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 130.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-14",
@@ -4288,7 +4480,9 @@
     "AD CHART 2-6 #14"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 139.5,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-34",
@@ -4304,7 +4498,9 @@
     "AD CHART 2-6 #34"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 157.6,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-54",
@@ -4320,7 +4516,9 @@
     "AD CHART 2-6 #54"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 140.1,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-74",
@@ -4336,7 +4534,9 @@
     "AD CHART 2-6 #74"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 114.6,
+   "hgt_est_m": 16.9
   },
   {
    "id": "RKNY-2-6-94",
@@ -4352,7 +4552,9 @@
     "AD CHART 2-6 #94"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 170.6,
+   "hgt_est_m": 3.4
   },
   {
    "id": "RKNY-2-6-15",
@@ -4368,7 +4570,9 @@
     "AD CHART 2-6 #15"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 186.3,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-35",
@@ -4384,7 +4588,9 @@
     "AD CHART 2-6 #35"
    ],
    "category": "Unknown",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 69.9,
+   "hgt_est_m": 5.1
   },
   {
    "id": "RKNY-2-6-55",
@@ -4400,7 +4606,9 @@
     "AD CHART 2-6 #55"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 149.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-75",
@@ -4416,7 +4624,9 @@
     "AD CHART 2-6 #75"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 218.1,
+   "hgt_est_m": 5.9
   },
   {
    "id": "RKNY-2-6-95",
@@ -4432,7 +4642,9 @@
     "AD CHART 2-6 #95"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 187.6,
+   "hgt_est_m": 0.4
   },
   {
    "id": "RKNY-2-6-16",
@@ -4448,7 +4660,9 @@
     "AD CHART 2-6 #16"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 219.5,
+   "hgt_est_m": 0.5
   },
   {
    "id": "RKNY-2-6-36",
@@ -4464,7 +4678,9 @@
     "AD CHART 2-6 #36"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 147.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-56",
@@ -4480,7 +4696,9 @@
     "AD CHART 2-6 #56"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 142.9,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-76",
@@ -4496,7 +4714,9 @@
     "AD CHART 2-6 #76"
    ],
    "category": "Unknown",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 93.2,
+   "hgt_est_m": 42.3
   },
   {
    "id": "RKNY-2-6-96",
@@ -4512,7 +4732,9 @@
     "AD CHART 2-6 #96"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 121.0,
+   "hgt_est_m": 0.5
   },
   {
    "id": "RKNY-2-6-17",
@@ -4528,7 +4750,9 @@
     "AD CHART 2-6 #17"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 120.3,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-37",
@@ -4544,7 +4768,9 @@
     "AD CHART 2-6 #37"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 132.4,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-57",
@@ -4560,7 +4786,9 @@
     "AD CHART 2-6 #57"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 143.8,
+   "hgt_est_m": 3.2
   },
   {
    "id": "RKNY-2-6-77",
@@ -4576,7 +4804,9 @@
     "AD CHART 2-6 #77"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 209.0,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-97",
@@ -4592,7 +4822,9 @@
     "AD CHART 2-6 #97"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 125.2,
+   "hgt_est_m": 0.8
   },
   {
    "id": "RKNY-2-6-18",
@@ -4608,7 +4840,9 @@
     "AD CHART 2-6 #18"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 170.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-38",
@@ -4624,7 +4858,9 @@
     "AD CHART 2-6 #38"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 212.5,
+   "hgt_est_m": 3.0
   },
   {
    "id": "RKNY-2-6-58",
@@ -4640,7 +4876,9 @@
     "AD CHART 2-6 #58"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 118.3,
+   "hgt_est_m": 3.7
   },
   {
    "id": "RKNY-2-6-78",
@@ -4656,7 +4894,9 @@
     "AD CHART 2-6 #78"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 125.1,
+   "hgt_est_m": 5.4
   },
   {
    "id": "RKNY-2-6-98",
@@ -4672,7 +4912,9 @@
     "AD CHART 2-6 #98"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 132.8,
+   "hgt_est_m": 3.2
   },
   {
    "id": "RKNY-2-6-19",
@@ -4688,7 +4930,9 @@
     "AD CHART 2-6 #19"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 184.8,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-39",
@@ -4704,7 +4948,9 @@
     "AD CHART 2-6 #39"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 158.3,
+   "hgt_est_m": 1.7
   },
   {
    "id": "RKNY-2-6-59",
@@ -4720,7 +4966,9 @@
     "AD CHART 2-6 #59"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 104.0,
+   "hgt_est_m": 12.0
   },
   {
    "id": "RKNY-2-6-79",
@@ -4736,7 +4984,9 @@
     "AD CHART 2-6 #79"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 146.8,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-99",
@@ -4752,7 +5002,9 @@
     "AD CHART 2-6 #99"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 147.4,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-20",
@@ -4768,7 +5020,9 @@
     "AD CHART 2-6 #20"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 212.5,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-40",
@@ -4784,7 +5038,9 @@
     "AD CHART 2-6 #40"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 177.4,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKNY-2-6-60",
@@ -4800,7 +5056,9 @@
     "AD CHART 2-6 #60"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 115.6,
+   "hgt_est_m": 9.9
   },
   {
    "id": "RKNY-2-6-80",
@@ -4816,7 +5074,9 @@
     "AD CHART 2-6 #80"
    ],
    "category": "Tree",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 116.7,
+   "hgt_est_m": 2.8
   },
   {
    "id": "RKNY-2-6-100",
@@ -4832,7 +5092,9 @@
     "AD CHART 2-6 #100"
    ],
    "category": "Natural",
-   "airport": "RKNY"
+   "airport": "RKNY",
+   "ground_m": 127.5,
+   "hgt_est_m": 0.0
   }
  ],
  "issues": [

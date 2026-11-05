@@ -1,6 +1,6 @@
 {
  "icao": "RKPS",
- "built_at": "2026-11-05T06:18:55.000976Z",
+ "built_at": "2026-11-05T07:36:56.368719Z",
  "sources": [
   {
    "file": "(2-13) INSTR APCH CHART.pdf",
@@ -6262,11 +6262,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": "06L/R APCH 24L/R TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 75.4,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKPSOB002",
@@ -6278,11 +6281,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 122.5,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKPSOB003",
@@ -6294,11 +6300,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 124.3,
+   "hgt_est_m": 3.4
   },
   {
    "id": "RKPSOB004",
@@ -6310,11 +6319,14 @@
    "type": "Natural High Point",
    "marking": null,
    "remarks": "(Including Steel tower 243 ft) NIL",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 846.7,
+   "hgt_est_m": 71.1
   },
   {
    "id": "RKPSOB005",
@@ -6326,11 +6338,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 75.4,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKPSOB006",
@@ -6342,11 +6357,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 767.9,
+   "hgt_est_m": 33.7
   },
   {
    "id": "RKPSOB007",
@@ -6358,11 +6376,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 64.4,
+   "hgt_est_m": 0.5
   },
   {
    "id": "RKPSOB008",
@@ -6374,11 +6395,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": "In 06L/R, 24L/R circling area and at AD",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 125.8,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKPSOB009",
@@ -6390,11 +6414,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 130.8,
+   "hgt_est_m": 21.3
   },
   {
    "id": "RKPSOB010",
@@ -6406,11 +6433,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 195.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKPSOB011",
@@ -6422,11 +6452,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 224.7,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKPSOB012",
@@ -6438,11 +6471,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": "06L/R TKOF 24L/R APCH",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 24.6,
+   "hgt_est_m": 1.0
   },
   {
    "id": "RKPSOB013",
@@ -6454,11 +6490,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 65.0,
+   "hgt_est_m": 3.3
   },
   {
    "id": "RKUSOB014",
@@ -6470,11 +6509,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 89.4,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKPSOB015",
@@ -6486,11 +6528,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKPS"
+   "airport": "RKPS",
+   "ground_m": 275.6,
+   "hgt_est_m": 0.5
   }
  ],
  "issues": [

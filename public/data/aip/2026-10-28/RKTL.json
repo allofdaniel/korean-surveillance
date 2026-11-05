@@ -1,6 +1,6 @@
 {
  "icao": "RKTL",
- "built_at": "2026-11-05T06:19:35.378660Z",
+ "built_at": "2026-11-05T07:37:40.429965Z",
  "sources": [
   {
    "file": "(2-14) STAR(1).pdf",
@@ -3495,11 +3495,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": "17/APCH 35/TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 511.2,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTLOB002",
@@ -3511,11 +3514,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 432.6,
+   "hgt_est_m": 5.1
   },
   {
    "id": "RKTLOB003",
@@ -3527,11 +3533,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 356.3,
+   "hgt_est_m": 8.9
   },
   {
    "id": "RKTLOB004",
@@ -3543,11 +3552,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 205.7,
+   "hgt_est_m": 6.1
   },
   {
    "id": "RKTLOB005",
@@ -3559,11 +3571,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 56.2,
+   "hgt_est_m": 4.5
   },
   {
    "id": "RKTLOB006",
@@ -3575,11 +3590,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 61.8,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTLOB007",
@@ -3591,11 +3609,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": "35/APCH 17/TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 55.4,
+   "hgt_est_m": 13.2
   },
   {
    "id": "RKTLOB008",
@@ -3607,11 +3628,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 59.4,
+   "hgt_est_m": 9.2
   },
   {
    "id": "RKTLOB009",
@@ -3623,11 +3647,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 145.4,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTLOB010",
@@ -3639,11 +3666,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 183.6,
+   "hgt_est_m": 0.8
   },
   {
    "id": "RKTLOB011",
@@ -3655,11 +3685,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 171.0,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTLOB012",
@@ -3671,11 +3704,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 43.6,
+   "hgt_est_m": 0.0
   },
   {
    "id": "RKTLOB013",
@@ -3687,11 +3723,14 @@
    "type": "Natural High Point",
    "marking": "NIL",
    "remarks": null,
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Natural",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 163.3,
+   "hgt_est_m": 0.7
   },
   {
    "id": "RKTLOB015",
@@ -3703,11 +3742,14 @@
    "type": "GP Antenna",
    "marking": null,
    "remarks": "49.2 ft Marked/LGTD 35/APCH 17/TKOF Material(steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 47.0,
+   "hgt_est_m": 14.3
   },
   {
    "id": "RKTLOB016",
@@ -3719,11 +3761,14 @@
    "type": "GP NFM Antenna",
    "marking": null,
    "remarks": "20 ft Marked/LGTD 35/APCH 17/TKOF Material(steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 45.4,
+   "hgt_est_m": 6.6
   },
   {
    "id": "RKTLOB017",
@@ -3735,11 +3780,14 @@
    "type": "GP Antenna",
    "marking": null,
    "remarks": "49.2 ft Marked/LGTD 17/TKOF 35/APCH Material(steel)",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 2"
    ],
    "category": "Navaid",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 50.5,
+   "hgt_est_m": 15.2
   },
   {
    "id": "RKTLOB014",
@@ -3751,11 +3799,14 @@
    "type": "Tower",
    "marking": null,
    "remarks": "97.1 ft NIL 17/APCH 35/TKOF",
+   "position_estimated": false,
    "sources": [
     "AD 2.10 Area 3"
    ],
    "category": "Tower",
-   "airport": "RKTL"
+   "airport": "RKTL",
+   "ground_m": 51.8,
+   "hgt_est_m": 26.8
   }
  ],
  "issues": [
